@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -19,12 +21,35 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         public void BuildInsheet(string fileName)
         {
+            AppendHeaderFromFile();
             doContent.AppendLine($"insheet using \"{fileName}\", tab case names");
         }
 
-        public void AppendLabelToValuesMatching(string variableName, string labelName)
+        private static string doFileHeader = null;
+
+        private void AppendHeaderFromFile()
         {
-            doContent.AppendLine($"label values {variableName} {labelName}");
+            if (string.IsNullOrEmpty(doFileHeader))
+            {
+                var assembly = Assembly.GetAssembly(typeof(DoFile));
+                var resourceName = "WB.Services.Export.CsvExport.Exporters.DoFileHeader.txt";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        doFileHeader = reader.ReadToEnd();
+                    }
+                }
+
+            }
+
+            doContent.Append(doFileHeader);
+        }
+
+        public void AssignValuesToVariable(string variableName, string valueName)
+        {
+            doContent.AppendLine($"label values {variableName} {valueName}");
         }
 
         public void AppendLabelToVariableMatching(string variableName, string labelName)
@@ -37,7 +62,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             doContent.AppendLine($"capture label variable {variableName} `\"{this.RemoveNotAllowedCharsAndDecode(labelName)}\"'");
         }
 
-        public void AppendLabel(string labelName, IEnumerable<VariableValueLabel> labels)
+        public void DefineLabel(string labelName, IEnumerable<VariableValueLabel> labels)
         {
             //stata allows only int values less 2,147,483,620 to be labeled
             //stata doesn't allow to declare empty dictionaries

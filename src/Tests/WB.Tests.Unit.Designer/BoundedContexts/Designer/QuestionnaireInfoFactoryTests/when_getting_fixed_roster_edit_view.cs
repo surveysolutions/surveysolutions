@@ -72,16 +72,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.NotLinkedMultiOptionQuestions.ElementAt(1).Title.Should().Contain(GetQuestion(q2Id).QuestionText);
 
         [NUnit.Framework.Test] public void should_return_grouped_list_of_integer_titles_with_one_pair () =>
-            result.NumericIntegerTitles.Count.Should().Be(3);
+            result.NumericIntegerTitles.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_grouped_list_of_integer_titles_with_two_pairs_and_key_equals__textListGroupKey () =>
             result.NumericIntegerTitles.ElementAt(0).Title.Should().Be(textListGroupKey);
 
-        [NUnit.Framework.Test] public void should_return_integer_questions_in_group_with_key__Group_1__with_ids_contains_only_q4Id () =>
-            result.NumericIntegerTitles.ElementAt(1).Id.Should().Contain(q4Id.FormatGuid());
-
         [NUnit.Framework.Test] public void should_return_integer_questions_in_group_with_index_2_with_ids_contains_only_q7Id () =>
-            result.NumericIntegerTitles.ElementAt(2).Id.Should().Contain(q7Id.FormatGuid());
+            result.NumericIntegerTitles.ElementAt(1).Id.Should().Contain(q7Id.FormatGuid());
 
         [NUnit.Framework.Test] public void should_list_of_roster_title_do_not_countain_multiomedia_question_with_id_q8Id () =>
             result.NumericIntegerTitles.Should().OnlyContain(q => q.Id != q8Id.FormatGuid());

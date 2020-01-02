@@ -77,12 +77,12 @@ namespace WB.Services.Export.Ddi.Implementation
                                 var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, 
                                     variableLabel.VariableName,
                                     this.GetDdiDataType(questionItem.QuestionType), 
-                                    variableLabel.Label,
+                                    variableLabel.VariableLabel,
                                     questionItem.Instructions,
                                     questionItem.QuestionText, 
                                     this.GetDdiVariableScale(questionItem.QuestionType));
 
-                                foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
+                                foreach (VariableValueLabel variableValueLabel in variableLabel.Value.VariableValues)
                                 {
                                     if (decimal.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var value))
                                         metadataWriter.AddValueLabelToVariable(variable, value, variableValueLabel.Label);
@@ -95,10 +95,10 @@ namespace WB.Services.Export.Ddi.Implementation
                             if (variableItem != null)
                             {
                                 var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
-                                    this.GetDdiDataType(variableItem.Type), variableLabel.Label, null,
+                                    this.GetDdiDataType(variableItem.Type), variableLabel.Value.Name, null,
                                     variableItem.Expression, this.GetDdiVariableScale(variableItem.Type));
 
-                                foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
+                                foreach (VariableValueLabel variableValueLabel in variableLabel.Value.VariableValues)
                                 {
                                     if (decimal.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var value))
                                         metadataWriter.AddValueLabelToVariable(variable, value, variableValueLabel.Label);
@@ -110,7 +110,7 @@ namespace WB.Services.Export.Ddi.Implementation
                         else
                         {
                             metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
-                                DdiDataType.DynString, variableLabel.Label, null, null, null);
+                                DdiDataType.DynString, variableLabel.VariableLabel, null, null, null);
                         }
                     }
                 }

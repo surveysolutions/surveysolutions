@@ -7,9 +7,9 @@ namespace WB.UI.Interviewer.Migrations
     [Migration(201904081208)]
     public class AddTitleToOptionViewForSearching : IMigration
     {
-        private readonly IPlainStorage<OptionView> optionsStorage;
+        private readonly IPlainStorage<OptionView, int?> optionsStorage;
 
-        public AddTitleToOptionViewForSearching(IPlainStorage<OptionView> optionsStorage)
+        public AddTitleToOptionViewForSearching(IPlainStorage<OptionView, int?> optionsStorage)
         {
             this.optionsStorage = optionsStorage;
         }

@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
@@ -24,6 +25,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using Group = Main.Core.Entities.SubEntities.Group;
@@ -103,6 +105,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
+        private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private int affectedByReplaceEntries;
 
@@ -113,13 +116,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationService,
-            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+            ICategoriesService categoriesService)
         {
             this.clock = clock;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationService = translationService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.categoriesService = categoriesService;
         }
 
         #region Questionnaire command handlers
@@ -184,6 +189,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 translation.Id = newTranslationId;
             }
+
+            foreach (var categories in clonedDocument.Categories)
+                this.categoriesService.CloneCategories(document.PublicKey, categories.Id, clonedDocument.PublicKey, categories.Id);
 
             this.innerDocument = clonedDocument;
         }
@@ -540,6 +548,41 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
+        #region Categories command handlers
+
+        public void AddOrUpdateCategories(AddOrUpdateCategories command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            var categories = new Categories()
+            {
+                Id = command.CategoriesId,
+                Name = command.Name,
+            };
+            innerDocument.Categories.RemoveAll(x => x.Id == command.CategoriesId);
+
+            if (command.OldCategoriesId.HasValue)
+            {
+                innerDocument.Categories.RemoveAll(x => x.Id == command.OldCategoriesId.Value);
+
+                var categoricalQuestionsWithOldId = innerDocument.Find<ICategoricalQuestion>(c => c.CategoriesId == command.OldCategoriesId);
+                categoricalQuestionsWithOldId.ForEach(c => c.CategoriesId = command.CategoriesId);
+            }
+
+            innerDocument.Categories.Add(categories);
+        }
+
+        public void DeleteCategories(DeleteCategories command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.innerDocument.Categories.RemoveAll(x => x.Id == command.CategoriesId);
+
+            this.innerDocument.Find<ICategoricalQuestion>(x => x.CategoriesId == command.CategoriesId)
+                .ForEach(x => x.CategoriesId = null);
+        }
+
+        #endregion
+
         #region Attachment command handlers
                 
         public void AddOrUpdateAttachment(AddOrUpdateAttachment command)
@@ -867,7 +910,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 linkedFilterExpression: null,
                 isTimestamp: false,
                 showAsList:null,
-                showAsListThreshold: null);
+                showAsListThreshold: null,
+                categoriesId: null);
 
             this.innerDocument.Add(question, command.ParentGroupId);
             
@@ -944,6 +988,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         false,
                         null,
+                        null,
                         null);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
@@ -988,6 +1033,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         false,
                         null,
+                        null,
                         null);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
@@ -1030,6 +1076,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.ValidationConditions,
                 null,
                 command.IsTimestamp,
+                null,
                 null,
                 null);
 
@@ -1091,7 +1138,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.LinkedFilterExpression,
                 false,
                 null,
-                null);
+                null,
+                categoriesId: command.CategoriesId);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
             
@@ -1164,7 +1212,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.LinkedFilterExpression,
                 false,
                 showAsList:command.ShowAsList,
-                showAsListThreshold: command.ShowAsListThreshold);
+                showAsListThreshold: command.ShowAsListThreshold,
+                categoriesId: command.CategoriesId);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -1211,7 +1260,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 false,
                 null,
-                null);
+                null,
+                categoricalQuestion.CategoriesId);
 
             this.innerDocument.ReplaceEntity(categoricalQuestion, newQuestion);
         }
@@ -1248,7 +1298,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 false,
                 null,
-                null);
+                null,
+                categoricalOneAnswerQuestion.CategoriesId);
 
             this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
         }
@@ -1287,7 +1338,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 false,
                 categoricalOneAnswerQuestion.ShowAsList,
-                categoricalOneAnswerQuestion.ShowAsListThreshold);
+                categoricalOneAnswerQuestion.ShowAsListThreshold,
+                categoricalOneAnswerQuestion.CategoriesId);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -1340,6 +1392,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.ValidationConditions,
                 null,
                 false,
+                null,
                 null,
                 null);
 
@@ -1449,6 +1502,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     null,
                     false,
                     null,
+                    null,
                     null);
 
             if (question != null)
@@ -1504,6 +1558,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 new List<ValidationCondition>(),
                 null,
                 false,
+                null,
                 null,
                 null);
 
@@ -1561,6 +1616,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 false,
                 null,
+                null,
                 null);
             newQuestion.IsSignature = command.IsSignature;
             if (question != null)
@@ -1604,6 +1660,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.ValidationConditions,
                     null,
                     false,
+                    null,
                     null,
                     null);
 
@@ -2331,7 +2388,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int? maxAnswerCount, bool? isFilteredCombobox, Guid? cascadeFromQuestionId,
             bool? yesNoView, IList<ValidationCondition> validationConditions,
             string linkedFilterExpression, bool isTimestamp,
-            bool? showAsList, int? showAsListThreshold)
+            bool? showAsList, int? showAsListThreshold, Guid? categoriesId = null)
         {
             AbstractQuestion question;
 
@@ -2342,7 +2399,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         AreAnswersOrdered = areAnswersOrdered ?? false,
                         MaxAllowedAnswers = maxAllowedAnswers,
-                        YesNoView = yesNoView ?? false
+                        YesNoView = yesNoView ?? false,
+                        CategoriesId = categoriesId
                     };
                     UpdateAnswerList(answers, question, linkedToQuestionId);
                     break;
@@ -2350,7 +2408,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     question = new SingleQuestion()
                     {
                         ShowAsList = showAsList ?? false,
-                        ShowAsListThreshold = showAsListThreshold
+                        ShowAsListThreshold = showAsListThreshold,
+                        CategoriesId = categoriesId
                     };
 
                     UpdateAnswerList(answers, question, linkedToQuestionId);

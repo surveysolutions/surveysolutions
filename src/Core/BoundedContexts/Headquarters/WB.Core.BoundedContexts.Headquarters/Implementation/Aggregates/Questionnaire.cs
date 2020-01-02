@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
@@ -14,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 {
@@ -26,6 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly IAuthorizedUser authorizedUser;
+        private readonly IReusableCategoriesStorage categoriesStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private Guid Id { get; set; }
@@ -35,13 +39,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IFileSystemAccessor fileSystemAccessor, 
-            IPlainStorageAccessor<TranslationInstance> translations)
+            IPlainStorageAccessor<TranslationInstance> translations,
+            IAuthorizedUser authorizedUser,
+            IReusableCategoriesStorage categoriesStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
             this.fileSystemAccessor = fileSystemAccessor;
             this.translations = translations;
+            this.authorizedUser = authorizedUser;
+            this.categoriesStorage = categoriesStorage;
         }
 
         public void SetId(Guid id) => this.Id = id;
@@ -80,6 +88,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             sourceQuestionnaireClone.Title = command.NewTitle;
 
             CloneTranslations(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
+            CloneCategories(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion,
+                command.NewQuestionnaireVersion);
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
                 sourceQuestionnaireClone,
@@ -91,6 +101,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 questionnaireBrowseItem.AllowExportVariables,
                 comment: command.Comment);
         }
+
+        private void CloneCategories(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion) =>
+            this.categoriesStorage.Clone(
+                new QuestionnaireIdentity(sourceQuestionnaireId, sourceQuestionnaireVersion),
+                new QuestionnaireIdentity(sourceQuestionnaireId, newQuestionnaireVersion)
+            );
 
         private void CloneTranslations(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)
         {
@@ -130,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.questionnaireBrowseItemStorage.Store(
                 new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus,
-                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment),
+                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment, this.authorizedUser.Id),
                 projectionId);
         }
 

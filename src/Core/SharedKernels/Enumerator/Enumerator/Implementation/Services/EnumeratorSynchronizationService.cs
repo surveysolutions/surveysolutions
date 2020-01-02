@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
@@ -25,6 +26,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         protected abstract string ApiVersion { get; }
         protected abstract string ApiUrl { get; }
+
+        protected string EnumeratorApiVersion => "v1";
+        protected string EnumeratorApiUrl => "api/enumerator/";
+        protected string EnumeratorApplicationUrl => string.Concat(EnumeratorApiUrl, EnumeratorApiVersion);
+
 
         protected string ApplicationUrl => string.Concat(ApiUrl, ApiVersion);
         
@@ -37,6 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");
         protected string TranslationsController => string.Concat(ApplicationUrl, "/translations");
         protected string AttachmentContentController => string.Concat(ApplicationUrl, "/attachments");
+        protected string ReusableCategoriesController => string.Concat(EnumeratorApplicationUrl, "/categories");
         
         protected string LogoUrl => string.Concat(ApplicationUrl, "/companyLogo");
         protected string TenantIdUrl => string.Concat(ApplicationUrl, "/tenantId");
@@ -91,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     url: string.Concat(this.UsersController, "/login"),
                     request: logonInfo,
                     credentials: credentials,
-                    token: token));
+                    token: token)).ConfigureAwait(false); ;
 
                 return authToken;
             }
@@ -101,20 +108,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public async Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token = default)
-            => await this.TryGetRestResponseOrThrowAsync(async () =>
-            {
-                var result = await this.restService.GetAsync<bool>(url: AutoUpdateUrl,
-                    credentials: this.restCredentials, token: token);
-                return result;
-            });
+        public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token = default)
+            => this.TryGetRestResponseOrThrowAsync(
+                () => this.restService.GetAsync<bool>(url: AutoUpdateUrl,
+                    credentials: this.restCredentials, token: token));
 
-        public async Task<bool> AreNotificationsEnabledAsync(CancellationToken token = default)
-            => await this.TryGetRestResponseOrThrowAsync(async () =>
+        public Task<bool> AreNotificationsEnabledAsync(CancellationToken token = default)
+            => this.TryGetRestResponseOrThrowAsync(() =>
             {
-                var result = await this.restService.GetAsync<bool>(url: NotificationsUrl, credentials: this.restCredentials,
+                return this.restService.GetAsync<bool>(url: NotificationsUrl, credentials: this.restCredentials,
                     token: token);
-                return result;
             });
 
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView entities, CancellationToken token = default)
@@ -180,7 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public async Task<string> GetTenantId(RestCredentials credentials = null, CancellationToken token = default)
         {
             var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<TenantIdApiView>(
-                url: TenantIdUrl, credentials: credentials ?? this.restCredentials, token: token));
+                url: TenantIdUrl, credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false); ;
             return response.TenantId;
         }
 
@@ -188,6 +191,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             string url = string.Concat(ApiUrl, "compatibility/", this.deviceSettings.GetDeviceId(), "/",
                 this.syncProtocolVersionProvider.GetProtocolVersion());
+
             if (tenantId != null)
             {
                 url += "?tenantId=" + WebUtility.UrlEncode(tenantId);
@@ -241,8 +245,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         #endregion
 
         #region [Questionnaire Api]
-
-
+        
         public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
             CancellationToken token = default)
         {
@@ -297,6 +300,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.TryGetRestResponseOrThrowAsync(() =>  this.restService.GetAsync<List<TranslationDto>>(
                 url: url,
                 credentials: this.restCredentials, token: cancellationToken));
+        }
+
+        public Task<List<ReusableCategoriesDto>> GetQuestionnaireReusableCategoriesAsync(QuestionnaireIdentity questionnaireIdentity,
+            CancellationToken cancellationToken)
+        {
+            var url = $"{this.ReusableCategoriesController}/{questionnaireIdentity}";
+
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<ReusableCategoriesDto>>(
+                url: url, credentials: this.restCredentials, token: cancellationToken));
         }
 
         public Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
@@ -477,7 +489,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 var restFile = await this.restService.DownloadFileAsync(
                     url: this.checkVersionUriProvider.CheckVersionUrl, token: token,
                     credentials: this.restCredentials,
-                    transferProgress: transferProgress);
+                    transferProgress: transferProgress).ConfigureAwait(false); ;
 
                 return restFile.Content;
             }
@@ -486,18 +498,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 var newException = ex.ToSynchronizationException();
                 throw newException;
             }
-        } 
-           
+        }
 
         public async Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             var interviewerPatchApiUrl = $"{this.checkVersionUriProvider.CheckVersionUrl}patch/{this.deviceSettings.GetApplicationVersionCode()}";
+         
             var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl,
                     token: token,
                     credentials: this.restCredentials,
-                    transferProgress: transferProgress);
+                    transferProgress: transferProgress).ConfigureAwait(false); ;
 
-                return restFile.Content;
+            return restFile.Content;
         }
 
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)

@@ -88,6 +88,33 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Categories {0} added.
+        /// </summary>
+        public static string Categories_Add {
+            get {
+                return ResourceManager.GetString("Categories_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories {0} deleted.
+        /// </summary>
+        public static string Categories_Delete {
+            get {
+                return ResourceManager.GetString("Categories_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories {0} updated.
+        /// </summary>
+        public static string Categories_Update {
+            get {
+                return ResourceManager.GetString("Categories_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change.
         /// </summary>
         public static string Change {

@@ -9,6 +9,9 @@
         }
         .ag-header-cell{
             border: 1px solid #E5E5E5;
+            &:not(:last-of-type){
+                border-right: none;
+            }
             border-bottom-color: rgba(0, 0, 0, 0.3);
             .ag-header-cell-label {
                 text-overflow: clip;
@@ -24,7 +27,6 @@
             }
         }
         .ag-pinned-left-cols-container{
-            
             .ag-cell{
                 background-color: transparent;
                 border-right-color: rgba(0, 0, 0, 0.3);
@@ -39,7 +41,12 @@
                 }
                 
             }
-            border: 1px solid #E5E5E5;
+            border-bottom: 1px solid #E5E5E5;
+            border-right: 1px solid #E5E5E5;
+            &:first-of-type{
+                border-left: 1px solid #E5E5E5;
+            }
+            
             display: flex;
             align-items: center;
             &.ag-cell-focus{
@@ -78,12 +85,13 @@
                     font-style: italic;
                 }
             }
+
         }
-        .ag-cell:not(.ag-cell-last-left-pinned){
-            .cell-unit{
-                background: #FFFFFF; 
-            }
-        }
+        // .ag-cell:not(.ag-cell-last-left-pinned){
+        //     .cell-unit{
+        //         background: #FFFFFF; 
+        //     }
+        // }
         .cell-unit{
             width: 100%;
             height: 100%;
@@ -148,6 +156,57 @@
                 
             }
 
+        }
+
+        &.roster-matrix{
+            .cell-bordered{
+                &:not(.ag-header-cell-label){
+                    height: 100%;
+                }
+                border-right: 1px solid #E5E5E5;
+                
+                &:last-of-type{
+                    border: none;
+                }
+
+            }
+            .ag-cell{
+                .tooltip-wrapper{
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 30px;
+                    position: absolute;
+                    z-index: 1000;
+                    a{
+                        display: block;
+                        height: 100%;
+                    }
+                }
+                & > .ag-input-text-wrapper{
+                    height: 100%
+                }
+                .field{
+                    height: 100%;
+                }
+				input{
+					left:0px;
+					width:0px;
+					display:none;
+				}
+                label{
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                    justify-content: center;
+                    cursor: pointer;
+                }
+                .radio + .radio{
+                    margin: 0;
+                }
+            }
         }
     }
     .cell-wrap-text {

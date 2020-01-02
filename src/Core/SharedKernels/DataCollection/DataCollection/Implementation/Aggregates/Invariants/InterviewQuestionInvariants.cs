@@ -141,17 +141,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionExists(QuestionType.DateTime)
                 .RequireQuestionEnabled();
 
-        public void RequireFixedSingleOptionPreloadValueAllowed(decimal selectedValue)
+        public void RequireFixedSingleOptionPreloadValueAllowed(decimal selectedValue, int? parentValue)
             => this
                 .RequireQuestionExists(QuestionType.SingleOption)
-                .RequireOptionExists(selectedValue);
+                .RequireOptionExists(selectedValue, parentValue);
 
-        public void RequireFixedSingleOptionAnswerAllowed(decimal selectedValue, QuestionnaireIdentity questionnaireIdentity)
+        public void RequireFixedSingleOptionAnswerAllowed(decimal selectedValue, int? parentValue, QuestionnaireIdentity questionnaireIdentity)
             => this
                 .RequireQuestionExists(QuestionType.SingleOption)
-                .RequireOptionExists(selectedValue)
-                .RequireQuestionEnabled()
-                .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, this.Questionnaire.Translation);
+                .RequireOptionExists(selectedValue, parentValue)
+                .RequireQuestionEnabled();
 
         public void RequireLinkedToListSingleOptionAnswerAllowed(int selectedValue)
             => this
@@ -435,9 +434,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        private InterviewQuestionInvariants RequireOptionExists(decimal value)
+        private InterviewQuestionInvariants RequireOptionExists(decimal value, int? parentValue)
         {
-            var availableValues = this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, value);
+            var availableValues = this.Questionnaire.DoesSupportReusableCategories(this.QuestionId)
+                ? this.questionOptionsRepository.GetOptionForQuestionByOptionValue(this.Questionnaire, this.QuestionId, value, parentValue, null)
+                : this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, value, parentValue);
 
             if (availableValues == null)
                 throw new AnswerNotAcceptedException(
@@ -447,7 +448,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
                         {ExceptionKeys.QuestionId, this.QuestionId},
-                        {ExceptionKeys.ProvidedAnswerValue, value}
+                        {ExceptionKeys.ProvidedAnswerValue, value},
+                        {ExceptionKeys.ParentValue, parentValue}
                     }
                 };
 
@@ -489,7 +491,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireOptionsExist(IReadOnlyCollection<int> values)
         {
-            var availableValues = (this.Questionnaire.IsQuestionFilteredCombobox(this.QuestionId)
+            var availableValues = (this.Questionnaire.IsQuestionFilteredCombobox(this.QuestionId) || this.Questionnaire.DoesSupportReusableCategories(this.QuestionId)
                 ? this.questionOptionsRepository.GetOptionsByOptionValues(this.Questionnaire, this.QuestionId, values.ToArray(), this.Questionnaire.Translation).Select(x => x.Value)
                 : this.Questionnaire.GetMultiSelectAnswerOptionsAsValues(this.QuestionId)).ToArray();
 
@@ -615,7 +617,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (answer < 0)
             {
-                if (this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, answer) == null)
+                if (this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, answer, null) == null)
                 {
                     throw new AnswerNotAcceptedException(
                         $"Answer is incorrect because question is used as size of roster and specified answer is negative")
@@ -734,56 +736,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 };
             return this;
         }
-
-        private InterviewQuestionInvariants RequireCascadingQuestionAnswerCorrespondsToParentAnswer(decimal answer, Translation translation)
-        {
-            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
-
-            if (!question.IsCascading)
-                return this;
-
-            var answerOption = this.questionOptionsRepository.GetOptionForQuestionByOptionValue(this.Questionnaire,
-                this.QuestionIdentity.Id, answer, translation);
-
-            if (!answerOption.ParentValue.HasValue)
-                throw new QuestionnaireException(
-                    $"Answer option has no parent value"
-                )
-                {
-                    Data =
-                    {
-                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
-                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
-                        {ExceptionKeys.ProvidedAnswerValue, answer}
-                    }
-                };
-
-            int answerParentValue = answerOption.ParentValue.Value;
-            var parentQuestion = (question.GetAsInterviewTreeCascadingQuestion()).GetCascadingParentQuestion();
-
-            if (!parentQuestion.IsAnswered())
-                return this;
-
-            int actualParentValue = parentQuestion.GetAnswer().SelectedValue;
-
-            if (answerParentValue != actualParentValue)
-                throw new AnswerNotAcceptedException(
-                    $"Selected value do not correspond to the parent answer selected value")
-                {
-                    Data =
-                    {
-                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
-                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
-                        {ExceptionKeys.ProvidedAnswerValue, answer},
-                        {ExceptionKeys.ParentValue, answerParentValue}
-                    }
-                };
-
-            return this;
-        }
-
-        private string FormatQuestionForException()
-            => $"'{this.GetQuestionTitleForException()} [{this.GetQuestionVariableNameForException()}]'";
 
         private string GetQuestionTitleForException()
             => this.Questionnaire.HasQuestion(this.QuestionId)

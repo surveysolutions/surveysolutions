@@ -1386,9 +1386,9 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Assignments received by Interviewer.
         /// </summary>
-        public static string InterviewerProfile_DownloadedInterviewsCount {
+        public static string InterviewerProfile_DownloadedAssignmentsCount {
             get {
-                return ResourceManager.GetString("InterviewerProfile_DownloadedInterviewsCount", resourceCulture);
+                return ResourceManager.GetString("InterviewerProfile_DownloadedAssignmentsCount", resourceCulture);
             }
         }
         
@@ -2527,7 +2527,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name.
+        ///   Looks up a localized string similar to Interviewer Name.
         /// </summary>
         public static string MapList_Name {
             get {
@@ -2545,7 +2545,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maps.
+        ///   Looks up a localized string similar to Map files.
         /// </summary>
         public static string MapList_Title {
             get {

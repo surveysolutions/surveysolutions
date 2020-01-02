@@ -38,6 +38,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -130,7 +131,7 @@ namespace WB.UI.Headquarters
             var logger = container.Resolve<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {container.Resolve<IProductVersion>()}");
 
-            ConfigureAuth(app, container);
+            ConfigureAuth(app);
             
             InitializeMVC();
             ConfigureWebApi(app, config);
@@ -186,7 +187,7 @@ namespace WB.UI.Headquarters
             app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true, Resolver = resolver });
         }
 
-        private void ConfigureAuth(IAppBuilder app, ILifetimeScope ioc)
+        private void ConfigureAuth(IAppBuilder app)
         {
             var applicationSecuritySection = NConfigurator.Default.GetSection<HqSecuritySection>(@"applicationSecurity");
 
@@ -202,8 +203,7 @@ namespace WB.UI.Headquarters
                     OnValidateIdentity = OnValidateIdentity(
                             validateInterval: TimeSpan.FromMinutes(30),
                             regenerateIdentityCallback: (manager, user) => manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie),
-                            getUserIdCallback: (id) => Guid.Parse(id.GetUserId()),
-                            ioc: ioc),
+                            getUserIdCallback: (id) => Guid.Parse(id.GetUserId())),
 
                     OnApplyRedirect = ctx => ctx.ApplyNonApiRedirect()
                 },
@@ -223,13 +223,11 @@ namespace WB.UI.Headquarters
         /// <param name="validateInterval"></param>
         /// <param name="regenerateIdentityCallback"></param>
         /// <param name="getUserIdCallback"></param>
-        /// <param name="ioc"></param>
         /// <returns></returns>
         public static Func<CookieValidateIdentityContext, Task> OnValidateIdentity(
             TimeSpan validateInterval, 
             Func<HqUserManager, HqUser, Task<ClaimsIdentity>> regenerateIdentityCallback,
-            Func<ClaimsIdentity, Guid> getUserIdCallback,
-            ILifetimeScope ioc)
+            Func<ClaimsIdentity, Guid> getUserIdCallback)
         {
             if (getUserIdCallback == null)
                 throw new ArgumentNullException(nameof(getUserIdCallback));
@@ -253,7 +251,8 @@ namespace WB.UI.Headquarters
 
                 if (validate)
                 {
-                    var manager = ioc.Resolve<HqUserManager>();
+                    var manager = DependencyResolver.Current.GetService<HqUserManager>();
+
                     var userId = getUserIdCallback(context.Identity);
                     if (manager != null && userId != null)
                     {

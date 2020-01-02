@@ -7,13 +7,16 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
     {
         private readonly Dictionary<string, DataExportVariable> variableLabels;
 
-        public QuestionnaireLevelLabels(string levelName, DataExportVariable[] labeledVariable)
+        public QuestionnaireLevelLabels(string levelName, DataExportVariable[] labeledVariable, DataExportValue[] predefinedLabels)
         {
             this.LevelName = levelName;
             this.variableLabels = labeledVariable.ToDictionary(x => x.VariableName, x => x);
+            this.PredefinedLabels = predefinedLabels ?? new DataExportValue[0];
         }
 
         public string LevelName { get; private set; }
+
+        public DataExportValue[] PredefinedLabels { get; }
 
         public DataExportVariable[] LabeledVariable => this.variableLabels.Values.ToArray();
 

@@ -1,5 +1,5 @@
 using System;
-using Plugin.Permissions.Abstractions;
+using MvvmCross.Platforms.Android;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -11,10 +11,21 @@ namespace WB.UI.Interviewer.Implementations.Services
 {
     internal class TabletDiagnosticService : EnumeratorTabletDiagnosticService
     {
-        public TabletDiagnosticService(IFileSystemAccessor fileSystemAccessor, IPermissions permissions,
-            ISynchronizationService synchronizationService, IDeviceSettings deviceSettings,
-            IArchivePatcherService archivePatcherService, ILogger logger, IViewModelNavigationService navigationService) : base(fileSystemAccessor, permissions,
-            synchronizationService, deviceSettings, archivePatcherService, logger, navigationService)
+        public TabletDiagnosticService(IFileSystemAccessor fileSystemAccessor,
+            IPermissionsService permissions,
+            ISynchronizationService synchronizationService,
+            IDeviceSettings deviceSettings,
+            IArchivePatcherService archivePatcherService,
+            ILogger logger,
+            IViewModelNavigationService navigationService,
+            IMvxAndroidCurrentTopActivity topActivity) : base(fileSystemAccessor,
+            permissions,
+            synchronizationService,
+            deviceSettings,
+            archivePatcherService,
+            logger,
+            navigationService,
+            topActivity)
         {
         }
 

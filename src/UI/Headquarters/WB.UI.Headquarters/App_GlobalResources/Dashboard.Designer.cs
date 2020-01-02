@@ -223,6 +223,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imported by.
+        /// </summary>
+        internal static string ImportedBy {
+            get {
+                return ResourceManager.GetString("ImportedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{role}} user {{name}}.
+        /// </summary>
+        internal static string ImportedByText {
+            get {
+                return ResourceManager.GetString("ImportedByText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import questionnaire.
         /// </summary>
         internal static string ImportTemplate {
@@ -304,6 +322,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show on Designer.
+        /// </summary>
+        internal static string ShowOnDesigner {
+            get {
+                return ResourceManager.GetString("ShowOnDesigner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click Import Questionnaire button to load a questionnaire from Designer.
         /// </summary>
         internal static string SurveySetupIntroMessage1 {
@@ -354,15 +381,6 @@ namespace Resources {
         internal static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View on Designer.
-        /// </summary>
-        internal static string ShowOnDesigner {
-            get {
-                return ResourceManager.GetString("ShowOnDesigner", resourceCulture);
             }
         }
         

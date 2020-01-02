@@ -70,7 +70,8 @@ namespace WB.Tests.Unit.Designer
             bool yesNoView = false,
             string optionsFilterExpression = null,
             string linkedFilterExpression = null,
-            bool isFilteredCombobox = false)
+            bool isFilteredCombobox = false,
+            Guid? categoriesId = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             var questionProperties = Create.QuestionProperties();
@@ -92,7 +93,8 @@ namespace WB.Tests.Unit.Designer
                 maxAllowedAnswers,
                 yesNoView,
                 linkedFilterExpression,
-                isFilteredCombobox);
+                isFilteredCombobox,
+                categoriesId: categoriesId);
             command.Properties = questionProperties;
             questionnaire.UpdateMultiOptionQuestion(command);
         }
@@ -116,7 +118,8 @@ namespace WB.Tests.Unit.Designer
             bool isFilteredCombobox = false,
             Guid? cascadeFromQuestionId = null,
             bool showAsList = false,
-            int? showAsListThreshold = null)
+            int? showAsListThreshold = null,
+            Guid? categoriesId = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
 
@@ -148,7 +151,8 @@ namespace WB.Tests.Unit.Designer
                         validationExpression: null,
                         validationMessage: null,
                         showAsList: showAsList,
-                        showAsListThreshold: showAsListThreshold));
+                        showAsListThreshold: showAsListThreshold,
+                        categoriesId: categoriesId));
 
             if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {
