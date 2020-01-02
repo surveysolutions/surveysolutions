@@ -1,6 +1,6 @@
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.Headquarters.Services.Export
+namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public interface ITabularFormatExportService
     {

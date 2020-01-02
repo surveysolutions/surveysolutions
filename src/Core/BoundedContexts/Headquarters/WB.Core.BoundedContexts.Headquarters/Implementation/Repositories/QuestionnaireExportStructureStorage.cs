@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
@@ -10,31 +10,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
     internal class QuestionnaireExportStructureStorage: IQuestionnaireExportStructureStorage
     {
         private readonly IExportViewFactory exportViewFactory;
+        private readonly IMemoryCache cache;
 
-        private static readonly MemoryCache cache = new MemoryCache(nameof(QuestionnaireExportStructure));
-
-        public QuestionnaireExportStructureStorage(IExportViewFactory exportViewFactory)
+        public QuestionnaireExportStructureStorage(IExportViewFactory exportViewFactory, IMemoryCache cache)
         {
             this.exportViewFactory = exportViewFactory;
+            this.cache = cache;
         }
 
         public QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireIdentity id)
         {
-            var idStringKey = id.ToString();
-            var cachedQuestionnaireExportStructure = cache.Get(idStringKey);
-            if (cachedQuestionnaireExportStructure == null)
+            return cache.GetOrCreateNullSafe(id.ToString(), entry =>
             {
-                cachedQuestionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(id);
-
-                if (cachedQuestionnaireExportStructure == null)
-                    return null;
-
-                cache.Set(idStringKey, 
-                    cachedQuestionnaireExportStructure,
-                    DateTime.Now.AddHours(1));
-            }
-
-            return (QuestionnaireExportStructure) cachedQuestionnaireExportStructure;
+                entry.SlidingExpiration = TimeSpan.FromHours(1);
+                return this.exportViewFactory.CreateQuestionnaireExportStructure(id);
+            });
         }
     }
 }

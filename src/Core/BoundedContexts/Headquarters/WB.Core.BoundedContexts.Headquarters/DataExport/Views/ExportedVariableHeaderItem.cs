@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public class ExportedVariableHeaderItem : IExportedHeaderItem
     {
