@@ -248,7 +248,7 @@ namespace WB.UI.Headquarters.Controllers
                 SupervisorId = supervisorId,
                 ReportNameDescription = string.Format(GetReportDescriptionByType(supervisorId, reportType, perTeam), PeriodicStatusReport.Team.ToLower()),
                 TotalRowPresent = totalRowPresent,
-                MinAllowedDate = localDate ?? DateTime.Now,
+                MinAllowedDate = (localDate ?? DateTime.Now).ToString("s"),
                 SupervisorsUrl = Url.Action(reportName + "BySupervisors", "Reports"),
                 InterviewersUrl = Url.Action(reportName + "ByInterviewers", "Reports"),
                 Periods = new[]
