@@ -87,9 +87,12 @@
       ref="table"
       :tableOptions="tableOptions"
       :addParamsToRequest="addParamsToRequest"
+      @ajaxComplete="onTableReload"
       noPaging
       noSearch
       exportable
+      hasTotalRow 
+      noSelect
     >
       
     </DataTables>
@@ -111,6 +114,8 @@ export default {
             period: null,
             from: null,
             dateFormat: "YYYY-MM-DD",
+            dateTimeRanges: [],
+            columns: [],
             loading : {
                 report: false
             }
@@ -134,8 +139,106 @@ export default {
     methods: {
         loadReportData() {
             if (this.$refs.table){
+                this.prepareColumns();
                 this.$refs.table.reload();
             }
+        },
+        prepareColumns() {
+            var self = this;
+            var columns = []
+            columns.push({
+                data: "responsibleName",
+                name: "Responsible",
+                title: this.$t('Model.ResponsibleColumnName'),
+                orderable: true,
+                render: function(data, type, row) {
+                    if (data == undefined) {
+                        if (self.model.supervisorId) {
+                            return self.$t('Strings.AllInterviewers')
+                        }
+                        else {
+                            return self.$t('Strings.AllTeams')
+                        }
+                    }
+ 
+                    if (self.model.canNavigateToQuantityByTeamMember)
+                    {
+                        const interviewersUrl = self.getInterviewersUrl(row.responsibleId)
+                        return `<a href='${interviewersUrl}'">${data}</a>`
+                    }
+                    else
+                    {
+                        return `<span>${data}</span>`
+                    }
+                }
+            })
+
+            for(let i = 0; i < this.dateTimeRanges.length; i++) {
+                const date = this.dateTimeRanges[i];
+                const index = i
+                columns.push({
+                    class: "type-numeric",
+                    title: moment(date.to).format(this.dateFormat),
+                    data: date.from,
+                    name: date.from,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (row.quantityByPeriod) {
+                            var value = row.quantityByPeriod[index]
+                            var formatedValue = self.formatNumber(data)
+                            return `<span>${value}</span>`
+                        }
+                        if (row.quantityByPeriod) {
+                            var value = row.speedByPeriod[index]
+                            if (value == null)
+                                return '-'
+
+                            var formatedValue = moment.duration(data, "minutes").format("D[d] H[h] mm[m]")
+                            return `<span>${value}</span>`
+                        }
+                        return '-'
+                    }
+                })
+            }
+            columns.push({
+                data: "average",
+                name: "Average",
+                title: this.$t('PeriodicStatusReport.Average'),
+                orderable: true,
+                render: function(data, type, row) {
+                    if (row.quantityByPeriod) {
+                        var formatedValue = self.formatNumber(data)
+                        return `<span>${formatedValue}</span>`
+                    }
+                    if (row.quantityByPeriod) {
+                        if (data == null)
+                            return '-'
+
+                        var formatedValue = moment.duration(data, "minutes").format("D[d] H[h] mm[m]")
+                        return `<span>${formatedValue}</span>`
+                    }
+                    return '-'
+                }
+            })
+            columns.push({
+                data: "total",
+                name: "Total",
+                title: this.$t('PeriodicStatusReport.Total'),
+                orderable: true,
+                render: function(data, type, row) {
+                    if (row.quantityByPeriod) {
+                        var value = self.formatNumber(data)
+                        return `<span>${value}</span>`
+                    }
+                    if (row.quantityByPeriod) {
+                        var value = moment.duration(data, "minutes").format("D[d] H[h] mm[m]")
+                        return `<span>${value}</span>`
+                    }
+                    return '-'
+                }
+            })
+
+            this.columns = columns
         },
         reportTypeSelected(option) {
             this.reportTypeId = option
@@ -172,7 +275,7 @@ export default {
         addParamsToRequest(requestData) {
             requestData.questionnaireId = (this.questionnaireId || {}).key
             requestData.questionnaireVersion = (this.questionnaireVersion || {}).key
-            requestData.reportTypeId = this.reportTypeId.key
+            requestData.reportType = this.reportTypeId.key
             requestData.columnCount = this.overTheLast.key
             requestData.period = this.period.key
             requestData.from = this.from
@@ -202,25 +305,26 @@ export default {
             return data.lowStorageCount || data.wrongDateOnTabletCount
         },
         getInterviewersUrl(supervisorId){
-            var url = new Url(window.location.href);
             return this.model.interviewersUrl
-                + '?questionnaireId=' + url.query['questionnaireId']
-                + '&questionnaireVersion=' + url.query['questionnaireVersion']
-                + '&from=' + url.query['from']
-                + '&period=' + url.query['period']
-                + '&columnCount=' + url.query['columnCount']
-                + '&reportType=' + url.query['reportType']
+                + '?questionnaireId=' + (this.questionnaireId || {}).key
+                + '&questionnaireVersion=' + (this.questionnaireVersion || {}).key
+                + '&from=' + this.from
+                + '&period=' + this.period.key
+                + '&columnCount=' + this.overTheLast.key
+                + '&reportType=' + this.reportTypeId.key
                 + '&supervisorId=' + supervisorId;
         },
         getSupervisorsUrl() {
-            var url = new Url(window.location.href);
             return this.model.supervisorsUrl
-                + '?questionnaireId=' + url.query['questionnaireId']
-                + '&questionnaireVersion=' + url.query['questionnaireVersion']
-                + '&from=' + url.query['from']
-                + '&period=' + url.query['period']
-                + '&reportType=' + url.query['reportType']
-                + '&columnCount=' + url.query['columnCount'];
+                + '?questionnaireId=' + (this.questionnaireId || {}).key
+                + '&questionnaireVersion=' + (this.questionnaireVersion || {}).key
+                + '&from=' + this.from
+                + '&period=' + this.period.key
+                + '&reportType=' + this.reportTypeId.key
+                + '&columnCount=' + this.overTheLast.key;
+        },
+        onTableReload(data) {
+            this.dateTimeRanges = data.dateTimeRanges || []
         }
     },
     computed: {
@@ -254,52 +358,13 @@ export default {
             };
         },        
         tableOptions() {
-            var self = this;
-
-            var columns = []
-            columns.push({
-                data: "responsibleId",
-                name: "Responsible",
-                title: this.$t('Model.ResponsibleColumnName'),
-                orderable: true,
-                render: function(data, type, row) {
-                    if (self.model.canNavigateToQuantityByTeamMember)
-                    {
-                        const interviewersUrl = this.getInterviewersUrl(ResponsibleId())
-                        return `<a href='${interviewersUrl}'">${data}</a>`
-                    }
-                    else
-                    {
-                        return `<span>${data}</span>`
-                    }
-                }
-            })
-
-            const columnsCount = this.columnsCount
-            return columnsCount == null ? [] : columnsCount.map(a => ({
-                class: "type-numeric",
-                title: moment(a.to).format(this.dateFormat),
-                data: a.from,
-                name: a.from,
-                orderable: false
-            }))
-
-            columns.push({
-                data: "average",
-                name: "Average",
-                title: this.$t('PeriodicStatusReport.Average'),
-                orderable: true
-            })
-            columns.push({
-                data: "total",
-                name: "Total",
-                title: this.$t('PeriodicStatusReport.Total'),
-                orderable: true
-            })
+            if (this.columns.length == 0) {
+                this.prepareColumns()
+            }
 
             return {
                 deferLoading: 0,
-                columns: columns,
+                columns: this.columns,
                 ajax: {
                     url: this.$config.model.dataUrl,
                     type: "GET",
