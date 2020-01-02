@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
@@ -27,6 +28,14 @@ namespace WB.UI.Headquarters
             services.Configure<PreloadingConfig>(configuration.GetSection("PreLoading"));
             services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
             services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
+            services.Configure<FileStorageConfig>(configuration.GetSection("FileStorage"));
+
+            services.PostConfigure<FileStorageConfig>(c =>
+            {
+                c.AppData = c.AppData
+                    .Replace("~", System.IO.Directory.GetCurrentDirectory())
+                    .Replace("/", @"\\");
+            });
         }
     }
 }
