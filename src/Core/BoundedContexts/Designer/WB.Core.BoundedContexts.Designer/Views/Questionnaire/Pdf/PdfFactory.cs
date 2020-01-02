@@ -59,18 +59,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 return null;
             }
 
+            ITranslation translationData = null;
+
             if (translation.HasValue)
             {
                 var translationMetadata = questionnaire.Translations.FirstOrDefault(t => t.Id == translation.Value);
                 if (translationMetadata == null)
                     throw new ArgumentException("Questionnaire doesn't contains translation: " + translation);
 
-                var translationData = translationService.Get(questionnaire.PublicKey, translationMetadata.Id);
+                translationData = translationService.Get(questionnaire.PublicKey, translationMetadata.Id);
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             } 
             else if (useDefaultTranslation && questionnaire.DefaultTranslation != null)
             {
-                var translationData = translationService.Get(questionnaire.PublicKey, questionnaire.DefaultTranslation.Value);
+                translationData = translationService.Get(questionnaire.PublicKey, questionnaire.DefaultTranslation.Value);
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             }
 
@@ -129,17 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 QuestionsWithLongOptionsList = Find<ICategoricalQuestion>(allItems, x => !x.CategoriesId.HasValue && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
                 QuestionsWithLongSpecialValuesList = Find<IQuestion>(allItems, x => x.QuestionType == QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
-                CategoriesList = questionnaire.Categories.Select(x => new PdfQuestionnaireModel.Categories
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Items = this.categoriesService.GetCategoriesById(questionnaire.PublicKey, x.Id).Select(y => new PdfQuestionnaireModel.CategoriesItem
-                    {
-                        Id = y.Id,
-                        ParentId = y.ParentId,
-                        Text = y.Text
-                    }).ToList()
-                }).ToList()
+                CategoriesList = GetCategoriesList(questionnaire, translationData)
             };
 
             pdfView.FillStatistics(allItems, pdfView.Statistics);
@@ -149,6 +141,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             pdfView.Statistics.QuestionsWithValidationConditionsCount = Find<IQuestion>(allItems, x => x.ValidationConditions.Any()).Count();
             
             return pdfView;
+        }
+
+        private List<PdfQuestionnaireModel.Categories> GetCategoriesList(QuestionnaireDocument questionnaire, ITranslation translationData)
+        {
+            return questionnaire.Categories.Select(x => new PdfQuestionnaireModel.Categories
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Items = this.categoriesService.GetCategoriesById(questionnaire.PublicKey, x.Id).Select(y => new PdfQuestionnaireModel.CategoriesItem
+                {
+                    Id = y.Id,
+                    ParentId = y.ParentId,
+                    Text = translationData.GetCategoriesText(x.Id, y.Id, y.ParentId) ?? y.Text
+                }).ToList()
+            }).ToList();
         }
 
         public string LoadQuestionnaireTitle(Guid questionnaireId)
