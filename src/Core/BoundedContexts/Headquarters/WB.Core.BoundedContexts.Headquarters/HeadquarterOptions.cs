@@ -6,7 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         public string BaseUrl { get; set; }
         public string TenantName { get; set; }
-        public object DataStorePath { get; set; } = "~/Add_Data";
     }
 
     public static class HeadquarterOptionsExtensions

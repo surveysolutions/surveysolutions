@@ -2,12 +2,15 @@
 using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
@@ -26,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
 
         public AssignmentImportTemplateGenerator(
             IFileSystemAccessor fileSystemAccessor,
-            string folderPath,
+            IOptions<FileStorageConfig> fileStorageOptions,
             ITabularFormatExportService tabularFormatExportService, 
             IArchiveUtils archiveUtils, 
             IExportFileNameService exportFileNameService,
@@ -37,7 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
             this.archiveUtils = archiveUtils;
             this.exportFileNameService = exportFileNameService;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
-            this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
+            this.path = fileSystemAccessor.CombinePath(fileStorageOptions.Value.AppData, FolderName);
+
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
         }

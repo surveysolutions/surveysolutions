@@ -46,11 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             {
                 registry.Bind<IExternalFileStorage, NoExternalFileSystemStorage>();
                 registry.Bind<IAudioAuditFileStorage, AudioAuditFileStorage>();
-
-                var hqOptions = configuration.HeadquarterOptions().Get<HeadquarterOptions>();
-
-                registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, ImageFileStorage>(
-                    "rootDirectoryPath", hqOptions.DataStorePath);
+                registry.Bind<IImageFileStorage, ImageFileStorage>();
             }
         }
 
