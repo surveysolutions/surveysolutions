@@ -1,4 +1,12 @@
-﻿<div class="row">
+﻿<div class="row" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade  && !activeQuestion.isLinkedToReusableCategories">
+    <div class="col-xs-12">
+        <div class="well well-sm" ng-if="activeQuestion.wereOptionsTruncated" ng-i18next="({count: 200})QuestionOptionsCut"></div>
+        <ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include>
+        <p></p>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-xs-12">
         <label class="wb-label" for="cb-categorical-kind" ng-i18next="QuestionDisplayMode"></label>
     </div>
@@ -103,13 +111,6 @@
            class="btn btn-link"
            ng-click="showAddClassificationModal()" ng-i18next="QuestionAddClassification">
         </a>
-        <p></p>
-    </div>
-</div>
-<div class="row" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade  && !activeQuestion.isLinkedToReusableCategories">
-    <div class="col-xs-12">
-        <div class="well well-sm" ng-if="activeQuestion.wereOptionsTruncated" ng-i18next="({count: 200})QuestionOptionsCut"></div>
-        <ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include>
         <p></p>
     </div>
 </div>

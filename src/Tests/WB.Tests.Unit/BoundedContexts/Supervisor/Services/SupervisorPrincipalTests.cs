@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
 
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var hashedPassword = "hash";
             var userId = "sv";
 
-            var identityStorage = new InMemoryPlainStorage<SupervisorIdentity>();
+            var identityStorage = Create.Storage.InMemorySqlitePlainStorage<SupervisorIdentity>();
             var supervisorIdentity = Create.Other.SupervisorIdentity(id: userId, userName: login, passwordHash: hashedPassword);
             identityStorage.Store(supervisorIdentity);
 
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         private SupervisorPrincipal CreatePrincipal(IPlainStorage<SupervisorIdentity> usersStorage = null,
             IPasswordHasher passwordHasher = null)
         {
-           return new SupervisorPrincipal(usersStorage ?? new InMemoryPlainStorage<SupervisorIdentity>(),
+           return new SupervisorPrincipal(usersStorage ?? new InMemoryPlainStorage<SupervisorIdentity>(Mock.Of<ILogger>()),
                 passwordHasher ?? Mock.Of<IPasswordHasher>());
         }
     }

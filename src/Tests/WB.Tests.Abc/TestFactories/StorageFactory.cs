@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -43,6 +44,11 @@ namespace WB.Tests.Abc.TestFactories
 
     public class StorageFactory
     {
+        public InMemoryPlainStorage<TEntity, TKey> InMemorySqlitePlainStorage<TEntity, TKey>(ILogger logger = null) where TEntity : class, IPlainStorageEntity<TKey>, new()
+            => new InMemoryPlainStorage<TEntity, TKey>(logger ?? Mock.Of<ILogger>());
+        public InMemoryPlainStorage<TEntity> InMemorySqlitePlainStorage<TEntity>(ILogger logger = null) where TEntity : class, IPlainStorageEntity, new()
+            => new InMemoryPlainStorage<TEntity>(logger ?? Mock.Of<ILogger>());
+
         public IPlainStorageAccessor<TEntity> InMemoryPlainStorage<TEntity>() where TEntity : class => new InMemoryPlainStorageAccessor<TEntity>();
         public TestInMemoryWriter<TEntity> InMemoryReadSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();
         public TestInMemoryWriter<TEntity, TKey> InMemoryReadSideStorage<TEntity, TKey>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity, TKey>();
