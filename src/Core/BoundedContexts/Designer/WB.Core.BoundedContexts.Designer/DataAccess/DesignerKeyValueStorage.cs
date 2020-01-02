@@ -91,7 +91,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                 dbContext.Add(instance);
             }
 
-            //memoryCache.Remove(CacheKey(id));
+            memoryCache.Remove(CacheKey(id));
+            GetById(id);
         }
 
         private string CacheKey(string id) => QueryType.Name + id;
