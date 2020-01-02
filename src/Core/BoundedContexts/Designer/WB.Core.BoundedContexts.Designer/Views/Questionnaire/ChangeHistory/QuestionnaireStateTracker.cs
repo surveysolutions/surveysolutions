@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public Dictionary<Guid, string> LookupState { get; set; } = new Dictionary<Guid, string>();
         public Dictionary<Guid, string> AttachmentState { get; set; } = new Dictionary<Guid, string>();
         public Dictionary<Guid, string> TranslationState { get; set; } = new Dictionary<Guid, string>();
+        public Dictionary<Guid, string> CategoriesState { get; set; } = new Dictionary<Guid, string>();
         public Guid CreatedBy { get; set; }
 
         public void RemoveCascadely(Guid groupId)

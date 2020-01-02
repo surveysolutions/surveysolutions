@@ -182,6 +182,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .OrderBy(x => x.Name)
                 .ToList();
 
+            questionnaireInfoView.Categories = questionnaireDocument.Categories
+                .Select(categoriesIdentity => new CategoriesView
+                {
+                    CategoriesId = categoriesIdentity.Id.FormatGuid(),
+                    Name = categoriesIdentity.Name,
+                })
+                .OrderBy(x => x.Name)
+                .ToList();
+
             questionnaireInfoView.Metadata = new MetadataView()
             {
                 Title = questionnaireDocument.Title,

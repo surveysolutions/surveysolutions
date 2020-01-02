@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     throw new ArgumentException($@"Incorrect answer type for SingleOption question: '{result.VariableName}' => '{answer}'", nameof(answer));
                 }
 
-                result.AnswerAsString = questionnaire.GetAnswerOptionTitle(result.Identity.Id, singleOptionAnswer);
+                result.AnswerAsString = questionnaire.GetAnswerOptionTitle(result.Identity.Id, singleOptionAnswer, null);
             }
 
             if (questionType == QuestionType.DateTime)

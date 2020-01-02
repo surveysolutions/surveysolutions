@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.Core.BoundedContexts.Tester.Services
@@ -17,5 +18,6 @@ namespace WB.Core.BoundedContexts.Tester.Services
         Task<Questionnaire> GetQuestionnaireAsync(string questionnaireId, IProgress<TransferProgress> transferProgress, CancellationToken token);
         Task<AttachmentContent> GetAttachmentContentAsync(string attachmentId, IProgress<TransferProgress> transferProgress, CancellationToken token);
         Task<TranslationDto[]> GetTranslationsAsync(string questionnaireId, CancellationToken token);
+        Task<ReusableCategoriesDto[]> GetReusableCategoriesAsync(string questionnaireId, CancellationToken token);
     }
 }

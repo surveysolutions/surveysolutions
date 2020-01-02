@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging;
+using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Versions;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
@@ -38,7 +39,10 @@ namespace WB.UI.WebTester
         {
             services.AddOptions();
             services.AddControllersWithViews()
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson(opt =>
+                {
+                    opt.SerializerSettings.Converters.Add(new EnumToStringConverter());
+                });
             services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddResponseCaching();

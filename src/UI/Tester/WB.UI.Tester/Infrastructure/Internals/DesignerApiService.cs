@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.UI.Tester.Infrastructure.Internals.Security;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
@@ -105,6 +106,12 @@ namespace WB.UI.Tester.Infrastructure.Internals
         public Task<TranslationDto[]> GetTranslationsAsync(string questionnaireId, CancellationToken token)
             => this.restService.GetAsync<TranslationDto[]>(
                 url: $"{this.apiPrefix}/translation/{questionnaireId}",
+                token: token,
+                credentials: this.RestCredentials);
+
+        public Task<ReusableCategoriesDto[]> GetReusableCategoriesAsync(string questionnaireId, CancellationToken token)
+            => this.restService.GetAsync<ReusableCategoriesDto[]>(
+                url: $"{this.apiPrefix}/categories/{questionnaireId}",
                 token: token,
                 credentials: this.RestCredentials);
 

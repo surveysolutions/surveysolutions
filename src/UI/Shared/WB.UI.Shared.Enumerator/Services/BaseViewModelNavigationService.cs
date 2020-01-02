@@ -6,7 +6,6 @@ using Android.OS;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Java.Lang;
-using MvvmCross.Logging;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using MvvmCross.ViewModels;
@@ -46,21 +45,23 @@ namespace WB.UI.Shared.Enumerator.Services
             this.logger = logger;
         }
 
-        public virtual bool HasPendingOperations => this.commandService.HasPendingCommands ||
-                                                    this.userInteractionService.HasPendingUserInteractions ||
-                                                    this.userInterfaceStateService.IsUserInterfaceLocked ||
-                                                    this.userInterfaceStateService.HasPendingThrottledActions;
+        public virtual bool HasPendingOperations => 
+            this.commandService.HasPendingCommands ||
+            this.userInteractionService.HasPendingUserInteractions ||
+            this.userInterfaceStateService.IsUserInterfaceLocked ||
+            this.userInterfaceStateService.HasPendingThrottledActions;
 
         public Task Close(IMvxViewModel viewModel)
         {
             this.logger.Trace($"Closing viewmodel {viewModel.GetType()}");
             return this.navigationService.Close(viewModel);
         }
-
+        
         public void InstallNewApp(string pathToApk)
         {
             this.logger.Info($"Installing new app {pathToApk} android build version code {Build.VERSION.SdkInt}");
             Intent promptInstall;
+
             if (Build.VERSION.SdkInt < BuildVersionCodes.N)
             {
                 promptInstall =
@@ -69,7 +70,7 @@ namespace WB.UI.Shared.Enumerator.Services
                         .AddFlags(ActivityFlags.NewTask)
                         .AddFlags(ActivityFlags.GrantReadUriPermission);
             }
-            else
+            else 
             {
                 var uriForFile = FileProvider.GetUriForFile(this.topActivity.Activity.BaseContext,
                     this.topActivity.Activity.ApplicationContext.PackageName + ".fileprovider",

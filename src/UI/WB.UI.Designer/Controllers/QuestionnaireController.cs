@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -76,6 +77,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IPublicFoldersStorage publicFoldersStorage;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
+        private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
 
         public QuestionnaireController(
@@ -93,7 +95,8 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireHelper questionnaireHelper,
             IPublicFoldersStorage publicFoldersStorage,
             IAttachmentService attachmentService,
-            ITranslationsService translationsService)
+            ITranslationsService translationsService,
+            ICategoriesService categoriesService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -109,6 +112,7 @@ namespace WB.UI.Designer.Controllers
             this.publicFoldersStorage = publicFoldersStorage;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
+            this.categoriesService = categoriesService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
 

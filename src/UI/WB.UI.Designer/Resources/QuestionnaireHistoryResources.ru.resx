@@ -346,4 +346,16 @@
       <value>Комментарий</value>
       <comment>Комментарий</comment>
   </data>
+  <data name="Categories_Delete" xml:space="preserve">
+      <value>Удалены категории {0}</value>
+      <comment>Удалены категории {0}</comment>
+  </data>
+  <data name="Categories_Add" xml:space="preserve">
+      <value>Добавлены новые категории {0}</value>
+      <comment>Добавлены новые категории {0}</comment>
+  </data>
+  <data name="Categories_Update" xml:space="preserve">
+      <value>Категории {0} обновлены</value>
+      <comment>Категории {0} обновлены</comment>
+  </data>
 </root>

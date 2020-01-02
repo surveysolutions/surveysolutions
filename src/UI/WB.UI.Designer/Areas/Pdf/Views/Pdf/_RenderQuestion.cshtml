@@ -5,6 +5,20 @@
 @using WB.Core.SharedKernels.Questionnaire.Documents
 @using WB.UI.Designer.Utils
 @model Main.Core.Entities.SubEntities.IQuestion
+
+@functions {
+
+    private static List<Answer> GetOptions(ICategoricalQuestion question, PdfQuestionnaireModel questionnaire)
+        => question.CategoriesId.HasValue ? questionnaire.CategoriesList.Find(x => x.Id == question.CategoriesId.Value).Items.Select(x => new Answer
+        {
+            AnswerValue = x.Id.ToString(),
+            ParentValue = x.ParentId?.ToString(),
+            AnswerText = x.Text
+        }).ToList() : question.Answers;
+
+    private static string GetOptionsRef(PdfQuestionnaireModel questionnaire, ICategoricalQuestion question)
+        => questionnaire.GetOptionsRef(question.CategoriesId.HasValue ? question.CategoriesId.Value : question.PublicKey);
+}
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
     var question = Model;
@@ -88,99 +102,106 @@
         </div>
 
         @switch (question.QuestionType)
-            {
-                case QuestionType.SingleOption:
+        {
+            case QuestionType.SingleOption:
                 <div class="answer-editor">
-                    @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
-                    {
-                        <div class="option">
-                            <div class="option-value"><span >@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</span></div>
-                            <div class="option-text">
-                                <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
-                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
-                            </div>
+                    @{
+                var singleQuestion = question as ICategoricalQuestion;
+                var singleCategories = GetOptions(singleQuestion, questionnaire);
+                foreach (var option in singleCategories.Take(questionnaire.Settings.OptionsExcerptCount))
+                {
+                    <div class="option">
+                        <div class="option-value"><span >@questionnaire.GetFormattedOptionValue(singleCategories, @option.AnswerValue)</span></div>
+                        <div class="option-text">
+                            <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                            <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
                         </div>
-                    }
-                    @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
-                    {
-                        <div class="more">
-                            <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">
-                                @Pdf.Format(PdfStrings.AppendixLink, question.Answers.Count - questionnaire.Settings.OptionsExcerptCount, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O"))
-                            </a>
-                        </div>
-                    }
+                    </div>
+                }
+                @if (singleCategories.Count > questionnaire.Settings.OptionsExcerptCount)
+                {
+                    <div class="more">
+                        <a href="#@GetOptionsRef(questionnaire, singleQuestion)">
+                            @Pdf.Format(PdfStrings.AppendixLink, singleCategories.Count - questionnaire.Settings.OptionsExcerptCount, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O"))
+                        </a>
+                    </div>
+                }}
                 </div>
                 break;
             case QuestionType.MultyOption:
                 <div class="answer-editor multi-option">
-                    @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
-                    {
-                        <div class="option">
-                            <div class="option-value">
-                                @questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)
+                    @{
+                var multiQuestion = question as ICategoricalQuestion;
+                var multiCategories = GetOptions(multiQuestion, questionnaire);
+
+                foreach (var option in multiCategories.Take(questionnaire.Settings.OptionsExcerptCount))
+                {
+                    <div class="option">
+                        <div class="option-value">
+                            @questionnaire.GetFormattedOptionValue(multiCategories, @option.AnswerValue)
+                        </div>
+                        @if (questionnaire.IsYesNoMultiQuestion(question))
+                        {
+                            <div class="yes_no_multiselect">
+                                <input type="radio" id="@question.StataExportCaption-@option.AnswerValue-yes" name="@question.StataExportCaption-@option.AnswerValue">
+                                <label for="@question.StataExportCaption-@option.AnswerValue-yes"></label>
+                                <span style="vertical-align: top;">/</span>
+                                <input type="radio" id="@question.StataExportCaption-@option.AnswerValue-no" name="@question.StataExportCaption-@option.AnswerValue">
+                                <label for="@question.StataExportCaption-@option.AnswerValue-no"></label>
                             </div>
-                            @if (questionnaire.IsYesNoMultiQuestion(question))
-                            {
-                                <div class="yes_no_multiselect">
-                                    <input type="radio" id="@question.StataExportCaption-@option.AnswerValue-yes" name="@question.StataExportCaption-@option.AnswerValue">
-                                    <label for="@question.StataExportCaption-@option.AnswerValue-yes"></label>
-                                    <span style="vertical-align: top;">/</span>
-                                    <input type="radio" id="@question.StataExportCaption-@option.AnswerValue-no" name="@question.StataExportCaption-@option.AnswerValue">
-                                    <label for="@question.StataExportCaption-@option.AnswerValue-no"></label>
-                                </div>
-                                <div class="yes_no-option-text">@option.AnswerText</div>
-                            }
-                            else
-                            {
-                                <div class="option-text">
-                                    <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
-                                    <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
-                                </div>
-                            }
-                        </div>
-                    }
-                    @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
-                    {
-                        <div class="more">
-                            <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">
-                                @Pdf.Format(PdfStrings.AppendixLink, question.Answers.Count - questionnaire.Settings.OptionsExcerptCount, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O"))
-                            </a>
-                        </div>
-                    }
+                            <div class="yes_no-option-text">@option.AnswerText</div>
+                        }
+                        else
+                        {
+                            <div class="option-text">
+                                <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                            </div>
+                        }
+                    </div>
+                }
+                @if (multiCategories.Count > questionnaire.Settings.OptionsExcerptCount)
+                {
+                    <div class="more">
+                        <a href="#@GetOptionsRef(questionnaire, multiQuestion)">
+                            @Pdf.Format(PdfStrings.AppendixLink, multiCategories.Count - questionnaire.Settings.OptionsExcerptCount, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O"))
+                        </a>
+                    </div>
+                }}
                 </div>
                 break;
             case QuestionType.Numeric:
-	            <div class="answer-editor">
-		            <input type="number" class="dashes">
-	            </div>
-	            if (question.Answers.Count > 0)
-	            {
-		             <div class="question-meta more">
-			             <div class="type">
-				             @PdfStrings.SpecialValues
-			             </div>
-		             </div>
-			         <div class="question-meta">
+                <div class="answer-editor">
+                    <input type="number" class="dashes">
+                </div>
+                if (question.Answers.Count > 0)
+                {
+                    <div class="question-meta more">
+                        <div class="type">
+                            @PdfStrings.SpecialValues
+                        </div>
+                    </div>
+                    <div class="question-meta">
 
-				             @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
-				             {
-					             <div class="option">
-						             <div class="option-value"><span>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</span></div>
-						             <div class="option-text">
-							             <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
-						             </div>
-					             </div>
-				             }
-				             @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
-				             {
-					             <div class="more">
-						             <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">
-							             @Pdf.Format(PdfStrings.AppendixLink, question.Answers.Count - questionnaire.Settings.OptionsExcerptCount, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "SV"))
-						             </a>
-					             </div>
-				             }
-			         </div>
-	            }
+                        @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
+                        {
+                            <div class="option">
+                                <div class="option-value"><span>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</span></div>
+                                <div class="option-text">
+                                    <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                                </div>
+                            </div>
+                        }
+                        @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
+                        {
+                            <div class="more">
+                                <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">
+                                    @Pdf.Format(PdfStrings.AppendixLink, question.Answers.Count - questionnaire.Settings.OptionsExcerptCount, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "SV"))
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
                 break;
             case QuestionType.DateTime:
                 <div class="answer-editor">
@@ -222,7 +243,7 @@
             case QuestionType.Audio:
                 <div class="answer-editor">
                 </div>
-            break;
+                break;
         }
     </div>
 </div>
