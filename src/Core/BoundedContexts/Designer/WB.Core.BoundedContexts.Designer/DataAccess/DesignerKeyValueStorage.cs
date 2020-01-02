@@ -75,8 +75,6 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
         public void Store(T entity, string id)
         {
-            var key = CacheKey(id);
-            memoryCache.Remove(CacheKey(id));
             var entry = FindEntry(id);
             
             if (entry != null && entry.State != EntityState.Deleted)
@@ -92,6 +90,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                 
                 dbContext.Add(instance);
             }
+
+            //memoryCache.Remove(CacheKey(id));
         }
 
         private string CacheKey(string id) => QueryType.Name + id;
