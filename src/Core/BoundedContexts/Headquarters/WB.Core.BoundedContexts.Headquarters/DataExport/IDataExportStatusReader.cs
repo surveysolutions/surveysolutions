@@ -2,10 +2,11 @@
 using System.IO;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
+namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public class DataExportArchive
     {

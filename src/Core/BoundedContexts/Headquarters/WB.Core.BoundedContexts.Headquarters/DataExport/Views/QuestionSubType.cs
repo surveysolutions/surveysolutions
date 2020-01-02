@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
+﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public enum QuestionSubtype
     {
