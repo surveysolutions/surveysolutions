@@ -332,6 +332,7 @@ import ExportProcessCard from "./ExportProcessCard";
 import { mixin as VueTimers } from "vue-timers";
 import queryString from "query-string";
 import { last } from "lodash";
+import moment from 'moment';
 
 const dataFormatNum = { Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6 };
 const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 };

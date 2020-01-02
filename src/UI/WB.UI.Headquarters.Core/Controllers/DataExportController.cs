@@ -54,6 +54,7 @@ namespace WB.UI.Headquarters.Controllers
                     RegenerateSurveyDataUrl = Url.Action("Regenerate", "DataExportApi"),
                     QuestionnairesUrl = Url.Action("QuestionnairesWithVersions", "QuestionnairesApi"),
                     StatusUrl = Url.Action("ExportStatus", "DataExportApi"),
+                    ExportStatusUrl = Url.Action("Status", "DataExportApi"),
                     RunningJobsUrl = Url.Action("GetRunningJobs", "DataExportApi"),
                     DataAvailabilityUrl = Url.Action("DataAvailability", "DataExportApi"),
                     WasExportFileRecreatedUrl = Url.Action("WasExportFileRecreated", "DataExportApi"),

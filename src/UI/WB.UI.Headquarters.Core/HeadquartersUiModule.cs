@@ -4,6 +4,7 @@ using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
@@ -22,6 +23,9 @@ namespace WB.UI.Headquarters
         public void Load(IIocRegistry registry)
         {
             var services = registry;
+
+            services.AddScoped<ServiceApiKeyAuthorization>();
+            
             registry.AddTransient<IExportServiceApiFactory, ExportServiceApiFactory>();
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();

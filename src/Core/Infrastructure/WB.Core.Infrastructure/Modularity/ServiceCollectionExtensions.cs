@@ -12,9 +12,15 @@ namespace WB.Core.Infrastructure.Modularity
         }
 
         public static void AddScoped<TService>(this IIocRegistry registry, Func<IServiceProvider, TService> implementationFactory)
-        where TService : class
+         where TService : class
         {
             registry.BindToMethod(ctx => implementationFactory(ctx.Get<IServiceProvider>()));
+        }
+
+        public static void AddScoped<TService>(this IIocRegistry registry)
+            where TService : class
+        {
+            registry.BindInPerLifetimeScope<TService, TService>();
         }
     }
 }

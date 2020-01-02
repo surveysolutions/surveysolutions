@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace WB.UI.Headquarters
 {
@@ -12,7 +13,13 @@ namespace WB.UI.Headquarters
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                
+                .ConfigureLogging(log =>
+                {
+                    log.ClearProviders()
+                        .AddConsole()
+                        .AddFilter("Microsoft", LogLevel.Warning)
+                        .SetMinimumLevel(LogLevel.Warning);
+                })
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureAppConfiguration((hostingContext, c) =>
                 {
