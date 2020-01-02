@@ -48,6 +48,18 @@ namespace WB.UI.Headquarters.Controllers.Api
             public Guid? QuestionnaireId { get; set; }
         }
 
+        public class QuantityDataTableResponse : DataTableResponse<QuantityByResponsibleReportRow>
+        {
+            public DateTimeRange[] DateTimeRanges { get; set; }
+            public QuantityTotalRow TotalRow { get; set; }
+        }
+
+        public class SpeedDataTableResponse : DataTableResponse<SpeedByResponsibleReportRow>
+        {
+            public DateTimeRange[] DateTimeRanges { get; set; }
+            public SpeedByResponsibleTotalRow TotalRow { get; set; }
+        }
+
         private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)
         {
             switch (reportType)
@@ -114,8 +126,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report));
             var result = new FileStreamResult(exportFileStream, exportFile.MimeType)
             {
-                FileDownloadName =
-                    $"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
+                FileDownloadName = $"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
             };
             return result;
         }

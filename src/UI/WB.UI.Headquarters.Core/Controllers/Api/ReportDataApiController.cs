@@ -169,7 +169,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
             }
 
-            return new JsonResult(this.quantityReport.Load(input));
+            var reportView = ToDataTableResponse(this.quantityReport.Load(input));
+            return new JsonResult(reportView);
         }
 
         [HttpGet]
@@ -200,9 +201,21 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
             }
 
-            var reportView = this.quantityReport.Load(input);
+            var reportView = ToDataTableResponse(this.quantityReport.Load(input));
             return new JsonResult(reportView);
         }
+
+        public QuantityDataTableResponse ToDataTableResponse(QuantityByResponsibleReportView reportView)
+        {
+            return new QuantityDataTableResponse
+            {
+                RecordsTotal = reportView.TotalCount,
+                Data = reportView.Items,
+                DateTimeRanges = reportView.DateTimeRanges,
+                TotalRow = reportView.TotalRow
+            };
+        }
+
 
         [HttpGet]
         public IActionResult SpeedByInterviewers([FromQuery]SpeedByInterviewersReportModel data, [FromQuery]string exportType = null)
@@ -234,6 +247,17 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
 
             return new JsonResult(this.speedReport.Load(input));
+        }
+
+        public SpeedDataTableResponse ToDataTableResponse(SpeedByResponsibleReportView reportView)
+        {
+            return new SpeedDataTableResponse
+            {
+                RecordsTotal = reportView.TotalCount,
+                Data = reportView.Items,
+                DateTimeRanges = reportView.DateTimeRanges,
+                TotalRow = reportView.TotalRow
+            };
         }
 
         [HttpGet]
