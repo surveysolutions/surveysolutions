@@ -26,6 +26,7 @@
             v-if="answeredOrAllOptions.some(e => e.value === option.value)"
             class="wb-checkbox"
             type="checkbox"
+            style="width:0px;left:0px;"
             :id="$me.id + '_' + option.value"
             :name="$me.id"
             :value="option.value"
