@@ -176,7 +176,7 @@ namespace WB.Tests.Abc.TestFactories
         )
             => new InterviewDashboardEventHandler(
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
-                prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
+                prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(Mock.Of<ILogger>()),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
 
@@ -435,7 +435,7 @@ namespace WB.Tests.Abc.TestFactories
 
             return new InterviewerOnlineSynchronizationProcess(
                 syncServiceMock,
-                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(Mock.Of<ILogger>()),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
@@ -460,7 +460,7 @@ namespace WB.Tests.Abc.TestFactories
 
             return new InterviewerOfflineSynchronizationProcess(
                 syncServiceMock,
-                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(Mock.Of<ILogger>()),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
@@ -827,7 +827,7 @@ namespace WB.Tests.Abc.TestFactories
             return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
-                interviews ?? new InMemoryPlainStorage<InterviewView>(),
+                interviews ?? new InMemoryPlainStorage<InterviewView>(Mock.Of<ILogger>()),
                 serializer ?? Mock.Of<IJsonAllTypesSerializer>(s => s.Deserialize<AggregateRootEvent[]>(It.IsAny<string>()) == new AggregateRootEvent[] { }),// new JsonAllTypesSerializer(),
                 commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
@@ -868,8 +868,8 @@ namespace WB.Tests.Abc.TestFactories
             var interviewerDownloadInterviews = new InterviewerDownloadInterviews(
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
-                interviewSequenceViewRepository ?? new InMemoryPlainStorage<InterviewSequenceView, Guid>(),
-                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
+                interviewSequenceViewRepository ?? new InMemoryPlainStorage<InterviewSequenceView, Guid>(logger),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(logger),
                 eventBus ?? Create.Service.LiteEventBus(),
                 eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
                 logger ?? Mock.Of<ILogger>(),
@@ -916,7 +916,7 @@ namespace WB.Tests.Abc.TestFactories
             var result = new RemoveObsoleteQuestionnaires(
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
-                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(Mock.Of<ILogger>()),
                 attachmentsCleanupService ?? Mock.Of<IAttachmentsCleanupService>(),
                 interviewsRemover ?? Mock.Of<IInterviewsRemover>(),
                 Mock.Of<ILogger>(),
