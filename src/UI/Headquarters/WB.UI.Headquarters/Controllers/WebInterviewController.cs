@@ -178,10 +178,12 @@ namespace WB.UI.Headquarters.Controllers
                 isAskForEmailAvailable = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false;
             }
 
+            var askForEmail = isAskForEmailAvailable ? Request.Cookies.Get(AskForEmail)?.Value ?? "false" : "false";
+
             return new WebInterviewIndexPageModel
             {
                 Id = interviewId,
-                AskForEmail = isAskForEmailAvailable ? "false" : Request.Cookies.Get(AskForEmail)?.Value ?? "false",
+                AskForEmail = askForEmail,
                 CustomMessages = webInterviewConfig.CustomMessages
             };
         }
