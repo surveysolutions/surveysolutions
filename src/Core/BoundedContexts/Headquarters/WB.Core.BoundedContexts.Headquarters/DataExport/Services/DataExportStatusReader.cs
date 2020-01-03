@@ -106,13 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 }
             }
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(processView.QuestionnaireIdentity, null);
-            if (questionnaire == null)
-            {
-                return null;
-            }
-
-            processView.Title = questionnaire.Title;
+            processView.Id = id;
             return processView;
         }
 
