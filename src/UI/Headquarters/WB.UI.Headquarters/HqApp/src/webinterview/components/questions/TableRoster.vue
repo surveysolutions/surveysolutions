@@ -30,8 +30,8 @@
     import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
     import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
     import TableRoster_RosterTitle from "./TableRoster.RosterTitle";
-    import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";
-    
+    import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";    
+
     export default {
         name: 'TableRoster',
         mixins: [entityDetails],
@@ -53,7 +53,7 @@
             TableRoster_ViewAnswer,
             TableRoster_QuestionEditor,
             TableRoster_RosterTitle,
-            TableRoster_QuestionTitle,
+            TableRoster_QuestionTitle
         },
 
         beforeMount() {
@@ -106,12 +106,14 @@
                             headerComponentFramework: 'TableRoster_QuestionTitle',
                             headerComponentParams: {
                                 title: question.title,
-                                instruction: question.instruction, 
+                                instruction: question.instruction,
+                                question: question
                             },
                             field: question.id, 
                             cellRendererFramework: 'TableRoster_ViewAnswer',
                             cellRendererParams: {
                                 id: question.id,
+                                question: question
                             },
                             cellEditorFramework: 'TableRoster_QuestionEditor', 
                             cellEditorParams: {

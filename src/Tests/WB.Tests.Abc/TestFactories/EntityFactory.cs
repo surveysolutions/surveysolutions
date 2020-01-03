@@ -88,6 +88,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -892,8 +893,8 @@ namespace WB.Tests.Abc.TestFactories
                 Variable = variable
             };
 
-        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true, string comment = null)
-            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments, allowExportVariables, comment);
+        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true, string comment = null, Guid? importedBy = null)
+            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments, allowExportVariables, comment, importedBy);
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
@@ -2510,5 +2511,16 @@ namespace WB.Tests.Abc.TestFactories
                 Options = items
             };
         }
+
+        public ReusableCategoricalOptions ReusableCategoricalOptions(QuestionnaireIdentity questionnaireId,
+            Guid categoriesId, int value, string text = "option", int? parentValue = null, int? sortIndex = null) => new ReusableCategoricalOptions
+        {
+            CategoriesId = categoriesId,
+            QuestionnaireId = questionnaireId,
+            ParentValue = parentValue,
+            Text = text,
+            Value = value,
+            SortIndex = sortIndex ?? 0
+        };
     }
 }

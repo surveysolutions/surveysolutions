@@ -1,4 +1,10 @@
-﻿
+﻿<div class="row" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isLinkedToReusableCategories">
+    <div class="col-xs-12">
+        <div class="well well-sm" ng-if="activeQuestion.wereOptionsTruncated" ng-i18next="({count: 200})QuestionOptionsCut"></div>
+        <ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include>
+        <p></p>
+    </div>
+</div>
 <div class="row">
     <div class="col-xs-12">
         <label class="wb-label" for="cb-categorical-kind" ng-i18next="QuestionDisplayMode"></label>
@@ -41,10 +47,10 @@
 
                 <ul class="dropdown-menu" role="menu">
                     <li role="presentation">
-                        <a role="menuitem" tabindex="-1" ng-i18next="UserDefinedCategories" ng-click="changeIsReusableCategories(false)"></a>
+                        <a role="menuitem" tabindex="-1" ng-i18next="UserDefinedCategories" ng-click="setUserDefinedCategories()"></a>
                     </li>
                     <li role="presentation">
-                        <a role="menuitem" tabindex="-1" ng-i18next="ReusableCategories" ng-click="changeIsReusableCategories(true)"></a>
+                        <a role="menuitem" tabindex="-1" ng-i18next="ReusableCategories" ng-click="setIsReusableCategories()"></a>
                     </li>
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" ng-i18next="RostersQuestion" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.yesNoView" ng-click="setIsLinkedQuestion()"></a>
@@ -105,13 +111,6 @@
     </div>
 </div>
 <p></p>
-<div class="row" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isLinkedToReusableCategories">
-    <div class="col-xs-12">
-        <div class="well well-sm" ng-if="activeQuestion.wereOptionsTruncated" ng-i18next="({count: 200})QuestionOptionsCut"></div>
-        <ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include>
-        <p></p>
-    </div>
-</div>
 <div class="row" ng-if="activeQuestion.isLinked">
     <div class="col-xs-12">
         <div class="form-group" ng-include="'linkTemplate.html'" ng-class="{'has-error': !questionForm.linkedToEntity.$valid}"></div>

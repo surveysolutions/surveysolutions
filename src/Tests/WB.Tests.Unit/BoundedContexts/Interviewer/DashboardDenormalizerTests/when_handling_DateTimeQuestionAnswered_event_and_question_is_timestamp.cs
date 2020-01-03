@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                         Create.Entity.DateTimeQuestion(questionId: dateTimeQuestionIdentity.Id, preFilled: true, isTimestamp: true)
                     })));
             var answerToStringConverter = Create.Service.AnswerToStringConverter();
-            prefilledQuestions = new InMemoryPlainStorage<PrefilledQuestionView>();
+            prefilledQuestions = Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>();
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 questionnaireStorage: plainQuestionnaireRepository,
                 prefilledQuestions: prefilledQuestions,

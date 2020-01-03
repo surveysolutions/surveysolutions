@@ -59,6 +59,7 @@ namespace WB.Services.Export
             services.AddTransient<IAssignmentActionsExporter, AssignmentActionsExporter>();
             services.AddTransient<IInterviewActionsExporter, InterviewActionsExporter>();
             services.AddTransient<IInterviewsExporter, InterviewsExporter>();
+            services.AddTransient<IInterviewsDoFilesExporter, InterviewsDoFilesExporter>();
             services.AddTransient<IInterviewFactory, InterviewFactory>();
             services.AddTransient<IInterviewErrorsExporter, InterviewErrorsExporter>();
             services.AddTransient<IExportQuestionService, ExportQuestionService>();

@@ -185,6 +185,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnumeratorSetup.cs" />
     <Compile Include="Services\AndroidPathUtils.cs" />
+    <Compile Include="Services\ApplicationResumeMessage.cs" />
     <Compile Include="Services\ArchivePatcherService.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />
     <Compile Include="Services\BaseViewModelNavigationService.cs" />
@@ -2238,7 +2239,7 @@
       <Version>2.2.2</Version>
     </PackageReference>
     <PackageReference Include="modernhttpclient-updated">
-      <Version>2.7.2</Version>
+      <Version>3.4.3</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Droid.Support.Core.Utils">
       <Version>6.4.0</Version>

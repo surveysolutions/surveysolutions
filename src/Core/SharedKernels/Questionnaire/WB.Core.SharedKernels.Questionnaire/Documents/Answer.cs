@@ -37,6 +37,8 @@ namespace Main.Core.Entities.SubEntities
             return parsedParentValue;
         }
 
+        public bool HasValue() => AnswerCode.HasValue || !string.IsNullOrEmpty(AnswerValue);
+
         public static Answer CreateFromOther(Answer answer)
         {
             return new Answer
