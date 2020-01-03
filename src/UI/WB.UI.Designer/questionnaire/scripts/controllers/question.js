@@ -623,7 +623,7 @@
             };
 
             $scope.getCategoriesList = function() {
-                return $scope.questionnaire.categories || [];
+                return ($scope.questionnaire || {}).categories || [];
             };
 
             $scope.setCategories = function (categories) {
