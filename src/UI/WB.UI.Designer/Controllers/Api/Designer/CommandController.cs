@@ -32,6 +32,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
@@ -58,6 +59,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
         private readonly ICategoriesService categoriesService;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
@@ -71,7 +73,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
             ITranslationsService translationsService,
-            ICategoriesService categoriesService)
+            ICategoriesService categoriesService,
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -81,6 +84,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
             this.categoriesService = categoriesService;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public class AttachmentModel
@@ -292,7 +296,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
-            catch (InvalidExcelFileException e)
+            catch (InvalidFileException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
 
@@ -333,16 +337,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 command = (AddOrUpdateCategories)this.Deserialize(commandType, model.Command);
                 if (model.File != null)
                 {
-                    byte[] postedFile;
-                    using (var stream = new MemoryStream())
-                    {
-                        await model.File.CopyToAsync(stream);
-                        postedFile = stream.ToArray();
-                    }
+                    var extension = this.fileSystemAccessor.GetFileExtension(model.File.FileName);
 
-                    this.categoriesService.Store(command.QuestionnaireId,
-                        command.CategoriesId,
-                        postedFile);
+                    var excelExtensions = new[] {".xlsx", ".ods", ".xls"};
+                    var tsvExtensions = new[] {".txt", ".tab", ".tsv"};
+
+                    if(!excelExtensions.Union(tsvExtensions).Contains(extension))
+                        throw new ArgumentException(ExceptionMessages.ImportOptions_Tab_Or_Excel_Only);
+
+                    var fileType = excelExtensions.Contains(extension)
+                        ? CategoriesFileType.Excel
+                        : CategoriesFileType.Tsv;
+
+                    this.categoriesService.Store(command.QuestionnaireId, command.CategoriesId, model.File.OpenReadStream(), fileType);
                 }
             }
             catch (FormatException e)
@@ -354,7 +361,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
-            catch (InvalidExcelFileException e)
+            catch (InvalidFileException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
 

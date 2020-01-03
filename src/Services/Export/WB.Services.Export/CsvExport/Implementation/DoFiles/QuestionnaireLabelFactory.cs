@@ -17,16 +17,16 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             var variableLabels = new List<DataExportVariable>();
             var predefinedLabels = level.ReusableLabels
-                .Select(o => new DataExportLabelValue(
+                .Select(o => new DataExportValue(
                     o.Value.Name, 
                     o.Key, 
-                    o.Value.Labels.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray()))
+                    o.Value.Labels.Select(label => new VariableValueLabel(label.Value, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray()))
                 .ToArray();
 
             var levelVariableValueLabel = Array.Empty<VariableValueLabel>();
             if (level.LevelLabels != null)
             {
-                levelVariableValueLabel = level.LevelLabels.Select(x => new VariableValueLabel(x.Caption, x.Title?.RemoveHtmlTags())).ToArray();
+                levelVariableValueLabel = level.LevelLabels.Select(x => new VariableValueLabel(x.Value, x.Title?.RemoveHtmlTags())).ToArray();
             }
 
             if (levelRosterVector.Count == 0 && level.LevelIdColumnName == ServiceColumns.InterviewId) // main file
@@ -50,33 +50,35 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
             {
-                var isMultiOptionQuestion = (headerItem as ExportedQuestionHeaderItem)?.QuestionType == QuestionType.MultyOption;
-                var hasLabels = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 && !isMultiOptionQuestion;
+                var isMultiOptionQuestionWithOptionsInEntity = (headerItem is ExportedQuestionHeaderItem questionHeaderItem) 
+                                            && questionHeaderItem.QuestionType == QuestionType.MultyOption 
+                                            && questionHeaderItem.QuestionSubType != QuestionSubtype.MultyOption_Combobox;
+                var isNeedSaveLabelsByEntity = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 && !isMultiOptionQuestionWithOptionsInEntity;
                 var labelReferenceId = (headerItem as ExportedQuestionHeaderItem)?.LabelReferenceId;
 
                 foreach (var headerColumn in headerItem.ColumnHeaders)
                 {
-                    var variableValueLabel = Array.Empty<VariableValueLabel>();
+                    DataExportValue value = null;
 
-                    if (labelReferenceId.HasValue && !isMultiOptionQuestion)
+                    if (labelReferenceId.HasValue)
                     {
                         var labels = level.ReusableLabels.First(l => l.Key == labelReferenceId.Value).Value;
-                        var labelValue = new DataExportLabelValue(labels.Name?.RemoveHtmlTags() ?? string.Empty, labelReferenceId.Value);
-                        variableLabels.Add(new DataExportVariable(headerColumn.Name, headerItem.PublicKey, labelValue));
-                        continue;
+                        value = new DataExportValue(labels.Name, labelReferenceId.Value);
                     }
-
-                    if (hasLabels)
+                    else if (isNeedSaveLabelsByEntity)
                     {
-                        variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
-                            .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))
+                        var variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
+                            .Select(label => new VariableValueLabel(label.Value, label.Title?.RemoveHtmlTags() ?? string.Empty))
                             .ToArray();
+                        value = new DataExportValue(headerColumn.Name, headerItem.PublicKey, variableValueLabel);
+                    }
+                    else
+                    {
+                        value = new DataExportValue(headerColumn.Name, headerItem.PublicKey, Array.Empty<VariableValueLabel>());
                     }
 
-                    variableLabels.Add(
-                        new DataExportVariable(headerColumn.Name, 
-                            headerColumn.Title?.RemoveHtmlTags() ?? string.Empty, 
-                            headerItem.PublicKey, variableValueLabel, headerColumn.ExportType));
+                    var variableLabel = headerColumn.Title?.RemoveHtmlTags() ?? string.Empty;
+                    variableLabels.Add(new DataExportVariable(headerColumn.Name, variableLabel, headerItem.PublicKey, headerColumn.ExportType, value));
                 }
             }
 

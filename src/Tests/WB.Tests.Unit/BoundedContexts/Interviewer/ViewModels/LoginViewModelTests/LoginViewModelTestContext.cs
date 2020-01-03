@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTests
 {
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                new InMemoryPlainStorage<CompanyLogo>(), 
+                Create.Storage.InMemorySqlitePlainStorage<CompanyLogo>(), 
                 synchronizationService ?? Mock.Of<IOnlineSynchronizationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 Mock.Of<IAuditLogService>());

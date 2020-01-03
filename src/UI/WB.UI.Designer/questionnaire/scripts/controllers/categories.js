@@ -84,6 +84,8 @@
 
                             dataBind(categories.checkpoint, categories);
                             $scope.categoriesList.push(categories);
+                            updateQuestionnaireCategories();
+
                             setTimeout(function() {
                                     utilityService.focus("focusCategories" + categories.categoriesId);
                                 },
@@ -117,9 +119,8 @@
                     categories.name = categories.meta.fileName.replace(/\.[^/.]+$/, "");
 
                 var fileNameLength = categories.name.length;
-                categories.name =
-                    categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
-                categories.oldCategoriesId = categories.CategoriesId;
+                categories.name = categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
+                categories.oldCategoriesId = categories.categoriesId;
                 categories.categoriesId = utilityService.guid();
 
                 if (!_.isUndefined(categories.form)) {
@@ -135,6 +136,8 @@
                 commandService.updateCategories($state.params.questionnaireId, categories).then(function () {
                     dataBind(categories.checkpoint, categories);
                     categories.form.$setPristine();
+
+                    updateQuestionnaireCategories();
                 });
             };
 
@@ -156,14 +159,20 @@
             $scope.deleteCategories = function(index) {
                 var categories = $scope.categoriesList[index];
                 var categoriesName = categories.name || $i18next.t('SideBarCategoriesNoName');
+                
+                var trimmedCategoriesName = utilityService.trimText(categoriesName);
+                var message = $i18next.t('DeleteConfirmCategories', { trimmedTitle: trimmedCategoriesName });
+
                 var modalInstance =
-                    confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(categoriesName));
+                    confirmService.open(utilityService.createDeletePopup(message));
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
                         commandService.deleteCategories($state.params.questionnaireId, categories.categoriesId).then(
                             function() {
                                 $scope.categoriesList.splice(index, 1);
+
+                                updateQuestionnaireCategories();
                             });
                     }
                 });
@@ -188,4 +197,16 @@
             $rootScope.$on('questionnaireLoaded', function () {
                 $scope.loadCategories();
             });
+
+            var updateQuestionnaireCategories = function() {
+                if ($scope.categoriesList === null)
+                    return;
+
+                $scope.questionnaire.categories = _.map($scope.categoriesList,
+                    function(categoriesDto) {
+                        return { categoriesId: categoriesDto.categoriesId, name: categoriesDto.name };
+                    });
+
+                $rootScope.$broadcast("updateCategories", {});
+            };
         });

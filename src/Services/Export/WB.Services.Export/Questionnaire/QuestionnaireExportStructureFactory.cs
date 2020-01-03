@@ -213,24 +213,46 @@ namespace WB.Services.Export.Questionnaire
             exportedHeaderItem.Labels = new List<LabelItem>();
             if (question is ICategoricalQuestion categoricalQuestion && categoricalQuestion.CategoriesId.HasValue)
             {
-                exportedHeaderItem.LabelReferenceId = categoricalQuestion.CategoriesId;
+                var isMultiWithoutPredefineCategories = question is MultyOptionsQuestion multyOptionsQuestion
+                                                        && multyOptionsQuestion.IsFilteredCombobox != true;
 
-                if (!headerStructureForLevel.ReusableLabels.ContainsKey(categoricalQuestion.CategoriesId.Value))
+                if (!isMultiWithoutPredefineCategories)
                 {
-                    var categories = questionnaire.Categories.First(c => c.Id == categoricalQuestion.CategoriesId.Value);
-                    headerStructureForLevel.ReusableLabels[categoricalQuestion.CategoriesId.Value] =
-                        new ReusableLabels()
-                        {
-                            Name = categories.Name,
-                            Labels = categories.Values.Select(o => new LabelItem(o.Id.ToString(), o.Text)).ToArray()
-                        };
+                    exportedHeaderItem.LabelReferenceId = categoricalQuestion.CategoriesId;
+
+                    if (!headerStructureForLevel.ReusableLabels.ContainsKey(categoricalQuestion.CategoriesId.Value))
+                    {
+                        var categories = questionnaire.Categories.First(c => c.Id == categoricalQuestion.CategoriesId.Value);
+                        headerStructureForLevel.ReusableLabels[categoricalQuestion.CategoriesId.Value] =
+                            new ReusableLabels()
+                            {
+                                Name = categories.Name,
+                                Labels = categories.Values.Select(o => new LabelItem(o.Id.ToString(), o.Text)).ToArray()
+                            };
+                    }
                 }
             }
             else if (question.Answers != null)
             {
-                foreach (var answer in question.Answers)
+                var isMultiFilteredCombo = question is MultyOptionsQuestion multyOptionsQuestion && multyOptionsQuestion.IsFilteredCombobox == true;
+
+                if (isMultiFilteredCombo)
                 {
-                    exportedHeaderItem.Labels.Add(new LabelItem(answer));
+                    exportedHeaderItem.LabelReferenceId = question.PublicKey;
+
+                    headerStructureForLevel.ReusableLabels[question.PublicKey] =
+                        new ReusableLabels()
+                        {
+                            Name = question.VariableName,
+                            Labels = question.Answers.Select(a => new LabelItem(a.AnswerValue, a.AnswerText)).ToArray()
+                        };
+                }
+                else
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        exportedHeaderItem.Labels.Add(new LabelItem(answer));
+                    }
                 }
             }
 
@@ -314,15 +336,17 @@ namespace WB.Services.Export.Questionnaire
                     exportedHeaderItem.ColumnValues[i] = columnValue;
                 }
 
-                if (!isQuestionLinked && !isMultiCombobox)
+                if (!isQuestionLinked)
                 {
                     var questionLabel = string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel;
 
                     if (question.QuestionType == QuestionType.MultyOption)
                     {
-                        var optionText = asCategorical?.CategoriesId.HasValue ?? false
-                            ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
-                            : question.Answers[i].AnswerText;
+                        var optionText = asCategorical?.IsFilteredCombobox ?? false
+                            ? i.ToString()
+                            : asCategorical?.CategoriesId.HasValue ?? false
+                                ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
+                                : question.Answers[i].AnswerText;
 
                         headerColumn.Title = $"{questionLabel}:{optionText}";
                     }
@@ -447,7 +471,7 @@ namespace WB.Services.Export.Questionnaire
             if (@group.IsFixedRoster && headerStructureForLevel.LevelLabels == null)
             {
                 headerStructureForLevel.LevelLabels =
-                    @group.FixedRosterTitles.Select(title => new LabelItem() { Caption = title.Value.ToString(CultureInfo.InvariantCulture), Title = title.Title })
+                    @group.FixedRosterTitles.Select(title => new LabelItem(title.Value.ToString(CultureInfo.InvariantCulture), title.Title))
                         .ToArray();
             }
             else if (@group.IsRoster && headerStructureForLevel.LevelLabels == null)
@@ -456,7 +480,7 @@ namespace WB.Services.Export.Questionnaire
                 if (trigger.QuestionType == QuestionType.MultyOption)
                 {
                     headerStructureForLevel.LevelLabels =
-                        trigger.Answers.Select(title => new LabelItem() { Caption = title.AnswerValue, Title = title.AnswerText})
+                        trigger.Answers.Select(title => new LabelItem(title.AnswerValue, title.AnswerText))
                             .ToArray();
                 }
             }
@@ -556,18 +580,28 @@ namespace WB.Services.Export.Questionnaire
         private void AddHeadersForMultiOptions(HeaderStructureForLevel headerStructureForLevel, Question question,
             QuestionnaireDocument questionnaire)
         {
-            var typedQuestion = question as MultyOptionsQuestion;
-            var columnCount = typedQuestion?.IsFilteredCombobox ?? false 
-                ? (typedQuestion.MaxAllowedAnswers ?? Constants.MaxLongRosterRowCount)
-                : typedQuestion?.CategoriesId.HasValue ?? false
-                    ? questionnaire.Categories.First(c => c.Id == typedQuestion.CategoriesId.Value).Values.Length
-                    : question.Answers.Count;
+            var columnCount = GetColumnsCountForMultiOptionQuestion(question, questionnaire);
 
             headerStructureForLevel.HeaderItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question, columnCount,
                     questionnaire,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire),
                     headerStructureForLevel));
+        }
+
+        private int GetColumnsCountForMultiOptionQuestion(Question question, QuestionnaireDocument questionnaire)
+        {
+            var typedQuestion = question as MultyOptionsQuestion;
+            var isSupportReusableCategories = typedQuestion?.CategoriesId.HasValue ?? false;
+
+            var optionCount = isSupportReusableCategories
+                ? questionnaire.Categories.First(c => c.Id == typedQuestion.CategoriesId.Value).Values.Length
+                : question.Answers.Count;
+
+            if (typedQuestion?.IsFilteredCombobox ?? false)
+                return Math.Min(typedQuestion.MaxAllowedAnswers ?? Constants.MaxLongRosterRowCount, optionCount);
+
+            return optionCount;
         }
 
         private void AddHeadersForTextList(HeaderStructureForLevel headerStructureForLevel, Question question,

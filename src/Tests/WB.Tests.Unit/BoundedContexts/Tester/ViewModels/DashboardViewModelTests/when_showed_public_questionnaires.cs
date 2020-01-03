@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,7 +9,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Tests.Abc.Storage;
-
+using WB.Core.BoundedContexts.Tester.ViewModels;
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     internal class when_showed_public_questionnaires : DashboardViewModelTestContext
@@ -16,25 +17,31 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         [Test]
         public async Task should_contain_only_public_questionnaires()
         {
-            var awaiterForQuestionnaires1 = new TaskCompletionSource<bool>();
-
             var designerApiService = new Mock<IDesignerApiService>();
+            var tcs = new TaskCompletionSource<bool>();
+
             designerApiService.Setup(x => x.GetQuestionnairesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() =>
-                {
-                    awaiterForQuestionnaires1.SetResult(true);
-                    return Questionnaires;
-                });
+                .Returns(Task.FromResult(Questionnaires));
 
             var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
 
-            var viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
+            var viewModel = CreateDashboardViewModel(
+                questionnaireListStorage: storageAccessor,
                 designerApiService: designerApiService.Object);
-            await viewModel.Initialize();
 
-            await awaiterForQuestionnaires1.Task;
+            viewModel.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(DashboardViewModel.Questionnaires))
+                {
+                    tcs.TrySetResult(true);
+                }
+            };
+
+            await viewModel.Initialize();
+            await tcs.Task; // flakiness fix
 
             viewModel.ShowPublicQuestionnairesCommand.Execute();
+            
 
             viewModel.Questionnaires.All(_ => _.IsPublic).Should().BeTrue();
             viewModel.Questionnaires.Count.Should().Be(3);

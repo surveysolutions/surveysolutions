@@ -63,7 +63,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     : interview.GetGroup(Identity.Parse(parentId))?.Children
                         .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
-                children = children.Where(e => !questionnaire.IsFlatRoster(e.Identity.Id) && !questionnaire.IsTableRoster(e.Identity.Id));
+                children = children.Where(e => !questionnaire.IsCustomViewRoster(e.Identity.Id));
 
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
@@ -82,9 +82,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
                         sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => 
                             !c.IsDisabled() 
-                            && !questionnaire.IsFlatRoster(c.Identity.Id)
-                            && !questionnaire.IsTableRoster(c.Identity.Id)
-                            );
+                            && !questionnaire.IsCustomViewRoster(c.Identity.Id)
+                        );
                     });
                 }
             }
@@ -342,7 +341,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return GetRosterInstanceEntity(callerInterview, questionnaire, isReviewMode, roster, identity);
             }
 
-            if (questionnaire.IsTableRoster(identity.Id))
+            if (questionnaire.IsTableRoster(identity.Id) || questionnaire.IsMatrixRoster(identity.Id))
             {
                 var parentGroupId = questionnaire.GetParentGroup(identity.Id);
                 var parentGroup = callerInterview.GetGroup(new Identity(parentGroupId.Value, identity.RosterVector));
@@ -363,24 +362,42 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     this.ApplyValidity(rosterInstance.Validity, rosterInstance.Status);
                 });
 
-                var questions = questionnaire.GetChildQuestions(identity.Id)
-                    .Select(questionId => new TableRosterQuestionReference()
-                    {
-                        Id = questionId.FormatGuid(),
-                        Title = questionnaire.GetQuestionTitle(questionId),
-                        Instruction = questionnaire.GetQuestionInstruction(questionId),
-                        EntityType = GetEntityTypeInTableRoster(questionId, questionnaire).ToString(),
-                    })
-                    .ToArray();
-
-                var result = new TableRoster()
+                if (questionnaire.IsTableRoster(identity.Id))
                 {
-                    Id = id,
-                    Title = questionnaire.GetGroupTitle(identity.Id),
-                    Questions = questions,
-                    Instances = tableRosterInstances
-                };
-                return result;
+                    return new TableRoster()
+                    {
+                        Id = id,
+                        Title = questionnaire.GetGroupTitle(identity.Id),
+                        Questions = questionnaire.GetChildQuestions(identity.Id)
+                            .Select(questionId => new TableRosterQuestionReference()
+                            {
+                                Id = questionId.FormatGuid(),
+                                Title = questionnaire.GetQuestionTitle(questionId),
+                                Instruction = questionnaire.GetQuestionInstruction(questionId),
+                                EntityType = GetEntityTypeInTableRoster(questionId, questionnaire).ToString(),
+                            }).ToArray(),
+                        Instances = tableRosterInstances
+                    };
+                }
+
+                if (questionnaire.IsMatrixRoster(identity.Id))
+                {
+                    return new MatrixRoster()
+                    {
+                        Id = id,
+                        Title = questionnaire.GetGroupTitle(identity.Id),
+                        Questions = questionnaire.GetChildQuestions(identity.Id)
+                            .Select(questionId => new MatrixRosterQuestionReference()
+                            {
+                                Id = questionId.FormatGuid(),
+                                Title = questionnaire.GetQuestionTitle(questionId),
+                                Instruction = questionnaire.GetQuestionInstruction(questionId),
+                                EntityType = GetEntityTypeInMatrixRoster(questionId, questionnaire).ToString(),
+                                Options = questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
+                            }).ToArray(),
+                        Instances = tableRosterInstances
+                    };
+                }
             }
 
             return null;
@@ -389,16 +406,33 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private static InterviewEntityType GetEntityTypeInTableRoster(Guid entityId, IQuestionnaire callerQuestionnaire)
         {
             switch (callerQuestionnaire.GetQuestionType(entityId))
-            {
-                case QuestionType.Numeric:
-                    return callerQuestionnaire.IsQuestionInteger(entityId)
-                        ? InterviewEntityType.Integer
-                        : InterviewEntityType.Double;
-                case QuestionType.Text:
-                    return InterviewEntityType.TextQuestion;
-                default:
-                    return InterviewEntityType.Unsupported;
-            }
+                {
+                    case QuestionType.Numeric:
+                        return callerQuestionnaire.IsQuestionInteger(entityId)
+                            ? InterviewEntityType.Integer
+                            : InterviewEntityType.Double;
+                    case QuestionType.Text:
+                        return InterviewEntityType.TextQuestion;
+                    default:
+                        return InterviewEntityType.Unsupported;
+                }
+            
+        }
+
+        private static InterviewEntityType GetEntityTypeInMatrixRoster(Guid entityId, IQuestionnaire callerQuestionnaire)
+        {
+            switch (callerQuestionnaire.GetQuestionType(entityId))
+                {
+                    case QuestionType.SingleOption:
+                        return InterviewEntityType.CategoricalSingle;
+                    case QuestionType.MultyOption:
+                        return callerQuestionnaire.IsQuestionYesNo(entityId)
+                            ? InterviewEntityType.CategoricalYesNo
+                            : InterviewEntityType.CategoricalMulti;
+                    default:
+                        return InterviewEntityType.Unsupported;
+                }
+            
         }
 
         private InterviewGroupOrRosterInstance GetRosterInstanceEntity(IStatefulInterview callerInterview, IQuestionnaire questionnaire,
@@ -537,7 +571,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         public Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
             var parent = interview.GetParentGroup(identity);
-            while (parent != null && (questionnaire.IsFlatRoster(parent.Id) || questionnaire.IsTableRoster(parent.Id)))
+            while (parent != null && questionnaire.IsCustomViewRoster(parent.Id))
             {
                 parent = interview.GetParentGroup(parent);
             }

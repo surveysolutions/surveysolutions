@@ -744,8 +744,8 @@
   <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
     <value>Table roster allows to use only text and numeric questions.</value>
   </data>
-  <data name="WB0286_TableRosterWorksOnlyInWebMode" xml:space="preserve">
-    <value>Table roster mode works only in web survey, on tablets it will be 'sub section' mode.</value>
+  <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+    <value>Table or Matrix roster mode works only in web survey, on tablets it will be 'sub section' mode.</value>
   </data>
   <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
     <value>Questions in a table roster may not contain any substitutions in text.</value>
@@ -776,5 +776,14 @@
   </data>
   <data name="WB0296" xml:space="preserve">
     <value>Questions have the same categories. Use reusable categories instead</value>
+  </data>
+  <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+      <value>Matrix roster allows to use only simple categorical questions: combobox, cascading or yes/no modes are not allowed.</value>
+  </data>
+  <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+      <value>Matrix mode allowed only for rosters with no more than {0} question(s).</value>
+  </data>
+  <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+    <value>Matrix roster has to contain no supervisor or identifying questions.</value>
   </data>
 </root>

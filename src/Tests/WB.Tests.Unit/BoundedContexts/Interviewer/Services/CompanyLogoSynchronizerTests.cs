@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
 {
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
                                       LogoNeedsToBeUpdated = true
                                   });
 
-            var logoStorage = new InMemoryPlainStorage<CompanyLogo>();
+            var logoStorage = Create.Storage.InMemorySqlitePlainStorage<CompanyLogo>();
             var synchronizer = GetSynchronizer(synchronizationService, logoStorage);
 
             // act
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             var logo = logoStorage.FirstOrDefault();
             Assert.That(logo, Is.Not.Null);
             Assert.That(logo.ETag, Is.EqualTo(etag));
-            Assert.That(logo.File, Is.SameAs(logoContent));
+            Assert.That(logo.File, Is.EqualTo(logoContent));
             Assert.That(logo.Id, Is.EqualTo(CompanyLogo.StorageKey));
         }
 
@@ -89,7 +90,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
                                       HasCustomLogo = false,
                                   });
 
-            var logoStorage = new InMemoryPlainStorage<CompanyLogo>();
+            var logoStorage = Create.Storage.InMemorySqlitePlainStorage<CompanyLogo>();
             logoStorage.Store(new CompanyLogo
             {
                 ETag = "etag",
@@ -120,7 +121,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
                                       LogoNeedsToBeUpdated = true
                                   });
 
-            var logoStorage = new InMemoryPlainStorage<CompanyLogo>();
+            var logoStorage = Create.Storage.InMemorySqlitePlainStorage<CompanyLogo>();
             logoStorage.Store(new CompanyLogo
             {
                 ETag = "etag",
@@ -135,7 +136,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             // assert
             var companyLogo = logoStorage.GetById(CompanyLogo.StorageKey);
             Assert.That(companyLogo.ETag, Is.EqualTo(hqEtag));
-            Assert.That(companyLogo.File, Is.SameAs(hqLogoContent));
+            Assert.That(companyLogo.File, Is.EqualTo(hqLogoContent));
         }
 
         private CompanyLogoSynchronizer GetSynchronizer(ISynchronizationService synchronizationService, 

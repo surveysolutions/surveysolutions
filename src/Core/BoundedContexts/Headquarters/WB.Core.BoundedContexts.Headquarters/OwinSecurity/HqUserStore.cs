@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -108,9 +109,10 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public async Task<HqUser> FindByNameAsync(string userName)
         {
-            var result = await unitOfWork.Session.QueryOver<HqUser>()
-                .WhereRestrictionOn(x => x.UserName).IsInsensitiveLike(userName)
-                .SingleOrDefaultAsync<HqUser>();
+            var result = await unitOfWork.Session.Query<HqUser>()
+                .Where(u => u.UserName.ToUpper() == userName.ToUpper())
+                .SingleOrDefaultAsync();
+
             return result;
         }
 
