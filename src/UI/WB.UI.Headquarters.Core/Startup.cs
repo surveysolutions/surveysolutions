@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
@@ -216,6 +217,8 @@ namespace WB.UI.Headquarters
             services.AddOptions();
             services.AddControllersWithViews().AddNewtonsoftJson(j =>
             {
+                j.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                j.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
                 j.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
 

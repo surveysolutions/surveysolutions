@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -77,12 +78,27 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowed]
-        public async Task<ActionResult<List<long>>> ExportStatus()
+        public async Task<ActionResult<List<ExportStatusItem>>> ExportStatus()
         {
             try
             {
                 var jobs = (await this.exportServiceApi.GetAllJobsList()).OrderByDescending(x => x).ToList();
-                return jobs;
+                var runningJobs = (await this.exportServiceApi.GetRunningExportJobs());
+
+                var allJobs = jobs.Union(runningJobs).ToList();
+
+                var result = new List<ExportStatusItem>();
+
+                foreach (var job in allJobs)
+                {
+                    result.Add(new ExportStatusItem
+                    {
+                        Id = job,
+                        Running = runningJobs.Contains(job)
+                    });
+                }
+
+                return result;
             }
             catch (Exception)
             {
@@ -90,14 +106,42 @@ namespace WB.UI.Headquarters.API
             }
         }
 
+        public class ExportStatusItem
+        {
+            public long Id { get; set; }
+            public bool Running { get; set; }
+        }
+
         [HttpGet]
         [ObserverNotAllowed]
-        public async Task<ActionResult<DataExportProcessView>> Status(long id)
+        public async Task<ActionResult<List<DataExportProcessView>>> Status([FromQuery(Name = "id[]")] long[] ids)
         {
-            DataExportProcessView result = await dataExportStatusReader.GetProcessStatus(id);
-            if (result == null)
+            var query = new TransformBlock<long, DataExportProcessView>(
+                async id =>
+                {
+                    try
+                    {
+                        return await dataExportStatusReader.GetProcessStatus(id);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                });
+
+            var buffer = new BufferBlock<DataExportProcessView>();
+            using var _ = query.LinkTo(buffer, new DataflowLinkOptions {PropagateCompletion = true});
+            
+            foreach (var id in ids) query.Post(id);
+
+            query.Complete();
+            await query.Completion;
+
+            var result = new List<DataExportProcessView>();
+
+            while (buffer.TryReceive(f => f != null, out var item))
             {
-                return NotFound();
+                result.Add(item);
             }
 
             return result;

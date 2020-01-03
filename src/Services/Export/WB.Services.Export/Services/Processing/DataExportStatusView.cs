@@ -21,6 +21,7 @@ namespace WB.Services.Export.Services.Processing
         }
 
         public string QuestionnaireId { get; set;  }
+        public string Title { get; set; }
         public List<DataExportView> DataExports { get; set; }
         public DataExportProcessView[] RunningDataExportProcesses { get; set; }
     }

@@ -5,6 +5,7 @@ namespace WB.Services.Export.Services.Processing
 {
     public class DataExportProcessView
     {
+        public string Title { get; set; }
         public string DataExportProcessId { get; set; }
         public DateTime BeginDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
