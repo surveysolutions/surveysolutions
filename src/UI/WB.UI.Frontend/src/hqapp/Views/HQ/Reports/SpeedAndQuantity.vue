@@ -139,7 +139,6 @@ export default {
     methods: {
         loadReportData() {
             if (this.$refs.table){
-                this.prepareColumns();
                 this.$refs.table.reload();
             }
         },
@@ -149,7 +148,7 @@ export default {
             columns.push({
                 data: "responsibleName",
                 name: "Responsible",
-                title: this.$t('Model.ResponsibleColumnName'),
+                title: self.model.responsibleColumnName,
                 orderable: true,
                 render: function(data, type, row) {
                     if (data == undefined) {
@@ -173,28 +172,24 @@ export default {
                 }
             })
 
-            for(let i = 0; i < this.dateTimeRanges.length; i++) {
-                const date = this.dateTimeRanges[i];
+            const count = self.columnsCount
+            for(let i = 0; i < count; i++) {
+                //const date = this.dateTimeRanges[i];
                 const index = i
                 columns.push({
                     class: "type-numeric",
-                    title: moment(date.to).format(this.dateFormat),
-                    data: date.from,
-                    name: date.from,
+                    title: '',//moment(date.to).format(this.dateFormat),
+                    data: '',//date.from,
+                    name: '',//date.from,
                     orderable: false,
                     render: function(data, type, row) {
                         if (row.quantityByPeriod) {
                             var value = row.quantityByPeriod[index]
-                            var formatedValue = self.formatNumber(data)
-                            return `<span>${value}</span>`
+                            return self.renderQuantityValue(value)
                         }
                         if (row.quantityByPeriod) {
                             var value = row.speedByPeriod[index]
-                            if (value == null)
-                                return '-'
-
-                            var formatedValue = moment.duration(data, "minutes").format("D[d] H[h] mm[m]")
-                            return `<span>${value}</span>`
+                            return self.renderSpeedValue(value)
                         }
                         return '-'
                     }
@@ -207,15 +202,10 @@ export default {
                 orderable: true,
                 render: function(data, type, row) {
                     if (row.quantityByPeriod) {
-                        var formatedValue = self.formatNumber(data)
-                        return `<span>${formatedValue}</span>`
+                        return self.renderQuantityValue(data)
                     }
                     if (row.quantityByPeriod) {
-                        if (data == null)
-                            return '-'
-
-                        var formatedValue = moment.duration(data, "minutes").format("D[d] H[h] mm[m]")
-                        return `<span>${formatedValue}</span>`
+                        return self.renderSpeedValue(data)
                     }
                     return '-'
                 }
@@ -227,18 +217,43 @@ export default {
                 orderable: true,
                 render: function(data, type, row) {
                     if (row.quantityByPeriod) {
-                        var value = self.formatNumber(data)
-                        return `<span>${value}</span>`
+                        return self.renderQuantityValue(data)
                     }
                     if (row.quantityByPeriod) {
-                        var value = moment.duration(data, "minutes").format("D[d] H[h] mm[m]")
-                        return `<span>${value}</span>`
+                        return self.renderSpeedValue(data)
                     }
                     return '-'
                 }
             })
 
             this.columns = columns
+        },
+        updateDateColumnsInfo() {
+            for(let i = 0; i < this.dateTimeRanges.length; i++) {
+                const date = this.dateTimeRanges[i];
+                const column = this.columns[i + 1]
+                column.title = moment(date.to).format(this.dateFormat)
+                column.data = date.from
+                column.name = date.from
+
+                column.sTitle = column.title
+                column.sName = column.name
+                column.mData = column.data
+            }
+        },
+        renderQuantityValue(value) {
+            if (value == null)
+                return '-'
+
+            var formatedValue = this.formatNumber(value)
+            return `<span>${formatedValue}</span>`
+        },
+        renderSpeedValue(value) {
+            if (value == null)
+                return '-'
+
+            var formatedValue = moment.duration(value, "minutes").format("D[d] H[h] mm[m]")
+            return `<span>${formatedValue}</span>`
         },
         reportTypeSelected(option) {
             this.reportTypeId = option
@@ -266,10 +281,12 @@ export default {
             } else if (newVal === "m") {
                 this.overTheLast = this.model.overTheLasts[2]
             }
+            this.prepareColumns()
             this.loadReportData()
         },
         overTheLastSelected(option) {
             this.overTheLast = option
+            this.prepareColumns()
             this.loadReportData()
         },
         addParamsToRequest(requestData) {
@@ -325,6 +342,7 @@ export default {
         },
         onTableReload(data) {
             this.dateTimeRanges = data.dateTimeRanges || []
+            this.updateDateColumnsInfo();
         }
     },
     computed: {
@@ -332,7 +350,16 @@ export default {
             return this.$config.model;
         },
         title() {
-            return "report title"
+            var title = this.model.reportName == 'Speed'
+                    ? this.$t('MainMenu.Speed')
+                    : this.$t('MainMenu.Quantity')
+            //title = `<span>${title}:</span><span>${(this.reportTypeId || {}).name}</span>`
+
+            if (this.model.supervisorId) {
+                title += this.$t('PeriodicStatusReport.InTheSupervisorTeamFormat', this.model.supervisorName)
+            }
+
+            return title
 /*          <span>@(String.Compare(Model.ReportName,"speed", CultureInfo.InvariantCulture,CompareOptions.IgnoreCase) == 0? MainMenu.Speed : MainMenu.Quantity ): </span><span data-bind="text: ReportTypeName"></span>
             @(Model.SupervisorId.HasValue ? string.Format(PeriodicStatusReport.InTheSupervisorTeamFormat, @Model.SupervisorName) : "")
 */
