@@ -70,7 +70,8 @@ namespace WB.Tests.Unit.Designer
             bool yesNoView = false,
             string optionsFilterExpression = null,
             string linkedFilterExpression = null,
-            bool isFilteredCombobox = false)
+            bool isFilteredCombobox = false,
+            Guid? categoriesId = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             var questionProperties = Create.QuestionProperties();
@@ -92,7 +93,8 @@ namespace WB.Tests.Unit.Designer
                 maxAllowedAnswers,
                 yesNoView,
                 linkedFilterExpression,
-                isFilteredCombobox);
+                isFilteredCombobox,
+                categoriesId: categoriesId);
             command.Properties = questionProperties;
             questionnaire.UpdateMultiOptionQuestion(command);
         }

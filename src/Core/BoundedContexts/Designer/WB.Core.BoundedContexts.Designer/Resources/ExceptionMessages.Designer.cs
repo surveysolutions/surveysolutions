@@ -331,6 +331,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only tab-separated values (*.tab, *.txt, *.tsv) or excel (*.xslx, *.xls, *.ods) files are accepted.
+        /// </summary>
+        public static string ImportOptions_Tab_Or_Excel_Only {
+            get {
+                return ResourceManager.GetString("ImportOptions_Tab_Or_Excel_Only", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title is too long. Title length should be less than {0}.
         /// </summary>
         public static string ImportOptions_TitleTooLong {

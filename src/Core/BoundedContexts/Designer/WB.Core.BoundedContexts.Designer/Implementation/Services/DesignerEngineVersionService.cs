@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                           HasQuestionnaire = questionnaire =>  questionnaire.Translations.Any(),
-                          Description = "Multilanguage questionnaire"
+                          Description = "Multi-language questionnaire"
                     }
                 }
             },
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                           HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Area).Any(),
-                          Description = "New expression storage or contains Area Question"
+                          Description = "Area Question"
                     }
                 }
             },
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Audio).Any(),
-                        Description = "Contains Audio Question"
+                        Description = "Audio Question"
                     }
                 }
             },
@@ -116,12 +116,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<IValidatable>(q => q.ValidationConditions.Any(x => x.Severity == ValidationSeverity.Warning)).Any(),
-                        Description = "Contains Validation Warnings"
+                        Description = "Validation Warnings"
                     },
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<IMultimediaQuestion>(q => q.IsSignature).Any(),
-                        Description = "Contains Signature Question"
+                        Description = "Signature Question"
                     }
                 }
             },
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Attachments.Any(a => IsNonImageAttachment(a.ContentId)),
-                        Description = "New types of attachments added"
+                        Description = "New types of attachments"
                     }
                 }
             },
@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<IGroup>(q => !q.IsRoster && !String.IsNullOrWhiteSpace(q.VariableName)).Any(),
-                        Description = "Contains section with not empty variable name"
+                        Description = "Section with not empty variable name"
                     }
                 }
             },
@@ -169,12 +169,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<IMultyOptionsQuestion>(q => q.IsFilteredCombobox == true ).Any(),
-                        Description = "Contains multi option question with combobox kind"
+                        Description = "Multi option question with combobox kind"
                     },
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<SingleQuestion>(q => q.ShowAsList == true ).Any(),
-                        Description = "Contains cascading question with show as list option"
+                        Description = "Cascading question with show as list option"
                     }
                 }
             },
@@ -217,19 +217,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             }
                             return false;
                         },
-                        Description = "Contains %self% as substituted text"
+                        Description = "%self% as substituted text"
                     },
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<IGroup>(q => q.DisplayMode == RosterDisplayMode.Table).Any(),
-                        Description = "Contains roster with table display mode"
+                        Description = "Roster with table display mode"
                     },
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<IQuestion>(q => q.QuestionType == QuestionType.SingleOption
                                                                        && q.QuestionScope == QuestionScope.Supervisor 
                                                                        && q.CascadeFromQuestionId.HasValue).Any(),
-                        Description = "Contains cascading question with supervisor scope"
+                        Description = "Cascading question with supervisor scope"
                     }
                 }
             },
@@ -241,7 +241,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire =>  questionnaire.Categories.Any(),
-                        Description = "Contains reusable categories"
+                        Description = "Reusable categories"
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<IGroup>(q => q.DisplayMode == RosterDisplayMode.Matrix).Any(),
+                        Description = "Roster with Matrix display mode"
                     }
                 }
             },

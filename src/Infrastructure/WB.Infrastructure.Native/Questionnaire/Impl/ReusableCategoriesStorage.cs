@@ -58,5 +58,25 @@ namespace WB.Infrastructure.Native.Questionnaire.Impl
                                              && categoricalOption.QuestionnaireId.Version == questionnaireIdentity.Version)
             );
         }
+
+        public void Clone(QuestionnaireIdentity oldIdentity, QuestionnaireIdentity newIdentity)
+        {
+            var oldCategories = this.storageAccessor.Query(t => t.Where(categoricalOption =>
+                    categoricalOption.QuestionnaireId.QuestionnaireId == oldIdentity.QuestionnaireId &&
+                    categoricalOption.QuestionnaireId.Version == oldIdentity.Version))
+                .ToList();
+
+            var newCategories = oldCategories.Select(x => new ReusableCategoricalOptions()
+            {
+                CategoriesId = x.CategoriesId,
+                QuestionnaireId = newIdentity,
+                SortIndex = x.SortIndex,
+                ParentValue = x.ParentValue,
+                Text = x.Text,
+                Value = x.Value
+            }).ToList();
+
+            this.storageAccessor.Store(newCategories);
+        }
     }
 }

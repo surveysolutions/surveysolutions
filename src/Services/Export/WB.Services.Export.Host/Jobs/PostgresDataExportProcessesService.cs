@@ -55,7 +55,7 @@ namespace WB.Services.Export.Host.Jobs
 
             var eta = job.GetData<string>(EtaField);
             var status = Enum.Parse<DataExportStatus>(job.GetData<string>(StatusField));
-            var hasError = job.Status == JobStatus.Canceled || job.Status == JobStatus.Fail;
+            var hasError = /*job.Status == JobStatus.Canceled ||*/ job.Status == JobStatus.Fail;
 
             args.Status = new DataExportProcessStatus
             {

@@ -484,6 +484,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete set of categories &quot;{{trimmedTitle}}&quot;? Source of categories for categorical questions dependent on it will be changed to user defined categories.
+        /// </summary>
+        public static string DeleteConfirmCategories {
+            get {
+                return ResourceManager.GetString("DeleteConfirmCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete &quot;{{trimmedTitle}}&quot;?.
         /// </summary>
         public static string DeleteConfirmQuestion {
@@ -934,7 +943,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet..
+        ///   Looks up a localized string similar to By default, a disabled item is grayed-out. Checking this option will hide a disabled question or section on a tablet..
         /// </summary>
         public static string HelpHideIfDisabled {
             get {
@@ -999,7 +1008,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
         ///Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
-        ///Table - the questions of the roster are shown in the same level as rows and columns of the table. Supported only in Web survey, tablet falls back to &apos;Sub-Section&apos; mode..
+        ///Table - the questions of the roster are shown in the same level as rows and columns of the table. 
+        ///Matrix - a categorical question of the roster is displayed as matrix. 
+        ///Table and Matrix views are supported only in Web survey, tablet falls back to &apos;Sub-Section&apos; mode..
         /// </summary>
         public static string HelpRosterDisplayMode {
             get {
@@ -2061,6 +2072,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Matrix.
+        /// </summary>
+        public static string RosterDisplayMode_Matrix {
+            get {
+                return ResourceManager.GetString("RosterDisplayMode_Matrix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sub-Section.
         /// </summary>
         public static string RosterDisplayMode_SubSection {
@@ -2142,7 +2162,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster&apos;s question.
+        ///   Looks up a localized string similar to List question or question from roster group.
         /// </summary>
         public static string RostersQuestion {
             get {
