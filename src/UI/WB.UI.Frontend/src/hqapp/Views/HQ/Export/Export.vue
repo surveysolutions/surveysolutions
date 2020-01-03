@@ -303,7 +303,6 @@
                                 v-for="result in exportResults"
                                 v-bind:key="result.id"
                                 :data="result"
-                                @deleted="removeProcessCard"
                             ></ExportProcessCard>
                         </div>
                     </div>
@@ -327,158 +326,98 @@
 </template>
 
 <script>
-import Vue from "vue";
-import ExportProcessCard from "./ExportProcessCard";
-import { mixin as VueTimers } from "vue-timers";
-import queryString from "query-string";
-import { last } from "lodash";
-import moment from 'moment';
+import Vue from 'vue'
+import ExportProcessCard from './ExportProcessCard'
+import {mixin as VueTimers} from 'vue-timers'
+import queryString from 'query-string'
+import {last} from 'lodash'
+import moment from 'moment'
 
-const dataFormatNum = { Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6 };
-const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 };
+const dataFormatNum = {Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6}
+const ExternalStorageType = {dropbox: 1, oneDrive: 2, googleDrive: 3}
 
 export default {
     mixins: [VueTimers],
+
     data() {
         return {
-            exportServiceIsUnavailable: true,
-            dataType: "surveyData",
-            dataFormat: "Tabular",
-            dataDestination: "zip",
+            dataType: 'surveyData',
+            dataFormat: 'Tabular',
+            dataDestination: 'zip',
             questionnaireId: null,
             questionnaireVersion: null,
             status: null,
             statuses: this.$config.model.statuses,
-            exportResults: [],
             isUpdatingDataAvailability: false,
             hasInterviews: false,
             hasBinaryData: false,
             externalStoragesSettings: (this.$config.model.externalStoragesSettings || {}).oAuth2 || {},
             pageState: {},
             updateInProgress: false,
-            allJobs: [],
-            jobsLoadingBatchCount: 18
-        };
-    },
-    timers: {
-        updateExportCards: { time: 5000, autostart: true, repeat: true }
+            jobsLoadingBatchCount: 18,
+        }
     },
 
     computed: {
+        exportResults() {
+            return this.$store.state.export.jobs
+        },
+        exportServiceIsUnavailable() {
+            return this.$store.state.export.exportServiceIsUnavailable
+        },
         isDropboxSetUp() {
-            var settings = this.externalStoragesSettings["dropbox"] || null;
-            return settings != null;
+            var settings = this.externalStoragesSettings['dropbox'] || null
+            return settings != null
         },
         isOneDriveSetUp() {
-            var settings = this.externalStoragesSettings["oneDrive"] || null;
-            return settings != null;
+            var settings = this.externalStoragesSettings['oneDrive'] || null
+            return settings != null
         },
         isGoogleDriveSetUp() {
-            var settings = this.externalStoragesSettings["googleDrive"] || null;
-            return settings != null;
+            var settings = this.externalStoragesSettings['googleDrive'] || null
+            return settings != null
         },
         canExportExternally() {
-            return this.$config.model.externalStoragesSettings != null;
+            return this.$config.model.externalStoragesSettings != null
         },
         questionnaireFetchUrl() {
-            return this.$config.model.api.questionnairesUrl;
+            return this.$config.model.api.questionnairesUrl
         },
         questionnaireVersionFetchUrl() {
             if (this.questionnaireId && this.questionnaireId.key)
-                return `${this.$config.model.api.questionnairesUrl}/${this.questionnaireId.key}`;
-            return null;
-        }
+                return `${this.$config.model.api.questionnairesUrl}/${this.questionnaireId.key}`
+            return null
+        },
     },
+
     mounted() {
-        window.addEventListener("scroll", this.onscroll);
-        var self = this;
-        self.$store.dispatch("showProgress");
-
-        this.$http
-            .get(this.$config.model.api.statusUrl)
-            .then(function(response) {
-                if (response.data) self.exportServiceIsUnavailable = false;
-
-                self.allJobs = response.data || [];
-                self.addJobs();
-            })
-            .catch(function(error) {
-                Vue.config.errorHandler(error, self);
-            })
-            .then(function() {
-                self.$store.dispatch("hideProgress");
-            });
+        var self = this
+        this.updateExportStatus()
     },
 
     methods: {
-        getOffsetRect: function(elem) {
-            // (1)
-            var box = elem.getBoundingClientRect();
-
-            // (2)
-            var body = document.body;
-            var docElem = document.documentElement;
-
-            // (3)
-            var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
-            var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
-
-            // (4)
-            var clientTop = docElem.clientTop || body.clientTop || 0;
-            var clientLeft = docElem.clientLeft || body.clientLeft || 0;
-
-            // (5)
-            var top = box.top + scrollTop - clientTop;
-            var left = box.left + scrollLeft - clientLeft;
-
-            return { top: Math.round(top), left: Math.round(left) };
-        },
-        onscroll: async function(event) {
-            const bottomOfJobs = this.getOffsetRect(this.$refs.list).top + this.$refs.list.offsetHeight;
-
-            const scrollY = window.scrollY;
-            const visible = document.documentElement.clientHeight;
-
-            if (visible + scrollY >= bottomOfJobs ||  bottomOfJobs < visible) {
-                this.addJobs();
-            }
-        },
-        addJobs() {
-            let lastUiJob = last(this.exportResults);
-            let indexOfLastUiJobInAllJobs = lastUiJob == undefined ? 0 : this.allJobs.lastIndexOf(lastUiJob.id) + 1;
-            let jobsToInsert = this.allJobs.slice(
-                indexOfLastUiJobInAllJobs,
-                indexOfLastUiJobInAllJobs + this.jobsLoadingBatchCount
-            );
-            jobsToInsert.forEach(jobId => {
-                this.exportResults.push({
-                    id: jobId
-                });
-            });
+        updateExportStatus() {
+            this.$store.dispatch('getExportStatus')
         },
 
         resetForm() {
-            (this.dataType = "surveyData"), (this.dataFormat = "Tabular");
-            this.dataDestination = "zip";
-            this.questionnaireId = null;
-            this.questionnaireVersion = null;
-            this.status = null;
-            this.hasInterviews = false;
-            this.hasBinaryData = false;
-        },
-
-        removeProcessCard(id) {
-            this.exportResults = _.reject(this.exportResults, { id });
+            ;(this.dataType = 'surveyData'), (this.dataFormat = 'Tabular')
+            this.dataDestination = 'zip'
+            this.questionnaireId = null
+            this.questionnaireVersion = null
+            this.status = null
+            this.hasInterviews = false
+            this.hasBinaryData = false
         },
 
         async queueExport() {
-            if (this.dataDestination != "zip") {
-                this.redirectToExternalStorage();
-                return;
+            if (this.dataDestination != 'zip') {
+                this.redirectToExternalStorage()
+                return
             }
 
-            var self = this;
-            var validationResult = await this.$validator.validateAll();
+            var self = this
+            var validationResult = await this.$validator.validateAll()
             if (validationResult) {
                 const exportParams = self.getExportParams(
                     self.questionnaireId.key,
@@ -487,30 +426,26 @@ export default {
                     self.dataFormat,
                     self.dataDestination,
                     self.status
-                );
+                )
 
-                self.$store.dispatch("showProgress");
+                self.$store.dispatch('showProgress')
 
                 this.$http
-                    .post(this.$config.model.api.updateSurveyDataUrl, null, { params: exportParams })
+                    .post(this.$config.model.api.updateSurveyDataUrl, null, {params: exportParams})
                     .then(function(response) {
-                        self.$validator.reset();
-                        const jobId = (response.data || { JobId: 0 }).JobId;
-                        self.allJobs.splice(0, 0, jobId);
-                        self.exportResults.splice(0, 0, {
-                            id: jobId
-                        });
+                        self.$validator.reset()
+                        self.updateExportStatus()
                     })
                     .catch(function(error) {
-                        Vue.config.errorHandler(error, self);
+                        Vue.config.errorHandler(error, self)
                     })
                     .then(function() {
-                        self.$store.dispatch("hideProgress");
-                    });
+                        self.$store.dispatch('hideProgress')
+                    })
             } else {
-                var fieldName = this.errors.items[0].field;
-                const $firstFieldWithError = $("#" + fieldName);
-                $firstFieldWithError.focus();
+                var fieldName = this.errors.items[0].field
+                const $firstFieldWithError = $('#' + fieldName)
+                $firstFieldWithError.focus()
             }
         },
 
@@ -522,151 +457,113 @@ export default {
                 this.dataFormat,
                 this.dataDestination,
                 this.status
-            );
+            )
 
             var state = {
                 questionnaireIdentity: {
                     questionnaireId: exportParams.id,
-                    version: exportParams.version
+                    version: exportParams.version,
                 },
                 format: exportParams.format,
                 interviewStatus: exportParams.status,
-                type: ExternalStorageType[this.dataDestination]
-            };
+                type: ExternalStorageType[this.dataDestination],
+            }
 
-            let storageSettings = this.externalStoragesSettings[this.dataDestination];
+            let storageSettings = this.externalStoragesSettings[this.dataDestination]
 
-            const jsonState = JSON.stringify(state);
+            const jsonState = JSON.stringify(state)
 
             var request = {
                 response_type: this.externalStoragesSettings.responseType,
                 redirect_uri: encodeURIComponent(this.externalStoragesSettings.redirectUri),
                 client_id: storageSettings.clientId,
                 state: window.btoa(
-                    window.location.href + ";" + this.$config.model.api.exportToExternalStorageUrl + ";" + jsonState
+                    window.location.href + ';' + this.$config.model.api.exportToExternalStorageUrl + ';' + jsonState
                 ),
-                scope: storageSettings.scope
-            };
+                scope: storageSettings.scope,
+            }
 
-            window.location = storageSettings.authorizationUri + "?" + decodeURIComponent($.param(request));
+            window.location = storageSettings.authorizationUri + '?' + decodeURIComponent($.param(request))
         },
 
         getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption) {
-            var format = dataFormatNum.Tabular;
+            var format = dataFormatNum.Tabular
 
             switch (dataType) {
-                case "surveyData":
-                    format = dataFormatNum[dataFormat];
-                    break;
-                case "binaryData":
-                    format = dataFormatNum.Binary;
-                    break;
-                case "ddiData":
-                    format = dataFormatNum.Ddi;
-                    break;
-                case "paraData":
-                    format = dataFormatNum.Paradata;
-                    break;
+                case 'surveyData':
+                    format = dataFormatNum[dataFormat]
+                    break
+                case 'binaryData':
+                    format = dataFormatNum.Binary
+                    break
+                case 'ddiData':
+                    format = dataFormatNum.Ddi
+                    break
+                case 'paraData':
+                    format = dataFormatNum.Paradata
+                    break
             }
 
-            const status = (statusOption || { key: null }).key;
+            const status = (statusOption || {key: null}).key
 
             return {
                 id: questionnaireId,
                 version: questionnaireVersion,
                 format,
-                status
-            };
-        },
-
-        restorePageState(state) {
-            this.pageState = {
-                id: state.i,
-                version: state.v,
-                status: state.s
-            };
-
-            this.dataType = state.t;
-            this.dataFormat = state.f;
-            this.dataDestination = state.d;
+                status,
+            }
         },
 
         statusSelected(newValue) {
-            this.status = newValue;
+            this.status = newValue
         },
+
         questionnaireSelected(newValue) {
-            this.questionnaireId = newValue;
+            this.questionnaireId = newValue
             if (!newValue) {
-                this.resetDataAvalability();
+                this.resetDataAvalability()
             }
         },
+
         questionnaireVersionSelected(newValue) {
-            this.questionnaireVersion = newValue;
-            if (this.questionnaireVersion) this.updateDataAvalability();
+            this.questionnaireVersion = newValue
+            if (this.questionnaireVersion) this.updateDataAvalability()
             else {
-                this.resetDataAvalability();
+                this.resetDataAvalability()
             }
         },
         resetDataAvalability() {
-            this.hasInterviews = null;
-            this.hasBinaryData = null;
-            this.dataType = null;
+            this.hasInterviews = null
+            this.hasBinaryData = null
+            this.dataType = null
         },
+
         updateDataAvalability() {
-            this.isUpdatingDataAvailability = true;
+            this.isUpdatingDataAvailability = true
 
             this.$http
                 .get(this.$config.model.api.dataAvailabilityUrl, {
                     params: {
                         id: this.questionnaireId.key,
-                        version: this.questionnaireVersion.key
-                    }
+                        version: this.questionnaireVersion.key,
+                    },
                 })
                 .then(response => {
-                    this.hasInterviews = response.data.hasInterviews;
-                    this.hasBinaryData = response.data.hasBinaryData;
+                    this.hasInterviews = response.data.hasInterviews
+                    this.hasBinaryData = response.data.hasBinaryData
                     if (this.dataType == null) {
-                        this.dataType = this.hasInterviews ? "surveyData" : "ddi";
+                        this.dataType = this.hasInterviews ? 'surveyData' : 'ddi'
                     }
                 })
                 .catch(error => {
-                    Vue.config.errorHandler(error, self);
+                    Vue.config.errorHandler(error, self)
                 })
                 .then(() => {
-                    this.isUpdatingDataAvailability = false;
-                });
+                    this.isUpdatingDataAvailability = false
+                })
         },
-
-        updateExportCards() {
-            var self = this;
-
-            if (this.updateInProgress) return;
-
-            this.updateInProgress = true;
-            this.$http
-                .get(this.$config.model.api.runningJobsUrl)
-                .then(response => {
-                    self.updateInProgress = false;
-                    self.exportServiceIsUnavailable = response.data == null;
-                    if (response.data) {
-                        response.data.forEach(function(jobId, index, array) {
-                            if (self.exportResults.some(job => job.id == jobId)) return;
-
-                            self.exportResults.splice(index, 0, {
-                                id: jobId
-                            });
-                        });
-                    }
-                })
-                .catch(function(error) {
-                    Vue.config.errorHandler(error, self);
-                })
-                .then(function() {
-                    self.updateInProgress = false;
-                    self.$store.dispatch("hideProgress");
-                });
-        }
     },
-    components: { ExportProcessCard }
-};
+
+    components: {ExportProcessCard},
+}
 </script>

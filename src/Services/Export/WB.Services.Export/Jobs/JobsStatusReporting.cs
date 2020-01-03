@@ -7,6 +7,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.Tenant;
@@ -31,18 +32,21 @@ namespace WB.Services.Export.Jobs
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IExternalArtifactsStorage externalArtifactsStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public JobsStatusReporting(IDataExportProcessesService dataExportProcessesService,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IFileSystemAccessor fileSystemAccessor,
             IExternalArtifactsStorage externalArtifactsStorage,
-            IDataExportFileAccessor exportFileAccessor)
+            IDataExportFileAccessor exportFileAccessor,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.externalArtifactsStorage = externalArtifactsStorage;
             this.exportFileAccessor = exportFileAccessor;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId, TenantInfo tenant)
@@ -52,11 +56,13 @@ namespace WB.Services.Export.Jobs
             if(!tenant.Id.Equals(process.ExportSettings.Tenant.Id)) throw new ArgumentException("Cannot found process #" + processId, nameof(processId));
 
             var dataExportProcessView = ToDataExportProcessView(process);
+            var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
+            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
 
             var exportSettings = new ExportSettings
             {
                 Tenant = tenant,
-                QuestionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId),
+                QuestionnaireId = questionnaireId,
                 ExportFormat = dataExportProcessView.Format,
                 Status = dataExportProcessView.InterviewStatus,
                 FromDate = dataExportProcessView.FromDate,
@@ -70,7 +76,7 @@ namespace WB.Services.Export.Jobs
             dataExportProcessView.DataFileLastUpdateDate = exportFileInfo.LastUpdateDate;
             dataExportProcessView.FileSize = exportFileInfo.FileSize;
             dataExportProcessView.HasFile = exportFileInfo.HasFile;
-
+            dataExportProcessView.Title = questionnaire.Title;
             dataExportProcessView.DataDestination = process.StorageType.HasValue 
                 ? process.StorageType.Value.ToString() 
                 : "File";
@@ -89,6 +95,7 @@ namespace WB.Services.Export.Jobs
                 .Select(ToDataExportProcessView).ToArray();
 
             var exports = new List<DataExportView>();
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireIdentity);
 
             foreach (var supportedDataExport in this.supportedDataExports)
             {
@@ -110,7 +117,10 @@ namespace WB.Services.Export.Jobs
             return new DataExportStatusView(
                 questionnaireId: questionnaireIdentity.Id,
                 dataExports: exports,
-                runningDataExportProcesses: allProcesses.Where(p => p.IsRunning).ToArray());
+                runningDataExportProcesses: allProcesses.Where(p => p.IsRunning).ToArray())
+            {
+                Title = questionnaire.Title
+            };
         }
 
         private async Task<DataExportView> CreateDataExportView(
