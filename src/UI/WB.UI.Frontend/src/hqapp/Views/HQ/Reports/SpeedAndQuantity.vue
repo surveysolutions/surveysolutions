@@ -1,5 +1,5 @@
 <template>
-  <HqLayout :title="title" :hasFilter="true">
+  <HqLayout :title="title" :subtitle="reportDescription" :hasFilter="true">
     <Filters slot="filters">
       <FilterBlock :title="$t('PeriodicStatusReport.InterviewActions')">
         <Typeahead
@@ -103,8 +103,11 @@
 <script>
 
 import moment from "moment";
+import routeSync from "~/shared/routeSync";
 
 export default {
+    mixins: [routeSync],
+
     data() {
         return {
             questionnaireId: null,
@@ -253,18 +256,17 @@ export default {
         },
         reportTypeSelected(option) {
             this.reportTypeId = option
+            this.onChange(query => { query.reportType = this.reportTypeId.key })
             this.loadReportData()
         },
         questionnaireSelected(option){
             this.questionnaireId = option
+            this.onChange(query => { query.questionnaireId = (this.questionnaireId || {}).key })
             this.loadReportData()
         },
         questionnaireVersionSelected(option) {
             this.questionnaireVersion = option
-            this.loadReportData()
-        },
-        statusSelected(option) {
-            this.status = option
+            this.onChange(query => { query.questionnaireVersion = (this.questionnaireVersion || {}).key })
             this.loadReportData()
         },
         periodSelected(option) {
@@ -277,11 +279,14 @@ export default {
             } else if (newVal === "m") {
                 this.overTheLast = this.model.overTheLasts[2]
             }
+            this.onChange(query => { query.period = (this.period || {}).key })
+            this.onChange(query => { query.columnCount = (this.overTheLast || {}).key })
             this.prepareColumns()
             this.loadReportData()
         },
         overTheLastSelected(option) {
             this.overTheLast = option
+            this.onChange(query => { query.columnCount = (this.overTheLast || {}).key })
             this.prepareColumns()
             this.loadReportData()
         },
@@ -335,6 +340,7 @@ export default {
                     ? this.$t('MainMenu.Speed')
                     : this.$t('MainMenu.Quantity')
             //title = `<span>${title}:</span><span>${(this.reportTypeId || {}).name}</span>`
+            title = `${title}: ${(this.reportTypeId || {}).value}`
 
             if (this.model.supervisorId) {
                 title += this.$t('PeriodicStatusReport.InTheSupervisorTeamFormat', this.model.supervisorName)
@@ -344,6 +350,16 @@ export default {
         },
         reportDescription() {
             return this.model.reportNameDescription
+        },
+        queryString() {
+            return {
+                questionnaireId: (this.questionnaireId || {}).key,
+                questionnaireVersion: (this.questionnaireVersion || {}).key,
+                reportType: this.reportTypeId.key,
+                columnCount: this.overTheLast.key,
+                period: this.period.key,
+                from: this.from
+            };
         },
         columnsCount() {
             return (this.overTheLast || {}).key || 7
