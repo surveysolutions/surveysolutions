@@ -78,7 +78,7 @@
       <FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
         <DatePicker 
           :config="datePickerConfig"
-          :value="from"
+          :value="selectedDate"
         ></DatePicker>
       </FilterBlock>
     </Filters>
@@ -151,7 +151,7 @@ export default {
                 title: self.model.responsibleColumnName,
                 orderable: true,
                 render: function(data, type, row) {
-                    if (data == undefined) {
+                    if (data == undefined || row.DT_RowClass == "total-row") {
                         if (self.model.supervisorId) {
                             return self.$t('Strings.AllInterviewers')
                         }
@@ -178,7 +178,7 @@ export default {
                 const index = i
                 columns.push({
                     class: "type-numeric",
-                    title: '',//moment(date.to).format(this.dateFormat),
+                    title: `<span id="date${index}"></span>`,//moment(date.to).format(this.dateFormat),
                     data: '',//date.from,
                     name: '',//date.from,
                     orderable: false,
@@ -230,15 +230,11 @@ export default {
         },
         updateDateColumnsInfo() {
             for(let i = 0; i < this.dateTimeRanges.length; i++) {
-                const date = this.dateTimeRanges[i];
+                const dateRange = this.dateTimeRanges[i];
                 const column = this.columns[i + 1]
-                column.title = moment(date.to).format(this.dateFormat)
-                column.data = date.from
-                column.name = date.from
-
-                column.sTitle = column.title
-                column.sName = column.name
-                column.mData = column.data
+                const date = moment(dateRange.to).format(this.dateFormat)
+                column.title = date
+                document.getElementById(`date${i}`).textContent = date
             }
         },
         renderQuantityValue(value) {
@@ -298,18 +294,6 @@ export default {
             requestData.from = this.from
             requestData.timezoneOffsetMinutes = new Date().getTimezoneOffset()
         },
-        renderCell(data, row, facet) {
-            const formatedNumber = this.formatNumber(data);
-            if(data === 0 || row.DT_RowClass == "total-row") {
-                return `<span>${formatedNumber}</span>`;
-            }
-
-            if (!this.supervisorId) {
-                return `<a href='${this.$config.model.interviewersBaseUrl}?Facet=${facet}&supervisor=${row.teamName}'>${formatedNumber}</a>`;
-            }
-         
-            return this.getLinkToInterviewerProfile(data, row);
-        },
         formatNumber(value) {
             if (value == null || value == undefined)
                 return value;
@@ -317,9 +301,6 @@ export default {
                navigator.language ||  
                navigator.userLanguage; 
             return value.toLocaleString(language);
-        },
-        hasIssue(data) {
-            return data.lowStorageCount || data.wrongDateOnTabletCount
         },
         getInterviewersUrl(supervisorId){
             return this.model.interviewersUrl
@@ -360,9 +341,6 @@ export default {
             }
 
             return title
-/*          <span>@(String.Compare(Model.ReportName,"speed", CultureInfo.InvariantCulture,CompareOptions.IgnoreCase) == 0? MainMenu.Speed : MainMenu.Quantity ): </span><span data-bind="text: ReportTypeName"></span>
-            @(Model.SupervisorId.HasValue ? string.Format(PeriodicStatusReport.InTheSupervisorTeamFormat, @Model.SupervisorName) : "")
-*/
         },
         reportDescription() {
             return this.model.reportNameDescription
@@ -373,15 +351,26 @@ export default {
         supervisorId() {
             return this.$route.params.supervisorId
         },
+        selectedDate() {
+            return this.from || moment().format(this.dateFormat)
+        },
         datePickerConfig() {
             var self = this
             return {
-                mode: "date",
+                mode: "single",
                 maxDate: "today",
                 wrap: true,
                 minDate: self.model.minAllowedDate, 
                 enableTime: false, 
-                dateFormat: 'Y-m-d'
+                dateFormat: 'Y-m-d',
+                onChange: (selectedDates, dateStr, instance) => {
+                    const date = selectedDates.length > 0 ? selectedDates[0] : null;
+
+                    if (date != null) {
+                        self.from = date
+                        self.loadReportData()
+                    }
+                }
             };
         },        
         tableOptions() {
