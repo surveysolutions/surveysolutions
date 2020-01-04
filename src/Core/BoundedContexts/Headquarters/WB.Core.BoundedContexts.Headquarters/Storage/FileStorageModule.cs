@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IAudioFileStorage, AudioFileStorage>();
-            
 
             var settings = configuration.AmazonOptions().Get<AmazonS3Settings>();
 
