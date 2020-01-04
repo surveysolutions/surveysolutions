@@ -10,5 +10,6 @@ namespace WB.Infrastructure.Native.Questionnaire
         IEnumerable<CategoriesItem> GetOptions(QuestionnaireIdentity identity, Guid categoriesId);
         void Store(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, List<CategoriesItem> reusableCategories);
         void RemoveCategories(QuestionnaireIdentity questionnaireIdentity);
+        void Clone(QuestionnaireIdentity oldIdentity, QuestionnaireIdentity newIdentity);
     }
 }

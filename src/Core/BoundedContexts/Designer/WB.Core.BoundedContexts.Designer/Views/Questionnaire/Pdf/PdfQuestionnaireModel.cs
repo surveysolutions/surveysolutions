@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.Metadata = this.questionnaire.Metadata ?? new QuestionnaireMetaInfo();
         }
 
-        public List<IQuestion> QuestionsWithLongOptionsList { get; internal set; }
+        public List<ICategoricalQuestion> QuestionsWithLongOptionsList { get; internal set; }
 
         public List<IQuestion> QuestionsWithLongSpecialValuesList { get; internal set; }
 
@@ -396,8 +396,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 }
                 case "O":
                 {
-                    var question = Find<IQuestion>(entityId);
-                    return QuestionsWithLongOptionsList.IndexOf(question) + 1;
+                    var question = Find<ICategoricalQuestion>(entityId);
+                    if (!question.CategoriesId.HasValue)
+                        return CategoriesList.Count + QuestionsWithLongOptionsList.IndexOf(question) + 1;
+                    else
+                    {
+                        var categories = CategoriesList.Find(x => x.Id == question.CategoriesId.Value);
+                        return CategoriesList.IndexOf(categories) + 1;
+                    }
                 }
                 case "VE":
                 {
@@ -465,7 +471,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool IsValidationsAppendixEmpty => ItemsWithLongValidations.Count == 0;
         public bool IsInstructionsAppendixEmpty => QuestionsWithLongInstructions.Count == 0;
         public bool IsOptionsFilterAppendixEmpty => QuestionsWithLongOptionsFilterExpression.Count == 0;
-        public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0;
+        public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0 && CategoriesList.Count == 0;
         public bool IsVariablesAppendixEmpty => VariableWithLongExpressions.Count == 0;
 
         public bool IsSpecialValuesAppendixEmpty => QuestionsWithLongSpecialValuesList.Count == 0;

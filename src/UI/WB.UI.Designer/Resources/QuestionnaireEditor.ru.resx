@@ -1405,7 +1405,7 @@
       <comment>Источник категорий</comment>
   </data>
   <data name="RostersQuestion" xml:space="preserve">
-      <value>Вопрос из ростера</value>
+      <value>Список или вопрос из ростера</value>
       <comment>Вопрос из ростера</comment>
   </data>
   <data name="ReusableCategories" xml:space="preserve">

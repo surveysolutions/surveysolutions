@@ -171,9 +171,11 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 
             if (date1 > date2) return -9998;
 
-            var d1Bis = new DateTime(date2.Value.Year, date1.Value.Month, date1.Value.Day);
+            // 2000 was a leap year!!!
+            var d1Bis = new DateTime(2000, date1.Value.Month, date1.Value.Day);
+            var d2Bis = new DateTime(2000, date2.Value.Month, date2.Value.Day);
             var yearsDif = date2.Value.Year - date1.Value.Year;
-            var yearsAdj = (d1Bis - date2.Value).TotalMilliseconds > 0 ? 1 : 0;
+            var yearsAdj = (d1Bis - d2Bis).TotalMilliseconds > 0 ? 1 : 0;
             return yearsDif - yearsAdj;
         }
 

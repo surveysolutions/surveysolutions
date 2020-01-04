@@ -1,8 +1,8 @@
 <template>
-    <div class="w-100" :enable="hasInstructions" trigger="hover-focus" append-to="body"><!-- v-bind:style="{ width: getWidth() + 'px!important' }"-->
+    <div :enable="hasInstructions" trigger="hover-focus" append-to="body"><!-- v-bind:style="{ width: getWidth() + 'px!important' }"-->
         <div class="ag-cell-label-container" style="flex-direction:row; justify-content: flex-start;" v-if="question.entityType =='CategoricalSingle' || question.entityType =='CategoricalMulti'">    
-            <div class="ag-header-cell-label cell-bordered" v-for="option in getOptions" :key="question.id + '_' + option.value" style="width: 221px;" >                
-                <span>{{option.title}}</span>                                             
+            <div class="ag-header-cell-label cell-bordered" v-for="option in getOptions" :key="question.id + '_' + option.value" style="width: 220px;" >                
+                <span style="width:188px;">{{option.title}}</span>                                             
             </div>
         </div>               
     </div>

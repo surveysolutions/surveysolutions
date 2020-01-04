@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var rejectedByHqInterview = Id.g1;
             var rejectedBySvInterview = Id.g2;
 
-            IPlainStorage<InterviewView> interviews = new InMemoryPlainStorage<InterviewView>();
+            IPlainStorage<InterviewView> interviews = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             interviews.Store(Create.Entity.InterviewView(interviewId: rejectedByHqInterview, canBeDeleted: true));
             interviews.Store(Create.Entity.InterviewView(interviewId: rejectedBySvInterview, canBeDeleted: true));
 
