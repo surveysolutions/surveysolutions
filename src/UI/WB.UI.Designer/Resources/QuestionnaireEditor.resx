@@ -839,7 +839,7 @@
     <value>Source of categories</value>
   </data>
   <data name="RostersQuestion" xml:space="preserve">
-    <value>Roster's question</value>
+    <value>List question or question from roster group</value>
   </data>
   <data name="QuestionRadioButtonList" xml:space="preserve">
     <value>Radio button list</value>
