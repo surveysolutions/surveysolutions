@@ -1,6 +1,4 @@
 ﻿using System;
-using MvvmCross.Base;
-using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;

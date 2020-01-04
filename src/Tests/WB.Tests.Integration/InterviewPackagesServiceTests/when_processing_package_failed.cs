@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -76,7 +77,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             Guid supervisorId = Id.g9;
 
             var users = new Mock<IUserRepository>();
-            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { SupervisorId = supervisorId } }));
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { SupervisorId = supervisorId } }));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
@@ -88,7 +89,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             InScopeExecutor.Init(executor.Object);
 
             var interviewPackagesService = Create.Service.InterviewPackagesService(
-                syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true },
+                syncSettings: new SyncSettings(origin),
                 logger: Mock.Of<ILogger>(),
                 serializer: newtonJsonSerializer,
                 interviewPackageStorage: packagesStorage,

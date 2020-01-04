@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
@@ -82,7 +83,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 .Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
 
             var users = new Mock<IUserRepository>();
-            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(new HqUser()
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser()
                 {Profile = new HqUserProfile() {SupervisorId = supervisorId}}));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
@@ -94,7 +95,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             InScopeExecutor.Init(executor.Object);
 
             interviewPackagesService = Create.Service.InterviewPackagesService(
-                    syncSettings: new SyncSettings(origin) {UseBackgroundJobForProcessingPackages = true},
+                    syncSettings: new SyncSettings(origin) {},
                     logger: Mock.Of<ILogger>(),
                     serializer: newtonJsonSerializer,
                     interviewPackageStorage: packagesStorage,

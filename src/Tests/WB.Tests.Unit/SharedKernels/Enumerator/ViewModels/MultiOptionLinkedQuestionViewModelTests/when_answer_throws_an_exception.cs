@@ -3,7 +3,6 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;

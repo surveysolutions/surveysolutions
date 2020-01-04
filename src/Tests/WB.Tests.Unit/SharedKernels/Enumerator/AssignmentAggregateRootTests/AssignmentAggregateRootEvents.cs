@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Assignment;

@@ -2,7 +2,6 @@
 using Moq;
 using MvvmCross.Base;
 using NUnit.Framework;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
