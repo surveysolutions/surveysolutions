@@ -214,17 +214,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var userMaps = userMapsStorage.Query(q => q.Where(x=>x.Map == mapName).ToList());
 
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+            var usersToLower = users.Select(em => em.ToLower()).ToList();
 
             var availableUsers = this.userStorage.Users
-                .Where(x => users.Select(em => em.ToLower()).Contains(x.UserName.ToLower()))
+                .Where(x => usersToLower.Contains(x.UserName.ToLower()))
                 .Select(x => new
                 {
                     UserName = x.UserName,
                     IsArchived = x.IsArchived,
-                    IsInterviewer = x.Roles.Any(role => role.Id == interviewerRoleId)
+                    Roles = x.Roles
                 }).ToArray();
-                
-            var userMappings = availableUsers.Where(y => y.IsArchived == false && y.IsInterviewer == true)
+
+            var userMappings = availableUsers
+                .Where(y => y.IsArchived == false 
+                                               && y.Roles.Any(role => role.Id == interviewerRoleId))
                 .Select(x => new UserMap() {Map = mapName, UserName = x.UserName}).ToList();
 
             userMapsStorage.Remove(userMaps);

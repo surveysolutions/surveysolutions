@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             syncService.Setup(x => x.GetInterviewDetailsAsync(obsoleteInterviewId, It.IsAny<IProgress<TransferProgress>>(), CancellationToken.None))
                 .ReturnsAsync(serverEvents);
 
-            var localInterviewsStorage = new InMemoryPlainStorage<InterviewView>();
+            var localInterviewsStorage = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             localInterviewsStorage.Store(new InterviewView
             {
                 InterviewId = obsoleteInterviewId,

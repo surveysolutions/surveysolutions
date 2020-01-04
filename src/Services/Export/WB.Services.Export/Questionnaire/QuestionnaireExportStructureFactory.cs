@@ -214,7 +214,7 @@ namespace WB.Services.Export.Questionnaire
             if (question is ICategoricalQuestion categoricalQuestion && categoricalQuestion.CategoriesId.HasValue)
             {
                 var isMultiWithoutPredefineCategories = question is MultyOptionsQuestion multyOptionsQuestion
-                                                        /*&& multyOptionsQuestion.IsFilteredCombobox == true*/;
+                                                        && multyOptionsQuestion.IsFilteredCombobox != true;
 
                 if (!isMultiWithoutPredefineCategories)
                 {
@@ -234,9 +234,25 @@ namespace WB.Services.Export.Questionnaire
             }
             else if (question.Answers != null)
             {
-                foreach (var answer in question.Answers)
+                var isMultiFilteredCombo = question is MultyOptionsQuestion multyOptionsQuestion && multyOptionsQuestion.IsFilteredCombobox == true;
+
+                if (isMultiFilteredCombo)
                 {
-                    exportedHeaderItem.Labels.Add(new LabelItem(answer));
+                    exportedHeaderItem.LabelReferenceId = question.PublicKey;
+
+                    headerStructureForLevel.ReusableLabels[question.PublicKey] =
+                        new ReusableLabels()
+                        {
+                            Name = question.VariableName,
+                            Labels = question.Answers.Select(a => new LabelItem(a.AnswerValue, a.AnswerText)).ToArray()
+                        };
+                }
+                else
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        exportedHeaderItem.Labels.Add(new LabelItem(answer));
+                    }
                 }
             }
 
@@ -320,15 +336,17 @@ namespace WB.Services.Export.Questionnaire
                     exportedHeaderItem.ColumnValues[i] = columnValue;
                 }
 
-                if (!isQuestionLinked && !isMultiCombobox)
+                if (!isQuestionLinked)
                 {
                     var questionLabel = string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel;
 
                     if (question.QuestionType == QuestionType.MultyOption)
                     {
-                        var optionText = asCategorical?.CategoriesId.HasValue ?? false
-                            ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
-                            : question.Answers[i].AnswerText;
+                        var optionText = asCategorical?.IsFilteredCombobox ?? false
+                            ? i.ToString()
+                            : asCategorical?.CategoriesId.HasValue ?? false
+                                ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
+                                : question.Answers[i].AnswerText;
 
                         headerColumn.Title = $"{questionLabel}:{optionText}";
                     }
