@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Castle.Components.DictionaryAdapter;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;

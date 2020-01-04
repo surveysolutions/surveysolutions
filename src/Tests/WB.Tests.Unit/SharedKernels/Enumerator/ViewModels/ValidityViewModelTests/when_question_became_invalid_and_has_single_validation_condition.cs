@@ -4,7 +4,6 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;

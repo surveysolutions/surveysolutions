@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Tests.Abc;
 

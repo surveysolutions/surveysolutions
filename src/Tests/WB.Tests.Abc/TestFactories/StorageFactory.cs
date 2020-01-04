@@ -32,15 +32,16 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Abc.TestFactories
 {
-    public class TestHqUserManager : HqUserManager
-    {
-        public TestHqUserManager() : base(Mock.Of<IUserRepository>(),
-            Mock.Of<IHashCompatibilityProvider>(),
-            Mock.Of<IIdentityPasswordHasher>(),
-            Mock.Of<IPasswordValidator>(),
-            Mock.Of<IIdentityValidator>(),
-            Mock.Of<ISystemLog>()) { }
-    }
+    // TODO: Core migration https://issues.mysurvey.solutions/youtrack/issue/KP-13523
+    //public class TestHqUserManager : HqUserManager
+    //{
+    //    public TestHqUserManager() : base(Mock.Of<IUserRepository>(),
+    //        Mock.Of<IHashCompatibilityProvider>(),
+    //        Mock.Of<IIdentityPasswordHasher>(),
+    //        Mock.Of<IPasswordValidator>(),
+    //        Mock.Of<IIdentityValidator>(),
+    //        Mock.Of<ISystemLog>()) { }
+    //}
 
     public class StorageFactory
     {
@@ -63,18 +64,19 @@ namespace WB.Tests.Abc.TestFactories
 
         public IInterviewerProfileFactory UserProfileFactory() => Mock.Of<IInterviewerProfileFactory>();
 
-        public HqUserManager HqUserManager(IUserRepository userStore = null,
-            IHashCompatibilityProvider hashCompatibilityProvider = null,
-            IIdentityPasswordHasher passwordHasher = null,
-            IPasswordValidator passwordValidator = null,
-            IIdentityValidator identityValidator = null,
-            ISystemLog logger = null)
-            => new HqUserManager(userStore ?? Mock.Of<IUserRepository>(),
-                hashCompatibilityProvider,
-                passwordHasher ?? Mock.Of<IIdentityPasswordHasher>(),
-                passwordValidator ?? Mock.Of<IPasswordValidator>(),
-                identityValidator ?? Mock.Of<IIdentityValidator>(),
-                logger ?? Mock.Of<ISystemLog>());
+        // TODO: Core migration https://issues.mysurvey.solutions/youtrack/issue/KP-13523
+        //public HqUserManager HqUserManager(IUserRepository userStore = null,
+        //    IHashCompatibilityProvider hashCompatibilityProvider = null,
+        //    IIdentityPasswordHasher passwordHasher = null,
+        //    IPasswordValidator passwordValidator = null,
+        //    IIdentityValidator identityValidator = null,
+        //    ISystemLog logger = null)
+        //    => new HqUserManager(userStore ?? Mock.Of<IUserRepository>(),
+        //        hashCompatibilityProvider,
+        //        passwordHasher ?? Mock.Of<IIdentityPasswordHasher>(),
+        //        passwordValidator ?? Mock.Of<IPasswordValidator>(),
+        //        identityValidator ?? Mock.Of<IIdentityValidator>(),
+        //        logger ?? Mock.Of<ISystemLog>());
 
         public IAssignmentDocumentsStorage AssignmentDocumentsInmemoryStorage()
         {
@@ -87,10 +89,11 @@ namespace WB.Tests.Abc.TestFactories
         public SQLiteConnectionWithLock InMemorySqLiteConnection =>
             new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true));
 
-        public S3FileStorage S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
-        {
-            return new S3FileStorage(s3Settings, client, transferUtility, loggerProvider);
-        }
+        // TODO: Core migration https://issues.mysurvey.solutions/youtrack/issue/KP-13442
+        //public S3FileStorage S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
+        //{
+        //    return new S3FileStorage(s3Settings, client, transferUtility, loggerProvider);
+        //}
 
         public IPlainStorage<TEntity> SqliteInmemoryStorage<TEntity>(params TEntity[] items)
             where TEntity : class, IPlainStorageEntity, IPlainStorageEntity<string>, new()

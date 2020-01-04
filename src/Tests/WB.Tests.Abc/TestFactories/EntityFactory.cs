@@ -12,6 +12,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
 using Moq;
+using NUnit.Framework;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters;
@@ -37,7 +38,6 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -1950,10 +1950,10 @@ namespace WB.Tests.Abc.TestFactories
 
             var exportViewFactory = new ExportViewFactory(
                 fileSystemAccessor.Object,
-                Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                 new RosterStructureService(),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
-            return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, new QuestionnaireIdentity(Guid.NewGuid(), 1));
+            return exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
         public AudioQuestion AudioQuestion(Guid qId, string variable)
@@ -2003,9 +2003,9 @@ namespace WB.Tests.Abc.TestFactories
                 changeValue, interviewId, eventSequence);
         }
 
-        public SyncSettings SyncSettings(bool useBackgroundJobForProcessingPackages = false)
+        public SyncSettings SyncSettings()
         {
-            return new SyncSettings("hq", useBackgroundJobForProcessingPackages);
+            return new SyncSettings("hq");
         }
 
         public InterviewTreeVariableDiff InterviewTreeVariableDiff(InterviewTreeVariable sourceVariable, InterviewTreeVariable targetVariable)

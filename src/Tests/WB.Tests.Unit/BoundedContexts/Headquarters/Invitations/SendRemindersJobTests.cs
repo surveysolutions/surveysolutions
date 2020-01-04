@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Quartz;
@@ -9,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using WB.Tests.Abc.TestFactories;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 {

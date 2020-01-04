@@ -3,11 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Ncqrs.Eventing;
 using NUnit.Framework;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
 

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MvvmCross.Base;
-using MvvmCross.Logging;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 using WB.Tests.Abc;

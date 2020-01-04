@@ -26,6 +26,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -42,7 +43,6 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -626,24 +626,26 @@ namespace WB.Tests.Abc.TestFactories
                      x.ReadHeader(It.IsAny<Stream>(), It.IsAny<string>()) == headers);
         }
 
-        public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
-            IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
-            IInterviewerVersionReader interviewerVersionReader = null,
-            IInterviewFactory interviewFactory = null,
-            IAuthorizedUser currentUser = null)
-        {
-            var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
-            return new InterviewerProfileFactory(
-                userManager ?? defaultUserManager,
-                interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
-                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
-                interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                currentUser ?? Mock.Of<IAuthorizedUser>(),
-                Mock.Of<IQRCodeHelper>(),
-                Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
-        }
+        // TODO: Core migration https://issues.mysurvey.solutions/youtrack/issue/KP-13523
+        //public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
+        //    IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
+        //    IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
+        //    IInterviewerVersionReader interviewerVersionReader = null,
+        //    IInterviewFactory interviewFactory = null,
+        //    IAuthorizedUser currentUser = null)
+        //{
+        //    // TODO: Core migration - fix
+        //    //var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
+        //    return new InterviewerProfileFactory(
+        //        null, //userManager ?? defaultUserManager,
+        //        interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+        //        deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
+        //        interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
+        //        interviewFactory ?? Mock.Of<IInterviewFactory>(),
+        //        currentUser ?? Mock.Of<IAuthorizedUser>(),
+        //        Mock.Of<IQRCodeHelper>(),
+        //        Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
+        //}
 
 
 
@@ -668,7 +670,7 @@ namespace WB.Tests.Abc.TestFactories
             var hqUser = Mock.Of<HqUser>(_ => _.Id == Id.gA
                                            && _.Profile == hqUserProfile);
             userRepositoryMock
-                .Setup(arg => arg.FindByIdAsync(It.IsAny<Guid>()))
+                .Setup(arg => arg.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(hqUser);
 
             return new InterviewPackagesService(
