@@ -31,6 +31,7 @@ export default {
 
                 if (response.data == null) {
                     commit("SET_SERVICE_STATE", false)
+                    return
                 }
 
                 response.data.forEach(status => {
@@ -92,6 +93,8 @@ export default {
 
         ADD_JOB(state, { id }) {
             const job = { id, isInitializing: true }
+
+            // making sure all jobs ordered by ID descending
             const idx = findIndex(state.jobs, j => j.id < id)
 
             if (idx < 0)
