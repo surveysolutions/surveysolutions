@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.Enumerator.Utils;
-using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewEntities

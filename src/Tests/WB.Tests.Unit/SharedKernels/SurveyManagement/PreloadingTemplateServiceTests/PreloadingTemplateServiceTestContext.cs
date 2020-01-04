@@ -1,13 +1,16 @@
 ﻿using System;
 using System.IO;
+using Microsoft.Extensions.Options;
+//using JsonDiffPatchDotNet;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateServiceTests
@@ -21,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
             IExportFileNameService exportFileNameService = null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object;
-            return new AssignmentImportTemplateGenerator(currentFileSystemAccessor, "",
+            return new AssignmentImportTemplateGenerator(currentFileSystemAccessor, Options.Create(new FileStorageConfig()),//",
                 tabularFormatExportService ?? Mock.Of<ITabularFormatExportService>(),
                 Mock.Of<IArchiveUtils>(),
                 exportFileNameService ?? Mock.Of<IExportFileNameService>(),
@@ -33,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
             IFileSystemAccessor fileSystemAccessor = null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object;
-            return new AssignmentImportTemplateGenerator(currentFileSystemAccessor, "",
+            return new AssignmentImportTemplateGenerator(currentFileSystemAccessor, Options.Create(new FileStorageConfig()),
                 Mock.Of<ITabularFormatExportService>(),
                 Mock.Of<IArchiveUtils>(),
                 Mock.Of<IExportFileNameService>(),

@@ -1,6 +1,8 @@
 ﻿using System.IO;
+using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTests
@@ -10,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
     {
         protected static ImageFileStorage CreatePlainFileRepository(IFileSystemAccessor fileSystemAccessor = null)
         {
-            return new ImageFileStorage(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object, "");
+            return new ImageFileStorage(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object, Options.Create(new FileStorageConfig()));
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

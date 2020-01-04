@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
         {
             mockOfPackagesStorage = new Mock<IPlainStorageAccessor<InterviewPackage>>();
 
-            var syncSettings = Mock.Of<SyncSettings>(x => x.UseBackgroundJobForProcessingPackages == true);
+            var syncSettings = Mock.Of<SyncSettings>();
             
             interviewPackagesService = Create.Service.InterviewPackagesService(interviewPackageStorage: mockOfPackagesStorage.Object, syncSettings: syncSettings);
 
