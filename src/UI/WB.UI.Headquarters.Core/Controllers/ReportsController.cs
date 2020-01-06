@@ -223,6 +223,16 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("SpeedAndQuantity", model);
         }
 
+        [ActivePage(MenuItem.SurveyStatistics)]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public ActionResult SurveyStatistics()
+        {
+            return this.View("SurveyStatistics", new
+            {
+                isSupervisor = this.authorizedUser.IsSupervisor
+            });
+        }
+
         private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName,
             PeriodiceReportType reportType,
             bool canNavigateToQuantityByTeamMember,

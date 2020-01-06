@@ -1620,7 +1620,6 @@
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <Content Include="Views\InterviewerAuditLog\Index.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeAssignments.cshtml" />
-    <Content Include="Views\Reports\SurveyStatistics.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
