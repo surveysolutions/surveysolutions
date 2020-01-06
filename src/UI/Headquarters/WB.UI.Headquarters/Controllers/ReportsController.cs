@@ -109,15 +109,7 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        [ActivePage(MenuItem.SurveyStatistics)]
-        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
-        public ActionResult SurveyStatistics()
-        {
-            return this.View("SurveyStatistics", new
-            {
-                isSupervisor = this.authorizedUser.IsSupervisor
-            });
-        }
+
         
 
         
