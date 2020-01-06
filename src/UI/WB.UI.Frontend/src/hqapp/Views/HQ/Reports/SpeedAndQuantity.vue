@@ -125,18 +125,44 @@ export default {
         }
     },
     mounted() {
-        if (this.reportTypeId == null && this.model.reportTypes.length > 0) {
+
+        if (this.query.questionnaireId) {
+            this.questionnaireId = _.find(this.$config.model.questionnaires, "key", this.query.questionnaireId)
+        }
+
+        if (this.questionnaireId && this.query.questionnaireVersion) {
+            this.questionnaireVersion = _.find(this.questionnaireId.versions, "key", this.query.questionnaireVersion)
+        }
+
+        if (this.query.reportType) {
+            this.reportTypeId = _.find(this.model.reportTypes, "key", this.query.reportType)
+        } 
+        else if (this.reportTypeId == null && this.model.reportTypes.length > 0) {
+            var index = this.model.reportTypes
             this.reportTypeId = this.model.reportTypes[0]
         }
-        if (this.overTheLast == null && this.model.overTheLasts.length > 6) {
+
+        if (this.query.columnCount) {
+            this.overTheLast = _.find(this.model.overTheLasts, "key", this.query.columnCount)
+        }
+        else if (this.overTheLast == null && this.model.overTheLasts.length > 6) {
             this.overTheLast = this.model.overTheLasts[6]
         }
-        if (this.period == null && this.model.periods.length > 0) {
+
+        if (this.query.period) {
+            this.period = _.find(this.model.periods, "key", this.query.period)
+        }
+        else if (this.period == null && this.model.periods.length > 0) {
             this.period = this.model.periods[0]
         }
-        if (this.from == null) {
+                
+        if (this.query.from) {
+            this.from = this.query.from
+        }
+        else if (this.from == null) {
             this.from = moment().format(this.dateFormat)
         }
+
         this.loadReportData()
     },
     methods: {
