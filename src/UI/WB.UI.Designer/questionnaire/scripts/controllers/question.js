@@ -703,10 +703,15 @@
                 markFormAsChanged();
             };
 
-            $scope.$on('updateCategories', function () {
-                if ($scope.activeQuestion.isLinkedToReusableCategories === true && $scope.activeQuestion.categoriesId !== null && $scope.getSelectedCategories() === undefined) {
-                    $scope.activeQuestion.isLinkedToReusableCategories = null;
-                    $scope.activeQuestion.categoriesId = null;
+            $scope.$on('updateCategories', function (scope, categoryInfo) {
+                if ($scope.activeQuestion.isLinkedToReusableCategories === true) {
+                    if (categoryInfo.oldCategoriesId != null && $scope.activeQuestion.categoriesId == categoryInfo.oldCategoriesId) {
+                        $scope.activeQuestion.categoriesId = categoryInfo.categoriesId;
+                    }
+                    else if ($scope.activeQuestion.categoriesId !== null && $scope.getSelectedCategories() === undefined) {
+                        $scope.activeQuestion.isLinkedToReusableCategories = null;
+                        $scope.activeQuestion.categoriesId = null;
+                    }
                 }
             });
 
