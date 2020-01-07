@@ -114,7 +114,7 @@ namespace WB.UI.Interviewer.ViewModel
                 {
                     lock (ThrottlingLock)
                     {
-                        PauseThread.Abort();
+                        PauseThread?.Abort();
                         if (pendingPause == null)
                         {
                             commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));

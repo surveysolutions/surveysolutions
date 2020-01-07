@@ -26,10 +26,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         public override async Task ExecuteAsync()
         {
-            if (!await this.synchronizationService.IsAutoUpdateEnabledAsync(Context.CancellationToken))
+            if (!await this.synchronizationService.IsAutoUpdateEnabledAsync(Context.CancellationToken).ConfigureAwait(false))
             {
                 var versionFromServerCheck = await 
-                    this.synchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
+                    this.synchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken).ConfigureAwait(false);
                 Context.Statistics.NewVersionExists = 
                     versionFromServerCheck.HasValue && versionFromServerCheck > GetApplicationVersionCode();
 
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             });
 
             var versionFromServer = await
-                this.synchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
+                this.synchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken).ConfigureAwait(false);
 
             if (versionFromServer.HasValue && versionFromServer > GetApplicationVersionCode())
             {
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                                 { "progressPercentage", ((int) downloadProgress.ProgressPercentage).ToString()}
                             }
                         });
-                    }));
+                    })).ConfigureAwait(false);
                 }
                 catch (Exception exc)
                 {

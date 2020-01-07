@@ -61,8 +61,8 @@ namespace WB.UI.Shared.Enumerator.Services
             bool continueIfNoPatch = true,
             IProgress<TransferProgress> onDownloadProgressChanged = null)
         {
-            await this.permissions.AssureHasPermission(Permission.Storage);
-            await this.permissions.EnsureHasPermissionToInstallFromUnknownSourcesAsync();
+            await this.permissions.AssureHasPermission(Permission.Storage).ConfigureAwait(false);
+            await this.permissions.EnsureHasPermissionToInstallFromUnknownSourcesAsync().ConfigureAwait(false);
             
             var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N
                 ? AndroidPathUtils.GetPathToExternalDirectory()
@@ -93,7 +93,7 @@ namespace WB.UI.Shared.Enumerator.Services
              
             try
             {
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(onDownloadProgressChanged, cancellationToken);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(onDownloadProgressChanged, cancellationToken).ConfigureAwait(false);
             }
             catch (RestException restEx)
             {
@@ -106,7 +106,7 @@ namespace WB.UI.Shared.Enumerator.Services
             async Task GetWithFullApk()
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(onDownloadProgressChanged, cancellationToken);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(onDownloadProgressChanged, cancellationToken).ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 if (this.fileSystemAccessor.IsFileExists(pathToNewApk))
@@ -131,13 +131,13 @@ namespace WB.UI.Shared.Enumerator.Services
                     this.logger.Error("Were not able to apply delta patch. ", e);
 
                     if (continueIfNoPatch)
-                        await GetWithFullApk();
+                        await GetWithFullApk().ConfigureAwait(false);
                 }
             }
             else
             {
                 if (continueIfNoPatch)
-                    await GetWithFullApk();
+                    await GetWithFullApk().ConfigureAwait(false);
             }
 
             if (patchOrFullApkBytes == null)
