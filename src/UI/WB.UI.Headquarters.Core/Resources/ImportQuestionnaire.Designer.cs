@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are signed in on Designer as {0}..
+        ///   Looks up a localized string similar to You are signed in on Designer as {{user}}..
         /// </summary>
         public static string SignedInBlock {
             get {

@@ -124,7 +124,7 @@
     <value>لا يمكن العثور على الاستبيان المطلوب. يرجى تحديث قائمة الاستبيانات</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>لقد سجلت الدخول على المصمم باسم {0}.</value>
+    <value>لقد سجلت الدخول على المصمم باسم {{user}}.</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>تسجيل خروج</value>
