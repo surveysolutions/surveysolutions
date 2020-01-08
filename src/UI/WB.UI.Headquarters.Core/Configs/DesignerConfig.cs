@@ -5,5 +5,7 @@
         public string DesignerAddress { get; set; }
 
         public int RestTimeout { get; set; }
+
+        public bool AcceptUnsignedCertificate { get; set; }
     }
 }

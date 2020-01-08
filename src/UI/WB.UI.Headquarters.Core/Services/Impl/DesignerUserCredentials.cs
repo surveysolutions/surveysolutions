@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Web;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 
-namespace WB.UI.Headquarters.Services
+namespace WB.UI.Headquarters.Services.Impl
 {
     public class DesignerUserCredentials : IDesignerUserCredentials
     {
@@ -14,6 +13,7 @@ namespace WB.UI.Headquarters.Services
         private static readonly Dictionary<string, RestCredentials> credentialsStorage = new Dictionary<string, RestCredentials>();
 
         public DesignerUserCredentials() { }
+
         public DesignerUserCredentials(IAuthorizedUser authorizedUser)
         {
             this.authorizedUser = authorizedUser ?? throw new ArgumentNullException(nameof(authorizedUser));

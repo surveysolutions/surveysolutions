@@ -80,14 +80,14 @@ namespace WB.UI.Headquarters.Code
         //    return ToSafeJavascriptMessage(page as HtmlHelper, sourceMessage);
         //}
 
-        public static IHtmlContent ToSafeJavascriptMessage<T>(this IHtmlHelper<T> page, string sourceMessage)
+        public static IHtmlContent ToSafeJavascriptMessage(this IHtmlHelper page, string sourceMessage)
         {
             var html = Encoder.JavaScriptEncode(sourceMessage, false);
 
             return page.Raw(html);
         }
 
-        public static HtmlString RenderHqConfig<T>(this IHtmlHelper<T> helper, object model, string title = null)
+        public static HtmlString RenderHqConfig(this IHtmlHelper helper, object model, string title = null)
         {
             string titleString = title ?? (string)helper.ViewBag.Title?.ToString() ?? null;
 

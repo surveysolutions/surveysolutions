@@ -51,6 +51,13 @@
       </Content>
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Content Remove="Views\Template\Import.cshtml" />
+    <Content Remove="Views\Template\ImportMode.cshtml" />
+  </ItemGroup>
+
+
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.Core.csproj" />
@@ -115,8 +122,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>HQ.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ImportQuestionnaire.Designer.cs">
+      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\Interviews.Designer.cs">
       <DependentUpon>Interviews.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\LoginToDesigner.Designer.cs">
+      <DependentUpon>LoginToDesigner.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -144,6 +161,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireImport.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Reports.designer.cs">
       <DesignTime>True</DesignTime>
@@ -233,6 +255,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HQ.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ImportQuestionnaire.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportQuestionnaire.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Interviews.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
@@ -256,6 +282,10 @@
     <EmbeddedResource Update="Resources\QuestionnaireClonning.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireClonning.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireImport.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireImport.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Reports.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

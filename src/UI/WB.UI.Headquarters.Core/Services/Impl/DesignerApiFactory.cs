@@ -1,22 +1,18 @@
-﻿using Newtonsoft.Json;
-using Refit;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Refit;
+using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.BoundedContexts.Headquarters.Designer
+namespace WB.UI.Headquarters.Services.Impl
 {
-    public interface IDesignerApiFactory
-    {
-        IDesignerApi Get();
-    }
-
     internal class DesignerApiFactory : IDesignerApiFactory
     {
         private readonly IRestServiceSettings serviceSettings;

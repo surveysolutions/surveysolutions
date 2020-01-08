@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Services;
+using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
 
@@ -31,6 +32,10 @@ namespace WB.UI.Headquarters
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
 
             var captchaSection = this.configuration.CaptchaOptionsSection();
+
+
+            registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
+            registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
 
             var config = captchaSection.Get<CaptchaConfig>() ?? new CaptchaConfig();
             var provider = config.CaptchaType;

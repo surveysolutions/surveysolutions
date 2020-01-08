@@ -74,7 +74,8 @@
                     </ol>
                     <h1>@ImportQuestionnaire.PageHeader</h1>
                     <div class="signed-name">
-                        @Html.Raw(string.Format(@ImportQuestionnaire.SignedInBlock, string.Format("<span>{0}</span>", @Model.DesignerUserName))) <a href="@Url.Action("LogoutFromDesigner")">@ImportQuestionnaire.SignOut</a>
+                        @Html.Raw(string.Format(@ImportQuestionnaire.SignedInBlock, string.Format("<span>{0}</span>", @Model.DesignerUserName))) 
+                        <a href="@Url.Action("LogoutFromDesigner")">@ImportQuestionnaire.SignOut</a>
                     </div>
                 </div>
             </div>

@@ -1,55 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using Resources;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Models;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.Code;
+using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.UI.Headquarters.Configs;
+using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Headquarters.Resources;
-using WB.Core.BoundedContexts.Headquarters.Designer;
-using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [LimitsFilter]
-    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-    public class TemplateController : BaseController
+    [Authorize(Roles = "Administrator, Headquarter")]
+    [ActivePage(MenuItem.Questionnaires)]
+    public class TemplateController : Controller
     {
         private readonly IDesignerApi designerApi;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly IQuestionnaireImportService importService;
-        private readonly DesignerUserCredentials designerUserCredentials;
+        private readonly IDesignerUserCredentials designerUserCredentials;
         private readonly IAllUsersAndQuestionnairesFactory questionnaires;
         private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly ILogger<TemplateController> logger;
 
-        public TemplateController(ICommandService commandService, 
-            ILogger logger,
+        public TemplateController(
             IDesignerApi designerApi, 
             IQuestionnaireVersionProvider questionnaireVersionProvider,
             IQuestionnaireImportService importService,
-            DesignerUserCredentials designerUserCredentials, 
+            IDesignerUserCredentials designerUserCredentials, 
             IAllUsersAndQuestionnairesFactory questionnaires,
             IAssignmentsUpgradeService upgradeService,
-            IAuthorizedUser authorizedUser)
-            : base(commandService, logger)
+            IAuthorizedUser authorizedUser,
+            ILogger<TemplateController> logger,
+            IOptions<DesignerConfig> designerConfig)
         {
             this.designerApi = designerApi;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
@@ -58,10 +56,9 @@ namespace WB.UI.Headquarters.Controllers
             this.questionnaires = questionnaires;
             this.upgradeService = upgradeService;
             this.authorizedUser = authorizedUser;
+            this.logger = logger;
 
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-
-            if (AppSettings.Instance.AcceptUnsignedCertificate)
+            if (designerConfig.Value.AcceptUnsignedCertificate)
             {
                 ServicePointManager.ServerCertificateValidationCallback =
                     (self, certificate, chain, sslPolicyErrors) => true;
@@ -82,7 +79,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (this.designerUserCredentials.Get() == null)
             {
-                Error(Resources.LoginToDesigner.SessionExpired);
+                //Error(Resources.LoginToDesigner.SessionExpired);
                 return this.RedirectToAction("LoginToDesigner");
             }
 
@@ -91,20 +88,20 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Import(Guid id, ImportModel request)
         {
             if (this.designerUserCredentials.Get() == null)
             {
-                Error(Resources.LoginToDesigner.SessionExpired);
+                //Error(Resources.LoginToDesigner.SessionExpired);
                 return this.RedirectToAction("LoginToDesigner");
             }
 
             var model = await this.GetImportModel(id);
             if (model.QuestionnaireInfo != null)
             {
-                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false, request.Comment, Request.Url.ToString());
+                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false,
+                    request.Comment, Request.GetDisplayUrl());
                 model.ErrorMessage = result.ImportError;
 
                 if (result.IsSuccess)
@@ -169,14 +166,20 @@ namespace WB.UI.Headquarters.Controllers
         }
 
 
-        public ActionResult LoginToDesigner()
+        [AntiForgeryFilter]
+        public IActionResult LoginToDesigner()
         {
-            return this.View();
+            return this.View(new
+            {
+                BackLink = Url.Action("Index", "SurveySetup"),
+                LoginAction = Url.Action("LoginToDesigner", "Template"),
+                DesignerLogo = Url.Content("~/Dependencies/img/designer-logo.png")
+            });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> LoginToDesigner(LogOnModel model)
+        public async Task<IActionResult> LoginToDesigner([FromBody]LogOnModel model)
         {
             var creds = new RestCredentials { Login = model.UserName, Password = model.Password };
 
@@ -187,36 +190,38 @@ namespace WB.UI.Headquarters.Controllers
                 
                 this.designerUserCredentials.Set(creds);
 
-                return this.RedirectToAction("Import");
+                return Ok();
             }
             catch (RestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
             {
-                this.ModelState.AddModelError("InvalidCredentials", string.Empty);
+                return StatusCode(StatusCodes.Status401Unauthorized);
             }
             catch (RestException ex) when (ex.StatusCode == HttpStatusCode.Forbidden)
             {
                 var position = ex.Message.IndexOf("IP:", StringComparison.InvariantCultureIgnoreCase);
                 string ipString = position > -1 ? ex.Message.Substring(position) : "";
 
-                this.ModelState.AddModelError("AccessForbidden", $"{Resources.LoginToDesigner.AccessForbidden} {ipString}");
+
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = $"{Resources.LoginToDesigner.AccessForbidden} {ipString}"
+                });
             }
             catch (RestException ex)
             {
-                this.Logger.Warn("Error communicating to designer", ex);
-                this.Error(string.Format(
-                    QuestionnaireImport.LoginToDesignerError,
-                    GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
+                this.logger.LogWarning(ex, "Error communicating to designer");
             }
             catch (Exception ex)
             {
-                this.Logger.Error("Could not connect to designer.", ex);
-
-                this.Error(string.Format(
-                        QuestionnaireImport.LoginToDesignerError,
-                        GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
+                this.logger.LogError(ex, "Could not connect to designer.");
             }
 
-            return this.View(model);
+            return StatusCode(StatusCodes.Status400BadRequest, new
+            {
+                Message = string.Format(
+                    QuestionnaireImport.LoginToDesignerError,
+                    Url.Action("Import", "Template"))
+            });
         }
     }
 
