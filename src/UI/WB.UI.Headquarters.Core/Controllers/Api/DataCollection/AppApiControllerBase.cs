@@ -9,7 +9,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     public class AppControllerBaseBase : ControllerBase
     {
-        private readonly Version LastSupportedVersion = new Version(19, 08, 0, 0); // version from the sky, discussed on scrum 12/04/2019
+        // version from the sky, discussed on scrum 12/04/2019
+        //revision is used to compare version of client apk
+        private readonly Version LastSupportedVersion = new Version(19, 08, 0, 25531); 
 
         private readonly IPlainKeyValueStorage<InterviewerSettings> settingsStorage;
         private readonly IPlainKeyValueStorage<TenantSettings> tenantSettings;
@@ -33,6 +35,20 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             }
 
             return appVersion < LastSupportedVersion;
+        }
+
+        protected bool IsNeedUpdateAppBySettings(int? clientApkBuildNumber, int? serverApkBuildNumber)
+        {
+            if (clientApkBuildNumber == null)
+                return false;
+
+            var interviewerSettings = settingsStorage.GetById(AppSetting.InterviewerSettings);
+            if (interviewerSettings.IsAutoUpdateEnabled())
+            {
+                return clientApkBuildNumber != serverApkBuildNumber;
+            }
+
+            return clientApkBuildNumber < LastSupportedVersion.Revision;
         }
 
         protected bool UserIsFromThisTenant(string userTenantId)

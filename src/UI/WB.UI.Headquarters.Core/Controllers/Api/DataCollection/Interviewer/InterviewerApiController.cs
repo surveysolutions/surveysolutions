@@ -34,13 +34,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         protected readonly IUserViewFactory userViewFactory;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IProductVersion productVersion;
         private readonly IAssignmentsService assignmentsService;
         private readonly IClientApkProvider clientApkProvider;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewInformationFactory interviewFactory;
+        private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IUserToDeviceService userToDeviceService;
-        
+
         public enum ClientVersionFromUserAgent
         {
             Unknown = 0,
@@ -52,13 +52,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IUserViewFactory userViewFactory,
             IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
-            IProductVersion productVersion,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewInformationFactory interviewFactory,
             IAssignmentsService assignmentsService,
             IClientApkProvider clientApkProvider,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
             IPlainKeyValueStorage<TenantSettings> tenantSettings,
+            IInterviewerVersionReader interviewerVersionReader,
             IUserToDeviceService userToDeviceService)
             : base(interviewerSettingsStorage, tenantSettings)
         {
@@ -66,11 +66,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             this.userViewFactory = userViewFactory;
             this.syncVersionProvider = syncVersionProvider;
             this.authorizedUser = authorizedUser;
-            this.productVersion = productVersion;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.interviewFactory = interviewFactory;
             this.assignmentsService = assignmentsService;
             this.clientApkProvider = clientApkProvider;
+            this.interviewerVersionReader = interviewerVersionReader;
             this.userToDeviceService = userToDeviceService;
         }
 
@@ -183,16 +183,16 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             {
                 return StatusCode((int) HttpStatusCode.Conflict);
             }
-
-            var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
-            var interviewerVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.interviewer");
-
-            if (interviewerVersion != null && interviewerVersion > currentVersion)
+            
+            var serverApkBuildNumber = interviewerVersionReader.Version;
+            var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
+            
+            if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
             {
                 return StatusCode((int) HttpStatusCode.NotAcceptable);
             }
 
-            if (IsNeedUpdateAppBySettings(interviewerVersion, currentVersion))
+            if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
             {
                 return StatusCode((int) HttpStatusCode.UpgradeRequired);
             }

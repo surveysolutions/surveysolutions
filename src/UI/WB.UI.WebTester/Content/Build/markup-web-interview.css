@@ -484,6 +484,10 @@ span.image-zoom-box, span.image-option {
     height: 100%; }
   .table-view .ag-theme-customStyles.roster-matrix .ag-cell .field {
     height: 100%; }
+  .table-view .ag-theme-customStyles.roster-matrix .ag-cell input {
+    left: 0px;
+    width: 0px;
+    display: none; }
   .table-view .ag-theme-customStyles.roster-matrix .ag-cell label {
     padding: 0;
     margin: 0;

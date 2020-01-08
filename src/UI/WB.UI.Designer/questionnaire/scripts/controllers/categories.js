@@ -137,7 +137,7 @@
                     dataBind(categories.checkpoint, categories);
                     categories.form.$setPristine();
 
-                    updateQuestionnaireCategories();
+                    updateQuestionnaireCategories(categories);
                 });
             };
 
@@ -198,7 +198,7 @@
                 $scope.loadCategories();
             });
 
-            var updateQuestionnaireCategories = function() {
+            var updateQuestionnaireCategories = function (categories) {
                 if ($scope.categoriesList === null)
                     return;
 
@@ -207,6 +207,6 @@
                         return { categoriesId: categoriesDto.categoriesId, name: categoriesDto.name };
                     });
 
-                $rootScope.$broadcast("updateCategories", {});
+                $rootScope.$broadcast("updateCategories", categories || {});
             };
         });
