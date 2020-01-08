@@ -3,5 +3,6 @@
     public interface IInterviewerVersionReader
     {
         int? Version { get; }
+        int? SupervisorVersion { get; }
     }
 }

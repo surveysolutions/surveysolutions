@@ -20,5 +20,13 @@ namespace WB.UI.Headquarters.Code
                 return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
             }
         }
+
+        public int? SupervisorVersion
+        {
+            get
+            {
+                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.SupervisorFileName);
+            }
+        }
     }
 }
