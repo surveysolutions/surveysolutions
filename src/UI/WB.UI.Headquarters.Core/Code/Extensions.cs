@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,16 +29,48 @@ namespace WB.UI.Headquarters.Code
             return false;
         }
 
+        private static Regex buildVersionRegex = new Regex("build (\\d+)", RegexOptions.Compiled);
+
         public static Version GetProductVersionFromUserAgent(this HttpRequest request, string productName)
         {
-            //foreach (var product in request.Headers[HeaderNames.UserAgent])
-            //{
-            //    if ((product.Product?.Name.StartsWith(productName, StringComparison.OrdinalIgnoreCase) ?? false)
-            //        && Version.TryParse(product.Product.Version, out Version version))
-            //    {
-            //        return version;
-            //    }
-            //}
+            foreach (var product in request.Headers[HeaderNames.UserAgent])
+            {
+                if (product.StartsWith(productName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var parts = product.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length > 0)
+                    {
+                        var productVersion = parts[0].Split('/', StringSplitOptions.RemoveEmptyEntries);
+                        if (productVersion.Length == 2)
+                        {
+                            if (Version.TryParse(productVersion[1], out Version version))
+                            {
+                                return version;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static int? GetBuildNumberFromUserAgent(this HttpRequest request)
+        {
+            if (request?.Headers?.ContainsKey(HeaderNames.UserAgent) != true) return null;
+
+            foreach (var product in request.Headers[HeaderNames.UserAgent])
+            {
+                var match = buildVersionRegex.Match(product);
+                if (match.Success && match.Groups.Count == 2)
+                {
+                    var stringBuild = match.Groups[1].Value;
+                    if (int.TryParse(stringBuild, out int build))
+                    {
+                        return build;
+                    }
+                }
+            }
 
             return null;
         }
