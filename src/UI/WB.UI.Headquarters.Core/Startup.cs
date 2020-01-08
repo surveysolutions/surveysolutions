@@ -223,8 +223,15 @@ namespace WB.UI.Headquarters
             });
 
 
-            //services.AddDistributedMemoryCache();
-            services.AddSession();
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddResponseCaching();
             services.AddResponseCompression();
             services.AddLogging();
@@ -317,7 +324,7 @@ namespace WB.UI.Headquarters
             app.UseAuthorization();
 
             app.UseSwagger();
-
+            app.UseSession();
             app.UseResponseCompression();
             app.UseRequestDecompression();
 

@@ -124,7 +124,7 @@
     <value>El cuestionario solicitado no pudo ser encontrado. Por favor actualice la lista de cuestionarios</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>Ha ingresado en sesión en Designer {0}</value>
+    <value>Ha ingresado en sesión en Designer {{user}}</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>Salir</value>

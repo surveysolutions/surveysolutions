@@ -2,6 +2,7 @@
     <div :class="wrapperClass">
         <span id="loadingPixel" style="display:none" :data-loading="isProcessingFlag"></span>
         <table ref="table"
+            v-bind:class="tableClass"
                class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
             <thead ref="header"><slot name="header"></slot></thead>
             <tbody ref="body"></tbody>
@@ -95,6 +96,9 @@ export default {
         },
         search: {
             caseInsensitive: true
+        },
+        tableClass: {
+            type: String, default: null
         }
     },
 

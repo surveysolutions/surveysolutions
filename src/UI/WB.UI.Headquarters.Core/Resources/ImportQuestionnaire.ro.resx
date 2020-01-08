@@ -124,7 +124,7 @@
     <value>Chestionarul solicitat nu poate fi găsit. Vă rugăm actualizați lista chestionarelor</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>Sunteți conectat la Designer ca {0}.</value>
+    <value>Sunteți conectat la Designer ca {{user}}.</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>deconectare</value>

@@ -127,7 +127,7 @@
     <value>Select a questionnaire to import</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>You are signed in on Designer as {0}.</value>
+    <value>You are signed in on Designer as {{user}}.</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>sign out</value>

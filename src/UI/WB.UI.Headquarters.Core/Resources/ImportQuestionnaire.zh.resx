@@ -124,7 +124,7 @@
     <value>未找到请求的问卷。请刷新问卷列表。</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>您在问卷设计网站以{0}登录。</value>
+    <value>您在问卷设计网站以{{user}}登录。</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>注销</value>

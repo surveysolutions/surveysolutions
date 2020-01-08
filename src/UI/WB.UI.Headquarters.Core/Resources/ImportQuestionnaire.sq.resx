@@ -124,7 +124,7 @@
     <value>Pyetësori i kërkuar nuk mund të gjendet. Ju lutemi, rifreskoni listën e pyetësorëve </value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>Ju jeni të regjistruar në Designer si {0}.</value>
+    <value>Ju jeni të regjistruar në Designer si {{user}}.</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>Dil</value>
