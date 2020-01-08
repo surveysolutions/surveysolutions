@@ -60,10 +60,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(TableRosterHasMoreThanAllowedEntities, "WB0283", string.Format(VerificationMessages.WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInTableRoster)),
             Error<IGroup>(TableRosterCantContainsSupervisorQuestions, "WB0284", VerificationMessages.WB0284_TableRosterCantContainsSupervisorQuestions),
             Error<IGroup>(TableRosterContainsOnlyAllowedQuestionTypes, "WB0285", VerificationMessages.WB0285_TableRosterContainsOnlyAllowedQuestionTypes),
-            Error<IGroup>(MatrixRosterContainsOnlyAllowedQuestionTypes, "WB0289", VerificationMessages.WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes),
-            Error<IGroup>(MatrixRosterHasMoreThanAllowedEntities, "WB0290", string.Format(VerificationMessages.WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInMatrixRoster)),
-            Error<IGroup>(MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions, "WB0291", VerificationMessages.WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions),
-
+            Error<IGroup>(MatrixRosterContainsOnlyAllowedQuestionTypes, "WB0297", VerificationMessages.WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes),
+            Error<IGroup>(MatrixRosterHasMoreThanAllowedEntities, "WB0298", string.Format(VerificationMessages.WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInMatrixRoster)),
+            Error<IGroup>(MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions, "WB0299", VerificationMessages. WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions),
+            
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
             Warning<IGroup>(EmptyGroup, "WB0202", VerificationMessages.WB0202_GroupWithoutQuestions),
