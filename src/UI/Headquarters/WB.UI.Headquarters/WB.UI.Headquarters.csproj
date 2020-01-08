@@ -558,35 +558,6 @@
       <DependentUpon>Maps.resx</DependentUpon>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.ar.resx">
-      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.es.resx">
-      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.fr.resx">
-      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.ka.resx">
-      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.pt.resx">
-      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>QuestionnaireImport.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.ro.resx">
-      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.ru.resx">
-      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.zh.resx">
-      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-    </Content>
     <Content Include="App_GlobalResources\Roles.resx">
       <SubType>Designer</SubType>
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -967,12 +938,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DevicesInterviewers.sq.resx" />
     <EmbeddedResource Include="Resources\EnumNames.sq.resx" />
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.ar.resx">
-      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.ro.resx">
-      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.es.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
@@ -991,13 +956,6 @@
     <EmbeddedResource Include="Resources\DevicesInterviewers.zh.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.es.resx">
-      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.fr.resx">
-      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.sq.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.ar.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
@@ -1008,16 +966,6 @@
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\LimitsIndicator.sq.resx" />
-    <EmbeddedResource Include="Resources\LoginToDesigner.ar.resx">
-      <DependentUpon>LoginToDesigner.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.es.resx">
-      <DependentUpon>LoginToDesigner.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.ro.resx">
-      <DependentUpon>LoginToDesigner.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.sq.resx" />
     <EmbeddedResource Include="Resources\OutdatedBrowser.ar.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
@@ -1200,20 +1148,6 @@
     <EmbeddedResource Include="Resources\DevicesInterviewers.ru.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.ka.resx">
-      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ImportQuestionnaire.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.ru.resx">
-      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.zh.resx">
-      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\LimitsIndicator.fr.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
@@ -1232,26 +1166,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\LimitsIndicator.zh.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.fr.resx">
-      <DependentUpon>LoginToDesigner.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.ka.resx">
-      <DependentUpon>LoginToDesigner.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.pt.resx">
-      <DependentUpon>LoginToDesigner.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LoginToDesigner.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.ru.resx">
-      <DependentUpon>LoginToDesigner.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.zh.resx">
-      <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OutdatedBrowser.ka.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
@@ -1502,7 +1416,6 @@
     <Content Include="Views\Install\Finish.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
-    <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\SurveySetup\BatchUpload.cshtml" />
     <Content Include="Views\Reports\MapReport.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
@@ -1562,8 +1475,6 @@
     <Content Include="Scripts\spin.min.js.map" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
-    <Content Include="Views\Template\Import.cshtml" />
-    <Content Include="Views\Template\ImportMode.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportVerificationErrors.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportProgress.cshtml" />
     <Content Include="Views\SurveySetup\Index.cshtml" />
@@ -1729,7 +1640,6 @@
     </Compile>
     <Compile Include="Services\AspNetAppPathResolver.cs" />
     <Compile Include="Services\ClientApkProvider.cs" />
-    <Compile Include="Services\DesignerUserCredentials.cs" />
     <Compile Include="Services\HqSignInManager.cs" />
     <Compile Include="Services\IClientApkProvider.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
@@ -1861,11 +1771,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="App_GlobalResources\QuestionnaireImport.Designer.cs">
-      <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="App_GlobalResources\Settings.Designer.cs">
       <DependentUpon>Settings.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -1994,7 +1899,6 @@
     <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Controllers\Profile\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
-    <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\Profile\HeadquartersController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -2002,11 +1906,9 @@
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Controllers\Profile\SupervisorController.cs" />
-    <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Injections\HeadquartersUIModule.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
-    <Compile Include="Models\ImportModeModel.cs" />
     <Compile Include="Models\InterviewerModel.cs" />
     <Compile Include="Models\InterviewersFilter.cs" />
     <Compile Include="Models\InterviewersModel.cs" />
@@ -2025,7 +1927,6 @@
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
     <Compile Include="Models\TeamsAndStatusesFilter.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
-    <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
     <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
@@ -2051,18 +1952,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\ImportQuestionnaire.Designer.cs">
-      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Resources\LimitsIndicator.Designer.cs">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\LoginToDesigner.Designer.cs">
-      <DependentUpon>LoginToDesigner.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -2146,6 +2037,7 @@
   <ItemGroup>
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="Dependencies\dist\" />
+    <Folder Include="Models\Template\" />
     <Folder Include="Views\Interviews\" />
     <Folder Include="Views\WebInterviewSetupApi\" />
   </ItemGroup>
