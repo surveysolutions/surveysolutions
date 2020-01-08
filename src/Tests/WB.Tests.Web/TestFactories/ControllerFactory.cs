@@ -61,7 +61,6 @@ namespace WB.Tests.Web.TestFactories
             IUserViewFactory userViewFactory = null,
             IInterviewerSyncProtocolVersionProvider syncVersionProvider = null,
             IAuthorizedUser authorizedUser = null,
-            IProductVersion productVersion = null,
             HqSignInManager signInManager = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             IAssignmentsService assignmentsService = null,

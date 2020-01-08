@@ -46,7 +46,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [Test]
         public void when_resolved_comment_exists_and_client_has_7090_protocol_Should_not_allow_to_synchronize()
         {
-            var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
+            //var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
+
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 0);
 
             var synchronizedUserId = Id.gA;
             var interviews =
@@ -57,9 +59,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
-                productVersion: productVersion,
                 interviewInformationFactory: interviews,
-                authorizedUser: authorizedUser);
+                authorizedUser: authorizedUser,
+                interviewerVersionReader: interviewerVersionReader);
 
             // Act
             HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7090);
@@ -74,7 +76,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var syncProtocolVersionProvider = Mock.Of<IInterviewerSyncProtocolVersionProvider>(x =>
                 x.GetProtocolVersion() == InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced);
 
-            var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.08.0.0 (build 0)");
+            //var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.08.0.0 (build 0)");
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 0);
 
             var assignments =
                 Mock.Of<IAssignmentsService>(x => x.GetAssignments(It.IsAny<Guid>()) == new List<Assignment>());
@@ -86,10 +89,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(syncVersionProvider: syncProtocolVersionProvider,
-                productVersion: productVersion,
                 assignmentsService: assignments,
                 authorizedUser: authorizedUser,
-                interviewerSettings: interviewerSettingsStorage);
+                interviewerSettings: interviewerSettingsStorage,
+                interviewerVersionReader: interviewerVersionReader);
             interviewerApiController.Request.Headers.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", "19.08.0.0"));;
 
             // Act
@@ -102,6 +105,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         public void when_assignment_has_audio_recording_enabled_should_force_client_upgrade()
         {
             var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 0);
 
             var synchronizedUserId = Id.gA;
             var assignments =
@@ -112,9 +116,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
-                productVersion: productVersion,
                 assignmentsService: assignments,
-                authorizedUser: authorizedUser);
+                authorizedUser: authorizedUser,
+                interviewerVersionReader: interviewerVersionReader);
 
             // Act
             HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7080);
@@ -127,6 +131,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         public async Task when_assignment_has_no_audio_recording_user_should_be_able_synchronize()
         {
             var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.10.0.23853 (build 23853)");
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 23853);
 
             var synchronizedUserId = Id.gA;
 
@@ -135,8 +140,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
-                productVersion: productVersion,
-                authorizedUser: authorizedUser);
+                authorizedUser: authorizedUser,
+                interviewerVersionReader: interviewerVersionReader);
 
             // Act
             HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7080);
@@ -154,6 +159,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 x.GetProtocolVersion() == InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced);
 
             var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 0);
 
             var assignments =
                 Mock.Of<IAssignmentsService>(x => x.GetAssignments(It.IsAny<Guid>()) == new List<Assignment>() &&
@@ -163,9 +169,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(syncVersionProvider: syncProtocolVersionProvider,
-                productVersion: productVersion,
                 assignmentsService: assignments,
-                authorizedUser: authorizedUser);
+                authorizedUser: authorizedUser,
+                interviewerVersionReader: interviewerVersionReader);
             interviewerApiController.Request.Headers.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", "18.04.0.0"));;
 
             // Act
@@ -174,17 +180,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.UpgradeRequired));
         }
 
-        [TestCase("19.12.0.0 (build 0)", "19.07.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("19.12.0.0 (build 0)", "19.08.0.0", HttpStatusCode.OK)]
-        [TestCase("19.10.0.0 (build 0)", "19.10.0.0", HttpStatusCode.OK)]
-        [TestCase("19.10.0.1 (build 0)", "19.10.0.0", HttpStatusCode.OK)]
-        [TestCase("19.10.0.4 (build 0)", "19.10.0.4", HttpStatusCode.OK)]
-        [TestCase("20.09.0 (build 0)", "20.09.2 (build 25689)", HttpStatusCode.NotAcceptable)]
+        [TestCase(24699, "19.07.0.0 (build 24689)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(25689, "19.08.0.0 (build 25689)", HttpStatusCode.OK)]
+        [TestCase(25679, "20.09.2 (build 25689)", HttpStatusCode.NotAcceptable)]
         public void when_set_setting_to_autoUpdateEnabled_to_false_should_return_correct_upgrade_result(
-            string hqVersion, string appVersion, HttpStatusCode result)
+            int hqApkBuildNumber, string appVersion, HttpStatusCode result)
         {
             var interviewerUserAgent = string.Format(InterviewerUserAgent, appVersion);
-            var productVersionObj = Mock.Of<IProductVersion>(x => x.ToString() == hqVersion);
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == hqApkBuildNumber);
 
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
@@ -194,9 +197,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                     m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
-                productVersion: productVersionObj,
                 authorizedUser: authorizedUser,
-                interviewerSettings: interviewerSettingsStorage);
+                interviewerSettings: interviewerSettingsStorage,
+                interviewerVersionReader: interviewerVersionReader);
             interviewerApiController.Request.Headers.UserAgent.ParseAdd(interviewerUserAgent);
 
             // Act
@@ -205,18 +208,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(result));
         }
 
-        [TestCase("18.12.0.0 (build 0)", "18.03.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("18.12.0.0 (build 0)", "18.04.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("18.06.0.0 (build 0)", "18.06.0.0", HttpStatusCode.OK)]
-        [TestCase("18.06.0.1 (build 0)", "18.06.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("18.06.0.4 (build 0)", "18.06.0.4", HttpStatusCode.OK)]
-        [TestCase("19.08.0 (build 0)", "19.08.2 (build 25689)", HttpStatusCode.NotAcceptable)]
+        [TestCase(21699, "18.03.0.0 (build 21689)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(23689, "18.06.0.0 (build 23689)", HttpStatusCode.OK)]
+        [TestCase(25689, "18.06.0.4 (build 25689)", HttpStatusCode.OK)]
+        [TestCase(26688, "19.08.2 (build 26689)", HttpStatusCode.NotAcceptable)]
         public void when_set_setting_autoUpdateEnabled_to_true_should_return_correct_upgrade_result(
-            string hqVersion, string appVersion, HttpStatusCode result)
+            int hqApkBuildNumber, string appVersion, HttpStatusCode result)
         {
             var interviewerUserAgent = string.Format(InterviewerUserAgent, appVersion);
 
-            var productVersionObj = Mock.Of<IProductVersion>(x => x.ToString() == hqVersion);
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == hqApkBuildNumber);
 
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
@@ -226,9 +227,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
-                productVersion: productVersionObj,
                 authorizedUser: authorizedUser,
-                interviewerSettings: interviewerSettingsStorage);
+                interviewerSettings: interviewerSettingsStorage,
+                interviewerVersionReader: interviewerVersionReader);
 
             interviewerApiController.Request.Headers.UserAgent.ParseAdd(interviewerUserAgent);
 
