@@ -55,7 +55,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                      || questionnaire.GetSubstitutedGroups(identity.Id).Any()
                      || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
                      || questionnaire.ShowCascadingAsList(identity.Id)
-                   ))
+                    )
+                    || questionnaire.GetLinkedToSourceEntity(identity.Id).Any()
+                    )
                 {
                     doesNeedRefreshSectionList = true;
                 }
@@ -153,7 +155,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     entityRosterVector = entityRosterVector.Shrink(entity.RosterVector.Length - 1);
                     var parentIdentity = new Identity(parent.PublicKey, entityRosterVector);
 
-                    if (composite is IGroup group && group.DisplayMode == RosterDisplayMode.Table)
+                    if (composite is IGroup group && (group.DisplayMode == RosterDisplayMode.Table || group.DisplayMode == RosterDisplayMode.Matrix))
                     {
                         var tableClientRosterIdentity = new Identity(composite.PublicKey, entityRosterVector);
                         entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parentIdentity, interview.Id), tableClientRosterIdentity));

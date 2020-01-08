@@ -391,7 +391,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 Title = questionnaire.GetQuestionTitle(questionId),
                                 Instruction = questionnaire.GetQuestionInstruction(questionId),
                                 EntityType = GetEntityTypeInMatrixRoster(questionId, questionnaire).ToString(),
-                                Options = questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
+                                Options = GetOptionsForMatrixRoster(questionnaire, questionId, identity.RosterVector, callerInterview)
                             }).ToArray(),
                         Instances = tableRosterInstances
                     };
@@ -399,6 +399,17 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
 
             return null;
+        }
+
+        private static CategoricalOption[] GetOptionsForMatrixRoster(IQuestionnaire questionnaire, Guid questionId, RosterVector rosterVector, IStatefulInterview callerInterview)
+        {
+            var isLinked = questionnaire.IsQuestionLinked(questionId);
+
+            if (!isLinked)
+                return questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray();
+
+            var referencedByLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionId);
+            return GetOptionsLinkedToListQuestion(callerInterview, Identity.Create(questionId, rosterVector), referencedByLinkedQuestion).ToArray();
         }
 
         private static InterviewEntityType GetEntityTypeInTableRoster(Guid entityId, IQuestionnaire callerQuestionnaire)

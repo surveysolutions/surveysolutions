@@ -88,6 +88,9 @@
                     this.setTableRosterHeight()
                     this.initQuestionsInRows()
                 }
+            },
+            ["$me.questions"]() {
+                this.initQuestionAsColumns()
             }
         },
 
