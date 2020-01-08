@@ -13,5 +13,6 @@ namespace WB.UI.Headquarters.Services.Impl
         }
 
         public int? Version => this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
+        public int? SupervisorVersion => this.clientApkProvider.GetLatestVersion(ClientApkInfo.SupervisorFileName);
     }
 }
