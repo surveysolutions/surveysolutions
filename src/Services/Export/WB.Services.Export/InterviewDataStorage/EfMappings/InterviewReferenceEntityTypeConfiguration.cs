@@ -64,15 +64,14 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         public void Configure(EntityTypeBuilder<Assignment.Assignment> builder)
         {
             builder.ToTable("__assignment", schema);
-            builder.HasKey(a => a.Id);
-            builder.HasAlternateKey(a => a.PublicKey);
+            builder.HasAlternateKey(a => a.Id);
+            builder.HasKey(a => a.PublicKey);
 
             builder.Property(a => a.WebMode).IsRequired(false);
             builder.Property(a => a.AudioRecording).IsRequired(true);
             builder.Property(a => a.Quantity).IsRequired(false);
             builder.Property(a => a.Comment).IsRequired(false);
 
-            builder.HasMany(a => a.Actions).WithOne(a => a.Assignment);
         }
     }
 
@@ -95,10 +94,6 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.Property(a => a.NewValue).IsRequired(false);
             builder.Property(a => a.Comment).IsRequired(false);
 
-            builder.HasOne(a => a.Assignment)
-                .WithMany(a => a.Actions)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
