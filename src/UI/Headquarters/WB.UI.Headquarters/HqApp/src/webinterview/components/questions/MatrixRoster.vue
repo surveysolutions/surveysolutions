@@ -7,7 +7,7 @@
         <ag-grid-vue 
             ref="matrixRoster"
             class="ag-theme-customStyles roster-matrix"
-            style="height:500px"
+            style="height:1024px"
             domLayout='normal'
             rowHeight="40"
             headerHeight="50"
@@ -202,9 +202,9 @@
             },
 
             setTableRosterHeight() {
-                if (this.$me.instances.length > 10) {
+                if (this.$me.instances.length > 20) {
                     this.gridApi.setDomLayout('normal')
-                    this.$refs.matrixRoster.$el.style.height = '500px';
+                    this.$refs.matrixRoster.$el.style.height = '1024px';
                 }
                 else {
                     this.gridApi.setDomLayout('autoHeight');
