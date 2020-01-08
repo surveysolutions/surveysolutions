@@ -100,7 +100,6 @@ namespace WB.Services.Export.Questionnaire
                 databaseSchemaService.CreateOrRemoveSchema(questionnaire);
             }
 
-            this.dbContext.SaveChanges();
             filterWatch.Stop();
             return result;
         }
