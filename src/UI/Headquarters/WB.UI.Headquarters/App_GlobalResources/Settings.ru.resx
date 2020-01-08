@@ -321,6 +321,6 @@
     <value>Уведомления электронной почтой</value>
   </data>
   <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
-    <value>Разрешить респонденту отправлять электронные письма(применяется, если рассылка настроена)</value>
+    <value>Разрешить респонденту отправлять электронные письма (применяется, если рассылка настроена)</value>
   </data>
 </root>
