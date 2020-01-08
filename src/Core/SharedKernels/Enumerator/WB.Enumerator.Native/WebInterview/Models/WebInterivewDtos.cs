@@ -253,14 +253,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public TableRosterInstance[] Instances { get; set; }
     }
 
-    public class TableRoster : RosterEntity
+    public class TableOrMatrixRoster : RosterEntity
     {
-        public TableRosterQuestionReference[] Questions { get; set; }
-    }
-
-    public class MatrixRoster : RosterEntity
-    {
-        public MatrixRosterQuestionReference[] Questions { get; set; }
+        public TableOrMatrixRosterQuestionReference[] Questions { get; set; }
     }
 
     public class TableRosterInstance : InterviewEntity
@@ -279,11 +274,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Instruction { get; set; }
     }
 
-    public class TableRosterQuestionReference : RosterQuestionReference
-    {
-    }
-
-    public class MatrixRosterQuestionReference : RosterQuestionReference
+    public class TableOrMatrixRosterQuestionReference : RosterQuestionReference
     {
         public CategoricalOption[] Options { get; set; }
     }
