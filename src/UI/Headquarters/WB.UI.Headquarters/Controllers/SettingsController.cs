@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers
 
                             try
                             {
-                                this.imageProcessingService.ResizeImage(array, 1, 1);
+                                this.imageProcessingService.Validate(array);
 
                                 this.appSettingsStorage.Store(new CompanyLogo
                                 {
@@ -79,8 +79,9 @@ namespace WB.UI.Headquarters.Controllers
                                 }, CompanyLogo.CompanyLogoStorageKey);
                                 WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
                             }
-                            catch (Exception)
+                            catch (Exception e)
                             {
+                                Logger.Error("Error on logo handling", e);
                                 WriteToTempData(Alerts.ERROR, Settings.LogoNotUpdated);
                             }
                         }

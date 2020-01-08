@@ -8,7 +8,7 @@ $width-right-menu-small: 380px;
 	.container, .container-fluid{
 		padding: 0 ($margin-container/2) 0 ($margin-container/2);
 	}
-	min-width: 360px;
+	min-width: 300px;
 	min-height: 70px;
 	margin-bottom: 0;
 	.navbar-header .navbar-brand{
@@ -230,8 +230,8 @@ $width-right-menu-small: 380px;
 		}
 	}
 	.nav.navbar-right{
-	    max-width: $max-width-right-menu;
-		min-width: $min-width-right-menu;
+	    // max-width: $max-width-right-menu;
+		// min-width: $min-width-right-menu;
 		& > li{
 			float: right;
 			&.help-link{
@@ -249,7 +249,7 @@ $width-right-menu-small: 380px;
 	white-space: nowrap;
 	margin-bottom: 0;
 	margin-top: 0;
-    max-width: calc(100% - 730px);
+    max-width: calc(100% - 1000px);
     overflow: hidden;
     text-overflow: ellipsis;
 	display: block;
@@ -261,7 +261,7 @@ $width-right-menu-small: 380px;
 .language{
 	background: url("#{$assetsPath}/img/language.png") 0 15px no-repeat;
 	padding-left: 40px;
-	max-width: 300px;
+	max-width: 250px;
 	min-width: 120px;
 	& > a{
 		white-space: nowrap;
@@ -283,13 +283,13 @@ $width-right-menu-small: 380px;
 @media screen and (max-width: 1350px){
 	.navbar-web-interview{
 		.navbar-text{
-			max-width: calc(100% - 550px);
+			max-width: calc(100% - 85%);
 		}
 		.nav.navbar-right{
-			max-width: $width-right-menu-small;
+			//max-width: $width-right-menu-small;
 		}
 		.language{
-			max-width: 55%;
+			//max-width: 55%;
 		}
 	}
 }
@@ -320,7 +320,7 @@ $width-right-menu-small: 380px;
 						min-height: 41px;
 						min-width: 15px;
 						padding: 0;
-						transform: rotate(270deg);
+						//transform: rotate(270deg);
 					}
 					.brand-name{
 						display: none;
@@ -448,8 +448,24 @@ $width-right-menu-small: 380px;
 			.navbar-brand{
 				.logo{
 					margin-top: 5px;
-					transform: rotate(270deg);
+					//transform: rotate(270deg);
 				}
+			}
+			& > .interview-ID{
+				padding: 15px 9px;
+				display: inline-block;
+			}
+			.btn-icon,
+			.badge.badge_nav{
+				display: block;
+				float: right;
+				position: relative;
+				top: 0;
+				left: 0;
+				margin: 10px;
+			}
+			.active-page{
+				display: inline-block;
 			}
 		}
 		.navbar-left,.navbar-right {
@@ -485,17 +501,16 @@ $width-right-menu-small: 380px;
 			color: #fff;
 			background-color: transparent;
 		}
-		
+		.navbar-web-interview .nav.navbar-right > li,
+		.navbar-web-interview .nav.navbar-right > li.help-link,
+		.navbar-web-interview .nav.navbar-left{
+			width: 100%;
+			max-width: 100%;
+			text-align: left;
+		}
 	}
 }
 @media (max-width: ($screen-sm-min - 1) ){
-	.navbar-web-interview .nav.navbar-right > li,
-	.navbar-web-interview .nav.navbar-right > li.help-link,
-	.navbar-web-interview .nav.navbar-left{
-		width: 100%;
-		max-width: 100%;
-		text-align: left;
-	}
 	.language .dropdown-menu{
 		max-width: 80%;
 	}
@@ -533,7 +548,7 @@ $width-right-menu-small: 380px;
 			.navbar-brand{
 				.logo{
 					margin-top: 5px;
-					transform: rotate(270deg);
+					//transform: rotate(270deg);
 				}
 				.brand-name{
 					display: none;
@@ -652,13 +667,30 @@ $width-right-menu-small: 380px;
 	.language{
 		background-position-y: 5px;
 	}
+	body:not(.wide-navbar){
+			.navbar-web-interview .nav.navbar-right > li,
+		.navbar-web-interview .nav.navbar-right > li.help-link,
+		.navbar-web-interview .nav.navbar-left{
+			width: 100%;
+			max-width: 100%;
+			text-align: left;
+		}
+	}
+
 }
 @media (max-width: $screen-xs-min) {
 	.navbar{
 		.navbar-header{
+			& > .interview-ID{
+				padding-left: 5px;
+				padding-right: 5px;
+			}
 			.active-page{
 			    max-width: 30%;
 			}
+		}
+		.container-fluid{
+			padding: 0px 12px;
 		}
 	}
 }
