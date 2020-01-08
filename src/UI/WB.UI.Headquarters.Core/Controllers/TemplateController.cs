@@ -72,7 +72,15 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("LoginToDesigner");
             }
 
-            return this.View(new ImportQuestionnaireListModel { DesignerUserName = this.designerUserCredentials.Get().Login });
+            return this.View(new ImportQuestionnaireListModel
+            {
+                DesignerUserName = this.designerUserCredentials.Get().Login,
+                LogoutFromDesigner = Url.Action("LogoutFromDesigner"),
+                SurveySetup = Url.Action("Index", "SurveySetup"),
+                Import = Url.Action("Import"),
+                DataUrl = Url.Action("QuestionnairesList", "DesignerQuestionnairesApi"),
+                ImportMode = Url.Action("ImportMode")
+            });
         }
       
         public async Task<ActionResult> ImportMode(Guid id)
@@ -173,7 +181,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 BackLink = Url.Action("Index", "SurveySetup"),
                 LoginAction = Url.Action("LoginToDesigner", "Template"),
-                DesignerLogo = Url.Content("~/Dependencies/img/designer-logo.png")
+                DesignerLogo = Url.Content("~/img/designer-logo.png"),
+                ListUrl = Url.Action("Import")
             });
         }
 

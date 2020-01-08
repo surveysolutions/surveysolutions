@@ -36,12 +36,12 @@
                             </div>
                             <div class="form-group">
                                 <input type="text" name="UserName" class="form-control" autofocus="autofocus" 
-                                    v-model="userName"
+                                    v-model="userName" v-validate="'required'" 
                                     :placeholder="this.$t('LoginToDesigner.LoginWatermark')" />
                             </div>
                             <div class="form-group">
                                 <input type="password" name="Password" class="form-control"
-                                       v-model="password"
+                                       v-model="password" v-validate="'required'" 
                                        :placeholder="this.$t('FieldsAndValidations.PasswordFieldName')" />
                             </div>
                             <div class="form-actions">
@@ -66,30 +66,35 @@ export default {
         };
     },
     methods: {
-        trySignIn() {
-            this.$http({
-                method: 'post',
-                url: this.$config.model.loginAction, 
-                data: {
-                    userName: this.userName,
-                    password: this.password
-                },
-                headers: {
-                    'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie()
-                }
-            }).then((loginResponse) => {
-                if (loginResponse.status == 200) {
-                    // redirect to list
-                }
-            }, (error) => {
-                if (error.response.status == 401) {
-                    this.invalidCredentials = true
-                }
-                else {
-                    this.invalidCredentials = false
-                    this.errorMessage = error.response.message
-                }
-            })
+        async trySignIn() {
+            var validationResult = await this.$validator.validateAll()
+            if(validationResult) {
+                this.$http({
+                    method: 'post',
+                    url: this.$config.model.loginAction, 
+                    data: {
+                        userName: this.userName,
+                        password: this.password
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie()
+                    }
+                })
+                .then(
+                    (loginResponse) => {
+                    if (loginResponse.status == 200) {
+                        window.location = this.$config.model.listUrl
+                    }
+                }, (error) => {
+                    if (error.response.status == 401) {
+                        this.invalidCredentials = true
+                    }
+                    else {
+                        this.invalidCredentials = false
+                        this.errorMessage = error.response.message
+                    }
+                })
+            }
         }
     }
 }

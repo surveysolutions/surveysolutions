@@ -124,7 +124,7 @@
     <value>მოთხოვნილი კითხვარი ვერ მოიძებნა. გთხოვთ, განაახლოთ კითხვარების სია</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>თქვენ შესული ხართ დიზაინერიში {0} -ით</value>
+    <value>თქვენ შესული ხართ დიზაინერიში {{user}} -ით</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>სისტემიდან გამოსვლა</value>

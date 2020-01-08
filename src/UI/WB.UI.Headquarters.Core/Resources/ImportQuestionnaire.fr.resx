@@ -124,7 +124,7 @@
     <value>Le questionnaire demandé ne peut pas être trouvé. Veuillez actualiser la liste des questionnaires</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>Vous êtes connecté au Designer en tant que {0}.</value>
+    <value>Vous êtes connecté au Designer en tant que {{user}}.</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>Déconnexion</value>

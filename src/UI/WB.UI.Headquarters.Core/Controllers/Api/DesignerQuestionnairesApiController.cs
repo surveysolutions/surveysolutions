@@ -24,8 +24,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.designerUserCredentials = designerUserCredentials;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<DataTableResponse<QuestionnaireToBeImported>>> QuestionnairesList([FromBody] DataTableRequest request)
+        [HttpGet]
+        public async Task<ActionResult<DataTableResponse<QuestionnaireToBeImported>>> QuestionnairesList(DataTableRequest request)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                     PageIndex = request.PageIndex,
                     PageSize = request.PageSize,
                     SortOrder = request.GetSortOrder(),
-                    Filter = request.Search.Value
+                    Filter = request.Search?.Value
                 });
 
                 return new DataTableResponse<QuestionnaireToBeImported>

@@ -127,7 +127,7 @@
     <value>Выберите опросник для импорта</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>Вы вошли на Designer как {0}.</value>
+    <value>Вы вошли на Designer как {{user}}.</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>выход</value>
