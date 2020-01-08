@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -37,7 +38,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                 logger.LogInformation("Start job execution [{tenantName} {jobArgs}]", job.TenantName, job.Args);
                 var linkedCancellation = CancellationTokenSource.CreateLinkedTokenSource(token);
 
-                jobCancellation.Subscribe(cancelled =>
+                using var sub = jobCancellation.Subscribe(cancelled =>
                 {
                     if (job.Id == cancelled)
                     {
