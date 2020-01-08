@@ -315,8 +315,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
-            registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
-            registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
 
             registry.BindWithConstructorArgumentInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>(

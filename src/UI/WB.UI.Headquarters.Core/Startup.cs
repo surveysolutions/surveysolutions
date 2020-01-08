@@ -241,6 +241,7 @@ namespace WB.UI.Headquarters
 
             services.AddScoped<UnitOfWorkActionFilter>();
             services.AddScoped<InstallationFilter>();
+            services.AddScoped<AntiForgeryFilter>();
 
             AddCompression(services);
 
@@ -287,6 +288,8 @@ namespace WB.UI.Headquarters
                 options.EnableForHttps = true;
                 options.Providers.Add<BrotliCompressionProvider>();
             });
+
+            services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
