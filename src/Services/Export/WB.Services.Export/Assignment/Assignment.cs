@@ -11,7 +11,6 @@ namespace WB.Services.Export.Assignment
         public int Id { get; set; }
         public Guid PublicKey { get; set; }
         public Guid ResponsibleId { get; set; }
-        public ICollection<AssignmentAction> Actions { get; set; }
         public int? Quantity { get; set; }
         public bool AudioRecording { get; set; }
         public bool? WebMode { get; set; }
