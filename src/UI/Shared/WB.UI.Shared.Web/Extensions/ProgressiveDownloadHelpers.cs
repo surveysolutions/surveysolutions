@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 
 namespace WB.UI.Shared.Web.Extensions
 {
@@ -49,6 +47,22 @@ namespace WB.UI.Shared.Web.Extensions
                     && Version.TryParse(product.Product.Version, out Version version))
                 {
                     return version;
+                }
+            }
+
+            return null;
+        }
+
+        public static int? GetBuildNumberFromUserAgent(this HttpRequestMessage request)
+        {
+            if (request?.Headers?.UserAgent == null) return null;
+
+            foreach (var product in request.Headers?.UserAgent)
+            {
+                if ((product.Comment?.Contains("build") ?? false) 
+                    && int.TryParse(product.Comment.Split(' ')[1].Replace(")", ""), out int build))
+                {
+                    return build;
                 }
             }
 
