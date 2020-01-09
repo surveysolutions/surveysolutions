@@ -70,6 +70,21 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
+        public void should_not_allow_roster_title_inside_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.FixedRoster(title: "Roster ",
+                        rosterId: Id.gA,
+                        displayMode:RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.NumericIntegerQuestion(variable: "test1 %rostertitle%", id: Id.g1)
+                        }
+                    ))
+                .ExpectError("WB0300");
+        }
+
+        [Test]
         public void should_validate_location_of_roster_title_for_numeric_roster()
         {
             Create.QuestionnaireDocumentWithOneChapter(
@@ -256,7 +271,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             Create.Question(questionType: questionType),
                         })
                 )
-                .ExpectError("WB0289");
+                .ExpectError("WB0297");
         }
 
         [Test]
@@ -284,7 +299,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             Create.Question(scope: QuestionScope.Supervisor),
                         })
                 )
-                .ExpectError("WB0291");
+                .ExpectError("WB0299");
         }
 
         [Test]
@@ -298,7 +313,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         Create.StaticText()
                     })
                 )
-                .ExpectError("WB0289");
+                .ExpectError("WB0297");
         }
 
         [Test]
@@ -313,7 +328,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             Create.Question()
                         })
                 )
-                .ExpectError("WB0290");
+                .ExpectError("WB0298");
         }
     }
 }
