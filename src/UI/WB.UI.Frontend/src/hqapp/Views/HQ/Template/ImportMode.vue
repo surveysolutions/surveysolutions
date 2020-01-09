@@ -23,11 +23,11 @@
                 <ul>
                     <li>
                         {{$t('QuestionnaireImport.CreatedAt')}}
-                        <span>{{$config.model.questionnaireInfo.createdAt}}</span>
+                        <span>{{formatDate($config.model.questionnaireInfo.createdAt)}}</span>
                     </li>
                     <li>
                         {{$t('QuestionnaireImport.LastModifiedAt')}}
-                        <span>{{$config.model.questionnaireInfo.lastUpdatedAt}}</span>
+                        <span>{{formatDate($config.model.questionnaireInfo.lastUpdatedAt)}}</span>
                     </li>
                 </ul>
             </div>
@@ -83,7 +83,7 @@
                                 />
                                 <label for="imortAsNewVersion">
                                     <span class="tick"></span>
-                                    {{$t('QuestionnaireImport.ImportAsNewVersion', $config.model.newVersionNumber)}}
+                                    {{$t('QuestionnaireImport.ImportAsNewVersion', {version: $config.model.newVersionNumber})}}
                                 </label>
                             </div>
                         </div>
@@ -115,7 +115,8 @@
                                 >
                                     <option
                                         v-for="item in $config.model.questionnairesToUpgradeFrom"
-                                        :value="`{'templateId': '${item.TemplateId}', 'version': ${item.TemplateVersion}`"
+                                        :value="`{'templateId': '${item.templateId}', 'version': ${item.templateVersion}}`"
+                                        :key="`${item.templateId}_${item.templateVersion}`"
                                     >({{$t('Assignments.QuestionnaireVersion', {version: item.TemplateVersion})}}) {{item.TemplateName}}</option>
                                 </select>
                             </div>
@@ -158,5 +159,13 @@
     </HqLayout>
 </template>
 <script>
-export default {}
+import { DateFormats } from "~/shared/helpers"
+import moment from "moment"
+export default {
+    methods: {
+        formatDate(date){
+            return new moment(date).format(DateFormats.dateTime)
+        }
+    }
+}
 </script>
