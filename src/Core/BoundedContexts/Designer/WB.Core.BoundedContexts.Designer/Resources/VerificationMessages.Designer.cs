@@ -2076,5 +2076,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0300", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matrix roster has to contain no linked questions..
+        /// </summary>
+        public static string WB0301_MatrixRosterHasToContainNoLinkedQuestions {
+            get {
+                return ResourceManager.GetString("WB0301_MatrixRosterHasToContainNoLinkedQuestions", resourceCulture);
+            }
+        }
     }
 }

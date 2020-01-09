@@ -63,6 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(MatrixRosterContainsOnlyAllowedQuestionTypes, "WB0297", VerificationMessages.WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes),
             Error<IGroup>(MatrixRosterHasMoreThanAllowedEntities, "WB0298", string.Format(VerificationMessages.WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInMatrixRoster)),
             Error<IGroup>(MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions, "WB0299", VerificationMessages. WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions),
+            Error<IGroup>(MatrixRosterHasToContainNoLinkedQuestions, "WB0301", VerificationMessages. WB0301_MatrixRosterHasToContainNoLinkedQuestions),
             
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
@@ -524,6 +525,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 if (composite is IQuestion question)
                     return question.QuestionScope == QuestionScope.Supervisor 
                            || question.QuestionScope == QuestionScope.Headquarter;
+                return false;
+            });
+
+        private static bool MatrixRosterHasToContainNoLinkedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>
+            {
+                if (composite is IQuestion question)
+                    return question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue;
                 return false;
             });
 
