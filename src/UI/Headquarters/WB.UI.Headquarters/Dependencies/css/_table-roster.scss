@@ -35,7 +35,7 @@
         .ag-cell{
             white-space: normal !important;
             & > .ag-input-text-wrapper{
-                width: 100%;
+                
                 .ag-cell-edit-input{
                     padding: 9px 15px;
                 }
@@ -157,7 +157,11 @@
             }
 
         }
-
+        &:not(.roster-matrix){
+            .ag-cell > .ag-input-text-wrapper{
+                width: 100%;
+            }
+        }
         &.roster-matrix{
             .cell-bordered{
                 &:not(.ag-header-cell-label){
