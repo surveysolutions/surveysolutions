@@ -45,7 +45,7 @@
                                 <div class="form-actions">
                                     <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestSupervisor", controller = "InterviewerSync"})" class="get-supervisor-app">
                                         <span>@Pages.GetLatestSupervisorApp</span>
-                                        <span class="version">@Pages.DownloadPage_Version @(DependencyResolver.Current.GetService<IProductVersion>())</span>
+                                        <span class="version">@Pages.DownloadPage_Version @(DependencyResolver.Current.GetService<IInterviewerVersionReader>().SupervisorVersionString)</span>
                                     </a>
                                     @if (qRCodeHelper.SupportQRCodeGeneration())
                                     {

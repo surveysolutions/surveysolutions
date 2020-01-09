@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         [HttpGet]
         public virtual int? GetLatestVersion()
         {
-            return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
+            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
         }
 
         [HttpPost]
