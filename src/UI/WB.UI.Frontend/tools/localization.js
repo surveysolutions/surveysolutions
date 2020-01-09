@@ -1,4 +1,4 @@
-//const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const globby = require("globby");
@@ -71,7 +71,6 @@ module.exports = class LocalizationBuilder {
     }
 
     parseResxFiles(compilation) {
-        const fs = compilation.inputFileSystem;
 
         console.time("parseResxFiles");
         var files = this.getFiles()
