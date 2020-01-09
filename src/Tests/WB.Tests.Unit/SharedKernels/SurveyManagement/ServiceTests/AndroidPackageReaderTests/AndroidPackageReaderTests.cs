@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AndroidPacka
                 manifestResourceStream.CopyTo(memoryStream);
 
                 var version = reader.Read(memoryStream);
-                Assert.That(version.Version, Is.EqualTo(25987));
+                Assert.That(version.BuildNumber, Is.EqualTo(25987));
             }
         }
     }
