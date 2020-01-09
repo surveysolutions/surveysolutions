@@ -789,4 +789,7 @@
   <data name="WB0300" xml:space="preserve">
     <value>Question in Matrix roster must not contain %rostertitle% substitution.</value>
   </data>
+  <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+    <value>Matrix roster has to contain no linked questions.</value>
+  </data>
 </root>

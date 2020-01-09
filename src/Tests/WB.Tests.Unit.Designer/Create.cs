@@ -578,6 +578,8 @@ namespace WB.Tests.Unit.Designer
             string instructions = null,
             bool isPrefilled = false,
             QuestionScope scope = QuestionScope.Interviewer,
+            Guid? linkedToQuestion = null,
+            Guid? linkedToRoster = null,
             params Answer[] answers)
         {
             var publicKey = questionId ?? Guid.NewGuid();
@@ -596,6 +598,8 @@ namespace WB.Tests.Unit.Designer
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 Featured = isPrefilled,
                 QuestionScope = scope,
+                LinkedToRosterId = linkedToRoster,
+                LinkedToQuestionId = linkedToQuestion,
             };
         }
 
