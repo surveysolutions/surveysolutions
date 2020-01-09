@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
