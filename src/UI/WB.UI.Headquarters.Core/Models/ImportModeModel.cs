@@ -22,5 +22,7 @@ namespace WB.UI.Headquarters.Models
         public DateTime PreviousVersionUploadedDate { get; set; }
         public string ErrorMessage { get; set; }
         public List<TemplateViewItem> QuestionnairesToUpgradeFrom { get; set; }
+        public string SurveySetupUrl { get; set; }
+        public string ListOfMyQuestionnaires { get; set; }
     }
 }

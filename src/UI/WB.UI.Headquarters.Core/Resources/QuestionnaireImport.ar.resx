@@ -133,7 +133,7 @@
     <value>اقسام فرعية</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>إنشاء إصدار جديد (# {0})</value>
+    <value>إنشاء إصدار جديد (# {{version}})</value>
   </data>
   <data name="ImportModePageTitle" xml:space="preserve">
     <value>استيراد الاستبيان:</value>
@@ -160,7 +160,7 @@
     <value>أسئلة</value>
   </data>
   <data name="QuestionsWithConditions" xml:space="preserve">
-    <value>{0} منهم مع الشروط</value>
+    <value>{{count}} منهم مع الشروط</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>سيسمح لك هذا بانشاء مهام فردية قد تحتوي على بيانات تعريف. وستظهر هذه المهام على أجهزة الباحثين فقط</value>

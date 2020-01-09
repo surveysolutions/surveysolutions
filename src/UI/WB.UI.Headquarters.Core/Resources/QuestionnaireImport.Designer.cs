@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new version  (#{0}).
+        ///   Looks up a localized string similar to Create a new version  (#{{version}}).
         /// </summary>
         public static string ImportAsNewVersion {
             get {
@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} of them with conditions.
+        ///   Looks up a localized string similar to {{count}} of them with conditions.
         /// </summary>
         public static string QuestionsWithConditions {
             get {

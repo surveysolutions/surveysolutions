@@ -157,7 +157,7 @@
     <value>Questions</value>
   </data>
   <data name="QuestionsWithConditions" xml:space="preserve">
-    <value>{0} of them with conditions</value>
+    <value>{{count}} of them with conditions</value>
   </data>
   <data name="Rosters" xml:space="preserve">
     <value>Rosters</value>
@@ -166,7 +166,7 @@
     <value>You have already imported this questionnaire</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>Create a new version  (#{0})</value>
+    <value>Create a new version  (#{{version}})</value>
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
     <value>Import</value>

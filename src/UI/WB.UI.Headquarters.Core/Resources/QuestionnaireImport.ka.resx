@@ -133,7 +133,7 @@
     <value>ქვე-სექციები</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>შექმენი ახალი ვერსია (# {0})</value>
+    <value>შექმენი ახალი ვერსია (# {{version}})</value>
   </data>
   <data name="ImportModePageTitle" xml:space="preserve">
     <value>კითხვარის იმპორტი</value>
@@ -160,7 +160,7 @@
     <value>კითხვები</value>
   </data>
   <data name="QuestionsWithConditions" xml:space="preserve">
-    <value>{0} მათთან პირობებში</value>
+    <value>{{count}} მათთან პირობებში</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>ეს საშუალებას მოგცემთ შექმნათ ინდივიდუალური დავალებები, რომლებიც შეიძლება შეიცავდეს იდენტიფიცირებულ მონაცემებს. მხოლოდ ეს დავალებები გამოჩნდება ინტერვიუერის მოწყობილობებზე.</value>

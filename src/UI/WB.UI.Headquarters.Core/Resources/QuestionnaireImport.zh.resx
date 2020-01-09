@@ -142,7 +142,7 @@
     <value>问卷子块</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>创建一个新版本（#{0}）</value>
+    <value>创建一个新版本（#{{version}}）</value>
   </data>
   <data name="ImportModePageTitle" xml:space="preserve">
     <value>导入问卷：</value>
@@ -163,7 +163,7 @@
     <value>问题</value>
   </data>
   <data name="QuestionsWithConditions" xml:space="preserve">
-    <value>其中{0}个含有条件</value>
+    <value>其中{{count}}个含有条件</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>这将允许您创建包含识别数据的单个任务。</value>

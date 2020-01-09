@@ -142,7 +142,7 @@
     <value>Sous-sections</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>Créer une nouvelle version (# {0})</value>
+    <value>Créer une nouvelle version (# {{version}})</value>
   </data>
   <data name="ImportModePageTitle" xml:space="preserve">
     <value>Importer un questionnaire:</value>
@@ -166,7 +166,7 @@
     <value>Questions</value>
   </data>
   <data name="QuestionsWithConditions" xml:space="preserve">
-    <value>{0} entre eux avec des conditions</value>
+    <value>{{count}} entre eux avec des conditions</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>Cela vous permettra de créer des affectations individuelles pouvant contenir des données d'identification. Seules ces affectations apparaîtront sur les appareils de L'Enquêteur.</value>
