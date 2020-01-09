@@ -88,6 +88,12 @@
                     this.setTableRosterHeight()
                     this.initQuestionsInRows()
                 }
+            },
+            ["$me.questions"]() {
+                this.instructions = this.$me.questions.length > 0 ? this.$me.questions[0].instruction : null
+            },
+            ["$me.title"]() {
+                this.title = this.$me.title
             }
         },
 
@@ -99,7 +105,10 @@
             gridOptions() {
                 return {
                     suppressClickEdit:true,
-                    suppressCellSelection:true
+                    suppressCellSelection:true,
+                    context: {
+                        componentParent: this
+                    }
                 }
             }
         },
