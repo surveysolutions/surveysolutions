@@ -806,4 +806,8 @@
   <data name="WB0300" xml:space="preserve">
     <value>Матричное представление ростера не может содержать вопрос с подстановкой %rostertitle%.</value>
   </data>
+  <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+      <value>Матричное представление ростера не может содержать связанные вопросы.
+</value>
+  </data>
 </root>
