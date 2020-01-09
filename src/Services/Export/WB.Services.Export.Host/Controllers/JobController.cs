@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Services.Export.Interview;
-using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -197,6 +196,21 @@ namespace WB.Services.Export.Host.Controllers
                 this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
             }
 
+            return Ok();
+        }
+
+
+        [HttpDelete]
+        [Route("api/v1/job/byId")]
+        public async Task<ActionResult> DeleteDataExportProcessById(long jobId, TenantInfo tenant)
+        {
+            var job = await jobService.GetJobAsync(jobId);
+            if (job == null) return NotFound();
+
+            if (job.Tenant != tenant.Id.Id) return NotFound();
+
+            this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
+            
             return Ok();
         }
 

@@ -208,15 +208,6 @@ namespace WB.UI.Headquarters.API
             else
             {
                 return File(result.Data, @"applications/octet-stream", WebUtility.UrlDecode(result.FileName));
-
-                //var response = Request.CreateResponse(HttpStatusCode.OK);
-                //response.Content = new StreamContent(result.Data);
-                //response.Content.Headers.ContentType = new MediaTypeHeaderValue(@"application/octet-stream");
-                //response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-                //{
-                //    FileName = WebUtility.UrlDecode(result.FileName)
-                //};
-                //return response;
             }
         }
 
@@ -295,7 +286,7 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [ObserverNotAllowed]
-        public async Task<ActionResult<bool>> DeleteDataExportProcess(string id)
+        public async Task<ActionResult<bool>> DeleteDataExportProcess([FromQuery] long id)
         {
             try
             {

@@ -11,7 +11,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         { 
             this.QuestionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
         }
-        public string DataExportProcessId { get;  set; }
+
+        public long ProcessId { get; set; }
+
         public DateTime BeginDate { get;  set; }
         public DateTime LastUpdateDate { get;  set; }
         public int Progress { get;  set; }
@@ -32,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         }
 
         public long Id { get; set; }
-        public string DataExportProcessId { get;  set; }
+
         public DateTime BeginDate { get;  set; }
         public DateTime LastUpdateDate { get;  set; }
         public int Progress { get;  set; }

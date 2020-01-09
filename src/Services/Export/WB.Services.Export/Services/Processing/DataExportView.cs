@@ -5,6 +5,7 @@ namespace WB.Services.Export.Services.Processing
 {
     public class DataExportView
     {
+        public long ProcessId { get; set; }
         public DataExportFormat DataExportFormat { get; set; }
         public DataExportType DataExportType { get; set; }
         public bool HasDataToExport { get; set; }
