@@ -345,39 +345,37 @@ span.image-zoom-box, span.image-option {
   .table-view .ag-theme-customStyles .ag-horizontal-left-spacer {
     height: 0; }
   .table-view .ag-theme-customStyles .ag-header-cell {
-    border: 1px solid #E5E5E5;
-    border-bottom-color: rgba(0, 0, 0, 0.3); }
-    .table-view .ag-theme-customStyles .ag-header-cell:not(:last-of-type) {
-      border-right: none; }
+    border-top: 1px solid #E5E5E5;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3); }
+    .table-view .ag-theme-customStyles .ag-header-cell:last-of-type {
+      border-right: 1px solid #E5E5E5; }
     .table-view .ag-theme-customStyles .ag-header-cell .ag-header-cell-label {
       text-overflow: clip;
       overflow: visible;
       white-space: normal !important;
       padding: 11px 15px;
       width: 100%; }
+    .table-view .ag-theme-customStyles .ag-header-cell:nth-of-type(2) {
+      border-left: none; }
   .table-view .ag-theme-customStyles .ag-pinned-left-header .ag-header-cell {
-    border-right-color: rgba(0, 0, 0, 0.3); }
-  .table-view .ag-theme-customStyles .ag-pinned-left-cols-container .ag-cell {
-    background-color: transparent;
-    border-right-color: rgba(0, 0, 0, 0.3); }
+    border-left: 1px solid #E5E5E5;
+    border-right: 1px solid rgba(0, 0, 0, 0.3); }
+  .table-view .ag-theme-customStyles .ag-pinned-left-cols-container {
+    border-right: 1px solid rgba(0, 0, 0, 0.3);
+    border-left: 1px solid #E5E5E5; }
+    .table-view .ag-theme-customStyles .ag-pinned-left-cols-container .ag-cell {
+      background-color: transparent; }
   .table-view .ag-theme-customStyles .ag-cell {
-    white-space: normal !important;
     border-bottom: 1px solid #E5E5E5;
-    border-right: 1px solid #E5E5E5;
+    white-space: normal !important;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center; }
-    .table-view .ag-theme-customStyles .ag-cell > .ag-input-text-wrapper {
-      width: 100%; }
-      .table-view .ag-theme-customStyles .ag-cell > .ag-input-text-wrapper .ag-cell-edit-input {
-        padding: 9px 15px; }
-    .table-view .ag-theme-customStyles .ag-cell:first-of-type {
-      border-left: 1px solid #E5E5E5; }
-    .table-view .ag-theme-customStyles .ag-cell.ag-cell-focus {
-      border-color: rgba(0, 0, 0, 0.75) !important; }
+    .table-view .ag-theme-customStyles .ag-cell > .ag-input-text-wrapper .ag-cell-edit-input {
+      padding: 9px 15px; }
     .table-view .ag-theme-customStyles .ag-cell.ag-cell-inline-editing {
       padding: 0; }
       .table-view .ag-theme-customStyles .ag-cell.ag-cell-inline-editing .ag-input-text-wrapper {
@@ -464,12 +462,14 @@ span.image-zoom-box, span.image-option {
       background-position: 0 0;
       background-color: rgba(255, 46, 0, 0.2);
       border-color: #FF2E00; }
+  .table-view .ag-theme-customStyles:not(.roster-matrix) .ag-cell > .ag-input-text-wrapper {
+    width: 100%; }
   .table-view .ag-theme-customStyles.roster-matrix .cell-bordered {
     border-right: 1px solid #E5E5E5; }
     .table-view .ag-theme-customStyles.roster-matrix .cell-bordered:not(.ag-header-cell-label) {
       height: 100%; }
     .table-view .ag-theme-customStyles.roster-matrix .cell-bordered:last-of-type {
-      border: none; }
+      border-right-width: 1.5px; }
   .table-view .ag-theme-customStyles.roster-matrix .ag-cell .tooltip-wrapper {
     top: 0;
     left: 0;
