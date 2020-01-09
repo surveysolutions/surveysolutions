@@ -5,6 +5,6 @@ namespace WB.Services.Export.Events
 {
     public interface IEventsHandler
     {
-        Task<long> HandleEventsFeedAsync(EventsFeed feed, CancellationToken token = default);
+        Task HandleEventsFeedAsync(EventsFeed feed, CancellationToken token = default);
     }
 }
