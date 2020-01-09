@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,8 +10,6 @@ using Newtonsoft.Json.Converters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -133,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (toCancel != null)
             {
-                await this.exportServiceApi.DeleteProcess(toCancel.DataExportProcessId);
+                await this.exportServiceApi.DeleteProcess(toCancel.ProcessId);
             }
 
             return this.Ok();
