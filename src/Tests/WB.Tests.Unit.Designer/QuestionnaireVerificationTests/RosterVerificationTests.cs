@@ -271,7 +271,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             Create.Question(questionType: questionType),
                         })
                 )
-                .ExpectError("WB0289");
+                .ExpectError("WB0297");
         }
 
         [Test]
@@ -299,7 +299,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             Create.Question(scope: QuestionScope.Supervisor),
                         })
                 )
-                .ExpectError("WB0291");
+                .ExpectError("WB0299");
         }
 
         [Test]
@@ -313,7 +313,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         Create.StaticText()
                     })
                 )
-                .ExpectError("WB0289");
+                .ExpectError("WB0297");
         }
 
         [Test]
@@ -328,7 +328,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             Create.Question()
                         })
                 )
-                .ExpectError("WB0290");
+                .ExpectError("WB0298");
         }
     }
 }
