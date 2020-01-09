@@ -2067,5 +2067,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question in Matrix roster must not contain %rostertitle% substitution..
+        /// </summary>
+        public static string WB0300 {
+            get {
+                return ResourceManager.GetString("WB0300", resourceCulture);
+            }
+        }
     }
 }

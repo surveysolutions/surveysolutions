@@ -786,4 +786,7 @@
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
     <value>Matrix roster has to contain no supervisor or identifying questions.</value>
   </data>
+  <data name="WB0300" xml:space="preserve">
+    <value>Question in Matrix roster must not contain %rostertitle% substitution.</value>
+  </data>
 </root>
