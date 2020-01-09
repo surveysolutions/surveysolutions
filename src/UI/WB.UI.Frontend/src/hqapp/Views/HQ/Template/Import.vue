@@ -1,6 +1,6 @@
 <template>
    <HqLayout :title="$config.model.title" :hasFilter="false">
-       <div>
+       <template slot="headers">
             <ol class="breadcrumb">
                 <li>
                     <a :href="this.$config.model.surveySetup">
@@ -21,7 +21,7 @@
                     {{this.$t('ImportQuestionnaire.SignOut')}}
                 </a>
             </div>
-        </div>
+        </template>
         <DataTables
             ref="table"
             :tableOptions="tableOptions"
