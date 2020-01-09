@@ -1,5 +1,6 @@
 import LoginToDesigner from "./LoginToDesigner"
 import Import from "./Import"
+import ImportMode from "./ImportMode"
 import Vue from "vue"
 
 export default class Template{
@@ -11,7 +12,12 @@ export default class Template{
         {
             path: '/Template/Import',
             component: Import
-        }]
+        },
+        {
+            path: '/Template/ImportMode/:questionnaireId',
+            component: ImportMode
+        }
+        ]
     }
 
     initialize() {

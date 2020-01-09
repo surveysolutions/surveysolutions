@@ -133,7 +133,7 @@
     <value>Subsecciones</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>Crear nueva versión (#{0})</value>
+    <value>Crear nueva versión (#{{version}})</value>
   </data>
   <data name="ImportModePageTitle" xml:space="preserve">
     <value>Importar cuestionario:</value>
@@ -160,7 +160,7 @@
     <value>Preguntas</value>
   </data>
   <data name="QuestionsWithConditions" xml:space="preserve">
-    <value>{0} de ellos con condiciones</value>
+    <value>{{count}} de ellos con condiciones</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>Esto le permitirá crear asignaciones individuales que pueden contener datos de identificación. Solo esas asignaciones aparecerán en los dispositivos entrevistadores.</value>

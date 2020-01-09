@@ -133,7 +133,7 @@
     <value>Sub-secțiuni</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>Creați o versiune nouă (# {0})</value>
+    <value>Creați o versiune nouă (# {{version}})</value>
   </data>
   <data name="ImportModePageTitle" xml:space="preserve">
     <value>Import chestionar:</value>
@@ -160,7 +160,7 @@
     <value>Întrebări</value>
   </data>
   <data name="QuestionsWithConditions" xml:space="preserve">
-    <value>{0} dintre ele cu condiții</value>
+    <value>{{count}} dintre ele cu condiții</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>Permite crearea de alocări individuale de interviuri care pot conține date de identificare. Doar acele alocări vor apărea pe dispozitivele anchetatorilor.</value>
