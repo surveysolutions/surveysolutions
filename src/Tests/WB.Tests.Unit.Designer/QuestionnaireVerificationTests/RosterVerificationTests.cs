@@ -303,6 +303,34 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
+        public void should_not_allow_linked_to_question_questions_in_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.Question(linkedToQuestion: Id.g7),
+                        })
+                )
+                .ExpectError("WB0301");
+        }
+
+        [Test]
+        public void should_not_allow_linked_to_roster_questions_in_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.Question(linkedToRoster: Id.g7),
+                        })
+                )
+                .ExpectError("WB0301");
+        }
+
+        [Test]
         public void should_not_allow_static_text_in_matrix_roster()
         {
             Create.QuestionnaireDocumentWithOneChapter(
