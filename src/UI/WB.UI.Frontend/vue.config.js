@@ -6,7 +6,7 @@ const WriteFilePlugin = require("write-file-webpack-plugin");
 const RuntimePublicPathPlugin = require("./tools/RuntimePublicPathPlugin");
 const FileManagerPlugin = require("filemanager-webpack-plugin");
 const LocalizationPlugin = require("./tools/LocalizationPlugin")
-
+const extraWatch = require("extra-watch-webpack-plugin")
 const isHot = process.env.HOT_MODE == 1;
 const assetsPath = isHot ? "http://localhost:8080/" : "~/dist/";
 
@@ -33,8 +33,7 @@ const pages = {
     finishInstallation: {
         entry: "src/pages/finishInstallation.js",
         filename: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.Template.cshtml"),
-        locales: null
+        template: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.Template.cshtml")
     },
 
     hq_legacy: {
@@ -71,7 +70,7 @@ const pages = {
 const fileTargets = [
     { source: join(".resources", "locale", "**", "*.json"), destination: join("dist", "locale") },
 
-    { source: join("dist", "img", "**" , "*.*"), destination: path.join(hqFolder, "wwwroot", "img") },
+    { source: join("dist", "img", "**", "*.*"), destination: path.join(hqFolder, "wwwroot", "img") },
     { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqFolder, "wwwroot", "fonts") },
     { source: join("dist", "css", "*.*"), destination: path.join(hqFolder, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(hqFolder, "wwwroot", "js") },
@@ -109,25 +108,28 @@ module.exports = {
         config.devtool("source-map")
 
         config.plugin("fileManager").use(FileManagerPlugin, [{
-            //verbose: true,
             onEnd: { copy: fileTargets }
         }]);
 
         config.plugin('cleanup-dists').use(CleanupPlugin, [{
-            //  verbose: true,
             dangerouslyAllowCleanPatternsOutsideProject: true,
             dry: false,
             cleanOnceBeforeBuildPatterns: fileTargets.map(target => target.destination)
         }]);
 
+        const resxFiles = [
+            path.join(hqFolder, "**/*.resx"),
+            path.join(uiFolder, "WB.UI.Headquarters.Core/**/*.resx"),
+            path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
+            path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
+        ]
+
+        config.plugin('extraWatch')
+            .use(extraWatch, [{ files: resxFiles }])
+
         config.plugin("localization")
             .use(LocalizationPlugin, [{
-                patterns: [
-                    path.join(hqFolder, "**/*.resx"),
-                    path.join(uiFolder, "WB.UI.Headquarters.Core/**/*.resx"),
-                    path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
-                    path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
-                ],
+                patterns: resxFiles,
                 destination: "./.resources",
                 locales
             }])
@@ -169,12 +171,12 @@ module.exports = {
         //}
         //});
 
-         config.plugin("provide").use(webpack.ProvidePlugin, [{
-        //     _: "lodash",
-             $: "jquery",
-             jQuery: "jquery",
-        //     moment: "moment"
-         }]);
+        config.plugin("provide").use(webpack.ProvidePlugin, [{
+            //     _: "lodash",
+            $: "jquery",
+            jQuery: "jquery",
+            //     moment: "moment"
+        }]);
 
 
         // config.plugin("runtime").use(RuntimePublicPathPlugin, [{
