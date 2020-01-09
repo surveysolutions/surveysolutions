@@ -80,7 +80,7 @@ namespace WB.Services.Export.Jobs
             dataExportProcessView.DataDestination = process.StorageType.HasValue 
                 ? process.StorageType.Value.ToString() 
                 : "File";
-
+            
             return dataExportProcessView;
         }
 
@@ -106,11 +106,11 @@ namespace WB.Services.Export.Jobs
                     ExportFormat = supportedDataExport.format,
                     Status = status,
                     FromDate = fromDate,
-                    ToDate = toDate
+                    ToDate = toDate,
                 };
                 var dataExportView = await this.CreateDataExportView(exportSettings,
                     supportedDataExport.exportType, allProcesses);
-
+                
                 exports.Add(dataExportView);
             }
 
@@ -151,7 +151,6 @@ namespace WB.Services.Export.Jobs
             dataExportView.ProgressInPercents = process?.Progress ?? 0;
             dataExportView.TimeEstimation = process?.TimeEstimation;
 
-
             var exportFileInfo = await GetExportFileInfo(exportSettings);
 
             dataExportView.LastUpdateDate = exportFileInfo.LastUpdateDate;
@@ -182,6 +181,7 @@ namespace WB.Services.Export.Jobs
 
             return new DataExportProcessView
             {
+                Id = dataExportProcessDetails.ProcessId,
                 IsRunning = status.IsRunning,
                 DataExportProcessId = dataExportProcessDetails.NaturalId,
                 BeginDate = status.BeginDate ?? DateTime.MinValue,

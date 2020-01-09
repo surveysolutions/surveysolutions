@@ -201,7 +201,9 @@ export default {
                 if (result) {
                     this.$http
                         .post(this.$config.model.api.cancelExportProcessUrl, null, {
-                            params: {id: this.dataExportProcessId},
+                            params: {
+                                id: this.data.id
+                            },
                         })
                         .catch(error => {
                             Vue.config.errorHandler(error, this)
