@@ -231,8 +231,8 @@ namespace WB.UI.Headquarters.Controllers
 
                     if (fi.Name.EndsWith(".apk", StringComparison.OrdinalIgnoreCase))
                     {
-                        var version = this.androidPackageReader.Read(fi.FullName)?.Version;
-                        if(version != null) sb.Append($" [ver:{version}]");
+                        var build = this.androidPackageReader.Read(fi.FullName)?.BuildNumber;
+                        if(build != null) sb.Append($" [build:{build}]");
                         var hash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(fi.FullName));
                         sb.Append($" [md5:{hash}]");
                     }
