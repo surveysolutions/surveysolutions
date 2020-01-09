@@ -221,9 +221,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
             var questionnaireHtml = RenderActionResultToString(nameof(RenderQuestionnaire), questionnaire).Result;
 
-            // TODO: FIX ME PLEASE. Broken during migration to 3.1 core
-            //ControllerContext.RouteData.Routers.Add(AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
-            var pageFooterUrl = new UrlHelper(ControllerContext).Link("QuestionnaireFooter", new { });
+            var pageFooterUrl = Url.Link("QuestionnaireFooter", new { });
 
             Task.Factory.StartNew(() =>
             {
