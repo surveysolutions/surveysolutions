@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
+using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -120,6 +121,7 @@ namespace WB.UI.Headquarters
             autofacKernel.Load(
                 new NcqrsModule(),
                 eventStoreModule,
+                GetQuartzModule(),
                 new InfrastructureModule(),
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(),
@@ -132,7 +134,6 @@ namespace WB.UI.Headquarters
                 new DataExportModule(),
                 GetHqBoundedContextModule(),
                 new HeadquartersUiModule(Configuration),
-                GetQuartzModule(),
                 new ProductVersionModule(typeof(Startup).Assembly)
                 );
         }
@@ -154,6 +155,9 @@ namespace WB.UI.Headquarters
                  configurationSection.InterviewsImportParallelTasksLimit);
 
             var trackingSection = Configuration.GetSection("Tracking").Get<TrackingConfig>();
+
+            var syncPackageSection =
+                Configuration.GetSection("SyncPackageReprocessor").Get<SyncPackageReprocessorConfig>();
 
             var userPreloadingSettings =
                 new UserPreloadingSettings(
@@ -207,7 +211,8 @@ namespace WB.UI.Headquarters
                 new TrackingSettings(trackingSection.WebInterviewPauseResumeGraceTimespan),
                 externalStoragesSettings: externalStoragesSettings,
                 fileSystemEmailServiceSettings: 
-                    new FileSystemEmailServiceSettings(false, null, null, null, null, null)
+                    new FileSystemEmailServiceSettings(false, null, null, null, null, null),
+                syncPackagesJobSetting: new SyncPackagesProcessorBackgroundJobSetting(true, syncPackageSection.SynchronizationInterval, syncPackageSection.SynchronizationBatchCount, syncPackageSection.SynchronizationParallelExecutorsCount)
             );
         }
 
@@ -274,6 +279,8 @@ namespace WB.UI.Headquarters
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // https://github.com/JanKallman/EPPlus/issues/31
 
             services.AddOptionsConfiguration(this.Configuration);
+
+            services.AddHostedService<QuartzHostedService>();
         }
 
         private static void AddCompression(IServiceCollection services)

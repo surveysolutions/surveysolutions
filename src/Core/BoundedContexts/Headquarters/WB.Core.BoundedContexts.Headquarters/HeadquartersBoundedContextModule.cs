@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
@@ -53,6 +54,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
+using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -100,6 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         private readonly ExternalStoragesSettings externalStoragesSettings;
         private readonly FileSystemEmailServiceSettings fileSystemEmailServiceSettings;
+        private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesJobSetting;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly SampleImportSettings sampleImportSettings;
         private readonly SyncSettings syncSettings;
@@ -111,13 +114,15 @@ namespace WB.Core.BoundedContexts.Headquarters
             SyncSettings syncSettings,
             TrackingSettings trackingSettings,
             ExternalStoragesSettings externalStoragesSettings = null,
-            FileSystemEmailServiceSettings fileSystemEmailServiceSettings = null)
+            FileSystemEmailServiceSettings fileSystemEmailServiceSettings = null,
+            SyncPackagesProcessorBackgroundJobSetting syncPackagesJobSetting = null)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.sampleImportSettings = sampleImportSettings;
             this.syncSettings = syncSettings;
             this.externalStoragesSettings = externalStoragesSettings;
             this.fileSystemEmailServiceSettings = fileSystemEmailServiceSettings;
+            this.syncPackagesJobSetting = syncPackagesJobSetting;
             this.trackingSettings = trackingSettings;
         }
 
@@ -322,9 +327,17 @@ namespace WB.Core.BoundedContexts.Headquarters
                 "eventBusSettings",
                 new EventBusSettings()); // todo restore KP-13449
 
+            registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => syncPackagesJobSetting);
+            registry.BindToConstant<AssignmentImportOptions>(() => new AssignmentImportOptions(15));
             registry.Bind<AssignmentAggregateRoot>();
             registry.Bind<AssignmentsVerificationTask>();
             registry.Bind<AssignmentsImportTask>();
+            registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
+            registry.Bind<UsersImportTask>();
+            registry.Bind<PauseResumeJobScheduler>();
+            registry.Bind<UpgradeAssignmentJobScheduler>();
+            registry.Bind<SendInvitationsTask>();
+            registry.Bind<SendRemindersTask>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

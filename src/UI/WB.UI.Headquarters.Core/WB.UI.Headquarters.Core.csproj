@@ -22,6 +22,7 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
 
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" /> <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
