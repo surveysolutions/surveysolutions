@@ -1,4 +1,4 @@
-const fs = require("fs");
+//const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const globby = require("globby");
@@ -13,24 +13,25 @@ module.exports = class LocalizationBuilder {
         };
 
         this.localeInfo = null;
+        this.files = null
     }
 
-    prepareLocalizationFiles() {
-        this.parseResxFiles();
+    prepareLocalizationFiles(compilation) {
+        this.parseResxFiles(compilation);
+
         const locales = this.options.locales;
         Object.keys(locales).forEach(page => {
-            if(locales.hasOwnProperty(page))
-            this.writeFiles(
-                this.options.destination,
-                path.join("locale", page),
-                locales[page]
-            );
+            if (locales.hasOwnProperty(page))
+                this.writeFiles(
+                    this.options.destination,
+                    path.join("locale", page),
+                    locales[page]
+                );
         })
     }
 
     writeFiles(destination, folder, namespaces) {
         const response = {};
-
         const destinationFolder = path.join(destination, folder);
         rimraf.sync(destinationFolder);
 
@@ -51,7 +52,8 @@ module.exports = class LocalizationBuilder {
 
             this.ensureDirectoryExistence(resultPath);
 
-            fs.writeFileSync(resultPath, fileBody);
+            
+            require("fs").writeFileSync(resultPath, fileBody);
 
             response[language] = path
                 .join(folder, filename)
@@ -61,14 +63,18 @@ module.exports = class LocalizationBuilder {
         return response;
     }
 
-    parseResxFiles() {
-        console.time("parseResxFiles");
-
-        const patterns = this.options.patterns;
-
-        var files = globby.sync(patterns, {
+    getFiles() {
+        const { patterns } = this.options;
+        return globby.sync(patterns, {
             onlyFiles: true
         });
+    }
+
+    parseResxFiles(compilation) {
+        const fs = compilation.inputFileSystem;
+
+        console.time("parseResxFiles");
+        var files = this.getFiles()
 
         const locale = {}; /* en: { Namespace: { key: "sdfsdf" } } */
 
@@ -196,6 +202,9 @@ module.exports = class LocalizationBuilder {
 
     ensureDirectoryExistence(filePath) {
         var dirname = path.dirname(filePath);
+
+        const fs = require("fs")
+
         if (fs.existsSync(dirname)) {
             return true;
         }

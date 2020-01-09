@@ -64,6 +64,7 @@
     "cross-env": "^5.2.0",
     "eslint": "6.7.2",
     "eslint-plugin-vue": "6.0.1",
+    "extra-watch-webpack-plugin": "^1.0.3",
     "node-sass": "^4.13.0",
     "rimraf": "^3.0.0",
     "sass-loader": "^8.0.0",
