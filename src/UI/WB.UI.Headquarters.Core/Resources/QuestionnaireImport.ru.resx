@@ -157,7 +157,7 @@
     <value>Вопросы</value>
   </data>
   <data name="QuestionsWithConditions" xml:space="preserve">
-    <value>{0} с условиями </value>
+    <value>{{count}} с условиями </value>
   </data>
   <data name="Rosters" xml:space="preserve">
     <value>Ростеры</value>
@@ -166,7 +166,7 @@
     <value>Этот опросник был ранее импортирован </value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>Создать новую #{0} версию опросника</value>
+    <value>Создать новую #{{version}} версию опросника</value>
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
     <value>Импортировать опросник</value>

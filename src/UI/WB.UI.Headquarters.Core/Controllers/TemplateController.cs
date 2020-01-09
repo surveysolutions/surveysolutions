@@ -83,11 +83,11 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
       
+        [AntiForgeryFilter]
         public async Task<ActionResult> ImportMode(Guid id)
         {
             if (this.designerUserCredentials.Get() == null)
             {
-                //Error(Resources.LoginToDesigner.SessionExpired);
                 return this.RedirectToAction("LoginToDesigner");
             }
 
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Import(Guid id, ImportModel request)
+        public async Task<ActionResult> ImportMode(Guid id, [FromForm]ImportModel request)
         {
             if (this.designerUserCredentials.Get() == null)
             {
@@ -144,7 +144,8 @@ namespace WB.UI.Headquarters.Controllers
                 model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
                 model.QuestionnairesToUpgradeFrom =
                     this.questionnaires.GetOlderQuestionnairesWithPendingAssignments(id, model.NewVersionNumber);
-
+                model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
+                model.ListOfMyQuestionnaires = Url.Action("Import");
             }
             catch (RestException e)
             {
