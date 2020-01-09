@@ -22,17 +22,20 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy;
         private readonly ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy;
         private readonly IWebNavigationService webNavigationService;
+        private readonly ISubstitutionTextFactory substitutionTextFactory;
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
         public WebInterviewInterviewEntityFactory(IMapper autoMapper,
             IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy,
             ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy,
-            IWebNavigationService webNavigationService)
+            IWebNavigationService webNavigationService,
+            ISubstitutionTextFactory substitutionTextFactory)
         {
             this.autoMapper = autoMapper;
             this.enumeratorGroupStateCalculationStrategy = enumeratorGroupStateCalculationStrategy;
             this.supervisorGroupStateCalculationStrategy = supervisorGroupStateCalculationStrategy;
             this.webNavigationService = webNavigationService;
+            this.substitutionTextFactory = substitutionTextFactory;
         }
 
         public Sidebar GetSidebarChildSectionsOf(string currentSectionId,
@@ -345,6 +348,16 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 var parentGroupId = questionnaire.GetParentGroup(identity.Id);
                 var parentGroup = callerInterview.GetGroup(new Identity(parentGroupId.Value, identity.RosterVector));
+
+                string CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(Identity questionIdentity, string text)
+                {
+                    var substitutionText = this.substitutionTextFactory.CreateText(questionIdentity, text, questionnaire);
+                    substitutionText.ReplaceSubstitutions(parentGroup.Tree);
+
+                    return this.webNavigationService.MakeNavigationLinks(
+                        substitutionText?.BrowserReadyText, questionIdentity, questionnaire, callerInterview, webLinksVirtualDirectory);
+                }
+
                 var tableRosterInstances = parentGroup.Children
                     .Where(c => c.Identity.Id == identity.Id)
                     .Cast<InterviewTreeRoster>()
@@ -365,17 +378,22 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return new TableOrMatrixRoster()
                 {
                     Id = id,
-                    Title = questionnaire.GetGroupTitle(identity.Id),
+                    Title =  CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(identity, questionnaire.GetGroupTitle(identity.Id)),
                     Questions = questionnaire.GetChildQuestions(identity.Id)
-                        .Select(questionId => new TableOrMatrixRosterQuestionReference()
+                        .Select(questionId =>
                         {
-                            Id = questionId.FormatGuid(),
-                            Title = questionnaire.GetQuestionTitle(questionId),
-                            Instruction = questionnaire.GetQuestionInstruction(questionId),
-                            EntityType = GetEntityType(Identity.Create(questionId, RosterVector.Empty), questionnaire, callerInterview, isReviewMode).ToString(),
-                            Options = questionnaire.IsMatrixRoster(identity.Id)
-                                ? questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
-                                : null
+                            var qIdentity = Identity.Create(questionId, identity.RosterVector);
+
+                            return new TableOrMatrixRosterQuestionReference()
+                            {
+                                Id = questionId.FormatGuid(),
+                                Title = CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(qIdentity, questionnaire.GetQuestionTitle(questionId)),
+                                Instruction = CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(qIdentity, questionnaire.GetQuestionInstruction(questionId)),
+                                EntityType = GetEntityType(qIdentity, questionnaire, callerInterview, isReviewMode).ToString(),
+                                Options = questionnaire.IsMatrixRoster(identity.Id)
+                                    ? questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
+                                    : null
+                            };
                         }).ToArray(),
                     Instances = tableRosterInstances
                 };
