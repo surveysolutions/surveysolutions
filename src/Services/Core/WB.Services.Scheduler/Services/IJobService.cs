@@ -9,9 +9,10 @@ namespace WB.Services.Scheduler.Services
     public interface IJobService
     {
         Task<JobItem> AddNewJobAsync(JobItem job);
-        Task<List<JobItem>> GetAllJobsAsync(TenantInfo tenant, params JobStatus[] statuses);
+        Task<List<JobItem>> GetAllJobsAsync(TenantInfo tenant);
+        Task<List<JobItem>> GetRunningOrQueuedJobs(TenantInfo tenant);
         Task<JobItem> GetFreeJobAsync(CancellationToken token = default);
-        Task<JobItem> GetJobAsync(TenantInfo tenant, string tag, params JobStatus[] statuses);
+        Task<JobItem> GetJobAsync(TenantInfo tenant, string tag);
         Task<JobItem> GetJobAsync(long id);
         Task<bool> HasMostRecentFinishedJobIdWithSameTag(long jobId, TenantInfo tenant);
     }
