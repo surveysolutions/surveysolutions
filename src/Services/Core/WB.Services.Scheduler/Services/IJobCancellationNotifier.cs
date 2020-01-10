@@ -8,6 +8,6 @@ namespace WB.Services.Scheduler.Services
         Task NotifyOnJobCancellationAsync(long jobId);
         string Channel { get; }
         void JobCancelled(long jobId);
-        void Subscribe(Action<long> action);
+        IDisposable Subscribe(Action<long> action);
     }
 }

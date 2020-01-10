@@ -17,11 +17,11 @@
             </template>
 
         </popover>
-        <div class="cell-bordered d-flex" style="align-items:center;"
+        <div class="cell-bordered d-flex" style="align-items:center;width:220px !important;max-width:220px;"
           v-for="option in editorParams.question.options"
           :key="$me.id + '_' + option.value"
           v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
-        <div class="field" style="width:219px;">
+        <div class="field" style="width:220px;">
           <input
             v-if="answeredOrAllOptions.some(e => e.value === option.value)"
             class="wb-checkbox"

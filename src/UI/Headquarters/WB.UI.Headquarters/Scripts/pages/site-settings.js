@@ -1,4 +1,5 @@
-﻿Supervisor.VM.SiteSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $interviewerSettingsUrl, $profileSettingsUrl) {
+﻿Supervisor.VM.SiteSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl,
+    $interviewerSettingsUrl, $profileSettingsUrl, $webInterviewSettingsUrl) {
     Supervisor.VM.SiteSettings.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -11,6 +12,7 @@
     self.isInterviewerAutomaticUpdatesEnabled = ko.observable(true);
     self.isDeviceNotificationsEnabled = ko.observable(true);
     self.isAllowInterviewerUpdateProfile = ko.observable(false);
+    self.isEmailAllowed = ko.observable(false);
 
     self.password = ko.observable('');
     self.message = ko.observable('');
@@ -107,10 +109,30 @@
         return true;
     };
 
+    self.loadProfileSettings = function () {
+        self.SendRequest($webInterviewSettingsUrl,
+            {},
+            function (data) {
+                if (!data) return;
+                self.isEmailAllowed(data.AllowEmails);
+            }, true, true);
+    };
+
+    self.updateWebInterviewEmailNotifications = function (obj, event) {
+        ajax.sendRequest($webInterviewSettingsUrl, "POST",
+            {
+                allowEmails: self.isEmailAllowed()
+            }, false,
+            //onSuccess
+            function () { }
+        );
+        return true;
+    };
+
     self.updateProfileSettings = function() {
         ajax.sendRequest($profileSettingsUrl, "POST",
             {
-                allowInterviewerUpdateProfile: self.isAllowInterviewerUpdateProfile(),
+                allowInterviewerUpdateProfile: self.isAllowInterviewerUpdateProfile()
             }, false,
             //onSuccess
             function () { }
