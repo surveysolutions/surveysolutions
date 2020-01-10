@@ -85,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(id);
             if (lastSuccessDeviceInfo != null)
             {
-                int? interviewerApkVersion = interviewerVersionReader.Version;
+                int? interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
                 var hasUpdateForInterviewerApp = interviewerApkVersion > lastSuccessDeviceInfo.AppBuildVersion;
                 model.InterviewerAppVersion = lastSuccessDeviceInfo.AppVersion;
                 model.DeviceId = lastSuccessDeviceInfo.DeviceId;

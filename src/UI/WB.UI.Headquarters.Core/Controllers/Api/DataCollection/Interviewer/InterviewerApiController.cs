@@ -124,9 +124,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName);
+                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
 
-            return Ok(this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName));
+            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
         }
 
         [HttpGet]
@@ -135,9 +135,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
+                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
 
-            return Ok(this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName));
+            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
         }
 
         [HttpPost]
@@ -184,7 +184,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
                 return StatusCode((int) HttpStatusCode.Conflict);
             }
             
-            var serverApkBuildNumber = interviewerVersionReader.Version;
+            var serverApkBuildNumber = interviewerVersionReader.InterviewerBuildNumber;
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
             
             if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)

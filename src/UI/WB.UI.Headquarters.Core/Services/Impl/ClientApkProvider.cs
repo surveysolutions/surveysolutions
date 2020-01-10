@@ -68,14 +68,24 @@ namespace WB.UI.Headquarters.Services.Impl
             };
         }
 
-        public int? GetLatestVersion(string appName)
+        public int? GetApplicationBuildNumber(string appName)
         {
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(
                 ApkClientsFolder(), appName);
 
             return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                 ? null
-                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
+                : this.androidPackageReader.Read(pathToInterviewerApp).BuildNumber;
+        }
+
+        public string GetApplicationVersionString(string appName)
+        {
+            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(
+                ApkClientsFolder(), appName);
+
+            return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
+                ? null
+                : this.androidPackageReader.Read(pathToInterviewerApp).VersionString;
         }
 
         public string ApkClientsFolder()

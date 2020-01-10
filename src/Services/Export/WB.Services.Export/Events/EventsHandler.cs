@@ -33,11 +33,11 @@ namespace WB.Services.Export.Events
             this.dbContext = dbContext;
         }
 
-        public async Task<long> HandleEventsFeedAsync(EventsFeed feed, CancellationToken token = default)
+        public async Task HandleEventsFeedAsync(EventsFeed feed, CancellationToken token = default)
         {
             try
             {
-                using var tr = await this.dbContext.Database.BeginTransactionAsync(token);
+                await using var tr = await this.dbContext.Database.BeginTransactionAsync(token);
 
                 var eventsToPublish = eventsFilter != null
                     ? await eventsFilter.FilterAsync(feed.Events)
@@ -85,8 +85,6 @@ namespace WB.Services.Export.Events
                 tr.Commit();
                     
                 Monitoring.TrackEventsProcessedCount(this.tenantContext?.Tenant?.Name, globalSequence.AsLong);
-
-                return globalSequence.AsLong;
             }
             catch (OperationCanceledException)
             {

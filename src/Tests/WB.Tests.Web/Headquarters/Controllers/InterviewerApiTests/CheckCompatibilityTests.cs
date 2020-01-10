@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         {
             //var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
 
-            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 0);
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == 0);
 
             var synchronizedUserId = Id.gA;
             var interviews =
@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 x.GetProtocolVersion() == InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced);
 
             //var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.08.0.0 (build 0)");
-            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 0);
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == 0);
 
             var assignments =
                 Mock.Of<IAssignmentsService>(x => x.GetAssignments(It.IsAny<Guid>()) == new List<Assignment>());
@@ -105,7 +105,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         public void when_assignment_has_audio_recording_enabled_should_force_client_upgrade()
         {
             var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
-            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 0);
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == 0);
 
             var synchronizedUserId = Id.gA;
             var assignments =
@@ -131,7 +131,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         public async Task when_assignment_has_no_audio_recording_user_should_be_able_synchronize()
         {
             var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.10.0.23853 (build 23853)");
-            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 23853);
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == 23853);
 
             var synchronizedUserId = Id.gA;
 
@@ -159,7 +159,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 x.GetProtocolVersion() == InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced);
 
             var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
-            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == 0);
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == 0);
 
             var assignments =
                 Mock.Of<IAssignmentsService>(x => x.GetAssignments(It.IsAny<Guid>()) == new List<Assignment>() &&
@@ -187,7 +187,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             int hqApkBuildNumber, string appVersion, HttpStatusCode result)
         {
             var interviewerUserAgent = string.Format(InterviewerUserAgent, appVersion);
-            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == hqApkBuildNumber);
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == hqApkBuildNumber);
 
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
@@ -217,7 +217,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         {
             var interviewerUserAgent = string.Format(InterviewerUserAgent, appVersion);
 
-            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.Version == hqApkBuildNumber);
+            var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == hqApkBuildNumber);
 
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
