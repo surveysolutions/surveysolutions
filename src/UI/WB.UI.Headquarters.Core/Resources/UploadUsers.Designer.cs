@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class UploadUsers {
+    public class UploadUsers {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.UploadUsers", typeof(UploadUsers).Assembly);
@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to All {{total}} accounts were successfully created:.
         /// </summary>
-        internal static string AllAccountsCreated {
+        public static string AllAccountsCreated {
             get {
                 return ResourceManager.GetString("AllAccountsCreated", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Supervisor.
         /// </summary>
-        internal static string AssignedTo {
+        public static string AssignedTo {
             get {
                 return ResourceManager.GetString("AssignedTo", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to required for interviewers, contains user name of supervisor to whom this person wil be assigned.
         /// </summary>
-        internal static string AssignedToDescription {
+        public static string AssignedToDescription {
             get {
                 return ResourceManager.GetString("AssignedToDescription", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Back to user import.
         /// </summary>
-        internal static string BackToImport {
+        public static string BackToImport {
             get {
                 return ResourceManager.GetString("BackToImport", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string Cancel {
+        public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to column.
         /// </summary>
-        internal static string Column {
+        public static string Column {
             get {
                 return ResourceManager.GetString("Column", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You can make an assignments for these teams from &apos;questionnaires&apos; section, assignments can also be created in batch mode.
         /// </summary>
-        internal static string CompleteDescription {
+        public static string CompleteDescription {
             get {
                 return ResourceManager.GetString("CompleteDescription", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alternatively, you can create.
         /// </summary>
-        internal static string Description {
+        public static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Download .tab template for user upload.
         /// </summary>
-        internal static string DownloadTemplateLink {
+        public static string DownloadTemplateLink {
             get {
                 return ResourceManager.GetString("DownloadTemplateLink", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
-        internal static string Email {
+        public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Approx {{estimatedTime}} left.
         /// </summary>
-        internal static string EstimatedTime {
+        public static string EstimatedTime {
             get {
                 return ResourceManager.GetString("EstimatedTime", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Full name.
         /// </summary>
-        internal static string FullName {
+        public static string FullName {
             get {
                 return ResourceManager.GetString("FullName", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Importing user information from.
         /// </summary>
-        internal static string ImportingUserInfo {
+        public static string ImportingUserInfo {
             get {
                 return ResourceManager.GetString("ImportingUserInfo", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{supervisorsCount}} supervisors and {{interviewersCount}} interviewers.
         /// </summary>
-        internal static string InterviewersAndSupervisorsCount {
+        public static string InterviewersAndSupervisorsCount {
             get {
                 return ResourceManager.GetString("InterviewersAndSupervisorsCount", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to line.
         /// </summary>
-        internal static string Line {
+        public static string Line {
             get {
                 return ResourceManager.GetString("Line", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to interviewer.
         /// </summary>
-        internal static string ManualInterviewerCreateLink {
+        public static string ManualInterviewerCreateLink {
             get {
                 return ResourceManager.GetString("ManualInterviewerCreateLink", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to supervisor.
         /// </summary>
-        internal static string ManualSupervisorCreateLink {
+        public static string ManualSupervisorCreateLink {
             get {
                 return ResourceManager.GetString("ManualSupervisorCreateLink", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No user accounts were created.
         /// </summary>
-        internal static string NoCreatedUsers {
+        public static string NoCreatedUsers {
             get {
                 return ResourceManager.GetString("NoCreatedUsers", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Optional personal information.
         /// </summary>
-        internal static string OptionalInformation {
+        public static string OptionalInformation {
             get {
                 return ResourceManager.GetString("OptionalInformation", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to or.
         /// </summary>
-        internal static string Or {
+        public static string Or {
             get {
                 return ResourceManager.GetString("Or", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
-        internal static string Password {
+        public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to password must contain at least one number, one upper case character and one lower case character.
         /// </summary>
-        internal static string PasswordDescription {
+        public static string PasswordDescription {
             get {
                 return ResourceManager.GetString("PasswordDescription", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Phone number.
         /// </summary>
-        internal static string Phone {
+        public static string Phone {
             get {
                 return ResourceManager.GetString("Phone", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to profile manually.
         /// </summary>
-        internal static string Profile {
+        public static string Profile {
             get {
                 return ResourceManager.GetString("Profile", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaires.
         /// </summary>
-        internal static string Questionnaires {
+        public static string Questionnaires {
             get {
                 return ResourceManager.GetString("Questionnaires", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Data required for creating interviewers and supervisors.
         /// </summary>
-        internal static string RequiredData {
+        public static string RequiredData {
             get {
                 return ResourceManager.GetString("RequiredData", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Reupload .tab file.
         /// </summary>
-        internal static string ReUploadTabFile {
+        public static string ReUploadTabFile {
             get {
                 return ResourceManager.GetString("ReUploadTabFile", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Role.
         /// </summary>
-        internal static string Role {
+        public static string Role {
             get {
                 return ResourceManager.GetString("Role", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to time determination.
         /// </summary>
-        internal static string TimeDetermination {
+        public static string TimeDetermination {
             get {
                 return ResourceManager.GetString("TimeDetermination", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Creating multiple users by batch upload.
         /// </summary>
-        internal static string Title {
+        public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Upload .tab file.
         /// </summary>
-        internal static string UploadBtn {
+        public static string UploadBtn {
             get {
                 return ResourceManager.GetString("UploadBtn", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Importing {{importedUsersCount}} of {{totalUsersToImportCount}}.
         /// </summary>
-        internal static string Uploading {
+        public static string Uploading {
             get {
                 return ResourceManager.GetString("Uploading", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Warning: Another Batch Upload by &quot;{{userName}}&quot; is in progress..
         /// </summary>
-        internal static string UploadInProgress {
+        public static string UploadInProgress {
             get {
                 return ResourceManager.GetString("UploadInProgress", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You will be available to start yours when current one is completed..
         /// </summary>
-        internal static string UploadInProgressDescription {
+        public static string UploadInProgressDescription {
             get {
                 return ResourceManager.GetString("UploadInProgressDescription", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
-        internal static string UserName {
+        public static string UserName {
             get {
                 return ResourceManager.GetString("UserName", resourceCulture);
             }
@@ -378,7 +378,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to user name, should be between 3 and 15 characters and contain only letters, digits and underscore symbol.
         /// </summary>
-        internal static string UserNameDescription {
+        public static string UserNameDescription {
             get {
                 return ResourceManager.GetString("UserNameDescription", resourceCulture);
             }
@@ -387,7 +387,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Verification failed.
         /// </summary>
-        internal static string VerificationFailed {
+        public static string VerificationFailed {
             get {
                 return ResourceManager.GetString("VerificationFailed", resourceCulture);
             }

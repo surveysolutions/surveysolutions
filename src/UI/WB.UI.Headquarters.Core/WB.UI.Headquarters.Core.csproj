@@ -67,6 +67,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Archived.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Archived.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Assignments.Designer.cs">
       <DependentUpon>Assignments.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -101,6 +106,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>DataTables.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Details.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Details.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\DevicesInterviewers.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\EnumNames.Designer.cs">
       <DependentUpon>EnumNames.resx</DependentUpon>
@@ -142,6 +157,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>MapReport.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\OutdatedBrowser.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Pages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -167,6 +187,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Reports.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ReviewInterview.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ReviewInterview.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\SyncLogMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SyncLogMessages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\TabletLogs.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -177,14 +207,53 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Troubleshooting.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Troubleshooting.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\UnderConstruction.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UnderConstruction.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\UploadUsers.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UploadUsers.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\UserPreloadingVerificationMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Users.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Users.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\WebInterviewSettings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebInterviewSettings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\WebInterviewSetup.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\WebInterviewUI.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Archived.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Archived.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Assignments.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Assignments.Designer.cs</LastGenOutput>
@@ -212,6 +281,14 @@
     <EmbeddedResource Update="Resources\DataTables.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataTables.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Details.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Details.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DevicesInterviewers.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DevicesInterviewers.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\EnumNames.ar.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
@@ -258,6 +335,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\LoginToDesigner.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginToDesigner.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\MainMenu.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
@@ -265,6 +346,10 @@
     <EmbeddedResource Update="Resources\MapReport.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MapReport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\OutdatedBrowser.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OutdatedBrowser.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Pages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -286,6 +371,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Reports.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ReviewInterview.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReviewInterview.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SyncLogMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SyncLogMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\TabletLogs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
@@ -294,9 +387,37 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Troubleshooting.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Troubleshooting.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\UnderConstruction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\UploadUsers.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadUsers.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\UserPreloadingVerificationMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserPreloadingVerificationMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Users.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Users.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WebInterviewSettings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WebInterviewSetup.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewSetup.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WebInterviewUI.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

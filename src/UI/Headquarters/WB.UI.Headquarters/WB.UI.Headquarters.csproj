@@ -915,179 +915,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <EmbeddedResource Include="Resources\Archived.ar.resx">
-      <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Archived.ro.resx">
-      <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Archived.sq.resx" />
-    <EmbeddedResource Include="Resources\Assignments.sq.resx" />
-    <EmbeddedResource Include="Resources\Details.ar.resx">
-      <DependentUpon>Details.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.ro.resx">
-      <DependentUpon>Details.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.sq.resx" />
-    <EmbeddedResource Include="Resources\DevicesInterviewers.ar.resx">
-      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.ro.resx">
-      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.sq.resx" />
-    <EmbeddedResource Include="Resources\EnumNames.sq.resx" />
-    <EmbeddedResource Include="Resources\Archived.es.resx">
-      <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.es.resx">
-      <DependentUpon>Details.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.fr.resx">
-      <DependentUpon>Details.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.es.resx">
-      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.fr.resx">
-      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.zh.resx">
-      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.ar.resx">
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.es.resx">
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.ro.resx">
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.sq.resx" />
-    <EmbeddedResource Include="Resources\OutdatedBrowser.ar.resx">
-      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.es.resx">
-      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.fr.resx">
-      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.ro.resx">
-      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.sq.resx" />
-    <EmbeddedResource Include="Resources\Questionnaire.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Questionnaire.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Questionnaire.ru.resx" />
-    <EmbeddedResource Include="Resources\ReviewInterview.ar.resx">
-      <DependentUpon>ReviewInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ReviewInterview.es.resx">
-      <DependentUpon>ReviewInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ReviewInterview.fr.resx">
-      <DependentUpon>ReviewInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ReviewInterview.ro.resx">
-      <DependentUpon>ReviewInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ReviewInterview.sq.resx" />
-    <EmbeddedResource Include="Resources\ReviewInterview.zh.resx">
-      <DependentUpon>ReviewInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ReviewInterview.ru.resx">
-      <DependentUpon>ReviewInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.ar.resx">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.es.resx">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.ro.resx">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.sq.resx" />
-    <EmbeddedResource Include="Resources\TabletSyncMessages.sq.resx" />
-    <EmbeddedResource Include="Resources\Troubleshooting.ar.resx">
-      <DependentUpon>Troubleshooting.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.es.resx">
-      <DependentUpon>Troubleshooting.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.fr.resx">
-      <DependentUpon>Troubleshooting.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.ro.resx">
-      <DependentUpon>Troubleshooting.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.sq.resx" />
-    <EmbeddedResource Include="Resources\UnderConstruction.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
-      <DependentUpon>UnderConstruction.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UnderConstruction.sq.resx" />
-    <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
-    <EmbeddedResource Include="Resources\UploadUsers.fr.resx">
-      <DependentUpon>UploadUsers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UploadUsers.ro.resx">
-      <DependentUpon>UploadUsers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UploadUsers.sq.resx" />
-    <EmbeddedResource Include="Resources\UploadUsers.zh.resx">
-      <DependentUpon>UploadUsers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ar.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.es.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.fr.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ro.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ru.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.sq.resx" />
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSettings.ru.resx">
-      <DependentUpon>WebInterviewSettings.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSettings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSettings.sq.resx" />
-    <EmbeddedResource Include="Resources\WebInterviewSetup.ro.resx">
-      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.sq.resx" />
-    <EmbeddedResource Include="Resources\WebInterviewUI.ro.resx">
-      <DependentUpon>WebInterviewUI.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewUI.sq.resx" />
-    <EmbeddedResource Include="Resources\WebInterviewUI.uk-UA.resx" />
-    <EmbeddedResource Include="Resources\WebInterviewUI.zh.resx">
-      <DependentUpon>WebInterviewUI.resx</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -1104,178 +931,6 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
-    <EmbeddedResource Include="Resources\Archived.fr.resx">
-      <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Archived.ka.resx">
-      <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Archived.pt.resx">
-      <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Archived.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Archived.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Archived.ru.resx">
-      <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Archived.zh.resx">
-      <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.ka.resx">
-      <DependentUpon>Details.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Details.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.ru.resx">
-      <DependentUpon>Details.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.zh.resx">
-      <DependentUpon>Details.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.ka.resx">
-      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>DevicesInterviewers.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.ru.resx">
-      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.fr.resx">
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.ka.resx">
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.pt.resx">
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LimitsIndicator.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.ru.resx">
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.zh.resx">
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.ka.resx">
-      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>OutdatedBrowser.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.ru.resx">
-      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.zh.resx">
-      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ReviewInterview.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ReviewInterview.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.fr.resx">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.ka.resx">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.pt.resx">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SyncLogMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.ru.resx">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.zh.resx">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.ka.resx">
-      <DependentUpon>Troubleshooting.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Troubleshooting.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Troubleshooting.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.zh.resx">
-      <DependentUpon>Troubleshooting.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UploadUsers.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UploadUsers.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UploadUsers.ru.resx">
-      <DependentUpon>UploadUsers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UserPreloadingVerificationMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.ar.resx">
-      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.es.resx">
-      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.fr.resx">
-      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.ka.resx">
-      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>WebInterviewSetup.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.zh.resx">
-      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewUI.ar.resx">
-      <DependentUpon>WebInterviewUI.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewUI.es.resx">
-      <DependentUpon>WebInterviewUI.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewUI.fr.resx">
-      <DependentUpon>WebInterviewUI.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewUI.ka.resx">
-      <DependentUpon>WebInterviewUI.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewUI.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewUI.ru.resx">
-      <DependentUpon>WebInterviewUI.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1530,8 +1185,6 @@
     <Content Include="Views\Interview\InterviewHistory.cshtml" />
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <Content Include="Views\InterviewerAuditLog\Index.cshtml" />
-    <Content Include="Views\SurveySetup\UpgradeAssignments.cshtml" />
-    <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Download\Supervisor.cshtml" />
@@ -1565,7 +1218,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
-    <Compile Include="API\AssignmentsUpgradeApiController.cs" />
     <Compile Include="API\Automation\QuestionnaireAutomationController.cs" />
     <Compile Include="API\DataCollection\AttachmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
@@ -1633,11 +1285,6 @@
     <Compile Include="API\WebInterview\Pipeline\WebInterviewDataAuthorizeAttribute.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Filters\WebInterviewObserverNotAllowedActionFilter.cs" />
-    <Compile Include="Resources\Questionnaire.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Questionnaire.resx</DependentUpon>
-    </Compile>
     <Compile Include="Services\AspNetAppPathResolver.cs" />
     <Compile Include="Services\ClientApkProvider.cs" />
     <Compile Include="Services\HqSignInManager.cs" />
@@ -1813,7 +1460,6 @@
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\InterviewerAuditLogController.cs" />
     <Compile Include="Controllers\AuditLogController.cs" />
-    <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\InterviewerHqController.cs" />
     <Compile Include="Controllers\MapsApiController.cs" />
     <Compile Include="Controllers\MapsController.cs" />
@@ -1899,7 +1545,6 @@
     <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Controllers\Profile\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
-    <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\Profile\HeadquartersController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TypeExtensions.cs" />
@@ -1937,76 +1582,6 @@
     <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Models\WebInterview\WebInterviewIndexPageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Archived.Designer.cs">
-      <DependentUpon>Archived.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\Details.Designer.cs">
-      <DependentUpon>Details.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\DevicesInterviewers.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\LimitsIndicator.Designer.cs">
-      <DependentUpon>LimitsIndicator.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\OutdatedBrowser.Designer.cs">
-      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\ReviewInterview.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ReviewInterview.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\SyncLogMessages.Designer.cs">
-      <DependentUpon>SyncLogMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\Troubleshooting.Designer.cs">
-      <DependentUpon>Troubleshooting.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\UnderConstruction.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UnderConstruction.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\UploadUsers.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UploadUsers.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\UserPreloadingVerificationMessages.Designer.cs">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\WebInterviewSettings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WebInterviewSettings.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\WebInterviewSetup.Designer.cs">
-      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\WebInterviewUI.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WebInterviewUI.resx</DependentUpon>
-    </Compile>
     <Compile Include="Services\DataExportStatusReader.cs" />
     <Compile Include="Services\MetricsService.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
@@ -2038,6 +1613,7 @@
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="Dependencies\dist\" />
     <Folder Include="Models\Template\" />
+    <Folder Include="Resources\" />
     <Folder Include="Views\Interviews\" />
     <Folder Include="Views\WebInterviewSetupApi\" />
   </ItemGroup>

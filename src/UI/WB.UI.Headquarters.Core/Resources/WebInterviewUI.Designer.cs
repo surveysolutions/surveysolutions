@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class WebInterviewUI {
+    public class WebInterviewUI {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.WebInterviewUI", typeof(WebInterviewUI).Assembly);
@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Answer is invalid.
         /// </summary>
-        internal static string AnswerIsInvalid {
+        public static string AnswerIsInvalid {
             get {
                 return ResourceManager.GetString("AnswerIsInvalid", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Answer was not saved.
         /// </summary>
-        internal static string AnswerWasNotSaved {
+        public static string AnswerWasNotSaved {
             get {
                 return ResourceManager.GetString("AnswerWasNotSaved", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Edit area.
         /// </summary>
-        internal static string AreaRecord {
+        public static string AreaRecord {
             get {
                 return ResourceManager.GetString("AreaRecord", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Click to record audio.
         /// </summary>
-        internal static string AudioClickRecord {
+        public static string AudioClickRecord {
             get {
                 return ResourceManager.GetString("AudioClickRecord", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Audio initialization failed.
         /// </summary>
-        internal static string AudioInitializationFailed {
+        public static string AudioInitializationFailed {
             get {
                 return ResourceManager.GetString("AudioInitializationFailed", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Audio recording.
         /// </summary>
-        internal static string AudioRecording {
+        public static string AudioRecording {
             get {
                 return ResourceManager.GetString("AudioRecording", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{humanizedLength}} ({{formattedLength}}) of audio recording.
         /// </summary>
-        internal static string AudioRecordingDuration {
+        public static string AudioRecordingDuration {
             get {
                 return ResourceManager.GetString("AudioRecordingDuration", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Record new.
         /// </summary>
-        internal static string AudioRecordNew {
+        public static string AudioRecordNew {
             get {
                 return ResourceManager.GetString("AudioRecordNew", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string Cancel {
+        public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Click to answer.
         /// </summary>
-        internal static string ClickToAnswer {
+        public static string ClickToAnswer {
             get {
                 return ResourceManager.GetString("ClickToAnswer", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;Web Interview supports only one active tab with the interview.&lt;/p&gt;&lt;p&gt;Please reload this page to continue using this tab or close it.&lt;/p&gt;.
         /// </summary>
-        internal static string CloseInterviewMessage {
+        public static string CloseInterviewMessage {
             get {
                 return ResourceManager.GetString("CloseInterviewMessage", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to This interview is opened in another tab or browser.
         /// </summary>
-        internal static string CloseInterviewTitle {
+        public static string CloseInterviewTitle {
             get {
                 return ResourceManager.GetString("CloseInterviewTitle", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
-        internal static string Comment {
+        public static string Comment {
             get {
                 return ResourceManager.GetString("Comment", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add comment.
         /// </summary>
-        internal static string CommentAdd {
+        public static string CommentAdd {
             get {
                 return ResourceManager.GetString("CommentAdd", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Admin comment.
         /// </summary>
-        internal static string CommentAdmin {
+        public static string CommentAdmin {
             get {
                 return ResourceManager.GetString("CommentAdmin", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter your comment.
         /// </summary>
-        internal static string CommentEnter {
+        public static string CommentEnter {
             get {
                 return ResourceManager.GetString("CommentEnter", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Headquarters comment.
         /// </summary>
-        internal static string CommentHeadquarters {
+        public static string CommentHeadquarters {
             get {
                 return ResourceManager.GetString("CommentHeadquarters", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Hide comment.
         /// </summary>
-        internal static string CommentHide {
+        public static string CommentHide {
             get {
                 return ResourceManager.GetString("CommentHide", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Interviewer comment.
         /// </summary>
-        internal static string CommentInterviewer {
+        public static string CommentInterviewer {
             get {
                 return ResourceManager.GetString("CommentInterviewer", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Post.
         /// </summary>
-        internal static string CommentPost {
+        public static string CommentPost {
             get {
                 return ResourceManager.GetString("CommentPost", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Posting....
         /// </summary>
-        internal static string CommentPosting {
+        public static string CommentPosting {
             get {
                 return ResourceManager.GetString("CommentPosting", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Supervisor comment.
         /// </summary>
-        internal static string CommentSupervisor {
+        public static string CommentSupervisor {
             get {
                 return ResourceManager.GetString("CommentSupervisor", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Your comment.
         /// </summary>
-        internal static string CommentYours {
+        public static string CommentYours {
             get {
                 return ResourceManager.GetString("CommentYours", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Complete.
         /// </summary>
-        internal static string Complete {
+        public static string Complete {
             get {
                 return ResourceManager.GetString("Complete", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You are about to complete this interview.
         /// </summary>
-        internal static string CompleteAbout {
+        public static string CompleteAbout {
             get {
                 return ResourceManager.GetString("CompleteAbout", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questions with errors:.
         /// </summary>
-        internal static string CompleteErrors {
+        public static string CompleteErrors {
             get {
                 return ResourceManager.GetString("CompleteErrors", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to First {{count}} entities with errors:.
         /// </summary>
-        internal static string CompleteFirstErrors {
+        public static string CompleteFirstErrors {
             get {
                 return ResourceManager.GetString("CompleteFirstErrors", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Note for supervisor.
         /// </summary>
-        internal static string CompleteNoteToSupervisor {
+        public static string CompleteNoteToSupervisor {
             get {
                 return ResourceManager.GetString("CompleteNoteToSupervisor", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Answered.
         /// </summary>
-        internal static string CompleteQuestionsAnswered {
+        public static string CompleteQuestionsAnswered {
             get {
                 return ResourceManager.GetString("CompleteQuestionsAnswered", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questions status:.
         /// </summary>
-        internal static string CompleteQuestionsStatus {
+        public static string CompleteQuestionsStatus {
             get {
                 return ResourceManager.GetString("CompleteQuestionsStatus", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Unanswered.
         /// </summary>
-        internal static string CompleteQuestionsUnanswered {
+        public static string CompleteQuestionsUnanswered {
             get {
                 return ResourceManager.GetString("CompleteQuestionsUnanswered", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove related roster?.
         /// </summary>
-        internal static string ConfirmRosterRemove {
+        public static string ConfirmRosterRemove {
             get {
                 return ResourceManager.GetString("ConfirmRosterRemove", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please reload the page to restore connection and continue this interview..
         /// </summary>
-        internal static string ConnectionLostMessage {
+        public static string ConnectionLostMessage {
             get {
                 return ResourceManager.GetString("ConnectionLostMessage", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Connection to server is lost..
         /// </summary>
-        internal static string ConnectionLostTitle {
+        public static string ConnectionLostTitle {
             get {
                 return ResourceManager.GetString("ConnectionLostTitle", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cover.
         /// </summary>
-        internal static string Cover {
+        public static string Cover {
             get {
                 return ResourceManager.GetString("Cover", resourceCulture);
             }
@@ -380,7 +380,7 @@ namespace WB.UI.Headquarters.Resources {
         ///only previous version of interview is available. &lt;br /&gt;
         ///Contact support for assistance..
         /// </summary>
-        internal static string CoverBrokenPackegeText {
+        public static string CoverBrokenPackegeText {
             get {
                 return ResourceManager.GetString("CoverBrokenPackegeText", resourceCulture);
             }
@@ -389,7 +389,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error: This interview is corrupted.
         /// </summary>
-        internal static string CoverBrokenPackegeTitle {
+        public static string CoverBrokenPackegeTitle {
             get {
                 return ResourceManager.GetString("CoverBrokenPackegeTitle", resourceCulture);
             }
@@ -398,7 +398,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questions with comments:.
         /// </summary>
-        internal static string CoverComments {
+        public static string CoverComments {
             get {
                 return ResourceManager.GetString("CoverComments", resourceCulture);
             }
@@ -407,7 +407,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to First {{count}} entities with comments:.
         /// </summary>
-        internal static string CoverFirstComments {
+        public static string CoverFirstComments {
             get {
                 return ResourceManager.GetString("CoverFirstComments", resourceCulture);
             }
@@ -416,7 +416,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Supervisor note:.
         /// </summary>
-        internal static string CoverSupervisorNote {
+        public static string CoverSupervisorNote {
             get {
                 return ResourceManager.GetString("CoverSupervisorNote", resourceCulture);
             }
@@ -425,7 +425,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Entered value can not be parsed as decimal value.
         /// </summary>
-        internal static string DecimalCannotParse {
+        public static string DecimalCannotParse {
             get {
                 return ResourceManager.GetString("DecimalCannotParse", resourceCulture);
             }
@@ -434,7 +434,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter decimal.
         /// </summary>
-        internal static string DecimalEnter {
+        public static string DecimalEnter {
             get {
                 return ResourceManager.GetString("DecimalEnter", resourceCulture);
             }
@@ -443,7 +443,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Entered value is too large. Less than 15 digits allowed.
         /// </summary>
-        internal static string DecimalTooBig {
+        public static string DecimalTooBig {
             get {
                 return ResourceManager.GetString("DecimalTooBig", resourceCulture);
             }
@@ -452,7 +452,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Disconnected.
         /// </summary>
-        internal static string Disconnected {
+        public static string Disconnected {
             get {
                 return ResourceManager.GetString("Disconnected", resourceCulture);
             }
@@ -461,7 +461,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
-        internal static string Done {
+        public static string Done {
             get {
                 return ResourceManager.GetString("Done", resourceCulture);
             }
@@ -470,7 +470,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Email resume link.
         /// </summary>
-        internal static string EmailLink_EmailResumeLink {
+        public static string EmailLink_EmailResumeLink {
             get {
                 return ResourceManager.GetString("EmailLink_EmailResumeLink", resourceCulture);
             }
@@ -479,7 +479,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter your email address.
         /// </summary>
-        internal static string EmailLink_Header {
+        public static string EmailLink_Header {
             get {
                 return ResourceManager.GetString("EmailLink_Header", resourceCulture);
             }
@@ -488,7 +488,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{email}} is invalid email address.
         /// </summary>
-        internal static string EmailLink_InvalidEmail {
+        public static string EmailLink_InvalidEmail {
             get {
                 return ResourceManager.GetString("EmailLink_InvalidEmail", resourceCulture);
             }
@@ -497,7 +497,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to We will send you a message with the link to resume the interview if you need to continue later..
         /// </summary>
-        internal static string EmailLink_Message {
+        public static string EmailLink_Message {
             get {
                 return ResourceManager.GetString("EmailLink_Message", resourceCulture);
             }
@@ -506,7 +506,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter email.
         /// </summary>
-        internal static string EmailLink_Placeholder {
+        public static string EmailLink_Placeholder {
             get {
                 return ResourceManager.GetString("EmailLink_Placeholder", resourceCulture);
             }
@@ -515,7 +515,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You can cancel now and proceed with the interview. And you can send it later by clicking &apos;Email resume link&apos; item in the top menu..
         /// </summary>
-        internal static string EmailLink_ResumeAnyTime {
+        public static string EmailLink_ResumeAnyTime {
             get {
                 return ResourceManager.GetString("EmailLink_ResumeAnyTime", resourceCulture);
             }
@@ -524,7 +524,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter date.
         /// </summary>
-        internal static string EnterDate {
+        public static string EnterDate {
             get {
                 return ResourceManager.GetString("EnterDate", resourceCulture);
             }
@@ -533,7 +533,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string Error {
+        public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
             }
@@ -542,7 +542,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Errors.
         /// </summary>
-        internal static string Error_plural {
+        public static string Error_plural {
             get {
                 return ResourceManager.GetString("Error_plural", resourceCulture);
             }
@@ -551,7 +551,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The position could not be determined due to an unknown error (Code: {{strErrorCode}})..
         /// </summary>
-        internal static string GPSError {
+        public static string GPSError {
             get {
                 return ResourceManager.GetString("GPSError", resourceCulture);
             }
@@ -560,7 +560,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Your browser does not support receiving Geolocation.
         /// </summary>
-        internal static string GPSNotAvailable {
+        public static string GPSNotAvailable {
             get {
                 return ResourceManager.GetString("GPSNotAvailable", resourceCulture);
             }
@@ -569,7 +569,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to This website does not have permission to use the Geolocation API.
         /// </summary>
-        internal static string GPSPermissionDenied {
+        public static string GPSPermissionDenied {
             get {
                 return ResourceManager.GetString("GPSPermissionDenied", resourceCulture);
             }
@@ -578,7 +578,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The current position could not be determined..
         /// </summary>
-        internal static string GPSPositionUnavailable {
+        public static string GPSPositionUnavailable {
             get {
                 return ResourceManager.GetString("GPSPositionUnavailable", resourceCulture);
             }
@@ -587,7 +587,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Record GPS.
         /// </summary>
-        internal static string GPSRecord {
+        public static string GPSRecord {
             get {
                 return ResourceManager.GetString("GPSRecord", resourceCulture);
             }
@@ -596,7 +596,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The current position could not be determined within the specified timeout period..
         /// </summary>
-        internal static string GPSTimeout {
+        public static string GPSTimeout {
             get {
                 return ResourceManager.GetString("GPSTimeout", resourceCulture);
             }
@@ -605,7 +605,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
-        internal static string Help {
+        public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
             }
@@ -614,7 +614,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Hide resolved.
         /// </summary>
-        internal static string HideResolved {
+        public static string HideResolved {
             get {
                 return ResourceManager.GetString("HideResolved", resourceCulture);
             }
@@ -623,7 +623,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Instruction.
         /// </summary>
-        internal static string Instruction {
+        public static string Instruction {
             get {
                 return ResourceManager.GetString("Instruction", resourceCulture);
             }
@@ -632,7 +632,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Show instruction.
         /// </summary>
-        internal static string InstructionShow {
+        public static string InstructionShow {
             get {
                 return ResourceManager.GetString("InstructionShow", resourceCulture);
             }
@@ -641,7 +641,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Additional question information.
         /// </summary>
-        internal static string Interview_Overview_AdditionalInformation {
+        public static string Interview_Overview_AdditionalInformation {
             get {
                 return ResourceManager.GetString("Interview_Overview_AdditionalInformation", resourceCulture);
             }
@@ -650,7 +650,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Not answered.
         /// </summary>
-        internal static string Interview_Overview_NotAnswered {
+        public static string Interview_Overview_NotAnswered {
             get {
                 return ResourceManager.GetString("Interview_Overview_NotAnswered", resourceCulture);
             }
@@ -659,7 +659,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove related roster &apos;{{rosterTitle}}&apos;?.
         /// </summary>
-        internal static string Interview_Questions_RemoveRowFromRosterMessage {
+        public static string Interview_Questions_RemoveRowFromRosterMessage {
             get {
                 return ResourceManager.GetString("Interview_Questions_RemoveRowFromRosterMessage", resourceCulture);
             }
@@ -668,7 +668,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Interview is received by interviewer and cannot be modified.
         /// </summary>
-        internal static string InterviewReceivedCantModify {
+        public static string InterviewReceivedCantModify {
             get {
                 return ResourceManager.GetString("InterviewReceivedCantModify", resourceCulture);
             }
@@ -677,7 +677,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Loading....
         /// </summary>
-        internal static string Loading {
+        public static string Loading {
             get {
                 return ResourceManager.GetString("Loading", resourceCulture);
             }
@@ -686,7 +686,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Loading questionnaire. Please wait....
         /// </summary>
-        internal static string LoadingQuestionnaire {
+        public static string LoadingQuestionnaire {
             get {
                 return ResourceManager.GetString("LoadingQuestionnaire", resourceCulture);
             }
@@ -695,7 +695,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Loading, please wait.
         /// </summary>
-        internal static string LoadingWait {
+        public static string LoadingWait {
             get {
                 return ResourceManager.GetString("LoadingWait", resourceCulture);
             }
@@ -704,7 +704,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Multimedia playback is not supported by your browser. You can download it instead..
         /// </summary>
-        internal static string MultimediaNotSupported {
+        public static string MultimediaNotSupported {
             get {
                 return ResourceManager.GetString("MultimediaNotSupported", resourceCulture);
             }
@@ -713,7 +713,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Network.
         /// </summary>
-        internal static string Network {
+        public static string Network {
             get {
                 return ResourceManager.GetString("Network", resourceCulture);
             }
@@ -722,7 +722,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
-        internal static string No {
+        public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
             }
@@ -731,7 +731,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You have no access to questionnaire.
         /// </summary>
-        internal static string NoQuestionnaireAccess {
+        public static string NoQuestionnaireAccess {
             get {
                 return ResourceManager.GetString("NoQuestionnaireAccess", resourceCulture);
             }
@@ -740,7 +740,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No results found.
         /// </summary>
-        internal static string NoResultsFound {
+        public static string NoResultsFound {
             get {
                 return ResourceManager.GetString("NoResultsFound", resourceCulture);
             }
@@ -749,7 +749,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Entered value can not be less than protected answer.
         /// </summary>
-        internal static string NumberCannotBeLessThanProtected {
+        public static string NumberCannotBeLessThanProtected {
             get {
                 return ResourceManager.GetString("NumberCannotBeLessThanProtected", resourceCulture);
             }
@@ -758,7 +758,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Entered value can not be parsed as integer value.
         /// </summary>
-        internal static string NumberCannotParse {
+        public static string NumberCannotParse {
             get {
                 return ResourceManager.GetString("NumberCannotParse", resourceCulture);
             }
@@ -767,7 +767,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter number.
         /// </summary>
-        internal static string NumberEnter {
+        public static string NumberEnter {
             get {
                 return ResourceManager.GetString("NumberEnter", resourceCulture);
             }
@@ -776,7 +776,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Answer &apos;{{answer}}&apos; is incorrect because question is used as size of roster and specified answer is negative.
         /// </summary>
-        internal static string NumberRosterError {
+        public static string NumberRosterError {
             get {
                 return ResourceManager.GetString("NumberRosterError", resourceCulture);
             }
@@ -785,7 +785,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove {{amountOfRostersToRemove}} row(s) from each related roster?.
         /// </summary>
-        internal static string NumberRosterRemoveConfirm {
+        public static string NumberRosterRemoveConfirm {
             get {
                 return ResourceManager.GetString("NumberRosterRemoveConfirm", resourceCulture);
             }
@@ -794,7 +794,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Answer &apos;{{answer}}&apos; is incorrect because answer is greater than Roster upper bound {{answerMaxValue}}..
         /// </summary>
-        internal static string NumberRosterUpperBound {
+        public static string NumberRosterUpperBound {
             get {
                 return ResourceManager.GetString("NumberRosterUpperBound", resourceCulture);
             }
@@ -803,7 +803,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Categories will be available after answering referenced question.
         /// </summary>
-        internal static string OptionsAvailableAfterAnswer {
+        public static string OptionsAvailableAfterAnswer {
             get {
                 return ResourceManager.GetString("OptionsAvailableAfterAnswer", resourceCulture);
             }
@@ -812,7 +812,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Only image files are allowed to upload.
         /// </summary>
-        internal static string PhotoIsNotImage {
+        public static string PhotoIsNotImage {
             get {
                 return ResourceManager.GetString("PhotoIsNotImage", resourceCulture);
             }
@@ -821,7 +821,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Image is too big to upload. Please, choose an image less than 30 Mb.
         /// </summary>
-        internal static string PhotoTooBig {
+        public static string PhotoTooBig {
             get {
                 return ResourceManager.GetString("PhotoTooBig", resourceCulture);
             }
@@ -830,7 +830,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Upload a photo.
         /// </summary>
-        internal static string PhotoUpload {
+        public static string PhotoUpload {
             get {
                 return ResourceManager.GetString("PhotoUpload", resourceCulture);
             }
@@ -839,7 +839,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{progress}}% Complete.
         /// </summary>
-        internal static string ProgressText {
+        public static string ProgressText {
             get {
                 return ResourceManager.GetString("ProgressText", resourceCulture);
             }
@@ -848,7 +848,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Unsupported question type.
         /// </summary>
-        internal static string QuestionUnsupported {
+        public static string QuestionUnsupported {
             get {
                 return ResourceManager.GetString("QuestionUnsupported", resourceCulture);
             }
@@ -857,7 +857,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Record current time.
         /// </summary>
-        internal static string RecordCurrentTime {
+        public static string RecordCurrentTime {
             get {
                 return ResourceManager.GetString("RecordCurrentTime", resourceCulture);
             }
@@ -866,7 +866,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Reload.
         /// </summary>
-        internal static string Reload {
+        public static string Reload {
             get {
                 return ResourceManager.GetString("Reload", resourceCulture);
             }
@@ -875,7 +875,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Reload questionnaire.
         /// </summary>
-        internal static string ReloadQuestionnaire {
+        public static string ReloadQuestionnaire {
             get {
                 return ResourceManager.GetString("ReloadQuestionnaire", resourceCulture);
             }
@@ -884,7 +884,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Resolve.
         /// </summary>
-        internal static string Resolve {
+        public static string Resolve {
             get {
                 return ResourceManager.GetString("Resolve", resourceCulture);
             }
@@ -893,7 +893,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Resolved commentaries are hidden by default, but can be reviewed by all the interview participants.
         /// </summary>
-        internal static string ResolveHint {
+        public static string ResolveHint {
             get {
                 return ResourceManager.GetString("ResolveHint", resourceCulture);
             }
@@ -902,7 +902,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Save scenario.
         /// </summary>
-        internal static string SaveScenario {
+        public static string SaveScenario {
             get {
                 return ResourceManager.GetString("SaveScenario", resourceCulture);
             }
@@ -911,7 +911,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Session on Designer application has expired. Sign in on Designer application to be able to save..
         /// </summary>
-        internal static string SaveScenarioDesignerLogin {
+        public static string SaveScenarioDesignerLogin {
             get {
                 return ResourceManager.GetString("SaveScenarioDesignerLogin", resourceCulture);
             }
@@ -920,7 +920,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Open Designer.
         /// </summary>
-        internal static string SaveScenarioGoToDesigner {
+        public static string SaveScenarioGoToDesigner {
             get {
                 return ResourceManager.GetString("SaveScenarioGoToDesigner", resourceCulture);
             }
@@ -929,7 +929,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
-        internal static string SaveScenarioName {
+        public static string SaveScenarioName {
             get {
                 return ResourceManager.GetString("SaveScenarioName", resourceCulture);
             }
@@ -938,7 +938,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Select scenario to replace.
         /// </summary>
-        internal static string SaveScenarioOptions {
+        public static string SaveScenarioOptions {
             get {
                 return ResourceManager.GetString("SaveScenarioOptions", resourceCulture);
             }
@@ -947,7 +947,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Replace existing.
         /// </summary>
-        internal static string SaveScenarioOptions_ReplaceExisting {
+        public static string SaveScenarioOptions_ReplaceExisting {
             get {
                 return ResourceManager.GetString("SaveScenarioOptions_ReplaceExisting", resourceCulture);
             }
@@ -956,7 +956,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Save new.
         /// </summary>
-        internal static string SaveScenarioOptions_SaveNew {
+        public static string SaveScenarioOptions_SaveNew {
             get {
                 return ResourceManager.GetString("SaveScenarioOptions_SaveNew", resourceCulture);
             }
@@ -965,7 +965,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
-        internal static string Search {
+        public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
             }
@@ -974,7 +974,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please reload the page to continue this interview..
         /// </summary>
-        internal static string SessionTimeoutMessage {
+        public static string SessionTimeoutMessage {
             get {
                 return ResourceManager.GetString("SessionTimeoutMessage", resourceCulture);
             }
@@ -983,7 +983,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Your session has timed out because you didn&apos;t do any action for 15 minutes..
         /// </summary>
-        internal static string SessionTimeoutMessageTitle {
+        public static string SessionTimeoutMessageTitle {
             get {
                 return ResourceManager.GetString("SessionTimeoutMessageTitle", resourceCulture);
             }
@@ -992,7 +992,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Your session has timed out.
         /// </summary>
-        internal static string SessionTimeoutTitle {
+        public static string SessionTimeoutTitle {
             get {
                 return ResourceManager.GetString("SessionTimeoutTitle", resourceCulture);
             }
@@ -1001,7 +1001,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Show on map.
         /// </summary>
-        internal static string ShowOnMap {
+        public static string ShowOnMap {
             get {
                 return ResourceManager.GetString("ShowOnMap", resourceCulture);
             }
@@ -1010,7 +1010,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Show resolved.
         /// </summary>
-        internal static string ShowResolved {
+        public static string ShowResolved {
             get {
                 return ResourceManager.GetString("ShowResolved", resourceCulture);
             }
@@ -1019,7 +1019,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Network connection is slow.
         /// </summary>
-        internal static string SlowConnection {
+        public static string SlowConnection {
             get {
                 return ResourceManager.GetString("SlowConnection", resourceCulture);
             }
@@ -1028,7 +1028,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Switching language. Please wait....
         /// </summary>
-        internal static string SwitchingLanguage {
+        public static string SwitchingLanguage {
             get {
                 return ResourceManager.GetString("SwitchingLanguage", resourceCulture);
             }
@@ -1037,7 +1037,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter text.
         /// </summary>
-        internal static string TextEnter {
+        public static string TextEnter {
             get {
                 return ResourceManager.GetString("TextEnter", resourceCulture);
             }
@@ -1046,7 +1046,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter text {{userFriendlyMask}}.
         /// </summary>
-        internal static string TextEnterMasked {
+        public static string TextEnterMasked {
             get {
                 return ResourceManager.GetString("TextEnterMasked", resourceCulture);
             }
@@ -1055,7 +1055,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter new item.
         /// </summary>
-        internal static string TextEnterNewItem {
+        public static string TextEnterNewItem {
             get {
                 return ResourceManager.GetString("TextEnterNewItem", resourceCulture);
             }
@@ -1064,7 +1064,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please, fill in all the required values.
         /// </summary>
-        internal static string TextRequired {
+        public static string TextRequired {
             get {
                 return ResourceManager.GetString("TextRequired", resourceCulture);
             }
@@ -1073,7 +1073,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Toggle navigation.
         /// </summary>
-        internal static string ToggleNavigation {
+        public static string ToggleNavigation {
             get {
                 return ResourceManager.GetString("ToggleNavigation", resourceCulture);
             }
@@ -1082,7 +1082,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Warnings.
         /// </summary>
-        internal static string WarningsHeader {
+        public static string WarningsHeader {
             get {
                 return ResourceManager.GetString("WarningsHeader", resourceCulture);
             }
@@ -1091,7 +1091,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Web interview.
         /// </summary>
-        internal static string WebInterview {
+        public static string WebInterview {
             get {
                 return ResourceManager.GetString("WebInterview", resourceCulture);
             }
@@ -1100,7 +1100,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Tester session is over.
         /// </summary>
-        internal static string WebTesterSessionOver {
+        public static string WebTesterSessionOver {
             get {
                 return ResourceManager.GetString("WebTesterSessionOver", resourceCulture);
             }
@@ -1109,7 +1109,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please close this page. You may open new one by returning to Designer site.
         /// </summary>
-        internal static string WebTesterSessionOverMessage {
+        public static string WebTesterSessionOverMessage {
             get {
                 return ResourceManager.GetString("WebTesterSessionOverMessage", resourceCulture);
             }
@@ -1118,7 +1118,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
-        internal static string Yes {
+        public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }
