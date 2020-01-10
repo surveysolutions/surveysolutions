@@ -4,7 +4,7 @@
         :subtitle="$t('Pages.SurveyStatisticsDescription')">
         <div class="clearfix">
             <div class="col-sm-8">
-                <h4>{{this.filter.questionnaire == null ? $t('Common.AllQuestionnaires') : this.filter.questionnaire.Title}}, {{this.filter.version == null ? $t('Common.AllVersions').toLowerCase() : ('ver. ' + this.filter.version)}} </h4>        
+                <h4>{{this.filter.questionnaire == null ? $t('Common.AllQuestionnaires') : this.filter.questionnaire.title}}, {{this.filter.version == null ? $t('Common.AllVersions').toLowerCase() : ('ver. ' + this.filter.version)}} </h4>        
             </div>
         </div>
         <div >
@@ -29,7 +29,7 @@
         <DataTables ref="table"
             v-if="isFiltersLoaded"
             noSearch exportable multiorder hasTotalRow noSelect
-            :tableOptions="tableOptions" :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
+            :tableOptions="tableOptions" :pageLength="isPivot ? this.filter.condition.answers.length : 15"
             @ajaxComplete="onTableReload"
             :addParamsToRequest="addFilteringParams">
         </DataTables>
@@ -97,11 +97,11 @@ export default {
             data.version = this.filter.version
 
             if(this.filter.condition != null) {
-                data.ConditionalQuestion = this.filter.condition.Id
+                data.conditionalQuestion = this.filter.condition.id
                 data.pivot = this.filter.pivot
 
                 if(!data.pivot || this.filter.conditionAnswers.length > 0) {
-                    data.Condition = _.map(this.filter.conditionAnswers, 'Answer')
+                    data.condition = _.map(this.filter.conditionAnswers, 'Answer')
                 }
             }
         },
@@ -123,12 +123,12 @@ export default {
         conditionAnswers() {
             if(this.condition == null) return 15
 
-            return this.condition.Answers.length
+            return this.condition.answers.length
         },
 
         numericColumns() {
             if(this.filter.question != null){
-                if(this.filter.question.Type == 'Numeric') {
+                if(this.filter.question.type == 'Numeric') {
                     return [
                         {name: this.$t("Reports.Count"), data: "count"},
                         {name: this.$t("Reports.Average"), data: "average"},
@@ -158,7 +158,7 @@ export default {
         totalColumn() {
             if(this.filter.question == null) return []
 
-            if(this.filter.question.HasTotal || this.isPivot){
+            if(this.filter.question.hasTotal || this.isPivot){
                 return [{
                         class: "type-numeric",
                         title: this.$t("Pages.Total"),
@@ -174,12 +174,12 @@ export default {
         categoriesColumns() {
             if(this.filter.question == null) return []
            
-            const answers = this.filter.question.Answers
+            const answers = this.filter.question.answers
             return answers == null ? [] : answers.map(a => ({
                     class: "type-numeric",
-                    title: a.Text,
-                    data: a.Column,
-                    name: a.Column,
+                    title: a.text,
+                    data: a.column,
+                    name: a.column,
                     orderable: true
             }))
         },
@@ -189,7 +189,7 @@ export default {
                 return [{
                         data: "variable",
                         name: "variable",
-                        title: this.filter.condition.Label || this.filter.condition.VariableName,
+                        title: this.filter.condition.label || this.filter.condition.variableName,
                         orderable: true
                     }
                 ]
