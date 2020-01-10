@@ -455,8 +455,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 }
                 else if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length > 0)
                 {
-                    var roster =
-                        questionnaire.Questionnaire.GetRoster(vectorOfRosterQuestionsByEntityWithSubstitutions.Last());
+                    var parentGroup = questionnaire.Questionnaire.GetParentGroupsIds(traslatedEntityWithSubstitution.Entity);
+                    var roster = questionnaire.Questionnaire.GetRoster(parentGroup.First());
                     if (roster != null && roster.DisplayMode == RosterDisplayMode.Matrix)
                     {
                         return QuestionnaireVerificationMessage.Error("WB0300",
