@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void ExportStared(string processName, DataExportFormat format)
         {
-            this.Append(LogEntryType.ExportStared, processName, "exported", format.ToString());
+            this.Append(LogEntryType.ExportStarted, processName, "exported", format.ToString());
         }
 
         public void QuestionnaireDeleted(string title, QuestionnaireIdentity questionnaire)
