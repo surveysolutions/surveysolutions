@@ -219,7 +219,6 @@ namespace WB.UI.Headquarters
                 j.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
 
-
             services.AddDistributedMemoryCache();
 
             services.AddSession(options =>
