@@ -1,48 +1,38 @@
 ﻿using System;
 using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web.Http;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Ionic.Zip;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Headquarters.Controllers.Api
 {
-    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-    [ApiNoCache]
-    public class AssignmentsUpgradeApiController : BaseApiController
+    [Authorize(Roles = "Administrator, Headquarter")]
+    [Route("api/[controller]/[action]")]
+    [ResponseCache(NoStore = true)]
+    public class AssignmentsUpgradeApiController : ControllerBase
     {
         private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IQuestionnaireBrowseViewFactory browseViewFactory;
         private readonly IFileSystemAccessor fileNameService;
 
-        public AssignmentsUpgradeApiController(ICommandService commandService, 
-            ILogger logger, 
-            IAssignmentsUpgradeService upgradeService,
+        public AssignmentsUpgradeApiController(IAssignmentsUpgradeService upgradeService,
             IQuestionnaireBrowseViewFactory browseViewFactory,
-            IFileSystemAccessor fileNameService) : base(commandService, logger)
+            IFileSystemAccessor fileNameService)
         {
             this.upgradeService = upgradeService;
             this.browseViewFactory = browseViewFactory;
             this.fileNameService = fileNameService;
         }
 
-        [CamelCase] 
         [HttpGet]
-        public HttpResponseMessage Status(string id)
+        public IActionResult Status(string id)
         {
             AssignmentUpgradeProgressDetails assignmentUpgradeProgressDetails = this.upgradeService.Status(Guid.Parse(id));
             if (assignmentUpgradeProgressDetails != null)
@@ -50,7 +40,7 @@ namespace WB.UI.Headquarters.API
                 var questionnaireTo = this.browseViewFactory.GetById(assignmentUpgradeProgressDetails.MigrateTo);
                 var questionnaireFrom = this.browseViewFactory.GetById(assignmentUpgradeProgressDetails.MigrateFrom);
 
-                return Request.CreateResponse(HttpStatusCode.OK, new
+                return Ok(new
                 {
                     progressDetails = assignmentUpgradeProgressDetails,
                     migrateToTitle = string.Format(Pages.QuestionnaireNameFormat, questionnaireTo.Title,
@@ -60,24 +50,24 @@ namespace WB.UI.Headquarters.API
                 });
             }
 
-            return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not found");
+            return NotFound();
         }
 
         [HttpPost]
-        public HttpResponseMessage Stop(string id)
+        public IActionResult Stop(string id)
         {
             this.upgradeService.StopProcess(Guid.Parse(id));
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Ok();
         }
 
         [HttpGet]
-        public HttpResponseMessage ExportErrors(string id)
+        public IActionResult ExportErrors(string id)
         {
             AssignmentUpgradeProgressDetails assignmentUpgradeProgressDetails = this.upgradeService.Status(Guid.Parse(id));
 
             if (assignmentUpgradeProgressDetails == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             using (MemoryStream resultStream = new MemoryStream())
@@ -90,18 +80,9 @@ namespace WB.UI.Headquarters.API
                 csvWriter.Flush();
                 streamWriter.Flush();
 
-                var response = this.Request.CreateResponse(HttpStatusCode.OK);
-                resultStream.Seek(0, SeekOrigin.Begin);
-                response.Content = new ByteArrayContent(Compress(resultStream));
-
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = this.GetOutputFileName(assignmentUpgradeProgressDetails.MigrateTo)
-                };
-
-                return response;
+                var fileContents = Compress(resultStream);
+                var fileName = this.GetOutputFileName(assignmentUpgradeProgressDetails.MigrateTo);
+                return File(fileContents, "application/octet-stream", fileName, null, null, false);
             }
         }
 
