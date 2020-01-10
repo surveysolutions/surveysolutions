@@ -35,7 +35,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
         public SupervisorControllerBase(ITabletInformationService tabletInformationService, 
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
-            IProductVersion productVersion,
             IUserViewFactory userViewFactory, 
             IPlainKeyValueStorage<InterviewerSettings> settingsStorage,
             IPlainKeyValueStorage<TenantSettings> tenantSettings,
@@ -76,7 +75,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [Route("v1/extended/latestversion")]
         public virtual int? GetLatestVersion()
         {
-            return this.clientApkProvider.GetLatestVersion(ClientApkInfo.SupervisorFileName);
+            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
         }
 
         [Authorize(Roles = "Supervisor")]
@@ -104,7 +103,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 }
             }
 
-            var serverApkBuildNumber = interviewerVersionReader.SupervisorVersion;
+            var serverApkBuildNumber = interviewerVersionReader.SupervisorBuildNumber;
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
             
             if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
