@@ -578,6 +578,8 @@ namespace WB.Tests.Unit.Designer
             string instructions = null,
             bool isPrefilled = false,
             QuestionScope scope = QuestionScope.Interviewer,
+            Guid? linkedToQuestion = null,
+            Guid? linkedToRoster = null,
             params Answer[] answers)
         {
             var publicKey = questionId ?? Guid.NewGuid();
@@ -596,6 +598,8 @@ namespace WB.Tests.Unit.Designer
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 Featured = isPrefilled,
                 QuestionScope = scope,
+                LinkedToRosterId = linkedToRoster,
+                LinkedToQuestionId = linkedToQuestion,
             };
         }
 
@@ -765,7 +769,8 @@ namespace WB.Tests.Unit.Designer
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
         public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, 
-            string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null, string enablementCondition = null)
+            string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null, string enablementCondition = null, 
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
             => Create.Roster(
                 rosterId: rosterId,
                 children: children,
@@ -773,7 +778,8 @@ namespace WB.Tests.Unit.Designer
                 title: title,
                 fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" },
                 fixedRosterTitles: fixedRosterTitles,
-                enablementCondition: enablementCondition);
+                enablementCondition: enablementCondition,
+                displayMode:displayMode);
 
         public static Group ListRoster(
             Guid? rosterId = null,

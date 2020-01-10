@@ -70,6 +70,21 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
+        public void should_not_allow_roster_title_inside_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.FixedRoster(title: "Roster ",
+                        rosterId: Id.gA,
+                        displayMode:RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.NumericIntegerQuestion(variable: "test1 %rostertitle%", id: Id.g1)
+                        }
+                    ))
+                .ExpectError("WB0300");
+        }
+
+        [Test]
         public void should_validate_location_of_roster_title_for_numeric_roster()
         {
             Create.QuestionnaireDocumentWithOneChapter(
@@ -256,7 +271,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             Create.Question(questionType: questionType),
                         })
                 )
-                .ExpectError("WB0289");
+                .ExpectError("WB0297");
         }
 
         [Test]
@@ -284,7 +299,35 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             Create.Question(scope: QuestionScope.Supervisor),
                         })
                 )
-                .ExpectError("WB0291");
+                .ExpectError("WB0299");
+        }
+
+        [Test]
+        public void should_not_allow_linked_to_question_questions_in_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.Question(linkedToQuestion: Id.g7),
+                        })
+                )
+                .ExpectError("WB0301");
+        }
+
+        [Test]
+        public void should_not_allow_linked_to_roster_questions_in_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.Question(linkedToRoster: Id.g7),
+                        })
+                )
+                .ExpectError("WB0301");
         }
 
         [Test]
@@ -298,7 +341,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         Create.StaticText()
                     })
                 )
-                .ExpectError("WB0289");
+                .ExpectError("WB0297");
         }
 
         [Test]
@@ -313,7 +356,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             Create.Question()
                         })
                 )
-                .ExpectError("WB0290");
+                .ExpectError("WB0298");
         }
     }
 }
