@@ -1587,7 +1587,6 @@
     <Compile Include="Services\InterviewImportColumn.cs" />
     <Compile Include="Services\VersionCheckService.cs" />
     <Compile Include="Services\IVersionCheckService.cs" />
-    <Compile Include="Services\WebInterviewEmailRenderer.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
     <Compile Include="Utils\Binding\AutofacBinderResolver.cs" />

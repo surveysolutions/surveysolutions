@@ -33,6 +33,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
@@ -318,6 +319,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
+            registry.Bind<IUserImportService, UserImportService>();
 
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
@@ -338,6 +340,16 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<UpgradeAssignmentJobScheduler>();
             registry.Bind<SendInvitationsTask>();
             registry.Bind<SendRemindersTask>();
+            registry.Bind<UpgradeAssignmentJob>();
+            registry.Bind<SyncPackagesReprocessorBackgroundJob>();
+            registry.Bind<UsersImportJob>();
+            registry.Bind<PauseResumeJob>();
+            registry.Bind<UsersImportJob>();
+            registry.Bind<AssignmentsImportJob>();
+            registry.Bind<SendInvitationsJob>();
+            registry.Bind<AssignmentsVerificationJob>();
+            registry.Bind<SendRemindersJob>();
+            registry.Bind<DeleteQuestionnaireJob>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

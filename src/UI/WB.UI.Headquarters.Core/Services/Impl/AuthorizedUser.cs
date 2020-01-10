@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Services.Impl
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        private ClaimsPrincipal User => httpContextAccessor.HttpContext.User;
+        private ClaimsPrincipal User => httpContextAccessor.HttpContext?.User;
 
         public bool IsSupervisor => this.IsCurrentUserInRole(UserRoles.Supervisor);
 
@@ -38,6 +38,6 @@ namespace WB.UI.Headquarters.Services.Impl
             }
         }
 
-        public string UserName => this.User.Identity.Name;
+        public string UserName => this.User?.Identity?.Name;
     }
 }

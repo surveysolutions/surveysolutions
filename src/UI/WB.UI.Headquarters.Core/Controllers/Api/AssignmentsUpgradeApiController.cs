@@ -14,7 +14,7 @@ using WB.UI.Headquarters.Resources;
 namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator, Headquarter")]
-    [Route("api/[controller]/[action]")]
+    [Route("api/{controller}/{action}/{id?}")]
     [ResponseCache(NoStore = true)]
     public class AssignmentsUpgradeApiController : ControllerBase
     {
