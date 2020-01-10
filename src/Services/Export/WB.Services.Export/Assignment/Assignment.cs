@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using WB.Services.Export.InterviewDataStorage;
 
 namespace WB.Services.Export.Assignment
 {
