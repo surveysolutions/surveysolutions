@@ -54,7 +54,7 @@
       </div>
     </FilterBlock>
 
-    <FilterBlock :title="$t('Reports.ByAnswerValue')" v-if="question && question.Type == 'Numeric'">
+    <FilterBlock :title="$t('Reports.ByAnswerValue')" v-if="question && question.type == 'Numeric'">
       <div class="row">
         <div class="col-xs-6">
           <div
@@ -95,7 +95,7 @@
       </div>
     </FilterBlock>
 
-    <template v-if="question != null && question.SupportConditions">
+    <template v-if="question != null && question.supportConditions">
       <FilterBlock :title="$t('Reports.ConditionQuestion')">
         <Typeahead control-id="condition"
           :placeholder="$t('Reports.SelectConditionQuestion')"
@@ -118,9 +118,9 @@
             class="list-group-item pointer"
             v-for="answer in condition.Answers"
             :key="answer.Answer"
-            :class="{ 'list-group-item-success': isSelectedAnswer(answer.Answer)}"
-            @click="selectConditionAnswer(answer.Answer)"
-          >{{answer.Answer}}. {{answer.Text}}</li>
+            :class="{ 'list-group-item-success': isSelectedAnswer(answer.answer)}"
+            @click="selectConditionAnswer(answer.answer)"
+          >{{answer.answer}}. {{answer.text}}</li>
         </ul>
       </template>
     </template>
@@ -246,7 +246,7 @@ export default {
             this.onChange(query => {
                 query.questionId = id == null ? null : id.name;
 
-                if (id != null && !id.SupportConditions) {
+                if (id != null && !id.supportConditions) {
                     query.conditionId = null;
                 } else {
                     query.conditionId = null;
@@ -280,7 +280,7 @@ export default {
 
             const filter = _.assign(
                 {
-                    questionnaireId: this.questionnaire == null ? null : this.questionnaire.Id,
+                    questionnaireId: this.questionnaire == null ? null : this.questionnaire.id,
                     questionnaire: this.questionnaire,
                     version: this.version,
                     question: this.question,
@@ -323,11 +323,11 @@ export default {
 
         questionnaireList() {
             return _.chain(this.questionnaires)
-                .orderBy(["Title"], ["asc"])
+                .orderBy(["title"], ["asc"])
                 .map(q => {
                     return {
-                        key: q.Id,
-                        value: q.Title
+                        key: q.id,
+                        value: q.title
                     };
                 })
                 .uniqWith(_.isEqual)
@@ -336,12 +336,12 @@ export default {
 
         questionnaireVersionsList() {
             var val = _.chain(this.questionnaires)
-                .filter(c => this.selectedQuestionnaire != null && this.selectedQuestionnaire.key == c.Id)
-                .orderBy(["Title", "Version"], ["asc", "asc"])
+                .filter(c => this.selectedQuestionnaire != null && this.selectedQuestionnaire.key == c.id)
+                .orderBy(["title", "version"], ["asc", "asc"])
                 .map(q => {
                     return {
-                        key: q.Version,
-                        value: `ver. ${q.Version}`
+                        key: q.version,
+                        value: `ver. ${q.version}`
                     };
                 })
                 .uniqWith(_.isEqual)
@@ -352,28 +352,29 @@ export default {
 
         questionsList() {
             function getValue(question) {
-                let result = `[${question.VariableName}]`;
+                let result = `[${question.variableName}]`;
 
-                if (question.Label) {
-                    result += " " + question.Label + "\r\n" + question.QuestionText;
+                if (question.label) {
+                    result += " " + question.label + "\r\n" + question.questionText;
                 } else {
-                    result += " " + question.QuestionText;
+                    result += " " + question.questionText;
                 }
 
                 return result;
             }
 
-            return _.chain(this.questions)
+            const questions = _.chain(this.questions)
                 .map(q => {
                     return {
-                        key: q.Id,
-                        name: q.VariableName,
-                        supportConditions: q.SupportConditions,
+                        key: q.id,
+                        name: q.variableName,
+                        supportConditions: q.supportConditions,
                         value: getValue(q),
-                        breadcrumbs: q.Breadcrumbs
+                        breadcrumbs: q.breadcrumbs
                     };
                 })
                 .value();
+            return questions
         },
 
         conditionVariablesList() {
@@ -387,24 +388,24 @@ export default {
             if (this.selectedQuestionnaire == null) return null;
 
             return _.find(this.questionnaires, q => {
-                const key = q.Id;
+                const key = q.id;
                 return key == this.selectedQuestionnaire.key;
             });
         },
 
         question() {
             if (this.selectedQuestion == null) return null;
-            return _.find(this.questions, { Id: this.selectedQuestion.key });
+            return _.find(this.questions, { id: this.selectedQuestion.key });
         },
 
         condition() {
             if (this.selectedCondition == null) return null;
-            return _.find(this.questions, { Id: this.selectedCondition.key });
+            return _.find(this.questions, { id: this.selectedCondition.key });
         },
 
         conditionAnswers() {
             if (this.condition == null) return [];
-            return _.filter(this.condition.Answers, ans => this.isSelectedAnswer(ans.Answer));
+            return _.filter(this.condition.answers, ans => this.isSelectedAnswer(ans.answer));
         },
 
         // drop down
