@@ -22,17 +22,20 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy;
         private readonly ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy;
         private readonly IWebNavigationService webNavigationService;
+        private readonly ISubstitutionTextFactory substitutionTextFactory;
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
         public WebInterviewInterviewEntityFactory(IMapper autoMapper,
             IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy,
             ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy,
-            IWebNavigationService webNavigationService)
+            IWebNavigationService webNavigationService,
+            ISubstitutionTextFactory substitutionTextFactory)
         {
             this.autoMapper = autoMapper;
             this.enumeratorGroupStateCalculationStrategy = enumeratorGroupStateCalculationStrategy;
             this.supervisorGroupStateCalculationStrategy = supervisorGroupStateCalculationStrategy;
             this.webNavigationService = webNavigationService;
+            this.substitutionTextFactory = substitutionTextFactory;
         }
 
         public Sidebar GetSidebarChildSectionsOf(string currentSectionId,
@@ -345,6 +348,16 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 var parentGroupId = questionnaire.GetParentGroup(identity.Id);
                 var parentGroup = callerInterview.GetGroup(new Identity(parentGroupId.Value, identity.RosterVector));
+
+                string CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(Identity questionIdentity, string text)
+                {
+                    var substitutionText = this.substitutionTextFactory.CreateText(questionIdentity, text, questionnaire);
+                    substitutionText.ReplaceSubstitutions(parentGroup.Tree);
+
+                    return this.webNavigationService.MakeNavigationLinks(
+                        substitutionText?.BrowserReadyText, questionIdentity, questionnaire, callerInterview, webLinksVirtualDirectory);
+                }
+
                 var tableRosterInstances = parentGroup.Children
                     .Where(c => c.Identity.Id == identity.Id)
                     .Cast<InterviewTreeRoster>()
@@ -362,77 +375,31 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     this.ApplyValidity(rosterInstance.Validity, rosterInstance.Status);
                 });
 
-                if (questionnaire.IsTableRoster(identity.Id))
+                return new TableOrMatrixRoster()
                 {
-                    return new TableRoster()
-                    {
-                        Id = id,
-                        Title = questionnaire.GetGroupTitle(identity.Id),
-                        Questions = questionnaire.GetChildQuestions(identity.Id)
-                            .Select(questionId => new TableRosterQuestionReference()
-                            {
-                                Id = questionId.FormatGuid(),
-                                Title = questionnaire.GetQuestionTitle(questionId),
-                                Instruction = questionnaire.GetQuestionInstruction(questionId),
-                                EntityType = GetEntityTypeInTableRoster(questionId, questionnaire).ToString(),
-                            }).ToArray(),
-                        Instances = tableRosterInstances
-                    };
-                }
+                    Id = id,
+                    Title =  CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(identity, questionnaire.GetGroupTitle(identity.Id)),
+                    Questions = questionnaire.GetChildQuestions(identity.Id)
+                        .Select(questionId =>
+                        {
+                            var qIdentity = Identity.Create(questionId, identity.RosterVector);
 
-                if (questionnaire.IsMatrixRoster(identity.Id))
-                {
-                    return new MatrixRoster()
-                    {
-                        Id = id,
-                        Title = questionnaire.GetGroupTitle(identity.Id),
-                        Questions = questionnaire.GetChildQuestions(identity.Id)
-                            .Select(questionId => new MatrixRosterQuestionReference()
+                            return new TableOrMatrixRosterQuestionReference()
                             {
                                 Id = questionId.FormatGuid(),
-                                Title = questionnaire.GetQuestionTitle(questionId),
-                                Instruction = questionnaire.GetQuestionInstruction(questionId),
-                                EntityType = GetEntityTypeInMatrixRoster(questionId, questionnaire).ToString(),
-                                Options = questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
-                            }).ToArray(),
-                        Instances = tableRosterInstances
-                    };
-                }
+                                Title = CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(qIdentity, questionnaire.GetQuestionTitle(questionId)),
+                                Instruction = CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(qIdentity, questionnaire.GetQuestionInstruction(questionId)),
+                                EntityType = GetEntityType(qIdentity, questionnaire, callerInterview, isReviewMode).ToString(),
+                                Options = questionnaire.IsMatrixRoster(identity.Id)
+                                    ? questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
+                                    : null
+                            };
+                        }).ToArray(),
+                    Instances = tableRosterInstances
+                };
             }
 
             return null;
-        }
-
-        private static InterviewEntityType GetEntityTypeInTableRoster(Guid entityId, IQuestionnaire callerQuestionnaire)
-        {
-            switch (callerQuestionnaire.GetQuestionType(entityId))
-                {
-                    case QuestionType.Numeric:
-                        return callerQuestionnaire.IsQuestionInteger(entityId)
-                            ? InterviewEntityType.Integer
-                            : InterviewEntityType.Double;
-                    case QuestionType.Text:
-                        return InterviewEntityType.TextQuestion;
-                    default:
-                        return InterviewEntityType.Unsupported;
-                }
-            
-        }
-
-        private static InterviewEntityType GetEntityTypeInMatrixRoster(Guid entityId, IQuestionnaire callerQuestionnaire)
-        {
-            switch (callerQuestionnaire.GetQuestionType(entityId))
-                {
-                    case QuestionType.SingleOption:
-                        return InterviewEntityType.CategoricalSingle;
-                    case QuestionType.MultyOption:
-                        return callerQuestionnaire.IsQuestionYesNo(entityId)
-                            ? InterviewEntityType.CategoricalYesNo
-                            : InterviewEntityType.CategoricalMulti;
-                    default:
-                        return InterviewEntityType.Unsupported;
-                }
-            
         }
 
         private InterviewGroupOrRosterInstance GetRosterInstanceEntity(IStatefulInterview callerInterview, IQuestionnaire questionnaire,
@@ -576,6 +543,92 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 parent = interview.GetParentGroup(parent);
             }
             return parent;
+        }
+
+        public InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
+            IStatefulInterview interview, bool isReviewMode)
+        {
+            var entityId = identity.Id;
+
+            if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
+
+            if (callerQuestionnaire.HasGroup(entityId) || callerQuestionnaire.IsRosterGroup(entityId))
+            {
+                if (callerQuestionnaire.IsFlatRoster(entityId))
+                    return InterviewEntityType.GroupTitle;
+                if (callerQuestionnaire.IsTableRoster(entityId))
+                    return InterviewEntityType.TableRoster;
+                if (callerQuestionnaire.IsMatrixRoster(entityId))
+                    return InterviewEntityType.MatrixRoster;
+                return InterviewEntityType.Group;
+            }
+
+            if (callerQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
+
+            switch (callerQuestionnaire.GetQuestionType(entityId))
+            {
+                case QuestionType.DateTime:
+                    return InterviewEntityType.DateTime;
+                case QuestionType.GpsCoordinates:
+                    return InterviewEntityType.Gps;
+                case QuestionType.Multimedia:
+                    return InterviewEntityType.Multimedia; // InterviewEntityType.Multimedia;
+                case QuestionType.MultyOption:
+                    if (callerQuestionnaire.IsQuestionFilteredCombobox(entityId))
+                    {
+                        return InterviewEntityType.MultiCombobox;
+                    }
+                    if (callerQuestionnaire.IsLinkedToListQuestion(entityId))
+                        return InterviewEntityType.CategoricalMulti;
+                    if (callerQuestionnaire.IsQuestionLinked(entityId)
+                        || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
+                        return InterviewEntityType.LinkedMulti;
+                    return callerQuestionnaire.IsQuestionYesNo(entityId)
+                        ? InterviewEntityType.CategoricalYesNo
+                        : InterviewEntityType.CategoricalMulti;
+                case QuestionType.SingleOption:
+                    if (callerQuestionnaire.IsLinkedToListQuestion(entityId))
+                        return InterviewEntityType.CategoricalSingle;
+                    if (callerQuestionnaire.IsQuestionLinked(entityId)
+                        || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
+                        return InterviewEntityType.LinkedSingle;
+                    if (callerQuestionnaire.IsQuestionCascading(entityId))
+                    {
+                        if (callerQuestionnaire.ShowCascadingAsList(entityId))
+                        {
+                            var threshold = callerQuestionnaire.GetCascadingAsListThreshold(entityId) ?? Constants.DefaultCascadingAsListThreshold;
+
+                            if (!interview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(identity, threshold))
+                            {
+                                return InterviewEntityType.CategoricalSingle;
+                            }
+
+                            return InterviewEntityType.Combobox;
+                        }
+
+                        return InterviewEntityType.Combobox;
+                    }
+                    if (callerQuestionnaire.IsQuestionFilteredCombobox(entityId))
+                        return InterviewEntityType.Combobox;
+                    else
+                        return InterviewEntityType.CategoricalSingle;
+                case QuestionType.Numeric:
+                    return callerQuestionnaire.IsQuestionInteger(entityId)
+                        ? InterviewEntityType.Integer
+                        : InterviewEntityType.Double;
+                case QuestionType.Text:
+                    return InterviewEntityType.TextQuestion;
+                case QuestionType.TextList:
+                    return InterviewEntityType.TextList;
+                case QuestionType.QRBarcode:
+                    return InterviewEntityType.QRBarcode;
+                case QuestionType.Audio:
+                    return InterviewEntityType.Audio;
+                case QuestionType.Area:
+                    return isReviewMode ? InterviewEntityType.Area : InterviewEntityType.Unsupported;
+                default:
+                    return InterviewEntityType.Unsupported;
+            }
         }
 
         protected virtual string WebLinksVirtualDirectory(bool isReview) => "WebTester/Interview";
