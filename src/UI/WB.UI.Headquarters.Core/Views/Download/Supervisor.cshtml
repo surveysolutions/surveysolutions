@@ -4,6 +4,7 @@
 @model WB.UI.Headquarters.Models.DownloadModel
 @inject IQRCodeHelper qRCodeHelper
 @inject IProductVersion productVersion
+@inject IInterviewerVersionReader versionReader
 @{
     Layout = null;
 }
@@ -44,11 +45,7 @@
                                 <div class="form-actions">
                                     <a href="@Url.RouteUrl(new {action = "GetLatestSupervisor", controller = "InterviewerSync"})" class="get-supervisor-app">
                                         <span>@Pages.GetLatestSupervisorApp</span>
-<<<<<<< HEAD:src/UI/WB.UI.Headquarters.Core/Views/Download/Supervisor.cshtml
-                                        <span class="version">@Pages.DownloadPage_Version @(productVersion.ToString())</span>
-=======
-                                        <span class="version">@Pages.DownloadPage_Version @(DependencyResolver.Current.GetService<IInterviewerVersionReader>().SupervisorVersionString)</span>
->>>>>>> origin/rc:src/UI/Headquarters/WB.UI.Headquarters/Views/Download/Supervisor.cshtml
+                                        <span class="version">@Pages.DownloadPage_Version @versionReader.SupervisorVersionString</span>
                                     </a>
                                     @if (qRCodeHelper.SupportQRCodeGeneration())
                                     {
