@@ -4,6 +4,7 @@
 @model WB.UI.Headquarters.Models.DownloadModel
 @inject IQRCodeHelper qRCodeHelper
 @inject IProductVersion productVersion
+@inject IInterviewerVersionReader versionReader
 @{
     Layout = null;
 }
@@ -44,11 +45,7 @@
                             <div class="form-actions">
                                 <a asp-action="GetLatestVersion" asp-controller="InterviewerSync" class="get-interviewer-app" id="dowload">
                                     <span>@Pages.GetLatestApp</span>
-<<<<<<< HEAD:src/UI/WB.UI.Headquarters.Core/Views/Download/Index.cshtml
-                                    <span class="version">@Pages.DownloadPage_Version @(productVersion.ToString())</span>
-=======
-                                    <span class="version">@Pages.DownloadPage_Version @(DependencyResolver.Current.GetService<IInterviewerVersionReader>().InterviewerVersionString)</span>
->>>>>>> origin/rc:src/UI/Headquarters/WB.UI.Headquarters/Views/Download/Index.cshtml
+                                    <span class="version">@Pages.DownloadPage_Version @(versionReader.InterviewerVersionString)</span>
                                 </a>
                                 @if (qRCodeHelper.SupportQRCodeGeneration())
                                 {
