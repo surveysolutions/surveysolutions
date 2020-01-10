@@ -1134,8 +1134,6 @@
     <Content Include="Views\SurveySetup\InterviewImportProgress.cshtml" />
     <Content Include="Views\SurveySetup\Index.cshtml" />
     <Content Include="Views\Interviewers\Index.cshtml" />
-    <Content Include="Views\WebInterviewSetup\Start.cshtml" />
-    <Content Include="Views\WebInterviewSetup\Started.cshtml" />
     <Content Include="Views\WebInterview\Start.cshtml" />
     <Content Include="Views\WebInterview\Resume.cshtml" />
     <Content Include="Views\WebInterview\_WebInterviewLayout.cshtml" />
@@ -1192,9 +1190,6 @@
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
     <Content Include="Views\ControlPanel\ImportBrokenPackage.cshtml" />
     <Content Include="Views\Settings\EmailProviders.cshtml" />
-    <Content Include="Views\WebInterviewSetup\Settings.cshtml" />
-    <Content Include="Views\WebInterviewSetup\SendInvitations.cshtml" />
-    <Content Include="Views\WebInterviewSetup\EmailDistributionProgress.cshtml" />
     <Content Include="Views\WebEmails\EmailHtml.cshtml" />
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
@@ -1359,8 +1354,6 @@
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
-    <Compile Include="API\WebInterview\WebInterviewSettingsApiController.cs" />
-    <Compile Include="API\WebInterview\WebInterviewSetupApiController.cs" />
     <Compile Include="API\WebInterview\WebStatefulInterviewExtensions.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
     <Compile Include="App_GlobalResources\DataExport.designer.cs">
@@ -1513,7 +1506,6 @@
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
-    <Compile Include="Controllers\WebInterviewSetupController.cs" />
     <Compile Include="Filters\ErrorLoggerFilter.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
     <Compile Include="Filters\HttpStatusException.cs" />
