@@ -157,7 +157,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var questionnairesWithData =
                 new HashSet<QuestionnaireIdentity>(this.interviewReportDataRepository.QuestionnairesWithData(teamLeadId));
 
-            return allQuestionnaires.Items.Where(q => questionnairesWithData.Contains(q.Identity()))
+            var questionnairesDtos = allQuestionnaires.Items.Where(q => questionnairesWithData.Contains(q.Identity()))
                 .OrderByDescending(q => q.LastEntryDate)
                 .Select(q => new QuestionnaireDto
                 {
@@ -165,6 +165,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     Title = q.Title,
                     Version = q.Version
                 }).ToList();
+            return questionnairesDtos;
         }
 
         private ActionResult ReturnEmptyResult(SurveyStatisticsQuery query)
@@ -200,7 +201,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Localizable(false)]
         [HttpGet]
         [Route(@"")]
-        public ActionResult Report([FromQuery] SurveyStatisticsQuery query)
+        public ActionResult Report(SurveyStatisticsQuery query)
         {
             if (query.QuestionnaireId == null)
             {
