@@ -14,26 +14,21 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Storage;
-using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -59,9 +54,7 @@ using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api.DataTable;
-using WB.UI.Headquarters.Services;using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
-using WB.UI.Shared.Web.Services;
 using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Headquarters
@@ -222,7 +215,6 @@ namespace WB.UI.Headquarters
             services.AddOptions();
             services.AddControllersWithViews().AddNewtonsoftJson(j =>
             {
-                j.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 j.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
                 j.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
