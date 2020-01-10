@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
@@ -538,6 +540,64 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.Single(e => e.Code == "WB0073").References.Count().Should().Be(1);
             verificationMessages.Single(e => e.Code == "WB0073").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
             verificationMessages.Single(e => e.Code == "WB0073").References.First().Id.Should().Be(questionId);
+        }
+
+        [Test]
+        public void when_verifying_questionnaire_with_question_inside_matrix_roster_with_substitutions_references_with_same_roster_level()
+        {
+            Guid questionWithSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
+            Guid sameRosterLevelQuestionId = Guid.Parse("12222222222222222222222222222222");
+            string sameRosterLevelQuestionVariableName = "i_am_deeper_ddddd_deeper";
+            var rosterGroupId1 =       Guid.Parse("AAAAAAAAAAAAAAAA1111111111111111");
+            var rosterGroupId2 =       Guid.Parse("AAAAAAAAAAAAAAAA2222222222222222");
+            var rosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+            var questionnaire = CreateQuestionnaireDocument(new IComposite[]
+            {
+                Create.NumericIntegerQuestion(rosterSizeQuestionId, variable: "var1"),
+                new Group()
+                {
+                    PublicKey = rosterGroupId1,
+                    IsRoster = true,
+                    DisplayMode = RosterDisplayMode.Matrix,
+                    VariableName = "a",
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    Children = new List<IComposite>()
+                    {
+                        Create.SingleOptionQuestion(
+                            questionWithSubstitutionsId,
+                            variable: "var2",
+                            title: $"hello %{sameRosterLevelQuestionVariableName}%",
+                            answers: new List<Answer> { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
+                        ),
+                    }.ToReadOnlyCollection()
+
+                },
+                new Group()
+                {
+                    PublicKey = rosterGroupId2,
+                    IsRoster = true,
+                    VariableName = "c",
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    Children = new List<IComposite>()
+                    {
+                        Create.NumericRealQuestion(
+                            sameRosterLevelQuestionId,
+                            variable: sameRosterLevelQuestionVariableName
+                        )
+                    }.ToReadOnlyCollection()
+
+                }
+            });
+
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            verificationMessages.ShouldContainError("WB0302");
+            verificationMessages.GetError("WB0302").References.Count().Should().Be(2);
+            verificationMessages.GetError("WB0302").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0302").References.First().Id.Should().Be(questionWithSubstitutionsId);
+            verificationMessages.GetError("WB0302").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0302").References.Last().Id.Should().Be(sameRosterLevelQuestionId);
         }
     }
 }
