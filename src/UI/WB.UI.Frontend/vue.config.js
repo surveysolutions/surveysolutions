@@ -113,6 +113,7 @@ module.exports = {
             path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
             path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
         ]
+        
 
         config.plugin('extraWatch')
             .use(extraWatch, [{ files: resxFiles }])
