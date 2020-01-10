@@ -792,4 +792,7 @@
   <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
     <value>Matrix roster has to contain no linked questions.</value>
   </data>
+  <data name="WB0302" xml:space="preserve">
+    <value>Substitution cannot reference items from same roster level.</value>
+  </data>
 </root>
