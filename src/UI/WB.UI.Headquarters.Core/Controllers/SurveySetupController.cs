@@ -129,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.Questionnaires)]
-        public ActionResult UpgradeAssignments(Guid id, long version)
+        public IActionResult UpgradeAssignments(Guid id, long version)
         {
             var model = new UpgradeAssignmentsModel();
             model.QuestionnaireIdentity = new QuestionnaireIdentity(id, version);
@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Questionnaires)]
         [HttpPost]
         [ActionName("UpgradeAssignments")]
-        public ActionResult UpgradeAssignmentsPost(Guid id, long version)
+        public IActionResult UpgradeAssignmentsPost(Guid id, long version)
         {
             var processId = Guid.NewGuid();
             var sourceQuestionnaireId = QuestionnaireIdentity.Parse(Request.Form["sourceQuestionnaireId"]);

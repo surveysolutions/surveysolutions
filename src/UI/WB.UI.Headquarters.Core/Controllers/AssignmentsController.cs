@@ -18,6 +18,7 @@ namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     [ActivePage(MenuItem.Assignments)]
+    [Localizable(false)]
     public class AssignmentsController : Controller
     {
         private readonly IAuthorizedUser currentUser;
@@ -36,7 +37,6 @@ namespace WB.UI.Headquarters.Controllers
             this.assignmentViewFactory = assignmentViewFactory;
         }
         
-        [Localizable(false)]
         [ActivePage(MenuItem.Assignments)]
         public IActionResult Index(int? id)
         {

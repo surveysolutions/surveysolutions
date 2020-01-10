@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class WebInterviewSettings {
+    public class WebInterviewSettings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.WebInterviewSettings", typeof(WebInterviewSettings).Assembly);
@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Additional settings.
         /// </summary>
-        internal static string AdditionalSettings {
+        public static string AdditionalSettings {
             get {
                 return ResourceManager.GetString("AdditionalSettings", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to After {{count}} day.
         /// </summary>
-        internal static string AfterXDay {
+        public static string AfterXDay {
             get {
                 return ResourceManager.GetString("AfterXDay", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to After {{count}} days.
         /// </summary>
-        internal static string AfterXDay_plural {
+        public static string AfterXDay_plural {
             get {
                 return ResourceManager.GetString("AfterXDay_plural", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to After {{count}} week.
         /// </summary>
-        internal static string AfterXWeek {
+        public static string AfterXWeek {
             get {
                 return ResourceManager.GetString("AfterXWeek", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to After {{count}} weeks.
         /// </summary>
-        internal static string AfterXWeek_plural {
+        public static string AfterXWeek_plural {
             get {
                 return ResourceManager.GetString("AfterXWeek_plural", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string Cancel {
+        public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Complete.
         /// </summary>
-        internal static string Complete {
+        public static string Complete {
             get {
                 return ResourceManager.GetString("Complete", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Complete.
         /// </summary>
-        internal static string CompletePage {
+        public static string CompletePage {
             get {
                 return ResourceManager.GetString("CompletePage", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Customize displayed text for respondents.
         /// </summary>
-        internal static string CustomizeDisplayedText {
+        public static string CustomizeDisplayedText {
             get {
                 return ResourceManager.GetString("CustomizeDisplayedText", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Customize emails text.
         /// </summary>
-        internal static string CustomizeEmailsText {
+        public static string CustomizeEmailsText {
             get {
                 return ResourceManager.GetString("CustomizeEmailsText", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Description:.
         /// </summary>
-        internal static string Description {
+        public static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Description for password:.
         /// </summary>
-        internal static string DescriptionForPassword {
+        public static string DescriptionForPassword {
             get {
                 return ResourceManager.GetString("DescriptionForPassword", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Do not send.
         /// </summary>
-        internal static string DoNotSend {
+        public static string DoNotSend {
             get {
                 return ResourceManager.GetString("DoNotSend", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Message:.
         /// </summary>
-        internal static string EmailMessage {
+        public static string EmailMessage {
             get {
                 return ResourceManager.GetString("EmailMessage", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Subject:.
         /// </summary>
-        internal static string EmailSubject {
+        public static string EmailSubject {
             get {
                 return ResourceManager.GetString("EmailSubject", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You can use %SURVEYNAME% placeholder in the text as a name of survey.
         /// </summary>
-        internal static string EmailTemplateDescription {
+        public static string EmailTemplateDescription {
             get {
                 return ResourceManager.GetString("EmailTemplateDescription", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Example of the Finish Page.
         /// </summary>
-        internal static string ExampleFinishPage {
+        public static string ExampleFinishPage {
             get {
                 return ResourceManager.GetString("ExampleFinishPage", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Example of the Invitation Email message.
         /// </summary>
-        internal static string ExampleInvitationEmailMessage {
+        public static string ExampleInvitationEmailMessage {
             get {
                 return ResourceManager.GetString("ExampleInvitationEmailMessage", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Example of the Reject Email message.
         /// </summary>
-        internal static string ExampleRejectEmailMessage {
+        public static string ExampleRejectEmailMessage {
             get {
                 return ResourceManager.GetString("ExampleRejectEmailMessage", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Example of the Reminder Email message.
         /// </summary>
-        internal static string ExampleReminderEmailMessage {
+        public static string ExampleReminderEmailMessage {
             get {
                 return ResourceManager.GetString("ExampleReminderEmailMessage", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Example of the Resume Page.
         /// </summary>
-        internal static string ExampleResumePage {
+        public static string ExampleResumePage {
             get {
                 return ResourceManager.GetString("ExampleResumePage", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Example of the Welcome Page.
         /// </summary>
-        internal static string ExampleWelcomePage {
+        public static string ExampleWelcomePage {
             get {
                 return ResourceManager.GetString("ExampleWelcomePage", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The field is required..
         /// </summary>
-        internal static string FieldRequired {
+        public static string FieldRequired {
             get {
                 return ResourceManager.GetString("FieldRequired", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Finish Page.
         /// </summary>
-        internal static string FinishPage {
+        public static string FinishPage {
             get {
                 return ResourceManager.GetString("FinishPage", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Invitation.
         /// </summary>
-        internal static string Invitation {
+        public static string Invitation {
             get {
                 return ResourceManager.GetString("Invitation", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Invitation.
         /// </summary>
-        internal static string InvitationEmailMessage {
+        public static string InvitationEmailMessage {
             get {
                 return ResourceManager.GetString("InvitationEmailMessage", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Main text:.
         /// </summary>
-        internal static string MainText {
+        public static string MainText {
             get {
                 return ResourceManager.GetString("MainText", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Note for supervisor.
         /// </summary>
-        internal static string NoteToSupervisor {
+        public static string NoteToSupervisor {
             get {
                 return ResourceManager.GetString("NoteToSupervisor", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Reject.
         /// </summary>
-        internal static string Reject {
+        public static string Reject {
             get {
                 return ResourceManager.GetString("Reject", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Reject.
         /// </summary>
-        internal static string RejectEmailMessage {
+        public static string RejectEmailMessage {
             get {
                 return ResourceManager.GetString("RejectEmailMessage", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Reminder.
         /// </summary>
-        internal static string Reminder {
+        public static string Reminder {
             get {
                 return ResourceManager.GetString("Reminder", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No Response.
         /// </summary>
-        internal static string ReminderNoResponseEmailMessage {
+        public static string ReminderNoResponseEmailMessage {
             get {
                 return ResourceManager.GetString("ReminderNoResponseEmailMessage", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Partial Response.
         /// </summary>
-        internal static string ReminderPartialResponseEmailMessage {
+        public static string ReminderPartialResponseEmailMessage {
             get {
                 return ResourceManager.GetString("ReminderPartialResponseEmailMessage", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Reminder setting.
         /// </summary>
-        internal static string ReminderSetting {
+        public static string ReminderSetting {
             get {
                 return ResourceManager.GetString("ReminderSetting", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Resume.
         /// </summary>
-        internal static string ResumeEmailMessage {
+        public static string ResumeEmailMessage {
             get {
                 return ResourceManager.GetString("ResumeEmailMessage", resourceCulture);
             }
@@ -378,7 +378,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Resume Page.
         /// </summary>
-        internal static string ResumePage {
+        public static string ResumePage {
             get {
                 return ResourceManager.GetString("ResumePage", resourceCulture);
             }
@@ -387,7 +387,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to save.
         /// </summary>
-        internal static string Save {
+        public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
             }
@@ -396,7 +396,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Send reminder to people with no response.
         /// </summary>
-        internal static string SendWithNoResponse {
+        public static string SendWithNoResponse {
             get {
                 return ResourceManager.GetString("SendWithNoResponse", resourceCulture);
             }
@@ -405,7 +405,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Send reminder to people with a partial response.
         /// </summary>
-        internal static string SendWithPartialResponse {
+        public static string SendWithPartialResponse {
             get {
                 return ResourceManager.GetString("SendWithPartialResponse", resourceCulture);
             }
@@ -414,7 +414,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Shown only if password is required and set.
         /// </summary>
-        internal static string ShownPasswordIsRequired {
+        public static string ShownPasswordIsRequired {
             get {
                 return ResourceManager.GetString("ShownPasswordIsRequired", resourceCulture);
             }
@@ -423,7 +423,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Start interview button.
         /// </summary>
-        internal static string StartInterviewButton {
+        public static string StartInterviewButton {
             get {
                 return ResourceManager.GetString("StartInterviewButton", resourceCulture);
             }
@@ -432,7 +432,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Title:.
         /// </summary>
-        internal static string Title {
+        public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
@@ -441,7 +441,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Web interview setup for .
         /// </summary>
-        internal static string WebInterviewSetupFor_Title {
+        public static string WebInterviewSetupFor_Title {
             get {
                 return ResourceManager.GetString("WebInterviewSetupFor_Title", resourceCulture);
             }
@@ -450,7 +450,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Welcome Page.
         /// </summary>
-        internal static string WelcomePage {
+        public static string WelcomePage {
             get {
                 return ResourceManager.GetString("WelcomePage", resourceCulture);
             }
