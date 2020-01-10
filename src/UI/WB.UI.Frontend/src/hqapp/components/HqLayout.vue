@@ -8,7 +8,7 @@
                         <div :class="{'neighbor-block-to-search': hasSearch}">
                             <slot name="headers">
                                 <div :class="{'topic-with-button': topicButtonRef}">
-                                    <h1>{{title}}</h1>
+                                    <h1 v-html='title'></h1>
                                     <a v-if="topicButtonRef" class="btn btn-success" :href="topicButtonRef">{{ topicButton }} </a>
                                 </div>
                                 <i v-if="subtitle">{{ subtitle }}</i>
