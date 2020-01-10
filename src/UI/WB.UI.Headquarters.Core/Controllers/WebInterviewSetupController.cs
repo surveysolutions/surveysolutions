@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -15,22 +16,18 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.Enumerator.Native.WebInterview;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [LimitsFilter]
-    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
+    [Authorize(Roles = "Administrator, Headquarter")]
     [ObserverNotAllowed]
-    [WebInterviewFeatureEnabled]
-    public class WebInterviewSetupController : BaseController
+    public class WebInterviewSetupController : Controller
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
@@ -41,20 +38,13 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAuthorizedUser authorizedUser;
 
         // GET: WebInterviewSetup
-        public WebInterviewSetupController(ICommandService commandService,
-            ILogger logger, 
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IWebInterviewConfigurator configurator,
+        public WebInterviewSetupController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IQueryableReadSideRepositoryReader<Assignment, Guid> assignments,
             IAssignmentsService assignmentsService,
-            IWebInterviewNotificationService webInterviewNotificationService, 
             IInvitationService invitationService, 
             SendInvitationsTask sendInvitationsTask,
             IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
             IAuthorizedUser authorizedUser)
-            : base(commandService, 
-                  logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
@@ -79,14 +69,14 @@ namespace WB.UI.Headquarters.Controllers
             QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
             {
-                return this.HttpNotFound();
+                return NotFound();
             }
 
             var model = new SendInvitationsModel
             {
                 Api = new
                 {
-                    InvitationsInfo = Url.HttpRouteUrl("DefaultApiWithAction", new {controller = "WebInterviewSetupApi", action = "InvitationsInfo", id = id }),
+                    InvitationsInfo = Url.Action("InvitationsInfo", "WebInterviewSetupApi", new { id = id }),
                     SurveySetupUrl = Url.Action("Index", "SurveySetup"),
                     EmaiProvidersUrl = Url.Action("EmailProviders","Settings"),
                     WebSettingsUrl = Url.Action("Settings", "WebInterviewSetup", new { id = id }),
@@ -102,12 +92,12 @@ namespace WB.UI.Headquarters.Controllers
         [ActionName("SendInvitations")]
         public async Task<ActionResult> SendInvitationsPost(string id)
         {
-            QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(Request["questionnaireId"]);
+            QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(Request.Form["questionnaireId"]);
 
             QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
             {
-                return this.HttpNotFound();
+                return NotFound();
             }
             
             if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.InProgress)
@@ -120,12 +110,12 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.Questionnaires)]
-        public ActionResult EmailDistributionProgress()
+        public IActionResult EmailDistributionProgress()
         {
             var progress = this.invitationService.GetEmailDistributionStatus();
             if (progress == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             return View(new EmailDistributionProgressModel { Api = new
@@ -138,17 +128,17 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.Questionnaires)]
-        public ActionResult Settings(string id)
+        public IActionResult Settings(string id)
         {
             if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
             {
-                return this.HttpNotFound();
+                return NotFound();
             }
 
             QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
             {
-                return this.HttpNotFound();
+                return NotFound();
             }
 
             var model = new SetupModel();
@@ -159,8 +149,7 @@ namespace WB.UI.Headquarters.Controllers
             model.LogoUrl = Url.Action("Thumbnail", "CompanyLogo", new { httproute = "DefaultApi" });
             model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
             model.AssignmentsCount = this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
-            model.DownloadAssignmentsUrl = Url.HttpRouteUrl("DefaultApiWithAction",
-                new { controller = "LinksExport", action = "Download", id = questionnaireIdentity.ToString() });
+            model.DownloadAssignmentsUrl = Url.Action("Download", "LinksExport", new {id = questionnaireIdentity.ToString() });
 
             model.TextOptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
                 .ToDictionary(m => m.ToString().ToCamelCase(), m => m.ToUiString()).ToArray();

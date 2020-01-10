@@ -515,7 +515,7 @@
                                     <div class="preview email-block-unit">
                                         <div class="browser-mockup">
                                             <div class="email-example">
-                                                <table class="em-table" align="center" border="0" cellspacing="0" cellpadding="0" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; box-sizing: border-box; max-width: 600px; background-image: url('../../Dependencies/img/logo.svg'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: 115% 45px;">
+                                                <table class="em-table" align="center" border="0" cellspacing="0" cellpadding="0" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; box-sizing: border-box; max-width: 600px; background-image: url('../../img/logo.svg'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: 115% 45px;">
                                                     <tr>
                                                         <td style="border: 6px solid #E5E5E5;  padding: 50px 55px 115px; box-sizing: border-box;">
                                                             <table border="0" width="100%" cellpadding="0" cellspacing="0" >
@@ -666,7 +666,7 @@
 </template>
 <script>
 import Vue from "vue"
-
+import {map, isNil} from "lodash"
 export default {
   data() {
     return {
@@ -699,15 +699,15 @@ export default {
     self.logoUrl = this.$config.model.logoUrl;
     self.hasLogo = this.$config.model.hasLogo;
 
-    this.emailTemplates = _.map(
+    this.emailTemplates = map(
       this.$config.model.defaultEmailTemplates,
       (value, key) => {
         var defaultEmailTemplate = value;
         var custom = self.$config.model.emailTemplates[key];
-        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
-        var message = custom == undefined || _.isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message
-        var passwordDescription = custom == undefined || _.isNil(custom.passwordDescription) || custom.passwordDescription === "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription
-        var linkText = custom == undefined || _.isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText
+        var subject = custom == undefined || isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
+        var message = custom == undefined || isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message
+        var passwordDescription = custom == undefined || isNil(custom.passwordDescription) || custom.passwordDescription === "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription
+        var linkText = custom == undefined || isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText
         return {
           value: key,
           buttonTitle: defaultEmailTemplate.shortTitle,
@@ -720,16 +720,16 @@ export default {
       }
     );
 
-    _.map(this.emailTemplates, emailTemplate => {
+    map(this.emailTemplates, emailTemplate => {
         self.$validator.reset('emailTemplateData' + emailTemplate.value);
     });
 
-    this.webInterviewPageMessages = _.map(
+    this.webInterviewPageMessages = map(
       this.$config.model.defaultTexts,
       (value, key) => {
         var customText = self.$config.model.definedTexts[key];
         var defaultText = value;
-        var message = customText == undefined || _.isNil(customText) || customText === "" ? defaultText : customText
+        var message = customText == undefined || isNil(customText) || customText === "" ? defaultText : customText
         return {
           value: key,
           text: message,
@@ -737,9 +737,9 @@ export default {
           cancelText: message
         };
       }
-    ).reduce(function(map, obj) {
-        map[obj.value] = obj;
-        return map;
+    ).reduce(function(maped, obj) {
+        maped[obj.value] = obj;
+        return maped;
     }, {});
 
     self.$validator.reset('$welcomePage');
@@ -749,7 +749,7 @@ export default {
   },
   methods: {
     setActive(emailTemplate) {
-      _.map(this.emailTemplates, option => {
+      map(this.emailTemplates, option => {
         option.isActive = false;
       });
       emailTemplate.isActive = true;
@@ -769,10 +769,10 @@ export default {
     cancelEditEmailTemplate(emailTemplate) {
         var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value];
         var custom = this.$config.model.emailTemplates[emailTemplate.value];
-        emailTemplate.message = custom == undefined || _.isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message;
-        emailTemplate.subject = custom == undefined || _.isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
-        emailTemplate.passwordDescription = custom == undefined || _.isNil(custom.passwordDescription) || custom.passwordDescription === "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription;
-        emailTemplate.linkText = custom == undefined || _.isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText;
+        emailTemplate.message = custom == undefined || isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message;
+        emailTemplate.subject = custom == undefined || isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
+        emailTemplate.passwordDescription = custom == undefined || isNil(custom.passwordDescription) || custom.passwordDescription === "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription;
+        emailTemplate.linkText = custom == undefined || isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText;
         this.$validator.reset('emailTemplateData' + emailTemplate.value);
     },
     async saveEmailTemplate(emailTemplate) {

@@ -1,12 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web.Http;
+﻿using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -19,18 +15,16 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator, Headquarter")]
     [ApiNoCache]
-    [CamelCase]
-    public class WebInterviewSetupApiController : BaseApiController
+    [ResponseCache(NoStore = true)]
+    [Route("api/{controller}/{action}/{id?}")]
+    public class WebInterviewSetupApiController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
@@ -48,7 +42,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             IAssignmentsService assignmentsService,
             IInvitationService invitationService, 
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
-            IArchiveUtils archiveUtils) : base(commandService, logger)
+            IArchiveUtils archiveUtils) 
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -59,7 +53,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
-        public IHttpActionResult InvitationsInfo(string id)
+        public IActionResult InvitationsInfo(string id)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
             {
@@ -95,7 +89,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
-        public IHttpActionResult EmailDistributionStatus()
+        public IActionResult EmailDistributionStatus()
         {
             InvitationDistributionStatus status = this.invitationService.GetEmailDistributionStatus();
             if (status == null)
@@ -117,11 +111,11 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
-        public HttpResponseMessage ExportInvitationErrors()
+        public IActionResult ExportInvitationErrors()
         {
             InvitationDistributionStatus status = this.invitationService.GetEmailDistributionStatus();
             if (status == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
             using (MemoryStream resultStream = new MemoryStream())
             using (var streamWriter = new StreamWriter(resultStream))
@@ -134,24 +128,15 @@ namespace WB.UI.Headquarters.API.WebInterview
                 csvWriter.Flush();
                 streamWriter.Flush();
 
-                var response = this.Request.CreateResponse(HttpStatusCode.OK);
-                resultStream.Seek(0, SeekOrigin.Begin);
-
-                response.Content = new ByteArrayContent(archiveUtils.CompressStream(resultStream,"notSentInvitations.tab"));
-
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = "notSentInvitations.zip"
-                };
-
-                return response;
+                return File(archiveUtils.CompressStream(resultStream, "notSentInvitations.tab"),
+                    "application/octet-stream",
+                    "notSentInvitations.zip",
+                    null, null);
             }
         }
 
         [HttpPost]
-        public IHttpActionResult CancelEmailDistribution()
+        public IActionResult CancelEmailDistribution()
         {
             invitationService.CancelEmailDistribution();
             return Ok();
