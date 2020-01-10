@@ -3,7 +3,7 @@ using WB.UI.Headquarters.API;
 
 namespace WB.UI.Headquarters.Services.Impl
 {
-    public class InterviewerVersionReader : IInterviewerVersionReader
+    class InterviewerVersionReader : IInterviewerVersionReader
     {
         private readonly IClientApkProvider clientApkProvider;
 
@@ -12,7 +12,12 @@ namespace WB.UI.Headquarters.Services.Impl
             this.clientApkProvider = clientApkProvider;
         }
 
-        public int? Version => this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
-        public int? SupervisorVersion => this.clientApkProvider.GetLatestVersion(ClientApkInfo.SupervisorFileName);
+        public int? InterviewerBuildNumber => this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+
+        public int? SupervisorBuildNumber => this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
+
+        public string InterviewerVersionString => this.clientApkProvider.GetApplicationVersionString(ClientApkInfo.InterviewerFileName);
+
+        public string SupervisorVersionString => this.clientApkProvider.GetApplicationVersionString(ClientApkInfo.SupervisorFileName);
     }
 }

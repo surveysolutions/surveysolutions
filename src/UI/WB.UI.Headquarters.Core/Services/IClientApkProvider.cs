@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.Services
     {
         IActionResult GetApkAsHttpResponse(HttpRequest request, string appName, string responseFileName);
         IActionResult GetPatchFileAsHttpResponse(HttpRequest request, string fileName);
-        int? GetLatestVersion(string appName);
-        string ApkClientsFolder();
+        int? GetApplicationBuildNumber(string appName);
+        string GetApplicationVersionString(string appName);
     }
 }
