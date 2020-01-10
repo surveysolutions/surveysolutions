@@ -1,40 +1,73 @@
 <template>
-    <div class="input-group">
-        <input class="form-control with-clear-btn" :placeholder="placeholder" :type="type" 
-                :value="value" @change="changed"/>
-        <div class="input-group-btn" @click="clearFilter">
-            <div class="btn btn-default">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </div>
-        </div>
+    <div class="field" :class="{'answered': hasValue === true}">
+        <input
+            class="form-control with-clear-btn"
+            :class="{'input-validation-error': haserror === true}"
+            v-bind="$attrs"
+            v-bind:value="value"
+            v-on="inputListeners"
+            ref="input"
+        />
+
+        <button type="button" class="btn btn-link btn-clear" v-if="hasValue" @click="clearFilter">
+            <span></span>
+        </button>
     </div>
 </template>
 
 <script>
 export default {
-    props: {
-        value: {
-            default: null       
-        },
-        type: {
-            type: String,
-            default: "text"
-        },
-        placeholder: {
-            type: String,
-            default: null
+    data() {
+        return {
+            disabled: false,
+            type: 'text',
         }
     },
-    methods: {
-        clearFilter(){
-            this.$emit("input", null)
-            this.$emit("changed")
+    inheritAttrs: false,
+    props: {
+        value: {
+            default: null,
         },
-        changed(ev) {
-            if(ev != null && ev.target == null) return
-            this.$emit("input", parseInt(ev.target.value))
-            this.$emit("changed")
-        }
-    }
-};
+        haserror: {
+            type: Boolean,
+            default: false,
+        },
+        canClear: {
+            type: Boolean,
+            default: true,
+        },
+    },
+    computed: {
+        hasValue: function() {
+            return this.type == 'text' && !this.disabled && this.canClear && this.value !== null && this.value !== ''
+        },
+        inputListeners: function() {
+            var vm = this
+            // `Object.assign` объединяет объекты вместе, чтобы получить новый объект
+            return Object.assign(
+                {},
+                // Мы добавляем все слушатели из родителя
+                this.$listeners,
+                // Затем мы можем добавить собственные слушатели или
+                // перезаписать поведение некоторых существующих.
+                {
+                    // Это обеспечит, что будет работать v-model на компоненте
+                    input: function(event) {
+                        vm.$emit('input', event.target.value)
+                    },
+                }
+            )
+        },
+    },
+    methods: {
+        clearFilter() {
+            this.$emit('input', null)
+            this.$emit('changed')
+        },
+    },
+    mounted() {
+        this.disabled = this.$refs.input.disabled
+        this.type = this.$refs.input.type
+    },
+}
 </script>

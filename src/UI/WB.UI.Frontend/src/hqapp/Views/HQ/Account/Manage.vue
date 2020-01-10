@@ -10,145 +10,44 @@
         </div>
         <div class="row extra-margin-bottom">
             <div class="col-sm-12">
-                <div class="block-filter">
-                    <label class for="Login">{{$t("Pages.AccountManage_Login")}}</label>:
-                    <div class="form-group">
-                        <div class="field">
-                            <input
-                                class="form-control with-clear-btn"
-                                maxlength="100"
-                                id="Login"
-                                name="Login"
-                                disabled
-                                v-model="model.userName"
-                            />
+                <form-group :label="$t('Pages.AccountManage_Login')">
+                    <TextInput :value="model.userName" disabled />
+                </form-group>
 
-                            <button type="button" class="btn btn-link btn-clear" tabindex="-1">
-                                <span></span>
-                            </button>
-                        </div>
-                        <span
-                            class="field-validation-valid help-block"
-                            data-valmsg-for="PersonName"
-                            data-valmsg-replace="true"
-                        ></span>
-                    </div>
-                </div>
-                <div class="block-filter">
-                    <label class for="Login">{{$t("Pages.AccountManage_Role")}}</label>:
-                    <div class="form-group">
-                        <div class="field">
-                            <input
-                                class="form-control with-clear-btn"
-                                maxlength="100"
-                                id="Role"
-                                name="Role"
-                                type="text"
-                                disabled
-                                v-model="model.role"
-                            />
+                <form-group :label="$t('Pages.AccountManage_Role')">
+                    <TextInput :value="model.role" disabled />
+                </form-group>
 
-                            <button type="button" class="btn btn-link btn-clear" tabindex="-1">
-                                <span></span>
-                            </button>
-                        </div>
-                        <span
-                            class="field-validation-valid help-block"
-                            data-valmsg-for="PersonName"
-                            data-valmsg-replace="true"
-                        ></span>
-                    </div>
-                </div>
-                <div class="block-filter">
-                    <label class for="PersonName">{{$t("FieldsAndValidations.PersonNameFieldName")}}</label>:
-                    <div class="form-group">
-                        <div class="field">
-                            <input
-                                class="form-control with-clear-btn"
-                                data-val="true"
-                                data-val-length="Person name cannot contain more than 100 characters"
-                                data-val-length-max="100"
-                                data-_val="false"
-                                id="PersonName"
-                                name="PersonName"
-                                type="text"
-                                v-model="model.personName"
-                            />
-
-                            <button type="button" class="btn btn-link btn-clear" tabindex="-1">
-                                <span></span>
-                            </button>
-                        </div>
-                        <span
-                            class="field-validation-valid help-block"
-                            data-valmsg-for="PersonName"
-                            data-valmsg-replace="true"
-                        ></span>
-                    </div>
-                </div>
-                <div class="block-filter">
-                    <label class for="Email">{{$t("FieldsAndValidations.EmailFieldName")}}</label>:
-                    <div class="form-group">
-                        <div class="field answered">
-                            <input
-                                class="form-control with-clear-btn"
-                                data-val="true"
-                                data-val-email="Is not a valid e-mail address"
-                                data-_val="true"
-                                id="Email"
-                                name="Email"
-                                type="text"
-                                v-model="model.email"
-                            />
-
-                            <button type="button" class="btn btn-link btn-clear" tabindex="-1">
-                                <span></span>
-                            </button>
-                        </div>
-                        <span
-                            class="field-validation-valid help-block"
-                            data-valmsg-for="Email"
-                            data-valmsg-replace="true"
-                        ></span>
-                    </div>
-                </div>
-                <div class="block-filter">
-                    <label
-                        class
-                        for="PhoneNumber"
-                    >{{$t("FieldsAndValidations.PhoneNumberFieldName")}}</label>:
-                    <div class="form-group">
-                        <div class="field">
-                            <input
-                                class="form-control with-clear-btn"
-                                data-val="true"
-                                data-val-length="Phone number cannot contain more than 15 characters"
-                                maxlength="15"
-                                data-val-phone="Invalid phone number"
-                                data-_val="true"
-                                id="PhoneNumber"
-                                name="PhoneNumber"
-                                type="text"
-                                v-model="model.phoneNumber"
-                            />
-
-                            <button type="button" class="btn btn-link btn-clear" tabindex="-1">
-                                <span></span>
-                            </button>
-                        </div>
-                        <span
-                            class="field-validation-valid help-block"
-                            data-valmsg-for="PhoneNumber"
-                            data-valmsg-replace="true"
-                        ></span>
-                    </div>
-                </div>
+                <form-group
+                    :label="$t('FieldsAndValidations.PersonNameFieldName')"
+                    :error="modelState['PersonName']">
+                    <TextInput
+                        v-model.trim="personName"
+                        :haserror="modelState['PersonName'] !== undefined"
+                    />
+                </form-group>
+                <form-group
+                    :label="$t('FieldsAndValidations.EmailFieldName')"
+                    :error="modelState['Email']"
+                >
+                    <TextInput
+                        v-model.trim="email"
+                        :haserror="modelState['Email'] !== undefined"
+                    />
+                </form-group>
+                <form-group
+                    :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
+                    :error="modelState['PhoneNumber']">
+                    <TextInput
+                        v-model.trim="phoneNumber"
+                        :haserror="modelState['PhoneNumber'] !== undefined"/>
+                </form-group>
             </div>
 
             <div class="col-sm-12">
                 <div class="block-filter">
                     <button type="submit" class="btn btn-success">{{$t('Pages.Update')}}</button>
-                    <a class="btn btn-default" href="/Account/Cancel">{{$t('Common.Cancel')}}</a>
+                    <a class="btn btn-default" href="/">{{$t('Common.Cancel')}}</a>
                 </div>
             </div>
 
@@ -156,84 +55,33 @@
                 <h2>{{$t('Pages.AccountManage_ChangePassword')}}</h2>
             </div>
             <div class="col-sm-12">
-                <div class="block-filter">
-                    <label class for="UpdateOwnPassword_OldPassword">{{$t('FieldsAndValidations.OldPasswordFieldName')}}</label>:
-                    <div class="form-group">
-                        <div class="field">
-                            <input
-                                autocomplete="new-password"
-                                class="form-control with-clear-btn"
-                                data-val="true"
-                                id="UpdateOwnPassword_OldPassword"
-                                name="UpdateOwnPassword.OldPassword"
-                                type="password"
-                            />
-
-                            <button type="button" class="btn btn-link btn-clear" tabindex="-1">
-                                <span></span>
-                            </button>
-                        </div>
-                        <span
-                            class="field-validation-valid help-block"
-                            data-valmsg-for="UpdateOwnPassword.OldPassword"
-                            data-valmsg-replace="true"
-                        ></span>
-                    </div>
-                </div>
-                <div class="block-filter">
-                    <label class for="UpdateOwnPassword_Password">{{$t('FieldsAndValidations.NewPasswordFieldName')}}</label>:
-                    <div class="form-group">
-                        <div class="field">
-                            <input
-                                autocomplete="new-password"
-                                class="form-control with-clear-btn"
-                                data-val="true"
-                                id="UpdateOwnPassword_Password"
-                                name="UpdateOwnPassword.Password"
-                                type="password"
-                            />
-
-                            <button type="button" class="btn btn-link btn-clear" tabindex="-1">
-                                <span></span>
-                            </button>
-                        </div>
-                        <span
-                            class="field-validation-valid help-block"
-                            data-valmsg-for="UpdateOwnPassword.Password"
-                            data-valmsg-replace="true"
-                        ></span>
-                    </div>
-                </div>
-                <div class="block-filter">
-                    <label class for="UpdateOwnPassword_ConfirmPassword">{{$t('FieldsAndValidations.ConfirmPasswordFieldName')}}</label>:
-                    <div class="form-group">
-                        <div class="field">
-                            <input
-                                autocomplete="new-password"
-                                class="form-control with-clear-btn"
-                                data-val="true"
-                                id="UpdateOwnPassword_ConfirmPassword"
-                                name="UpdateOwnPassword.ConfirmPassword"
-                                type="password"
-                            />
-
-                            <button type="button" class="btn btn-link btn-clear" tabindex="-1">
-                                <span></span>
-                            </button>
-                        </div>
-                        <span
-                            class="field-validation-valid help-block"
-                            data-valmsg-for="UpdateOwnPassword.ConfirmPassword"
-                            data-valmsg-replace="true"
-                        ></span>
-                    </div>
-                </div>
+                <form-group
+                    :label="$t('FieldsAndValidations.OldPasswordFieldName')"
+                    :error="modelState['OldPassword']">
+                    <TextInput
+                        v-model.trim="oldPassword"
+                        :haserror="modelState['OldPassword'] !== undefined"/>
+                </form-group>
+                <form-group
+                    :label="$t('FieldsAndValidations.NewPasswordFieldName')"
+                    :error="modelState['Password']">
+                    <TextInput
+                        v-model.trim="password"
+                        :haserror="modelState['Password'] !== undefined"/>
+                </form-group>
+                <form-group
+                    :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
+                    :error="modelState['ConfirmPassword']">
+                    <TextInput
+                        v-model.trim="confirmPassword"
+                        :haserror="modelState['ConfirmPassword'] !== undefined"/>
+                </form-group>
             </div>
 
             <div class="col-sm-12">
                 <div class="block-filter">
                     <button type="submit" class="btn btn-success">{{$t('Pages.Update')}}</button>
-                    <a class="btn btn-default" href="/Account/Cancel">{{$t('Common.Cancel')}}</a>
+                    <a class="btn btn-default" href="/">{{$t('Common.Cancel')}}</a>
                 </div>
             </div>
         </div>
@@ -241,13 +89,29 @@
 </template>
 
 <script>
-import Vue from "vue";
+import Vue from 'vue'
 
 export default {
-  computed: {
-        model() {
-            return this.$config.model;
+    data() {
+        return {
+            modelState: {},
+            personName : null,
+            email: null,
+            phoneNumber: null,
+            oldPassword: null,
+            password: null,
+            confirmPassword: null
         }
-  }
+    },
+    computed: {
+        model() {
+            return this.$config.model
+        },
+    },
+    mounted() {
+        this.personName = this.model.personName;
+        this.email = this.model.email;
+        this.phoneNumber = this.model.phoneNumber;
+    }
 }
 </script>
