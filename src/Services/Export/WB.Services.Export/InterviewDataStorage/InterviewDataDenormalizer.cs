@@ -617,15 +617,13 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             var sw = Stopwatch.StartNew();
 
-            using (var command = commandBuilder.BuildCommandsInExecuteOrderFromState(state))
-            {
-                logger.LogDebug("Save state command with {parameters} parameters generated in {time}.", command.Parameters.Count, sw.Elapsed);
-                sw.Restart();
+            await using var command = commandBuilder.BuildCommandsInExecuteOrderFromState(state);
+            logger.LogDebug("Save state command with {parameters} parameters generated in {time}.", command.Parameters.Count, sw.Elapsed);
+            sw.Restart();
 
-                await commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
+            await commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
 
-                logger.LogDebug("Save state command applied on DB in {time}", sw.Elapsed);
-            }
+            logger.LogDebug("Save state command applied on DB in {time}", sw.Elapsed);
         }
 
         private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)

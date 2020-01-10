@@ -53,8 +53,7 @@ namespace WB.Services.Export.Infrastructure
                     throw new ArgumentException(nameof(TenantDbContext) +
                                                 " cannot be resolved outside of configured ITenantContext");
 
-                var connectionStringBuilder =
-                    new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
+                var connectionStringBuilder =  new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
                 connectionStringBuilder.SearchPath = tenantContext.Tenant.SchemaName();
                 return connectionStringBuilder.ToString();
             });
@@ -108,9 +107,9 @@ namespace WB.Services.Export.Infrastructure
             }
         }
 
-        public async Task CheckSchemaVersionAndMigrate()
+        public async Task CheckSchemaVersionAndMigrate(CancellationToken cancellationToken)
         {
-            if (await DoesSchemaExist())
+            if (await DoesSchemaExist(cancellationToken))
             {
                 long schemaVersion = 0;
                 try
@@ -126,18 +125,17 @@ namespace WB.Services.Export.Infrastructure
 
                 if (schemaVersion < ContextSchemaVersion)
                 {
-                    await DropTenantSchemaAsync(this.TenantContext.Tenant.Name);
+                    await DropTenantSchemaAsync(this.TenantContext.Tenant.Name, cancellationToken);
                 }
             }
 
             this.Database.Migrate();
 
-            using (var tr = Database.BeginTransaction())
-            {
-                SchemaVersion.AsLong = ContextSchemaVersion;
-                await SaveChangesAsync();
-                tr.Commit();
-            }
+            await using var tr = Database.BeginTransaction();
+
+            SchemaVersion.AsLong = ContextSchemaVersion;
+            await SaveChangesAsync(cancellationToken);
+            tr.Commit();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -163,74 +161,69 @@ namespace WB.Services.Export.Infrastructure
         {
             List<string> tablesToDelete = new List<string>();
 
-            using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
+            await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
+            await db.OpenAsync(cancellationToken);
+
+            //logger.LogInformation("Start drop tenant scheme: {tenant}", tenant);
+
+            var schemas = (await db.QueryAsync<string>(
+                "select nspname from pg_catalog.pg_namespace n " +
+                "join pg_catalog.pg_description d on d.objoid = n.oid " +
+                "where d.description = @tenant",
+                new
+                {
+                    tenant
+                })).ToList();
+
+            foreach (var schema in schemas)
             {
-                await db.OpenAsync();
+                var tables = await db.QueryAsync<string>(
+                    "select tablename from pg_tables where schemaname= @schema",
+                    new {schema});
 
-                //logger.LogInformation("Start drop tenant scheme: {tenant}", tenant);
+                foreach (var table in tables)
+                {
+                    tablesToDelete.Add($@"""{schema}"".""{table}""");
+                }
+            }
 
-                var schemas = (await db.QueryAsync<string>(
-                    "select nspname from pg_catalog.pg_namespace n " +
-                    "join pg_catalog.pg_description d on d.objoid = n.oid " +
-                    "where d.description = @tenant",
-                    new
-                    {
-                        tenant
-                    })).ToList();
+            foreach (var tables in tablesToDelete.Batch(30))
+            {
+                await using var tr = db.BeginTransaction();
+                foreach (var table in tables)
+                {
+                    await db.ExecuteAsync($@"drop table if exists {table}");
+                    //logger.LogInformation("Dropped {table}", table);
+                }
 
+                await tr.CommitAsync(cancellationToken);
+            }
+
+            await using (var tr = db.BeginTransaction())
+            {
                 foreach (var schema in schemas)
                 {
-                    var tables = await db.QueryAsync<string>(
-                        "select tablename from pg_tables where schemaname= @schema",
-                        new {schema});
-
-                    foreach (var table in tables)
-                    {
-                        tablesToDelete.Add($@"""{schema}"".""{table}""");
-                    }
+                    await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
+                    //logger.LogInformation("Dropped schema {schema}.", schema);
                 }
 
-                foreach (var tables in tablesToDelete.Batch(30))
-                {
-                    using (var tr = db.BeginTransaction())
-                    {
-                        foreach (var table in tables)
-                        {
-                            await db.ExecuteAsync($@"drop table if exists {table}");
-                            //logger.LogInformation("Dropped {table}", table);
-                        }
-
-                        await tr.CommitAsync();
-                    }
-                }
-
-                using (var tr = db.BeginTransaction())
-                {
-                    foreach (var schema in schemas)
-                    {
-                        await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
-                        //logger.LogInformation("Dropped schema {schema}.", schema);
-                    }
-
-                    await tr.CommitAsync();
-                }
+                await tr.CommitAsync(cancellationToken);
             }
         }
 
-        private async Task<bool> DoesSchemaExist()
+        private async Task<bool> DoesSchemaExist(CancellationToken cancellationToken)
         {
-            using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
-            {
-                await db.OpenAsync();
-                var name = TenantContext.Tenant.SchemaName();
-                var exists = await db.QueryFirstAsync<bool>(
-                    "SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = @name);",
-                    new
-                    {
-                        name
-                    });
-                return exists;
-            }
+            await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
+
+            await db.OpenAsync(cancellationToken);
+            var name = TenantContext.Tenant.SchemaName();
+            var exists = await db.QueryFirstAsync<bool>(
+                "SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = @name);",
+                new
+                {
+                    name
+                });
+            return exists;
         }
     }
 }

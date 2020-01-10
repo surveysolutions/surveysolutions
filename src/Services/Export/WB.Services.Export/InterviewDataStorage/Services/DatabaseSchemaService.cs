@@ -45,7 +45,6 @@ namespace WB.Services.Export.InterviewDataStorage.Services
                 this.questionnaireSchemaGenerator.DropQuestionnaireDbStructure(questionnaireDocument);
 
                 reference.DeletedAt = DateTime.UtcNow;
-                this.dbContext.SaveChanges();
                 return true;
             }
 
