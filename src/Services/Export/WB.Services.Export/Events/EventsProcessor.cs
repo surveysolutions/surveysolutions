@@ -43,7 +43,7 @@ namespace WB.Services.Export.Events
         private const double BatchSizeMultiplier = 1;
         private const string ApiEventsQueryMonitoringKey = "api_events_query";
 
-        private async Task EnsureMigrated()
+        private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
             using var scope = serviceProvider.CreateScope();
 
@@ -52,14 +52,14 @@ namespace WB.Services.Export.Events
             var tenantDbContext = scope.ServiceProvider.GetService<TenantDbContext>();
             if (tenantDbContext.Database.IsNpgsql())
             {
-                await tenantDbContext.CheckSchemaVersionAndMigrate();
+                await tenantDbContext.CheckSchemaVersionAndMigrate(cancellationToken);
             }
         }
 
         public async Task HandleNewEvents(long exportProcessId, CancellationToken token = default)
         {
             long sequenceToStartFrom;
-            await EnsureMigrated();
+            await EnsureMigrated(token);
 
             using (var scope = serviceProvider.CreateScope())
             {
