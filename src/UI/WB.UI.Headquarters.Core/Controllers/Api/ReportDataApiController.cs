@@ -142,14 +142,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult QuantityByInterviewers([FromQuery]QuantityByInterviewersReportModel data, [FromQuery]string exportType = null)
+        public IActionResult QuantityByInterviewers(QuantityByInterviewersReportModel data, [FromQuery]string exportType = null)
         {
             var input = new QuantityByInterviewersReportInputModel
             {
                SupervisorId = data.SupervisorId ?? this.authorizedUser.Id,
                InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
                Page = data.PageIndex,
-               PageSize = data.PageSize,
+               PageSize = data.PageSize > 0 ? data.PageSize : MaxPageSize,
                QuestionnaireVersion = data.QuestionnaireVersion,
                QuestionnaireId = data.QuestionnaireId,
                ColumnCount = data.ColumnCount,
@@ -219,12 +219,12 @@ namespace WB.UI.Headquarters.Controllers.Api
 
 
         [HttpGet]
-        public IActionResult SpeedByInterviewers([FromQuery]SpeedByInterviewersReportModel data, [FromQuery]string exportType = null)
+        public IActionResult SpeedByInterviewers(SpeedByInterviewersReportModel data, [FromQuery]string exportType = null)
         {
             var input = new SpeedByInterviewersReportInputModel
             {
                 Page = data.PageIndex,
-                PageSize = data.PageSize,
+                PageSize = data.PageSize > 0 ? data.PageSize : MaxPageSize,
                 SupervisorId = data.SupervisorId ?? this.authorizedUser.Id,
                 InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
                 QuestionnaireVersion = data.QuestionnaireVersion,
@@ -262,12 +262,12 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult SpeedBetweenStatusesBySupervisors([FromQuery]SpeedBySupervisorsReportModel filter, [FromQuery]string exportType = null)
+        public IActionResult SpeedBetweenStatusesBySupervisors(SpeedBySupervisorsReportModel filter, [FromQuery]string exportType = null)
         {
             var input = new SpeedBetweenStatusesBySupervisorsReportInputModel
             {
                 Page = filter.PageIndex,
-                PageSize = filter.PageSize,
+                PageSize = filter.PageSize > 0 ? filter.PageSize : MaxPageSize,
                 ColumnCount = filter.ColumnCount,
                 From = filter.From,
                 Orders = filter.SortOrder,
@@ -293,12 +293,12 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult SpeedBetweenStatusesByInterviewers([FromQuery]SpeedByInterviewersReportModel filter, [FromQuery]string exportType = null)
+        public IActionResult SpeedBetweenStatusesByInterviewers(SpeedByInterviewersReportModel filter, [FromQuery]string exportType = null)
         {
             var input = new SpeedBetweenStatusesByInterviewersReportInputModel
             {
                 Page = filter.PageIndex,
-                PageSize = filter.PageSize,
+                PageSize = filter.PageSize > 0 ? filter.PageSize : MaxPageSize,
                 ColumnCount = filter.ColumnCount,
                 From = filter.From,
                 Orders = filter.SortOrder,
@@ -325,12 +325,12 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult SpeedBySupervisors([FromQuery]SpeedBySupervisorsReportModel data, [FromQuery]string exportType = null)
+        public IActionResult SpeedBySupervisors(SpeedBySupervisorsReportModel data, [FromQuery]string exportType = null)
         {
             var input = new SpeedBySupervisorsReportInputModel
             {
                 Page = data.PageIndex,
-                PageSize = data.PageSize,
+                PageSize = data.PageSize > 0 ? data.PageSize : MaxPageSize,
                 InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
                 ColumnCount = data.ColumnCount,
                 From = data.From,
