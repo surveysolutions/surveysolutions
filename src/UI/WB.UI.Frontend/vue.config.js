@@ -2,13 +2,9 @@ const path = require("path");
 const baseDir = path.resolve(__dirname, "./");
 const join = path.join.bind(path, baseDir);
 const webpack = require("webpack");
-const WriteFilePlugin = require("write-file-webpack-plugin");
-const RuntimePublicPathPlugin = require("./tools/RuntimePublicPathPlugin");
 const FileManagerPlugin = require("filemanager-webpack-plugin");
 const LocalizationPlugin = require("./tools/LocalizationPlugin")
 const extraWatch = require("extra-watch-webpack-plugin")
-const isHot = process.env.HOT_MODE == 1;
-const assetsPath = isHot ? "http://localhost:8080/" : "~/dist/";
 
 const uiFolder = join("..");
 const hqFolder = path.join(uiFolder, "WB.UI.Headquarters.Core");
@@ -16,7 +12,6 @@ const webTesterFolder = path.join(uiFolder, "WB.UI.WebTester");
 
 const StatsPlugin = require('stats-webpack-plugin')
 const CleanupPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
-
 
 const locales = {
     hq: ["Assignments", "Common", "Dashboard", "DataExport", "DataTables",
@@ -28,76 +23,71 @@ const locales = {
     webinterview: ["WebInterviewUI", "WebInterview", "Common"]
 }
 
+const isPack = process.argv.indexOf("--package") >= 0;
+
+const hqDist = !isPack ? hqFolder :  join("dist", "package", "hq")
+const webTesterDist = !isPack ? webTesterFolder : join("dist", "package", "webtester")
+
 const pages = {
 
     finishInstallation: {
         entry: "src/pages/finishInstallation.js",
-        filename: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.cshtml"),
+        filename: path.join(hqDist, "Views", "Shared", "_FinishInstallation.cshtml"),
         template: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.Template.cshtml")
     },
 
     hq_legacy: {
         entry: "src/pages/hq_legacy.js",
-        filename: path.join(hqFolder, "Views", "Shared", "_AdminLayout_Legacy.cshtml"),
+        filename: path.join(hqDist, "Views", "Shared", "_AdminLayout_Legacy.cshtml"),
         template: path.join(hqFolder, "Views", "Shared", "_AdminLayout_Legacy.Template.cshtml")
     },
 
     logon: {
         entry: "src/pages/logon.js",
-        filename: path.join(hqFolder, "Views", "Shared", "_Logon.cshtml"),
+        filename: path.join(hqDist, "Views", "Shared", "_Logon.cshtml"),
         template: path.join(hqFolder, "Views", "Shared", "_Logon.Template.cshtml")
     },
 
     hq_vue: {
         entry: "src/hqapp/main.js",
-        filename: path.join(hqFolder, "Views", "Shared", "_AdminLayout.cshtml"),
+        filename: path.join(hqDist, "Views", "Shared", "_AdminLayout.cshtml"),
         template: path.join(hqFolder, "Views", "Shared", "_AdminLayout.Template.cshtml")
     },
 
     webinterview: {
         entry: "src/webinterview/main.js",
-        filename: path.join(hqFolder, "Views", "Shared", "_WebInterview.cshtml"),
+        filename: path.join(hqDist, "Views", "Shared", "_WebInterview.cshtml"),
         template: path.join(hqFolder, "Views", "Shared", "_WebInterview.Template.cshtml")
     },
 
     webtester: {
         entry: "src/webinterview/main.js",
-        filename: path.join(webTesterFolder, "Views", "Shared", "_Layout.cshtml"),
+        filename: path.join(webTesterDist, "Views", "Shared", "_Layout.cshtml"),
         template: path.join(webTesterFolder, "Views", "Shared", "_Layout.Template.cshtml")
     }
 };
 
+
 const fileTargets = [
     { source: join(".resources", "locale", "**", "*.json"), destination: join("dist", "locale") },
 
-    { source: join("dist", "img", "**", "*.*"), destination: path.join(hqFolder, "wwwroot", "img") },
-    { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqFolder, "wwwroot", "fonts") },
-    { source: join("dist", "css", "*.*"), destination: path.join(hqFolder, "wwwroot", "css") },
-    { source: join("dist", "js", "*.*"), destination: path.join(hqFolder, "wwwroot", "js") },
-    { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqFolder, "wwwroot", "locale", "hq") },
-    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqFolder, "wwwroot", "locale", "webinterview") },
+    { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img") },
+    { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },
+    { source: join("dist", "css", "*.*"), destination: path.join(hqDist, "wwwroot", "css") },
+    { source: join("dist", "js", "*.*"), destination: path.join(hqDist, "wwwroot", "js") },
+    { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
+    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
 
-    { source: join("dist", "img", "**", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "img") },
-    { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "fonts") },
-    { source: join("dist", "css", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "css") },
-    { source: join("dist", "js", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "js") },
-    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(hqFolder, "wwwroot", "js", "locale") },
+    { source: join("dist", "img", "**", "*.*"), destination: path.join(webTesterDist, "wwwroot", "img") },
+    { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterDist, "wwwroot", "fonts") },
+    { source: join("dist", "css", "*.*"), destination: path.join(webTesterDist, "wwwroot", "css") },
+    { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
+    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js", "locale") },
 
 ]
 
 module.exports = {
     pages,
-
-    devServer: {
-        contentBase: join("dist"),
-        publicPath: "/headquarters/hqapp/dist/",
-        hot: true,
-        compress: false,
-        headers: { "Access-Control-Allow-Origin": "*" },
-        host: "localhost",
-        port: 8080,
-        quiet: true
-    },
 
     transpileDependencies: [
         'autonumeric'
@@ -108,6 +98,7 @@ module.exports = {
         config.devtool("source-map")
 
         config.plugin("fileManager").use(FileManagerPlugin, [{
+            // verbose: true,
             onEnd: { copy: fileTargets }
         }]);
 
@@ -118,7 +109,6 @@ module.exports = {
         }]);
 
         const resxFiles = [
-            path.join(hqFolder, "**/*.resx"),
             path.join(uiFolder, "WB.UI.Headquarters.Core/**/*.resx"),
             path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
             path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
@@ -158,48 +148,11 @@ module.exports = {
                 }
             }
         });
-        // splitChunks: {
-        //     cacheGroups: {
-        //         commons: {
-        //             name: 'chunk-common',
-        //             test: /[\\\/]node_modules[\\\/](autonumeric|moment)/,
-        //             priority: 1,
-        //             chunks: 'all'
-        //         }
-        //     }
-        // }
-        //}
-        //});
 
         config.plugin("provide").use(webpack.ProvidePlugin, [{
-            //     _: "lodash",
             $: "jquery",
             jQuery: "jquery",
-            //     moment: "moment"
         }]);
-
-
-        // config.plugin("runtime").use(RuntimePublicPathPlugin, [{
-        //     runtimePublicPath: "window.CONFIG == null ? '/' : window.CONFIG.assetsPath || '/'"
-        // }]);
-
-
-        // if (isHot) {
-        //     config.plugin("writefile").use(WriteFilePlugin, [
-        //         {
-        //             test: /\.cshtml$/,
-        //             useHashIndex: true,
-        //             force: true,
-        //             log: true
-        //         }
-        //     ]);
-
-        //     config.devServer
-        //         .clientLogLevel("info")
-        //         .contentBase(join("dist"))
-        //         .publicPath("/")
-        //         .headers({ "Access-Control-Allow-Origin": "*" });
-        // }
 
         config.module.rules.delete("eslint");
 
