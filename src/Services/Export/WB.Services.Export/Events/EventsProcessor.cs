@@ -94,10 +94,6 @@ namespace WB.Services.Export.Events
                     try
                     {
                         using var batchScope = this.serviceProvider.CreateTenantScope(tenant);
-                        if (feed.Events.First().GlobalSequence > 70000)
-                        {
-                            throw new Exception();
-                        }
                         var eventsHandler = batchScope.ServiceProvider.GetRequiredService<IEventsHandler>();
                         feedRanges.Add(new FeedRangeDebugDataItem(feed));
                         await eventsHandler.HandleEventsFeedAsync(feed, token);
