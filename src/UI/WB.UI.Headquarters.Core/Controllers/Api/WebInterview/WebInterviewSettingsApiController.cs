@@ -1,33 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Controllers;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
-    [RoutePrefix("api/v1/webInterviewSettings")]
+    [Route("api/v1/webInterviewSettings")]
     [Authorize(Roles = "Administrator, Headquarter")]
-    [ApiNoCache]
-    [CamelCase]
-    public class WebInterviewSettingsApiController : BaseApiController
+    [ResponseCache(NoStore = true)]
+    public class WebInterviewSettingsApiController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
 
         public WebInterviewSettingsApiController(
-            ICommandService commandService, 
-            ILogger logger, 
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory) : base(commandService, logger)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -43,7 +35,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [Route(@"{id}/pageTemplate")]
         [HttpPost]
-        public IHttpActionResult UpdatePageTemplate(string id, [FromBody]UpdatePageTemplateModel updateModel)
+        public IActionResult UpdatePageTemplate(string id, [FromBody]UpdatePageTemplateModel updateModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -74,7 +66,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [Route(@"{id}/emailTemplate")]
         [HttpPost]
-        public IHttpActionResult UpdateEmailTemplate(string id, [FromBody]UpdateEmailTemplateModel updateModel)
+        public IActionResult UpdateEmailTemplate(string id, [FromBody]UpdateEmailTemplateModel updateModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -101,7 +93,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [Route(@"{id}/pageMessage")]
         [HttpPost]
-        public IHttpActionResult UpdatePageMessage(string id, [FromBody]UpdatePageMessageModel updateModel)
+        public IActionResult UpdatePageMessage(string id, [FromBody]UpdatePageMessageModel updateModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -131,7 +123,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [Route(@"{id}/additionalSettings")]
         [HttpPost]
-        public IHttpActionResult UpdateAdditionalSettings(string id, [FromBody]UpdateAdditionalSettingsModel updateModel)
+        public IActionResult UpdateAdditionalSettings(string id, [FromBody]UpdateAdditionalSettingsModel updateModel)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
@@ -153,7 +145,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [Route(@"{id}/start")]
         [HttpPost]
-        public IHttpActionResult Start(string id)
+        public IActionResult Start(string id)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
@@ -175,7 +167,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [Route(@"{id}/stop")]
         [HttpPost]
-        public IHttpActionResult Stop(string id)
+        public IActionResult Stop(string id)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
