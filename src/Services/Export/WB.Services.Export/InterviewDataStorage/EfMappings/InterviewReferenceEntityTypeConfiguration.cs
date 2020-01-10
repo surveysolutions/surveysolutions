@@ -64,14 +64,15 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         public void Configure(EntityTypeBuilder<Assignment.Assignment> builder)
         {
             builder.ToTable("__assignment", schema);
-            builder.HasAlternateKey(a => a.Id);
             builder.HasKey(a => a.PublicKey);
+            builder.HasAlternateKey(a => a.Id);
 
+            builder.Property(a => a.Id).ValueGeneratedNever();
+            builder.Property(a => a.PublicKey).ValueGeneratedNever();
             builder.Property(a => a.WebMode).IsRequired(false);
             builder.Property(a => a.AudioRecording).IsRequired(true);
             builder.Property(a => a.Quantity).IsRequired(false);
             builder.Property(a => a.Comment).IsRequired(false);
-
         }
     }
 
