@@ -336,7 +336,7 @@ export default {
         getInterviewersUrl(supervisorId){
             return this.model.interviewersUrl
                 + '?questionnaireId=' + (this.questionnaireId || {}).key
-                + '&questionnaireVersion=' + (this.questionnaireVersion || {}).key
+                + '&questionnaireVersion=' + (this.questionnaireVersion || {}).key || ''
                 + '&from=' + this.from
                 + '&period=' + this.period.key
                 + '&columnCount=' + this.overTheLast.key
@@ -346,7 +346,7 @@ export default {
         getSupervisorsUrl() {
             return this.model.supervisorsUrl
                 + '?questionnaireId=' + (this.questionnaireId || {}).key
-                + '&questionnaireVersion=' + (this.questionnaireVersion || {}).key
+                + '&questionnaireVersion=' + (this.questionnaireVersion || {}).key || ''
                 + '&from=' + this.from
                 + '&period=' + this.period.key
                 + '&reportType=' + this.reportTypeId.key
@@ -365,11 +365,10 @@ export default {
             var title = this.model.reportName == 'Speed'
                     ? this.$t('MainMenu.Speed')
                     : this.$t('MainMenu.Quantity')
-            //title = `<span>${title}:</span><span>${(this.reportTypeId || {}).name}</span>`
-            title = `${title}: ${(this.reportTypeId || {}).value}`
+            title = `<span>${title}: </span><span>${(this.reportTypeId || {}).value}</span>`
 
             if (this.model.supervisorId) {
-                title += this.$t('PeriodicStatusReport.InTheSupervisorTeamFormat', this.model.supervisorName)
+                title += '<br />' + this.$t('PeriodicStatusReport.InTheSupervisorTeamFormat').replace('{0}', this.model.supervisorName)
             }
 
             return title
