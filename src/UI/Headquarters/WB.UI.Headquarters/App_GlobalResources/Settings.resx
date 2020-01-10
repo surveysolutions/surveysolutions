@@ -147,6 +147,9 @@
   <data name="UserProfileSettings_Title" xml:space="preserve">
     <value>User Profile settings</value>
   </data>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
+    <value>Web interview Settings</value>
+  </data>
   <data name="MobileAppSettings_Title" xml:space="preserve">
     <value>Interviewer/Supervisor application settings</value>
   </data>
@@ -156,8 +159,14 @@
   <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
     <value>Enumerator's Profile editing</value>
   </data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
+    <value>Web Interview Email Notifications</value>
+  </data>
   <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
     <value>Allow enumerators update their contact information in the profile</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+    <value>Allow Web Interview respondent to send emails (effective if mail provider was set up)</value>
   </data>
   <data name="InterviewerAutoUpdate" xml:space="preserve">
     <value>Enable automatic updates</value>
