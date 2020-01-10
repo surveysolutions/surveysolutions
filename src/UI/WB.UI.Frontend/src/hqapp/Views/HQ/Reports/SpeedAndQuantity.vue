@@ -1,5 +1,11 @@
 <template>
   <HqLayout :title="title" :subtitle="reportDescription" :hasFilter="true">
+    <div slot='subtitle'>
+        <a v-if="this.model.canNavigateToQuantityBySupervisors" :href="getSupervisorsUrl" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left"></span>{{ $t('PeriodicStatusReport.BackToSupervisors') }}
+        </a>
+    </div>
+
     <Filters slot="filters">
       <FilterBlock :title="$t('PeriodicStatusReport.InterviewActions')">
         <Typeahead
@@ -323,7 +329,10 @@ export default {
             requestData.columnCount = this.overTheLast.key
             requestData.period = this.period.key
             requestData.from = this.from
+            requestData.supervisorId = this.model.supervisorId
             requestData.timezoneOffsetMinutes = new Date().getTimezoneOffset()
+            requestData.pageIndex = 1
+            requestData.pageSize = 50000
         },
         formatNumber(value) {
             if (value == null || value == undefined)
@@ -335,22 +344,13 @@ export default {
         },
         getInterviewersUrl(supervisorId){
             return this.model.interviewersUrl
-                + '?questionnaireId=' + (this.questionnaireId || {}).key
-                + '&questionnaireVersion=' + (this.questionnaireVersion || {}).key || ''
+                + '?questionnaireId=' + ((this.questionnaireId || {}).key || '')
+                + '&questionnaireVersion=' + ((this.questionnaireVersion || {}).key || '')
                 + '&from=' + this.from
                 + '&period=' + this.period.key
                 + '&columnCount=' + this.overTheLast.key
                 + '&reportType=' + this.reportTypeId.key
                 + '&supervisorId=' + supervisorId;
-        },
-        getSupervisorsUrl() {
-            return this.model.supervisorsUrl
-                + '?questionnaireId=' + (this.questionnaireId || {}).key
-                + '&questionnaireVersion=' + (this.questionnaireVersion || {}).key || ''
-                + '&from=' + this.from
-                + '&period=' + this.period.key
-                + '&reportType=' + this.reportTypeId.key
-                + '&columnCount=' + this.overTheLast.key;
         },
         onTableReload(data) {
             this.dateTimeRanges = data.dateTimeRanges || []
@@ -375,6 +375,15 @@ export default {
         },
         reportDescription() {
             return this.model.reportNameDescription
+        },
+        getSupervisorsUrl() {
+            return this.model.supervisorsUrl
+                + '?questionnaireId=' + ((this.questionnaireId || {}).key || '')
+                + '&questionnaireVersion=' + ((this.questionnaireVersion || {}).key || '')
+                + '&from=' + (this.from || '')
+                + '&period=' + ((this.period || {}).key || '')
+                + '&reportType=' + ((this.reportTypeId || {}).key || '')
+                + '&columnCount=' + ((this.overTheLast || {}).key || '')
         },
         queryString() {
             return {
