@@ -28,7 +28,7 @@ namespace WB.Services.Export.Host.Controllers
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
-            IJobService jobService, 
+            IJobService jobService,
             IQuestionnaireStorage questionnaireStorage)
         {
             this.exportProcessesService = exportProcessesService ?? throw new ArgumentNullException(nameof(exportProcessesService));
@@ -122,7 +122,7 @@ namespace WB.Services.Export.Host.Controllers
                 new QuestionnaireId(questionnaireId), status, fromDate, toDate);
         }
 
-  
+
         [HttpGet]
         [ResponseCache(NoStore = true)]
         [Route("api/v1/job/download")]
@@ -190,15 +190,15 @@ namespace WB.Services.Export.Host.Controllers
         [Route("api/v1/job")]
         public async Task<ActionResult> DeleteDataExportProcess(string processId, TenantInfo tenant)
         {
-            var job = await jobService.GetJobAsync(tenant, processId, JobStatus.Running, JobStatus.Created);
-            if (job != null)
+            var job = await jobService.GetJobAsync(tenant, processId);
+            
+            if (job != null && job.Status == JobStatus.Running || job.Status != JobStatus.Created)
             {
                 this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
             }
 
             return Ok();
         }
-
 
         [HttpDelete]
         [Route("api/v1/job/byId")]
@@ -210,7 +210,7 @@ namespace WB.Services.Export.Host.Controllers
             if (job.Tenant != tenant.Id.Id) return NotFound();
 
             this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
-            
+
             return Ok();
         }
 
@@ -250,7 +250,7 @@ namespace WB.Services.Export.Host.Controllers
                 .GroupBy(x => x.NaturalId)
                 .Select(x => x.Max(s => s.ProcessId))
                 .ToList();
-         
+
             return result;
         }
     }
