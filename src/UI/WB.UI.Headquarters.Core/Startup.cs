@@ -215,7 +215,7 @@ namespace WB.UI.Headquarters
             services.AddOptions();
             services.AddControllersWithViews().AddNewtonsoftJson(j =>
             {
-                j.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
+                //j.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
                 j.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
 

@@ -94,7 +94,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 QuestionnaireId = request.QuestionnaireId,
                 QuestionnaireVersion = request.QuestionnaireVersion,
                 Statuses = request.Statuses,
-                SearchBy = request.SearchBy ?? request.Search.Value,
+                SearchBy = request.SearchBy ?? request.Search?.Value,
                 ResponsibleId = this.authorizedUser.Id,
                 AssignmentId = request.AssignmentId
             };

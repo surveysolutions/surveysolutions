@@ -1,36 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Models;
-using WB.UI.Headquarters.Models.ComponentModels;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [LimitsFilter]
-    [AuthorizeOr403(Roles = "Interviewer")]
-    public class InterviewerHqController : BaseController
+    [Authorize(Roles = "Interviewer")]
+    public class InterviewerHqController : Controller
     {
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
@@ -42,13 +36,12 @@ namespace WB.UI.Headquarters.Controllers
 
         public InterviewerHqController(
             ICommandService commandService,
-            ILogger logger,
             IAuthorizedUser authorizedUser,
             IUserViewFactory usersRepository,
             IPlainStorageAccessor<InterviewSummary> interviewSummaryReader,
             IAssignmentsService assignments,
             IInterviewUniqueKeyGenerator keyGenerator,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory) : base(commandService, logger)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
@@ -60,25 +53,25 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.CreateNew)]
-        public ActionResult CreateNew()
+        public IActionResult CreateNew()
         {
             return View("Index", NewModel(MenuItem.CreateNew));
         }
 
         [ActivePage(MenuItem.Started)]
-        public ActionResult Started()
+        public IActionResult Started()
         {
             return View("Interviews", NewModel(MenuItem.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
         }
 
         [ActivePage(MenuItem.Rejected)]
-        public ActionResult Rejected()
+        public IActionResult Rejected()
         {
             return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor));
         }
 
         [ActivePage(MenuItem.Completed)]
-        public ActionResult Completed()
+        public IActionResult Completed()
         {
             return View("Interviews", NewModel(MenuItem.Completed, InterviewStatus.Completed));
         }
@@ -121,24 +114,24 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public ActionResult StartNewInterview(int id)
+        public IActionResult StartNewInterview(int id)
         {
             var assignment = this.assignments.GetAssignment(id);
 
             var interviewId = CreateInterview(assignment);
-            TempData[WebInterviewController.LastCreatedInterviewIdKey] = interviewId;
+            TempData["lastCreatedInterviewId"] = interviewId; // todo replace with lastCreatedInterviewId from webinterview controller when its migrated
 
             return Content(Url.Content(GenerateUrl(@"Cover", interviewId)));
         }
 
         [HttpGet]
-        public ActionResult OpenInterview(Guid id)
+        public IActionResult OpenInterview(Guid id)
         {
             return RedirectToAction("Cover", "WebInterview", new { id = id.FormatGuid() });
         }
 
         [HttpDelete]
-        public ActionResult DiscardInterview(Guid id)
+        public IActionResult DiscardInterview(Guid id)
         {
             var deleteInterview = new DeleteInterviewCommand(id, this.authorizedUser.Id);
             this.commandService.Execute(deleteInterview);
@@ -146,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public ActionResult RestartInterview(Guid id, string comment)
+        public IActionResult RestartInterview(Guid id, string comment)
         {
             var restartCommand = new RestartInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow);
 
