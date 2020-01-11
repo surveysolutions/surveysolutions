@@ -50,104 +50,10 @@
       <HintPath>..\..\..\..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Update="Properties\EnumeratorUIResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\UIResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.ar.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.es.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.fr.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.id.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.ka.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.km.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.pt.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.resx">
+       <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>EnumeratorUIResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.ro.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.ru.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.th.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.uk.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.vi.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.zh.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.ar.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.es.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.fr.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.id.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.ka.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.km.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.pt.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.ro.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.ru.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.th.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.uk.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.vi.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.zh.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
