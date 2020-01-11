@@ -7,6 +7,7 @@
 <script>
 
 import { DateFormats } from "~/shared/helpers";
+import moment from "moment"
 
 export default {
     computed: {
@@ -36,10 +37,6 @@ export default {
                 sDom: 'rf<"table-with-scroll"t>ip'
             }
         }
-    },
-
-    mounted() {
-        this.$refs.table.reload();
     },
 
     methods: {

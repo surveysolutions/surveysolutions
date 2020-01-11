@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.UI.Headquarters.Models.ComponentModels;
 
 namespace WB.UI.Headquarters.Models
 {
