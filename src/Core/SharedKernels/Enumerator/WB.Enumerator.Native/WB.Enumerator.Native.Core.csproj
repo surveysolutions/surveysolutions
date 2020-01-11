@@ -34,35 +34,11 @@
   <ItemGroup>
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.1.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Update="Resources\WebInterview.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\WebInterview.resx">
+    <EmbeddedResource Update="*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>WebInterview.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.fr.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.ar.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.es.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.ka.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.ru.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.zh.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+
 </Project>

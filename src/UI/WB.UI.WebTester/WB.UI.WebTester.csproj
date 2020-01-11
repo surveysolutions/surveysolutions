@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <Content Include="appsettings.*.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true">
       <DependentUpon>appsettings.ini</DependentUpon>
     </Content>
@@ -64,11 +64,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Common.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>
-
 </Project>
