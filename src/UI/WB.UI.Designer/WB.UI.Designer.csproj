@@ -45,12 +45,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="*.resx">
+    <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>
 
-    <ItemGroup>
+  <ItemGroup>
     <None Update="appsettings.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

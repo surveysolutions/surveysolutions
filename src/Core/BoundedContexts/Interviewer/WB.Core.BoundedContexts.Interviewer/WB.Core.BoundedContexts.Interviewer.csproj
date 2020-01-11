@@ -39,16 +39,8 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Properties\InterviewerUIResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.resx">
+    <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

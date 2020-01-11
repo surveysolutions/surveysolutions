@@ -26,17 +26,10 @@
     <ProjectReference Include="..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
     <ProjectReference Include="..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Update="Resources\Modules.Designer.cs">
-      <DependentUpon>Modules.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Modules.resx">
-      <LastGenOutput>Modules.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-  </ItemGroup>  
+  </ItemGroup>
 </Project>
