@@ -1453,7 +1453,6 @@
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\InterviewerAuditLogController.cs" />
     <Compile Include="Controllers\AuditLogController.cs" />
-    <Compile Include="Controllers\InterviewerHqController.cs" />
     <Compile Include="Controllers\MapsApiController.cs" />
     <Compile Include="Controllers\MapsController.cs" />
     <Compile Include="Controllers\Profile\AccountController.cs" />
@@ -1479,7 +1478,6 @@
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
     <Compile Include="Models\Admin\EmailProviders.cs" />
     <Compile Include="Models\Admin\SettingsModel.cs" />
-    <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\Maps\MapsModel.cs" />
     <Compile Include="Models\Maps\UserMapModel.cs" />
     <Compile Include="Models\Maps\UserMapLinkModel.cs" />
@@ -1501,7 +1499,6 @@
     <Compile Include="Models\Account\UserModelBase.cs" />
     <Compile Include="Models\Api\AssignmentProfile.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
-    <Compile Include="Models\InterviewerHqModel.cs" />
     <Compile Include="Models\Reports\MapReportModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
@@ -1549,20 +1546,12 @@
     <Compile Include="Models\InterviewerModel.cs" />
     <Compile Include="Models\InterviewersFilter.cs" />
     <Compile Include="Models\InterviewersModel.cs" />
-    <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
     <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
-    <Compile Include="Models\LogOnModel.cs" />
-    <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
-    <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
-    <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
-    <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
-    <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
-    <Compile Include="Models\TeamsAndStatusesFilter.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />

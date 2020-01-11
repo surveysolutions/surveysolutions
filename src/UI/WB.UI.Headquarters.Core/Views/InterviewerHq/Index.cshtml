@@ -1,0 +1,15 @@
+﻿@using WB.UI.Headquarters.Code
+@{
+    ViewBag.Title = MainMenu.CreateNew;
+    Layout = @"~/Views/Shared/_AdminLayout.cshtml";
+}
+@section Scripts{
+    @Html.RenderHqConfig(new
+    {
+        AssignmentsEndpoint = Url.Action("Get", "AssignmentsApi"),
+        InterviewerHqEndpoint = Url.Content(@"~/interviewerHq")
+    })
+}
+
+
+<div id="vueApp"></div>

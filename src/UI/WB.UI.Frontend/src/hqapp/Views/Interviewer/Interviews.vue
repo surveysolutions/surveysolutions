@@ -250,10 +250,6 @@ export default {
         clearAssignmentFilter() {
             this.assignmentId = null;
         }
-    },
-
-    mounted() {
-        this.reload();
     }
 }
 </script>
