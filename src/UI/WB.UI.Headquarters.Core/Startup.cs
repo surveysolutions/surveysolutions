@@ -311,7 +311,6 @@ namespace WB.UI.Headquarters
                 app.UseHsts();
             }
 
-           
             InitModules(app, env);
             
             app.UseStaticFiles();
