@@ -9,8 +9,6 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
     <LangVersion>latest</LangVersion>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-
-    <!-- <PublishTrimmed>true</PublishTrimmed> -->
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
@@ -73,9 +71,9 @@
   </ItemGroup>
 
   <ItemGroup>
-      <EmbeddedResource Update="*.resx">
-          <Generator>PublicResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
+    <EmbeddedResource Update="**\*.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

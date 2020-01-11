@@ -28,16 +28,8 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Properties\TesterUIResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>TesterUIResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\TesterUIResources.resx">
+    <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>TesterUIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
