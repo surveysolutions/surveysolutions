@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -312,8 +313,16 @@ namespace WB.UI.Headquarters
             }
 
             InitModules(app, env);
-            
+
+#if DEBUG
             app.UseStaticFiles();
+#else
+            var fileProvider = new ManifestEmbeddedFileProvider(this.GetType().Assembly, "wwwroot");
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = fileProvider
+            });
+#endif
 
             app.UseRouting();
 

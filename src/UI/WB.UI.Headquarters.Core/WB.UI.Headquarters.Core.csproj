@@ -13,6 +13,10 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
     <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
@@ -39,6 +43,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0-rc4" />
@@ -74,6 +79,16 @@
     <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <EmbeddedResource Update="**\*.resx">
+      <ExcludeFromManifest>True</ExcludeFromManifest>
+    </EmbeddedResource>
+    <Content Update="wwwroot\**\*.*">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+    <EmbeddedResource Include="wwwroot\**\*" />
   </ItemGroup>
 
 </Project>
