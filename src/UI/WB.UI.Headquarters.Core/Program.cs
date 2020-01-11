@@ -24,6 +24,7 @@ namespace WB.UI.Headquarters
                 .ConfigureAppConfiguration((hostingContext, c) =>
                 {
                     c.AddIniFile("appsettings.ini", false, true);
+                    c.AddIniFile("appsettings.DEV_DEFAULTS.ini", true, true);
                     c.AddIniFile("appsettings.cloud.ini", true, true);
                     c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
                     c.AddIniFile("appsettings.Production.ini", true);
