@@ -3,7 +3,6 @@
         <header>
             <slot name="header"></slot>
         </header>
-        testseteet
         <main class="web-interview" :class="{'fullscreen-hidden-content': sidebarHidden}">
             <div class="container-fluid">
                 <slot></slot>
