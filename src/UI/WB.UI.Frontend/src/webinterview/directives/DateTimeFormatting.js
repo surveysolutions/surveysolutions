@@ -2,6 +2,7 @@
 import Vue from "vue"
 import { DateFormats } from "~/shared/helpers"
 import { forEach } from "lodash"
+import moment from "moment"
 
 Vue.directive("dateTimeFormatting", (el, binding) => {
     const timeElements = el.getElementsByTagName("time")
