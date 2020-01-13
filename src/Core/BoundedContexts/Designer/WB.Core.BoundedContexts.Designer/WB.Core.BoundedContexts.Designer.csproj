@@ -107,6 +107,36 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Common.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Country.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Country.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\KindOfData.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>KindOfData.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ModeOfDataCollection.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModeOfDataCollection.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Roster.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Roster.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\StudyType.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StudyType.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -117,5 +147,32 @@
 
   <ItemGroup>
     <Folder Include="Services\WebTester\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Common.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Country.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Country.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\KindOfData.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>KindOfData.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ModeOfDataCollection.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ModeOfDataCollection.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Roster.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\StudyType.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StudyType.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

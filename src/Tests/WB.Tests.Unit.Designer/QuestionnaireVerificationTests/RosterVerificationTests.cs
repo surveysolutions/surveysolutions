@@ -78,7 +78,25 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         displayMode:RosterDisplayMode.Matrix,
                         children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(variable: "test1 %rostertitle%", id: Id.g1)
+                            Create.SingleQuestion(variable: "test1 %rostertitle%", id:Id.g1)
+                        }
+                    ))
+                .ExpectError("WB0300");
+        }
+
+        [Test]
+        public void should_not_allow_roster_title_inside_matrix_roster_triggered_by_numeric()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(Id.g5),
+                    Create.Roster(
+                        rosterSizeQuestionId: Id.g5,
+                        title: "Roster ",
+                        rosterId: Id.gA,
+                        displayMode: RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.SingleQuestion(variable: "test1 %rostertitle%", id:Id.g1)
                         }
                     ))
                 .ExpectError("WB0300");

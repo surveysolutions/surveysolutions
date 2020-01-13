@@ -5,7 +5,7 @@
         Unknown = 0,
         QuestionnaireImported = 1,
         QuestionnaireDeleted = 2,
-        ExportStared = 3,
+        ExportStarted = 3,
         AssignmentsUpgradeStarted = 4,
         UserCreated = 5,
         AssignmentSizeChanged = 6,
