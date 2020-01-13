@@ -57,6 +57,7 @@ using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Headquarters
@@ -216,6 +217,8 @@ namespace WB.UI.Headquarters
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddUnderConstruction();
+
             services.AddOptions();
             services.AddControllersWithViews().AddNewtonsoftJson(j =>
             {
@@ -329,6 +332,7 @@ namespace WB.UI.Headquarters
             InitModules(app, env);
             
             app.UseStaticFiles();
+            app.UseUnderConstruction();
 
             app.UseRouting();
 
