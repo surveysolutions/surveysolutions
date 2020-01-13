@@ -56,8 +56,13 @@ const pages = {
 
     webinterview: {
         entry: "src/webinterview/main.js",
-        filename: path.join(hqDist, "Views", "Shared", "_WebInterview.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_WebInterview.Template.cshtml")
+        filename: path.join(hqDist, "Views", "WebInterview", "_WebInterviewLayout.cshtml"),
+        template: path.join(hqFolder, "Views", "WebInterview", "_WebInterviewLayout.Template.cshtml")
+    },
+    webinterviewRun: {
+        entry: "src/webinterview/main.js",
+        filename: path.join(hqDist, "Views", "WebInterview", "Index.cshtml"),
+        template: path.join(hqFolder, "Views", "WebInterview", "Index.Template.cshtml")
     },
 
     webtester: {

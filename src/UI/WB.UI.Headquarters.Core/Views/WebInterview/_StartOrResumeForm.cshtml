@@ -1,11 +1,15 @@
-﻿@using WB.Core.GenericSubdomains.Portable
+﻿@using reCAPTCHA.AspNetCore
+@using WB.Enumerator.Native.Resources
 @using WB.UI.Headquarters.Models.WebInterview
+@using WB.UI.Headquarters.Services
 @using WB.UI.Shared.Web.Captcha
 @model WB.UI.Headquarters.Models.WebInterview.StartWebInterview
 @{
     bool isPasswordInvalid = ViewData.ModelState.ContainsKey("InvalidPassword") && ViewData.ModelState["InvalidPassword"].Errors.Any();
     bool isResume = Model is ResumeWebInterview;
 }
+
+@inject ICaptchaProvider captchaProvider
 
 @if (Model.ServerUnderLoad)
 {
@@ -27,9 +31,17 @@
                 </p>
             </div>
         }
-        <div class="form-group">
-            @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
-        </div>
+            <div class="form-group">
+                @if (captchaProvider is RecaptchaProvider)
+                {
+                    @inject IOptions<RecaptchaSettings> RecaptchaSettings
+                        @Html.Recaptcha(RecaptchaSettings.Value)
+                }
+                else if (captchaProvider is HostedCaptchaProvider hosted)
+                {
+                    @hosted.Render(Html)
+                }
+            </div>
     }
 
     if (Model.HasPassword)

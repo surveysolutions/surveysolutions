@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.Services
 {
     public interface IReviewAllowedService
     {

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
@@ -14,19 +13,15 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Controllers;
 using WB.Enumerator.Native.WebInterview.Models;
-using WB.UI.Headquarters.API.WebInterview.Pipeline;
-using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
     [ApiNoCache]
-    [WebInterviewDataAuthorize]
-    [CamelCase]
-    [RoutePrefix("api/webinterview/commands")]
-    [WebInterviewObserverNotAllowedActionFilter]
+    [WebInterviewAuthorize]
+    [Route("api/webinterview/commands")]
+    [WebInterviewObserverNotAllowed]
     public class InterviewCommandsController : CommandsController
     {
         private readonly IAuthorizedUser authorizedUser;
@@ -42,7 +37,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         protected bool IsReviewMode() =>
-            this.authorizedUser.CanConductInterviewReview() && this.Request.Headers.Contains(@"review");
+            this.authorizedUser.CanConductInterviewReview() && this.Request.Headers.ContainsKey("review");
 
 
         protected override Guid GetCommandResponsibleId(Guid interviewId)
@@ -57,82 +52,82 @@ namespace WB.UI.Headquarters.API.WebInterview
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("changeLanguage")]
-        public override IHttpActionResult ChangeLanguage(Guid interviewId, [FromBody]ChangeLanguageRequest request) => base.ChangeLanguage(interviewId, request);
+        public override IActionResult ChangeLanguage(Guid interviewId, [FromBody]ChangeLanguageRequest request) => base.ChangeLanguage(interviewId, request);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerTextQuestion")]
-        public override IHttpActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest) => base.AnswerTextQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest) => base.AnswerTextQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerTextListQuestion")]
-        public override IHttpActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest) => base.AnswerTextListQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest) => base.AnswerTextListQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerGpsQuestion")]
-        public override IHttpActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest) => base.AnswerGpsQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest) => base.AnswerGpsQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerDateQuestion")]
-        public override IHttpActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest) => base.AnswerDateQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest) => base.AnswerDateQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerSingleOptionQuestion")]
-        public override IHttpActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerSingleOptionQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerSingleOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerLinkedSingleOptionQuestion")]
-        public override IHttpActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest< decimal[]> answerRequest) => base.AnswerLinkedSingleOptionQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest< decimal[]> answerRequest) => base.AnswerLinkedSingleOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerLinkedMultiOptionQuestion")]
-        public override IHttpActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest) => base.AnswerLinkedMultiOptionQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest) => base.AnswerLinkedMultiOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerMultiOptionQuestion")]
-        public override IHttpActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest) => base.AnswerMultiOptionQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest) => base.AnswerMultiOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerYesNoQuestion")]
-        public override IHttpActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest) => base.AnswerYesNoQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest) => base.AnswerYesNoQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerIntegerQuestion")]
-        public override IHttpActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerIntegerQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerIntegerQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerDoubleQuestion")]
-        public override IHttpActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest) => base.AnswerDoubleQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest) => base.AnswerDoubleQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("answerQRBarcodeQuestion")]
-        public override IHttpActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest) => base.AnswerQRBarcodeQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest) => base.AnswerQRBarcodeQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("removeAnswer")]
-        public override IHttpActionResult RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
+        public override IActionResult RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("sendNewComment")]
-        public override IHttpActionResult SendNewComment(Guid interviewId, [FromBody]NewCommentRequest request) => base.SendNewComment(interviewId, request);
+        public override IActionResult SendNewComment(Guid interviewId, [FromBody]NewCommentRequest request) => base.SendNewComment(interviewId, request);
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("completeInterview")]
-        public override IHttpActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
+        public override IActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
         {
             var command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment);
             this.commandService.Execute(command);
@@ -147,7 +142,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("approve")]
-        public IHttpActionResult Approve(Guid interviewId, [FromBody]ApproveInterviewRequest approveInterviewRequest)
+        public IActionResult Approve(Guid interviewId, [FromBody]ApproveInterviewRequest approveInterviewRequest)
         {
             if (this.authorizedUser.IsSupervisor)
             {
@@ -172,7 +167,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         [HttpPost]
         [WebInterviewObserverNotAllowed]
         [Route("reject")]
-        public IHttpActionResult Reject(Guid interviewId, [FromBody]RejectInterviewRequest rejectInterviewRequest)
+        public IActionResult Reject(Guid interviewId, [FromBody]RejectInterviewRequest rejectInterviewRequest)
         {
             if (this.authorizedUser.IsSupervisor)
             {
@@ -214,7 +209,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         [Route("resolveComment")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public IHttpActionResult ResolveComment(Guid interviewId, [FromBody]ResolveCommentRequest resolveCommentRequest)
+        public IActionResult ResolveComment(Guid interviewId, [FromBody]ResolveCommentRequest resolveCommentRequest)
         {
             var identity = Identity.Parse(resolveCommentRequest.Identity);
             var command = new ResolveCommentAnswerCommand(interviewId,
@@ -234,7 +229,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         [HttpPost]
         [Route("setFlag")]
         [WebInterviewObserverNotAllowed]
-        public IHttpActionResult SetFlag(Guid interviewId, [FromBody] SetFlagRequest request)
+        public IActionResult SetFlag(Guid interviewId, [FromBody] SetFlagRequest request)
         {
             this.interviewFactory.SetFlagToQuestion(interviewId, Identity.Parse(request.Identity), request.HasFlag);
             return Ok();

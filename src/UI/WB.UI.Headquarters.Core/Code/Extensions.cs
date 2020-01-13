@@ -8,6 +8,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.Security.Application;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NHibernate.SqlCommand;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Code
@@ -116,6 +117,30 @@ namespace WB.UI.Headquarters.Code
         public static string QuestionnaireNameVerstionFirst(this IHtmlHelper html, string name, long version)
         {
             return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
+        }
+
+        public static T Get<T>(this ISession session, string key)
+        {
+            var str = session.GetString(key);
+            if (str != null)
+            {
+                return JsonConvert.DeserializeObject<T>(str);
+            }
+
+            return default;
+        }
+
+        public static void Set<T>(this ISession session, string key, T value)
+        {
+            if (value != null)
+            {
+                var str = JsonConvert.SerializeObject(value);
+                session.SetString(key, str);
+            }
+            else
+            {
+                session.Remove(key);
+            }
         }
     }
 }
