@@ -153,11 +153,11 @@ namespace WB.Services.Export.Services
                     Storage = GetStorageType(variableLabels.ValueType)
                 };
 
-                meta.Variables[index].VarLabel = variableLabels.Label;
+                meta.Variables[index].VarLabel = variableLabels.Value.Name;
 
                 var valueSet = new ValueSet();
 
-                foreach (var variableValueLabel in variableLabels.VariableValueLabels)
+                foreach (var variableValueLabel in variableLabels.Value.VariableValues)
                 {
                     double value;
                     if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))

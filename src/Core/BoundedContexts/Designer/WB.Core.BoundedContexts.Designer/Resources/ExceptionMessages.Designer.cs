@@ -151,6 +151,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to extract categories from uploaded file.
+        /// </summary>
+        public static string CategoriesCantBeExtracted {
+            get {
+                return ResourceManager.GetString("CategoriesCantBeExtracted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to column.
         /// </summary>
         public static string Column {
@@ -165,6 +174,87 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string ComboboxCannotBeFound {
             get {
                 return ResourceManager.GetString("ComboboxCannotBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicated categories in rows: {0}.
+        /// </summary>
+        public static string Excel_Categories_Duplicated {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Duplicated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some categories don&apos;t have a parent id.
+        /// </summary>
+        public static string Excel_Categories_Empty_ParentId {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Empty_ParentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] Empty text.
+        /// </summary>
+        public static string Excel_Categories_Empty_Text {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Empty_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] Empty value.
+        /// </summary>
+        public static string Excel_Categories_Empty_Value {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Empty_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] Invalid numeric value.
+        /// </summary>
+        public static string Excel_Categories_Int_Invalid {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Int_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories set should have at least 2 categories.
+        /// </summary>
+        public static string Excel_Categories_Less_2_Options {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Less_2_Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories set has more than {0} categories.
+        /// </summary>
+        public static string Excel_Categories_More_Than_Limit {
+            get {
+                return ResourceManager.GetString("Excel_Categories_More_Than_Limit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] Text of category should be less than 250 characters.
+        /// </summary>
+        public static string Excel_Categories_Text_More_Than_250 {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Text_More_Than_250", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No categories in file.
+        /// </summary>
+        public static string Excel_NoCategories {
+            get {
+                return ResourceManager.GetString("Excel_NoCategories", resourceCulture);
             }
         }
         
@@ -237,6 +327,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string ImportOptions_ParentValueNotFound {
             get {
                 return ResourceManager.GetString("ImportOptions_ParentValueNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only tab-separated values (*.tab, *.txt, *.tsv) or excel (*.xslx, *.xls, *.ods) files are accepted.
+        /// </summary>
+        public static string ImportOptions_Tab_Or_Excel_Only {
+            get {
+                return ResourceManager.GetString("ImportOptions_Tab_Or_Excel_Only", resourceCulture);
             }
         }
         

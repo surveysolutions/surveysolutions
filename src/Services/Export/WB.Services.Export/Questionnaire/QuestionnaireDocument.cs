@@ -14,9 +14,12 @@ namespace WB.Services.Export.Questionnaire
         {
             this.memoryCache = new MemoryCache(new MemoryCacheOptions());
             this.Translations = new List<Translation>();
+            this.Categories = new List<Categories>();
         }
 
         public List<Translation> Translations { get; set; }
+
+        public List<Categories> Categories { get; set; }
 
         public string Id { get; set;}
         public int Revision { get; set; }

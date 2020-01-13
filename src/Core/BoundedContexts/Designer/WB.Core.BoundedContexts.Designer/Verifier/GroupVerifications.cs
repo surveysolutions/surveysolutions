@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -61,7 +60,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(TableRosterHasMoreThanAllowedEntities, "WB0283", string.Format(VerificationMessages.WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInTableRoster)),
             Error<IGroup>(TableRosterCantContainsSupervisorQuestions, "WB0284", VerificationMessages.WB0284_TableRosterCantContainsSupervisorQuestions),
             Error<IGroup>(TableRosterContainsOnlyAllowedQuestionTypes, "WB0285", VerificationMessages.WB0285_TableRosterContainsOnlyAllowedQuestionTypes),
-
+            Error<IGroup>(MatrixRosterContainsOnlyAllowedQuestionTypes, "WB0297", VerificationMessages.WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes),
+            Error<IGroup>(MatrixRosterHasMoreThanAllowedEntities, "WB0298", string.Format(VerificationMessages.WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInMatrixRoster)),
+            Error<IGroup>(MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions, "WB0299", VerificationMessages. WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions),
+            Error<IGroup>(MatrixRosterHasToContainNoLinkedQuestions, "WB0301", VerificationMessages. WB0301_MatrixRosterHasToContainNoLinkedQuestions),
+            
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
             Warning<IGroup>(EmptyGroup, "WB0202", VerificationMessages.WB0202_GroupWithoutQuestions),
@@ -73,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Warning<IGroup>(NestedRosterDegree3OrMore, "WB0233", VerificationMessages.WB0233_NestedRosterDegree3OrMore),
             Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
             Warning<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
-            Warning<IGroup>(TableRosterWorksOnlyInWebMode, "WB0286", VerificationMessages.WB0286_TableRosterWorksOnlyInWebMode),
+            Warning<IGroup>(TableAndMatrixRosterWorksOnlyInWebMode, "WB0286", VerificationMessages.WB0286_TableAndMatixRosterWorksOnlyInWebMode),
         };
 
         private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>
@@ -497,6 +500,42 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return false;
         }
 
+        private static bool MatrixRosterHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Count() > MaxEntitiesInMatrixRoster;
+
+        private static bool MatrixRosterContainsOnlyAllowedQuestionTypes(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>
+            {
+                if (composite is IQuestion question)
+                    switch (question.QuestionType)
+                    {
+                        case QuestionType.SingleOption:
+                        case QuestionType.MultyOption:
+                            return question.IsFilteredCombobox == true 
+                                   || question.CascadeFromQuestionId != null 
+                                   || (question as MultyOptionsQuestion)?.YesNoView == true;
+                        default: return true;
+                    }
+                return true;
+            });
+
+        private static bool MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>
+            {
+                if (composite is IQuestion question)
+                    return question.QuestionScope == QuestionScope.Supervisor 
+                           || question.QuestionScope == QuestionScope.Headquarter;
+                return false;
+            });
+
+        private static bool MatrixRosterHasToContainNoLinkedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>
+            {
+                if (composite is IQuestion question)
+                    return question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue;
+                return false;
+            });
+
         private static bool TableRosterHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Table && group.Children.Count() > MaxEntitiesInTableRoster;
 
@@ -534,8 +573,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return false;
             });
 
-        private static bool TableRosterWorksOnlyInWebMode(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.DisplayMode == RosterDisplayMode.Table;
+        private static bool TableAndMatrixRosterWorksOnlyInWebMode(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Table || group.DisplayMode == RosterDisplayMode.Matrix;
 
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(

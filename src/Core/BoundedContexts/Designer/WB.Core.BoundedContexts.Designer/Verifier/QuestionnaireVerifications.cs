@@ -109,6 +109,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         Name = r.Name,
                         Reference = CreateReference(r)
                     })
+                ).Union(questionnaire.Categories
+                    .Where(x => !string.IsNullOrEmpty(x.Name))
+                    .Select(r => new
+                    {
+                        Name = r.Name,
+                        Reference = QuestionnaireEntityReference.CreateForCategories(r.Id)
+                    })
                 ).Union(questionnaire.VariableName.ToEnumerable()
                     .Where(x => !string.IsNullOrEmpty(x))
                     .Select(r => new
@@ -116,6 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         Name = r,
                         Reference = QuestionnaireEntityReference.CreateForQuestionnaire(questionnaire.PublicKey)
                     })
+
                 ).ToList();
 
 
@@ -445,6 +453,19 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         traslatedEntityWithSubstitution.TranslationName,
                         referenceToEntityWithSubstitution);
                 }
+                else if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length > 0)
+                {
+                    var parentGroup = questionnaire.Questionnaire.GetParentGroupsIds(traslatedEntityWithSubstitution.Entity);
+                    var roster = questionnaire.Questionnaire.GetRoster(parentGroup.First());
+                    if (roster != null && roster.DisplayMode == RosterDisplayMode.Matrix)
+                    {
+                        return QuestionnaireVerificationMessage.Error("WB0300",
+                            VerificationMessages.WB0300,
+                            traslatedEntityWithSubstitution.TranslationName,
+                            referenceToEntityWithSubstitution);
+                    }
+                }
+
                 return null;
             }
 
@@ -626,16 +647,7 @@ string code, Func<MultiLanguageQuestionnaireDocument, bool> hasError, string mes
                     ? new[] { QuestionnaireVerificationMessage.Warning(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
-
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)
-            where TEntity : class, IComposite
-        {
-            return questionnaire =>
-                questionnaire
-                    .Find<TEntity>(entity => hasError(entity, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
-        }
-
+        
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(
             string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError,  string message)
             where TEntity : class, IComposite

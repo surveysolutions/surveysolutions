@@ -17,5 +17,6 @@ namespace WB.Services.Export.Questionnaire
         public List<LabelItem> Labels { get; set; }
         public int[] ColumnValues { get; set; }
         public bool IsIdentifyingQuestion { get; internal set; }
+        public Guid? LabelReferenceId { get; set; }
     }
 }

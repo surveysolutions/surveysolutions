@@ -61,9 +61,14 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
 
         private static void TranslateAnswerOptions(IQuestion question, ITranslation translation)
         {
+            var categoriesId = (question as ICategoricalQuestion)?.CategoriesId;
+
             foreach (var answerOption in question.Answers)
             {
-                TranslateAnswerOption(question.PublicKey, answerOption, translation);
+                if (categoriesId.HasValue)
+                    TranslateCategories(categoriesId.Value, answerOption, translation);
+                else
+                    TranslateAnswerOption(question.PublicKey, answerOption, translation);
             }
         }
 
@@ -71,8 +76,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             answerOption.AnswerText = Translate(
                 original: answerOption.AnswerText,
-                translated: translation.GetAnswerOption(questionId, answerOption.AnswerValue));
+                translated: translation.GetAnswerOption(questionId, answerOption.AnswerValue, answerOption.ParentValue));
         }
+
+        private static void TranslateCategories(Guid categoriesId, Answer answerOption, ITranslation translation) =>
+            answerOption.AnswerText = Translate(
+                original: answerOption.AnswerText,
+                translated: translation.GetCategoriesText(categoriesId, (int)answerOption.GetParsedValue(), answerOption.GetParsedParentValue()));
 
         private static void TranslateSpecialValues(IQuestion question, ITranslation translation)
         {

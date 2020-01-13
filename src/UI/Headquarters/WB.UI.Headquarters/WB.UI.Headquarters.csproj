@@ -256,6 +256,9 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="PasswordGenerator, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\PasswordGenerator.2.0.5\lib\netstandard2.0\PasswordGenerator.dll</HintPath>
+    </Reference>
     <Reference Include="Polly, Version=7.0.0.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Polly.7.1.1\lib\netstandard2.0\Polly.dll</HintPath>
     </Reference>
@@ -795,6 +798,16 @@
     </Content>
     <Content Include="App_GlobalResources\Reports.zh.resx">
       <DependentUpon>Reports.resx</DependentUpon>
+    </Content>
+    <Content Include="App_GlobalResources\Roles.resx">
+      <SubType>Designer</SubType>
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Roles.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Roles.ru.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Roles.ru.designer.cs</LastGenOutput>
+      <DependentUpon>Roles.resx</DependentUpon>
     </Content>
     <Content Include="App_GlobalResources\Settings.ar.resx">
       <DependentUpon>Settings.resx</DependentUpon>
@@ -2196,6 +2209,7 @@
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
     <Compile Include="API\DataCollection\Enumerator\EnumeratorWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Enumerator\LogsApiController.cs" />
+    <Compile Include="API\DataCollection\Enumerator\v1\ReusableCategoriesApiV1Controller.cs" />
     <Compile Include="API\Export\UserExportApiController.cs" />
     <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.sq.designer.cs">
@@ -2257,6 +2271,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reports.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Roles.Designer.cs">
+      <DependentUpon>Roles.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="App_GlobalResources\Settings.sq.designer.cs">
       <AutoGen>True</AutoGen>

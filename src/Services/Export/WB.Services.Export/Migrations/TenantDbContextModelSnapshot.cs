@@ -15,38 +15,43 @@ namespace WB.Services.Export.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("WB.Services.Export.Assignment.Assignment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id");
+                    b.Property<Guid>("PublicKey")
+                        .HasColumnName("public_key")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("AudioRecording")
-                        .HasColumnName("audio_recording");
+                        .HasColumnName("audio_recording")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Comment")
-                        .HasColumnName("comment");
+                        .HasColumnName("comment")
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("PublicKey")
-                        .HasColumnName("public_key");
+                    b.Property<int>("Id")
+                        .HasColumnName("id")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("Quantity")
-                        .HasColumnName("quantity");
+                        .HasColumnName("quantity")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("ResponsibleId")
-                        .HasColumnName("responsible_id");
+                        .HasColumnName("responsible_id")
+                        .HasColumnType("uuid");
 
                     b.Property<bool?>("WebMode")
-                        .HasColumnName("web_mode");
+                        .HasColumnName("web_mode")
+                        .HasColumnType("boolean");
 
-                    b.HasKey("Id")
-                        .HasName("pk_assignments");
+                    b.HasKey("PublicKey");
 
-                    b.HasAlternateKey("PublicKey");
+                    b.HasAlternateKey("Id");
 
                     b.ToTable("__assignment");
                 });
@@ -54,39 +59,48 @@ namespace WB.Services.Export.Migrations
             modelBuilder.Entity("WB.Services.Export.Assignment.AssignmentAction", b =>
                 {
                     b.Property<long>("GlobalSequence")
-                        .HasColumnName("global_sequence");
+                        .HasColumnName("global_sequence")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Position")
-                        .HasColumnName("position");
+                        .HasColumnName("position")
+                        .HasColumnType("integer");
 
                     b.Property<int>("AssignmentId")
-                        .HasColumnName("assignment_id");
+                        .HasColumnName("assignment_id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Comment")
-                        .HasColumnName("comment");
+                        .HasColumnName("comment")
+                        .HasColumnType("text");
 
                     b.Property<string>("NewValue")
-                        .HasColumnName("new_value");
+                        .HasColumnName("new_value")
+                        .HasColumnType("text");
 
                     b.Property<string>("OldValue")
-                        .HasColumnName("old_value");
+                        .HasColumnName("old_value")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("OriginatorId")
-                        .HasColumnName("originator_id");
+                        .HasColumnName("originator_id")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ResponsibleId")
-                        .HasColumnName("responsible_id");
+                        .HasColumnName("responsible_id")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Status")
-                        .HasColumnName("status");
+                        .HasColumnName("status")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("TimestampUtc")
-                        .HasColumnName("timestamp_utc");
+                        .HasColumnName("timestamp_utc")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("GlobalSequence", "Position");
 
-                    b.HasIndex("AssignmentId")
-                        .HasName("ix_assignment_actions_assignment_id");
+                    b.HasIndex("AssignmentId");
 
                     b.ToTable("__assignment__action");
                 });
@@ -94,11 +108,12 @@ namespace WB.Services.Export.Migrations
             modelBuilder.Entity("WB.Services.Export.InterviewDataStorage.GeneratedQuestionnaireReference", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id");
+                        .HasColumnName("id")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnName("deleted_at");
+                        .HasColumnName("deleted_at")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id")
                         .HasName("pk_generated_questionnaires");
@@ -110,25 +125,32 @@ namespace WB.Services.Export.Migrations
                 {
                     b.Property<Guid>("InterviewId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("interview_id");
+                        .HasColumnName("interview_id")
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("AssignmentId")
-                        .HasColumnName("assignment_id");
+                        .HasColumnName("assignment_id")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("DeletedAtUtc")
-                        .HasColumnName("deleted_at_utc");
+                        .HasColumnName("deleted_at_utc")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Key")
-                        .HasColumnName("key");
+                        .HasColumnName("key")
+                        .HasColumnType("text");
 
                     b.Property<string>("QuestionnaireId")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("questionnaire_id")
+                        .HasColumnType("text");
 
                     b.Property<int>("Status")
-                        .HasColumnName("status");
+                        .HasColumnName("status")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdateDateUtc")
-                        .HasColumnName("update_date_utc");
+                        .HasColumnName("update_date_utc")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("InterviewId");
 
@@ -138,25 +160,17 @@ namespace WB.Services.Export.Migrations
             modelBuilder.Entity("WB.Services.Export.InterviewDataStorage.Metadata", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id");
+                        .HasColumnName("id")
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
-                        .HasColumnName("value");
+                        .HasColumnName("value")
+                        .HasColumnType("text");
 
                     b.HasKey("Id")
                         .HasName("pk_metadata");
 
                     b.ToTable("metadata");
-                });
-
-            modelBuilder.Entity("WB.Services.Export.Assignment.AssignmentAction", b =>
-                {
-                    b.HasOne("WB.Services.Export.Assignment.Assignment", "Assignment")
-                        .WithMany("Actions")
-                        .HasForeignKey("AssignmentId")
-                        .HasConstraintName("fk_assignment_actions_assignments_assignment_id")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

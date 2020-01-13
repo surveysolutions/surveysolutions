@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Main.Core.Entities.SubEntities
@@ -36,6 +37,8 @@ namespace Main.Core.Entities.SubEntities
             return parsedParentValue;
         }
 
+        public bool HasValue() => AnswerCode.HasValue || !string.IsNullOrEmpty(AnswerValue);
+
         public static Answer CreateFromOther(Answer answer)
         {
             return new Answer
@@ -45,6 +48,23 @@ namespace Main.Core.Entities.SubEntities
                 ParentValue = answer.ParentValue,
                 AnswerCode = answer.AnswerCode
             };
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Answer answer &&
+                   AnswerText == answer.AnswerText &&
+                   EqualityComparer<decimal?>.Default.Equals(GetParsedValue(), answer.GetParsedValue()) &&
+                   EqualityComparer<decimal?>.Default.Equals(GetParsedParentValue(), answer.GetParsedParentValue());
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1711232258;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AnswerText);
+            hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedValue());
+            hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedParentValue());
+            return hashCode;
         }
     }
 }

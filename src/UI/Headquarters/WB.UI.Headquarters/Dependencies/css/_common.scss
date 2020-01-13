@@ -37,7 +37,7 @@ html {
 		min-height: 100%;
 		position: relative;
 		color: $gray_text; 
-		min-width: 360px;
+		//min-width: 360px;
 		padding: 70px 0 100px;
 		font: 16px/18px Arial, sans-serif;
 		@include gradient-horizontal($gray_form, $gray_form);

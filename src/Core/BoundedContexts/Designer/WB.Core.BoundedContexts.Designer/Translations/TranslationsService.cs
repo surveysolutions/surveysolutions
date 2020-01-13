@@ -9,8 +9,10 @@ using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
@@ -45,14 +47,17 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly ITranslationsExportService translationsExportService;
-        
+        private readonly ICategoriesService categoriesService;
+
         public TranslationsService(DesignerDbContext dbContext,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            ITranslationsExportService translationsExportService)
+            ITranslationsExportService translationsExportService,
+            ICategoriesService categoriesService)
         {
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.translationsExportService = translationsExportService;
+            this.categoriesService = categoriesService;
         }
 
         public ITranslation Get(Guid questionnaireId, Guid translationId)
@@ -67,23 +72,21 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         }
 
         public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid translationId) =>
-            this.GetTranslationFileWithSpecifiedFormat(questionnaireId, translationId);
+            this.GetTranslationFile(questionnaireId, translationId);
 
         public TranslationFile GetTemplateAsExcelFile(Guid questionnaireId) =>
-            this.GetTemplateFileWithSpecifiedFormat(questionnaireId);
+            this.GetTranslationFile(questionnaireId);
 
-        private TranslationFile GetTranslationFileWithSpecifiedFormat(Guid questionnaireId, Guid translationId)
+        private TranslationFile GetTranslationFile(Guid questionnaireId, Guid? translationId = null)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
-            var translation = this.Get(questionnaireId, translationId);
-            return translationsExportService.GenerateTranslationFile(questionnaire, translationId, translation);
-        }
+            var translation = translationId.HasValue
+                ? this.Get(questionnaireId, translationId.Value)
+                : new QuestionnaireTranslation(new List<TranslationDto>());
 
-        private TranslationFile GetTemplateFileWithSpecifiedFormat(Guid questionnaireId)
-        {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
-            var translation = new QuestionnaireTranslation(new List<TranslationDto>());
-            return translationsExportService.GenerateTranslationFile(questionnaire, Guid.Empty, translation);
+            var categoriesService = new CategoriesService(questionnaireId, this.categoriesService);
+
+            return translationsExportService.GenerateTranslationFile(questionnaire, translationId ?? Guid.Empty, translation, categoriesService);
         }
 
         public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)
@@ -99,23 +102,29 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     {
                         if (package.Workbook.Worksheets.Count == 0)
                         {
-                            throw new InvalidExcelFileException(ExceptionMessages.TranslationFileIsEmpty);
+                            throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);
                         }
 
                         var sheetsWithTranslation = package.Workbook.Worksheets
-                            .Where(x => x.Name == TranslationExcelOptions.WorksheetName || x.Name.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix))
+                            .Where(x => x.Name == TranslationExcelOptions.WorksheetName ||
+                                        x.Name.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix) ||
+                                        x.Name.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix))
                             .ToList();
 
                         if (!sheetsWithTranslation.Any())
-                            throw new InvalidExcelFileException(ExceptionMessages.TranslationWorksheetIsMissing);
+                            throw new InvalidFileException(ExceptionMessages.TranslationWorksheetIsMissing);
 
                         var translationsWithHeaderMap = sheetsWithTranslation.Select(CreateHeaderMap).ToList();
 
-                        var translationErrors = this.Verify(translationsWithHeaderMap).Take(10).ToList();
-                        if (translationErrors.Any())
-                            throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) { FoundErrors = translationErrors };
-
                         var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+                        var categories = questionnaire.Categories?
+                                             .ToDictionary(x => $"{TranslationExcelOptions.CategoriesWorksheetPreffix}{x.Name.ToLower()}".ToLower(), x => x.Id)
+                                         ?? new Dictionary<string, Guid>();
+
+                        var translationErrors = this.Verify(translationsWithHeaderMap, categories).Take(10).ToList();
+                        if (translationErrors.Any())
+                            throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors) { FoundErrors = translationErrors };
+
                         Dictionary<Guid, bool> idsOfAllQuestionnaireEntities =
                             questionnaire.Children.TreeToEnumerable(x => x.Children).ToDictionary(composite => composite.PublicKey, x=>x is Group);
 
@@ -123,6 +132,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         foreach (var translationWithHeaderMap in translationsWithHeaderMap)
                         {
                             var worksheet = translationWithHeaderMap.Worksheet;
+                            var worksheetName = worksheet.Name.ToLower();
                             var end = worksheet.Dimension.End.Row;
 
                             for (int rowNumber = 2; rowNumber <= end; rowNumber++)
@@ -131,23 +141,13 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                                 if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
-                                var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
-                                if (!idsOfAllQuestionnaireEntities.Keys.Contains(questionnaireEntityId)) continue;
+                                var translationInstance = categories.ContainsKey(worksheetName)
+                                    ? GetCategoriesTranslation(questionnaireId, translationId, categories,
+                                        worksheetName, importedTranslation)
+                                    : GetQuestionnaireTranslation(questionnaireId, translationId,
+                                        importedTranslation, idsOfAllQuestionnaireEntities);
 
-                                var translationType = (TranslationType) Enum.Parse(typeof(TranslationType), importedTranslation.Type);
-
-                                var cleanedValue = this.GetCleanedValue(translationType, idsOfAllQuestionnaireEntities[questionnaireEntityId], importedTranslation.Translation);
-
-                                var translationInstance = new TranslationInstance
-                                {
-                                    Id = Guid.NewGuid(),
-                                    QuestionnaireId = questionnaireId,
-                                    TranslationId = translationId,
-                                    QuestionnaireEntityId = questionnaireEntityId,
-                                    Value = cleanedValue,
-                                    TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
-                                    Type = translationType
-                                };
+                                if(translationInstance == null) continue;
 
                                 translationInstances.Add(translationInstance);
                             }
@@ -167,17 +167,53 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 }
                 catch (NullReferenceException e)
                 {
-                    throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+                    throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
                 catch (InvalidDataException e)
                 {
-                    throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+                    throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
                 catch (COMException e)
                 {
-                    throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+                    throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
             }
+        }
+
+        private TranslationInstance GetCategoriesTranslation(Guid questionnaireId, Guid translationId,
+            Dictionary<string, Guid> categories, string worksheetName, TranslationRow importedTranslation) =>
+            new TranslationInstance
+            {
+                Id = Guid.NewGuid(),
+                QuestionnaireId = questionnaireId,
+                TranslationId = translationId,
+                QuestionnaireEntityId = categories[worksheetName],
+                Value = this.GetCleanedValue(TranslationType.Categories, false, importedTranslation.Translation),
+                TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
+                Type = TranslationType.Categories
+            };
+
+        private TranslationInstance GetQuestionnaireTranslation(Guid questionnaireId, Guid translationId, TranslationRow importedTranslation,
+            Dictionary<Guid, bool> idsOfAllQuestionnaireEntities)
+        {
+            var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
+            if (!idsOfAllQuestionnaireEntities.Keys.Contains(questionnaireEntityId)) return null;
+
+            var translationType = (TranslationType) Enum.Parse(typeof(TranslationType), importedTranslation.Type);
+
+            var cleanedValue = this.GetCleanedValue(translationType, idsOfAllQuestionnaireEntities[questionnaireEntityId],
+                importedTranslation.Translation);
+
+            return new TranslationInstance
+            {
+                Id = Guid.NewGuid(),
+                QuestionnaireId = questionnaireId,
+                TranslationId = translationId,
+                QuestionnaireEntityId = questionnaireEntityId,
+                Value = cleanedValue,
+                TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
+                Type = translationType
+            };
         }
 
         private TranslationsWithHeaderMap CreateHeaderMap(ExcelWorksheet worksheet)
@@ -215,12 +251,17 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        private IEnumerable<TranslationValidationError> Verify(IEnumerable<TranslationsWithHeaderMap> sheetsWithTranslation)
+        private IEnumerable<ImportValidationError> Verify(
+            IEnumerable<TranslationsWithHeaderMap> sheetsWithTranslation, Dictionary<string, Guid> categories)
         {
-            var errors = new List<TranslationValidationError>();
+            var errors = new List<ImportValidationError>();
             foreach (var worksheet in sheetsWithTranslation)
             {
-                errors.AddRange(this.Verify(worksheet).Take(10).ToList());
+                var validationErrors = (categories.ContainsKey(worksheet.Worksheet.Name.ToLower())
+                    ? this.VerifyCategories(worksheet)
+                    : this.Verify(worksheet)).Take(10).ToList();
+
+                errors.AddRange(validationErrors);
                 if (errors.Count >= 10)
                     return errors;
             }
@@ -262,28 +303,28 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             Translation = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.TranslationIndex}{rowNumber}"].GetValue<string>()
         };
 
-        private IEnumerable<TranslationValidationError> Verify(TranslationsWithHeaderMap worksheetWithHeadersMap)
+        private IEnumerable<ImportValidationError> Verify(TranslationsWithHeaderMap worksheetWithHeadersMap)
         {
             var worksheet = worksheetWithHeadersMap.Worksheet;
             var end = worksheet.Dimension.End.Row;
 
             if (worksheetWithHeadersMap.EntityIdIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.EntityIdColumnName),
                 };
             if (worksheetWithHeadersMap.TypeIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.TranslationTypeColumnName),
                 };
             if (worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName),
                 };
             if (worksheetWithHeadersMap.TranslationIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.TranslationTextColumnName),
                 };
@@ -305,7 +346,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.EntityIdIndex}{rowNumber}";
 
-                    yield return new TranslationValidationError
+                    yield return new ImportValidationError
                     {
                         Message = string.Format(ExceptionMessages.TranslationCel_A_lIsInvalid, TranslationExcelOptions.EntityIdColumnName, cellAddress),
                         ErrorAddress = cellAddress
@@ -316,7 +357,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.TypeIndex}{rowNumber}";
 
-                    yield return new TranslationValidationError
+                    yield return new ImportValidationError
                     {
                         Message = string.Format(ExceptionMessages.TranslationCellTypeIsInvalid, TranslationExcelOptions.TranslationTypeColumnName, cellAddress),
                         ErrorAddress = cellAddress
@@ -327,13 +368,68 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}";
 
-                    yield return new TranslationValidationError
+                    yield return new ImportValidationError
                     {
                         Message = string.Format(ExceptionMessages.TranslationCellIndexIsInvalid, TranslationExcelOptions.TranslationTypeColumnName, cellAddress),
                         ErrorAddress = cellAddress
                     };
                 }
             }
+        }
+
+        private IEnumerable<ImportValidationError> VerifyCategories(TranslationsWithHeaderMap worksheetWithHeadersMap)
+        {
+            var worksheet = worksheetWithHeadersMap.Worksheet;
+            var end = worksheet.Dimension.End.Row;
+            
+            if (worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex == null)
+                yield return new ImportValidationError
+                {
+                    Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName),
+                };
+            if (worksheetWithHeadersMap.TranslationIndex == null)
+                yield return new ImportValidationError
+                {
+                    Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.TranslationTextColumnName),
+                };
+
+            if (worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex == null
+                || worksheetWithHeadersMap.TranslationIndex == null)
+            {
+                yield break;
+            }
+
+
+            for (int rowNumber = 2; rowNumber <= end; rowNumber++)
+            {
+                var importedTranslation = GetExcelTranslation(worksheetWithHeadersMap, rowNumber);
+
+                if (string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
+                {
+                    var cellAddress = $"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}";
+
+                    yield return new ImportValidationError
+                    {
+                        Message = string.Format(ExceptionMessages.TranslationCellIndexIsInvalid, TranslationExcelOptions.TranslationTypeColumnName, cellAddress),
+                        ErrorAddress = cellAddress
+                    };
+                }
+            }
+        }
+
+        private class CategoriesService : ICategories
+        {
+            private readonly Guid questionnaireId;
+            private readonly ICategoriesService categoriesService;
+
+            public CategoriesService(Guid questionnaireId, ICategoriesService categoriesService)
+            {
+                this.questionnaireId = questionnaireId;
+                this.categoriesService = categoriesService;
+            }
+
+            public List<CategoriesItem> GetCategories(Guid categoriesId) =>
+                this.categoriesService.GetCategoriesById(questionnaireId, categoriesId).ToList();
         }
     }
 }

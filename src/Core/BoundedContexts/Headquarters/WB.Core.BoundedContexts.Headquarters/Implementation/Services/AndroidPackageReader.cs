@@ -9,6 +9,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     internal class AndroidPackageReader : IAndroidPackageReader
     {
+        private const string VersionNameAttributeName = "versionName";
+        private const string VersionCodeAttributeName = "versionCode";
+
         public AndroidPackageInfo Read(Stream fileStream)
         {
             byte[] manifestData = null;
@@ -36,14 +39,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             string xml = new APKManifest().ReadManifestFileIntoXml(manifestData);
             XmlDocument manifestXml = new XmlDocument();
             manifestXml.LoadXml(xml);
-            var versionCode = this.ExtractVersionCode(manifestXml);
+            var versionCode = this.ExtractValueByAttributeNameFromManifest(manifestXml, VersionCodeAttributeName);
+            var versionString = this.ExtractValueByAttributeNameFromManifest(manifestXml, VersionNameAttributeName);
 
             return new AndroidPackageInfo
             {
-                Version = string.IsNullOrEmpty(versionCode) ? (int?)null : int.Parse(versionCode)
+                BuildNumber = string.IsNullOrEmpty(versionCode) ? (int?)null : int.Parse(versionCode),
+                VersionString = versionString
             };
         }
-
+        
         public AndroidPackageInfo Read(string pathToApkFile)
         {
             using (var fileStream = File.OpenRead(pathToApkFile))
@@ -316,15 +321,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return null;
         }
         
-        public string ExtractVersionCode(XmlDocument manifestXml)
+        public string ExtractValueByAttributeNameFromManifest(XmlDocument manifestXml, string attributeName)
         {
             XmlDocument doc = manifestXml;
             if (doc == null)
                 throw new Exception("Document initialize failed");
                 
             var versionCode = 
-                 this.FindInDocument(doc, "manifest", "versionCode") 
-              ?? this.FuzzFindInDocument(doc, "manifest", "versionCode");
+                 this.FindInDocument(doc, "manifest", attributeName) 
+              ?? this.FuzzFindInDocument(doc, "manifest", attributeName);
             
             return versionCode;
         }

@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             (DateTime first, DateTime last) timestamps = (DateTime.Now, DateTime.UtcNow);
 
-            var recievedPackagesLog = new InMemoryPlainStorage<SuperivsorReceivedPackageLogEntry, int>();
+            var recievedPackagesLog = Create.Storage.InMemorySqlitePlainStorage<SuperivsorReceivedPackageLogEntry, int>();
             recievedPackagesLog.Store(new SuperivsorReceivedPackageLogEntry
             {
                 FirstEventId = Id.gA,

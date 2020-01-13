@@ -53,7 +53,6 @@ namespace WB.Services.Export.InterviewDataStorage.Services
                         CreateValidityTableForGroup(connection, storedGroup);
                     }
 
-                    dbContext.SaveChanges();
 
                     logger.LogInformation("Created database structure for {tenantName} ({questionnaireId} [{table}])",
                         this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId,
