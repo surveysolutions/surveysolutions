@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Web.UnderConstruction
 
         public async Task Invoke(HttpContext context)
         {
-            if (underConstructionInfo.Status != UnderConstructionStatus.Finished && !IsCssStylesRequest(context))
+            if (underConstructionInfo.Status != UnderConstructionStatus.Finished)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
                 context.Response.Headers.Add("Retry-After", "30");
@@ -26,15 +26,6 @@ namespace WB.UI.Shared.Web.UnderConstruction
             }
 
             await next.Invoke(context);
-        }
-
-        private bool IsCssStylesRequest(HttpContext context)
-        {
-            return context.Request.Path.HasValue && 
-                   (
-                       context.Request.Path.Value.StartsWith("/Dependencies/build/")
-                       || context.Request.Path.Value.StartsWith("/Content/identity/favicon")
-                   );
         }
     }
 }
