@@ -24,6 +24,9 @@ import DetailsInfo from './DetailsInfo.vue'
 import Vue from 'vue'
 import http from "~/webinterview/api/http";
 
+import "@/assets/css/markup-web-interview.scss"
+import "@/assets/css/markup-interview-review.scss"
+
 export default {
     watch: {
         ['$route.hash'](to) {
