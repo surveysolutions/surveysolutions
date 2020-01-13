@@ -58,6 +58,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.UnderConstruction;
 using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Headquarters
