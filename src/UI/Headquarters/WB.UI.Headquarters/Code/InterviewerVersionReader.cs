@@ -13,19 +13,35 @@ namespace WB.UI.Headquarters.Code
             this.clientApkProvider = clientApkProvider;
         }
 
-        public int? Version
+        public int? InterviewerBuildNumber
         {
             get
             {
-                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
+                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
             }
         }
 
-        public int? SupervisorVersion
+        public int? SupervisorBuildNumber
         {
             get
             {
-                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.SupervisorFileName);
+                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
+            }
+        }
+
+        public string InterviewerVersionString
+        {
+            get
+            {
+                return this.clientApkProvider.GetApplicationVersionString(ClientApkInfo.InterviewerFileName);
+            }
+        }
+
+        public string SupervisorVersionString
+        {
+            get
+            {
+                return this.clientApkProvider.GetApplicationVersionString(ClientApkInfo.SupervisorFileName);
             }
         }
     }

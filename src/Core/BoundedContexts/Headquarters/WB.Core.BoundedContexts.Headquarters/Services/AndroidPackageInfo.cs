@@ -2,6 +2,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     public class AndroidPackageInfo
     {
-        public int? Version { get; set; }
+        public int? BuildNumber { get; set; }
+
+        public string VersionString { get; set; }
     }
 }

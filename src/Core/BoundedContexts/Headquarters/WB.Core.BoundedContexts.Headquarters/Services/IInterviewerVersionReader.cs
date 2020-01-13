@@ -2,7 +2,9 @@
 {
     public interface IInterviewerVersionReader
     {
-        int? Version { get; }
-        int? SupervisorVersion { get; }
+        int? InterviewerBuildNumber { get; }
+        int? SupervisorBuildNumber { get; }
+        string InterviewerVersionString { get; }
+        string SupervisorVersionString { get; }
     }
 }
