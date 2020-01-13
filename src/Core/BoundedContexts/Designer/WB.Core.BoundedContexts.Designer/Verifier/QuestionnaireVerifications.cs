@@ -453,6 +453,19 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         traslatedEntityWithSubstitution.TranslationName,
                         referenceToEntityWithSubstitution);
                 }
+                else if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length > 0)
+                {
+                    var roster =
+                        questionnaire.Questionnaire.GetRoster(vectorOfRosterQuestionsByEntityWithSubstitutions.Last());
+                    if (roster != null && roster.DisplayMode == RosterDisplayMode.Matrix)
+                    {
+                        return QuestionnaireVerificationMessage.Error("WB0300",
+                            VerificationMessages.WB0300,
+                            traslatedEntityWithSubstitution.TranslationName,
+                            referenceToEntityWithSubstitution);
+                    }
+                }
+
                 return null;
             }
 
