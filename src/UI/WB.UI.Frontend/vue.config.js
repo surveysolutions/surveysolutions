@@ -20,7 +20,7 @@ const locales = {
         "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI",
         "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport"],
     webtester: ["WebInterviewUI", "WebInterview", "Common"],
-    webinterview: ["WebInterviewUI", "WebInterview", "Common"]
+    webinterview: ["WebInterviewUI", "WebInterview", "Common", "Details"]
 }
 
 const isPack = process.argv.indexOf("--package") >= 0;

@@ -41,7 +41,7 @@
     import { entityDetails } from "../mixins"
     import flatPickr from './ui/vue-flatpickr'
     import { DateFormats } from "~/shared/helpers"
-
+    import moment from "moment"
     export default {
         name: "DateTime",
         mixins: [entityDetails],

@@ -64,7 +64,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpGet]
         [Route("getTopFilteredOptionsForQuestionWithExclude")]
-        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, [FromQuery]  int[] excludedOptionIds = null) 
+        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, [FromQuery(Name = "excludedOptionIds[]")] int[] excludedOptionIds = null) 
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, excludedOptionIds);
 
         [HttpGet]
@@ -81,7 +81,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpGet]
         [Route("getEntitiesDetails")]
-        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromQuery] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
+        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("getFullSectionInfo")]
@@ -118,7 +118,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpGet]
         [Route("getSidebarChildSectionsOf")]
-        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromQuery] string[] ids, string sectionId = null) => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
+        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string sectionId = null) => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("search")]
