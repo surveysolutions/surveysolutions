@@ -16,11 +16,14 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
     {
         private readonly IAuthorizedUser authorizedUser;
 
-        public HqWebInterviewInterviewEntityFactory(IMapper autoMapper, 
+        public HqWebInterviewInterviewEntityFactory(IMapper autoMapper,
             IAuthorizedUser authorizedUser,
             IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy,
             ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy,
-            IWebNavigationService webNavigationService) : base(autoMapper, enumeratorGroupStateCalculationStrategy, supervisorGroupStateCalculationStrategy, webNavigationService)
+            IWebNavigationService webNavigationService,
+            ISubstitutionTextFactory substitutionTextFactory) : base(autoMapper,
+            enumeratorGroupStateCalculationStrategy, supervisorGroupStateCalculationStrategy, webNavigationService,
+            substitutionTextFactory)
         {
             this.authorizedUser = authorizedUser;
         }

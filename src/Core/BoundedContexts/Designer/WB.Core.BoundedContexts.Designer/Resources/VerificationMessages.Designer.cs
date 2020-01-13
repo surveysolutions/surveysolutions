@@ -2085,5 +2085,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0301_MatrixRosterHasToContainNoLinkedQuestions", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Substitution cannot reference items from same roster level..
+        /// </summary>
+        public static string WB0302 {
+            get {
+                return ResourceManager.GetString("WB0302", resourceCulture);
+            }
+        }
     }
 }

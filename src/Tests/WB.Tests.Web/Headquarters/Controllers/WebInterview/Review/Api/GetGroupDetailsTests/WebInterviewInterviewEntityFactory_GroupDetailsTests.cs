@@ -95,7 +95,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
             return new WebInterviewInterviewEntityFactory(mapper, 
                 enumeratorGroupStateCalculationStrategy,
                 supervisorGroupStateCalculationStrategy,
-                Mock.Of<IWebNavigationService>());
+                Mock.Of<IWebNavigationService>(), 
+                Mock.Of<ISubstitutionTextFactory>());
         }
     }
 }
