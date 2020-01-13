@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.API.WebInterview.Services;
@@ -38,6 +39,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
+            registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
