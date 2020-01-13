@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Newtonsoft.Json;
@@ -42,7 +40,8 @@ namespace WB.UI.Headquarters.Code
         // TODO: Add memory caching
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var files = webHostEnvironment.WebRootFileProvider.GetDirectoryContents(Path.TrimEnd('/') + "/" + Component);
+            var folder = Path.TrimEnd('/') + "/" + Component;
+            var files = webHostEnvironment.WebRootFileProvider.GetDirectoryContents(folder);
 
             Dictionary<string, string> locales = new Dictionary<string, string>();
 
@@ -52,7 +51,7 @@ namespace WB.UI.Headquarters.Code
 
                 if (match.Success == false) continue;
 
-                locales.Add(match.Groups["component"].Value, GetServerPath(file.PhysicalPath));
+                locales.Add(match.Groups["component"].Value, folder + '/' + file.Name);
             }
 
             output.TagName = "script";

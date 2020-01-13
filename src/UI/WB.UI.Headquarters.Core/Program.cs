@@ -20,6 +20,7 @@ namespace WB.UI.Headquarters
                         .AddFilter("Microsoft", LogLevel.Warning)
                         .SetMinimumLevel(LogLevel.Warning);
                 })
+                
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureAppConfiguration((hostingContext, c) =>
                 {
