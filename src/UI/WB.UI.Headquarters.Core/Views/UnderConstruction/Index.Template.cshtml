@@ -1,6 +1,10 @@
-﻿@using WB.Core.Infrastructure.Versions
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code
+﻿@using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Hosting
+@using WB.Core.Infrastructure.Versions
 @using WB.UI.Shared.Web.Extensions
+@inject IProductVersion productVersion
+@inject IWebHostEnvironment webHostEnvironment
+
 @model WB.UI.Shared.Web.Controllers.UnderConstructionController.UnderConstructionModel
 
 @{
@@ -15,14 +19,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <details></details>
-    @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
-
-    <!-- css_markup:css -->
-    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
-    <!-- endinject -->
-    <!-- css_markupSpecific:css -->
-    <link rel='stylesheet' async href='@Url.Content("~/Dependencies/build/markup-specific.css")'>
-    <!-- endinject -->
+    @Html.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
 </head>
 <body style="display: block;" class="wide-navbar under-construction">
     <header>
@@ -37,7 +34,7 @@
                 </div>
             </div>
         </nav>
-        </header>
+    </header>
     <main class="">
         <div class="container">
             <div class="row">
@@ -47,9 +44,9 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <p class="gray-font extra-margin-bottom">
-@*
-                                    @string.Format(UnderConstruction.ContactUsPhrase, $"<a href='#' class='gray-link-underline'>{UnderConstruction.ContactUsLinkText}</a>")
-*@
+                                    @*
+                                        @string.Format(UnderConstruction.ContactUsPhrase, $"<a href='#' class='gray-link-underline'>{UnderConstruction.ContactUsLinkText}</a>")
+                                    *@
                                 </p>
                             </div>
                         </div>
@@ -71,19 +68,15 @@
                 &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="https://www.worldbank.org/en/about/legal">@Pages.Layout_Legal</a>.
             </div>
             <div class="text-left">
-                @(DependencyResolver.Current.GetService<IProductVersion>())
-                @if (AppSettings.IsDebugBuilded)
+                @(productVersion.ToString())
+                @if (webHostEnvironment.IsDevelopment())
                 {
                     <span id="build-config">[.NET Debug]</span>
                 }
-                @if (HttpContext.Current.IsDebuggingEnabled)
+                @*@if (HttpContext.Current.IsDebuggingEnabled)
                 {
                     <span id="compile-config" style="color: red">Web Debug</span>
-                }
-                @*
-            <span>|</span>
-            <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
-                *@
+                }*@
             </div>
         </div>
     </footer>

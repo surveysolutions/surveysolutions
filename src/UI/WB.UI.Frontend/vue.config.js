@@ -69,6 +69,12 @@ const pages = {
         entry: "src/webinterview/main.js",
         filename: path.join(webTesterDist, "Views", "Shared", "_Layout.cshtml"),
         template: path.join(webTesterFolder, "Views", "Shared", "_Layout.Template.cshtml")
+    },
+
+    under_constraction: {
+        entry: "src/pages/hq_legacy.js",
+        filename: path.join(hqDist, "Views", "UnderConstruction", "Index.cshtml"),
+        template: path.join(hqFolder, "Views", "UnderConstruction", "Index.Template.cshtml")
     }
 };
 
