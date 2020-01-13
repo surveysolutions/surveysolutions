@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Code
 
                 if (match.Success == false) continue;
 
-                locales.Add(match.Groups["component"].Value, folder + '/' + file.Name);
+                locales.Add(match.Groups["component"].Value, '/' + folder + '/' + file.Name);
             }
 
             output.TagName = "script";
