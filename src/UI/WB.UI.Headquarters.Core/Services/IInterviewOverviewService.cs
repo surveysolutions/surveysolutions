@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.Services
 {
     public interface IInterviewOverviewService
     {

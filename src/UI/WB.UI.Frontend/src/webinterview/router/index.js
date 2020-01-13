@@ -29,7 +29,7 @@ function NewRouter(store) {
                 }
             },
             {
-                name: "webinterview",
+                name: "WebInterview",
                 path: "/:interviewId",
                 components: {
                     default: Interview,

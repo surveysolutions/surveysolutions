@@ -1137,12 +1137,6 @@
     <Content Include="Views\SurveySetup\InterviewImportProgress.cshtml" />
     <Content Include="Views\SurveySetup\Index.cshtml" />
     <Content Include="Views\Interviewers\Index.cshtml" />
-    <Content Include="Views\WebInterview\Start.cshtml" />
-    <Content Include="Views\WebInterview\Resume.cshtml" />
-    <Content Include="Views\WebInterview\_WebInterviewLayout.cshtml" />
-    <Content Include="Views\WebInterview\OutdatedBrowser.cshtml" />
-    <Content Include="Views\WebInterview\Finish.cshtml" />
-    <Content Include="Views\WebInterview\Error.cshtml" />
     <Content Include="Views\Shared\QueueIndicator.cshtml" />
     <Content Include="Views\Interviewer\Profile.cshtml" />
     <Content Include="Views\Shared\_notice.cshtml" />
@@ -1169,7 +1163,6 @@
     <Content Include="Views\Reports\StatusDuration.cshtml" />
     <Content Include="Views\Shared\_export-buttons.cshtml" />
     <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
-    <Content Include="Views\WebInterview\Index.cshtml" />
     <Content Include="Views\AuditLog\Index.cshtml" />
     <Content Include="Views\Interview\Review.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
@@ -1196,7 +1189,6 @@
     <Content Include="Views\WebEmails\EmailHtml.cshtml" />
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
-    <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
     <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
     <Content Include="Views\Diagnostics\Logs.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
@@ -1276,8 +1268,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TakeNewInterview.sq.resx</DependentUpon>
     </Compile>
-    <Compile Include="API\WebInterview\InterviewCommandsController.cs" />
-    <Compile Include="API\WebInterview\InterviewDataController.cs" />
     <Compile Include="API\TabletLogsApiController.cs" />
     <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewDataAuthorizeAttribute.cs" />
@@ -1338,26 +1328,11 @@
     <Compile Include="API\DataCollection\Supervisor\v1\DevicesApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\UsersApiController.cs" />
     <Compile Include="API\WebInterview\HqWebInterviewModule.cs" />
-    <Compile Include="API\WebInterview\IReviewAllowedService.cs" />
-    <Compile Include="API\WebInterview\IStatefullInterviewSearcher.cs" />
-    <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\LinksExportController.cs" />
-    <Compile Include="API\PagedApiResponse.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="API\WebInterview\Pipeline\HandlePauseEventPipelineModule.cs" />
-    <Compile Include="API\WebInterview\SearchResults.cs" />
-    <Compile Include="API\WebInterview\Services\HqWebInterviewInterviewEntityFactory.cs" />
-    <Compile Include="API\WebInterview\IInterviewOverviewService.cs" />
-    <Compile Include="API\WebInterview\Services\InterviewOverviewService.cs" />
     <Compile Include="API\WebInterview\Services\InterviewQuestionFilter.cs" />
-    <Compile Include="API\WebInterview\Services\Overview\OverviewWebGroupNode.cs" />
-    <Compile Include="API\WebInterview\Services\Overview\OverviewWebQuestionNode.cs" />
-    <Compile Include="API\WebInterview\Services\Overview\OverviewWebSectionNode.cs" />
-    <Compile Include="API\WebInterview\Services\Overview\OverviewWebStaticTextNode.cs" />
-    <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
-    <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
-    <Compile Include="API\WebInterview\WebStatefulInterviewExtensions.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
     <Compile Include="App_GlobalResources\DataExport.designer.cs">
       <AutoGen>True</AutoGen>
@@ -1472,7 +1447,6 @@
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\WebEmailsController.cs" />
-    <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Code\CustomAutofacHubActivator.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
@@ -1493,9 +1467,7 @@
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\Profile\TeamController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
-    <Compile Include="Controllers\WebInterviewController.cs" />
     <Compile Include="Filters\ActivePageAttribute.cs" />
-    <Compile Include="Filters\BrowsersRestriction.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Implementation\Services\InterviewCreatorFromAssignment.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
@@ -1504,7 +1476,6 @@
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
     <Compile Include="Models\Reports\MapReportModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
-    <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
     <Compile Include="Filters\ErrorLoggerFilter.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
@@ -1562,9 +1533,6 @@
     <Compile Include="Models\UserPreloading\UserPreloadingProcessState.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
-    <Compile Include="Models\WebInterview\EmailModel.cs" />
-    <Compile Include="Models\WebInterview\StartWebInterview.cs" />
-    <Compile Include="Models\WebInterview\WebInterviewIndexPageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataExportStatusReader.cs" />
     <Compile Include="Services\MetricsService.cs" />

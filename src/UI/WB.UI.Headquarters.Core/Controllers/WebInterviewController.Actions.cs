@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Enumerator.Native.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    public partial class WebInterviewController : BaseController
+    public partial class WebInterviewController : Controller
     {
         [HttpPost]
-        public async Task<ActionResult> EmailLink(string interviewId, string email)
+        public async Task<IActionResult> EmailLink(string interviewId, string email)
         {
             var assignmentId = interviewSummary.GetById(interviewId)?.AssignmentId ?? 0;
             var assignment = assignments.GetAssignment(assignmentId);
@@ -29,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers
                 await invitationMailingService.SendResumeAsync(invitationId, assignment, email);
                 if (Request.Cookies[AskForEmail] != null)
                 {
-                    Response.Cookies[AskForEmail].Expires = DateTime.UtcNow.AddDays(-1);
+                    Response.Cookies.Delete(AskForEmail);
                 }
 
                 return this.Json("ok");
@@ -42,7 +41,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Audio(Guid interviewId, string questionId, HttpPostedFileBase file)
+        public async Task<ActionResult> Audio(Guid interviewId, string questionId, IFormFile file)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
@@ -55,24 +54,23 @@ namespace WB.UI.Headquarters.Controllers
             }
             try
             {
-                using (var ms = new MemoryStream())
-                {
-                    await file.InputStream.CopyToAsync(ms);
+                using var ms = new MemoryStream();
 
-                    byte[] bytes = ms.ToArray();
+                await file.CopyToAsync(ms);
 
-                    var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes);
+                byte[] bytes = ms.ToArray();
 
-                    var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
+                var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes);
 
-                    audioFileStorage.StoreInterviewBinaryData(interviewId, fileName, audioInfo.Binary, audioInfo.MimeType);
+                var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
 
-                    var command = new AnswerAudioQuestionCommand(interview.Id,
-                        interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
-                        fileName, audioInfo.Duration);
+                audioFileStorage.StoreInterviewBinaryData(interviewId, fileName, audioInfo.Binary, audioInfo.MimeType);
 
-                    this.commandService.Execute(command);
-                }
+                var command = new AnswerAudioQuestionCommand(interview.Id,
+                    interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
+                    fileName, audioInfo.Duration);
+
+                this.commandService.Execute(command);
             }
             catch (Exception e)
             {
@@ -83,7 +81,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Image(Guid interviewId, string questionId, HttpPostedFileBase file)
+        public async Task<ActionResult> Image(Guid interviewId, string questionId, IFormFile file)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
@@ -99,20 +97,19 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
-                using (var ms = new MemoryStream())
-                {
-                    await file.InputStream.CopyToAsync(ms);
+                using var ms = new MemoryStream();
 
-                    this.imageProcessingService.Validate(ms.ToArray());
+                await file.CopyToAsync(ms);
 
-                    filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
-                    var responsibleId = interview.CurrentResponsibleId;
+                this.imageProcessingService.Validate(ms.ToArray());
 
-                    this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
+                filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
+                var responsibleId = interview.CurrentResponsibleId;
 
-                    this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
-                }
+                this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
+                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
+
+                this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
             }
             catch (Exception e) 
             {
