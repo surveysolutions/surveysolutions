@@ -16,7 +16,7 @@ namespace WB.UI.Shared.Web.UnderConstruction
             this.underConstructionInfo = underConstructionInfo;
         }
 
-        public async Task Invoke(HttpContext context)
+        public Task Invoke(HttpContext context)
         {
             if (underConstructionInfo.Status != UnderConstructionStatus.Finished)
             {
@@ -25,7 +25,7 @@ namespace WB.UI.Shared.Web.UnderConstruction
                 context.Request.Path = "/UnderConstruction";
             }
 
-            await next.Invoke(context);
+            return next.Invoke(context);
         }
     }
 }

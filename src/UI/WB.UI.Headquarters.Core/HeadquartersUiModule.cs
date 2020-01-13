@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
@@ -36,7 +37,7 @@ namespace WB.UI.Headquarters
             services.Bind<ICaptchaService, WebCacheBasedCaptchaService>();
             registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
-
+            registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
 
