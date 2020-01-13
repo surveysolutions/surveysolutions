@@ -19,7 +19,7 @@ using WB.UI.Headquarters.Filters;
 namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
     [ApiNoCache]
-    [WebInterviewAuthorize]
+    [WebInterviewAuthorize(InterviewIdQueryString = "interviewId")]
     [Route("api/webinterview/commands")]
     [WebInterviewObserverNotAllowed]
     public class InterviewCommandsController : CommandsController

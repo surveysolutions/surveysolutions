@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -7,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Controllers.Services;
@@ -41,6 +43,10 @@ namespace WB.UI.Headquarters
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
+            registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new WebInterviewAutoMapProfile());
+            }).CreateMapper());
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
 
