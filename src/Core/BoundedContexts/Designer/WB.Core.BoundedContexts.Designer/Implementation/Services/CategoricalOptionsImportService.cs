@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using MissingFieldException = CsvHelper.MissingFieldException;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -21,28 +22,39 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     public class CategoricalOptionsImportService : ICategoricalOptionsImportService
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-        public CategoricalOptionsImportService(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader)
+        private readonly ICategoriesService categoriesService;
+
+        public CategoricalOptionsImportService(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+            ICategoriesService categoriesService)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
+            this.categoriesService = categoriesService;
         }
 
         public ImportCategoricalOptionsResult ImportOptions(Stream file, string questionnaireId, Guid categoricalQuestionId)
         {
             var document = this.questionnaireDocumentReader.GetById(questionnaireId);
-            var question = document?.Find<IQuestion>(categoricalQuestionId);
+            var question = document?.Find<ICategoricalQuestion>(categoricalQuestionId);
 
             if (question == null)
                 return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionCannotBeFound, categoricalQuestionId));
 
             var importedOptions = new List<QuestionnaireCategoricalOption>();
-            var importErrors = new List<string>();
+            
             var cfg = this.CreateCsvConfiguration();
 
             var isCascadingQuestion = question.CascadeFromQuestionId.HasValue;
             if (isCascadingQuestion)
             {
-                var parentCascadingQuestion = document.Find<IQuestion>(question.CascadeFromQuestionId.Value);
-                if (parentCascadingQuestion.Answers.Count == 0)
+                var parentCascadingQuestion = document.Find<ICategoricalQuestion>(question.CascadeFromQuestionId.Value);
+
+                if (parentCascadingQuestion == null)
+                    return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionCannotBeFound,
+                        question.CascadeFromQuestionId.Value));
+
+                if ((parentCascadingQuestion.CategoriesId.HasValue && 
+                    !this.categoriesService.GetCategoriesById(document.PublicKey, parentCascadingQuestion.CategoriesId.Value).Any()) || 
+                    (!parentCascadingQuestion.CategoriesId.HasValue && parentCascadingQuestion.Answers.Count == 0))
                 {
                     return ImportCategoricalOptionsResult.Failed(
                         string.Format(ExceptionMessages.NoParentCascadingOptions, parentCascadingQuestion.VariableName));
@@ -53,6 +65,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 cfg.RegisterClassMap(new CascadingOptionMap(allValuesByAllParents, importedOptions));
             }
             else cfg.RegisterClassMap<CategoricalOptionMap>();
+
+            return ReadCategories(file, cfg, importedOptions);
+        }
+
+        private static ImportCategoricalOptionsResult ReadCategories(Stream file, Configuration cfg,
+            List<QuestionnaireCategoricalOption> importedOptions)
+        {
+            var importErrors = new List<string>();
 
             using (var csvReader = new CsvReader(new StreamReader(file), cfg))
             {
@@ -78,7 +98,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             importErrors.Add(e.Message);
                     }
                 }
-
             }
 
             return importErrors.Count > 0
@@ -91,14 +110,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var result = new Dictionary<string, (int value, int? parentValue)[]>();
 
-            IQuestion cascadingQuestion = null;
+            ICategoricalQuestion cascadingQuestion = null;
 
             while (parentQuestionId != null)
             {
-                cascadingQuestion = document.Find<IQuestion>(parentQuestionId.Value);
+                cascadingQuestion = document.Find<ICategoricalQuestion>(parentQuestionId.Value);
 
                 result.Add(cascadingQuestion.VariableName,
-                    cascadingQuestion.Answers.Select(x => ((int) x.GetParsedValue(), x.GetParsedParentValue())).ToArray());
+                    cascadingQuestion.CategoriesId.HasValue
+                        ? this.categoriesService.GetCategoriesById(document.PublicKey, cascadingQuestion.CategoriesId.Value).ToList().Select(x => (x.Id, x.ParentId)).ToArray()
+                        : cascadingQuestion.Answers.Select(x => ((int) x.GetParsedValue(), x.GetParsedParentValue())).ToArray());
 
                 parentQuestionId = cascadingQuestion.CascadeFromQuestionId;
             }
@@ -210,7 +231,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 }
             }
         }
-
+        
         private class CategoricalOptionMap : ClassMap<QuestionnaireCategoricalOption>
         {
             public CategoricalOptionMap()

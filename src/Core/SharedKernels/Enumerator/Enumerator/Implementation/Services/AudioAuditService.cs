@@ -38,12 +38,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             audioAuditService.StartAuditRecording($"{interviewId.FormatGuid()}-{fileNamePrefix}");
         }
 
-        public Task StopAudioRecordingAsync(Guid interviewId)
+        public void StopAudioRecording(Guid interviewId)
         {
             audioAuditService.StopAuditRecording();
             CheckAndProcessAllAuditFiles();
-
-            return Task.CompletedTask;
         }
 
         private void ProcessAllFiles(string[] files)

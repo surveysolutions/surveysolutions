@@ -5,13 +5,14 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
-using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.Headquarters.API.Filters;
 
 namespace WB.UI.Headquarters.API.Export
@@ -23,12 +24,15 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISerializer serializer;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
 
-        public QuestionnaireApiController(IQuestionnaireStorage questionnaireStorage, ISerializer serializer, IPlainKeyValueStorage<QuestionnairePdf> pdfStorage)
+        public QuestionnaireApiController(IQuestionnaireStorage questionnaireStorage, ISerializer serializer, IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
+            IReusableCategoriesStorage reusableCategoriesStorage)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.pdfStorage = pdfStorage ?? throw new ArgumentNullException(nameof(pdfStorage));
+            this.reusableCategoriesStorage = reusableCategoriesStorage;
         }
 
         [Route("{id}")]
@@ -37,9 +41,10 @@ namespace WB.UI.Headquarters.API.Export
         public HttpResponseMessage Get(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-            QuestionnaireDocument questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+
             var response = new HttpResponseMessage();
-            response.Content = new StringContent(this.serializer.Serialize(questionnaireDocumentVersioned), Encoding.UTF8, "application/json");
+            response.Content = new StringContent(this.serializer.Serialize(questionnaireDocument), Encoding.UTF8, "application/json");
             return response;
         }
 
@@ -58,6 +63,22 @@ namespace WB.UI.Headquarters.API.Export
             response.Content = new ByteArrayContent(pdf.Content);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
 
+            return response;
+        }
+
+        [Route("{id}/category/{categoryId}")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        public HttpResponseMessage Category(string id, Guid categoryId)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            var categoriesItems = reusableCategoriesStorage.GetOptions(questionnaireIdentity, categoryId);
+
+            if (categoriesItems == null) 
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent(this.serializer.Serialize(categoriesItems), Encoding.UTF8, "application/json");
             return response;
         }
     }

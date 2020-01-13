@@ -313,8 +313,14 @@
   <data name="SideBarTranslationName" xml:space="preserve">
     <value>translation name</value>
   </data>
+  <data name="SideBarCategoriesName" xml:space="preserve">
+    <value>name of categories</value>
+  </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
     <value>{{count}} Translation</value>
+  </data>
+  <data name="SideBarCategoriesCounter" xml:space="preserve">
+    <value>{{count}} Categories</value>
   </data>
   <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
     <value>{{count}} Translations</value>
@@ -322,11 +328,20 @@
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
     <value>Use this tab to manage questionnaire translations.</value>
   </data>
+  <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+    <value>Use this tab to manage reusable categories.</value>
+  </data>
   <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
     <value>You may download and update translations to different languages.</value>
   </data>
+  <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+    <value>You may download and update categories.</value>
+  </data>
   <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
     <value>Translation will be applied on original texts and override values. You may leave some texts empty to use default original translations.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+    <value>will be showed in list of reusable categories for any types of categorical questions.</value>
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Toggle Dropdown</value>
@@ -475,8 +490,14 @@
   <data name="SideBarTranslationsTitle" xml:space="preserve">
     <value>Translations</value>
   </data>
+  <data name="SideBarCategoriesTitle" xml:space="preserve">
+    <value>Categories</value>
+  </data>
   <data name="SideBarTranslationsUploadNew" xml:space="preserve">
     <value>Upload new translation</value>
+  </data>
+  <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+    <value>Upload new categories</value>
   </data>
   <data name="AttachmentPreview" xml:space="preserve">
     <value>Attachment preview</value>
@@ -603,6 +624,12 @@
   </data>
   <data name="QuestionDisplayMode" xml:space="preserve">
     <value>Display mode</value>
+  </data>
+  <data name="BindToReusableCategories" xml:space="preserve">
+    <value>Bind to reusable categories</value>
+  </data>
+  <data name="SelectCategories" xml:space="preserve">
+    <value>Select categories</value>
   </data>
   <data name="QuestionScope" xml:space="preserve">
     <value>Question scope</value>
@@ -802,6 +829,21 @@
   <data name="SelectParentQuestionError" xml:space="preserve">
     <value>You must select the parent question</value>
   </data>
+  <data name="UserDefinedCategories" xml:space="preserve">
+    <value>User defined categories</value>
+  </data>
+  <data name="ReusableCategories" xml:space="preserve">
+    <value>Reusable categories</value>
+  </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Source of categories</value>
+  </data>
+  <data name="RostersQuestion" xml:space="preserve">
+    <value>List question or question from roster group</value>
+  </data>
+  <data name="QuestionRadioButtonList" xml:space="preserve">
+    <value>Radio button list</value>
+  </data>
   <data name="SettingsInvite" xml:space="preserve">
     <value>Invite</value>
   </data>
@@ -872,12 +914,14 @@
     <value>Number of items determines the roster size. Each element of the list corresponds to a title of the roster row. Each element of the list should be placed on a separate line.</value>
   </data>
   <data name="HelpHideIfDisabled" xml:space="preserve">
-    <value>By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet.</value>
+    <value>By default, a disabled item is grayed-out. Checking this option will hide a disabled question or section on a tablet.</value>
   </data>
   <data name="HelpRosterDisplayMode" xml:space="preserve">
     <value>Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
 Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
-Table - the questions of the roster are shown in the same level as rows and columns of the table. Supported only in Web survey, tablet falls back to 'Sub-Section' mode.</value>
+Table - the questions of the roster are shown in the same level as rows and columns of the table. 
+Matrix - a categorical question of the roster is displayed as matrix. 
+Table and Matrix views are supported only in Web survey, tablet falls back to 'Sub-Section' mode.</value>
   </data>
   <data name="HelpHideInstructions" xml:space="preserve">
     <value>By default, an instruction text is shown on a tablet. Checking this option will show only the first line of instructions. Tapping on that line will show the complete text.</value>
@@ -936,6 +980,9 @@ Table - the questions of the roster are shown in the same level as rows and colu
   <data name="HotkeysCloseTranslations" xml:space="preserve">
     <value>Close translations panel</value>
   </data>
+  <data name="HotkeysCloseCategories" xml:space="preserve">
+    <value>Close categories panel</value>
+  </data>
   <data name="HotkeysFocusTitle" xml:space="preserve">
     <value>Focus title field in editor</value>
   </data>
@@ -990,6 +1037,9 @@ Table - the questions of the roster are shown in the same level as rows and colu
   <data name="DeleteConfirmQuestion" xml:space="preserve">
     <value>Are you sure you want to delete "{{trimmedTitle}}"?</value>
   </data>
+  <data name="DeleteConfirmCategories" xml:space="preserve">
+    <value>Are you sure you want to delete set of categories "{{trimmedTitle}}"? Source of categories for categorical questions dependent on it will be changed to user defined categories</value>
+  </data>
   <data name="UntitledQuestion" xml:space="preserve">
     <value>Untitled question</value>
   </data>
@@ -998,6 +1048,12 @@ Table - the questions of the roster are shown in the same level as rows and colu
   </data>
   <data name="TranslationsObtained_plural" xml:space="preserve">
     <value>Obtained {0} rows from translation file</value>
+  </data>
+  <data name="CategoriesObtained" xml:space="preserve">
+    <value>Obtained {0} row from categories file</value>
+  </data>
+  <data name="CategoriesObtained_plural" xml:space="preserve">
+    <value>Obtained {0} rows from categories file</value>
   </data>
   <data name="UnsavedChangesLeave" xml:space="preserve">
     <value>You will lose unsaved changes if you leave this page</value>
@@ -1043,6 +1099,9 @@ Table - the questions of the roster are shown in the same level as rows and colu
   </data>
   <data name="SideBarTranslationNoName" xml:space="preserve">
     <value>translation with no name</value>
+  </data>
+  <data name="SideBarCategoriesNoName" xml:space="preserve">
+    <value>categories with no name</value>
   </data>
   <data name="SideBarAttachmentNoName" xml:space="preserve">
     <value>attachment with no name</value>
@@ -1274,6 +1333,9 @@ Table - the questions of the roster are shown in the same level as rows and colu
   </data>
   <data name="RosterDisplayMode_Table" xml:space="preserve">
     <value>Table</value>
+  </data>
+  <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+    <value>Matrix</value>
   </data>
   <data name="RosterDisplayMode" xml:space="preserve">
     <value>Display mode:</value>

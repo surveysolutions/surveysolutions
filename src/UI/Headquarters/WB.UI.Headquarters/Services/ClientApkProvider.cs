@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -65,14 +66,24 @@ namespace WB.UI.Headquarters.Services
                 hash: this.fileSystemAccessor.ReadHash(pathToInterviewerPatch));
         }
 
-        public int? GetLatestVersion(string appName)
+        public int? GetApplicationBuildNumber(string appName)
         {
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(
                 ApkClientsFolder(), appName);
 
             return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                 ? null
-                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
+                : this.androidPackageReader.Read(pathToInterviewerApp).BuildNumber;
+        }
+
+        public string GetApplicationVersionString(string appName)
+        {
+            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(
+                ApkClientsFolder(), appName);
+
+            return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
+                ? null
+                : this.androidPackageReader.Read(pathToInterviewerApp).VersionString;
         }
 
         public string ApkClientsFolder()

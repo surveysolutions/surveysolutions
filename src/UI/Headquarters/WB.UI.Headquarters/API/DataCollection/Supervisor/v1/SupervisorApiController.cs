@@ -30,32 +30,32 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         private readonly ITabletInformationService tabletInformationService;
         private readonly HqSignInManager signInManager;
         private readonly ISupervisorSyncProtocolVersionProvider syncVersionProvider;
-        private readonly IProductVersion productVersion;
         private readonly IUserViewFactory userViewFactory;
         private readonly IClientApkProvider clientApkProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewInformationFactory interviewFactory;
+        private readonly IInterviewerVersionReader interviewerVersionReader;
 
         public SupervisorApiController(ITabletInformationService tabletInformationService, 
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
-            IProductVersion productVersion,
             IUserViewFactory userViewFactory, 
             HqSignInManager signInManager,
             IPlainKeyValueStorage<InterviewerSettings> settingsStorage,
             IPlainKeyValueStorage<TenantSettings> tenantSettings,
             IClientApkProvider clientApkProvider,
             IAuthorizedUser authorizedUser,
-            IInterviewInformationFactory interviewFactory)
+            IInterviewInformationFactory interviewFactory,
+            IInterviewerVersionReader interviewerVersionReader)
             : base(settingsStorage, tenantSettings)
         {
             this.tabletInformationService = tabletInformationService;
             this.syncVersionProvider = syncVersionProvider;
-            this.productVersion = productVersion;
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
             this.clientApkProvider = clientApkProvider;
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;
+            this.interviewerVersionReader = interviewerVersionReader;
         }
 
         [HttpGet]
@@ -76,7 +76,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         [HttpGet]
         public virtual int? GetLatestVersion()
         {
-            return this.clientApkProvider.GetLatestVersion(ClientApkInfo.SupervisorFileName);
+            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
         }
 
         [ApiBasicAuth(UserRoles.Supervisor)]
@@ -104,15 +104,15 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                 }
             }
 
-            var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
-            var supervisorVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.supervisor");
-
-            if (IsNeedUpdateAppBySettings(supervisorVersion, currentVersion))
+            var serverApkBuildNumber = interviewerVersionReader.SupervisorBuildNumber;
+            var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
+            
+            if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
             {
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
-            if (supervisorVersion != null && supervisorVersion > currentVersion)
+            if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
             {
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }

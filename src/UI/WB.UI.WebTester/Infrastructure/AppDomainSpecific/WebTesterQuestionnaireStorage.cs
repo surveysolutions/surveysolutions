@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Questionnaire;
 
 namespace WB.UI.WebTester.Infrastructure
 {
@@ -14,11 +15,13 @@ namespace WB.UI.WebTester.Infrastructure
 
         public WebTesterQuestionnaireStorage(IWebTesterTranslationService translationService, 
             IQuestionOptionsRepository questionOptionsRepository,
-            ISubstitutionService substitutionService)
+            ISubstitutionService substitutionService,
+            IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire)
         {
             this.translationService = translationService;
             this.questionOptionsRepository = questionOptionsRepository;
             this.substitutionService = substitutionService;
+            this.categoriesFillerIntoQuestionnaire = categoriesFillerIntoQuestionnaire;
         }
 
         private readonly ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache 
@@ -26,6 +29,7 @@ namespace WB.UI.WebTester.Infrastructure
 
         private readonly IQuestionOptionsRepository questionOptionsRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire;
 
         public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
@@ -42,8 +46,14 @@ namespace WB.UI.WebTester.Infrastructure
         
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            this.plainQuestionnairesCache[new QuestionnaireIdentity(id, version).ToString()] = 
-                 new PlainQuestionnaire(questionnaireDocument, version, questionOptionsRepository, substitutionService);
+            var questionnaireIdentity = new QuestionnaireIdentity(id, version);
+
+            var questionnaireMergedWithCategories =
+                this.categoriesFillerIntoQuestionnaire.FillCategoriesIntoQuestionnaireDocument(questionnaireIdentity,
+                    questionnaireDocument);
+
+            this.plainQuestionnairesCache[questionnaireIdentity.ToString()] = 
+                 new PlainQuestionnaire(questionnaireMergedWithCategories, version, questionOptionsRepository, substitutionService);
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)

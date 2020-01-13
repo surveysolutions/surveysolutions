@@ -61,28 +61,28 @@ namespace WB.Tests.Web.TestFactories
             IUserViewFactory userViewFactory = null,
             IInterviewerSyncProtocolVersionProvider syncVersionProvider = null,
             IAuthorizedUser authorizedUser = null,
-            IProductVersion productVersion = null,
             HqSignInManager signInManager = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             IAssignmentsService assignmentsService = null,
             IInterviewInformationFactory interviewInformationFactory = null,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings = null)
+            IPlainKeyValueStorage<TenantSettings> tenantSettings = null,
+            IInterviewerVersionReader interviewerVersionReader = null)
         {
             var result = new InterviewerApiController(tabletInformationService ?? Mock.Of<ITabletInformationService>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 syncVersionProvider ?? Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-                productVersion ?? Mock.Of<IProductVersion>(),
                 signInManager ?? new HqSignInManager(Abc.Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(),
-                    Mock.Of<IHashCompatibilityProvider>()),
+                Mock.Of<IHashCompatibilityProvider>()),
                 questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x =>
                     x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
                 interviewInformationFactory ?? Mock.Of<IInterviewInformationFactory>(),
                 assignmentsService ?? Mock.Of<IAssignmentsService>(),
                 Mock.Of<IClientApkProvider>(),
                 interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
-                    tenantSettings ?? new InMemoryKeyValueStorage<TenantSettings>()
+                tenantSettings ?? new InMemoryKeyValueStorage<TenantSettings>(),
+                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>()
             );
             result.Request = new HttpRequestMessage();
             result.Request.SetConfiguration(new HttpConfiguration());

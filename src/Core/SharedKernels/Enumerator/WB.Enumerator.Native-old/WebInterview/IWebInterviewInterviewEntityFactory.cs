@@ -15,5 +15,8 @@ namespace WB.Enumerator.Native.WebInterview
         GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode);
         void ApplyValidity(Validity validity, GroupStatus status);
         Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity);
+
+        InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
+            IStatefulInterview interview, bool isReviewMode);
     }
 }

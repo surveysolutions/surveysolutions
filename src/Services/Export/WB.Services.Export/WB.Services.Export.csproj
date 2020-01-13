@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="CsvExport\Exporters\DoFileHeader.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.3.103.57" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.100.1" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.105.1" />
@@ -71,6 +75,10 @@
     <Reference Include="StatData">
       <HintPath>..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="CsvExport\Exporters\DoFileHeader.txt" />
   </ItemGroup>
 
 </Project>

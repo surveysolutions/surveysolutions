@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -21,8 +22,10 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc.Storage;
@@ -41,6 +44,11 @@ namespace WB.Tests.Abc.TestFactories
 
     public class StorageFactory
     {
+        public InMemoryPlainStorage<TEntity, TKey> InMemorySqlitePlainStorage<TEntity, TKey>(ILogger logger = null) where TEntity : class, IPlainStorageEntity<TKey>, new()
+            => new InMemoryPlainStorage<TEntity, TKey>(logger ?? Mock.Of<ILogger>());
+        public InMemoryPlainStorage<TEntity> InMemorySqlitePlainStorage<TEntity>(ILogger logger = null) where TEntity : class, IPlainStorageEntity, new()
+            => new InMemoryPlainStorage<TEntity>(logger ?? Mock.Of<ILogger>());
+
         public IPlainStorageAccessor<TEntity> InMemoryPlainStorage<TEntity>() where TEntity : class => new InMemoryPlainStorageAccessor<TEntity>();
         public TestInMemoryWriter<TEntity> InMemoryReadSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();
         public TestInMemoryWriter<TEntity, TKey> InMemoryReadSideStorage<TEntity, TKey>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity, TKey>();
@@ -132,6 +140,21 @@ namespace WB.Tests.Abc.TestFactories
                 .Returns(questionnaire);
 
             return result.Object;
+        }
+
+        public IQuestionOptionsRepository QuestionOptionsRepository(IOptionsRepository optionsRepository)
+        {
+            return new QuestionOptionsRepository(optionsRepository);
+        }
+
+        public IQuestionOptionsRepository QuestionOptionsRepository(IPlainStorage<OptionView, int?> plainStore)
+        {
+            return new QuestionOptionsRepository(OptionsRepository(plainStore));
+        }
+
+        public IOptionsRepository OptionsRepository(IPlainStorage<OptionView, int?> plainStore)
+        {
+            return new OptionsRepository(plainStore);
         }
     }
 }

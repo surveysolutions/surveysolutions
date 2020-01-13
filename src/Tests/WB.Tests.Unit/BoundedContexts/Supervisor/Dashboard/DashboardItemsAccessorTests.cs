@@ -194,10 +194,10 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 
             return new DashboardItemsAccessor(
 
-                interviews ?? new InMemoryPlainStorage<InterviewView>(),
+                interviews ?? Create.Storage.InMemorySqlitePlainStorage<InterviewView>(),
                 assignments ?? Mock.Of<IAssignmentDocumentsStorage>(x => x.LoadAll() == new List<AssignmentDocument>()),
                 principal ?? Mock.Of<IPrincipal>(),
-                identifyingQuestionsRepo ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
+                identifyingQuestionsRepo ?? Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>(),
                 viewModelFactory.Object
             );
         }
