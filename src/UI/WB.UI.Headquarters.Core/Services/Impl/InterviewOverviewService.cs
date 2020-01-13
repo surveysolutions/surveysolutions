@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -9,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services.Overview;
 
-namespace WB.UI.Headquarters.API.WebInterview.Services
+namespace WB.UI.Headquarters.Services.Impl
 {
     public class InterviewOverviewService : IInterviewOverviewService
     {

@@ -10,7 +10,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 
-namespace WB.UI.Headquarters.API.WebInterview.Services
+namespace WB.UI.Headquarters.Services.Impl
 {
     public class HqWebInterviewInterviewEntityFactory : WebInterviewInterviewEntityFactory
     {

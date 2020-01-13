@@ -6,8 +6,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.API.WebInterview;
 
-namespace WB.UI.Headquarters.API.WebInterview.Services
+namespace WB.UI.Headquarters.Services.Impl
 {
     class WebInterviewAllowService : IWebInterviewAllowService
     {

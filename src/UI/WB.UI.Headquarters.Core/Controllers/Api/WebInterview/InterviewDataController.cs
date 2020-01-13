@@ -2,33 +2,29 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
-using WB.UI.Headquarters.API.WebInterview.Pipeline;
-using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
+using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.WebInterview;
+using WB.UI.Headquarters.Controllers.Services;
+using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Services;
+using WB.UI.Headquarters.Services.Impl;
 using InterviewEntity = WB.Enumerator.Native.WebInterview.Models.InterviewEntity;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
     [ApiNoCache]
-    [CamelCase]
-    [WebInterviewDataAuthorize]
-    [RoutePrefix("api/webinterview")]
+    [WebInterviewAuthorize(InterviewIdQueryString = "interviewId")]
+    [Route("api/webinterview")]
     public class InterviewDataController : Enumerator.Native.WebInterview.Controllers.InterviewDataController
     {
         private readonly IAuthorizedUser authorizedUser;
@@ -53,7 +49,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         protected override bool IsReviewMode() =>
-            this.authorizedUser.CanConductInterviewReview() && this.Request.Headers.Contains(@"review");
+            this.authorizedUser.CanConductInterviewReview() && this.Request.Headers.ContainsKey(@"review");
 
         protected override bool IsCurrentUserObserving() => this.authorizedUser.IsObserving;
 
@@ -68,7 +64,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [HttpGet]
         [Route("getTopFilteredOptionsForQuestionWithExclude")]
-        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, [FromUri]  int[] excludedOptionIds = null) 
+        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, [FromQuery]  int[] excludedOptionIds = null) 
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, excludedOptionIds);
 
         [HttpGet]
@@ -85,7 +81,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [HttpGet]
         [Route("getEntitiesDetails")]
-        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromUri] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
+        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromQuery] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("getFullSectionInfo")]
@@ -122,12 +118,12 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [HttpGet]
         [Route("getSidebarChildSectionsOf")]
-        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromUri] string[] ids, string sectionId = null) => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
+        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromQuery] string[] ids, string sectionId = null) => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("search")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
-        public SearchResults Search(Guid interviewId, [FromUri] FilterOption[] flags = null, int skip = 0, int limit = 50)
+        public SearchResults Search(Guid interviewId, [FromQuery] FilterOption[] flags = null, int skip = 0, int limit = 50)
         {
             FilterOption[] flagsEnum = flags ?? new FilterOption[0];
             var interview = GetCallerInterview(interviewId);

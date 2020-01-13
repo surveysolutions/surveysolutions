@@ -11,6 +11,7 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -371,6 +372,8 @@ namespace WB.UI.Headquarters
                         action = "SurveyAndStatuses"
                     });
 
+                endpoints.MapHub<WebInterview>("interview",
+                    options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
                 
                 endpoints.MapRazorPages();
             });

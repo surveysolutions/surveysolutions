@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {

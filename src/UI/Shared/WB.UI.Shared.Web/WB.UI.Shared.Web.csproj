@@ -227,7 +227,6 @@
     <Compile Include="Filters\LocalOrDevelopmentAccessOnlyAttribute.cs" />
     <Compile Include="Filters\NoCacheAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
-    <Compile Include="Implementation\Services\VirtualPathService.cs" />
     <Compile Include="Kernel\AutofacServiceLocatorFactory.cs" />
     <Compile Include="Kernel\AutofacWebKernel.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />

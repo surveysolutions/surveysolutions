@@ -2,8 +2,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
@@ -27,9 +30,12 @@ namespace WB.UI.Headquarters
 
             services.AddScoped<ServiceApiKeyAuthorization>();
             
-            registry.AddTransient<IExportServiceApiFactory, ExportServiceApiFactory>();
-
-            services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
+            registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
+            registry.Bind<IImageProcessingService, ImageProcessingService>();
+            registry.Bind<IAudioProcessingService, AudioProcessingService>();
+            services.Bind<ICaptchaService, WebCacheBasedCaptchaService>();
+            registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
+            registry.Bind<IWebNavigationService, WebNavigationService>();
 
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
