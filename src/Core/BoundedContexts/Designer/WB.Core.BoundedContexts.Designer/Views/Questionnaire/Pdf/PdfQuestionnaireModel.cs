@@ -59,6 +59,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             public List<ValidationCondition> ValidationConditions { get; set; }
         }
 
+        public class Categories
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public List<CategoriesItem> Items { get; set; }
+        }
+
+        public class CategoriesItem
+        {
+            public int Id { get; set; }
+            public int? ParentId { get; set; }
+            public string Text { get; set; }
+        }
+
         private readonly QuestionnaireDocument questionnaire;
         public PdfSettings Settings { get; }
 
@@ -76,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.Metadata = this.questionnaire.Metadata ?? new QuestionnaireMetaInfo();
         }
 
-        public List<IQuestion> QuestionsWithLongOptionsList { get; internal set; }
+        public List<ICategoricalQuestion> QuestionsWithLongOptionsList { get; internal set; }
 
         public List<IQuestion> QuestionsWithLongSpecialValuesList { get; internal set; }
 
@@ -89,6 +103,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<EntityWithLongCondition> ItemsWithLongConditions { get; internal set; }
 
         public List<IVariable> VariableWithLongExpressions { get; internal set; }
+
+        public List<Categories> CategoriesList { get; internal set; }
 
         public string Title => this.questionnaire.Title;
         public QuestionnaireMetaInfo Metadata { get; internal set; } 
@@ -380,8 +396,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 }
                 case "O":
                 {
-                    var question = Find<IQuestion>(entityId);
-                    return QuestionsWithLongOptionsList.IndexOf(question) + 1;
+                    var question = Find<ICategoricalQuestion>(entityId);
+                    if (!question.CategoriesId.HasValue)
+                        return CategoriesList.Count + QuestionsWithLongOptionsList.IndexOf(question) + 1;
+                    else
+                    {
+                        var categories = CategoriesList.Find(x => x.Id == question.CategoriesId.Value);
+                        return CategoriesList.IndexOf(categories) + 1;
+                    }
                 }
                 case "VE":
                 {
@@ -449,7 +471,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool IsValidationsAppendixEmpty => ItemsWithLongValidations.Count == 0;
         public bool IsInstructionsAppendixEmpty => QuestionsWithLongInstructions.Count == 0;
         public bool IsOptionsFilterAppendixEmpty => QuestionsWithLongOptionsFilterExpression.Count == 0;
-        public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0;
+        public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0 && CategoriesList.Count == 0;
         public bool IsVariablesAppendixEmpty => VariableWithLongExpressions.Count == 0;
 
         public bool IsSpecialValuesAppendixEmpty => QuestionsWithLongSpecialValuesList.Count == 0;

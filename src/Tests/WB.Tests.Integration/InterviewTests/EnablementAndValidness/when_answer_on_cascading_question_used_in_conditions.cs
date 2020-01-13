@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             );
 
             var optionsRepo = Moq.Mock.Of<IQuestionOptionsRepository>(x =>
-                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
+                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, 1, Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
                 {
                     Value = 1,
                     ParentValue = 1,

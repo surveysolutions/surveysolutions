@@ -23,9 +23,9 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(IQuestionnaire questionnaire,
-             Guid questionId, decimal optionValue, Translation translation)
+             Guid questionId, decimal optionValue, int? parentQuestionValue, Translation translation)
         {
-            return questionnaire.GetOptionForQuestionByOptionValueFromStructure(questionId, optionValue);
+            return questionnaire.GetOptionForQuestionByOptionValueFromStructure(questionId, optionValue, parentQuestionValue);
         }
 
         public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId, int[] optionsValues, Translation translation) => 

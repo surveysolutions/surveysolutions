@@ -40,5 +40,6 @@ namespace Main.Core.Entities.SubEntities.Question
 
         public bool ShowAsList { get; set; }
         public int? ShowAsListThreshold { get; set; }
+        public Guid? CategoriesId { get; set; }
     }
 }

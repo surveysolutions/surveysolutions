@@ -38,9 +38,9 @@ namespace WB.Services.Scheduler.Services.Implementation
             this.subject.OnNext(jobId);
         }
 
-        public void Subscribe(Action<long> action)
+        public IDisposable Subscribe(Action<long> action)
         {
-            this.subject.Subscribe(action);
+            return this.subject.Subscribe(action);
         }
     }
 }

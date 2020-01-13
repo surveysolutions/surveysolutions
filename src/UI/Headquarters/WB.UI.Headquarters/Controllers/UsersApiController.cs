@@ -78,12 +78,12 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<DataTableResponse<InterviewerListItem>> AllInterviewers([FromBody] DataTableRequestWithFilter reqest)
+        public async Task<DataTableResponse<InterviewerListItem>> AllInterviewers([FromBody] DataTableRequestWithFilter request)
         {
             Guid? supervisorId = null;
 
-            if (!string.IsNullOrWhiteSpace(reqest.SupervisorName))
-                supervisorId = (await this.userManager.FindByNameAsync(reqest.SupervisorName))?.Id;
+            if (!string.IsNullOrWhiteSpace(request.SupervisorName))
+                supervisorId = (await this.userManager.FindByNameAsync(request.SupervisorName))?.Id;
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
@@ -91,23 +91,23 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUserRole == UserRoles.Supervisor)
                 supervisorId = this.authorizedUser.Id;
 
-            var interviewerApkVersion = interviewerVersionReader.Version;
+            var interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
 
-            var pageIndex = reqest.PageIndex;
-            var pageSize = reqest.PageSize;
+            var pageIndex = request.PageIndex;
+            var pageSize = request.PageSize;
 
             var interviewers = this.usersFactory.GetInterviewers(pageIndex,
                 pageSize,
-                reqest.GetSortOrder(),
-                reqest.Search.Value,
-                reqest.Archived,
+                request.GetSortOrder(),
+                request.Search.Value,
+                request.Archived,
                 interviewerApkVersion,
                 supervisorId,
-                reqest.Facet);
+                request.Facet);
 
             return new DataTableResponse<InterviewerListItem>
             {
-                Draw = reqest.Draw + 1,
+                Draw = request.Draw + 1,
                 RecordsTotal = interviewers.TotalCount,
                 RecordsFiltered = interviewers.TotalCount,
                 Data = interviewers.Items.Select(x => new InterviewerListItem
@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUserRole == UserRoles.Supervisor)
                 supervisorId = this.authorizedUser.Id;
 
-            var interviewerApkVersion = interviewerVersionReader.Version;
+            var interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
 
             var filteredInterviewerIdsToExport = this.usersFactory.GetInterviewersIds(reqest.Search.Value,
                 reqest.Archived,

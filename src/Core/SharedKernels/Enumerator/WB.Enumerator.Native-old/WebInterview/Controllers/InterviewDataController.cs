@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Http;
-using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -51,9 +50,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
         };
 
-        protected IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        protected IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string translation = null)
         {
-            return questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
+            return questionnaireRepository.GetQuestionnaire(questionnaireIdentity, translation);
         }
 
         protected IStatefulInterview GetCallerInterview(Guid interviewId)
@@ -114,7 +113,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var result = new IdentifyingQuestion();
-            var entityType = this.GetEntityType(questionId, questionnaire, new Identity(questionId, RosterVector.Empty), interview);
+            var entityType = this.interviewEntityFactory.GetEntityType(new Identity(questionId, RosterVector.Empty), questionnaire, interview, IsReviewMode());
 
             result.Type = entityType.ToString();
             var questionIdentity = new Identity(questionId, RosterVector.Empty);
@@ -156,7 +155,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),
-                    EntityType = this.GetEntityType(x, questionnaire, new Identity(x, RosterVector.Empty), interview).ToString()
+                    EntityType = this.interviewEntityFactory.GetEntityType(new Identity(x, RosterVector.Empty), questionnaire, interview, IsReviewMode()).ToString()
                 })
                 .ToArray();
 
@@ -208,7 +207,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             foreach (var elementId in ids)
             {
-                if (questionnaire.IsTableRoster(elementId.Id))
+                if (questionnaire.IsTableRoster(elementId.Id) || questionnaire.IsMatrixRoster(elementId.Id))
                 {
                     var tableRosterIdentity = new Identity(elementId.Id, sectionIdentity.RosterVector);
                     if (!groupIds.Contains(tableRosterIdentity))
@@ -229,7 +228,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
-                    EntityType = this.GetEntityType(x.Id, questionnaire, x, statefulInterview).ToString()
+                    EntityType = this.interviewEntityFactory.GetEntityType(x, questionnaire, statefulInterview, IsReviewMode()).ToString()
                 })
                 .Union(ActionButtonsDefinition)
                 .ToArray();
@@ -334,7 +333,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (questionnaire == null) return null;
 
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(groupId.Id)
-                .Except(id => questionnaire.IsFlatRoster(id) || questionnaire.IsTableRoster(id))
+                .Except(id => questionnaire.IsCustomViewRoster(id))
                 .ToReadOnlyCollection();
 
             var breadCrumbs = new List<Breadcrumb>();
@@ -414,7 +413,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var callerInterview = this.GetCallerInterview(interviewId);
             if (callerInterview == null) return null;
 
-            var questionnaire = this.GetCallerQuestionnaire(callerInterview.QuestionnaireIdentity);
+            var questionnaire = this.GetCallerQuestionnaire(callerInterview.QuestionnaireIdentity, callerInterview.Language);
             var interviewEntities = new List<InterviewEntity>();
 
             foreach (var id in ids)
@@ -428,7 +427,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 var interviewEntity = this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode());
                 interviewEntities.Add(interviewEntity);
 
-                if (interviewEntity is TableRoster tableRoster)
+                if (interviewEntity is RosterEntity tableRoster)
                 {
                     foreach (var tableRosterInstance in tableRoster.Instances)
                     {
@@ -567,87 +566,6 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 SupervisorRejectComment = interview.SupervisorRejectComment
             };
             return completeInfo;
-        }
-
-        private InterviewEntityType GetEntityType(Guid entityId, IQuestionnaire callerQuestionnaire, Identity identity, IStatefulInterview interview)
-        {
-            if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
-
-            if (callerQuestionnaire.HasGroup(entityId) || callerQuestionnaire.IsRosterGroup(entityId))
-            {
-                if (callerQuestionnaire.IsFlatRoster(entityId))
-                    return InterviewEntityType.GroupTitle;
-                if (callerQuestionnaire.IsTableRoster(entityId))
-                    return InterviewEntityType.TableRoster;
-                return InterviewEntityType.Group;
-            }
-
-            if (callerQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
-
-            switch (callerQuestionnaire.GetQuestionType(entityId))
-            {
-                case QuestionType.DateTime:
-                    return InterviewEntityType.DateTime;
-                case QuestionType.GpsCoordinates:
-                    return InterviewEntityType.Gps;
-                case QuestionType.Multimedia:
-                    return InterviewEntityType.Multimedia; // InterviewEntityType.Multimedia;
-                case QuestionType.MultyOption:
-                    if (callerQuestionnaire.IsQuestionFilteredCombobox(entityId))
-                    {
-                        return InterviewEntityType.MultiCombobox;
-                    }
-                    if (callerQuestionnaire.IsLinkedToListQuestion(entityId))
-                        return InterviewEntityType.CategoricalMulti;
-                    if (callerQuestionnaire.IsQuestionLinked(entityId)
-                        || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
-                        return InterviewEntityType.LinkedMulti;
-                    return callerQuestionnaire.IsQuestionYesNo(entityId)
-                        ? InterviewEntityType.CategoricalYesNo
-                        : InterviewEntityType.CategoricalMulti;
-                case QuestionType.SingleOption:
-                    if (callerQuestionnaire.IsLinkedToListQuestion(entityId))
-                        return InterviewEntityType.CategoricalSingle;
-                    if (callerQuestionnaire.IsQuestionLinked(entityId)
-                        || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
-                        return InterviewEntityType.LinkedSingle;
-                    if (callerQuestionnaire.IsQuestionFilteredCombobox(entityId))
-                        return InterviewEntityType.Combobox;
-                    if (callerQuestionnaire.IsQuestionCascading(entityId))
-                    {
-                        if (callerQuestionnaire.ShowCascadingAsList(entityId))
-                        {
-                            var threshold = callerQuestionnaire.GetCascadingAsListThreshold(entityId) ?? Constants.DefaultCascadingAsListThreshold;
-
-                            if (!interview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(identity, threshold))
-                            {
-                                return InterviewEntityType.CategoricalSingle;
-                            }
-
-                            return InterviewEntityType.Combobox;
-                        }
-
-                        return InterviewEntityType.Combobox;
-                    }
-                    else
-                        return InterviewEntityType.CategoricalSingle;
-                case QuestionType.Numeric:
-                    return callerQuestionnaire.IsQuestionInteger(entityId)
-                        ? InterviewEntityType.Integer
-                        : InterviewEntityType.Double;
-                case QuestionType.Text:
-                    return InterviewEntityType.TextQuestion;
-                case QuestionType.TextList:
-                    return InterviewEntityType.TextList;
-                case QuestionType.QRBarcode:
-                    return InterviewEntityType.QRBarcode;
-                case QuestionType.Audio:
-                    return InterviewEntityType.Audio;
-                case QuestionType.Area:
-                    return IsReviewMode() ? InterviewEntityType.Area : InterviewEntityType.Unsupported;
-                default:
-                    return InterviewEntityType.Unsupported;
-            }
         }
     }
 }

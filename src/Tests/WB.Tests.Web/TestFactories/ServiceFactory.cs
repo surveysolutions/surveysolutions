@@ -4,6 +4,7 @@ using AutoMapper;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -11,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
-using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
@@ -59,7 +59,8 @@ namespace WB.Tests.Web.TestFactories
                 autoMapper ?? Mock.Of<IMapper>(),
                 enumeratorGroupStateCalculationStrategy ?? Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
                 supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>(),
-                Mock.Of<IWebNavigationService>());
+                Mock.Of<IWebNavigationService>(), 
+                Create.Service.SubstitutionTextFactory());
         }
 
         
@@ -70,6 +71,8 @@ namespace WB.Tests.Web.TestFactories
 
             return new WebNavigationService(mockOfVirtualPathService.Object);
         }
+
+        public SubstitutionTextFactory SubstitutionTextFactory() => new SubstitutionTextFactory(new SubstitutionService(), new VariableToUIStringService());
 
         public IWebInterviewNotificationService WebInterviewNotificationService(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -92,7 +95,8 @@ namespace WB.Tests.Web.TestFactories
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 new EnumeratorGroupGroupStateCalculationStrategy(), 
                 new SupervisorGroupStateCalculationStrategy(), 
-                Create.Service.WebNavigationService());
+                Create.Service.WebNavigationService(),
+                Create.Service.SubstitutionTextFactory());
         }
     }
 }

@@ -1,19 +1,20 @@
 <template>
     <popover class="w-100 d-block" :enable="hasInstructions" trigger="hover-focus" append-to="body">
-        <div class="ag-cell-label-container" v-bind:class="{ 'has-instruction' : hasInstructions }">    
-            <div class="ag-header-cell-label">    
-                <span class="ag-header-cell-text" v-html="title"></span>    
+        <div class="ag-cell-label-container" v-bind:class="{ 'has-instruction' : hasInstructions }">
+            <div class="ag-header-cell-label">
+                <span class="ag-header-cell-text" v-html="title"></span>
             </div>
         </div>
         <template slot="popover">
-            <div class="instruction-tooltip">        
+            <div class="instruction-tooltip">
                 <span v-dateTimeFormatting v-html="instruction"></span>
             </div>
-        </template>        
+        </template>
     </popover>
 </template>
 
 <script lang="js">
+    import { find } from "lodash"
     export default {
         name: 'TableRoster_QuestionTitle',
 
@@ -22,6 +23,7 @@
                 title: null,
                 instruction: null,
                 hasInstructions: false,
+                questionId: null
             }
         }, 
         computed: {
@@ -31,9 +33,18 @@
 
         },
         created() {
+            this.questionId = this.params.questionId
             this.title = this.params.title
             this.instruction = this.params.instruction
             this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
+        },
+        watch: {
+            ["params.context.componentParent.$me.questions"]() {
+                var self = this;
+                var question = _.find(self.params.context.componentParent.$me.questions, function(o) { return o.id == self.questionId; });
+                if(question !== undefined)
+                    this.instruction = question.instruction;
+            }
         }
     }
 </script>

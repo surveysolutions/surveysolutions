@@ -13,6 +13,7 @@ namespace WB.UI.Headquarters.Models
         public string Title { get; set; }
         public long Version { get; set; }
         public DateTime ImportDateUtc { get; set; }
+        public User ImportedBy { get; set; }
         public DateTime LastEntryDateUtc { get; set; }
         public DateTime CreationDateUtc { get; set; }
         public bool AudioAudit { get; set; }
@@ -26,6 +27,12 @@ namespace WB.UI.Headquarters.Models
         public string MainPdfUrl { get; set; }
         public string DesignerUrl { get; internal set; }
         public string Comment { get; set; }
+
+        public class User
+        {
+            public string Role { get; set; }
+            public string Name { get; set; }
+        }
     }
 
     public struct TranslatedPdf

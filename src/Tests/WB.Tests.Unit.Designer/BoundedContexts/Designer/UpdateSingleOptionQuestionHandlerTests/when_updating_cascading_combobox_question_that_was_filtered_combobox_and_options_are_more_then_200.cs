@@ -80,7 +80,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 validationExpression: null,
                 validationMessage: null,
                 showAsList:false,
-                showAsListThreshold: null));
+                showAsListThreshold: null,
+                categoriesId: null));
 
         [NUnit.Framework.Test] public void should_raise_QuestionChanged_event_with_answer_option_that_was_presiously_saved () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(filteredQuestionId)

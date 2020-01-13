@@ -54,8 +54,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslato
                 && _.GetTitle(staticText1) == "текст 1"
                 && _.GetTitle(question1) == "вопрос 1"
                 && _.GetInstruction(question1) == "инструкция 1"
-                && _.GetAnswerOption(singleOptionQuestion, radioOption1) == "радио 1"
-                && _.GetAnswerOption(multipleOptionsQuestion, checkOption1) == "галочка 1"
+                && _.GetAnswerOption(singleOptionQuestion, radioOption1, null) == "радио 1"
+                && _.GetAnswerOption(multipleOptionsQuestion, checkOption1, null) == "галочка 1"
                 && _.GetValidationMessage(questionWithValidations, 1) == "валидация вопроса 1"
                 && _.GetValidationMessage(staticTextWithValidations, 1) == "валидация текста 1"
                 && _.GetFixedRosterTitle(fixedRoster, rosterTitleValue1) == "титул ростера 1");
