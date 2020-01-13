@@ -42,6 +42,7 @@
 <script>
 import { DateFormats } from "~/shared/helpers";
 import Vue from "vue"
+import moment from 'moment'
 
 export default {
   data: function() {

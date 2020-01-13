@@ -4,6 +4,7 @@
 
 <script>
 import modal from "./components/modal";
+import moment from'moment';
 
 export default {
   computed: {

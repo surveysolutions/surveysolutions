@@ -53,6 +53,7 @@ const State = {
 import Vue from "vue";
 import AdditionalInfo from './OverviewItemAdditionalInfo'
 import api from "~/shared/api"
+import moment from 'moment'
 
 export default {
     props: {
