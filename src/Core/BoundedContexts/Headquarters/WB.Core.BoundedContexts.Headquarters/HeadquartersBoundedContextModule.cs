@@ -255,8 +255,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ICategoriesExportService, CategoriesExportService >();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, HqQuestionnaireStorage>(); 
-
-            registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
            
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();

@@ -2,13 +2,14 @@
 using System.Collections.Concurrent;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.Headquarters.Services
+namespace WB.UI.Headquarters.Services.Impl
 {
     internal class QuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
@@ -22,31 +23,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
             this.logger = logger;
         }
 
-
         private class AssemblyHolder
         {
             public AssemblyHolder(string assemblyFileName, byte[] assemblyContent)
             {
                 this.FileName = assemblyFileName;
-                
                 this.AssemblyContent = assemblyContent;
-            }
-
-            private Assembly assembly = null;
-
-            public string FileName { private set; get; }
-
-            public Assembly Assembly
-            {
-                get
+                assembly = new Lazy<Assembly>(() =>
                 {
-                    if(assembly == null)
-                        assembly = Assembly.Load(AssemblyContent);
-                    return this.assembly;
-
-                } 
+                    
+                    return Assembly.Load(assemblyContent);
+                });
             }
-            public byte[] AssemblyContent { private set; get; }
+
+            private readonly Lazy<Assembly> assembly;
+
+            public string FileName { get; }
+
+            public Assembly Assembly => assembly.Value;
+
+            public byte[] AssemblyContent { get; }
         }
 
 
