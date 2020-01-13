@@ -33,8 +33,8 @@ namespace WB.UI.Shared.Web.Controllers
 
             var model = new UnderConstructionModel()
             {
-                Title = UnderConstruction.UnderConstructionTitle,
-                MainMessage = isError ? status.Message : UnderConstruction.ServerInitializing,
+                Title = Resources.UnderConstruction.UnderConstructionTitle,
+                MainMessage = isError ? status.Message : Resources.UnderConstruction.ServerInitializing,
                 SubMessage = isError ? null : status.Message
             };
 

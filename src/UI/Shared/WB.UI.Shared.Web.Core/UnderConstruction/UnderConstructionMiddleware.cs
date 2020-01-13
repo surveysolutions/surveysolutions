@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using WB.Core.Infrastructure.Modularity;
 
-namespace WB.UI.Shared.Web.Filters
+namespace WB.UI.Shared.Web.UnderConstruction
 {
     public class UnderConstructionMiddleware
     {

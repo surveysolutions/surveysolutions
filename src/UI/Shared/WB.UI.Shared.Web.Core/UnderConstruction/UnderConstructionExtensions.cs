@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.Infrastructure.Modularity;
 
-namespace WB.UI.Shared.Web.Filters
+namespace WB.UI.Shared.Web.UnderConstruction
 {
     public static class UnderConstructionExtensions
     {
