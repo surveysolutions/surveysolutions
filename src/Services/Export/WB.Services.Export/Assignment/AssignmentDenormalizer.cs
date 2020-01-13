@@ -31,13 +31,10 @@ namespace WB.Services.Export.Assignment
             this.dbContext = dbContext;
         }
 
-        private readonly Dictionary<Guid, Assignment> assignments = new Dictionary<Guid, Assignment>();
-        private readonly Dictionary<Guid, Assignment> assignmentsFromDb = new Dictionary<Guid, Assignment>();
-        private readonly List<AssignmentAction> actions = new List<AssignmentAction>();
 
         public void Handle(PublishedEvent<AssignmentCreated> @event)
         {
-            assignments.Add(@event.EventSourceId, new Assignment()
+            dbContext.Assignments.Add(new Assignment
             {
                 Id = @event.Event.Id,
                 PublicKey = @event.EventSourceId,
@@ -119,7 +116,7 @@ namespace WB.Services.Export.Assignment
         {
             var assignment = GetAssignment(@event.EventSourceId);
 
-            var assignmentAction = new AssignmentAction()
+            var assignmentAction = new AssignmentAction
             {
                 GlobalSequence = @event.GlobalSequence,
                 Position = position,
@@ -132,33 +129,17 @@ namespace WB.Services.Export.Assignment
                 NewValue = newValue,
                 Comment = comment,
             };
-            actions.Add(assignmentAction);
+            dbContext.AssignmentActions.Add(assignmentAction);
         }
 
         private Assignment GetAssignment(Guid publicKey)
         {
-            if (assignments.TryGetValue(publicKey, out Assignment assignment))
-                return assignment;
-
-            if (assignmentsFromDb.TryGetValue(publicKey, out Assignment assignmentFromDbCached))
-                return assignmentFromDbCached;
-
-            //var assignmentFromDb = await dbContext.Assignments.FindAsync(publicKey, cancellationToken);
-            var assignmentFromDb = dbContext.Assignments.Where(ass => ass.PublicKey == publicKey).First();
-            assignmentsFromDb.Add(publicKey, assignmentFromDb);
-            return assignmentFromDb;
+            return dbContext.Assignments.Find(publicKey);
         }
 
-        public async Task SaveStateAsync(CancellationToken cancellationToken = default)
+        public Task SaveStateAsync(CancellationToken cancellationToken = default)
         {
-            if (assignments.Count > 0)
-                await dbContext.Assignments.AddRangeAsync(assignments.Values, cancellationToken);
-
-            if (assignmentsFromDb.Count > 0)
-                dbContext.Assignments.UpdateRange(assignmentsFromDb.Values);
-
-            if (actions.Count > 0)
-                await dbContext.AssignmentActions.AddRangeAsync(actions, cancellationToken);
+            return Task.CompletedTask;
         }
 
         private string ToQuantityString(int? quantity) => quantity.HasValue ? quantity.Value.ToString(CultureInfo.InvariantCulture) : "-1";

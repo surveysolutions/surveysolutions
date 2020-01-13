@@ -91,7 +91,7 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUserRole == UserRoles.Supervisor)
                 supervisorId = this.authorizedUser.Id;
 
-            var interviewerApkVersion = interviewerVersionReader.Version;
+            var interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
 
             var pageIndex = request.PageIndex;
             var pageSize = request.PageSize;
@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUserRole == UserRoles.Supervisor)
                 supervisorId = this.authorizedUser.Id;
 
-            var interviewerApkVersion = interviewerVersionReader.Version;
+            var interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
 
             var filteredInterviewerIdsToExport = this.usersFactory.GetInterviewersIds(reqest.Search.Value,
                 reqest.Archived,
