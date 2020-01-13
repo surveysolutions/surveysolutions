@@ -274,13 +274,18 @@ namespace WB.UI.Headquarters
 
             services.AddOptionsConfiguration(this.Configuration);
 
+#if RELEASE            
             var physicalProvider =  environment.ContentRootFileProvider;
             var manifestEmbeddedProvider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "wwwroot");
             var compositeProvider = new CompositeFileProvider(physicalProvider, manifestEmbeddedProvider);
 
             services.AddSingleton<IFileProvider>(compositeProvider);
             environment.WebRootFileProvider = compositeProvider;
-            services.AddHostedService<QuartzHostedService>();
+#endif
+            if (Configuration["no-quartz"].ToBool(false) == false)
+            {
+                services.AddHostedService<QuartzHostedService>();
+            }
         }
 
         private static void AddCompression(IServiceCollection services)
@@ -321,8 +326,7 @@ namespace WB.UI.Headquarters
             }
 
             InitModules(app, env);
-
-
+            
             app.UseStaticFiles();
 
             app.UseRouting();
