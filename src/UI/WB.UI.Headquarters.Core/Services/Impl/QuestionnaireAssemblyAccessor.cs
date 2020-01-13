@@ -1,6 +1,9 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
@@ -15,7 +18,7 @@ namespace WB.UI.Headquarters.Services.Impl
     {
         private readonly IAssemblyService assemblyService;
         private readonly ILogger logger;
-        private static readonly ConcurrentDictionary<string, AssemblyHolder> assemblyCache = new ConcurrentDictionary<string, AssemblyHolder>();
+        private static readonly ConcurrentDictionary<string, AssemblyHolder> AssemblyCache = new ConcurrentDictionary<string, AssemblyHolder>();
 
         public QuestionnaireAssemblyAccessor(IAssemblyService assemblyService, ILogger logger)
         {
@@ -23,6 +26,7 @@ namespace WB.UI.Headquarters.Services.Impl
             this.logger = logger;
         }
 
+        [DebuggerDisplay("{FileName} - {Assembly}")]
         private class AssemblyHolder
         {
             public AssemblyHolder(string assemblyFileName, byte[] assemblyContent)
@@ -31,36 +35,50 @@ namespace WB.UI.Headquarters.Services.Impl
                 this.AssemblyContent = assemblyContent;
                 assembly = new Lazy<Assembly>(() =>
                 {
-                    
-                    return Assembly.Load(assemblyContent);
+                    var state = typeof(WB.Core.SharedKernels.DataCollection.IInterviewExpressionState).Assembly;
+                    var ass = Assembly.Load(assemblyContent);
+                    var ctx = AssemblyLoadContext.GetLoadContext(ass);
+                    if (ctx == null)
+                    {
+                        return null;
+                    }
+
+                    ctx.Resolving += (context, name) =>
+                    {
+                        // redirect binding to 
+                        return name.Name == state.GetName().Name 
+                            ? state 
+                            : context.Assemblies.FirstOrDefault(a => a.FullName == name.FullName);
+                    };
+
+                    return ass;
                 });
             }
 
             private readonly Lazy<Assembly> assembly;
 
-            public string FileName { get; }
+            private string FileName { get; }
 
-            public Assembly Assembly => assembly.Value;
+            public Assembly? Assembly => assembly.Value;
 
             public byte[] AssemblyContent { get; }
         }
 
-
         private AssemblyHolder GetAssemblyHolder(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var assembly = assemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder);
+            var assembly = AssemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder);
 
             return assembly;
         }
 
-        public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
+        public Assembly? LoadAssembly(Guid questionnaireId, long questionnaireVersion)
         {
             var assembly = GetAssemblyHolder(questionnaireId, questionnaireVersion);
             return assembly?.Assembly;
         }
 
-        private AssemblyHolder CreateAssemblyHolder(string assemblyFileName)
+        private AssemblyHolder? CreateAssemblyHolder(string assemblyFileName)
         {
             var assemblyInfo = this.assemblyService.GetAssemblyInfo(assemblyFileName);
 
@@ -130,7 +148,7 @@ namespace WB.UI.Headquarters.Services.Impl
             return Convert.ToBase64String(assembly.AssemblyContent);
         }
 
-        public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
+        public byte[]? GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
             var assembly = GetAssemblyHolder(questionnaireId, questionnaireVersion);
             return assembly?.AssemblyContent;
