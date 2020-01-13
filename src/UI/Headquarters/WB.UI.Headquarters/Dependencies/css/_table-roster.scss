@@ -149,9 +149,12 @@
             }
         }
         &:not(.roster-matrix){
-            .ag-cell > .ag-input-text-wrapper{
-                width: 100%;
-            }
+            .ag-cell{
+                border-right: 1px solid #E5E5E5;
+                & > .ag-input-text-wrapper{
+                    width: 100%;
+                }
+            } 
         }
         &.roster-matrix{
             .cell-bordered{
