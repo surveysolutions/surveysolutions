@@ -69,7 +69,8 @@
 </template>
 
 <script>
-import { DateFormats } from "~/shared/helpers";
+import { DateFormats } from "~/shared/helpers"
+import moment from "moment"
 
 export default {
     data() {

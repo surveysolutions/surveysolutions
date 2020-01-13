@@ -198,7 +198,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                                          );
             }
             
-            if (input.Statuses != null)
+            if (input.Statuses?.Length > 0)
             {
                 items = items.Where(x => input.Statuses.Contains(x.Status));
             }

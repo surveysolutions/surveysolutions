@@ -38,6 +38,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
+            registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
 
