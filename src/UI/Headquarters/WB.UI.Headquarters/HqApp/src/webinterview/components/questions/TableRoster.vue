@@ -1,22 +1,20 @@
 <template>
     <div class="question table-view scroller" :id="hash">
-        <ag-grid-vue 
+        <ag-grid-vue
             ref="tableRoster"
             class="ag-theme-customStyles"
             style="height:1024px"
-            domLayout='normal'
+            domLayout="normal"
             rowHeight="40"
             headerHeight="50"
-
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
             :grid-options="gridOptions"
-
             @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"
-            @cell-editing-stopped="endCellEditting">
-        </ag-grid-vue>
+            @cell-editing-stopped="endCellEditting"
+        ></ag-grid-vue>
     </div>
 </template>
 
@@ -31,6 +29,7 @@
     import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
     import TableRoster_RosterTitle from "./TableRoster.RosterTitle";
     import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";    
+    import TableRoster_Title from "./TableRoster.Title";    
 
     export default {
         name: 'TableRoster',
@@ -53,7 +52,8 @@
             TableRoster_ViewAnswer,
             TableRoster_QuestionEditor,
             TableRoster_RosterTitle,
-            TableRoster_QuestionTitle
+            TableRoster_QuestionTitle,
+            TableRoster_Title,
         },
 
         beforeMount() {
@@ -91,7 +91,10 @@
         computed: {
             gridOptions() {
                 return {
-                    stopEditingWhenGridLosesFocus: true
+                    stopEditingWhenGridLosesFocus: true,
+                    context: {
+                        componentParent: this
+                    }
                 }
             }
         },
@@ -107,7 +110,7 @@
                             headerComponentParams: {
                                 title: question.title,
                                 instruction: question.instruction,
-                                question: question
+                                questionId: question.id
                             },
                             field: question.id, 
                             cellRendererFramework: 'TableRoster_ViewAnswer',
@@ -125,6 +128,10 @@
                 );
                 columnsFromQuestions.unshift({
                     headerName: this.$me.title, 
+                    headerComponentFramework: 'TableRoster_Title',
+                    headerComponentParams: {
+                        title: this.$me.title
+                    },
                     field: "rosterTitle", 
                     autoHeight: true, 
                     pinned: true, 

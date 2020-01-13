@@ -126,7 +126,7 @@ namespace WB.UI.Headquarters.API
         [AllowAnonymous]
         public bool CheckNewVersion(int versionCode)
         {
-            var version = this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
+            var version = this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
             return version.HasValue && (version.Value > versionCode);
         }
     }

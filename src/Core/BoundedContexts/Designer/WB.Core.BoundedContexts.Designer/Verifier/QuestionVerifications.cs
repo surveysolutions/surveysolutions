@@ -76,6 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<SingleQuestion, SingleQuestion>("WB0087", CascadingHasCircularReference, VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
             ErrorForTranslation<IComposite>("WB0287", TableRosterDoesntContainsQuestionWithSubstitutions, VerificationMessages.WB0287_TableRosterDoesntContainsQuestionWithSubstitutions),
+            ErrorsByQuestionsFromMatrixRostersThatHaveSubstitutionsToRosterQuestionsFromSelfOrDeeperRosterLevel,
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByLinkedQuestions,
@@ -112,16 +113,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 var parentSections = question.GetParent().UnwrapReferences(x => x.GetParent()).OfType<IConditional>();
                 return parentSections.Any(x => !string.IsNullOrEmpty(x.ConditionExpression));
-            }
-
-            return false;
-        }
-
-        private bool ComboboxShouldNotHaveParentValue(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            if (question.IsFilteredCombobox.GetValueOrDefault() && question.CascadeFromQuestionId == null)
-            {
-                return question.Answers.Any(x => x.ParentCode != null || x.ParentValue != null);
             }
 
             return false;
@@ -1074,5 +1065,76 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title, entity.VariableName);
             return substitutionReferences.Length > 0;
         }
+
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionsFromMatrixRostersThatHaveSubstitutionsToRosterQuestionsFromSelfOrDeeperRosterLevel(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var foundErrors = new List<QuestionnaireVerificationMessage>();
+
+            var entitiesSupportingSubstitutions = questionnaire.FindWithTranslations<IQuestion>(question =>
+                ((IGroup) question.GetParent()).DisplayMode == RosterDisplayMode.Matrix).ToList();
+
+            foreach (var translatedEntity in entitiesSupportingSubstitutions)
+            {
+                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
+                if (!string.IsNullOrWhiteSpace(translatedEntity.Entity.Instructions))
+                    foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.Instructions, questionnaire));
+            }
+
+            return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitleOrInstructions(
+            MultiLanguageQuestionnaireDocument.TranslatedEntity<IQuestion> translatedEntity, string title,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            string[] substitutionReferences =
+                this.substitutionService.GetAllSubstitutionVariableNames(title, translatedEntity.Entity.VariableName);
+
+            if (!substitutionReferences.Any())
+                return Enumerable.Empty<QuestionnaireVerificationMessage>();
+
+            Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution =
+                questionnaire.Questionnaire.GetRosterScope(translatedEntity.Entity);
+
+            IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
+                .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
+                    translatedEntity, null, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution,
+                    questionnaire))
+                .Where(errorOrNull => errorOrNull != null);
+
+            return entityErrors;
+        }
+
+        private QuestionnaireVerificationMessage GetVerificationErrorsBySubstitutionReferenceOrNull(
+            MultiLanguageQuestionnaireDocument.TranslatedEntity<IQuestion> traslatedEntityWithSubstitution,
+            int? validationConditionIndex,
+            string substitutionReference,
+            RosterScope vectorOfRosterQuestionsByEntityWithSubstitutions,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
+            
+            var entityToSubstitute = GetEntityByVariable(substitutionReference, questionnaire);
+            if (entityToSubstitute == null) return null;
+
+            var referenceToEntityBeingSubstituted = CreateReference(entityToSubstitute);
+            var entityToSubstituteRosterScope = questionnaire.Questionnaire.GetRosterScope(entityToSubstitute);
+
+            if (entityToSubstituteRosterScope.Equals(vectorOfRosterQuestionsByEntityWithSubstitutions))
+            {
+                return QuestionnaireVerificationMessage.Error("WB0302",
+                    VerificationMessages.WB0302,
+                    traslatedEntityWithSubstitution.TranslationName,
+                    referenceToEntityWithSubstitution,
+                    referenceToEntityBeingSubstituted);
+            }
+
+            return null;
+        }
+
+        private static IComposite GetEntityByVariable(string identifier, MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier) as IComposite
+               ?? questionnaire.FirstOrDefault<IVariable>(v => v.Name == identifier) as IComposite
+               ?? questionnaire.FirstOrDefault<IGroup>(g => g.VariableName == identifier) as IComposite;
     }
 }
