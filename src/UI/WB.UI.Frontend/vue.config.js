@@ -71,8 +71,8 @@ const pages = {
         template: path.join(webTesterFolder, "Views", "Shared", "_Layout.Template.cshtml")
     },
 
-    under_constraction: {
-        entry: "src/pages/hq_legacy.js",
+    under_construction: {
+        entry: "src/pages/under_construction.js",
         filename: path.join(hqDist, "Views", "UnderConstruction", "Index.cshtml"),
         template: path.join(hqFolder, "Views", "UnderConstruction", "Index.Template.cshtml")
     }
