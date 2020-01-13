@@ -62,10 +62,12 @@ namespace WB.UI.Headquarters
 {
     public class Startup
     {
+        private readonly IWebHostEnvironment environment;
         private AutofacKernel autofacKernel;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
+            this.environment = environment;
             Configuration = configuration;
         }
 
@@ -272,6 +274,12 @@ namespace WB.UI.Headquarters
 
             services.AddOptionsConfiguration(this.Configuration);
 
+            var physicalProvider =  environment.ContentRootFileProvider;
+            var manifestEmbeddedProvider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "wwwroot");
+            var compositeProvider = new CompositeFileProvider(physicalProvider, manifestEmbeddedProvider);
+
+            services.AddSingleton<IFileProvider>(compositeProvider);
+            environment.WebRootFileProvider = compositeProvider;
             services.AddHostedService<QuartzHostedService>();
         }
 
@@ -314,15 +322,8 @@ namespace WB.UI.Headquarters
 
             InitModules(app, env);
 
-#if DEBUG
+
             app.UseStaticFiles();
-#else
-            var fileProvider = new ManifestEmbeddedFileProvider(this.GetType().Assembly, "wwwroot");
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = fileProvider
-            });
-#endif
 
             app.UseRouting();
 
