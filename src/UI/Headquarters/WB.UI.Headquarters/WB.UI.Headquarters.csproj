@@ -1180,7 +1180,6 @@
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <Content Include="Views\InterviewerAuditLog\Index.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
-    <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Download\Supervisor.cshtml" />
     <Content Include="Views\ControlPanel\AppUpdates.cshtml" />
     <Content Include="Views\ControlPanel\ExportService.cshtml" />

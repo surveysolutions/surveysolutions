@@ -197,7 +197,6 @@
     <Compile Include="Slack\ISlackMessageThrottler.cs" />
     <Compile Include="Slack\SlackApiClient.cs" />
     <Compile Include="Slack\SlackApiConfiguration.cs" />
-    <Compile Include="Controllers\UnderConstructionController.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />
@@ -221,7 +220,6 @@
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Filters\ApiTransactionFilter.cs" />
     <Compile Include="Filters\TransactionFilter.cs" />
-    <Compile Include="Filters\UnderConstructionFilter.cs" />
     <Compile Include="Filters\EnforceHttpsHandler.cs" />
     <Compile Include="Filters\RequireSecureConnectionAttribute.cs" />
     <Compile Include="Filters\LocalOrDevelopmentAccessOnlyAttribute.cs" />
