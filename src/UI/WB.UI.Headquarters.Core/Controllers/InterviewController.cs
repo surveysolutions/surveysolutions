@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Web.Mvc;
 using Humanizer;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -9,23 +10,18 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
-    [LimitsFilter]
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-    public class InterviewController : BaseController
+    public class InterviewController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
@@ -34,15 +30,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IPauseResumeQueue pauseResumeQueue;
 
-        public InterviewController(
-            ICommandService commandService,
-            IAuthorizedUser authorizedUser,
-            ILogger logger,
+        public InterviewController(IAuthorizedUser authorizedUser,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory,
             IStatefulInterviewRepository statefulInterviewRepository,
             IPauseResumeQueue pauseResumeQueue, IQuestionnaireStorage questionnaireRepository)
-            : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
@@ -83,7 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
 
             if (!isAccessAllowed)
-                return HttpNotFound();
+                return NotFound();
 
             this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
 
@@ -155,11 +147,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
 
             if (interviewSummary == null)
-                return HttpNotFound();
+                return NotFound();
 
             bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
             if (!isAccessAllowed)
-                return HttpNotFound();
+                return NotFound();
 
             var identity = Identity.Parse(questionId);
             var interview = this.statefulInterviewRepository.Get(id.FormatGuid());

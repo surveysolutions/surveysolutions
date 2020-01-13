@@ -87,6 +87,7 @@ import SwitchLanguage from "./SwitchLanguage";
 import StatusesHistory from "./StatusesHistory";
 import OverviewModal from "./OverviewModal";
 import Vue from "vue";
+import moment from 'moment'
 
 export default {
   data() {

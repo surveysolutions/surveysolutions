@@ -2,7 +2,7 @@
            
 
 @{
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewBag.Title = @Pages.InterviewHistory_Header;
 }
 
@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="main-information-no-filter">
-                @Html.Partial("_alerts")
+                <partial name="_alerts"/>
                 <div class="page-header clearfix">
                     <h1>@Pages.InterviewHistory_Header</h1>
                 </div>
