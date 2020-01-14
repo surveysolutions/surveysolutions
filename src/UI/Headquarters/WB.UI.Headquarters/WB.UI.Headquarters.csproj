@@ -537,30 +537,6 @@
     <Content Include="App_GlobalResources\MapReport.zh.resx">
       <DependentUpon>MapReport.resx</DependentUpon>
     </Content>
-    <Content Include="App_GlobalResources\Maps.ar.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Maps.es.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Maps.fr.resx">
-      <DependentUpon>Maps.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_GlobalResources\Maps.ro.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Maps.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Maps.zh.resx">
-      <DependentUpon>Maps.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_GlobalResources\Roles.resx">
       <SubType>Designer</SubType>
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -704,11 +680,6 @@
     <Content Include="Dependencies\img\logo_under_constraction.jpg" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
     <Content Include="Dependencies\img\padlock-3dp.png" />
-    <Content Include="App_GlobalResources\Maps.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Maps.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_GlobalResources\BatchUpload.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>BatchUpload.sq.designer.cs</LastGenOutput>
@@ -724,10 +695,6 @@
     <Content Include="App_GlobalResources\MapReport.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>MapReport.sq.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Maps.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Maps.sq.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireClonning.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1237,11 +1204,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MapReport.sq.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Maps.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Maps.sq.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_GlobalResources\QuestionnaireClonning.sq.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1338,11 +1300,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataExport.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Maps.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
@@ -1430,8 +1387,6 @@
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\InterviewerAuditLogController.cs" />
     <Compile Include="Controllers\AuditLogController.cs" />
-    <Compile Include="Controllers\MapsApiController.cs" />
-    <Compile Include="Controllers\MapsController.cs" />
     <Compile Include="Controllers\Profile\AccountController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
@@ -1447,17 +1402,10 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\WebEmailsController.cs" />
     <Compile Include="Code\CustomAutofacHubActivator.cs" />
-    <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
-    <Compile Include="Implementation\Maps\MapService.cs" />
-    <Compile Include="Implementation\Services\SecureStorage.cs" />
     <Compile Include="Injections\ILocalExportServiceRunner.cs" />
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
     <Compile Include="Models\Admin\EmailProviders.cs" />
     <Compile Include="Models\Admin\SettingsModel.cs" />
-    <Compile Include="Models\Maps\MapsModel.cs" />
-    <Compile Include="Models\Maps\UserMapModel.cs" />
-    <Compile Include="Models\Maps\UserMapLinkModel.cs" />
-    <Compile Include="Models\Maps\MapDetailsModel.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
     <Compile Include="Models\Reports\SurveysAndStatusesModel.cs" />
@@ -1468,7 +1416,6 @@
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Filters\ActivePageAttribute.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
-    <Compile Include="Implementation\Services\InterviewCreatorFromAssignment.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
     <Compile Include="Models\Account\UserModelBase.cs" />
     <Compile Include="Models\Api\AssignmentProfile.cs" />
@@ -1520,7 +1467,6 @@
     <Compile Include="Models\InterviewersFilter.cs" />
     <Compile Include="Models\InterviewersModel.cs" />
     <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
-    <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
