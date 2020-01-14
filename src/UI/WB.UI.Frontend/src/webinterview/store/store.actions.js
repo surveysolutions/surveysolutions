@@ -3,7 +3,7 @@ import Vue from "vue"
 
 import { batchedAction } from "../helpers"
 
-import modal from "../components/modal"
+import modal from "@/shared/modal"
 
 function getAnswer(state, identity) {
     const question = state.entityDetails[identity]

@@ -1,27 +1,28 @@
 ﻿using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
-using Resources;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator")]
-    public class ExportSettingsApiController : ApiController
+    [Route("api/{controller}/{action}")]
+    public class ExportSettingsApiController : ControllerBase
     {
-        private readonly ILogger logger;
+        private readonly ILogger<ExportSettingsApiController> logger;
         private readonly IExportSettings exportSettings;
         private readonly ISystemLog auditLog;
         private readonly IExportServiceApi exportServiceApi;
 
-        public ExportSettingsApiController(ILogger logger, 
+        public ExportSettingsApiController(ILogger<ExportSettingsApiController> logger, 
             IExportSettings exportSettings,
             ISystemLog auditLog,
             IExportServiceApi exportServiceApi)
@@ -40,10 +41,10 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> ChangeState(ChangeSettingsModel changeSettingsState)
+        public async Task<ActionResult<ExportSettingsModel>> ChangeState([FromBody]ChangeSettingsModel changeSettingsState)
         {
             if (await this.IsExistsDataExportInProgress())
-                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, message: DataExport.ErrorThereAreRunningProcesses);
+                return StatusCode((int)HttpStatusCode.Forbidden, new {message = DataExport.ErrorThereAreRunningProcesses});
 
             ExportSettingsModel oldState = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
 
@@ -55,14 +56,14 @@ namespace WB.UI.Headquarters.API
 
             this.auditLog.ExportEncryptionChanged(changeSettingsState.EnableState);
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
-            return Request.CreateResponse(newExportSettingsModel);
+            return newExportSettingsModel;
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> RegeneratePassword()
+        public async Task<ActionResult<ExportSettingsModel>> RegeneratePassword()
         {
             if (await this.IsExistsDataExportInProgress())
-                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, message: DataExport.ErrorThereAreRunningProcesses); 
+                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.ErrorThereAreRunningProcesses}); 
 
             ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
 
@@ -73,10 +74,10 @@ namespace WB.UI.Headquarters.API
             }
 
 
-            this.logger.Info($@"Export settings were changed by {base.User.Identity.Name}. Encryption password was changed.");
+            this.logger.LogInformation("Export settings were changed by {User}. Encryption password was changed.", new {User = base.User.Identity.Name});
 
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
-            return Request.CreateResponse(newExportSettingsModel);
+            return newExportSettingsModel;
         }
 
         private Task ClearExportData()

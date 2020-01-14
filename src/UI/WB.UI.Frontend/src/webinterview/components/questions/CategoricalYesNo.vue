@@ -54,7 +54,7 @@
     import { entityDetails } from "../mixins"
     import Vue from 'vue'
     import * as $ from "jquery"
-    import modal from "../modal"
+    import modal from "@/shared/modal"
     import { findIndex, filter } from "lodash"
     import { shouldShowAnsweredOptionsOnlyForMulti } from "./question_helpers"
     
