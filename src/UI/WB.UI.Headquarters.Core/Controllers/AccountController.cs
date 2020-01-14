@@ -99,10 +99,18 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize]
+        [AntiForgeryFilter]
         public async Task<ActionResult> Manage()
         {
-            var manageAccountModel = await GetCurrentUserModelAsync();
-            return View(manageAccountModel);
+            return View(new
+            {
+                UserInfo = await GetCurrentUserModelAsync(),
+                Api = new
+                {
+                    UpdatePasswordUrl = Url.Action("UpdatePassword"),
+                    UpdateUserUrl = Url.Action("UpdateAccount")
+                }
+            });
         }
 
         private async Task<ManageAccountDto> GetCurrentUserModelAsync()
@@ -121,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public async Task<ActionResult> UpdatePassword(ChangePasswordModel model)
+        public async Task<ActionResult> UpdatePassword([FromBody]ChangePasswordModel model)
         {
             var currentUser = await this.userRepository.FindByIdAsync(this.authorizedUser.Id);
 
@@ -135,14 +143,15 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.ModelState.IsValid)
             {
-                IdentityResult updateResult;
+                if (model.Password != null && model.Password != model.ConfirmPassword)
+                    this.ModelState.AddModelError(nameof(ChangePasswordModel.ConfirmPassword), FieldsAndValidations.ConfirmPasswordErrorMassage);
 
-                if (model.Password != null && model.Password == model.ConfirmPassword)
-                    updateResult = await this.userRepository.ChangePasswordAsync(currentUser, model.Password);
-                else updateResult = IdentityResult.Failed(new IdentityError() {Description = FieldsAndValidations.ConfirmPasswordErrorMassage});
+                var updateResult = await this.userRepository.ChangePasswordAsync(currentUser, model.Password);
 
                 if (!updateResult.Succeeded)
-                    this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), string.Join(@", ", updateResult.Errors));
+                    this.ModelState.AddModelError(nameof(ChangePasswordModel.Password),
+                        string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
+
             }
 
             return this.ModelState.ErrorsToJsonResult();
@@ -151,20 +160,20 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public async Task<ActionResult> UpdateAccountAsync(ManageAccountModel editModel)
+        public async Task<ActionResult> UpdateAccount([FromBody]ManageAccountModel editModel)
         {
-            var currentUser = await this.userRepository.FindByIdAsync(this.authorizedUser.Id);
-
-            currentUser.Email = editModel.Email;
-            currentUser.FullName = editModel.PersonName;
-            currentUser.PhoneNumber = editModel.PhoneNumber;
-
             if (this.ModelState.IsValid)
             {
+                var currentUser = await this.userRepository.FindByIdAsync(this.authorizedUser.Id);
+
+                currentUser.Email = editModel.Email;
+                currentUser.FullName = editModel.PersonName;
+                currentUser.PhoneNumber = editModel.PhoneNumber;
+
                 var updateResult = await this.userRepository.UpdateAsync(currentUser);
 
                 if (!updateResult.Succeeded)
-                    this.ModelState.AddModelError(nameof(ManageAccountModel.Email), string.Join(@", ", updateResult.Errors));
+                    this.ModelState.AddModelError(nameof(ManageAccountModel.Email), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
             }
 
             return this.ModelState.ErrorsToJsonResult();
