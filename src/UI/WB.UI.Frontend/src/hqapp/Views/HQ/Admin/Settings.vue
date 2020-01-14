@@ -92,7 +92,8 @@
                     <div class="form-group">
                         <input
                             class="checkbox-filter single-checkbox"
-                            data-bind="checked: isAllowInterviewerUpdateProfile, click: updateAllowInterviewerUpdateProfile"
+                            v-model="isAllowInterviewerUpdateProfile"
+                            @change="updateAllowInterviewerUpdateProfile"
                             id="allowInterviewerUpdateProfile"
                             type="checkbox"
                         />
@@ -118,7 +119,8 @@
                     <div class="form-group">
                         <input
                             class="checkbox-filter single-checkbox"
-                            data-bind="checked: isInterviewerAutomaticUpdatesEnabled, click: updateDeviceSettings"
+                            v-model="isInterviewerAutomaticUpdatesEnabled"
+                            @change="updateDeviceSettings"
                             id="interviewerAutomaticUpdatesEnabled"
                             type="checkbox"
                         />
@@ -135,7 +137,8 @@
                     <div class="form-group">
                         <input
                             class="checkbox-filter single-checkbox"
-                            data-bind="checked: isDeviceNotificationsEnabled, click: updateDeviceSettings"
+                            v-model="isDeviceNotificationsEnabled"
+                            @change="updateDeviceSettings"
                             id="deviceNotificationsEnabled"
                             type="checkbox"
                         />
@@ -160,7 +163,8 @@
                     <div class="form-group">
                         <input
                             class="checkbox-filter single-checkbox"
-                            data-bind="checked: isEmailAllowed, click: updateWebInterviewEmailNotifications"
+                            v-model="isEmailAllowed"
+                            @change="updateWebInterviewEmailNotifications"
                             id="allowWebInterviewEmailNotifications"
                             type="checkbox"
                         />
@@ -182,15 +186,16 @@
                 <p>{{$t('Settings.LogoSettings_Description')}}</p>
             </div>
             <form
-                action="@Url.Action('UpdateLogo', 'Settings')"
+                :action="$config.model.updateLogoUrl"
                 method="post"
                 enctype="multipart/form-data"
                 class="col-sm-7"
-                data-bind="submit: onLogoSubmit"
+                @submit="onLogoSubmit"
             >
                 <input
                     name="__RequestVerificationToken"
                     type="hidden"
+                    
                     :value="this.$hq.Util.getCsrfCookie()"
                 />
                 <div class="block-filter">
@@ -199,6 +204,7 @@
                         <input
                             type="file"
                             id="companyLogo"
+                            ref="logoRef"
                             name="logo"
                             accept="image/gif, image/jpeg, image/png"
                         />
@@ -208,19 +214,23 @@
                     <button
                         type="submit"
                         class="btn btn-success"
-                        data-bind="click: onLogoSubmit"
                     >{{$t('Common.Save')}}</button>
                 </div>
             </form>
             <div class="col-sm-7">
                 <div class="block-filter">
                     <figure class="logo-wrapper">
-                        <figcaption>@Settings.CurrentLogo:</figcaption>
-                        <img class="logo extra-margin-bottom" />
+                        <figcaption>{{$t('Settings.CurrentLogo')}}:</figcaption>
+                        <img class="logo extra-margin-bottom" ref="logoImage" :src="$config.model.logoUrl" @error="logoError" />
                     </figure>
                 </div>
                 <div class="block-filter">
-                    <form action="@Url.Action('RemoveLogo', 'Settings')" method="post">
+                    <form :action="$config.model.removeLogoUrl" method="post">
+                        <input
+                            name="__RequestVerificationToken"
+                            type="hidden"
+                            :value="this.$hq.Util.getCsrfCookie()"
+                        />
                         <button type="submit" class="btn btn-danger">{{$t('Settings.RemoveLogo')}}</button>
                     </form>
                 </div>
@@ -239,6 +249,7 @@
     </script>-->
 </template>
 <script>
+import Vue from "vue"
 import modal from '@/shared/modal'
 
 export default {
@@ -247,7 +258,11 @@ export default {
             encryptionEnabled: false,
             encryptionPassword: null,
             globalNotice: null,
-            globalNoticeUpdated: false
+            globalNoticeUpdated: false,
+            isAllowInterviewerUpdateProfile: false,
+            isInterviewerAutomaticUpdatesEnabled: false,
+            isDeviceNotificationsEnabled: false,
+            isEmailAllowed: false
         }
     },
     mounted() {
@@ -260,8 +275,17 @@ export default {
             this.encryptionPassword = response.data.password
 
             const globalNoticeResponse = await this.$hq.AdminSettings.getGlobalNotice()
-
             this.globalNotice = globalNoticeResponse.data.globalNotice
+
+            const profile = await this.$hq.AdminSettings.getProfileSettings()
+            this.isAllowInterviewerUpdateProfile = profile.data.allowInterviewerUpdateProfile
+
+            const interviewerSettings = await this.$hq.AdminSettings.getInterviewerSettings()
+            this.isInterviewerAutomaticUpdatesEnabled = interviewerSettings.data.interviewerAutoUpdatesEnabled
+            this.isDeviceNotificationsEnabled = interviewerSettings.data.notificationsEnabled
+
+            const webInterviewSettings = await this.$hq.AdminSettings.getWebInterviewSettings()
+            this.isEmailAllowed = webInterviewSettings.data.allowEmails
         },
         async regenPassword() {
             const response = await this.$hq.ExportSettings.regenPassword()
@@ -278,6 +302,33 @@ export default {
         async clearMessage(){
             this.globalNotice = ""
             return this.updateMessage()
+        },
+        updateAllowInterviewerUpdateProfile() {
+            this.$hq.AdminSettings.setProfileSettings(this.isAllowInterviewerUpdateProfile)
+        },
+        updateDeviceSettings(){
+            return this.$hq.AdminSettings.setInterviewerSettings(this.isInterviewerAutomaticUpdatesEnabled, this.isDeviceNotificationsEnabled)
+        },
+        updateWebInterviewEmailNotifications(){
+            return this.$hq.AdminSettings.setWebInterviewSettings(this.isEmailAllowed)
+        },
+        onLogoSubmit() {
+             if (window.File && window.FileReader && window.FileList && window.Blob) {
+                //get the file size and file type from file input field
+                var fsize = this.$refs.logoRef.files[0].size;
+
+                if (fsize > 1024*1024*10) 
+                {
+                    alert('Logo image size should be less than 10mb');
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        },
+        logoError() {
+            if(this.$refs.logoImage.src !== this.$config.model.defaultLogoUrl) 
+                this.$refs.logoImage.src = this.$config.model.defaultLogoUrl
         },
         clickEncryptionEnabled() {
             var self = this

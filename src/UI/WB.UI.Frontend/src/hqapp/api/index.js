@@ -250,8 +250,6 @@ class ExportSettings {
     }
 }
 
-// var $interviewerSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "InterviewerSettings" })';
-// var $profileSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "ProfileSettings" })';
 // var $webInterviewSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "WebInterviewSettings" })';
 
 
@@ -266,6 +264,27 @@ class AdminSettings {
     }
     setGlobalNotice(val) {
         return this.http.post(`${this.base}/GlobalNoticeSettings`, {GlobalNotice: val})
+    }
+    getProfileSettings() {
+        return this.http.get(`${this.base}/ProfileSettings`)
+    }
+    setProfileSettings(allowInterviewerUpdateProfile) {
+        return this.http.post(`${this.base}/ProfileSettings`, {allowInterviewerUpdateProfile: allowInterviewerUpdateProfile})
+    }
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled){
+        return this.http.post(`${this.base}/InterviewerSettings`, 
+            { interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled, 
+              notificationsEnabled: isDeviceNotificationsEnabled
+            })
+    }
+    getInterviewerSettings() {
+        return this.http.get(`${this.base}/InterviewerSettings`)
+    }
+    getWebInterviewSettings() {
+        return this.http.get(`${this.base}/WebInterviewSettings`)
+    }
+    setWebInterviewSettings(allowEmails) {
+        return this.http.post(`${this.base}/WebInterviewSettings`, {allowEmails: allowEmails})
     }
 }
 

@@ -1285,9 +1285,6 @@
     <Compile Include="API\PublicApi\AssignmentsPublicApiMapProfile.cs" />
     <Compile Include="API\PublicApi\Models\InterviewerUserApiDetails.cs" />
     <Compile Include="API\PublicApi\QuestionnairesController.cs" />
-    <Compile Include="API\Resources\CompanyLogoController.cs" />
-    <Compile Include="API\Resources\DataTableTranslationsController.cs" />
-    <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\PublicApi\UsersController.cs" />
     <Compile Include="App_GlobalResources\Import.Designer.cs">
       <DependentUpon>Import.resx</DependentUpon>
