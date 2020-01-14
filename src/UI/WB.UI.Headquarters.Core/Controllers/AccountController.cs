@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +18,6 @@ using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
-using IdentityResult = Microsoft.AspNetCore.Identity.IdentityResult;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -100,11 +100,25 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize]
         [AntiForgeryFilter]
-        public async Task<ActionResult> Manage()
+        public async Task<ActionResult> Manage(Guid? id)
         {
+            var user = await this.userRepository.FindByIdAsync(id ?? this.authorizedUser.Id);
+            if (user == null) return NotFound("User not found");
+
             return View(new
             {
-                UserInfo = await GetCurrentUserModelAsync(),
+                UserInfo = new ManageAccountDto
+                {
+                    UserId = user.Id,
+                    Email = user.Email,
+                    PersonName = user.FullName,
+                    PhoneNumber = user.PhoneNumber,
+                    UserName = user.UserName,
+                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToUiString(),
+                    IsOwnProfile = user.Id == this.authorizedUser.Id,
+                    IsLockedByHeadquarters = user.IsLockedByHeadquaters,
+                    IsLockedBySupervisor = user.IsLockedBySupervisor
+                },
                 Api = new
                 {
                     UpdatePasswordUrl = Url.Action("UpdatePassword"),
@@ -113,45 +127,36 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        private async Task<ManageAccountDto> GetCurrentUserModelAsync()
-        {
-            var currentUser = await this.userRepository.FindByIdAsync(this.authorizedUser.Id);
-            return new ManageAccountDto
-            {
-                Email = currentUser.Email,
-                PersonName = currentUser.FullName,
-                PhoneNumber = currentUser.PhoneNumber,
-                UserName = currentUser.UserName,
-                Role = currentUser.Roles.FirstOrDefault().Id.ToUserRole().ToUiString()
-            };
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         public async Task<ActionResult> UpdatePassword([FromBody]ChangePasswordModel model)
         {
-            var currentUser = await this.userRepository.FindByIdAsync(this.authorizedUser.Id);
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
 
-            if (!string.IsNullOrEmpty(model.Password))
+            var currentUser = await this.userRepository.FindByIdAsync(model.UserId);
+            if(currentUser == null) return NotFound("User not found");
+
+            if (currentUser.IsArchived)
+                return BadRequest(FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+
+            if (model.UserId == this.authorizedUser.Id)
             {
                 bool isPasswordValid = !string.IsNullOrEmpty(model.OldPassword)
-                                       && await this.userRepository.CheckPasswordAsync(currentUser, model.OldPassword);
+                                       && await this.userRepository.CheckPasswordAsync(currentUser,
+                                           model.OldPassword);
                 if (!isPasswordValid)
-                    this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), FieldsAndValidations.OldPasswordErrorMessage);
+                    this.ModelState.AddModelError(nameof(ChangePasswordModel.OldPassword), FieldsAndValidations.OldPasswordErrorMessage);
             }
 
-            if (this.ModelState.IsValid)
+            if (model.Password != null && model.Password != model.ConfirmPassword)
+                this.ModelState.AddModelError(nameof(ChangePasswordModel.ConfirmPassword), FieldsAndValidations.ConfirmPasswordErrorMassage);
+            else
             {
-                if (model.Password != null && model.Password != model.ConfirmPassword)
-                    this.ModelState.AddModelError(nameof(ChangePasswordModel.ConfirmPassword), FieldsAndValidations.ConfirmPasswordErrorMassage);
-
                 var updateResult = await this.userRepository.ChangePasswordAsync(currentUser, model.Password);
 
                 if (!updateResult.Succeeded)
-                    this.ModelState.AddModelError(nameof(ChangePasswordModel.Password),
-                        string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
-
+                    this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
             }
 
             return this.ModelState.ErrorsToJsonResult();
@@ -162,19 +167,24 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> UpdateAccount([FromBody]ManageAccountModel editModel)
         {
-            if (this.ModelState.IsValid)
-            {
-                var currentUser = await this.userRepository.FindByIdAsync(this.authorizedUser.Id);
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
 
-                currentUser.Email = editModel.Email;
-                currentUser.FullName = editModel.PersonName;
-                currentUser.PhoneNumber = editModel.PhoneNumber;
+            var currentUser = await this.userRepository.FindByIdAsync(editModel.UserId);
+            if(currentUser == null) return NotFound("User not found");
 
-                var updateResult = await this.userRepository.UpdateAsync(currentUser);
+            currentUser.Email = editModel.Email;
+            currentUser.FullName = editModel.PersonName;
+            currentUser.PhoneNumber = editModel.PhoneNumber;
 
-                if (!updateResult.Succeeded)
-                    this.ModelState.AddModelError(nameof(ManageAccountModel.Email), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
-            }
+            if (this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter)
+                currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
+            if (this.authorizedUser.IsSupervisor)
+                currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+
+            var updateResult = await this.userRepository.UpdateAsync(currentUser);
+
+            if (!updateResult.Succeeded)
+                this.ModelState.AddModelError(nameof(ManageAccountModel.Email), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
 
             return this.ModelState.ErrorsToJsonResult();
         }
