@@ -824,3 +824,16 @@ dl{
 	width: 27px;
 	height: 27px;
 }
+.disabled-element{
+	//position: relative;
+	color: $gray-light;
+	cursor: not-allowed;
+	&:after{
+		content: '';
+		display: block;
+		@include absolute(0, 0);
+		@include square(100%);
+		@include stripe-gradient(#dbdfe2, transparent);
+		@include transition(opacity, 0.3s);
+  }
+}

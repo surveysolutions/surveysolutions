@@ -7047,13 +7047,15 @@ a.disabled {
     text-align: left; } }
 
 @media (max-width: 481px) {
-  .navbar .navbar-header > .interview-ID {
-    padding-left: 5px;
-    padding-right: 5px; }
-  .navbar .navbar-header .active-page {
-    max-width: 30%; }
-  .navbar .container-fluid {
-    padding: 0px 12px; } }
+  .navbar {
+    white-space: nowrap; }
+    .navbar .navbar-header > .interview-ID {
+      padding-left: 5px;
+      padding-right: 5px; }
+    .navbar .navbar-header .active-page {
+      max-width: 30%; }
+    .navbar .container-fluid {
+      padding: 0px 12px; } }
 
 /* Progress bar */
 .progress {
@@ -10010,6 +10012,22 @@ dl dd:after {
       /* on retina, use image that's scaled by 2 */
       background-image: url("../img/padlock-3dp.png");
       background-size: 27px 27px; } }
+
+.disabled-element {
+  color: #a6a8a9;
+  cursor: not-allowed; }
+  .disabled-element:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(-45deg, #dbdfe2 15%, transparent 15%, transparent 50%, #dbdfe2 50%, #dbdfe2 65%, transparent 65%, transparent);
+    background-size: 8px 8px;
+    -webkit-transition: opacity 0.3s linear 0s;
+    transition: opacity 0.3s linear 0s; }
 
 .fade-enter-active, .fade-leave-active {
   -webkit-transition: opacity 0.5s;

@@ -60,7 +60,7 @@
             this.countOfInstances = this.$me.instances.length
 
             this.defaultColDef = {
-                width: 220, // set every column width
+                width: 180, // set every column width
                 height: 76,
                 resizable: true,
                 editable: true, // make every column editable
@@ -92,6 +92,7 @@
             gridOptions() {
                 return {
                     stopEditingWhenGridLosesFocus: true,
+                    suppressMovableColumns:true,
                     context: {
                         componentParent: this
                     }
