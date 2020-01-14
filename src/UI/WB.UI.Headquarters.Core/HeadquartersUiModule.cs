@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -12,6 +13,7 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Controllers.Services;
+using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
@@ -33,7 +35,9 @@ namespace WB.UI.Headquarters
             var services = registry;
 
             services.AddScoped<ServiceApiKeyAuthorization>();
-            
+
+            registry.Bind<IMapService, MapService>();
+
             registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IAudioProcessingService, AudioProcessingService>();

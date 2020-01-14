@@ -45,7 +45,7 @@ export default {
         }        
     },
   mounted() {
-    this.$refs.table.reload();
+    this.reload();
   },
   methods: {
       updateStatus(newMessage, errors){
@@ -62,6 +62,7 @@ export default {
                 }
             },
     reload() {
+          if (this.$refs.table)
             this.$refs.table.reload();
         },
     onFileChange(e){

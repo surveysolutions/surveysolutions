@@ -23,7 +23,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
 
-        public MapsController(ICommandService commandService, ILogger logger,
+        public MapsController(
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IMapService mapPropertiesProvider, IAuthorizedUser authorizedUser)
         {
@@ -36,22 +36,11 @@ namespace WB.UI.Headquarters.Controllers
         {
             var model = new MapsModel()
             {
-                DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new
-                    {
-                        httproute = "",
-                        controller = "MapsApi",
-                        action = "MapList"
-                    }),
-
-                UploadMapsFileUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new {httproute = "", controller = "MapsApi", action = "Upload"}),
-                UserMapsUrl =
-                    Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UserMaps" }),
-                UserMapLinkingUrl =
-                    Url.RouteUrl("Default", new {httproute = "", controller = "Maps", action = "UserMapsLink"}),
-                DeleteMapLinkUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new {httproute = "", controller = "MapsApi", action = "DeleteMap"}),
+                DataUrl = Url.Action("MapList", "MapsApi"),
+                UploadMapsFileUrl = Url.Action("Upload", "MapsApi"),
+                UserMapsUrl = Url.Action("UserMaps", "Maps"),
+                UserMapLinkingUrl = Url.Action("UserMapsLink", "Maps"),
+                DeleteMapLinkUrl = Url.Action("DeleteMap", "MapsApi"),
                 IsObserver = authorizedUser.IsObserver,
                 IsObserving = authorizedUser.IsObserving,
             };
@@ -61,14 +50,11 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Maps)]
         public ActionResult UserMapsLink()
         {
-            this.ViewBag.ActivePage = MenuItem.Maps;
             var model = new UserMapLinkModel()
             {
-                DownloadAllUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new {httproute = "", controller = "MapsApi", action = "MappingDownload"}),
-                UploadUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new { httproute = "", controller = "MapsApi", action = "UploadMappings" }),
-                MapsUrl = Url.RouteUrl("Default", new {httproute = "", controller = "Maps", action = "Index"}),
+                DownloadAllUrl = Url.Action("MappingDownload", "MapsApi"),
+                UploadUrl = Url.Action("UploadMappings", "MapsApi"),
+                MapsUrl = Url.Action("Index", "Maps"),
                 IsObserver = authorizedUser.IsObserver,
                 IsObserving = authorizedUser.IsObserving,
                 FileExtension = TabExportFile.Extention,
@@ -84,17 +70,11 @@ namespace WB.UI.Headquarters.Controllers
         {
             var model = new UserMapModel()
             {
-                DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new
-                    {
-                        httproute = "",
-                        controller = "MapsApi",
-                        action = "UserMaps"
-                    }),
-                MapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "Index" }),
-                UserMapLinkingUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UserMapsLink" })
+                DataUrl = Url.Action("UserMaps", "MapsApi"),
+                MapsUrl = Url.Action("Index", "Maps"),
+                UserMapLinkingUrl = Url.Action("UserMapsLink", "Maps"),
             };
-            return View(model);
+            return View("UserMaps", model);
         }
 
         [HttpGet]
@@ -112,24 +92,16 @@ namespace WB.UI.Headquarters.Controllers
                 new MapDetailsModel
                 {
 
-                    DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                        new
-                        {
-                            httproute = "",
-                            controller = "MapsApi",
-                            action = "MapUserList"
-                        }),
-                    MapPreviewUrl = Url.RouteUrl("Default",
-                        new {httproute = "", controller = "Maps", action = "MapPreview", mapName = map.Id}),
-                    MapsUrl = Url.RouteUrl("Default", new {httproute = "", controller = "Maps", action = "Index"}),
+                    DataUrl = Url.Action("MapUserList", "MapsApi"),
+                    MapPreviewUrl = Url.Action("MapPreview", "Maps", new { mapName = map.Id }),
+                    MapsUrl = Url.Action("Index", "Maps"),
                     FileName = mapName,
                     Size = FileSizeUtils.SizeInMegabytes(map.Size),
                     Wkid = map.Wkid,
                     ImportDate = map.ImportDate.HasValue ? map.ImportDate.Value.FormatDateWithTime() : "",
                     MaxScale = map.MaxScale,
                     MinScale = map.MinScale,
-                    DeleteMapUserLinkUrl = Url.RouteUrl("DefaultApiWithAction",
-                        new {httproute = "", controller = "MapsApi", action = "DeleteMapUser"})
+                    DeleteMapUserLinkUrl = Url.Action("DeleteMapUser", "MapsApi"),
                 });
         }
 
