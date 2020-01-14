@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -141,6 +143,12 @@ namespace WB.UI.Headquarters.Code
             {
                 session.Remove(key);
             }
+        }
+
+        public static string MapPath(this IWebHostEnvironment hostingEnvironment, string path)
+        {
+            var targetPath = Path.Combine(hostingEnvironment.WebRootPath, path);
+            return targetPath;
         }
     }
 }

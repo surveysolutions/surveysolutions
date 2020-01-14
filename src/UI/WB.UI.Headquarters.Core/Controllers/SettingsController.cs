@@ -29,7 +29,13 @@ namespace WB.UI.Headquarters.Controllers
         [AntiForgeryFilter]
         public IActionResult Index()
         {
-            return View();
+            return View(new
+            {
+                UpdateLogoUrl = Url.Action("UpdateLogo"),
+                RemoveLogoUrl = Url.Action("RemoveLogo"),
+                LogoUrl = Url.Content("~/api/CompanyLogo/Thumbnail"),
+                DefaultLogoUrl = Url.Content("~/img/HQ-login-3_05.png")
+            });
         }
 
         public IActionResult EmailProviders()
@@ -47,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateLogo(IFormFile file)
+        public async Task<ActionResult> UpdateLogo([FromForm(Name = "logo")]IFormFile file)
         {
             if (file?.Length > 0)
             {
@@ -62,7 +68,6 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         Logo = array
                     }, AppSetting.CompanyLogoStorageKey);
-                    //WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
                 }
             }
 
@@ -70,10 +75,10 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RemoveLogo()
         {
             this.appSettingsStorage.Remove(CompanyLogo.CompanyLogoStorageKey);
-            //WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
             return RedirectToAction("Index");
         }
     }

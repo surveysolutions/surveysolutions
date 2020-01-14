@@ -155,7 +155,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 },
                 AppSetting.WebInterviewSettings);
 
-            return Ok(new { sucess = true });
+            return Ok();
         }
 
         [HttpGet]

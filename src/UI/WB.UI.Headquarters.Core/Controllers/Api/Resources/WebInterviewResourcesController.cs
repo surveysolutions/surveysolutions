@@ -1,26 +1,22 @@
-using System;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
 
-namespace WB.UI.Headquarters.API.Resources
+namespace WB.UI.Headquarters.Controllers.Api.Resources
 {
     [Localizable(false)]
-    [System.Web.Http.AllowAnonymous]
-    public class WebInterviewResourcesController : ApiController
+    [AllowAnonymous]
+    [Route("api/{controller}/{action}")]
+    public class WebInterviewResourcesController : ControllerBase
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IImageFileStorage imageFileStorage;
@@ -44,38 +40,39 @@ namespace WB.UI.Headquarters.API.Resources
 
         [HttpHead]
         [ActionName("Content")]
-        public HttpResponseMessage ContentHead([FromUri] string interviewId, [FromUri] string contentId)
+        public IActionResult ContentHead([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
             if (!interview.AcceptsInterviewerAnswers() && !this.authorizedUser.CanConductInterviewReview())
             {
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             var attachment = attachmentStorage.GetById(contentId);
             if (attachment == null)
             {
-                return this.Request.CreateResponse(HttpStatusCode.NoContent);
+                return NoContent();
             }
-
-            return new ProgressiveDownload(this.Request).HeaderInfoMessage(attachment.Content.LongLength, attachment.ContentType);
+          
+            var stream = new MemoryStream(attachment.Content);
+            return File(stream, attachment.ContentType, enableRangeProcessing: true);
         }
 
         [HttpGet]
-        public HttpResponseMessage Content([FromUri] string interviewId, [FromUri] string contentId)
+        public IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
             if (!interview.AcceptsInterviewerAnswers() && !this.authorizedUser.CanConductInterviewReview())
             {
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             var attachment = attachmentStorage.GetById(contentId);
             if (attachment == null)
             {
-                return this.Request.CreateResponse(HttpStatusCode.NoContent);
+                return NotFound();
             }
 
             if (attachment.IsImage())
@@ -89,12 +86,12 @@ namespace WB.UI.Headquarters.API.Resources
                 return this.BinaryResponseMessageWithEtag(resultFile);
             }
 
-            return new ProgressiveDownload(Request).ResultMessage(new MemoryStream(attachment.Content), attachment.ContentType, attachment.FileName);
+            return File(attachment.Content, attachment.ContentType, enableRangeProcessing: true);
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Image([FromUri] string interviewId, [FromUri] string questionId,
-            [FromUri] string filename)
+        public async Task<IActionResult> Image([FromQuery] string interviewId, [FromQuery] string questionId,
+            [FromQuery] string filename)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
@@ -102,13 +99,13 @@ namespace WB.UI.Headquarters.API.Resources
                 && interview.GetMultimediaQuestion(Identity.Parse(questionId)) != null
                 && !this.authorizedUser.CanConductInterviewReview())
             {
-                return this.Request.CreateResponse(HttpStatusCode.NoContent);
+                return NoContent();
             }
 
             var file = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, filename);
 
             if (file == null || file.Length == 0)
-                return this.Request.CreateResponse(HttpStatusCode.NoContent);
+                return NoContent();
 
             var fullSize = GetQueryStringValue("fullSize") != null;
             var resultFile = fullSize
@@ -120,8 +117,7 @@ namespace WB.UI.Headquarters.API.Resources
 
         private string GetQueryStringValue(string key)
         {
-            return (this.Request.GetQueryNameValuePairs().Where(query => query.Key == key).Select(query => query.Value))
-                .FirstOrDefault();
+            return this.Request.Query[key];
         }
     }
 }
