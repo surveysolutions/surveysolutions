@@ -1,5 +1,5 @@
 <template>
-  <div class="block-filter" >
+    <div class="block-filter">
         <h5 :title="tooltip" v-if="title != null">{{title}}</h5>
         <slot></slot>
     </div>
@@ -7,9 +7,6 @@
 
 <script>
 export default {
-    props: [
-        "title",
-        "tooltip"
-    ]
+    props: ['title', 'tooltip'],
 }
 </script>
