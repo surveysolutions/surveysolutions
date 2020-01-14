@@ -331,12 +331,12 @@ namespace WB.UI.Headquarters.Controllers
 
         
         [HttpGet]
-        public HttpResponseMessage MappingDownload()
+        public IActionResult MappingDownload()
         {
             return CreateMapUsersResponse("usermaps");
         }
 
-        private HttpResponseMessage CreateMapUsersResponse(string reportName)
+        private IActionResult CreateMapUsersResponse(string reportName)
         {
             var exportFile = this.exportFactory.CreateExportFile(ExportFileType.Tab);
 
@@ -344,12 +344,9 @@ namespace WB.UI.Headquarters.Controllers
             
             Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(reportView));
 
-            var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
+            var fileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}";
+            var result = File(exportFileStream, exportFile.MimeType, fileNameStar);
 
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-            {
-                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
-            };
             return result;
         }
 
