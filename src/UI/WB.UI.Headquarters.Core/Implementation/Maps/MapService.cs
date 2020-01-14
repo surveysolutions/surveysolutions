@@ -20,8 +20,9 @@ namespace WB.UI.Headquarters.Implementation.Maps
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
-            if (!Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized)
-                Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.InstallPath = Path.Combine(hostingEnvironment.ContentRootPath, @"bin");
+            //if (!Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized)
+            //    Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.InstallPath = Path.Combine(hostingEnvironment.ContentRootPath, @"bin");
+           //     Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();//InstallPath = Path.Combine(hostingEnvironment.ContentRootPath, @"bin");
         }
 
         public async Task<MapProperties> GetMapPropertiesFromFileAsync(string pathToMap)
@@ -127,7 +128,7 @@ namespace WB.UI.Headquarters.Implementation.Maps
 
                 return Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized;
             }
-            catch
+            catch (Exception exception)
             {
                 return false;
             }
