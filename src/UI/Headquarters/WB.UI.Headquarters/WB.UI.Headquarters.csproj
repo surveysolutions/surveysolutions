@@ -1096,13 +1096,8 @@
     <Content Include="Views\Interview\Review.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
-    <Content Include="Views\Maps\Details.cshtml" />
-    <Content Include="Views\Maps\MapPreview.cshtml" />
-    <Content Include="Views\Maps\UserMapsLink.cshtml" />
-    <Content Include="Views\Maps\Index.cshtml" />
     <Content Include="Views\Users\index.cshtml" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
-    <Content Include="Views\Maps\UserMaps.cshtml" />
     <Content Include="Views\ControlPanel\_InterviewPackages.cshtml" />
     <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
     <Content Include="Views\Interview\InterviewHistory.cshtml" />
