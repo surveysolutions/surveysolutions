@@ -56,6 +56,7 @@ using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api.DataTable;
+using WB.UI.Headquarters.Models.Users;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.UnderConstruction;
@@ -161,13 +162,13 @@ namespace WB.UI.Headquarters
             var userPreloadingSettings =
                 new UserPreloadingSettings(
                     configurationSection.MaxAllowedRecordNumber,
-                    loginFormatRegex: UserModel.UserNameRegularExpression,
+                    loginFormatRegex: CreateUserModel.UserNameRegularExpression,
                     emailFormatRegex: configurationSection.EmailFormatRegex,
                     passwordFormatRegex: configurationSection.PasswordStrengthRegularExpression,
                     phoneNumberFormatRegex: configurationSection.PhoneNumberFormatRegex,
-                    fullNameMaxLength: UserModel.PersonNameMaxLength,
-                    phoneNumberMaxLength: UserModel.PhoneNumberLength,
-                    personNameFormatRegex: UserModel.PersonNameRegex);
+                    fullNameMaxLength: EditUserModel.PersonNameMaxLength,
+                    phoneNumberMaxLength: EditUserModel.PhoneNumberLength,
+                    personNameFormatRegex: EditUserModel.PersonNameRegex);
 
             var synchronizationSettings = new SyncSettings(origin: Constants.SupervisorSynchronizationOrigin);
 
