@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
                 Orders = request.GetSortOrderRequestItems(),
-                SearchBy = request.Search.Value,
+                SearchBy = request.Search?.Value,
             };
 
             var items = this.mapBrowseViewFactory.Load(input);
@@ -101,7 +101,7 @@ namespace WB.UI.Headquarters.Controllers
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
                 Orders = request.GetSortOrderRequestItems(),
-                SearchBy = request.Search.Value,
+                SearchBy = request.Search?.Value,
             };
 
             var items = this.mapBrowseViewFactory.Load(input);
