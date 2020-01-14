@@ -211,9 +211,9 @@
             },
 
             setTableRosterHeight() {
-                if (this.$me.instances.length > 20) {
+                if (this.$me.instances.length > 30) {
                     this.gridApi.setDomLayout('normal')
-                    this.$refs.matrixRoster.$el.style.height = '1024px';
+                    this.$refs.matrixRoster.$el.style.height = '1536px';
                 }
                 else {
                     this.gridApi.setDomLayout('autoHeight');
