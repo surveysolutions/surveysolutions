@@ -547,39 +547,6 @@
       <LastGenOutput>Roles.ru.designer.cs</LastGenOutput>
       <DependentUpon>Roles.resx</DependentUpon>
     </Content>
-    <Content Include="App_GlobalResources\Settings.ar.resx">
-      <DependentUpon>Settings.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.es.resx">
-      <DependentUpon>Settings.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.fr.resx">
-      <DependentUpon>Settings.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.ka.resx">
-      <DependentUpon>Settings.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.pt.resx">
-      <DependentUpon>Settings.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.ro.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Settings.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.ru.resx">
-      <DependentUpon>Settings.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.zh.resx">
-      <DependentUpon>Settings.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_GlobalResources\TakeNewInterview.ar.resx">
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
     </Content>
@@ -703,10 +670,6 @@
     <Content Include="App_GlobalResources\QuestionnaireImport.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>QuestionnaireImport.sq.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Settings.sq.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\TakeNewInterview.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1063,7 +1026,6 @@
     <Content Include="Views\ApiUser\Create.cshtml" />
     <Content Include="Views\ApiUser\Edit.cshtml" />
     <Content Include="Views\ApiUser\Index.cshtml" />
-    <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\HQ\CloneQuestionnaire.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
@@ -1151,7 +1113,6 @@
     <Content Include="Views\ControlPanel\AppUpdates.cshtml" />
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
     <Content Include="Views\ControlPanel\ImportBrokenPackage.cshtml" />
-    <Content Include="Views\Settings\EmailProviders.cshtml" />
     <Content Include="Views\WebEmails\EmailHtml.cshtml" />
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
@@ -1173,7 +1134,6 @@
     <None Include="webdeploy.targets" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\Automation\QuestionnaireAutomationController.cs" />
     <Compile Include="API\DataCollection\AttachmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
@@ -1218,11 +1178,6 @@
       <DependentUpon>Roles.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\Settings.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Settings.sq.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\TakeNewInterview.sq.designer.cs">
       <AutoGen>True</AutoGen>
@@ -1312,7 +1267,6 @@
     <Compile Include="API\DataCollection\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />
     <Compile Include="API\ControlPanelApiController.cs" />
-    <Compile Include="API\ExportSettingsApiController.cs" />
     <Compile Include="API\InterviewerSyncController.cs" />
     <Compile Include="API\DataCollection\DevicesControllerBase.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerApiController.cs" />
@@ -1342,11 +1296,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\MapReport.Designer.cs">
       <DependentUpon>MapReport.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\Settings.Designer.cs">
-      <DependentUpon>Settings.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -1394,7 +1343,6 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\Profile\ApiUserController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\Profile\InterviewerController.cs" />
     <Compile Include="Controllers\InterviewersController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
@@ -1404,8 +1352,6 @@
     <Compile Include="Code\CustomAutofacHubActivator.cs" />
     <Compile Include="Injections\ILocalExportServiceRunner.cs" />
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
-    <Compile Include="Models\Admin\EmailProviders.cs" />
-    <Compile Include="Models\Admin\SettingsModel.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
     <Compile Include="Models\Reports\SurveysAndStatusesModel.cs" />
@@ -1446,16 +1392,13 @@
     <Compile Include="API\PublicApi\Models\UserApiDetails.cs" />
     <Compile Include="API\PublicApi\Models\UserApiItem.cs" />
     <Compile Include="API\PublicApi\Models\UserApiView.cs" />
-    <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CompanyLogo\CompanyLogo.cs" />
     <Compile Include="Models\ComponentModels\ComboboxModel.cs" />
-    <Compile Include="Models\ExportSettingsModel.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Controllers\Profile\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\Profile\HeadquartersController.cs" />
-    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TypeExtensions.cs" />
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />

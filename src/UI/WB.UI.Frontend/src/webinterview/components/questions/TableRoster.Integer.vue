@@ -19,7 +19,7 @@
     import Vue from 'vue'
     import { entityDetails, tableCellEditor } from "../mixins"
     import { getGroupSeparator, getDecimalSeparator } from "./question_helpers"
-    import modal from "../modal"
+    import modal from "@/shared/modal"
 
     export default {
         name: 'TableRoster_Integer',

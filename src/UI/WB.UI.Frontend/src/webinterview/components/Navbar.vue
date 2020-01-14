@@ -170,7 +170,7 @@
     </nav>
 </template>
 <script lang="js">
-    import modal from "./modal"
+    import modal from "@/shared/modal"
     import axios from "axios"
 
     export default {

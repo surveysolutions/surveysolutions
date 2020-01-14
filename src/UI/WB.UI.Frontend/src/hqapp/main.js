@@ -23,7 +23,7 @@ Vue.use(VueTextareaAutosize);
 import { Popover } from 'uiv'
 Vue.component("popover", Popover);
 
-import box from "~/webinterview/components/modal";
+import box from "@/shared/modal";
 import "flatpickr/dist/flatpickr.css";
 import "toastr/build/toastr.css";
 import * as poly from "smoothscroll-polyfill";
