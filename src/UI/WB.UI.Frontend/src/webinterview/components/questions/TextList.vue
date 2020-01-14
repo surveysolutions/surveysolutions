@@ -30,7 +30,7 @@
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
-    import modal from "../modal"
+    import modal from "@/shared/modal"
 
     class TextListAnswerRow {
        constructor(value, text) {

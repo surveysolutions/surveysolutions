@@ -15,7 +15,7 @@
     </div>
 </template>
 <script lang="js">
-    import modal from "./modal"
+    import modal from "@/shared/modal"
     export default {
         name: 'wb-layout',
         computed: {
