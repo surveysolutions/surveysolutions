@@ -10,7 +10,7 @@ namespace WB.UI.Shared.Web.Modules
 {
     public static class ApiControllerExtensions
     {
-        public static IActionResult BinaryResponseMessageWithEtag(this Controller controller, byte[] resultFile, string contentType = "image/png")
+        public static IActionResult BinaryResponseMessageWithEtag(this ControllerBase controller, byte[] resultFile, string contentType = "image/png")
         {
             var stringEtag = GetEtagValue(resultFile);
             var etag = $"\"{stringEtag}\"";
