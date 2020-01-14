@@ -55,7 +55,7 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
-    import modal from "../modal"
+    import modal from "@/shared/modal"
     import { getGroupSeparator, getDecimalSeparator } from "./question_helpers"
 
     export default {

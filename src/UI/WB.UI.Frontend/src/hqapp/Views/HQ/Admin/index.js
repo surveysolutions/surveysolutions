@@ -1,5 +1,6 @@
 import EmailProviders from "./EmailProviders"
 import TabletLogs from "./TabletLogs"
+import Settings from "./Settings"
 import Vue from "vue"
 
 export default class AdminComponent {
@@ -15,6 +16,10 @@ export default class AdminComponent {
             {
                 path: '/Diagnostics/Logs',
                 component: TabletLogs
+            },
+            {
+                path: '/Settings',
+                component: Settings
             }
         ]
     }

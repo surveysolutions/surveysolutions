@@ -422,6 +422,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ReviewInterview.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Settings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\SyncLogMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SyncLogMessages.Designer.cs</LastGenOutput>

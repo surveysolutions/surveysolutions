@@ -125,7 +125,7 @@
 <script>
 import Vue from 'vue'
 import {DateFormats} from '~/shared/helpers'
-import modal from '~/webinterview/components/modal'
+import modal from "@/shared/modal"
 import {mixin as VueTimers} from 'vue-timers'
 
 const ProcessStatus = {
