@@ -20,7 +20,7 @@ const i18n = Vuei18n.initialize(browserLanguage);
 
 import "./init";
 import "./errors";
-import box from "./components/modal";
+import box from "@/shared/modal";
 
 require("./componentsRegistry");
 

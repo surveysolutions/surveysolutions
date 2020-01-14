@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import modal from "./components/modal";
+import modal from "@/shared/modal";
 import moment from'moment';
 
 export default {

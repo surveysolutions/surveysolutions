@@ -1,7 +1,7 @@
 import * as toastr from "toastr"
 import Vue from "vue"
 
-import modal from "../components/modal"
+import modal from "@/shared/modal"
 
 const connectionStore = {
     state: {
