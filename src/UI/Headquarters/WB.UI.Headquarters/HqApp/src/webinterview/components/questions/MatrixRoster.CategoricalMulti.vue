@@ -1,6 +1,7 @@
 <template>
     <div :class='questionStyle' :id='`mr_view_${questionId}`'>
-        <popover  class="tooltip-wrapper" trigger="hover-focus" append-to="body" :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0">
+        <popover  class="tooltip-wrapper" trigger="hover-focus" append-to="body" 
+                  :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)">
             <a class="cell-content has-tooltip" type="primary" data-role="trigger"></a>
             <template slot="popover">
                 <div class="error-tooltip" v-if="!question.validity.isValid">
@@ -17,19 +18,18 @@
             </template>
 
         </popover>
-        <div class="cell-bordered d-flex" style="align-items:center;width:220px !important;max-width:220px;"
+        <div class="cell-bordered d-flex" style="align-items:center;width:180px !important;max-width:180px;"
           v-for="option in editorParams.question.options"
           :key="$me.id + '_' + option.value"
           v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
-        <div class="field" style="width:220px;">
+        <div class="field" style="width:180px;">
           <input
-            v-if="answeredOrAllOptions.some(e => e.value === option.value)"
+            v-if="!disabled && answeredOrAllOptions.some(e => e.value === option.value)"
             class="wb-checkbox"
             type="checkbox"
             :id="$me.id + '_' + option.value"
             :name="$me.id"
-            :value="option.value"
-            
+            :value="option.value"            
             v-model="answer"
             @change="change"
             v-disabledWhenUnchecked="{
@@ -91,9 +91,9 @@
             },
             questionStyle() {
                 return [{
-                    'disabled-question' : this.question.isDisabled,
-                    'has-error' : !this.question.validity.isValid,
-                    'has-warnings' : this.question.validity.warnings.length > 0,
+                    'disabled-element' : this.question.isDisabled,
+                    'has-error' : !this.question.isDisabled && !this.question.validity.isValid,
+                    'has-warnings' : !this.question.isDisabled && this.question.validity.warnings.length > 0,
                     'not-applicable' : this.question.isLocked,
                     'syncing': this.isFetchInProgress
                 }, 'cell-unit', 'options-group', ' h-100',' d-flex']

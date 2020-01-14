@@ -1,6 +1,7 @@
 <template>
     <div :class="questionStyle" :id='`tr_view_${questionId}`'>
-        <popover :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0" trigger="hover-focus" append-to="body">
+        <popover trigger="hover-focus" append-to="body"
+                 :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)" v-if="!question.isDisabled">
             <a class="cell-content has-tooltip" type="primary" data-role="trigger">
                 <span v-if="(questionType == 'Integer' || questionType == 'Double') && question.useFormatting">
                     {{question.answer | formatNumber}}
@@ -52,9 +53,9 @@
             },
             questionStyle() {
                 return [{
-                    'disabled-question' : this.question.isDisabled,
-                    'has-error' : !this.question.validity.isValid,
-                    'has-warnings' : this.question.validity.warnings.length > 0,
+                    'disabled-element' : this.question.isDisabled,
+                    'has-error' : ! this.question.isDisabled && !this.question.validity.isValid,
+                    'has-warnings' : ! this.question.isDisabled && this.question.validity.warnings.length > 0,
                     'not-applicable' : this.question.isLocked,
                     'syncing': this.isFetchInProgress
                 }, 'cell-unit']
