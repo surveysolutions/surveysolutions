@@ -7,9 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Maps;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
@@ -33,10 +31,9 @@ namespace WB.UI.Headquarters.Controllers
             this.authorizedUser = authorizedUser;
         }
 
+        [ActivePage(MenuItem.Maps)]
         public ActionResult Index()
         {
-            this.ViewBag.ActivePage = MenuItem.Maps;
-
             var model = new MapsModel()
             {
                 DataUrl = Url.RouteUrl("DefaultApiWithAction",
@@ -61,6 +58,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
+        [ActivePage(MenuItem.Maps)]
         public ActionResult UserMapsLink()
         {
             this.ViewBag.ActivePage = MenuItem.Maps;
@@ -136,10 +134,9 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
+        [ActivePage(MenuItem.Maps)]
         public ActionResult MapPreview(string mapName)
         {
-            this.ViewBag.ActivePage = MenuItem.Maps;
-
             MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
             if (map == null)
                 return NotFound();
