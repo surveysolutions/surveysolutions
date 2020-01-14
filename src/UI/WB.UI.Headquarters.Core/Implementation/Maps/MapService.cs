@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Web.Hosting;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
+using Microsoft.AspNetCore.Hosting;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -15,12 +16,12 @@ namespace WB.UI.Headquarters.Implementation.Maps
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public MapService(IFileSystemAccessor fileSystemAccessor)
+        public MapService(IFileSystemAccessor fileSystemAccessor, IHostingEnvironment hostingEnvironment)
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
             if (!Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized)
-                Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.InstallPath = HostingEnvironment.MapPath(@"~/bin");
+                Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.InstallPath = Path.Combine(hostingEnvironment.ContentRootPath, @"bin");
         }
 
         public async Task<MapProperties> GetMapPropertiesFromFileAsync(string pathToMap)

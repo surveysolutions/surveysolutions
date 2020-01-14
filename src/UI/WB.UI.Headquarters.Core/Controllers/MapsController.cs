@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
@@ -17,8 +18,8 @@ using WB.Core.BoundedContexts.Headquarters.Maps;
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-    public class MapsController : BaseController
+    [Authorize(Roles = "Administrator, Headquarter")]
+    public class MapsController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
 
@@ -26,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public MapsController(ICommandService commandService, ILogger logger,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
-            IMapService mapPropertiesProvider, IAuthorizedUser authorizedUser) : base(commandService, logger)
+            IMapService mapPropertiesProvider, IAuthorizedUser authorizedUser)
         {
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
             this.authorizedUser = authorizedUser;
@@ -57,7 +58,7 @@ namespace WB.UI.Headquarters.Controllers
                 IsObserver = authorizedUser.IsObserver,
                 IsObserving = authorizedUser.IsObserving,
             };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult UserMapsLink()
@@ -83,7 +84,6 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Maps)]
         public ActionResult UserMaps()
         {
-            this.ViewBag.ActivePage = MenuItem.Maps;
             var model = new UserMapModel()
             {
                 DataUrl = Url.RouteUrl("DefaultApiWithAction",
@@ -104,11 +104,11 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Details(string mapName)
         {
             if (mapName == null)
-                return HttpNotFound();
+                return NotFound();
 
             MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
             if (map == null)
-                return HttpNotFound();
+                return NotFound();
 
             return this.View("Details",
                 new MapDetailsModel
@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Controllers
 
             MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
             if (map == null)
-                return HttpNotFound();
+                return NotFound();
 
             return View(map);
         }
