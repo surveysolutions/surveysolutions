@@ -153,7 +153,7 @@ namespace WB.Services.Export.Services
                     Storage = GetStorageType(variableLabels.ValueType)
                 };
 
-                meta.Variables[index].VarLabel = variableLabels.Value.Name;
+                meta.Variables[index].VarLabel = variableLabels.VariableLabel;
 
                 var valueSet = new ValueSet();
 
