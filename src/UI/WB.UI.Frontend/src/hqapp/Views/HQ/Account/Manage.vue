@@ -11,7 +11,7 @@
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
-                    <a href="/">{{$t('Pages.Home')}}</a>
+                    <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
                 </li>
             </ol>
             <h1>{{$t('Strings.HQ_Views_Manage_Title')}}</h1>
@@ -20,11 +20,11 @@
             <div class="profile">
                 <div class="col-sm-12">
                     <form-group :label="$t('Pages.AccountManage_Login')">
-                        <TextInput :value="model.userInfo.userName" disabled />
+                        <TextInput :value="userInfo.userName" disabled />
                     </form-group>
 
                     <form-group :label="$t('Pages.AccountManage_Role')">
-                        <TextInput :value="model.userInfo.role" disabled />
+                        <TextInput :value="userInfo.role" disabled />
                     </form-group>
 
                     <form-group
@@ -54,6 +54,34 @@
                             :haserror="modelState['PhoneNumber'] !== undefined"
                         />
                     </form-group>
+                    <p v-if="lockMessage != null">{{lockMessage}}</p>
+                    <form-group v-if="!userInfo.isOwnProfile">
+                        <input
+                            class="checkbox-filter single-checkbox"
+                            id="IsLocked"
+                            name="IsLocked"
+                            type="checkbox"
+                            v-model="isLockedByHeadquarters"
+                        />
+                        <label for="IsLocked" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{$t('FieldsAndValidations.IsLockedFieldName')}}
+                        </label>
+                    </form-group>
+                    <form-group v-if="!userInfo.isOwnProfile && canLockBySupervisor">
+                        <input
+                            class="checkbox-filter single-checkbox"
+                            data-val="true"
+                            id="IsLockedBySupervisor"
+                            name="IsLockedBySupervisor"
+                            type="checkbox"
+                            v-model="isLockedBySupervisor"
+                        />
+                        <label for="IsLockedBySupervisor" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
+                        </label>
+                    </form-group>
                 </div>
 
                 <div class="col-sm-12">
@@ -62,16 +90,19 @@
                             type="submit"
                             class="btn btn-success"
                             style="margin-right:5px"
-                            @click="updateAccount">{{$t('Pages.Update')}}</button>
-                        <a class="btn btn-default" href="/">{{$t('Common.Cancel')}}</a>
+                            @click="updateAccount"
+                        >{{$t('Pages.Update')}}</button>
+                        <a class="btn btn-default" v-bind:href="referrerUrl">{{$t('Common.Cancel')}}</a>
                     </div>
                 </div>
-
+            </div>
+            <div class="profile">
                 <div class="col-sm-7">
                     <h2>{{$t('Pages.AccountManage_ChangePassword')}}</h2>
                 </div>
                 <div class="col-sm-12">
                     <form-group
+                        v-if="userInfo.isOwnProfile"
                         :label="$t('FieldsAndValidations.OldPasswordFieldName')"
                         :error="modelState['OldPassword']"
                     >
@@ -108,7 +139,7 @@
                             style="margin-right:5px"
                             @click="updatePassword"
                         >{{$t('Pages.Update')}}</button>
-                        <a class="btn btn-default" href="/">{{$t('Common.Cancel')}}</a>
+                        <a class="btn btn-default" v-bind:href="referrerUrl">{{$t('Common.Cancel')}}</a>
                     </div>
                 </div>
             </div>
@@ -130,6 +161,8 @@ export default {
             oldPassword: null,
             password: null,
             confirmPassword: null,
+            isLockedByHeadquarters: false,
+            isLockedBySupervisor: false,
             successMessage: null,
         }
     },
@@ -137,31 +170,81 @@ export default {
         model() {
             return this.$config.model
         },
+        userInfo() {
+            return this.model.userInfo
+        },
+        isAdmin() {
+            return this.userInfo.role == 'Administrator'
+        },
+        isHeadquarters() {
+            return this.userInfo.role == 'Headquarter'
+        },
+        isSupervisor() {
+            return this.userInfo.role == 'Supervisor'
+        },
+        isInterviewer() {
+            return this.userInfo.role == 'Interviewer'
+        },
+        isObserver() {
+            return this.userInfo.role == 'Observer'
+        },
+        isApiUser() {
+            return this.userInfo.role == 'ApiUser'
+        },
+        canLockBySupervisor() {
+            return this.isInterviewer
+        },
+        lockMessage() {
+            if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
+            if (this.isSupervisor) return this.$t('Pages.Supervisor_LockWarning')
+            if (this.isInterviewer) return this.$t('Pages.Interviewer_LockWarning')
+            return null
+        },
+        referrerTitle() {
+            if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
+            if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
+            if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
+            if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
+            if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
+
+            return this.$t('Pages.Home')
+        },
+        referrerUrl() {
+            if (this.isHeadquarters) return '../../Headquarters'
+            if (this.isSupervisor) return '../../Supervisor'
+            if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
+            if (this.isObserver) return '../../Observer'
+            if (this.isApiUser) return '../../ApiUser'
+            
+            return '/'
+        },
     },
     mounted() {
-        this.personName = this.model.userInfo.personName
-        this.email = this.model.userInfo.email
-        this.phoneNumber = this.model.userInfo.phoneNumber
+        this.personName = this.userInfo.personName
+        this.email = this.userInfo.email
+        this.phoneNumber = this.userInfo.phoneNumber
+        this.isLockedByHeadquarters = this.userInfo.isLockedByHeadquarters
+        this.isLockedBySupervisor = this.userInfo.isLockedBySupervisor
     },
     watch: {
-      personName: function (val) {
-          delete this.modelState["PersonName"]
-       },
-       email: function (val) {
-          delete this.modelState["Email"]
-       },
-       phoneNumber: function (val) {
-          delete this.modelState["PhoneNumber"]
-       },
-       oldPassword: function (val) {
-          delete this.modelState["OldPassword"]
-       },
-       password: function (val) {
-          delete this.modelState["Password"]
-       },
-       confirmPassword: function (val) {
-          delete this.modelState["ConfirmPassword"]
-       },
+        personName: function(val) {
+            delete this.modelState['PersonName']
+        },
+        email: function(val) {
+            delete this.modelState['Email']
+        },
+        phoneNumber: function(val) {
+            delete this.modelState['PhoneNumber']
+        },
+        oldPassword: function(val) {
+            delete this.modelState['OldPassword']
+        },
+        password: function(val) {
+            delete this.modelState['Password']
+        },
+        confirmPassword: function(val) {
+            delete this.modelState['ConfirmPassword']
+        },
     },
     methods: {
         updatePassword: function(event) {
@@ -175,6 +258,7 @@ export default {
                 method: 'post',
                 url: this.model.api.updatePasswordUrl,
                 data: {
+                    userId: self.userInfo.userId,
                     password: self.password,
                     confirmPassword: self.confirmPassword,
                     oldPassword: self.oldPassword,
@@ -202,9 +286,12 @@ export default {
                 method: 'post',
                 url: this.model.api.updateUserUrl,
                 data: {
+                    userId: self.userInfo.userId,
                     personName: self.personName,
                     email: self.email,
                     phoneNumber: self.phoneNumber,
+                    isLockedByHeadquarters: self.isLockedByHeadquarters,
+                    isLockedBySupervisor: self.isLockedBySupervisor,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),

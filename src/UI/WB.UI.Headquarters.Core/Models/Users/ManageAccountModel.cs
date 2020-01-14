@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Resources;
@@ -7,6 +8,7 @@ namespace WB.UI.Headquarters.Models.Users
 {
     public class ManageAccountModel
     {
+        public Guid UserId { get; set; }
 
         [EmailAddress(ErrorMessageResourceName = nameof(FieldsAndValidations.EmailErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
         public string Email { get; set; }
@@ -18,5 +20,8 @@ namespace WB.UI.Headquarters.Models.Users
         [Phone(ErrorMessageResourceName = nameof(FieldsAndValidations.PhoneErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
         [StringLength(UserModel.PhoneNumberLength, ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = nameof(FieldsAndValidations.PhoneErrorLength))]
         public string PhoneNumber { get; set; }
+
+        public bool IsLockedByHeadquarters { get; set; }
+        public bool IsLockedBySupervisor { get; set; }
     }
 }
