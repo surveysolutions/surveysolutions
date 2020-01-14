@@ -7,9 +7,6 @@
             height: 0;
         }
         .ag-header-cell{
-            &:last-of-type{
-                border-right: 1px solid #E5E5E5;
-            }
             
             border-top: 1px solid #E5E5E5;
             border-bottom: 1px solid rgba(0, 0, 0, 0.3);
@@ -85,6 +82,11 @@
                     font-style: italic;
                 }
             }
+            &.readonly{
+                background-color: #E5E5E5;
+                color: $gray-text;
+                cursor: not-allowed;
+            }
         }
         .cell-unit{
             width: 100%;
@@ -119,16 +121,6 @@
                 height: 3px;
                 background: transparent;
             }
-            &.not-applicable{
-                background-color: transparent;
-                background-image: linear-gradient(-45deg, #dbdfe2 15%, transparent 15%, transparent 50%, #dbdfe2 50%, #dbdfe2 65%, transparent 65%, transparent);
-                background-size: 8px 8px;
-                
-            }
-            &.disabled-question{
-                background-color: #E5E5E5;
-                border-color: #a0a0a0;
-            }
             
             &.has-warnings{
                 background-image: url('../img/warning2.svg');
@@ -150,6 +142,16 @@
             }
         }
         &:not(.roster-matrix){
+            
+            .ag-header-cell{
+                border-right: 1px solid #E5E5E5;
+                
+            }
+            .ag-pinned-left-header{
+                .ag-header-cell{
+                    border-right-color: rgba(0, 0, 0, 0.3);
+                }
+            }
             .ag-cell{
                 border-right: 1px solid #E5E5E5;
                 & > .ag-input-text-wrapper{

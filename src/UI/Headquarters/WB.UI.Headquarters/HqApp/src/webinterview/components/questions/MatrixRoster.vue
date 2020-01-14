@@ -7,7 +7,7 @@
         <ag-grid-vue 
             ref="matrixRoster"
             class="ag-theme-customStyles roster-matrix"
-            style="height:1024px"
+            style="height:1536px"
             domLayout='normal'
             rowHeight="40"
             headerHeight="50"
@@ -67,7 +67,7 @@
             this.instructions = this.$me.questions.length > 0 ? this.$me.questions[0].instruction : null
 
             this.defaultColDef = {
-                width: 220, // set every column width
+                width: 180, // set every column width
                 height: 76,
                 resizable: true,
                 editable: false, // make every column editable
@@ -106,6 +106,7 @@
                 return {
                     suppressClickEdit:true,
                     suppressCellSelection:true,
+                    suppressMovableColumns:true,
                     context: {
                         componentParent: this
                     }
@@ -126,7 +127,7 @@
                                 instruction: question.instruction,
                                 question: question
                             },
-                            width:question.options.length * 220,
+                            width:question.options.length * 180,
                             
                             field: question.id, 
                             cellRendererFramework: 'MatrixRoster_QuestionEditor',
@@ -160,6 +161,7 @@
                 var self = this;
 
                 var rosterInstancesWithQuestionsAsRows = _.map(
+                    //_.filter(this.$me.instances, function(instance){ return !instance.isDisabled || (instance.isDisabled && !instance.hideIfDisabled); }),                    
                     this.$me.instances,
                     (instance, key) => {
                         var instanceAsRow = {
