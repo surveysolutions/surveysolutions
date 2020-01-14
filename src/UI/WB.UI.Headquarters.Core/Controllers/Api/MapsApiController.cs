@@ -6,33 +6,30 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.UI.Headquarters.API;
-using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers.Api;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
-using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Extensions;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [CamelCase]
     [Authorize(Roles = "Administrator, Headquarter")]
-    public class MapsApiController : BaseApiController
+    public class MapsApiController : ControllerBase
     {
         private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk", ".tif" };
 
@@ -51,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers
             IMapService mapPropertiesProvider,
             IFileSystemAccessor fileSystemAccessor,
             ICsvReader recordsAccessorFactory,
-            IArchiveUtils archiveUtils) : base(commandService, logger)
+            IArchiveUtils archiveUtils)
         {
             this.mapBrowseViewFactory = mapBrowseViewFactory;
             this.logger = logger;
@@ -66,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers
         
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public IHttpActionResult MapList([FromUri] DataTableRequest request)
+        public IActionResult MapList(DataTableRequest request)
         {
             var input = new MapsInputModel
             {
@@ -96,7 +93,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public IHttpActionResult UserMaps([FromUri] DataTableRequest request)
+        public IActionResult UserMaps(DataTableRequest request)
         {
             var input = new UserMapsInputModel
             {
@@ -130,8 +127,8 @@ namespace WB.UI.Headquarters.Controllers
 
 
         [HttpPost]
-        [ObserverNotAllowedApi]
-        public async Task<JsonMapResponse> Upload(HttpFile file)
+        [ObserverNotAllowed]
+        public async Task<JsonMapResponse> Upload(IFormFile file)
         {
             var response = new JsonMapResponse();
 
@@ -155,7 +152,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             try
             {
-                var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file.FileBytes);
+                var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file.OpenReadStream());
                 
                 var validMapFilesCount = filesInArchive.Keys.Count(x =>
                     permittedMapFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(x)));
@@ -182,7 +179,7 @@ namespace WB.UI.Headquarters.Controllers
             var invalidMaps = new List<Tuple<string, Exception>>();
             try
             {
-                var extractedFiles = archiveUtils.GetFilesFromArchive(file.FileBytes);
+                var extractedFiles = archiveUtils.GetFilesFromArchive(file.OpenReadStream());
                 foreach (var map in extractedFiles)
                 {
                     try
@@ -214,16 +211,16 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ObserverNotAllowed]
-        public HttpResponseMessage UploadMappings(HttpFile file)
+        public IActionResult UploadMappings(IFormFile file)
         {
             if (file == null)
             {
-                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable, Maps.MappingsLoadingError);
+                return this.StatusCode(StatusCodes.Status406NotAcceptable, Maps.MappingsLoadingError);
             }
 
             if (TabExportFile.Extention != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
             {
-                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable, Maps.FileLoadingNotTsvError);
+                return this.StatusCode(StatusCodes.Status406NotAcceptable, Maps.FileLoadingNotTsvError);
             }
 
             int errorsCount = 0;
@@ -232,13 +229,13 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
-                mappings = ProcessDataFile(file.FileBytes);
+                mappings = ProcessDataFile(file.OpenReadStream());
             }
             catch (Exception e)
             {
-                Logger.Error($"Error on maps import mapping", e);
+                logger.Error($"Error on maps import mapping", e);
 
-                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable, Maps.MappingsLoadingError);
+                return this.StatusCode(StatusCodes.Status406NotAcceptable, Maps.MappingsLoadingError);
             }
 
             foreach (var mapUserMapping in mappings)
@@ -255,12 +252,12 @@ namespace WB.UI.Headquarters.Controllers
 
             }
 
-            return this.Request.CreateResponse(HttpStatusCode.OK, string.Format(Maps.UploadMappingsSummaryFormat, mappings.Count, errorsCount));
+            return this.Ok(string.Format(Maps.UploadMappingsSummaryFormat, mappings.Count, errorsCount));
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public IHttpActionResult MapUsers([FromBody] MapUsersTableRequest request)
+        public IActionResult MapUsers(MapUsersTableRequest request)
         {
             if(string.IsNullOrWhiteSpace(request.MapName))
                 return null;
@@ -294,7 +291,7 @@ namespace WB.UI.Headquarters.Controllers
         
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
-        public IHttpActionResult MapUserList([FromUri]MapUsersTableRequest request)
+        public IActionResult MapUserList(MapUsersTableRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.MapName))
                 return null;
@@ -355,13 +352,13 @@ namespace WB.UI.Headquarters.Controllers
             return result;
         }
 
-        [ObserverNotAllowedApi]
+        [ObserverNotAllowed]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<JsonCommandResponse> DeleteMap(DeleteMapRequestModel request)
+        public async Task<CommandApiController.JsonCommandResponse> DeleteMap(DeleteMapRequestModel request)
         {
             await this.mapStorageService.DeleteMap(request.Map);
-            return new JsonCommandResponse() { IsSuccess = true };
+            return new CommandApiController.JsonCommandResponse() { IsSuccess = true };
         }
 
         public class DeleteMapRequestModel
@@ -369,13 +366,13 @@ namespace WB.UI.Headquarters.Controllers
             public string Map { get; set; }
         }
 
-        [ObserverNotAllowedApi]
+        [ObserverNotAllowed]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public JsonCommandResponse DeleteMapUser(DeleteMapUserRequestModel request)
+        public CommandApiController.JsonCommandResponse DeleteMapUser(DeleteMapUserRequestModel request)
         {
             this.mapStorageService.DeleteMapUserLink(request.Map, request.User);
-            return new JsonCommandResponse() { IsSuccess = true };
+            return new CommandApiController.JsonCommandResponse() { IsSuccess = true };
         }
 
         public class DeleteMapUserRequestModel
@@ -391,15 +388,12 @@ namespace WB.UI.Headquarters.Controllers
         }
 
 
-        private List<MapUserMapping> ProcessDataFile(byte[] file)
+        private List<MapUserMapping> ProcessDataFile(Stream fileStream)
         {
             var records = new List<string[]>();
             try
             {
-                using (MemoryStream stream = new MemoryStream(file))
-                {
-                    records = this.recordsAccessorFactory.ReadRowsWithHeader(stream, "\t").ToList();
-                }
+                records = this.recordsAccessorFactory.ReadRowsWithHeader(fileStream, "\t").ToList();
             }
             catch (Exception e)
             {
