@@ -129,9 +129,11 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ObserverNotAllowed]
-        public async Task<JsonMapResponse> Upload(IFormFile file)
+        public async Task<JsonMapResponse> Upload()
         {
             var response = new JsonMapResponse();
+
+            IFormFile file = Request.Form.Files.SingleOrDefault();
 
             if (file == null)
             {
@@ -212,8 +214,10 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ObserverNotAllowed]
-        public IActionResult UploadMappings(IFormFile file)
+        public IActionResult UploadMappings()
         {
+            IFormFile file = Request.Form.Files.SingleOrDefault();
+
             if (file == null)
             {
                 return this.StatusCode(StatusCodes.Status406NotAcceptable, Maps.MappingsLoadingError);
