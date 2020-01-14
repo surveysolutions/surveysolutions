@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.BoundedContexts.Headquarters.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Attributes;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator")]
-    public class AdminSettingsController : ApiController
+    [Route("api/{controller}/{action}")]
+    public class AdminSettingsController : ControllerBase
     {
         private readonly ISystemLogViewFactory systemLogViewFactory;
 
@@ -85,16 +83,16 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        public HttpResponseMessage GlobalNoticeSettings()
+        public ActionResult<GlobalNoticeModel> GlobalNoticeSettings()
         {
-            return Request.CreateResponse(new GlobalNoticeModel
+            return new GlobalNoticeModel
             {
                 GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
-            });
+            };
         }
 
         [HttpPost]
-        public HttpResponseMessage GlobalNoticeSettings([FromBody] GlobalNoticeModel message)
+        public IActionResult GlobalNoticeSettings([FromBody] GlobalNoticeModel message)
         {
             if (string.IsNullOrEmpty(message?.GlobalNotice))
             {
@@ -107,23 +105,23 @@ namespace WB.UI.Headquarters.API
                 this.appSettingsStorage.Store(globalNotice, GlobalNotice.GlobalNoticeKey);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
+            return Ok(new {sucess = true});
         }
 
         [HttpGet]
-        public HttpResponseMessage InterviewerSettings()
+        public ActionResult<InterviewerSettingsModel> InterviewerSettings()
         {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
 
-            return Request.CreateResponse(new InterviewerSettingsModel
+            return new InterviewerSettingsModel
             {
                 InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled(),
                 NotificationsEnabled = interviewerSettings.IsDeviceNotificationsEnabled()
-            });
+            };
         }
 
         [HttpPost]
-        public HttpResponseMessage InterviewerSettings([FromBody] InterviewerSettingsModel message)
+        public IActionResult InterviewerSettings([FromBody] InterviewerSettingsModel message)
         {
             this.interviewerSettingsStorage.Store(
                 new InterviewerSettings
@@ -133,22 +131,22 @@ namespace WB.UI.Headquarters.API
                 },
                 AppSetting.InterviewerSettings);
 
-            return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
+            return Ok(new {sucess = true});
         }
 
         [HttpGet]
-        public HttpResponseMessage WebInterviewSettings()
+        public ActionResult<WebInterviewSettingsModel> WebInterviewSettings()
         {
             var webInterviewSettings = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings);
 
-            return Request.CreateResponse(new WebInterviewSettingsModel
+            return new WebInterviewSettingsModel
             {
                 AllowEmails = webInterviewSettings?.AllowEmails ?? false
-            });
+            };
         }
 
         [HttpPost]
-        public HttpResponseMessage WebInterviewSettings([FromBody] WebInterviewSettingsModel message)
+        public IActionResult WebInterviewSettings([FromBody] WebInterviewSettingsModel message)
         {
             this.webInterviewSettingsStorage.Store(
                 new WebInterviewSettings
@@ -157,22 +155,22 @@ namespace WB.UI.Headquarters.API
                 },
                 AppSetting.WebInterviewSettings);
 
-            return Request.CreateResponse(HttpStatusCode.OK, new { sucess = true });
+            return Ok(new { sucess = true });
         }
 
         [HttpGet]
-        public HttpResponseMessage ProfileSettings()
+        public ActionResult<ProfileSettingsModel> ProfileSettings()
         {
             var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
 
-            return Request.CreateResponse(new ProfileSettingsModel
+            return new ProfileSettingsModel
             {
                 AllowInterviewerUpdateProfile = profileSettings?.AllowInterviewerUpdateProfile ?? false
-            });
+            };
         }
 
         [HttpPost]
-        public HttpResponseMessage ProfileSettings([FromBody] ProfileSettingsModel message)
+        public IActionResult ProfileSettings([FromBody] ProfileSettingsModel message)
         {
             this.profileSettingsStorage.Store(
                 new ProfileSettings
@@ -181,11 +179,11 @@ namespace WB.UI.Headquarters.API
                 },
                 AppSetting.ProfileSettings);
 
-            return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
+            return Ok(new {sucess = true});
         }
 
         [HttpPost]
-        public HttpResponseMessage UpdateEmailProviderSettings([FromBody] EmailProviderSettings settings)
+        public IActionResult UpdateEmailProviderSettings([FromBody] EmailProviderSettings settings)
         {
             var currentsSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             this.emailProviderSettingsStorage.Store(settings, AppSetting.EmailProviderSettings);
@@ -196,19 +194,17 @@ namespace WB.UI.Headquarters.API
                 auditLog.EmailProviderWasChanged((currentsSettings?.Provider ?? EmailProvider.None).ToString(), settings.Provider.ToString());
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
+            return Ok(new {sucess = true});
         }
 
         [HttpGet]
-        [CamelCase]
-        public EmailProviderSettings EmailProviderSettings()
+        public ActionResult<EmailProviderSettings> EmailProviderSettings()
         {
             return this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
         }
 
         [HttpPost]
-        [CamelCase]
-        public async Task<HttpResponseMessage> SendTestEmail([FromBody] TestEmailModel model)
+        public async Task<IActionResult> SendTestEmail([FromBody] TestEmailModel model)
         {
             var settings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             try
@@ -220,11 +216,11 @@ namespace WB.UI.Headquarters.API
 
                 var sendingResult = await this.emailService.SendEmailAsync(model.Email, email.Subject, email.MessageHtml, email.MessageText);
 
-                return Request.CreateResponse(HttpStatusCode.OK, new {Success = true});
+                return Ok(new {success = true});
             }
             catch (EmailServiceException e)
             {
-                return Request.CreateResponse(e.StatusCode, new
+                return StatusCode((int)e.StatusCode, new
                 {
                     Success = false,
                     Errors = e.Errors,
@@ -235,6 +231,5 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         public SystemLog GetSystemLog(SystemLogFilter filter) => this.systemLogViewFactory.GetLog(filter);
-
     }
 }

@@ -230,6 +230,45 @@ class WebInterviewSettingsApi {
     }
 }
 
+class ExportSettings {
+    constructor(http) {
+        this.http = http
+        this.base = "api/ExportSettingsApi"
+    }
+
+    setEncryption(val) {
+        const url = `${this.base}/ChangeState`
+        return this.http.post(url, { enableState: val })
+    }
+
+    getEncryption() {
+        return this.http.get(`${this.base}/ExportSettings`)
+    }
+
+    regenPassword(){
+        return this.http.post(`${this.base}/RegeneratePassword`)
+    }
+}
+
+// var $interviewerSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "InterviewerSettings" })';
+// var $profileSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "ProfileSettings" })';
+// var $webInterviewSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "WebInterviewSettings" })';
+
+
+class AdminSettings {
+    constructor(http) {
+        this.http = http
+        this.base = "api/AdminSettings"
+    }
+
+    getGlobalNotice() {
+        return this.http.get(`${this.base}/GlobalNoticeSettings`)
+    }
+    setGlobalNotice(val) {
+        return this.http.post(`${this.base}/GlobalNoticeSettings`, {GlobalNotice: val})
+    }
+}
+
 class HttpUtil {
     getCsrfCookie() {
         var name = "CSRF-TOKEN="
@@ -268,6 +307,14 @@ class HqApiClient {
     get Assignments() { return new AssignmentsApi(this.http) }
 
     get WebInterviewSettings() { return new WebInterviewSettingsApi(this.http) }
+
+    get ExportSettings() {
+        return new ExportSettings(this.http)
+    }
+
+    get AdminSettings(){
+        return new AdminSettings(this.http)
+    }
 
     get Util() {
         return new HttpUtil()

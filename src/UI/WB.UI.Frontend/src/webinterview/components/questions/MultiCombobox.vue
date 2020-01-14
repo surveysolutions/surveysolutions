@@ -38,7 +38,7 @@
 
     import { entityDetails } from "../mixins"
     import Vue from 'vue'
-    import modal from "../modal"
+    import modal from "@/shared/modal"
     import {find, map, includes, without, filter as loFilter} from "lodash"
     
     export default {

@@ -51,7 +51,7 @@
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
-    import modal from "../modal"
+    import modal from "@/shared/modal"
     import { filter } from "lodash"
     import { shouldShowAnsweredOptionsOnlyForMulti } from "./question_helpers"
 
