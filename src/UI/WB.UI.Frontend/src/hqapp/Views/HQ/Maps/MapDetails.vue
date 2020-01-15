@@ -53,11 +53,13 @@
 <script>
 export default {
     mounted() {
-        this.$refs.table.reload();
+        this.reload();
     },
     methods: {     
         reload() {
-            this.$refs.table.reload();
+            if (this.$refs.table){
+                this.$refs.table.reload();
+            }
         },   
         addParamsToRequest(requestData) {
             requestData.mapName = this.$config.model.fileName;
