@@ -15,16 +15,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private ILookupTableService lookupTableService;
         private ITranslationsService translationsService;
         private ICommentsService commentsService;
+        private readonly ICategoriesService categoriesService;
 
         public ResourcesPostProcessor(IAttachmentService attachmentService,
             ILookupTableService lookupTableService,
             ITranslationsService translationsService,
-            ICommentsService commentsService)
+            ICommentsService commentsService,
+            ICategoriesService categoriesService)
         {
             this.attachmentService = attachmentService;
             this.lookupTableService = lookupTableService;
             this.translationsService = translationsService;
             this.commentsService = commentsService;
+            this.categoriesService = categoriesService;
         }
 
         public void Process(Questionnaire aggregate, DeleteQuestionnaire command)
@@ -33,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.lookupTableService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
             this.attachmentService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
             this.commentsService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
+            this.categoriesService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
         }
     }
 }

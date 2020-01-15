@@ -68,24 +68,25 @@ namespace WB.UI.Shared.Enumerator.Services
                 Android.Provider.Settings.Secure.AndroidId);
         }
 
-        private static string _userAgent = null;
+        private static string userAgent;
         public string UserAgent
         {
             get
             {
-                if (_userAgent != null) return _userAgent;
+                if (userAgent != null) return userAgent;
 
                 var flags = new List<string>();
 #if DEBUG
                 flags.Add("DEBUG");
 #endif
-                flags.Add($"QuestionnarieVersion/{this.GetSupportedQuestionnaireContentVersion()}");
-                _userAgent = $"{Application.Context.PackageName}/{this.GetApplicationVersionName()} ({string.Join(" ", flags)})";
-                return _userAgent;
+                flags.Add($"QuestionnaireVersion/{this.GetSupportedQuestionnaireContentVersion()}");
+                // Be very careful when changing this. CheckCompatibility method parses this
+                userAgent = $"{Application.Context.PackageName}/{this.GetApplicationVersionName()} ({string.Join(" ", flags)})";
+                return userAgent;
             }
         }
 
-        public int MaxDegreeOfParallelism { get; } = 3;
+        public int MaxDegreeOfParallelism { get; } = 4;
 
         public EnumeratorApplicationType ApplicationType =>
             this.GetApplicationVersionName()?.ToLower()?.Contains(@"maps") ?? false
@@ -94,6 +95,9 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public bool Encrypted => this.CurrentSettings.Encrypted ?? false;
         public void SetEncrypted(bool encrypted) => this.SaveCurrentSettings(s => s.Encrypted = encrypted);
+        public bool DashboardViewsUpdated => this.CurrentSettings.DashboardViewsUpdated ?? false;
+        public void SetDashboardViewsUpdated(bool updated) => this.SaveCurrentSettings(s => s.DashboardViewsUpdated = updated);
+
         public bool NotificationsEnabled => this.CurrentSettings.NotificationsEnabled ?? true;
         public virtual void SetNotifications(bool notificationsEnabled) => this.SaveCurrentSettings(s => s.NotificationsEnabled = notificationsEnabled);
         public void MarkSyncStart()

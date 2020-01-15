@@ -5,7 +5,6 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -19,58 +18,52 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 {
-    public class InterviewDashboardEventHandler : BaseDenormalizer, IGlobalLiteEventHandler,
-                                         ILitePublishedEventHandler<InterviewCreated>,
-                                         ILitePublishedEventHandler<SynchronizationMetadataApplied>,
-                                         ILitePublishedEventHandler<InterviewSynchronized>,
-                                         ILitePublishedEventHandler<InterviewStatusChanged>,
-                                         ILitePublishedEventHandler<InterviewHardDeleted>,
-                                         ILitePublishedEventHandler<InterviewerAssigned>,
-                                         ILitePublishedEventHandler<SupervisorAssigned>,
-
-                                         ILitePublishedEventHandler<TextQuestionAnswered>,
-                                         ILitePublishedEventHandler<MultipleOptionsQuestionAnswered>,
-                                         ILitePublishedEventHandler<SingleOptionQuestionAnswered>,
-                                         ILitePublishedEventHandler<NumericRealQuestionAnswered>,
-                                         ILitePublishedEventHandler<NumericIntegerQuestionAnswered>,
-                                         ILitePublishedEventHandler<DateTimeQuestionAnswered>,
-                                         ILitePublishedEventHandler<GeoLocationQuestionAnswered>,
-                                         ILitePublishedEventHandler<QRBarcodeQuestionAnswered>,
-                                         ILitePublishedEventHandler<YesNoQuestionAnswered>,
-                                         ILitePublishedEventHandler<TextListQuestionAnswered>,
-                                         ILitePublishedEventHandler<PictureQuestionAnswered>,
-                                         ILitePublishedEventHandler<AudioQuestionAnswered>,
-                                         ILitePublishedEventHandler<AnswersRemoved>,
-                                         ILitePublishedEventHandler<InterviewOnClientCreated>,
-                                         ILitePublishedEventHandler<InterviewFromPreloadedDataCreated>,
-                                         ILitePublishedEventHandler<AnswerRemoved>,
-
-                                         ILitePublishedEventHandler<TranslationSwitched>,
-                                         ILitePublishedEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-                                         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>,
-                                         ILitePublishedEventHandler<AreaQuestionAnswered>,
-                                         ILitePublishedEventHandler<InterviewKeyAssigned>
+    public class InterviewDashboardEventHandler : BaseDenormalizer, 
+                                         IEventHandler<InterviewCreated>,
+                                         IEventHandler<SynchronizationMetadataApplied>,
+                                         IEventHandler<InterviewSynchronized>,
+                                         IEventHandler<InterviewStatusChanged>,
+                                         IEventHandler<InterviewHardDeleted>,
+                                         IEventHandler<InterviewerAssigned>,
+                                         IEventHandler<SupervisorAssigned>,
+                                         
+                                         IEventHandler<TextQuestionAnswered>,
+                                         IEventHandler<MultipleOptionsQuestionAnswered>,
+                                         IEventHandler<SingleOptionQuestionAnswered>,
+                                         IEventHandler<NumericRealQuestionAnswered>,
+                                         IEventHandler<NumericIntegerQuestionAnswered>,
+                                         IEventHandler<DateTimeQuestionAnswered>,
+                                         IEventHandler<GeoLocationQuestionAnswered>,
+                                         IEventHandler<QRBarcodeQuestionAnswered>,
+                                         IEventHandler<YesNoQuestionAnswered>,
+                                         IEventHandler<TextListQuestionAnswered>,
+                                         IEventHandler<PictureQuestionAnswered>,
+                                         IEventHandler<AudioQuestionAnswered>,
+                                         IEventHandler<AnswersRemoved>,
+                                         IEventHandler<InterviewOnClientCreated>,
+                                         IEventHandler<InterviewFromPreloadedDataCreated>,
+                                         IEventHandler<AnswerRemoved>,
+                                         
+                                         IEventHandler<TranslationSwitched>,
+                                         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+                                         IEventHandler<SingleOptionLinkedQuestionAnswered>,
+                                         IEventHandler<AreaQuestionAnswered>,
+                                         IEventHandler<InterviewKeyAssigned>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAnswerToStringConverter answerToStringConverter;
-        private readonly ILiteEventRegistry liteEventRegistry;
 
         public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IQuestionnaireStorage questionnaireRepository,
-            ILiteEventRegistry liteEventRegistry,
             IAnswerToStringConverter answerToStringConverter)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.prefilledQuestions = prefilledQuestions;
             this.questionnaireRepository = questionnaireRepository;
             this.answerToStringConverter = answerToStringConverter;
-            this.liteEventRegistry = liteEventRegistry;
-
-            if (!this.liteEventRegistry.IsSubscribed(this))
-                this.liteEventRegistry.Subscribe(this);
         }
 
         public override object[] Writers => new object[] { this.interviewViewRepository };

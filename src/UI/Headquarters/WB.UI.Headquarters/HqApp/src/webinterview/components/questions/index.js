@@ -23,33 +23,36 @@ Vue.component("StaticText",         () => import(/* webpackChunkName: "questions
 Vue.component("TextList",           () => import(/* webpackChunkName: "questions" */"./TextList"))
 Vue.component("TextQuestion",       () => import(/* webpackChunkName: "questions" */"./TextQuestion"))
 Vue.component("Area",               () => import(/* webpackChunkName: "questions" */"./Area"))
-Vue.component("TableRoster",        () => import(/* webpackChunkName: "questions" */"./TableRoster"))
+Vue.component("TableRoster",        () => import(/* webpackChunkName: "table-roster" */"./TableRoster"))
 Vue.component("Unsupported",        () => import(/* webpackChunkName: "questions" */"./Unsupported"))
+Vue.component("MatrixRoster",        () => import(/* webpackChunkName: "matrix-roster" */"./MatrixRoster"))
 
+Vue.component("TableRoster_TextQuestion",   () => import(/* webpackChunkName: "table-roster" */"./TableRoster.TextQuestion"))
+Vue.component("TableRoster_Integer",        () => import(/* webpackChunkName: "table-roster" */"./TableRoster.Integer"))
+Vue.component("TableRoster_Double",         () => import(/* webpackChunkName: "table-roster" */"./TableRoster.Double"))
+Vue.component("TableRoster_Unsupported",    () => import(/* webpackChunkName: "table-roster" */"./TableRoster.Unsupported"))
 
-Vue.component("TableRoster_TextQuestion",   () => import(/* webpackChunkName: "questions" */"./TableRoster.TextQuestion"))
-Vue.component("TableRoster_Integer",        () => import(/* webpackChunkName: "questions" */"./TableRoster.Integer"))
-Vue.component("TableRoster_Double",         () => import(/* webpackChunkName: "questions" */"./TableRoster.Double"))
-Vue.component("TableRoster_Unsupported",    () => import(/* webpackChunkName: "questions" */"./TableRoster.Unsupported"))
-
+Vue.component("MatrixRoster_CategoricalSingle",   () => import(/* webpackChunkName: "matrix-roster" */"./MatrixRoster.CategoricalSingle"))
+Vue.component("MatrixRoster_CategoricalMulti",   () => import(/* webpackChunkName: "matrix-roster" */"./MatrixRoster.CategoricalMulti"))
+Vue.component("MatrixRoster_Unsupported",    () => import(/* webpackChunkName: "matrix-roster" */"./MatrixRoster.Unsupported"))
 
 Vue.component("wb-question",        () => import( /* webpackChunkName: "questions" */ "./Question"))
 Vue.component("wb-humburger",       () => import( /* webpackChunkName: "questions" */ "./ui/humburger"))
 Vue.component("wb-typeahead",       () => import( /* webpackChunkName: "questions" */ "./ui/typeahead"))
 
 export const GroupStatus = {
-    Disabled: 1,
-    NotStarted: 2,
-    Started: 3,
-    StartedInvalid: 4,
-    Completed: 5,
-    CompletedInvalid: 6
+    Disabled: "Disabled",
+    NotStarted: "NotStarted",
+    Started: "Started",
+    StartedInvalid: "StartedInvalid",
+    Completed: "Completed",
+    CompletedInvalid: "CompletedInvalid"
 }
 
 export const ButtonType = {
-    Start: 0,
-    Next: 1,
-    Parent: 2,
-    Complete: 3
+    Start: "Start",
+    Next: "Next",
+    Parent: "Parent",
+    Complete: "Complete"
 }
 

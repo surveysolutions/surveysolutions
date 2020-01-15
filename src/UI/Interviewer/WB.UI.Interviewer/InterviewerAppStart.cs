@@ -1,19 +1,18 @@
-﻿using System.Diagnostics;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
-using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
-using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Migrations;
 using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer
@@ -21,58 +20,80 @@ namespace WB.UI.Interviewer
     public class InterviewerAppStart : MvxAppStart
     {
         private readonly ILogger logger;
+        private readonly IMigrationRunner migrationRunner;
         private readonly IAuditLogService auditLogService;
-        private readonly IServiceLocator serviceLocator;
-        private readonly IApplicationCypher applicationCypher;
-        private IEnumeratorSettings enumeratorSettings;
+        private readonly IEnumeratorSettings enumeratorSettings;
         
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings, 
-            IServiceLocator serviceLocator,
-            IApplicationCypher applicationCypher,
-            ILogger logger) : base(application, navigationService)
+            ILogger logger,
+            IMigrationRunner migrationRunner) : base(application, navigationService)
         {
             this.auditLogService = auditLogService;
-            this.serviceLocator = serviceLocator;
-            this.applicationCypher = applicationCypher;
             this.logger = logger;
+            this.migrationRunner = migrationRunner;
             this.enumeratorSettings = enumeratorSettings;
-        }
-
-        public override void ResetStart()
-        {
-            //temp fix of KP-11583
-            //
-            //base.ResetStart();
-            logger.Warn("Ignored application reset start");
         }
 
         protected override Task<object> ApplicationStartup(object hint = null)
         {
             auditLogService.Write(new OpenApplicationAuditLogEntity());
-            
 
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
-            applicationCypher.EncryptAppData();
+            migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
-            this.BackwardCompatibility();
-
-            this.CheckAndProcessAudit();
-
+            Mvx.IoCProvider.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
+            
             this.UpdateNotificationsWorker();
 
             this.CheckAndProcessInterviewsWithoutViews();
 
+            this.CheckAndProcessUserLogins();
+
             return base.ApplicationStartup(hint);
+        }
+
+        private void CheckAndProcessUserLogins()
+        {
+            var interviewersStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewerIdentity>>();
+            
+            var users = interviewersStorage.LoadAll().ToList();
+            if (users.Count > 1)
+            {
+                var interviewViewRepository = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewView>>();
+                var assignmentViewRepository = Mvx.IoCProvider.Resolve<IAssignmentDocumentsStorage>();
+
+                foreach (var interviewerIdentity in users)
+                {
+                    var interviewsCount =
+                        interviewViewRepository.Count(x => x.ResponsibleId == interviewerIdentity.UserId);
+
+                    if(interviewsCount > 0)
+                        continue;
+                    var assignmentsCount =
+                        assignmentViewRepository.Count(x => x.ResponsibleId == interviewerIdentity.UserId);
+
+                    if (assignmentsCount == 0)
+                    {
+                        logger.Warn($"Removing extra user {interviewerIdentity.Name}, Id: {interviewerIdentity.Id}");
+                        interviewersStorage.Remove(interviewerIdentity.Id);
+                    }
+                }
+            }
         }
 
         private void CheckAndProcessInterviewsWithoutViews()
         {
+            var settings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
+            if (settings.DashboardViewsUpdated) return;
+
             var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
-            interviewsAccessor.CheckAndProcessInterviewsWithoutViews();
+            interviewsAccessor.CheckAndProcessInterviewsToFixViews();
+            
+            settings.SetDashboardViewsUpdated(true);
         }
 
         private void UpdateNotificationsWorker()
@@ -88,9 +109,9 @@ namespace WB.UI.Interviewer
         protected override async Task NavigateToFirstViewModel(object hint = null)
         {
             var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
-            var interviewersPlainStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewerIdentity>>();
-            InterviewerIdentity currentInterviewer = interviewersPlainStorage.FirstOrDefault();
-            if (currentInterviewer == null)
+            var interviewerPrincipal = Mvx.IoCProvider.Resolve<IInterviewerPrincipal>();
+            
+            if (!interviewerPrincipal.DoesIdentityExist())
             {
                 await viewModelNavigationService.NavigateToFinishInstallationAsync();
             }
@@ -98,55 +119,6 @@ namespace WB.UI.Interviewer
             {
                 await viewModelNavigationService.NavigateToLoginAsync();
             }
-        }
-
-
-        [Conditional("RELEASE")]
-        private void BackwardCompatibility()
-        {
-            this.UpdateAssignmentsWithInterviewsCount();
-            this.AddTitleToOptionViewForSearching();
-        }
-
-        private void UpdateAssignmentsWithInterviewsCount()
-        {
-            var assignmentStorage = Mvx.IoCProvider.Resolve<IAssignmentDocumentsStorage>();
-
-            var hasEmptyInterviewsCounts = assignmentStorage.Count(x => x.CreatedInterviewsCount == null) > 0;
-            
-            if (!hasEmptyInterviewsCounts) return;
-
-            var interviewStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewView>>();
-            
-            var assignments = assignmentStorage.LoadAll();
-
-            foreach (var assignment in assignments)
-            {
-                assignment.CreatedInterviewsCount = interviewStorage.Count(x => x.CanBeDeleted && x.Assignment == assignment.Id);
-                assignmentStorage.Store(assignment);
-            }
-        }
-
-        private void AddTitleToOptionViewForSearching()
-        {
-            var optionsStorage = Mvx.IoCProvider.Resolve<IPlainStorage<OptionView>>();
-
-            var hasEmptySearchTitles = optionsStorage.Count(x => x.SearchTitle == null) > 0;
-            if (!hasEmptySearchTitles) return;
-
-            var allOptions = optionsStorage.LoadAll();
-
-            foreach (var optionView in allOptions)
-                optionView.SearchTitle = optionView.Title.ToLower();
-            
-            optionsStorage.Store(allOptions);
-
-        }
-
-        private void CheckAndProcessAudit()
-        {
-            var auditService = Mvx.IoCProvider.Resolve<IAudioAuditService>();
-            auditService.CheckAndProcessAllAuditFiles();
         }
     }
 }

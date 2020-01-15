@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -20,7 +19,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class EnumerationStageViewModel : MvxViewModel,
-        ILiteEventHandler<GroupsDisabled>,
+        IAsyncViewModelEventHandler<GroupsDisabled>,
         IDisposable
     {
         private List<IInterviewEntityViewModel> createdEntities = new List<IInterviewEntityViewModel>();
@@ -35,11 +34,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly ICommandService commandService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
-        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         private NavigationState navigationState;
 
@@ -52,16 +50,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewViewModelFactory interviewViewModelFactory,
             IStatefulInterviewRepository interviewRepository,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
             DynamicTextViewModel dynamicTextViewModel, 
             ICompositeCollectionInflationService compositeCollectionInflationService,
-            ILiteEventRegistry liteEventRegistry,
+            IViewModelEventRegistry liteEventRegistry,
             ICommandService commandService)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.interviewRepository = interviewRepository;
             this.userInterfaceStateService = userInterfaceStateService;
-            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
 
@@ -77,10 +73,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
             this.groupId = groupId;
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
+            
+            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
 
             liteEventRegistry.Subscribe(this, interviewId);
-
-            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
         }
 
         private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
@@ -147,7 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Name.Dispose();
         }
 
-        public async void Handle(GroupsDisabled @event)
+        public async Task HandleAsync(GroupsDisabled @event)
         {
             if (@event.Groups.Any(id => id == groupId))
             {

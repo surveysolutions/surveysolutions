@@ -6,13 +6,13 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.Code.CommandTransformation;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -145,24 +145,21 @@ namespace WB.Tests.Abc.TestFactories
             QuestionnaireIdentity questionnaireIdentity = null,
             Guid? questionnaireId = null, long? questionnaireVersion = null,
             string newTitle = null,
-            long? newQuestionnaireVersion = null)
+            long? newQuestionnaireVersion = null,
+            string comment = null)
             => new CloneQuestionnaire(
                 questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
                 questionnaireIdentity?.Version ?? questionnaireVersion ?? 777,
                 newTitle ?? "New Title of Cloned Copy",
                 newQuestionnaireVersion??42,
-                Guid.NewGuid());
-
-        public CreateInterviewControllerCommand CreateInterviewControllerCommand()
-            => new CreateInterviewControllerCommand
-            {
-                AnswersToFeaturedQuestions = new List<UntypedQuestionAnswer>()
-            };
+                Guid.NewGuid(),
+                comment: comment);
 
         public ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
             Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
             long questionnaireContentVersion = 1,
-            string variable = "questionnaire")
+            string variable = "questionnaire",
+            string comment = null)
             => new ImportFromDesigner(
                 responsibleId ?? Guid.NewGuid(),
                 new QuestionnaireDocument
@@ -174,7 +171,8 @@ namespace WB.Tests.Abc.TestFactories
                 false,
                 base64StringOfAssembly,
                 questionnaireContentVersion,
-                2);
+                2,
+                comment: comment);
         
         public SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand(
             Guid? interviewId = null,
@@ -356,6 +354,75 @@ namespace WB.Tests.Abc.TestFactories
                 Guid.NewGuid(),
                 entityId?.Id ?? stubIdentity.Id,
                 entityId?.RosterVector ?? stubIdentity.RosterVector);
+        }
+
+        public CreateAssignment CreateAssignment(
+            Guid? assignmentId = null,
+            int? id = null,
+            Guid? userId = null,
+            QuestionnaireIdentity questionnaireId = null,
+            Guid? responsibleId = null,
+            int? quantity = null,
+            bool? audioRecording = null,
+            string email = null,
+            string password = null,
+            bool? webMode = null,
+            List<InterviewAnswer> answers = null,
+            List<string> protectedVariables = null,
+            string comment = null)
+        {
+            return new CreateAssignment(
+                assignmentId ?? Guid.NewGuid(), 
+                id ?? 11,
+                userId ?? Guid.NewGuid(), 
+                questionnaireId ?? Create.Entity.QuestionnaireIdentity(),
+                responsibleId ?? Guid.NewGuid(),
+                quantity,
+                audioRecording ?? false,
+                email,
+                password,
+                webMode,
+                answers,
+                protectedVariables,
+                comment);
+        }
+
+        public ArchiveAssignment ArchiveAssignment(Guid? assignmentId = null, Guid? userId = null)
+        {
+            return new ArchiveAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+        }
+        public UnarchiveAssignment UnarchiveAssignment(Guid? assignmentId = null, Guid? userId = null)
+        {
+            return new UnarchiveAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+        }
+        public DeleteAssignment DeleteAssignment(Guid? assignmentId = null, Guid? userId = null)
+        {
+            return new DeleteAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+        }
+        public MarkAssignmentAsReceivedByTablet MarkAssignmentAsReceivedByTablet(Guid? assignmentId = null, Guid? userId = null)
+        {
+            return new MarkAssignmentAsReceivedByTablet(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+        }
+        public ReassignAssignment ReassignAssignment(Guid? assignmentId = null, Guid? userId = null, Guid? responsibleId = null, string comment = null)
+        {
+            return new ReassignAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), responsibleId ?? Guid.NewGuid(), comment);
+        }
+        public UpdateAssignmentAudioRecording UpdateAssignmentAudioRecording(Guid? assignmentId = null, Guid? userId = null, bool? audioRecording = null)
+        {
+            return new UpdateAssignmentAudioRecording(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), audioRecording ?? false);
+        }
+        public UpdateAssignmentWebMode UpdateAssignmentWebMode(Guid? assignmentId = null, Guid? userId = null, bool? webMode = null)
+        {
+            return new UpdateAssignmentWebMode(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), webMode ?? false);
+        }
+        public UpdateAssignmentQuantity UpdateAssignmentQuantity(Guid? assignmentId = null, Guid? userId = null, int? quantity = null)
+        {
+            return new UpdateAssignmentQuantity(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), quantity);
+        }
+
+        public UpgradeAssignmentCommand UpgradeAssignment()
+        {
+            return new UpgradeAssignmentCommand(Id.g1, Id.g2);
         }
     }
 }

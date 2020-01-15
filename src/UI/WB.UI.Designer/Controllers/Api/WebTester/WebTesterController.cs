@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Api;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Services;
@@ -136,6 +137,36 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                     TranslationIndex = x.TranslationIndex
                 })
                 .ToArray();
+            return Ok(model);
+        }
+
+        [Route("{token:Guid}/categories")]
+        [HttpGet]
+        public IActionResult CategoriesAsync(string token)
+        {
+            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
+            if (questionnaireId == null)
+            {
+                return NotFound();
+            }
+
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId.Value));
+            if (questionnaireView == null) return NotFound();
+
+            var actualCategories = questionnaireView.Source.Categories.Select(x => x.Id).ToList();
+
+            var model = this.designerDbContext.CategoriesInstances
+                .Where(x => x.QuestionnaireId == questionnaireId && actualCategories.Contains(x.CategoriesId))
+                .OrderBy(x => x.SortIndex)
+                .Select(x => new CategoriesDto
+                {
+                    CategoriesId = x.CategoriesId,
+                    Id = x.Value,
+                    ParentId = x.ParentId,
+                    Text = x.Text
+                })
+                .ToArray();
+
             return Ok(model);
         }
     }

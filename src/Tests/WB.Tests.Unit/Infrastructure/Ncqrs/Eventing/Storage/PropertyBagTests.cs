@@ -77,7 +77,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             bag.AddPropertyValue(propertyName, firstValue);
             
             Action act = ()=>bag.AddPropertyValue(propertyName, secondValue);
-            act.Should().Throw<ArgumentException>().WithMessage("An item with the same key has already been added.");
+            act.Should().Throw<ArgumentException>().WithMessage("An item with the same key has already been added. Key: MyProperty");
         }
     }
 }

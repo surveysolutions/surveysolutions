@@ -112,6 +112,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
+        public virtual string Comments { get; }
+
         protected void BindLocationAction(Guid? questionId, double? latitude, double? longtitude)
         {
             if (!questionId.HasValue || !latitude.HasValue || !longtitude.HasValue) return;

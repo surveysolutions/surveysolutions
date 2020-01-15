@@ -118,16 +118,6 @@ export default {
                         }
                     },
                     {
-                        data: "oldAndroidCount",
-                        name: "OldAndroidCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.OldAndroidVersion"),
-                        render: function(data, type, row) {
-                            return self.renderCell(data, row, 'OldAndroid');
-                        }
-                    },
-                    {
                         data: "teamSize",
                         name: "TeamSize",
                         "class": "type-numeric",

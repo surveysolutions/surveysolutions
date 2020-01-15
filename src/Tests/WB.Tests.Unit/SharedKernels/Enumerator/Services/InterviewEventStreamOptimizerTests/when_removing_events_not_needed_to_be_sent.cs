@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewEventStreamOp
             optimizer = Create.Service.InterviewEventStreamOptimizer();
 
             // Act
-            result = optimizer.RemoveEventsNotNeededToBeSent(eventStream);
+            result = optimizer.FilterEventsToBeSent(eventStream, lastCompletionCommitId);
 
             // Assert
             result.Should().BeEquivalentTo(new[]

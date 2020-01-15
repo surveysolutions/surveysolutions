@@ -54,7 +54,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                         validationExpression: null,
                         validationMessage: null,
                         showAsList: false,
-                        showAsListThreshold: null)));
+                        showAsListThreshold: null,
+                        categoriesId: null)));
 
         private static Questionnaire questionnaire;
         private static Exception exception;

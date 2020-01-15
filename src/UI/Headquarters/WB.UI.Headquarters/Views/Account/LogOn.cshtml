@@ -142,7 +142,7 @@
     <footer class="footer">
         <div class="container-fluid">
             <div class="text-left">
-                &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
+                &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="https://www.worldbank.org/en/about/legal">@Pages.Layout_Legal</a>.
             </div>
             <div class="text-left">
                 @(DependencyResolver.Current.GetService<IProductVersion>())
@@ -156,9 +156,6 @@
                 }
                 <span>|</span>
                 <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
-            </div>
-            <div class="text-left">
-                @Html.Partial("_PoweredBy")
             </div>
         </div>
     </footer>

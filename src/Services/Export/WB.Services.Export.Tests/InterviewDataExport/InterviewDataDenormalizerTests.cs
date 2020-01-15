@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using ApprovalTests.Reporters.TestFrameworks;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         [SetUp]
         public void Setup()
         {
-            
+
         }
 
         [Test]
@@ -88,9 +89,55 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             Assert.That(command.CommandText, Is.Not.Null);
 
 
-            NpgsqlParameter commandParameter = (NpgsqlParameter) command.Parameters[0];
+            NpgsqlParameter commandParameter = (NpgsqlParameter)command.Parameters[0];
             Assert.That(commandParameter.NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Double));
             Assert.That(commandParameter.Value, Is.EqualTo(Double.NegativeInfinity));
+
+            Approvals.Verify(command.CommandText);
+        }
+
+        [Test]
+        public async Task when_variable_changed_with_long_value_as_double_should_be_able_to_write_it_to_db()
+        {
+            DbCommand command = null;
+            var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
+
+            await denormalizer.Handle(Create.Event.VariablesChanged(interviewId,
+                    Create.Identity(longVariableId), (double)42)
+                .ToPublishedEvent<VariablesChanged>());
+
+            await denormalizer.SaveStateAsync(CancellationToken.None);
+
+            Assert.That(command, Is.Not.Null);
+            Assert.That(command.CommandText, Is.Not.Null);
+
+            NpgsqlParameter commandParameter = (NpgsqlParameter)command.Parameters[0];
+            Assert.That(commandParameter.NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Bigint));
+            Assert.That(commandParameter.Value, Is.EqualTo(42));
+            Assert.That(commandParameter.Value.GetType(), Is.EqualTo(typeof(long)));
+
+            Approvals.Verify(command.CommandText);
+        }
+
+        [Test]
+        public async Task when_variable_changed_with_double_value_as_long_should_be_able_to_write_it_to_db()
+        {
+            DbCommand command = null;
+            var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
+
+            await denormalizer.Handle(Create.Event.VariablesChanged(interviewId,
+                    Create.Identity(doubleVariableId), (long)42)
+                .ToPublishedEvent<VariablesChanged>());
+
+            await denormalizer.SaveStateAsync(CancellationToken.None);
+
+            Assert.That(command, Is.Not.Null);
+            Assert.That(command.CommandText, Is.Not.Null);
+
+            NpgsqlParameter commandParameter = (NpgsqlParameter)command.Parameters[0];
+            Assert.That(commandParameter.NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Double));
+            Assert.That(commandParameter.Value, Is.EqualTo((double)42));
+            Assert.That(commandParameter.Value.GetType(), Is.EqualTo(typeof(double)));
 
             Approvals.Verify(command.CommandText);
         }
@@ -193,7 +240,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         [Test]
         public async Task when_get_answer_real_question_event_should_raise_interview_update_command()
         {
-            decimal answer = (decimal) 777.77;
+            decimal answer = (decimal)777.77;
 
             DbCommand command = null;
             var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
@@ -214,7 +261,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         [Test]
         public async Task when_get_answer_text_list_question_event_should_raise_interview_update_command()
         {
-            Tuple<decimal, string>[] answer = new[] {new Tuple<decimal, string>(55, "55"),};
+            Tuple<decimal, string>[] answer = new[] { new Tuple<decimal, string>(55, "55"), };
             DbCommand command = null;
             var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
 
@@ -235,7 +282,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             DbCommand command = null;
             var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
 
-            await denormalizer.Handle(Create.Event.QuestionsEnabled(interviewId, new []{ Create.Identity(intQuestionId, rosterVector) }).ToPublishedEvent<QuestionsEnabled>());
+            await denormalizer.Handle(Create.Event.QuestionsEnabled(interviewId, new[] { Create.Identity(intQuestionId, rosterVector) }).ToPublishedEvent<QuestionsEnabled>());
             await denormalizer.SaveStateAsync(CancellationToken.None);
 
             Assert.That(command, Is.Not.Null);
@@ -253,7 +300,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             DbCommand command = null;
             var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
 
-            await denormalizer.Handle(Create.Event.QuestionsDisabled(interviewId, new []{ Create.Identity(intQuestionId, rosterVector) }).ToPublishedEvent<QuestionsDisabled>());
+            await denormalizer.Handle(Create.Event.QuestionsDisabled(interviewId, new[] { Create.Identity(intQuestionId, rosterVector) }).ToPublishedEvent<QuestionsDisabled>());
             await denormalizer.SaveStateAsync(CancellationToken.None);
 
             Assert.That(command, Is.Not.Null);
@@ -319,11 +366,12 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             IMemoryCache memoryCache = Mock.Of<IMemoryCache>(mc => mc.TryGetValue(It.IsAny<object>(), out value) == true);
             ILogger<InterviewDataDenormalizer> logger = Mock.Of<ILogger<InterviewDataDenormalizer>>();
             var interviewReference = Create.Entity.InterviewReference();
-            IInterviewReferencesStorage interviewReferencesStorage = Mock.Of<IInterviewReferencesStorage>(r => r.FindAsync(It.IsAny<Guid>()) == Task.FromResult(interviewReference));
+            IInterviewReferencesStorage interviewReferencesStorage = Mock.Of<IInterviewReferencesStorage>(r 
+                => r.FindAsync(It.IsAny<Guid>()) == new ValueTask<InterviewReference>(Task.FromResult(interviewReference)));
             IInterviewDataExportBulkCommandBuilder commandBuilder = new InterviewDataExportBulkCommandBuilder();
             Mock<ICommandExecutor> commandExecutor = new Mock<ICommandExecutor>();
             commandExecutor.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<DbCommand>(), It.IsAny<CancellationToken>()))
-                .Returns<DbCommand, CancellationToken>((c, ct)  => Task.CompletedTask)
+                .Returns<DbCommand, CancellationToken>((c, ct) => Task.CompletedTask)
                 .Callback((DbCommand c, CancellationToken ct) => funcToSaveCommand.Invoke(c));
 
             return new InterviewDataDenormalizer(tenantContext, questionnaireStorage, memoryCache, commandBuilder, logger, interviewReferencesStorage, commandExecutor.Object);
@@ -332,8 +380,8 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         private QuestionnaireDocument SetupQuestionnaireDocumentWithAllEntities()
         {
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, questionnaireVersion, questionnaireVariable,
-                children: 
-                Create.Group(sectionId, "section", children: new IQuestionnaireEntity[] 
+                children:
+                Create.Group(sectionId, "section", children: new IQuestionnaireEntity[]
                 {
                     Create.TextQuestion(textQuestionId, variable: "text_q"),
                     Create.NumericIntegerQuestion(intQuestionId, "int_q"),
@@ -345,6 +393,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
                         Create.TextListQuestion(textListQuestionId, "text_list_q")
                     }),
                     Create.Variable(doubleVariableId, VariableType.Double, "double_variabe"),
+                    Create.Variable(longVariableId, VariableType.LongInteger, "long_variabe"),
                     Create.DateTimeQuestion(timestampQuestionId, variable: "timestamp", isTimestamp: true),
                     Create.DateTimeQuestion(dateQuestionId, variable: "date", isTimestamp: false),
                 })
@@ -365,6 +414,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         private readonly Guid realQuestionId = Guid.Parse("41111111-1111-1111-1111-111111111111");
         private readonly Guid textListQuestionId = Guid.Parse("51111111-1111-1111-1111-111111111111");
         private readonly Guid doubleVariableId = Guid.Parse("61111111-1111-1111-1111-111111111111");
+        private readonly Guid longVariableId = Guid.Parse("62111111-1111-2111-1111-111111111111");
         private readonly Guid timestampQuestionId = Guid.Parse("71111111-1111-1111-1111-111111111111");
         private readonly Guid dateQuestionId = Guid.Parse("81111111-1111-1111-1111-111111111111");
     }

@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -23,21 +24,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         private readonly IQuestionOptionsRepository questionOptionsRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider;
 
         public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, 
             ITranslationStorage translationStorage, 
             IQuestionnaireTranslator translator,
             IQuestionOptionsRepository questionOptionsRepository,
-            ISubstitutionService substitutionService)
+            ISubstitutionService substitutionService,
+            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider
+            )
         {
             this.repository = repository;
             this.translationStorage = translationStorage;
             this.translator = translator;
             this.questionOptionsRepository = questionOptionsRepository;
             this.substitutionService = substitutionService;
+            this.expressionStatePrototypeProvider = expressionStatePrototypeProvider ?? throw new ArgumentNullException(nameof(expressionStatePrototypeProvider));
         }
 
-        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
+        public virtual IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
             string questionnaireCacheKey = language != null ? $"{identity}${language}" : $"{identity}";
 
@@ -49,6 +54,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             QuestionnaireDocument questionnaireDocument = this.GetQuestionnaireDocument(identity.QuestionnaireId, identity.Version);
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 return null;
+
+            questionnaireDocument = FillPlainQuestionnaireDataOnCreate(identity, questionnaireDocument);
 
             Translation translationId = null;
             if (language != null)
@@ -64,11 +71,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             }
 
             var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version, 
-                questionOptionsRepository, substitutionService,translationId);
+                questionOptionsRepository, substitutionService, translationId);
 
             plainQuestionnaire.WarmUpPriorityCaches();
 
+            var usingExpressionStorage = plainQuestionnaire.IsUsingExpressionStorage();
+            if (usingExpressionStorage)
+            {
+                plainQuestionnaire.ExpressionStorageType = this.expressionStatePrototypeProvider.GetExpressionStorageType(identity);
+            }
+
             return plainQuestionnaire;
+        }
+
+        protected virtual QuestionnaireDocument FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
+        {
+            return questionnaireDocument;
         }
 
         public virtual void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)

@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -27,7 +28,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             ILookupTableService lookupTableService = null,
             IAttachmentService attachmentService = null,
             ITopologicalSorter<Guid> topologicalSorter = null,
-            IQuestionnaireTranslator questionnaireTranslator = null)
+            IQuestionnaireTranslator questionnaireTranslator = null,
+            ICategoriesService categoriesService = null)
             => Create.QuestionnaireVerifier(
                 expressionProcessor: expressionProcessor,
                 substitutionService: substitutionService,
@@ -37,7 +39,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 lookupTableService: lookupTableService,
                 attachmentService: attachmentService,
                 topologicalSorter: topologicalSorter,
-                questionnaireTranslator: questionnaireTranslator);
+                questionnaireTranslator: questionnaireTranslator,
+                categoriesService: categoriesService);
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -17,19 +18,19 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalMultiLinkedToQuestionViewModel : CategoricalMultiViewModelBase<RosterVector, RosterVector>,
-        ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-        ILiteEventHandler<LinkedOptionsChanged>,
-        ILiteEventHandler<RosterInstancesTitleChanged>
+        IAsyncViewModelEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IAsyncViewModelEventHandler<LinkedOptionsChanged>,
+        IAsyncViewModelEventHandler<RosterInstancesTitleChanged>
     {
         private RosterVector[] selectedOptionsToSave;
         private HashSet<Guid> parentRosters;
 
         public CategoricalMultiLinkedToQuestionViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionStateViewModel,
-            IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
+            IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
             : base(questionStateViewModel, questionnaireRepository, eventRegistry,
-                interviewRepository, principal, answering, instructionViewModel, throttlingModel, mainThreadDispatcher)
+                interviewRepository, principal, answering, instructionViewModel, throttlingModel)
         {
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<RosterVector>>();
         }
@@ -71,24 +72,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public void Handle(MultipleOptionsLinkedQuestionAnswered @event)
+        public async Task HandleAsync(MultipleOptionsLinkedQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
-            this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedRosterVectors?.Select(RosterVector.Convert).ToArray());
+            await this.UpdateViewModelsByAnsweredOptionsAsync(@event.SelectedRosterVectors?.Select(RosterVector.Convert).ToArray());
         }
 
-        public async void Handle(LinkedOptionsChanged @event)
+        public async Task HandleAsync(LinkedOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            await this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateViewModelsAsync();
         }
 
-        public virtual async void Handle(RosterInstancesTitleChanged @event)
+        public virtual async Task HandleAsync(RosterInstancesTitleChanged @event)
         {
             if (!@event.ChangedInstances.Any(x => this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
 
-            await this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateViewModelsAsync();
         }
     }
 }

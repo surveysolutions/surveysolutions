@@ -84,7 +84,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         [NUnit.Framework.Test] public void should_publish_events () =>
             eventBusMock.Verify(
-                bus => bus.PublishCommittedEvents(Moq.It.IsAny<IEnumerable<CommittedEvent>>()),
+                bus => bus.PublishCommittedEvents(Moq.It.IsAny<IReadOnlyCollection<CommittedEvent>>()),
                 Times.Once);
 
         [NUnit.Framework.Test] public void should_not_load_latest_aggregate_from_repository () =>

@@ -93,5 +93,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             return this.Equals((NavigationIdentity)obj);
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(TargetGroup)}: {TargetGroup}, {nameof(TargetScreen)}: {TargetScreen}, {nameof(AnchoredElementIdentity)}: {AnchoredElementIdentity}";
+        }
     }
 }

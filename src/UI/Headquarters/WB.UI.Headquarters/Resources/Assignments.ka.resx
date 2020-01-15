@@ -144,9 +144,6 @@
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>შეავსეთ ყველა ან რამდენიმე საიდენტიფიკაციო ველი</value>
   </data>
-  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>აირჩიეთ პასუხისმგებელი (ზედამხედველი ან ინტერვიუერი)  ამ დავალებისთვის </value>
-  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>შექმნილია</value>
   </data>

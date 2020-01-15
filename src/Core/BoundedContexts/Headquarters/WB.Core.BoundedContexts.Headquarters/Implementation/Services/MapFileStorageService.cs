@@ -410,7 +410,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return item;
         }
 
-        public void DeleteMap(string mapName)
+        public async Task DeleteMap(string mapName)
         {
             var map = this.mapPlainStorageAccessor.GetById(mapName);
             if (map != null)
@@ -418,7 +418,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (externalFileStorage.IsEnabled())
             {
-                this.externalFileStorage.Remove(GetExternalStoragePath(mapName));
+                await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(mapName));
             }
             else
             {
@@ -495,17 +495,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var userMaps = userMapsStorage.Query(q => q.Where(x=>x.Map == mapName).ToList());
 
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+            var usersToLower = users.Select(em => em.ToLower()).ToList();
 
             var availableUsers = this.userStorage.Users
-                .Where(x => users.Select(em => em.ToLower()).Contains(x.UserName.ToLower()))
+                .Where(x => usersToLower.Contains(x.UserName.ToLower()))
                 .Select(x => new
                 {
                     UserName = x.UserName,
                     IsArchived = x.IsArchived,
-                    IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
+                    Roles = x.Roles
                 }).ToArray();
-                
-            var userMappings = availableUsers.Where(y => y.IsArchived == false && y.IsInterviewer == true)
+
+            var userMappings = availableUsers
+                .Where(y => y.IsArchived == false 
+                                               && y.Roles.Any(role => role.Id == interviewerRoleId))
                 .Select(x => new UserMap() {Map = mapName, UserName = x.UserName}).ToList();
 
             userMapsStorage.Remove(userMaps);
@@ -537,11 +540,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }).ToArray();
         }
 
-        public byte[] GetMapContent(string mapName)
+        public async Task<byte[]> GetMapContentAsync(string mapName)
         {
             if (externalFileStorage.IsEnabled())
             {
-                return this.externalFileStorage.GetBinary((GetExternalStoragePath(mapName)));
+                return await this.externalFileStorage.GetBinaryAsync((GetExternalStoragePath(mapName)));
             }
             
             var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);

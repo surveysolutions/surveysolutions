@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
+using WB.Services.Export.Assignment;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Infrastructure.Storage;
 using WB.Services.Infrastructure.Tenant;
+using Microsoft.Extensions.Logging;
 
 namespace WB.Services.Export.Infrastructure
 {
@@ -20,22 +27,33 @@ namespace WB.Services.Export.Infrastructure
         /// https://weblogs.thinktecture.com/pawel/2018/06/entity-framework-core-changing-database-schema-at-runtime.html
         /// </example>
         public ITenantContext TenantContext { get; }
+
         private readonly Lazy<string> connectionString;
 
-        public TenantDbContext(ITenantContext tenantContext, 
+        private const long ContextSchemaVersion = 1;
+
+        private readonly IOptions<DbConnectionSettings> connectionSettings;
+        private readonly ILogger<TenantDbContext> logger;
+
+        public TenantDbContext(ITenantContext tenantContext,
             IOptions<DbConnectionSettings> connectionSettings,
-            DbContextOptions options) : base(options)
+            DbContextOptions options,
+            ILogger<TenantDbContext> logger = null) : base(options)
         {
             this.TenantContext = tenantContext;
+            this.connectionSettings = connectionSettings;
+            this.logger = logger;
 
             // failing later provide much much much more information on who and why injected this without ITenantContext
             // otherwise there will 2 step stack trace starting from one of the registered middleware
             // with zero information on who made a call
             this.connectionString = new Lazy<string>(() =>
             {
-                if (tenantContext.Tenant == null) throw new ArgumentException(nameof(TenantDbContext) + " cannot be resolved outside of configured ITenantContext");
+                if (tenantContext.Tenant == null)
+                    throw new ArgumentException(nameof(TenantDbContext) +
+                                                " cannot be resolved outside of configured ITenantContext");
 
-                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
+                var connectionStringBuilder =  new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
                 connectionStringBuilder.SearchPath = tenantContext.Tenant.SchemaName();
                 return connectionStringBuilder.ToString();
             });
@@ -44,15 +62,16 @@ namespace WB.Services.Export.Infrastructure
         public DbSet<InterviewReference> InterviewReferences { get; set; }
         public DbSet<Metadata> MetadataSet { get; set; }
         public DbSet<GeneratedQuestionnaireReference> GeneratedQuestionnaires { get; set; }
+        public DbSet<AssignmentAction> AssignmentActions { get; set; }
+        public DbSet<Assignment.Assignment> Assignments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql(connectionString.Value, b => {
-                    b.MigrationsHistoryTable("__migrations", this.TenantContext.Tenant.SchemaName()); 
-                });
+                optionsBuilder.UseNpgsql(connectionString.Value,
+                    b => { b.MigrationsHistoryTable("__migrations", this.TenantContext.Tenant.SchemaName()); });
             }
         }
 
@@ -65,11 +84,58 @@ namespace WB.Services.Export.Infrastructure
                 var meta = MetadataSet.Find(key);
                 if (meta == null)
                 {
-                    return MetadataSet.Add(new Metadata{Id = key, Value = "0"}).Entity;
+                    return MetadataSet.Add(new Metadata {Id = key, Value = "0"}).Entity;
                 }
 
                 return meta;
             }
+        }
+
+        public Metadata SchemaVersion
+        {
+            get
+            {
+                const string key = "schemaVersion";
+
+                var meta = MetadataSet.Find(key);
+                if (meta == null)
+                {
+                    return MetadataSet.Add(new Metadata {Id = key, Value = "0"}).Entity;
+                }
+
+                return meta;
+            }
+        }
+
+        public async Task CheckSchemaVersionAndMigrate(CancellationToken cancellationToken)
+        {
+            if (await DoesSchemaExist(cancellationToken))
+            {
+                long schemaVersion = 0;
+                try
+                {
+                    schemaVersion = SchemaVersion.AsLong;
+                }
+                catch (PostgresException postgressException)
+                {
+                    //if relation doesn't exist or incorrect for old schema
+                    //ignoring and dropping schema
+                    logger?.LogWarning("Version Check failed. {messageText}", postgressException.MessageText);
+                }
+
+                if (schemaVersion < ContextSchemaVersion)
+                {
+                    await DropTenantSchemaAsync(this.TenantContext.Tenant.Name, cancellationToken);
+                }
+            }
+
+            this.Database.Migrate();
+
+            await using var tr = Database.BeginTransaction();
+
+            SchemaVersion.AsLong = ContextSchemaVersion;
+            await SaveChangesAsync(cancellationToken);
+            tr.Commit();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -87,6 +153,77 @@ namespace WB.Services.Export.Infrastructure
             modelBuilder.ApplyConfiguration(new InterviewReferenceEntityTypeConfiguration(schema));
             modelBuilder.ApplyConfiguration(new MetadataTypeConfiguration(schema));
             modelBuilder.ApplyConfiguration(new DeletedQuestionnaireReferenceTypeConfiguration(schema));
+            modelBuilder.ApplyConfiguration(new AssignmentTypeConfiguration(schema));
+            modelBuilder.ApplyConfiguration(new AssignmentActionTypeConfiguration(schema));
+        }
+
+        public async Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)
+        {
+            List<string> tablesToDelete = new List<string>();
+
+            await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
+            await db.OpenAsync(cancellationToken);
+
+            //logger.LogInformation("Start drop tenant scheme: {tenant}", tenant);
+
+            var schemas = (await db.QueryAsync<string>(
+                "select nspname from pg_catalog.pg_namespace n " +
+                "join pg_catalog.pg_description d on d.objoid = n.oid " +
+                "where d.description = @tenant",
+                new
+                {
+                    tenant
+                })).ToList();
+
+            foreach (var schema in schemas)
+            {
+                var tables = await db.QueryAsync<string>(
+                    "select tablename from pg_tables where schemaname= @schema",
+                    new {schema});
+
+                foreach (var table in tables)
+                {
+                    tablesToDelete.Add($@"""{schema}"".""{table}""");
+                }
+            }
+
+            foreach (var tables in tablesToDelete.Batch(30))
+            {
+                await using var tr = db.BeginTransaction();
+                foreach (var table in tables)
+                {
+                    await db.ExecuteAsync($@"drop table if exists {table}");
+                    //logger.LogInformation("Dropped {table}", table);
+                }
+
+                await tr.CommitAsync(cancellationToken);
+            }
+
+            await using (var tr = db.BeginTransaction())
+            {
+                foreach (var schema in schemas)
+                {
+                    await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
+                    //logger.LogInformation("Dropped schema {schema}.", schema);
+                }
+
+                await tr.CommitAsync(cancellationToken);
+            }
+        }
+
+        private async Task<bool> DoesSchemaExist(CancellationToken cancellationToken)
+        {
+            await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
+
+            await db.OpenAsync(cancellationToken);
+            var name = TenantContext.Tenant.SchemaName();
+            var exists = await db.QueryFirstAsync<bool>(
+                "SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = @name);",
+                new
+                {
+                    name
+                });
+            return exists;
         }
     }
 }

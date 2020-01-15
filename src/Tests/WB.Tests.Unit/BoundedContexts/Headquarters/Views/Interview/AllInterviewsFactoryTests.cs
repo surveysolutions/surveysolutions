@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
         [TestCase(false, InterviewStatus.ReadyForInterview )]
         public void Load_When_load_interviews_with_statuse_Then_CanBeReassigned_flag_should_set_correctly(bool isAllowedReassign, params InterviewStatus[] interviewStatuses)
         {
-            var interviewSummaryStorage = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
+            var interviewSummaryStorage = Create.Storage.InMemoryReadSideStorage<InterviewSummary>();
 
             foreach (var interviewStatus in interviewStatuses)
             {
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
         [Test]
         public void when_interview_received_by_interviewer_should_not_allow_to_delete_it()
         {
-            var interviewSummaryStorage = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
+            var interviewSummaryStorage = Create.Storage.InMemoryReadSideStorage<InterviewSummary>();
             interviewSummaryStorage.Store(Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned, receivedByInterviewer: true), Id.g1);
 
             AllInterviewsFactory interviewsFactory = Create.Service.AllInterviewsFactory(interviewSummaryStorage);
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
         [Test]
         public void when_interview_assigned_to_supervisor_and_was_completed_should_not_allow_to_delete_it()
         {
-            var interviewSummaryStorage = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
+            var interviewSummaryStorage = Create.Storage.InMemoryReadSideStorage<InterviewSummary>();
             interviewSummaryStorage.Store(Create.Entity.InterviewSummary(status: InterviewStatus.SupervisorAssigned, wasCompleted: true), Id.g1);
 
             AllInterviewsFactory interviewsFactory = Create.Service.AllInterviewsFactory(interviewSummaryStorage);
@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
             string key = "11-11-11-11";
             DateTime updateDate = new DateTime(2017, 3, 23);
 
-            var interviewSummaryStorage = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
+            var interviewSummaryStorage = Create.Storage.InMemoryReadSideStorage<InterviewSummary>();
             interviewSummaryStorage.Store(Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 1, responsibleId: responsibleId, key: key, updateDate: updateDate, wasCreatedOnClient: true), Guid.NewGuid());
             // - SearchBy
             interviewSummaryStorage.Store(Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 1, responsibleId: responsibleId, key: "22-22-22-22", updateDate: updateDate, wasCreatedOnClient: true), Guid.NewGuid());

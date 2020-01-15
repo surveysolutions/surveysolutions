@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -9,19 +10,21 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class OptionsRepository : IOptionsRepository
     {
-        private readonly IPlainStorage<OptionView> optionsStorage;
+        private readonly IPlainStorage<OptionView, int?> optionsStorage;
         
-        public OptionsRepository(IPlainStorage<OptionView> optionsStorage)
+        public OptionsRepository(IPlainStorage<OptionView, int?> optionsStorage)
         {
             this.optionsStorage = optionsStorage;
         }
 
+        [DebuggerDisplay("{Value} {TranslationId == null ? Title : Title +\"(translation)\"}")]
         private class Option: OptionValue
         {
             public string Title { get; set; }
@@ -31,21 +34,38 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             public string TranslationId { get; set; }
         }
 
+        [DebuggerDisplay("{Value}")]
         private class OptionValue
         {
             public decimal Value { get; set; }
         }
 
         public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId,
-            Guid questionId,
-            int? parentValue, string filter, Guid? translationId)
+            Guid questionId, int? parentValue, string filter, Guid? translationId, int[] excludedOptionIds = null)
         {
+            return GetFilteredCategoriesOptionsImpl(questionnaireId, questionId, null, parentValue, filter, translationId, excludedOptionIds);
+        }
+
+        public IEnumerable<CategoricalOption> GetFilteredCategoriesOptions(QuestionnaireIdentity questionnaireId,
+            Guid categoryId, int? parentValue, string filter, Guid? translationId, int[] excludedOptionIds = null)
+        {
+            return GetFilteredCategoriesOptionsImpl(questionnaireId, null, categoryId, parentValue, filter, translationId, excludedOptionIds);
+        }
+
+        private IEnumerable<CategoricalOption> GetFilteredCategoriesOptionsImpl(QuestionnaireIdentity questionnaireId,
+            Guid? questionId, Guid? categoryId, int? parentValue, string filter, Guid? translationId, int[] excludedOptionIds = null)
+        {
+            if (!categoryId.HasValue && !questionId.HasValue)
+                throw new ArgumentException("Should specify questionId or categoryId");
+
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
+            var categoryIdAsString = categoryId.FormatGuid();
             var translationIdAsString = translationId.FormatGuid();
 
             filter = (filter ?? String.Empty).ToLower();
             decimal? parentValueAsDecimal = parentValue;
+            decimal[] excludedOptionIdsAsDecimal = excludedOptionIds?.Select(x => (decimal) x)?.ToArray() ?? Array.Empty<decimal>();
 
             int take = 50;
             int skip = 0;
@@ -57,10 +77,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 optionViews = this.optionsStorage
                     .FixedQueryWithSelection(
                         @where => @where.QuestionnaireId == questionnaireIdAsString &&
-                                  @where.QuestionId == questionIdAsString &&
+                                  @where.QuestionId == questionIdAsString && 
+                                  @where.CategoryId == categoryIdAsString &&
                                   (parentValueAsDecimal == null || @where.ParentValue == parentValueAsDecimal) &&
                                   (filter == "" || filter == null || @where.SearchTitle.Contains(filter)) &&
-                                  (@where.TranslationId == translationIdAsString || @where.TranslationId == null),
+                                  (@where.TranslationId == translationIdAsString || @where.TranslationId == null) &&
+                                  !excludedOptionIdsAsDecimal.Contains(@where.Value),
                         @order => @order.SortOrder,
                         @select => new Option
                         {
@@ -81,6 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         .FixedQueryWithSelection(
                             @where => @where.QuestionnaireId == questionnaireIdAsString &&
                                       @where.QuestionId == questionIdAsString &&
+                                      @where.CategoryId == categoryIdAsString &&
                                       (parentValueAsDecimal == null || @where.ParentValue == parentValueAsDecimal) &&
                                       defaultOptionValuesToCheck.Contains(@where.Value) &&
                                       @where.TranslationId == translationIdAsString,
@@ -108,13 +131,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 // increasing batch size on each query iteration, but no more then 1000
                 take = Math.Min(skip * 2, 1000);
             } while (optionViews.Any());
-
         }
 
         public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionTitle, int? parentQuestionValue, Guid? translationId)
         {
+            return GetOptionImpl(questionnaireId, questionId, null, optionTitle, parentQuestionValue, translationId);
+        }
+
+        public CategoricalOption GetCategoryOption(QuestionnaireIdentity questionnaireId, Guid categoryId, string optionTitle,
+            int? parentQuestionValue, Guid? translationId)
+        {
+            return GetOptionImpl(questionnaireId, null, categoryId, optionTitle, parentQuestionValue, translationId);
+        }
+
+        private CategoricalOption GetOptionImpl(QuestionnaireIdentity questionnaireId, Guid? questionId, Guid? categoryId, string optionTitle,
+            int? parentQuestionValue, Guid? translationId)
+        {
+            if (!categoryId.HasValue && !questionId.HasValue)
+                throw new ArgumentException("Should specify questionId or categoryId");
+
             var questionnaireIdAsString = questionnaireId.ToString();
-            var questionIdAsString = questionId.FormatGuid();
+            var questionIdAsString = questionId?.FormatGuid();
+            var categoryIdAsString = categoryId?.FormatGuid();
             var translationIdAsString = translationId.FormatGuid();
 
             OptionView categoricalQuestionOption = null;
@@ -124,6 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             categoricalQuestionOption = this.optionsStorage
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == questionIdAsString &&
+                            x.CategoryId == categoryIdAsString &&
                             x.SearchTitle.ToLower() == optionTitle &&
                             (parentQuestionValue == null || x.ParentValue == parentQuestionValue) &&
                             (x.TranslationId == translationIdAsString || x.TranslationId == null))
@@ -141,21 +180,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             };
         }
 
-        public CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, decimal optionValue, Guid? translationId)
+        public CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, decimal optionValue, int? parentValue, Guid? translationId)
         {
+            return GetOptionByValue(questionnaireId, questionId, null, optionValue, parentValue, translationId);
+        }
+
+        public CategoricalOption GetCategoryOptionByValue(QuestionnaireIdentity questionnaireId, Guid categoryId,
+            decimal optionValue, int? parentValue, Guid? translationId)
+        {
+            return GetOptionByValue(questionnaireId, null, categoryId, optionValue, parentValue, translationId);
+        }
+
+        private CategoricalOption GetOptionByValue(QuestionnaireIdentity questionnaireId, Guid? questionId, Guid? categoryId, decimal optionValue, int? parentValue, Guid? translationId)
+        {
+            if (!categoryId.HasValue && !questionId.HasValue)
+                throw new ArgumentException("Should specify questionId or categoryId");
+
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
+            var categoryIdAsString = categoryId.FormatGuid();
             var translationIdAsString = translationId.FormatGuid();
 
-            OptionView categoricalQuestionOption = null;
-
-            categoricalQuestionOption = this.optionsStorage
-                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
-                            x.QuestionId == questionIdAsString &&
-                            x.Value == optionValue &&
-                            (x.TranslationId == translationIdAsString || x.TranslationId == null))
-                .OrderBy(x => x.TranslationId == null)
-                .FirstOrDefault();
+            var categoricalQuestionOption = GetOptionByValue(optionValue, parentValue, questionnaireIdAsString, questionIdAsString, categoryIdAsString, translationIdAsString);
 
             if (categoricalQuestionOption == null)
                 return null;
@@ -168,6 +214,62 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             };
         }
 
+        private OptionView GetOptionByValue(decimal optionValue, int? parentValue, string questionnaireIdAsString,
+            string questionIdAsString, string categoryIdAsString, string translationIdAsString) =>
+            this.optionsStorage.Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                                           x.QuestionId == questionIdAsString &&
+                                           x.CategoryId == categoryIdAsString &&
+                                           x.Value == optionValue &&
+                                           (parentValue == null || x.ParentValue == parentValue) &&
+                                           (x.TranslationId == translationIdAsString || x.TranslationId == null))
+                .OrderBy(x => x.TranslationId == null)
+                .FirstOrDefault();
+
+        public CategoricalOption[] GetOptionsByValues(QuestionnaireIdentity questionnaireId, Guid questionId, int[] optionValues, Guid? translationId)
+        {
+            return GetOptionsByValuesImpl(questionnaireId, questionId, null, optionValues, translationId);
+        }
+
+        public CategoricalOption[] GetCategoryOptionsByValues(QuestionnaireIdentity questionnaireIdentity, Guid categoryId,
+            int[] optionsValues, Guid? translationId)
+        {
+            return GetOptionsByValuesImpl(questionnaireIdentity, null, categoryId, optionsValues, translationId);
+        }
+
+        private CategoricalOption[] GetOptionsByValuesImpl(QuestionnaireIdentity questionnaireId, Guid? questionId, Guid? categoryId, int[] optionValues, Guid? translationId)
+        {
+            if (!categoryId.HasValue && !questionId.HasValue)
+                throw new ArgumentException("Should specify questionId or categoryId");
+
+            if (optionValues.Length == 0) return Array.Empty<CategoricalOption>();
+
+            var questionnaireIdAsString = questionnaireId.ToString();
+            var questionIdAsString = questionId.FormatGuid();
+            var categoryIdAsString = categoryId.FormatGuid();
+            var values = optionValues.Select(Convert.ToDecimal).ToArray();
+            var translationIdAsString = translationId.FormatGuid();
+
+            List<CategoricalOption> result = new List<CategoricalOption>(optionValues.Length);
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                var option = GetOptionByValue(values[i], null, questionnaireIdAsString, questionIdAsString, categoryIdAsString,
+                    translationIdAsString);
+                result.Add(ToCategoricalOption(option));
+            }
+
+            return result.ToArray();
+        }
+
+
+
+        private CategoricalOption ToCategoricalOption(OptionView option) => new CategoricalOption
+        {
+            ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?) null,
+            Value = Convert.ToInt32(option.Value),
+            Title = option.Title
+        };
+
         public void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
@@ -177,46 +279,80 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public bool IsEmpty() => this.optionsStorage.FirstOrDefault() == null;
 
+        public CategoricalOption[] GetReusableCategoriesById(QuestionnaireIdentity questionnaireId, Guid categoryId)
+        {
+            var questionnaireIdAsString = questionnaireId.ToString();
+            var categoryIdAsString = categoryId.FormatGuid();
+
+            var options = this.optionsStorage
+                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                            x.QuestionId == null &&
+                            x.CategoryId == categoryIdAsString &&
+                            x.TranslationId == null)
+                .OrderBy(x => x.SortOrder);
+
+            return options.Select(ToCategoricalOption).ToArray();
+        }
+
         public void StoreOptionsForQuestion(QuestionnaireIdentity questionnaireIdentity, Guid questionId, List<Answer> answers, List<TranslationDto> translations)
         {
+            StoreOptionsImpl(questionnaireIdentity, questionId, null, answers, translations);
+        }
+
+        public void StoreOptionsForCategory(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, List<CategoriesItem> options, List<TranslationDto> translations)
+        {
+            var answers = options.Select(a => new Answer()
+            {
+                AnswerText = a.Text,
+                ParentValue = a.ParentId.ToString(),
+                AnswerValue = a.Id.ToString()
+            }).ToList();
+            StoreOptionsImpl(questionnaireIdentity, null, categoryId, answers, translations);
+        }
+
+
+        private void StoreOptionsImpl(QuestionnaireIdentity questionnaireIdentity, Guid? questionId, Guid? categoryId, List<Answer> options, List<TranslationDto> translations)
+        {
+            if (!categoryId.HasValue && !questionId.HasValue)
+                throw new ArgumentException("Should specify questionId or categoryId");
+
             var questionIdAsString = questionId.FormatGuid();
+            var categoryIdAsString = categoryId.FormatGuid();
             var questionnaireIdAsString = questionnaireIdentity.ToString();
 
             var optionsToSave = new List<OptionView>();
 
             int index = 0;
 
-            foreach (var answer in answers)
+            foreach (var option in options)
             {
-                decimal value = answer.GetParsedValue();
+                decimal value = option.GetParsedValue();
                 decimal? parentValue = null;
-                if (!string.IsNullOrEmpty(answer.ParentValue))
+                if (!string.IsNullOrEmpty(option.ParentValue))
                 {
-                    parentValue = decimal.Parse(answer.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+                    parentValue = decimal.Parse(option.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture);
                 }
-                var id = $"{questionnaireIdAsString}-{questionIdAsString}-{answer.AnswerValue}";
 
                 var optionView = new OptionView
                 {
-                    Id = id,
                     QuestionnaireId = questionnaireIdAsString,
                     QuestionId = questionIdAsString,
                     Value = value,
                     ParentValue = parentValue,
-                    Title = answer.AnswerText,
-                    SearchTitle = answer.AnswerText?.ToLower(),
+                    Title = option.AnswerText,
+                    SearchTitle = option.AnswerText?.ToLower(),
                     SortOrder = index,
-                    TranslationId = null
+                    TranslationId = null,
+                    CategoryId = categoryIdAsString
                 };
 
                 optionsToSave.Add(optionView);
 
-                var translatedOptions = translations.Where(x => x.QuestionnaireEntityId == questionId &&
-                                                                x.TranslationIndex == answer.AnswerValue &&
-                                                                x.Type == TranslationType.OptionTitle)
+                var translatedOptions = translations.Where(x => ((x.QuestionnaireEntityId == questionId && x.Type == TranslationType.OptionTitle)|| 
+                                                                (x.QuestionnaireEntityId == categoryId && x.Type == TranslationType.Categories))
+                                                                && x.TranslationIndex == $"{option.AnswerValue}${option.ParentValue}")
                     .Select(y => new OptionView
                     {
-                        Id = $"{questionnaireIdAsString}-{questionIdAsString}-{answer.AnswerValue}-{y.TranslationId.FormatGuid()}",
                         QuestionnaireId = questionnaireIdAsString,
                         QuestionId = questionIdAsString,
                         Value = value,
@@ -224,7 +360,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         Title = y.Value,
                         SearchTitle = y.Value?.ToLower(),
                         SortOrder = ++index,
-                        TranslationId = y.TranslationId.FormatGuid()
+                        TranslationId = y.TranslationId.FormatGuid(),
+                        CategoryId = categoryIdAsString
                     }).ToList();
 
                 optionsToSave.AddRange(translatedOptions);
@@ -239,6 +376,5 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             this.optionsStorage.Store(options);
         }
-
     }
 }

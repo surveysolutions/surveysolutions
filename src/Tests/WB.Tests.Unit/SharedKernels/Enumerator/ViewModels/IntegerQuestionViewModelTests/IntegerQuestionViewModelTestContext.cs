@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Tests;
@@ -18,7 +19,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    internal class IntegerQuestionViewModelTestContext : MvxIoCSupportingTest
+    public class IntegerQuestionViewModelTestContext : MvxIoCSupportingTest
     {
         public IntegerQuestionViewModelTestContext()
         {
@@ -34,8 +35,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity && _.IsAuthenticated == true);
-            
 
+            var special = specialValuesViewModel;
+            if(special == null)
+            {
+                var specialMock = new Mock<SpecialValuesViewModel>();
+                specialMock.DefaultValueProvider = DefaultValueProvider.Mock;
+                specialMock.SetReturnsDefault(Task.CompletedTask);
+                special = specialMock.Object;
+            }
             QuestionStateMock.Setup(x => x.Validity).Returns(ValidityModelMock.Object);
 
             return new IntegerQuestionViewModel(
@@ -46,8 +54,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
-                Mock.Of<ILiteEventRegistry>(),
-                specialValuesViewModel ?? Mock.Of<SpecialValuesViewModel>(),
+                Mock.Of<IViewModelEventRegistry>(),
+                special,
                 Create.ViewModel.ThrottlingViewModel());
         }
 
@@ -57,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             navigationState = Create.Other.NavigationState();
             QuestionStateMock = new Mock<QuestionStateViewModel<NumericIntegerQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             AnsweringViewModelMock = new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
-            EventRegistry = new Mock<ILiteEventRegistry>();
+            EventRegistry = new Mock<IViewModelEventRegistry>();
         }
 
         protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true, bool isLongRosterSize = false)
@@ -79,7 +87,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
         protected static Mock<AnsweringViewModel> AnsweringViewModelMock;
 
-        protected static Mock<ILiteEventRegistry> EventRegistry;
+        protected static Mock<IViewModelEventRegistry> EventRegistry;
 
         protected static readonly string interviewId = "Some interviewId";
 

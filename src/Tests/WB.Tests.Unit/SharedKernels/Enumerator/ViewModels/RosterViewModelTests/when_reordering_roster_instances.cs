@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -7,6 +8,7 @@ using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
@@ -17,6 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         [Test]
         public async Task should_reorder_roster_instances_in_the_list()
         {
+            var interviewId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Id.gA, children: new IComposite[]
             {
                 Create.Entity.YesNoQuestion(questionId: Id.g1, answers: new[]{ 1, 2, 3 }, ordered: true),
@@ -34,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             var statefulInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
-            ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
+            IViewModelEventRegistry registry = Create.Service.LiteEventRegistry();
 
             var viewModel = this.CreateViewModel(statefulInterviewRepository, eventRegistry: registry);
 
@@ -42,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.gA, RosterVector.Empty)));
 
-            viewModel.Init(null, Create.Identity(Id.g2), navigationState);
+            viewModel.Init(interviewId.ToString("N"), Create.Identity(Id.g2), navigationState);
 
             interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: Id.g1,
                 answeredOptions: new[]
@@ -51,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                     Create.Entity.AnsweredYesNoOption(2, false),
                     Create.Entity.AnsweredYesNoOption(3, false),
                 }));
-            Abc.SetUp.ApplyInterviewEventsToViewModels(interview, registry, interview.Id);
+            Abc.SetUp.ApplyInterviewEventsToViewModels(interview, registry, interviewId);
 
             // act
             interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
@@ -62,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                     Create.Entity.AnsweredYesNoOption(value: 3, answer: true),
                     Create.Entity.AnsweredYesNoOption(value: 1, answer: true),
                 }));
-            Abc.SetUp.ApplyInterviewEventsToViewModels(interview, registry, interview.Id);
+            Abc.SetUp.ApplyInterviewEventsToViewModels(interview, registry, interviewId);
 
             //assert
             var rosters = viewModel.RosterInstances.Select(x => x.Identity).ToArray();

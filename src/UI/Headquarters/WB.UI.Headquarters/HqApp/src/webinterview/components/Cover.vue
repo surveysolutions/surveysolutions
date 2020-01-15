@@ -59,7 +59,7 @@
 </template>
 
 <script lang="js">
-import { isEmpty } from "lodash"
+import isEmpty from "lodash/isEmpty"
 
 export default {
     name: "cover-readonly-view",

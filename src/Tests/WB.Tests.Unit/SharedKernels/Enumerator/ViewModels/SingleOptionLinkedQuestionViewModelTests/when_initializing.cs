@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         [NUnit.Framework.Test] public void should_fill_options_with_answers_from_linked_to_question () =>
             viewModel.Options.Select(option => option.Title).Should().BeEquivalentTo("answer1", "answer2");
 
-        private static Mock<ILiteEventRegistry> eventRegistryMock = new Mock<ILiteEventRegistry>();
+        private static Mock<IViewModelEventRegistry> eventRegistryMock = new Mock<IViewModelEventRegistry>();
         private static SingleOptionLinkedQuestionViewModel viewModel;
         static Guid linkSourceQuestionId;
         static Identity linkedQuestionId;

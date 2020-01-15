@@ -1386,9 +1386,9 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Assignments received by Interviewer.
         /// </summary>
-        public static string InterviewerProfile_DownloadedInterviewsCount {
+        public static string InterviewerProfile_DownloadedAssignmentsCount {
             get {
-                return ResourceManager.GetString("InterviewerProfile_DownloadedInterviewsCount", resourceCulture);
+                return ResourceManager.GetString("InterviewerProfile_DownloadedAssignmentsCount", resourceCulture);
             }
         }
         
@@ -2527,7 +2527,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name.
+        ///   Looks up a localized string similar to Interviewer Name.
         /// </summary>
         public static string MapList_Name {
             get {
@@ -2545,7 +2545,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maps.
+        ///   Looks up a localized string similar to Map files.
         /// </summary>
         public static string MapList_Title {
             get {
@@ -2901,6 +2901,69 @@ namespace WB.UI.Headquarters.Resources {
         public static string PublicSection {
             get {
                 return ResourceManager.GetString("PublicSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire details.
+        /// </summary>
+        public static string Questionnaire_Info {
+            get {
+                return ResourceManager.GetString("Questionnaire_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions.
+        /// </summary>
+        public static string Questionnaire_QuestionsCount {
+            get {
+                return ResourceManager.GetString("Questionnaire_QuestionsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions with conditions.
+        /// </summary>
+        public static string Questionnaire_QuestionsCountWithCond {
+            get {
+                return ResourceManager.GetString("Questionnaire_QuestionsCountWithCond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of rosters.
+        /// </summary>
+        public static string Questionnaire_RostersCount {
+            get {
+                return ResourceManager.GetString("Questionnaire_RostersCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of sections.
+        /// </summary>
+        public static string Questionnaire_SectionsCount {
+            get {
+                return ResourceManager.GetString("Questionnaire_SectionsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire Information.
+        /// </summary>
+        public static string Questionnaire_Stats {
+            get {
+                return ResourceManager.GetString("Questionnaire_Stats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of sub-sections.
+        /// </summary>
+        public static string Questionnaire_SubSectionsCount {
+            get {
+                return ResourceManager.GetString("Questionnaire_SubSectionsCount", resourceCulture);
             }
         }
         

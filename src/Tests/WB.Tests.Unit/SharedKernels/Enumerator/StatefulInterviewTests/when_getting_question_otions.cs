@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             };
 
             IQuestionnaireStorage questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, 
-                _ => _.GetOptionsForQuestion(questionId, null, string.Empty) == options);
+                _ => _.GetOptionsForQuestion(questionId, null, string.Empty, Moq.It.IsAny<int[]>()) == options);
 
             statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             BecauseOf();

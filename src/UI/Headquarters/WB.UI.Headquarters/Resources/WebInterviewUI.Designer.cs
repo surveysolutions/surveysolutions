@@ -513,7 +513,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cancel now and proceed with the interview. And you can send it later by clicking &apos;Email resume link&apos; item in the top menu..
+        ///   Looks up a localized string similar to You can cancel now and proceed with the interview. And you can send it later by clicking &apos;Email resume link&apos; item in the top menu..
         /// </summary>
         internal static string EmailLink_ResumeAnyTime {
             get {
@@ -729,6 +729,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have no access to questionnaire.
+        /// </summary>
+        internal static string NoQuestionnaireAccess {
+            get {
+                return ResourceManager.GetString("NoQuestionnaireAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No results found.
         /// </summary>
         internal static string NoResultsFound {
@@ -896,6 +905,60 @@ namespace WB.UI.Headquarters.Resources {
         internal static string SaveScenario {
             get {
                 return ResourceManager.GetString("SaveScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Session on Designer application has expired. Sign in on Designer application to be able to save..
+        /// </summary>
+        internal static string SaveScenarioDesignerLogin {
+            get {
+                return ResourceManager.GetString("SaveScenarioDesignerLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Designer.
+        /// </summary>
+        internal static string SaveScenarioGoToDesigner {
+            get {
+                return ResourceManager.GetString("SaveScenarioGoToDesigner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string SaveScenarioName {
+            get {
+                return ResourceManager.GetString("SaveScenarioName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select scenario to replace.
+        /// </summary>
+        internal static string SaveScenarioOptions {
+            get {
+                return ResourceManager.GetString("SaveScenarioOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace existing.
+        /// </summary>
+        internal static string SaveScenarioOptions_ReplaceExisting {
+            get {
+                return ResourceManager.GetString("SaveScenarioOptions_ReplaceExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save new.
+        /// </summary>
+        internal static string SaveScenarioOptions_SaveNew {
+            get {
+                return ResourceManager.GetString("SaveScenarioOptions_SaveNew", resourceCulture);
             }
         }
         

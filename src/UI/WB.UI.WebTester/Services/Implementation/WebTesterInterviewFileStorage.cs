@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
@@ -15,14 +16,25 @@ namespace WB.UI.WebTester.Services.Implementation
             this.mediaStorage = mediaStorage;
         }
 
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName)
+        {
+            var interviewBinaryData = this.mediaStorage.Get(fileName, interviewId)?.Data;
+            return Task.FromResult(interviewBinaryData);
+        }
+
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             return this.mediaStorage.Get(fileName, interviewId)?.Data;
         }
 
-        public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
-            => this.mediaStorage.GetArea(interviewId).Select(x =>
-                new InterviewBinaryDataDescriptor(interviewId, x.Filename, x.MimeType, () => x.Data)).ToList();
+        public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
+        {
+            var interviewBinaryDataDescriptors = this.mediaStorage.GetArea(interviewId).Select(x =>
+                    new InterviewBinaryDataDescriptor(interviewId, x.Filename, x.MimeType,
+                        () => Task.FromResult(x.Data)))
+                .ToList();
+            return Task.FromResult(interviewBinaryDataDescriptors);
+        }
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
@@ -34,9 +46,10 @@ namespace WB.UI.WebTester.Services.Implementation
             }, fileName, interviewId);
         }
 
-        public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
+        public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             mediaStorage.Remove(fileName, interviewId);
+            return Task.CompletedTask;
         }
 
         public string GetPath(Guid interviewId, string filename = null)

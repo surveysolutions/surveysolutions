@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public interface IAssignmentsUpgradeService
     {
-        void EnqueueUpgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
+        void EnqueueUpgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
 
         void ReportProgress(Guid processId, AssignmentUpgradeProgressDetails progressDetails);
 

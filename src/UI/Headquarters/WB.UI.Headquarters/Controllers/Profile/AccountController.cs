@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -6,7 +7,6 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserProfile;
@@ -138,18 +138,18 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize]
-        public ActionResult Manage()
+        public async Task<ActionResult> Manage()
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
-            var manageAccountModel = GetCurrentUserModel();
+            var manageAccountModel = await GetCurrentUserModel();
             manageAccountModel.AllowEditLockState = false;
             return View(manageAccountModel);
         }
 
-        private ManageAccountModel GetCurrentUserModel()
+        private async Task<ManageAccountModel> GetCurrentUserModel()
         {
-            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            var currentUser = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
             var manageAccountModel = new ManageAccountModel
             {
                 Id = currentUser.Id,
@@ -157,7 +157,7 @@ namespace WB.UI.Headquarters.Controllers
                 PersonName = currentUser.FullName,
                 PhoneNumber = currentUser.PhoneNumber,
                 UserName = currentUser.UserName,
-                Role = currentUser.Roles.FirstOrDefault().Role.ToUiString(),
+                Role = currentUser.Roles.FirstOrDefault().Id.ToUserRole().ToUiString(),
                 UpdatePasswordAction = nameof(this.UpdateOwnPassword),
                 EditAction = nameof(Manage)
             };
@@ -169,7 +169,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> Manage(ManageAccountModel model)
         {
-            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            var currentUser = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
             model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
@@ -199,8 +199,8 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> UpdateOwnPassword([Bind(Prefix = "UpdateOwnPassword")]ManageAccountModel model)
         {
-            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
-            var resultModel = GetCurrentUserModel();
+            var currentUser = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
+            var resultModel = await GetCurrentUserModel();
 
             model.Id = currentUser.Id;
 
@@ -235,7 +235,7 @@ namespace WB.UI.Headquarters.Controllers
             => !string.IsNullOrEmpty(model.OldPassword)
             && await this.userManager.CheckPasswordAsync(currentUser, model.OldPassword);
 
-        private static readonly UserRoles[] ObservableRoles = {UserRoles.Headquarter, UserRoles.Supervisor};
+        private static readonly Guid[] ObservableRoles = {UserRoles.Headquarter.ToUserId(), UserRoles.Supervisor.ToUserId()};
 
         [AuthorizeOr403(Roles = "Administrator, Observer")]
         public async Task<ActionResult> ObservePerson(string personName)
@@ -247,7 +247,7 @@ namespace WB.UI.Headquarters.Controllers
             if (user == null)
                 throw new HttpException(404, string.Empty);
 
-            if (!ObservableRoles.Contains(user.Roles.First().Role))
+            if (!ObservableRoles.Contains(user.Roles.First().Id))
                 throw new HttpException(404, string.Empty);
 
             //do not forget pass current user to display you are observing

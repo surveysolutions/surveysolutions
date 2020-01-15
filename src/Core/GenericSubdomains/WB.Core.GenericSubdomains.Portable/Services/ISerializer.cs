@@ -4,6 +4,8 @@
     {
         string Serialize(object item);
 
+        string SerializeWithoutTypes(object item);
+
         T Deserialize<T>(string payload);
     }
 }

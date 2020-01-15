@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
-using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -24,15 +22,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public abstract class CategoricalMultiViewModelBase<TOptionValue, TInterviewAnswer> : MvxNotifyPropertyChanged, 
         ICompositeQuestionWithChildren,
         IInterviewEntityViewModel, 
-        ILiteEventHandler<AnswersRemoved>,
+        IAsyncViewModelEventHandler<AnswersRemoved>,
         IDisposable
     {
         protected readonly ThrottlingViewModel throttlingModel;
         private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IPrincipal principal;
         protected readonly IStatefulInterviewRepository interviewRepository;
-        protected readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private Guid interviewId;
         private bool areAnswersOrdered;
         protected int? maxAllowedAnswers;
@@ -79,19 +76,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected CategoricalMultiViewModelBase(
             IQuestionStateViewModel questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            ThrottlingViewModel throttlingModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
             this.principal = principal;
             this.interviewRepository = interviewRepository;
-            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
             this.QuestionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
@@ -132,10 +127,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Init(interview, questionnaire);
 
             this.throttlingModel.Init(SaveAnswer);
+            
+            this.UpdateViewModelsAsync().WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
-
-            this.UpdateViewModelsInMainThread(); 
         }
 
         private async Task SaveAnswer()
@@ -151,29 +146,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (ex.ExceptionType != InterviewDomainExceptionType.QuestionIsMissing)
                 {
                     // reset to previous state
-                    this.UpdateOptionsFromInterviewInMainThread();
+                    await this.UpdateOptionsFromInterviewAsync();
                 }
 
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
-        private void UpdateViewModelsInMainThread()
-        {
-            var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-            this.Options.ReplaceWith(this.GetOptions(interview).ToList());
-            this.UpdateOptionsFromInterviewInMainThread();
-        }
-
-        protected virtual async Task UpdateViewModelsInMainThreadAsync()
+        protected virtual async Task UpdateViewModelsAsync()
         {
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
 
-            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(
-                () => 
-                    this.Options.ReplaceWith(this.GetOptions(interview).ToList()));
+            await this.InvokeOnMainThreadAsync(
+                () => this.Options.ReplaceWith(this.GetOptions(interview).ToList()));
 
-            this.UpdateOptionsFromInterviewInMainThread();
+            await this.UpdateOptionsFromInterviewAsync();
         }
 
         protected void InitViewModel(string title, TOptionValue value, IStatefulInterview interview,
@@ -206,21 +193,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
-        private void UpdateOptionsFromInterviewInMainThread()
+        private async Task UpdateOptionsFromInterviewAsync()
         {
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
 
-            this.UpdateViewModelsByAnsweredOptionsInMainThread(answeredOptions);
+            await this.UpdateViewModelsByAnsweredOptionsAsync(answeredOptions);
         }
 
-        protected void UpdateViewModelsByAnsweredOptionsInMainThread(TInterviewAnswer[] answeredOptions)
+        protected async Task UpdateViewModelsByAnsweredOptionsAsync(TInterviewAnswer[] answeredOptions)
         {
             answeredOptions = answeredOptions ?? Array.Empty<TInterviewAnswer>();
 
             var filteredAnswers = this.FilterAnsweredOptions(answeredOptions).ToList();
 
-            this.InvokeOnMainThread(() =>
+            await this.InvokeOnMainThreadAsync(() =>
             {
                 foreach (var option in this.Options)
                 {
@@ -255,11 +242,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.bottomBorderViewModel.HasOptions = this.HasOptions;
         }
 
-        public virtual void Handle(AnswersRemoved @event)
+        public virtual async Task HandleAsync(AnswersRemoved @event)
         {
             if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
 
-            this.InvokeOnMainThread(this.UpdateOptionsFromInterviewInMainThread);
+            await this.UpdateOptionsFromInterviewAsync();
         }
 
         public virtual void Dispose()

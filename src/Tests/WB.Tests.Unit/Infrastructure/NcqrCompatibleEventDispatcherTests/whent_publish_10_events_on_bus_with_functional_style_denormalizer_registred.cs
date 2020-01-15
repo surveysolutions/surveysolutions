@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             var serviceLocator = Create.Service.ServiceLocatorService(ncqrsStyleDenormalizerMock);
 
-            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            var denormalizerRegistry = Create.Service.DenormalizerRegistryNative();
             denormalizerRegistry.RegisterFunctional<TestFunctionalDenormalzierNonThrowing>();
 
             var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(serviceLocator: serviceLocator,

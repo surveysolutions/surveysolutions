@@ -314,4 +314,13 @@
       <value>Разрешает редактирование интервьюверам их контактной информации в профиле</value>
       <comment>Разрешает редактирование всем пользователям их контактной информации в профиле</comment>
   </data>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
+    <value>Настройки веб интервью</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
+    <value>Уведомления электронной почтой</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+    <value>Разрешить респонденту отправлять электронные письма (применяется, если рассылка настроена)</value>
+  </data>
 </root>

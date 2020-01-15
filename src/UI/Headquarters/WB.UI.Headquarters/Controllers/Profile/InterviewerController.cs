@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -77,7 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     this.Success(Pages.InterviewerController_InterviewerCreationSuccess);
                     return this.Back();
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form
@@ -200,7 +201,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     this.Success(string.Format(Pages.InterviewerController_EditSuccess, model.UserName));
                     return this.RedirectToAction(nameof(this.Profile), new { id = model.Id });
                 }
-                AddErrors(updateResult);
+                AddErrors(updateResult.Errors);
             }
 
             model.CancelAction = @"Profile";

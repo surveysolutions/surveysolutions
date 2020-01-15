@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -38,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         protected const int MaxExpressionLength = 10000;
         protected const int MaxOptionsCountInCascadingQuestion = 15000;
-        protected const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
+        public const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
 
         protected const int MaxOptionsCountInCategoricalOptionQuestion = 200;
 
@@ -51,6 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int MaxQuestionsCountInSection = 400;
         protected const int MaxEntitiesInPlainModeGroup = 10;
         protected const int MaxEntitiesInTableRoster = 10;
+        protected const int MaxEntitiesInMatrixRoster = 1;
 
         public const string VariableRegularExpression = "^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$";
         public static readonly Regex VariableNameRegex = new Regex(VariableRegularExpression);
@@ -139,5 +141,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         protected static bool IsSection(IQuestionnaireEntity entity) => entity.GetParent().GetParent() == null;
+
+        protected static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Find<TEntity>(entity => hasError(entity, questionnaire))
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
+        }
     }
 }

@@ -17,12 +17,18 @@ export default {
     },
 
     actions: {
-        fetchSidebar: batchedAction(({ commit }, ids) => {
-            return Vue.$api.call(api => api.getSidebarChildSectionsOf(ids))
+        fetchSidebar: batchedAction(({ commit, rootState }, ids) => {
+            return Vue.$api.interview.get('getSidebarChildSectionsOf',
+                {
+                    interviewId: rootState.route.params.interviewId,
+                    sectionId: rootState.route.params.sectionId || null, 
+                    ids
+                })
                 .then((sideBar) => {
                     commit("SET_SIDEBAR_STATE", sideBar)
                 });
         }, null, null),
+
         toggleSidebar({ commit, dispatch }, { panel, collapsed }) {
             commit("SET_SIDEBAR_TOGGLE", { panel, collapsed })
 
@@ -30,33 +36,35 @@ export default {
                 dispatch("fetchSidebar", panel.id)
             }
         },
+
         toggleSidebarPanel({ commit, state }, newState = null) {
             const sidebarPanelNewState = newState == null ? !state.sidebarHidden : newState;
             let panelBeingClosed = !sidebarPanelNewState;
-            if (state.screenWidth < state.mediumScreenThreshold && panelBeingClosed){
+            if (state.screenWidth < state.mediumScreenThreshold && panelBeingClosed) {
                 commit("SET_FACET_HIDDEN", true)
                 commit("SET_SEARCH_RESULTS_HIDDEN", true)
             }
             commit("SET_SIDEBAR_HIDDEN", sidebarPanelNewState)
         },
+        
         hideFacets({ commit, state }, newState = null) {
             const facetPanelNewState = newState == null ? !state.facetHidden : newState;
             let panelBeingClosed = !facetPanelNewState;
-            if (state.screenWidth < state.mediumScreenThreshold && panelBeingClosed){
+            if (state.screenWidth < state.mediumScreenThreshold && panelBeingClosed) {
                 commit("SET_SIDEBAR_HIDDEN", true)
                 commit("SET_SEARCH_RESULTS_HIDDEN", true)
             }
             commit("SET_FACET_HIDDEN", facetPanelNewState)
         },
         hideSearchResults({ commit, dispatch, state }, newState = null) {
-            if (state.screenWidth >= state.mediumScreenThreshold){
+            if (state.screenWidth >= state.mediumScreenThreshold) {
                 commit("SET_FACET_HIDDEN", false)
-            }            
+            }
             commit("SET_SEARCH_RESULTS_HIDDEN", newState == null ? true : newState)
         },
         showSearchResults({ commit, state }) {
             commit("SET_SEARCH_RESULTS_HIDDEN", false)
-            if (state.screenWidth < state.mediumScreenThreshold){
+            if (state.screenWidth < state.mediumScreenThreshold) {
                 commit("SET_FACET_HIDDEN", true)
                 commit("SET_SIDEBAR_HIDDEN", true)
             }
@@ -69,8 +77,7 @@ export default {
                 commit("SET_SEARCH_RESULTS_HIDDEN", true)
             }
             // return default state if screen size is L and XL
-            if (state.screenWidth < state.mediumScreenThreshold && newWidth >= state.mediumScreenThreshold)
-            {
+            if (state.screenWidth < state.mediumScreenThreshold && newWidth >= state.mediumScreenThreshold) {
                 commit("SET_FACET_HIDDEN", false)
                 commit("SET_SIDEBAR_HIDDEN", false)
                 commit("SET_SEARCH_RESULTS_HIDDEN", true)
@@ -84,8 +91,8 @@ export default {
 
     mutations: {
         SET_SIDEBAR_STATE(state, sideBar) {
-            if(sideBar == null) return
-            
+            if (sideBar == null) return
+
             const byParentId = groupBy(sideBar.groups, "parentId")
             forEach(byParentId, (panels, id) => {
                 Vue.set(state.panels, id, panels)

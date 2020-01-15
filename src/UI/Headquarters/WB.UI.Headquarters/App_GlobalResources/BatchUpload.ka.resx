@@ -471,10 +471,6 @@
   <data name="UploadDate" xml:space="preserve">
     <value>ატვირთვის თარიღი</value>
   </data>
-  <data name="UploadDescription" xml:space="preserve">
-    <value>ატვირთეთ ფაილი ადეკვატური მონაცემებით, რათა შეიქმნას ახალი დავალებები.
-მიუთითეთ ზედამხედველების ან დამწერლების მომხმარებლის სახელები, რათა სურათების დავალებები გააკეთონ. </value>
-  </data>
   <data name="Uploaded" xml:space="preserve">
     <value>ატვირთულია</value>
   </data>

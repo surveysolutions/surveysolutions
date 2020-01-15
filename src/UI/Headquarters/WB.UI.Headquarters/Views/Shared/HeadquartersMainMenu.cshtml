@@ -29,7 +29,7 @@
             @Html.MainMenuItem("SurveyStatistics", "Reports", @MainMenu.SurveyStatistics, MenuItem.SurveyStatistics)
         </ul>
     </li>
-    @Html.MainMenuItem("Interviews", "HQ", @MainMenu.Interviews, MenuItem.Docs)
+    @Html.MainMenuItem("Index", "Interviews", @MainMenu.Interviews, MenuItem.Interviews)
 
     <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Interviewers || page == MenuItem.UserBatchUpload ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.TeamsAndRoles">

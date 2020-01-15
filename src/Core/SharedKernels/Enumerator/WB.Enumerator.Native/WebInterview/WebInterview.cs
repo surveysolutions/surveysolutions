@@ -1,52 +1,101 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using Microsoft.AspNet.SignalR;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.CommandBus;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Enumerator.Native.WebInterview.Pipeline;
 
 namespace WB.Enumerator.Native.WebInterview
 {
-    public abstract partial class WebInterview : Hub, IErrorDetailsProvider
+    public class WebInterview : Hub
     {
-        private   IStatefulInterviewRepository statefulInterviewRepository => this.ServiceLocator.GetInstance<IStatefulInterviewRepository>();
-        protected ICommandService commandService => this.ServiceLocator.GetInstance<ICommandService>();
-        private   IQuestionnaireStorage questionnaireRepository => this.ServiceLocator.GetInstance<IQuestionnaireStorage>();
-        private   IWebInterviewNotificationService webInterviewNotificationService => this.ServiceLocator.GetInstance<IWebInterviewNotificationService>();
-        private   IWebInterviewInterviewEntityFactory interviewEntityFactory => this.ServiceLocator.GetInstance<IWebInterviewInterviewEntityFactory>();
-        private   IImageFileStorage imageFileStorage => this.ServiceLocator.GetInstance<IImageFileStorage>();
-        private   IAudioFileStorage audioFileStorage => this.ServiceLocator.GetInstance<IAudioFileStorage>();
+        private const string SectionId = "sectionId";
 
-        public IServiceLocator ServiceLocator { get; private set; }
+        private readonly IPipelineModule[] hubPipelineModules;
 
-        protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
-        private string CallerSectionid => this.Clients.Caller.sectionId;
-
-        protected IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
-
-        protected IQuestionnaire GetCallerQuestionnaire()
+        protected string CallerInterviewId
         {
-            var interview = this.GetCallerInterview();
-            return this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            get
+            {
+                var http = this.Context.GetHttpContext();
+                return http.Request.Query["interviewId"];
+            }
         }
 
-        protected virtual bool IsReviewMode => false;
-
-        protected virtual bool IsCurrentUserObserving => false;
-
-        public WebInterview()
+        public WebInterview(IPipelineModule[] hubPipelineModules)
         {
+            this.hubPipelineModules = hubPipelineModules;
         }
 
-        public void FillExceptionData(Dictionary<string, string> data)
+        public override async Task OnConnectedAsync()
+        {
+            await RegisterClient();
+
+            foreach (var pipelineModule in hubPipelineModules)
+            {
+                await pipelineModule.OnConnected(this);
+            }
+
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            foreach (var pipelineModule in hubPipelineModules)
+            {
+                await pipelineModule.OnDisconnected(this, exception);
+            }
+            
+            await UnRegisterClient();
+
+            await base.OnDisconnectedAsync(exception);
+        }
+
+        private async Task RegisterClient()
         {
             var interviewId = CallerInterviewId;
-            if (interviewId != null) data["caller.interviewId"] = interviewId;
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, interviewId);
+
+            var isReview = Context.Items[@"review"] as bool?;
+
+            if (isReview == false)
+            {
+                await Clients.OthersInGroup(interviewId).SendCoreAsync("closeInterview", null, CancellationToken.None);
+            }
         }
+
+        private async Task UnRegisterClient()
+        {
+            var interviewId = CallerInterviewId;
+            var sectionId = this.Context.Items[SectionId] as string;
+
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, interviewId);
+        }
+
+        
+        public async Task ChangeSection(string sectionId, string oldSectionId = null)
+        {
+            var interviewId = CallerInterviewId;
+            var oldSection = this.Context.Items[SectionId] as string;
+
+            if (interviewId != null)
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetGroupNameBySectionIdentity(oldSection, interviewId));
+                await Groups.AddToGroupAsync(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
+            }
+        }
+
+        private static string GetGroupNameBySectionIdentity(string sectionId, string interviewId)
+        {
+            return sectionId == null
+                ? GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId))
+                : GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId));
+        }
+
 
         [Localizable(false)]
         public static string GetConnectedClientSectionKey(Identity sectionId, Guid interviewId) => $"{sectionId}x{interviewId}";
@@ -54,6 +103,7 @@ namespace WB.Enumerator.Native.WebInterview
         [Localizable(false)]
         public static string GetConnectedClientPrefilledSectionKey(Guid interviewId) => $"PrefilledSectionx{interviewId}";
         
+
         public static string GetUiMessageFromException(Exception e)
         {
             if (e is InterviewException interviewException && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
@@ -76,11 +126,6 @@ namespace WB.Enumerator.Native.WebInterview
             }
 
             return e.Message;
-        }
-
-        public void SetServiceLocator(IServiceLocator serviceLocator)
-        {
-            this.ServiceLocator = serviceLocator;
         }
     }
 }

@@ -30,12 +30,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             IQuestionnaireStorage questionnaireStorage = null, 
             IPrincipal userIdentity = null, 
             AnswerNotifier answerNotifier = null,
-            ILiteEventRegistry eventRegistry = null,
+            IViewModelEventRegistry eventRegistry = null,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
             var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
-            var liteEventRegistry = eventRegistry ?? Mock.Of<ILiteEventRegistry>();
+            var liteEventRegistry = eventRegistry ?? Mock.Of<IViewModelEventRegistry>();
 
             return new CategoricalMultiLinkedToQuestionViewModel(
                 questionState ?? Create.ViewModel.QuestionState<MultipleOptionsLinkedQuestionAnswered>(liteEventRegistry, statefulInterviewRepository, questionnaireStorage),
@@ -55,10 +55,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             IStatefulInterviewRepository interviewRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IPrincipal userIdentity = null,
-            ILiteEventRegistry eventRegistry = null,
+            IViewModelEventRegistry eventRegistry = null,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
-            var liteEventRegistry = eventRegistry ?? Mock.Of<ILiteEventRegistry>();
+            var liteEventRegistry = eventRegistry ?? Mock.Of<IViewModelEventRegistry>();
             var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
 
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();

@@ -1,4 +1,5 @@
 import EmailProviders from "./EmailProviders"
+import TabletLogs from "./TabletLogs"
 import Vue from "vue"
 
 export default class AdminComponent {
@@ -10,6 +11,10 @@ export default class AdminComponent {
         return [{
                 path: '/Settings/EmailProviders',
                 component: EmailProviders
+            },
+            {
+                path: '/Diagnostics/Logs',
+                component: TabletLogs
             }
         ]
     }
@@ -17,10 +22,10 @@ export default class AdminComponent {
     initialize() {
         const VeeValidate = require('vee-validate');
         Vue.use(VeeValidate);
-        const installApi = require("~/webinterview/api").install
+        // const installApi = require("~/webinterview/api").install
 
-        installApi(Vue, {
-            store: this.rootStore
-        });
+        // installApi(Vue, {
+        //     store: this.rootStore
+        // });
     }
 }

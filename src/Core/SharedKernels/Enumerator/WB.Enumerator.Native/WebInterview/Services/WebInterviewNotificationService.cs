@@ -7,8 +7,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -51,11 +51,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 if (questionnaire.IsQuestion(identity.Id) && (
                         questionnaire.IsRosterSizeQuestion(identity.Id)
-                     || questionnaire.IsRosterTitleQuestion(identity.Id)
-                     || questionnaire.GetSubstitutedQuestions(identity.Id).Any()
-                     || questionnaire.GetSubstitutedGroups(identity.Id).Any()
-                     || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
-                   ))
+                        || questionnaire.IsRosterTitleQuestion(identity.Id)
+                        || questionnaire.GetSubstitutedQuestions(identity.Id).Any()
+                        || questionnaire.GetSubstitutedGroups(identity.Id).Any()
+                        || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
+                        || questionnaire.ShowCascadingAsList(identity.Id)
+                    ))
                 {
                     doesNeedRefreshSectionList = true;
                 }
@@ -70,15 +71,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     }
 
                     var parent = this.GetParentIdentity(currentEntity, interview);
-                    if (questionnaire.IsTableRoster(currentEntity.Id))
-                    {
-                        var tableClientRosterIdentity = new Identity(currentEntity.Id, currentEntity.RosterVector.Shrink());
-                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), tableClientRosterIdentity));
-                    }
-
                     if (parent != null)
                     {
-                        if (questionnaire.IsFlatRoster(parent.Id))
+                        if (questionnaire.IsCustomViewRoster(parent.Id))
                         {
                             var parentGroupIdentity = GetParentIdentity(parent, interview);
                             var connectedClientSectionKey = WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);
@@ -112,21 +107,24 @@ namespace WB.Enumerator.Native.WebInterview.Services
         public void ReloadInterview(Guid interviewId) => this.webInterviewInvoker.ReloadInterview(interviewId);
         public void FinishInterview(Guid interviewId) => this.webInterviewInvoker.FinishInterview(interviewId);
 
-        public void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage)
+        public void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, string errorMessage)
         {
-            var interview = this.statefulInterviewRepository.Get(interviewId);
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
             if (interview == null)
             {
                 return;
             }
             
-            var questionIdentity = Identity.Parse(questionId);
-
-            var clientGroupIdentity = this.GetClientGroupIdentity(questionIdentity, interview);
+            var clientGroupIdentity = this.GetClientGroupIdentity(questionId, interview);
 
             if (clientGroupIdentity != null)
-                this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId, errorMessage);
+                this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId.ToString(), errorMessage);
+        }
+        public void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, Exception exception)
+        {
+            var errorMessage = WebInterview.GetUiMessageFromException(exception);
+            MarkAnswerAsNotSaved(interviewId, questionId, errorMessage);
         }
 
         public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] entities)
@@ -225,7 +223,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             var document = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
 
-            var entityIds = Enumerable.ToHashSet(document.Find<IComposite>(this.IsSupportFilterOptionCondition)
+            var entityIds = EnumerableExtensions.ToHashSet(document.Find<IComposite>(this.IsSupportFilterOptionCondition)
                 .Select(e => e.PublicKey));
 
             foreach (var entityId in entityIds)
@@ -233,6 +231,19 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var identities = interview.GetAllIdentitiesForEntityId(entityId).ToArray();
                 this.RefreshEntities(interviewId, identities);
             }
+        }
+
+        public void RefreshCascadingOptions(Guid interviewId, Identity identity)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            if (interview == null) return;
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+
+            var dependentQuestionIds = questionnaire.GetCascadingQuestionsThatDependUponQuestion(identity.Id);
+            var dependentQuestionIdentities = dependentQuestionIds.SelectMany(x => interview.GetAllIdentitiesForEntityId(x)).ToArray();
+
+            this.RefreshEntities(interviewId, dependentQuestionIdentities);
         }
 
         public virtual void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities)
@@ -286,9 +297,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 this.RefreshEntities(interviewId, identitiesToRefresh);
             }
         }
-
-        public void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-            => this.webInterviewInvoker.ReloadInterviews(questionnaireIdentity);
 
         public void ShutDownInterview(Guid interviewId) => this.webInterviewInvoker.ShutDown(interviewId);
     }

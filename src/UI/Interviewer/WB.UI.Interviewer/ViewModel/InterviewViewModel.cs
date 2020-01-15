@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -43,7 +44,7 @@ namespace WB.UI.Interviewer.ViewModel
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
             ILastCreatedInterviewStorage lastCreatedInterviewStorage,
-            IAuditLogService auditLogService, 
+            IAuditLogService auditLogService,
             IAudioAuditService audioAuditService,
             IUserInteractionService userInteractionService,
             ILogger logger)
@@ -57,6 +58,11 @@ namespace WB.UI.Interviewer.ViewModel
             this.userInteractionService = userInteractionService;
             this.logger = logger;
         }
+
+        static readonly TimeSpan PauseResumeThrottling = TimeSpan.FromSeconds(5);
+        static readonly object ThrottlingLock = new Object();
+        static PauseInterviewCommand pendingPause = null;
+        private static Thread PauseThread;
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
@@ -96,62 +102,110 @@ namespace WB.UI.Interviewer.ViewModel
             }
         }
 
-        public override async void ViewAppeared()
+        public override void ViewAppeared()
         {
-            var interviewId = Guid.Parse(InterviewId);
-            var interview = interviewRepository.Get(this.InterviewId);
-            if (interview == null) return;
-
-            if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
+            Task.Run(async () =>
             {
-                commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
-            }
+                var interviewId = Guid.Parse(InterviewId);
+                var interview = interviewRepository.Get(this.InterviewId);
+                if (interview == null) return;
 
-            if (IsAudioRecordingEnabled == true && !isAuditStarting)
-            {
-                isAuditStarting = true;
-                try
+                if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
                 {
-                    await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
-                }
-                catch (Exception exc)
-                {
-                    logger.Warn("Audio audit failed to start.", exception: exc);
-                    await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                            .ConfigureAwait(false);
-                    this.userInteractionService.ShowToast(exc.Message);
-                }
-                finally
-                {
-                    isAuditStarting = false;
-                }
-            }
+                    lock (ThrottlingLock)
+                    {
+                        PauseThread?.Abort();
+                        if (pendingPause == null)
+                        {
+                            commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
+                        }
+                        else
+                        {
+                            var delay = DateTimeOffset.Now - pendingPause.OriginDate;
+                            if (delay > PauseResumeThrottling && pendingPause.InterviewId == interviewId)
+                            {
+                                commandService.Execute(pendingPause);
+                                commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
+                            }
+                        }
 
-            auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
-            base.ViewAppeared();
+                        pendingPause = null;
+                    }
+                }
+
+                if (IsAudioRecordingEnabled == true && !isAuditStarting)
+                {
+                    isAuditStarting = true;
+                    try
+                    {
+                        await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                    }
+                    catch (Exception exc)
+                    {
+                        logger.Warn("Audio audit failed to start.", exception: exc);
+                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                                .ConfigureAwait(false);
+                        this.userInteractionService.ShowToast(exc.Message);
+                    }
+                    finally
+                    {
+                        isAuditStarting = false;
+                    }
+                }
+
+                auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
+                base.ViewAppeared();
+            });
         }
 
         private bool isAuditStarting = false;
+        
         private readonly ILogger logger;
 
         public override void ViewDisappearing()
         {
-            if (InterviewId != null) 
+            if (InterviewId != null)
             {
-                var interviewId = Guid.Parse(InterviewId);
                 var interview = interviewRepository.Get(this.InterviewId);
-                if (!interview.IsCompleted)
+                if (interview != null)
                 {
-                    commandService.Execute(new PauseInterviewCommand(interviewId, interview.CurrentResponsibleId));
+                    var interviewId = interview.Id;
+
+                    if (!interview.IsCompleted)
+                    {
+                        pendingPause = new PauseInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId);
+                        var cmdid = pendingPause.CommandIdentifier; // to make sure it's a same command
+
+                        // discard - c# feature to ignore warning on non awaited Task
+                        PauseThread = new Thread(() => { PauseInterview(interviewId, cmdid); });
+                        PauseThread.Start();
+                    }
+
+                    auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
+
+                    if (IsAudioRecordingEnabled == true)
+                        audioAuditService.StopAudioRecording(interviewId);
                 }
-
-                auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
-
-                if (IsAudioRecordingEnabled == true)
-                    Task.Run(() => audioAuditService.StopAudioRecordingAsync(interviewId));
             }
 
             base.ViewDisappearing();
+        }
+
+        private void PauseInterview(Guid interviewId, Guid cmdid)
+        {
+            Thread.Sleep(PauseResumeThrottling);
+
+            lock (ThrottlingLock)
+            {
+                var delay = DateTimeOffset.Now - pendingPause.OriginDate;
+                var sameInterview = pendingPause.InterviewId == interviewId;
+                var samePendingCommand = pendingPause.CommandIdentifier == cmdid;
+
+                if (pendingPause != null && delay > PauseResumeThrottling && sameInterview && samePendingCommand)
+                    commandService.Execute(pendingPause);
+
+                pendingPause = null;
+            }
         }
     }
 }

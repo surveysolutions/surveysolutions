@@ -36,6 +36,8 @@
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "LinksExport", action = "Download"})';
         var $questionnairesApiEndpoint = '@Url.Content("~/api/v1/questionnaires")';
 
+        var $questionnaireDetailsUrl = '@Url.Action("Details", "Questionnaires")';
+
         var notifier = new Notifier();
         var ajax = new Ajax(notifier);
 
@@ -51,7 +53,8 @@
                 $exportQuestionnaireUrl,
                 $migrateAssignmentsUrl,
                 $questionnairesApiEndpoint,
-                $sendInvitationsUrl);
+                $sendInvitationsUrl,
+                $questionnaireDetailsUrl);
             model.toLocalDate = function(data) {
                 if (data === null || data === undefined || data === "") return "";
 
@@ -129,7 +132,10 @@
 
                 var buildMenuItem = function(selectedRow) {
                     var items = {}
-
+                    items["details"] = {
+                        name: "@Html.ToSafeJavascriptMessage(Dashboard.Details)",
+                        callback: model.openQuestionnaireDetails
+                    };
                     if (!(selectedRow.isDisabled)) {
                         @if (!isObserver)
                         {

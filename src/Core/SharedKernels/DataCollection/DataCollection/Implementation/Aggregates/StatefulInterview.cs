@@ -764,8 +764,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public List<AnswerComment> GetQuestionComments(Identity entityIdentity, bool includeResolved = false)
             => this.Tree.GetQuestion(entityIdentity).AnswerComments.Where(x => includeResolved || !x.Resolved).ToList();
 
-        List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize)
-            => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize);
+        List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question,
+            int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds)
+            => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize, excludedOptionIds);
 
         public bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity questionIdentity, int threshold)
         {
@@ -777,7 +778,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return false;
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var optionsCount =  questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestion.GetAnswer().SelectedValue, null).Take(threshold + 1).Count();
+            var optionsCount =  questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestion.GetAnswer().SelectedValue, null, null).Take(threshold + 1).Count();
 
             if (optionsCount > threshold)
                 return true;

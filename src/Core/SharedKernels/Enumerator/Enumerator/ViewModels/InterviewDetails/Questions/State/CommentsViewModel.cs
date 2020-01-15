@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     }
 
     public class CommentsViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<AnswerCommentResolved>,
+        IViewModelEventHandler<AnswerCommentResolved>,
         ICompositeEntity,
         IDisposable
     {
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private IStatefulInterview interview;
         private readonly ICommandService commandService;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
         private readonly IPrincipal principal;
 
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             ICommandService commandService,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher)
         {
             this.interviewRepository = interviewRepository;
@@ -77,7 +77,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.eventRegistry.Subscribe(this, interviewId);
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
@@ -88,6 +87,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.ShowResolvedCommentsVisible = anyResolvedCommentsExists;
             this.ShowResolvedComments = false;
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void UpdateCommentsFromInterview(bool showResolved = false)
@@ -258,6 +259,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendCommentQuestionCommandAsync()
         {
+#if !PRODUCTION
+            if (this.InterviewerComment?.Equals("!{kaboom}!", StringComparison.InvariantCultureIgnoreCase) == true)
+            {
+                throw new Exception("Test exception");
+            }
+#endif
             await this.commandService.ExecuteAsync(
                 new CommentAnswerCommand(
                     interviewId: Guid.Parse(this.interviewId),

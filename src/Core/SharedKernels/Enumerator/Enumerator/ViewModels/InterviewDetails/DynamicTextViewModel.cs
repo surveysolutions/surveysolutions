@@ -8,23 +8,24 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class DynamicTextViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<SubstitutionTitlesChanged>,
-        ILiteEventHandler<RosterInstancesTitleChanged>,
+        IViewModelEventHandler<SubstitutionTitlesChanged>,
+        IViewModelEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern);
 
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
 
         public DynamicTextViewModel(
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService)
         {

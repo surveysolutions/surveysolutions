@@ -31,5 +31,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         bool? LastSyncSucceeded { get; }
         void MarkSyncStart();
         void MarkSyncSucceeded();
+
+        bool DashboardViewsUpdated { get; }
+        void SetDashboardViewsUpdated(bool updated);
     }
 }

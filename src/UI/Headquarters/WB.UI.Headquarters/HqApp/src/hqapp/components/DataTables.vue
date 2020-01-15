@@ -1,13 +1,14 @@
 <template>
     <div :class="wrapperClass">
+        <span id="loadingPixel" style="display:none" :data-loading="isProcessingFlag"></span>
         <table ref="table"
                class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
-            <thead ref="header"><slot name="header"></slot></thead>            
+            <thead ref="header"><slot name="header"></slot></thead>
             <tbody ref="body"></tbody>
             <transition name="fade">
                 <div class='dataTables_processing' v-if="isProcessing" :class="{ 'error': errorMessage != null }">
                     <div v-if="errorMessage" >{{errorMessage}}</div>
-                    <div v-else>Processing...</div>
+                    <div v-else>{{$t("Common.Processing")}}...</div>
                 </div>
             </transition>
         </table>
@@ -98,6 +99,7 @@ export default {
     data() {
         return {
             isProcessing: false,
+            isProcessingFlag: false,
             selectedRows: [],
             table: null,
             export: {
@@ -190,20 +192,22 @@ export default {
             }
 
             if(options.ajax != null) {
-                options.ajax.dataSrc = (json) => {
-                    if(json.data) {
-                        if (json.data.length > 0 && json.totalRow) {
-                            var totalRow = json.totalRow;
-                            totalRow.DT_RowClass = "total-row";
-                            json.data.unshift(totalRow);
+                if(!options.ajax.dataSrc) {
+                    options.ajax.dataSrc = (json) => {
+                        if(json.data) {
+                            if (json.data.length > 0 && json.totalRow) {
+                                var totalRow = json.totalRow;
+                                totalRow.DT_RowClass = "total-row";
+                                json.data.unshift(totalRow);
+                            }
+                            return json.data
+                        } else {
+                            return json
                         }
-                        return json.data
-                    } else {
-                        return json
-                    }
-                };
+                    };
+                }
                         
-                options.ajax.data = (d) => {                    
+                options.ajax.data = (d) => {
                     this.addParamsToRequest(d);
                     self.errorMessage = null
                     // reducing length of GET request URI
@@ -258,6 +262,11 @@ export default {
                 self.rowsDeselected(e, dt, type, indexes)
             });
 
+            this.table.on('preXhr.dt', (e, diff, edit) => {
+                self.table.rows().deselect();
+                $(self.table.rows).find(".checkbox-filter").prop('checked', false);
+            });
+           
             this.table.on('draw', () => {
                 self.$emit("draw")
             })
@@ -292,7 +301,10 @@ export default {
 
         selectRowAndGetData(selectedItem) {
             this.table.rows().deselect();
-            var rowIndex = selectedItem.parent().children().index(selectedItem);
+            $(this.table.rows).find(".checkbox-filter").prop('checked', false);
+
+            var parent = selectedItem.parent();
+            var rowIndex = parent.parent().children().index(parent);
             this.table.row(rowIndex).select();
             const rowData = this.table.rows({ selected: true }).data()[0];
 
@@ -333,6 +345,9 @@ export default {
 
         initProcessingBox() {
             const self = this
+            this.table.on('processing', function(evnt, dt, show) {
+                self.isProcessingFlag = show;
+            })
             this.table.on('processing', _.debounce(function(evnt, dt, show) {
                 self.isProcessing = show
             }, 250))
@@ -362,7 +377,7 @@ export default {
         initContextMenu() {
             if (this.contextMenuItems == null) return;
             var contextMenuOptions = {
-                selector: "#" + this.$refs.table.attributes.id.value + " tbody tr",
+                selector: "#" + this.$refs.table.attributes.id.value + " tbody tr td:not(.checkbox-cell)",
                 autoHide: false,
                 build: ($trigger) => {
                     var selectedRow = this.selectRowAndGetData($trigger);
@@ -386,9 +401,9 @@ export default {
                 if (delimiterPosition !== -1)
                     rowId = rowId.substring(delimiterPosition+1);
                                 
-                var parsedId = parseInt(rowId);
-                if (!_.includes(this.selectedRows, parsedId)) {
-                    this.selectedRows.push(parsedId);
+                //var parsedId = parseInt(rowId);
+                if (!_.includes(this.selectedRows, rowId)) {
+                    this.selectedRows.push(rowId);
                 }
             }
 
@@ -403,8 +418,8 @@ export default {
                 if (delimiterPosition !== -1)
                     rowId = rowId.substring(delimiterPosition+1);
 
-                var parsedId = parseInt(rowId);
-                this.selectedRows = _.without(this.selectedRows, parsedId);
+                //var parsedId = parseInt(rowId);
+                this.selectedRows = _.without(this.selectedRows, rowId);
             }
 
             this.$emit("selectedRowsChanged", this.selectedRows)

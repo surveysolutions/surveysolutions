@@ -15,7 +15,6 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
@@ -61,7 +60,6 @@ namespace WB.UI.Headquarters
 
         public void Load(IWebIocRegistry registry)
         {
-            registry.Bind<ILiteEventRegistry, LiteEventRegistry>();
             registry.BindToConstant<ISettingsProvider>(() => settingsProvider);
 
             registry.BindToConstant<LegacyAssemblySettings>(() => legacyAssemblySettings);
@@ -125,13 +123,13 @@ namespace WB.UI.Headquarters
 
         public async Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
+            await serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             await serviceLocator.GetInstance<UsersImportTask>().ScheduleRunAsync();
             await serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             await serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             await serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Schedule(repeatIntervalInSeconds: 10);
-            serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
-            serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
+            await serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
+            await serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
             await serviceLocator.GetInstance<SendInvitationsTask>().ScheduleRunAsync();
             await serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             

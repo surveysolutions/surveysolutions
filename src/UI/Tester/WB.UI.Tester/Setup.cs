@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using MvvmCross;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
-using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -13,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomServices;
+using WB.UI.Shared.Enumerator.Utils;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
 using WB.UI.Tester.ServiceLocation;
@@ -22,16 +20,21 @@ namespace WB.UI.Tester
 {
     public class Setup : EnumeratorSetup<TesterMvxApplication>
     {
+        public Setup()
+        {
+            CrashReporting.Init("e77a488d-d76b-4300-9a37-8716f5b2faa7");
+        }
+
         protected override IMvxIoCProvider CreateIocProvider()
         {
             return IoCAdapterSetup.CreateIocProvider();
         }
 
-        protected override void InitializeViewLookup()
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
         {
-            base.InitializeViewLookup();
+            var result = base.InitializeViewLookup(viewModelViewLookup);
 
-            var viewModelViewLookup = new Dictionary<Type, Type>()
+            var viewModelViewLookup1 = new Dictionary<Type, Type>()
             {
                 {typeof (LoginViewModel), typeof (LoginActivity)},
                 {typeof (InterviewViewModel), typeof (InterviewActivity)},
@@ -44,8 +47,8 @@ namespace WB.UI.Tester
 #endif
             };
 
-            var container = Mvx.Resolve<IMvxViewsContainer>();
-            container.AddAll(viewModelViewLookup);
+            result.AddAll(viewModelViewLookup1);
+            return result;
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)

@@ -9,6 +9,7 @@ using Java.Lang;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -25,13 +26,15 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IMvxAndroidCurrentTopActivity topActivity;
         private readonly IMvxNavigationService navigationService;
         private readonly IPrincipal principal;
+        private readonly ILogger logger;
 
         protected BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
             IUserInterfaceStateService userInterfaceStateService,
             IMvxAndroidCurrentTopActivity topActivity,
             IMvxNavigationService navigationService,
-            IPrincipal principal)
+            IPrincipal principal, 
+            ILogger logger)
         {
             this.commandService = commandService;
             this.userInteractionService = userInteractionService;
@@ -39,30 +42,35 @@ namespace WB.UI.Shared.Enumerator.Services
             this.topActivity = topActivity;
             this.navigationService = navigationService;
             this.principal = principal;
+            this.logger = logger;
         }
 
-        public virtual bool HasPendingOperations => this.commandService.HasPendingCommands ||
-                                                    this.userInteractionService.HasPendingUserInteractions ||
-                                                    this.userInterfaceStateService.IsUserInterfaceLocked ||
-                                                    this.userInterfaceStateService.HasPendingThrottledActions;
+        public virtual bool HasPendingOperations => 
+            this.commandService.HasPendingCommands ||
+            this.userInteractionService.HasPendingUserInteractions ||
+            this.userInterfaceStateService.IsUserInterfaceLocked ||
+            this.userInterfaceStateService.HasPendingThrottledActions;
 
         public Task Close(IMvxViewModel viewModel)
         {
+            this.logger.Trace($"Closing viewmodel {viewModel.GetType()}");
             return this.navigationService.Close(viewModel);
         }
-
+        
         public void InstallNewApp(string pathToApk)
         {
+            this.logger.Info($"Installing new app {pathToApk} android build version code {Build.VERSION.SdkInt}");
             Intent promptInstall;
+
             if (Build.VERSION.SdkInt < BuildVersionCodes.N)
             {
                 promptInstall =
                     new Intent(Intent.ActionView)
-                        .SetDataAndType(global::Android.Net.Uri.FromFile(new Java.IO.File(pathToApk)), "application/vnd.android.package-archive")
+                        .SetDataAndType(Android.Net.Uri.FromFile(new Java.IO.File(pathToApk)), "application/vnd.android.package-archive")
                         .AddFlags(ActivityFlags.NewTask)
                         .AddFlags(ActivityFlags.GrantReadUriPermission);
             }
-            else
+            else 
             {
                 var uriForFile = FileProvider.GetUriForFile(this.topActivity.Activity.BaseContext,
                     this.topActivity.Activity.ApplicationContext.PackageName + ".fileprovider",
@@ -87,7 +95,6 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public abstract Task NavigateToMapsAsync();
 
-
         public abstract Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
         public abstract Task NavigateToPrefilledQuestionsAsync(string interviewId);
         public abstract void NavigateToSplashScreen();
@@ -100,11 +107,13 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             if (this.HasPendingOperations)
             {
+                this.logger.Trace($"Prevent navigate to {typeof(TViewModel)} with {typeof(TParam)} because answering in progress ");
                 this.ShowWaitMessage();
                 return Task.FromResult(false);
             }
-            else
-                return this.navigationService.Navigate<TViewModel, TParam>(param);
+
+            this.logger.Trace($"Navigate to new {typeof(TViewModel)} with {typeof(TParam)}");
+            return this.navigationService.Navigate<TViewModel, TParam>(param);
         }
 
         public Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
@@ -144,6 +153,8 @@ namespace WB.UI.Shared.Enumerator.Services
 
         protected void RestartApp(Type splashScreenType)
         {
+            this.logger.Trace("RestartApp");
+
             var currentActivity = topActivity.Activity;
             var intent = new Intent(currentActivity, splashScreenType);
             intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);

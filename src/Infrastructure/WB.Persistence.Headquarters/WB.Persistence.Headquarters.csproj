@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>net48</TargetFramework>
+      <TargetFramework>netstandard2</TargetFramework>
       <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
       <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
       <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -21,6 +21,10 @@
       <None Remove="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
       <None Remove="Migrations\Quartz\M201905151013_AddQuartzTables.sql" />
       <None Remove="Migrations\ReadSide\M001-100\interview_update.sql" />
+      <None Remove="Migrations\ReadSide\M2019\M201909091502_MigrateAssignments.sql" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Migrations\ReadSide\M2019\M201909091502_MigrateAssignments.sql" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
@@ -30,10 +34,10 @@
       <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Dapper" Version="1.60.6" />
+      <PackageReference Include="Dapper" Version="2.0.4" />
       <PackageReference Include="FluentMigrator" Version="3.2.1" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-      <PackageReference Include="Npgsql" Version="4.0.7" />
+      <PackageReference Include="Npgsql" Version="4.0.10" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />

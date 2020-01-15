@@ -197,6 +197,19 @@ namespace WB.Core.Infrastructure.CommandBus
                 Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: false, isStateless: false, configurer: null);
                 return this;
             }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> StatelessHandles<TCommand>(Action<TCommand, TAggregate> commandHandler)
+                where TCommand : TAggregateCommand
+            {
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: false, isStateless: true, configurer: null);
+                return this;
+            }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> StatelessHandles<TCommand>(Func<TAggregate, Action<TCommand>> commandHandler)
+                where TCommand : TAggregateCommand
+            {
+                return StatelessHandles<TCommand>((command, aggregate) => commandHandler(aggregate)(command));
+            }
         }
 
         public static AggregateSetup<TAggregate> Setup<TAggregate>()

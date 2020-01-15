@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -16,6 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly ISynchronizationService synchronizationService;
+        private readonly ILogger logger;
 
         protected QuestionnaireDownloader()
         {
@@ -23,17 +26,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         public QuestionnaireDownloader(IAttachmentContentStorage attachmentContentStorage,
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
-            ISynchronizationService synchronizationService)
+            ISynchronizationService synchronizationService,
+            ILogger logger)
         {
             this.attachmentContentStorage = attachmentContentStorage;
             this.questionnairesAccessor = questionnairesAccessor;
             this.synchronizationService = synchronizationService;
+            this.logger = logger;
         }
 
         public virtual async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity,
             SynchronizationStatistics statistics, IProgress<TransferProgress> transferProgress,
             CancellationToken cancellationToken)
         {
+            this.logger.Trace($"Loading of questionnaire requested {questionnaireIdentity}");
             if (!this.questionnairesAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity))
             {
                 var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
@@ -65,15 +71,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
 
                 var translationDtos = await this.synchronizationService.GetQuestionnaireTranslationAsync(questionnaireIdentity, cancellationToken);
+                this.logger.Trace($"Get translations for questionnaire {questionnaireIdentity}. {translationDtos.Count} records.");
 
-                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
-                    questionnaireIdentity,
-                    transferProgress,
-                    cancellationToken);
+                var reusableCategories = await this.synchronizationService.GetQuestionnaireReusableCategoriesAsync(questionnaireIdentity, cancellationToken);
+                this.logger.Trace($"Get categories for questionnaire {questionnaireIdentity}. {reusableCategories.Count} categories with {reusableCategories.Sum(c => c.Options.Count)} sum of items.");
+
+                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(questionnaireIdentity, transferProgress, cancellationToken);
 
                 this.questionnairesAccessor.StoreQuestionnaire(questionnaireIdentity,
                     questionnaireApiView.QuestionnaireDocument,
-                    questionnaireApiView.AllowCensus, translationDtos);
+                    questionnaireApiView.AllowCensus, 
+                    translationDtos,
+                    reusableCategories);
 
                 await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
                 statistics.SuccessfullyDownloadedQuestionnairesCount++;

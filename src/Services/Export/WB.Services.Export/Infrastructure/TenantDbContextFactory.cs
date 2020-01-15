@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Infrastructure.Tenant;
 
@@ -15,7 +16,7 @@ namespace WB.Services.Export.Infrastructure
         {
             var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
             optionsBuilder.UseNpgsql(
-                "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=ExportService;");
+                "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=ExportService_Factory;");
 
             var tenantInfo = new TenantInfo
             {
@@ -24,7 +25,7 @@ namespace WB.Services.Export.Infrastructure
             };
             var connectionSettings = Options.Create(new DbConnectionSettings
             {
-                DefaultConnection = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=ExportService;"
+                DefaultConnection = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=ExportService_Factory;"
             });
             var tenantContext = new TenantContext(null)
             {

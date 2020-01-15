@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NHibernate.Cfg;
@@ -31,6 +32,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
@@ -40,6 +42,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -230,7 +233,6 @@ namespace WB.Tests.Integration
 
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             List<InterviewAnswer> answersOnPrefilledQuestions = null,
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
@@ -240,11 +242,6 @@ namespace WB.Tests.Integration
             serviceLocatorMock.Setup(x => x.GetInstance<IQuestionnaireStorage>())
                 .Returns(qRepository);
 
-            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
-            serviceLocatorMock.Setup(x => x.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(expressionsProvider);
-
-            
             var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
             serviceLocatorMock.Setup(x => x.GetInstance<IQuestionOptionsRepository>())
                 .Returns(optionsRepository);
@@ -298,14 +295,19 @@ namespace WB.Tests.Integration
 
         public static SequentialCommandService SequentialCommandService(IEventSourcedAggregateRootRepository repository = null, ILiteEventBus eventBus = null)
         {
-            return new SequentialCommandService(
-                repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
-                eventBus ?? Mock.Of<ILiteEventBus>(),
-                Mock.Of<IServiceLocator>(),
-                Mock.Of<IPlainAggregateRootRepository>(),
-                new AggregateLock(),
-                Mock.Of<IAggregateRootCacheCleaner>(),
-                Mock.Of<ICommandsMonitoring>());
+            var locatorMock = new Mock<IServiceLocator>();
+
+            locatorMock.Setup(x => x.GetInstance<IInScopeExecutor>())
+                .Returns(() => new NoScopeInScopeExecutor(locatorMock.Object));
+            locatorMock.Setup(x => x.GetInstance<ICommandExecutor>())
+                .Returns(new CommandExecutor(repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                    eventBus ?? Mock.Of<IEventBus>(),
+                    locatorMock.Object,
+                    Mock.Of<IPlainAggregateRootRepository>(),
+                    Mock.Of<IAggregateRootCacheCleaner>(),
+                    Mock.Of<ICommandsMonitoring>()));
+
+            return new SequentialCommandService(locatorMock.Object, Stub.Lock());
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
@@ -434,7 +436,7 @@ namespace WB.Tests.Integration
                 Mock.Of<IServiceLocator>());
         }
 
-        public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)
+        public static AnswerNotifier AnswerNotifier(IViewModelEventRegistry registry = null)
             => new AnswerNotifier(registry ?? Abc.Create.Service.LiteEventRegistry());
 
         public static IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationCondition(Identity questionIdentity)

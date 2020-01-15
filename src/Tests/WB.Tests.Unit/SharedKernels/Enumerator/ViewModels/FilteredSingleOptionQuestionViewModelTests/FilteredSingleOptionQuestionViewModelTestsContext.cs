@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         {
             return new FilteredSingleOptionQuestionViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<ILiteEventRegistry>(),
+                Mock.Of<IViewModelEventRegistry>(),
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
@@ -80,8 +80,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 .Returns((QuestionnaireIdentity a, Guid b, int c) => options.First(x => x.Value == c));
 
             optionsRepository
-                .Setup(x => x.GetFilteredQuestionOptions(questionnaireId, questionId, It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<Guid>()))
-                .Returns((QuestionnaireIdentity a, Guid b, int? c, string d) => 
+                .Setup(x => x.GetFilteredQuestionOptions(questionnaireId, questionId, It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<int[]>()))
+                .Returns((QuestionnaireIdentity a, Guid b, int? c, string d, int[] e) => 
                         options.Where(x => x.Title.IndexOf(d ?? string.Empty, StringComparison.OrdinalIgnoreCase) >= 0).Select(x => x));
             
             return optionsRepository.Object;

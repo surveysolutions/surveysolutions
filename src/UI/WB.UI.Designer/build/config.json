@@ -89,7 +89,7 @@
       "questionnaire/scripts/modules/positionCalculator.js",
       "node_modules/underscore/underscore.js",
       "node_modules/js-cookie/src/js.cookie.js",
-      "node_modules/angular-ui-router/release/angular-ui-router.js",
+      "node_modules/@uirouter/angularjs/release/angular-ui-router.js",
       "node_modules/xss/dist/xss.js",
       "node_modules/html5shiv/dist/html5shiv.js",
       "questionnaire/scripts/modules/ui-ace.js",
@@ -132,7 +132,7 @@
         "node_modules/moment/min/moment-with-locales.js",
         "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
         "questionnaire/content/designer-start/bootstrap-custom.less",
-        "Content/designer-list.css"
+        "Styles/designer-list.less"
       ]
     },
     {

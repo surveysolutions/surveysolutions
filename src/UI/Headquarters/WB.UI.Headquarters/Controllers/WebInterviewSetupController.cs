@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -27,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
     [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-    [Filters.ObserverNotAllowed]
+    [ObserverNotAllowed]
     [WebInterviewFeatureEnabled]
     public class WebInterviewSetupController : BaseController
     {
@@ -45,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IWebInterviewConfigurator configurator,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IPlainStorageAccessor<Assignment> assignments,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignments,
             IAssignmentsService assignmentsService,
             IWebInterviewNotificationService webInterviewNotificationService, 
             IInvitationService invitationService, 
@@ -191,6 +192,7 @@ namespace WB.UI.Headquarters.Controllers
             model.ReminderAfterDaysIfPartialResponse = config.ReminderAfterDaysIfPartialResponse;
             model.Started = config.Started;
             model.UseCaptcha = config.UseCaptcha;
+            model.SingleResponse = config.SingleResponse;
 
             return View(model);
         }
@@ -252,6 +254,7 @@ namespace WB.UI.Headquarters.Controllers
         public int? ReminderAfterDaysIfNoResponse { get; set; } 
         public int? ReminderAfterDaysIfPartialResponse { get; set; }
         public bool Started { get; set; }
+        public bool SingleResponse { get; set; }
     }
 
     public class EmailTextTemplateViewModel

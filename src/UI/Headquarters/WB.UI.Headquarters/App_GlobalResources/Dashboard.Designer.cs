@@ -178,6 +178,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        internal static string Details {
+            get {
+                return ResourceManager.GetString("Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download web links.
         /// </summary>
         internal static string DownloadLinks {
@@ -210,6 +219,24 @@ namespace Resources {
         internal static string ImportDate {
             get {
                 return ResourceManager.GetString("ImportDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported by.
+        /// </summary>
+        internal static string ImportedBy {
+            get {
+                return ResourceManager.GetString("ImportedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{role}} user {{name}}.
+        /// </summary>
+        internal static string ImportedByText {
+            get {
+                return ResourceManager.GetString("ImportedByText", resourceCulture);
             }
         }
         
@@ -291,6 +318,15 @@ namespace Resources {
         internal static string SendInvitations {
             get {
                 return ResourceManager.GetString("SendInvitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show on Designer.
+        /// </summary>
+        internal static string ShowOnDesigner {
+            get {
+                return ResourceManager.GetString("ShowOnDesigner", resourceCulture);
             }
         }
         

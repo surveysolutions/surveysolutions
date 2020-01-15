@@ -11,10 +11,15 @@ export default {
             }
         })
     },
+    SET_ANSWER(state, {identity, answer}) {
+        const e = state.entityDetails[identity]
+        e.answer = answer
+    },
     SET_SECTION_DATA(state, sectionData) {
         var entitiesToDelete = differenceBy(state.entities, sectionData, 'identity');
         forEach(entitiesToDelete, entity => {
             Vue.delete(state.entityDetails, entity.identity)
+            Vue.delete(state.fetch.state, entity.identity)
         });
         state.entities = sectionData
     },

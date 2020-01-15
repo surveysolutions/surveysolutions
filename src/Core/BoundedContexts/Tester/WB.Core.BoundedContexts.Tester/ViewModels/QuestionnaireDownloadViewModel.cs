@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
@@ -150,11 +151,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     var dummyQuestionnaireIdentity = GenerateDummyQuestionnaireIdentity(questionnaireId);
 
-                    var translations =
-                        await this.designerApiService.GetTranslationsAsync(questionnaireId, cancellationToken);
+                    var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId, cancellationToken);
+                    var reusableCategories = await this.designerApiService.GetReusableCategoriesAsync(questionnaireId, cancellationToken);
 
                     this.StoreQuestionnaireWithNewIdentity(dummyQuestionnaireIdentity, questionnairePackage,
-                        translations, progress);
+                        translations, reusableCategories, progress);
 
                     return dummyQuestionnaireIdentity;
                 }
@@ -224,7 +225,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity,
             Questionnaire questionnairePackage, TranslationDto[] translations,
-            IProgress<string> progress)
+            ReusableCategoriesDto[] reusableCategories, IProgress<string> progress)
         {
             progress.Report(TesterUIResources.ImportQuestionnaire_StoreQuestionnaire);
 
@@ -234,7 +235,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var supportingAssembly = questionnairePackage.Assembly;
 
-            this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly, translations);
+            this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly, translations, reusableCategories);
         }
 
         private async Task<Questionnaire> DownloadQuestionnaire(string questionnaireId,

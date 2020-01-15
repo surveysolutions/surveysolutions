@@ -39,7 +39,7 @@
                 }
                 else if(authorizedUser.IsSupervisor)
                 {
-                    <a class="navbar-brand" href="@Url.Action("Interviews", "Survey", new {area = ""})">@Users.Supervisor</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Interviews", new {area = ""})">@Users.Supervisor</a>
                 }
                 else if (authorizedUser.IsObserver)
                 {
@@ -109,7 +109,7 @@
         <hr>
         <footer>
             <div class="text-center">
-                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Common.TheWorldBankGroup</a>, @(Common.AlRightsReserved). <a href="http://go.worldbank.org/OS6V7NIUD0">@Common.Legal</a>.
+                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Common.TheWorldBankGroup</a>, @(Common.AlRightsReserved). <a href="https://www.worldbank.org/en/about/legal">@Common.Legal</a>.
             </div>
             <div class="text-center">
                 @(DependencyResolver.Current.GetService<IProductVersion>())
@@ -131,9 +131,6 @@
                         <span style="background-color: #ff8;">@Common.NewVersionAvailable @(DependencyResolver.Current.GetService<IVersionCheckService>().GetNewVersionString()) </span>
                     </div>
                 }
-            </div>
-            <div class="text-center">
-                @Html.Partial("_PoweredBy")
             </div>
         </footer>
     </div>

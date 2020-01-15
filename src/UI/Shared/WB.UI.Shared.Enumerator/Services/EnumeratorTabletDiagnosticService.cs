@@ -19,20 +19,23 @@ namespace WB.UI.Shared.Enumerator.Services
     public abstract class EnumeratorTabletDiagnosticService: ITabletDiagnosticService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IPermissions permissions;
+        private readonly IPermissionsService permissions;
         private readonly ISynchronizationService synchronizationService;
         private readonly IDeviceSettings deviceSettings;
         private readonly IArchivePatcherService archivePatcherService;
         private readonly ILogger logger;
         private readonly IViewModelNavigationService navigationService;
-
-        protected EnumeratorTabletDiagnosticService(IFileSystemAccessor fileSystemAccessor,
-            IPermissions permissions,
+        private readonly IMvxAndroidCurrentTopActivity topActivity;
+        
+        protected EnumeratorTabletDiagnosticService(
+            IFileSystemAccessor fileSystemAccessor,
+            IPermissionsService permissions,
             ISynchronizationService synchronizationService,
             IDeviceSettings deviceSettings,
             IArchivePatcherService archivePatcherService,
             ILogger logger,
-            IViewModelNavigationService navigationService)
+            IViewModelNavigationService navigationService,
+            IMvxAndroidCurrentTopActivity topActivity)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.permissions = permissions;
@@ -41,9 +44,10 @@ namespace WB.UI.Shared.Enumerator.Services
             this.archivePatcherService = archivePatcherService;
             this.logger = logger;
             this.navigationService = navigationService;
+            this.topActivity = topActivity;
         }
 
-        private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+        private Activity CurrentActivity => topActivity.Activity;
 
         public void LaunchShareAction(string title, string info)
         {
@@ -57,8 +61,9 @@ namespace WB.UI.Shared.Enumerator.Services
             bool continueIfNoPatch = true,
             IProgress<TransferProgress> onDownloadProgressChanged = null)
         {
-            await this.permissions.AssureHasPermission(Permission.Storage);
-
+            await this.permissions.AssureHasPermission(Permission.Storage).ConfigureAwait(false);
+            await this.permissions.EnsureHasPermissionToInstallFromUnknownSourcesAsync().ConfigureAwait(false);
+            
             var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N
                 ? AndroidPathUtils.GetPathToExternalDirectory()
                 : AndroidPathUtils.GetPathToInternalDirectory();
@@ -85,10 +90,10 @@ namespace WB.UI.Shared.Enumerator.Services
             }
             
             byte[] patchOrFullApkBytes = null;
-
+             
             try
             {
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(onDownloadProgressChanged, cancellationToken);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(onDownloadProgressChanged, cancellationToken).ConfigureAwait(false);
             }
             catch (RestException restEx)
             {
@@ -101,7 +106,7 @@ namespace WB.UI.Shared.Enumerator.Services
             async Task GetWithFullApk()
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(onDownloadProgressChanged, cancellationToken);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(onDownloadProgressChanged, cancellationToken).ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 if (this.fileSystemAccessor.IsFileExists(pathToNewApk))
@@ -126,13 +131,13 @@ namespace WB.UI.Shared.Enumerator.Services
                     this.logger.Error("Were not able to apply delta patch. ", e);
 
                     if (continueIfNoPatch)
-                        await GetWithFullApk();
+                        await GetWithFullApk().ConfigureAwait(false);
                 }
             }
             else
             {
                 if (continueIfNoPatch)
-                    await GetWithFullApk();
+                    await GetWithFullApk().ConfigureAwait(false);
             }
 
             if (patchOrFullApkBytes == null)

@@ -54,9 +54,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         private SQLiteConnectionWithLock CreateConnection(string connectionString)
         {
-            var sqConnection = new SQLiteConnectionString(connectionString, true, null);
-            var connection = new SQLiteConnectionWithLock(sqConnection,
-                openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
+            var sqConnection = new SQLiteConnectionString(connectionString, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true, null);
+            var connection = new SQLiteConnectionWithLock(sqConnection);
 
             connection.CreateTable<EventView>();
 
@@ -225,6 +224,20 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                                           && ev.EventSourceId == eventSourceId 
                                           && typeNames.Contains(ev.EventType));
                 return @event != null;
+            }
+        }
+
+        public CommittedEvent GetEventByEventSequence(Guid eventSourceId, int eventSequence)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var eventV = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(eventView => eventView.EventSourceId == eventSourceId
+                                                 && eventView.EventSequence == eventSequence);
+
+                return eventV == null ? null: ToCommitedEvent(eventV, eventSerializer, this.encryptionService);
             }
         }
 

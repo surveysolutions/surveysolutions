@@ -95,9 +95,8 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             foreach (var interviewFile in this.fileSystemAccessor.GetFilesInDirectory(databaseSettings.PathToInterviewsDirectory, "*.sqlite3"))
             {
-                var sqConnection = new SQLiteConnectionString(interviewFile, true, null);
-                var connection = new SQLiteConnectionWithLock(sqConnection,
-                    openFlags: SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
+                var sqConnection = new SQLiteConnectionString(interviewFile, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true, null);
+                var connection = new SQLiteConnectionWithLock(sqConnection);
 
                 using (connection.Lock())
                 {

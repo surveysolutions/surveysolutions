@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.CreationDate);
             Property(x => x.LastEntryDate);
             Property(x => x.ImportDate);
+            Property(x => x.ImportedBy);
             Property(x => x.Title);
             Property(x => x.Variable);
             Property(x => x.IsPublic);
@@ -30,6 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.AllowExportVariables);
             Property(x => x.DisabledBy);
             Property(x => x.IsAudioRecordingEnabled);
+            Property(x => x.Comment);
 
             List(x => x.FeaturedQuestions, listMap =>
             {

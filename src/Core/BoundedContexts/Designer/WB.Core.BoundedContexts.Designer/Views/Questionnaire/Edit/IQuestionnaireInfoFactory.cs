@@ -1,25 +1,26 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public interface IQuestionnaireInfoFactory
     {
-        NewEditGroupView GetGroupEditView(string questionnaireId, Guid groupId);
+        NewEditGroupView GetGroupEditView(QuestionnaireRevision questionnaireId, Guid groupId);
 
-        NewEditRosterView GetRosterEditView(string questionnaireId, Guid rosterId);
+        NewEditRosterView GetRosterEditView(QuestionnaireRevision questionnaireId, Guid rosterId);
 
-        NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId);
+        NewEditQuestionView GetQuestionEditView(QuestionnaireRevision questionnaireId, Guid questionId);
 
-        NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId);
+        NewEditStaticTextView GetStaticTextEditView(QuestionnaireRevision questionnaireId, Guid staticTextId);
 
-        List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string questionnaireId, Guid id);
+        List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(QuestionnaireRevision questionnaireId, Guid id);
 
-        List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(string questionnaireId, Guid rosterId, Guid rosterSizeQuestionId);
+        List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(QuestionnaireRevision questionnaireId, Guid rosterId, Guid rosterSizeQuestionId);
 
-        VariableView GetVariableEditView(string questionnaireId, Guid variableId);
+        VariableView GetVariableEditView(QuestionnaireRevision questionnaireId, Guid variableId);
 
-        Guid GetSectionIdForItem(string questionnaireId, Guid? entityid);
+        Guid GetSectionIdForItem(QuestionnaireRevision questionnaireId, Guid? entityid);
     }
 }

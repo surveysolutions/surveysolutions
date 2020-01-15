@@ -51,10 +51,10 @@ namespace WB.Services.Scheduler.Services.Implementation
 
                     if (token.IsCancellationRequested) return;
 
-                    await Task.Delay(TimeSpan.FromSeconds(5), token);
+                    await Task.Delay(TimeSpan.FromSeconds(1), token);
                 }
                 catch (TaskCanceledException)
-                {
+                { 
                     Info("Cancellation requested. Stopping JobWorker");
                     throw;
                 }

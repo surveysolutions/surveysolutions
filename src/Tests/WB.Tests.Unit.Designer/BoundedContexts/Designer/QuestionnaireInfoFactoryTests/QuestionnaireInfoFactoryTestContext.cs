@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -15,11 +16,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     internal class QuestionnaireInfoFactoryTestContext
     {
         protected static QuestionnaireInfoFactory CreateQuestionnaireInfoFactory(
-            IPlainKeyValueStorage<QuestionnaireDocument> questionDetailsReader = null,
+            IDesignerQuestionnaireStorage questionDetailsReader = null,
             IExpressionProcessor expressionProcessor = null)
         {
             return new QuestionnaireInfoFactory(
-                    questionDetailsReader ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                    questionDetailsReader ?? Mock.Of<IDesignerQuestionnaireStorage>(),
                     expressionProcessor ?? Mock.Of<IExpressionProcessor>());
         }
 
@@ -73,6 +74,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         protected static Guid q6Id = Guid.Parse("66666666666666666000000000000000");
         protected static Guid q7Id = Guid.Parse("77777777777777777000000000000000");
         protected static Guid q8Id = Guid.Parse("88888888888888888000000000000000");
+        protected static Guid q9Id = Guid.Parse("99999999999999999000000000000000");
+        protected static Guid q10Id = Guid.Parse("10101010101010101000000000000000");
         protected static Guid numericQuestionId = Guid.NewGuid();
 
         protected static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -80,5 +83,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         protected static Guid var1Id = Guid.Parse("11DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         protected static Guid docId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+
+        protected static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
+
     }
 }

@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));
+        public void BecauseOf() => viewModel.HandleAsync(Create.Event.LinkedOptionsChanged(eventData));
 
         [NUnit.Framework.Test] public void should_not_modify_list_of_options () => viewModel.Options.Count.Should().Be(1);
 

@@ -10,10 +10,12 @@ namespace WB.Core.Infrastructure.PlainStorage
 
         void Remove(object id);
         void Remove(IEnumerable<TEntity> entities);
+        void Remove(Func<IQueryable<TEntity>, IQueryable<TEntity>> query);
 
         void Store(TEntity entity, object id);
 
         void Store(IEnumerable<Tuple<TEntity, object>> entities);
+        void Store(IEnumerable<TEntity> entities);
 
         void Flush();
 

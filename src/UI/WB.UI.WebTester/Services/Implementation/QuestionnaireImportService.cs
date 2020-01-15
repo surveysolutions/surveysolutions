@@ -4,11 +4,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.WebTester.Controllers;
 
 namespace WB.UI.WebTester.Services.Implementation
@@ -21,6 +24,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly ITranslationManagementService translationManagementService;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
         private readonly ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage;
+        private readonly IReusableCategoriesStorage categoriesManagementService;
 
         private static long version;
 
@@ -30,7 +34,8 @@ namespace WB.UI.WebTester.Services.Implementation
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             ITranslationManagementService translationManagementService,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage,
-            ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage)
+            ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage,
+            IReusableCategoriesStorage categoriesManagementService)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
@@ -38,6 +43,7 @@ namespace WB.UI.WebTester.Services.Implementation
             this.translationManagementService = translationManagementService ?? throw new ArgumentNullException(nameof(translationManagementService));
             this.questionnaireDocumentStorage = questionnaireDocumentStorage ?? throw new ArgumentNullException(nameof(questionnaireDocumentStorage));
             this.attachmentsStorage = attachmentsStorage ?? throw new ArgumentNullException(nameof(attachmentsStorage));
+            this.categoriesManagementService = categoriesManagementService ?? throw new ArgumentNullException(nameof(categoriesManagementService));
         }
 
         public Dictionary<Guid, QuestionnaireIdentity> TokenToQuestionnaireMap { get; } = new Dictionary<Guid, QuestionnaireIdentity>();
@@ -67,11 +73,6 @@ namespace WB.UI.WebTester.Services.Implementation
 
             var translations = await webTesterApi.GetTranslationsAsync(designerToken.ToString());
 
-            this.appdomainsPerInterviewManager.SetupForInterview(designerToken,
-                questionnaire.Document,
-                translations,
-                questionnaire.Assembly);
-
             var attachments = new List<QuestionnaireAttachment>();
 
             foreach (Attachment documentAttachment in questionnaire.Document.Attachments)
@@ -84,7 +85,9 @@ namespace WB.UI.WebTester.Services.Implementation
                     Content = content
                 });
             }
-            
+
+            var categories = await webTesterApi.GetCategoriesAsync(designerToken.ToString());
+
             lock (TokenToQuestionnaireMap)
             {
                 TokenToQuestionnaireMap[designerToken] = questionnaireIdentity;
@@ -94,6 +97,17 @@ namespace WB.UI.WebTester.Services.Implementation
                     this.attachmentsStorage.Store(attachment,attachment.Content.Id, designerToken);
                 }
                 
+                this.categoriesManagementService.RemoveCategories(questionnaireIdentity);
+                categories.GroupBy(x => x.CategoriesId).ForEach(x =>
+                {
+                    this.categoriesManagementService.Store(questionnaireIdentity, x.Key, x.Select(x => new CategoriesItem
+                    {
+                        Id = x.Id,
+                        ParentId = x.ParentId,
+                        Text = x.Text
+                    }).ToList());
+                });
+
                 this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version,
                     questionnaire.Document);
@@ -108,9 +122,13 @@ namespace WB.UI.WebTester.Services.Implementation
                     TranslationIndex = x.TranslationIndex,
                     TranslationId = x.TranslationId
                 }));
-
-                return questionnaireIdentity;
             }
+
+            this.appdomainsPerInterviewManager.SetupForInterview(designerToken,
+                questionnaireIdentity,
+                questionnaire.Assembly);
+
+            return questionnaireIdentity;
         }
     }
 }

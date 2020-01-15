@@ -12,6 +12,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
+            appDomainContext = AppDomainContext.Create();
             
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
@@ -24,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 Abc.Create.Entity.TextQuestion(questionId: disabledQuestionsId, variable: "txt_disabled", enablementCondition: "IsAnswered(link_single)")
             });
 
-            interview = SetupInterview(questionnaireDocument);
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
             interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, 1);
             interview.AnswerNumericRealQuestion(userId, titleQuestionId, Abc.Create.RosterVector(0), DateTime.Now, 18.5);
             eventContext = new EventContext();
@@ -40,6 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         [NUnit.Framework.Test] public void should_raise_SingleOptionLinkedQuestionAnswered_event () =>
@@ -48,6 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         [NUnit.Framework.Test] public void should_raise_QuestionsEnabled_event_for_question_conditionally_dependant_on_lined_question () =>
              eventContext.ShouldContainEvent<QuestionsEnabled>(q=>q.Questions.Any(x=>x.Id== disabledQuestionsId));
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Interview interview;
         private static readonly Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");

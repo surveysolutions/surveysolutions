@@ -12,7 +12,6 @@
     self.load = function () {
 
         self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
-        self.reloadDataTable();
     };
 
     self.onTableInitCompleteExtra = function () { };

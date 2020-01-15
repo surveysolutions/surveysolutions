@@ -219,4 +219,17 @@
   <data name="WebMode" xml:space="preserve">
     <value>Web mode</value>
   </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+    <comment>Questionnaire details</comment>
+  </data>
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Show on Designer</value>
+  </data>
+  <data name="ImportedBy" xml:space="preserve">
+    <value>Imported by</value>
+  </data>
+  <data name="ImportedByText" xml:space="preserve">
+    <value>{{role}} user {{name}}</value>
+  </data>
 </root>

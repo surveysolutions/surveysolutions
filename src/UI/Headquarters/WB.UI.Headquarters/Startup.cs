@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Data.Entity.Utilities;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -20,7 +20,6 @@ using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Owin;
@@ -39,6 +38,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -79,7 +79,6 @@ namespace WB.UI.Headquarters
         {
             Target.Register<SlackFatalNotificationsTarget>("slack");
             
-            ConfigureExceptionalStore();
             app.Use(RemoveServerNameFromHeaders);
 
             var autofacKernel = AutofacConfig.CreateKernel();
@@ -97,10 +96,10 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
             autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
-            var initTask = autofacKernel.InitAsync(
+            var initTask = Task.WhenAll(autofacKernel.InitAsync(
                     System.Configuration.ConfigurationManager.AppSettings
-                        .GetBool("RestartAppPoolOnInitializationError", true)
-                );
+                        .GetBool(@"RestartAppPoolOnInitializationError", true)
+                ), Task.Run(() => ConfigureExceptionalStore()));
 
             if (CoreSettings.IsDevelopmentEnvironment)
                 initTask.Wait();
@@ -175,10 +174,17 @@ namespace WB.UI.Headquarters
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            WebInterviewModule.Configure(app, HqWebInterviewModule.HubPipelineModules);
+            WebInterviewModuleConfigure(app);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseAutofacWebApi(config);
+        }
+
+        public static void WebInterviewModuleConfigure(IAppBuilder app)
+        {
+            var resolver = GlobalHost.DependencyResolver;
+            (resolver.GetService(typeof(IConnectionsMonitor)) as IConnectionsMonitor)?.StartMonitoring();
+            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true, Resolver = resolver });
         }
 
         private void ConfigureAuth(IAppBuilder app)
@@ -194,8 +200,7 @@ namespace WB.UI.Headquarters
                 LoginPath = new PathString(@"/Account/LogOn"),
                 Provider = new CookieAuthenticationProvider
                 {
-                    OnValidateIdentity = SecurityStampValidator
-                        .OnValidateIdentity<HqUserManager, HqUser, Guid>(
+                    OnValidateIdentity = OnValidateIdentity(
                             validateInterval: TimeSpan.FromMinutes(30),
                             regenerateIdentityCallback: (manager, user) => manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie),
                             getUserIdCallback: (id) => Guid.Parse(id.GetUserId())),
@@ -207,9 +212,84 @@ namespace WB.UI.Headquarters
                 CookieName = applicationSecuritySection.CookieSettings.Name,
                 CookieHttpOnly = applicationSecuritySection.CookieSettings.HttpOnly
             });
+        }
 
-            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-        }      
+        /// <summary>
+        ///     Can be used as the ValidateIdentity method for a CookieAuthenticationProvider which will check a user's security
+        ///     stamp after validateInterval
+        ///     Rejects the identity if the stamp changes, and otherwise will call regenerateIdentity to sign in a new
+        ///     ClaimsIdentity
+        /// </summary>
+        /// <param name="validateInterval"></param>
+        /// <param name="regenerateIdentityCallback"></param>
+        /// <param name="getUserIdCallback"></param>
+        /// <returns></returns>
+        public static Func<CookieValidateIdentityContext, Task> OnValidateIdentity(
+            TimeSpan validateInterval, 
+            Func<HqUserManager, HqUser, Task<ClaimsIdentity>> regenerateIdentityCallback,
+            Func<ClaimsIdentity, Guid> getUserIdCallback)
+        {
+            if (getUserIdCallback == null)
+                throw new ArgumentNullException(nameof(getUserIdCallback));
+
+            return async context =>
+            {
+                var currentUtc = DateTimeOffset.UtcNow;
+
+                if (context.Options?.SystemClock != null)
+                    currentUtc = context.Options.SystemClock.UtcNow;
+
+                var issuedUtc = context.Properties.IssuedUtc;
+
+                // Only validate if enough time has elapsed
+                var validate = (issuedUtc == null);
+                if (issuedUtc != null)
+                {
+                    var timeElapsed = currentUtc.Subtract(issuedUtc.Value);
+                    validate = timeElapsed > validateInterval;
+                }
+
+                if (validate)
+                {
+                    var manager = DependencyResolver.Current.GetService<HqUserManager>();
+
+                    var userId = getUserIdCallback(context.Identity);
+                    if (manager != null && userId != null)
+                    {
+                        var user = await manager.FindByIdAsync(userId).WithCurrentCulture();
+                        var reject = true;
+                        // Refresh the identity if the stamp matches, otherwise reject
+                        if (user != null && manager.SupportsUserSecurityStamp)
+                        {
+                            var securityStamp =
+                                context.Identity.FindFirstValue(Constants.DefaultSecurityStampClaimType);
+                            if (securityStamp == await manager.GetSecurityStampAsync(userId).WithCurrentCulture())
+                            {
+                                reject = false;
+                                // Regenerate fresh claims if possible and resign in
+                                if (regenerateIdentityCallback != null)
+                                {
+                                    var identity = await regenerateIdentityCallback.Invoke(manager, user).WithCurrentCulture();
+                                    if (identity != null)
+                                    {
+                                        // Fix for regression where this value is not updated
+                                        // Setting it to null so that it is refreshed by the cookie middleware
+                                        context.Properties.IssuedUtc = null;
+                                        context.Properties.ExpiresUtc = null;
+                                        context.OwinContext.Authentication.SignIn(context.Properties, identity);
+                                    }
+                                }
+                            }
+                        }
+                        if (reject)
+                        {
+                            context.RejectIdentity();
+                            context.OwinContext.Authentication.SignOut(context.Options.AuthenticationType);
+                        }
+                    }
+                }
+            };
+        }
 
         private static Task SetSessionStateBehavior(IOwinContext context, Func<Task> next)
         {
@@ -283,7 +363,9 @@ namespace WB.UI.Headquarters
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
+            
             RazorGeneratorMvcStart.Start();
+            
 
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }

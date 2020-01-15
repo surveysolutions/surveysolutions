@@ -5,7 +5,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
 
@@ -34,7 +33,7 @@ namespace WB.Tests.Unit.Infrastructure.Ncqrs
         [Test]
         public void should_register_functional_denormalizer()
         {
-            var registry = Create.Service.DenormalizerRegistry();
+            var registry = Create.Service.DenormalizerRegistryNative();
             
             // Act
             registry.RegisterFunctional<FunctionalDenormalizer>();
@@ -47,7 +46,7 @@ namespace WB.Tests.Unit.Infrastructure.Ncqrs
         [Test]
         public void should_register_regular_denormalizer()
         {
-            var registry = Create.Service.DenormalizerRegistry();
+            var registry = Create.Service.DenormalizerRegistryNative();
             
             // Act
             registry.Register<RegularDenormalizer>();

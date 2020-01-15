@@ -371,6 +371,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+    <value>Leave comment for a new responsible</value>
+  </data>
   <data name="Interviewer_Done" xml:space="preserve">
     <value>Done</value>
   </data>
@@ -696,4 +699,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
     <value>Show resolved</value>
   </data>
+  <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+    <value>There is no permission granted to application to self update. Please enable "Allow from this source" option in 'App info' settings menu.</value>
+</data>
 </root>

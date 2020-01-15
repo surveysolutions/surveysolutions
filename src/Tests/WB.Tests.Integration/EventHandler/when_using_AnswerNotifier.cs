@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Tests.Integration.EventHandler
@@ -21,7 +23,7 @@ namespace WB.Tests.Integration.EventHandler
 
             foreach (var answeredEventType in allQuestionAnsweredEvents)
             {
-                var eventHandlerType = typeof(ILitePublishedEventHandler<>);
+                var eventHandlerType = typeof(IViewModelEventHandler<>);
                 Type[] typeArgs = { answeredEventType };
                 var genericHandlerType = eventHandlerType.MakeGenericType(typeArgs);
 

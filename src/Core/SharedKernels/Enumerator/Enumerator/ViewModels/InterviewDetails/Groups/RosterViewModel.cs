@@ -9,19 +9,20 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class RosterViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>,
+        IViewModelEventHandler<RosterInstancesAdded>,
+        IViewModelEventHandler<RosterInstancesRemoved>,
         IDisposable,
         IInterviewEntityViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private string interviewId;
         private NavigationState navigationState;
 
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public RosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory interviewViewModelFactory,
-            ILiteEventRegistry eventRegistry)
+            IViewModelEventRegistry eventRegistry)
         {
             this.interviewRepository = interviewRepository;
             this.interviewViewModelFactory = interviewViewModelFactory;
@@ -51,10 +52,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.Identity = entityId;
             this.navigationState = navigationState;
 
-            this.eventRegistry.Subscribe(this, interviewId);
-
             this.RosterInstances = new CovariantObservableCollection<IInterviewEntityViewModel>();
             this.UpdateFromInterview();
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         public void Handle(RosterInstancesRemoved @event)

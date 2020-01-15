@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -41,57 +43,58 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         }
 
         [Test]
-        public void should_provide_proper_prefix_to_key_when_get_binary()
+        public async Task should_provide_proper_prefix_to_key_when_get_binary()
         {
-            client.Setup(c => c.GetObject(It.IsAny<GetObjectRequest>()))
-                .Returns(new GetObjectResponse()
+            client.Setup(c => c.GetObjectAsync(It.IsAny<GetObjectRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new GetObjectResponse()
                 {
                     ResponseStream = new MemoryStream()
                 });
 
-            this.storage.GetBinary("somePath");
+            await this.storage.GetBinaryAsync("somePath");
 
             var expectedKey = this.settings.BasePath + "/somePath";
 
-            client.Verify(c => c.GetObject(
+            client.Verify(c => c.GetObjectAsync(
                 It.Is<GetObjectRequest>(r =>
                     r.BucketName == settings.BucketName
-                    && r.Key == expectedKey)), Times.Once);
+                    && r.Key == expectedKey), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
-        public void should_not_throw_if_key_no_found_when_get_binary()
+        public async Task should_not_throw_if_key_no_found_when_get_binary()
         {
-            client.Setup(c => c.GetObject(It.IsAny<GetObjectRequest>()))
-                .Throws(new AmazonS3Exception("Error", ErrorType.Sender, "NoSuchKey", "", HttpStatusCode.NotFound));
+            client.Setup(c => c.GetObjectAsync(It.IsAny<GetObjectRequest>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new AmazonS3Exception("Error", ErrorType.Sender, "NoSuchKey", "", HttpStatusCode.NotFound));
 
-            Assert.DoesNotThrow(() => Assert.IsNull(this.storage.GetBinary("somePath")));
+            var binary = await this.storage.GetBinaryAsync("somePath");
+            Assert.That(binary, Is.Null);
         }
 
         [Test]
-        public void should_provide_proper_prefix_to_key_when_get_list()
+        public async Task should_provide_proper_prefix_to_key_when_get_list()
         {
-            client.Setup(c => c.ListObjectsV2(It.IsAny<ListObjectsV2Request>()))
-                .Returns(new ListObjectsV2Response
+            client.Setup(c => c.ListObjectsV2Async(It.IsAny<ListObjectsV2Request>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ListObjectsV2Response
                 {
                     S3Objects = new List<S3Object>()
                 });
 
-            this.storage.List("somePath");
+            await this.storage.ListAsync("somePath");
 
             var expectedKey = this.settings.BasePath + "/somePath";
 
-            client.Verify(c => c.ListObjectsV2(
+            client.Verify(c => c.ListObjectsV2Async(
                 It.Is<ListObjectsV2Request>(r =>
                     r.BucketName == settings.BucketName
-                    && r.Prefix == expectedKey)), Times.Once);
+                    && r.Prefix == expectedKey), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
-        public void should_return_objects_with_normalized_keys()
+        public async Task should_return_objects_with_normalized_keys()
         {
-            client.Setup(c => c.ListObjectsV2(It.IsAny<ListObjectsV2Request>()))
-                .Returns(new ListObjectsV2Response
+            client.Setup(c => c.ListObjectsV2Async(It.IsAny<ListObjectsV2Request>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ListObjectsV2Response
                 {
                     S3Objects = new List<S3Object>
                     {
@@ -100,7 +103,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
                     }
                 });
 
-            var result = this.storage.List("");
+            var result = await this.storage.ListAsync("");
 
             Assert.That(result, Has.One.Property(nameof(FileObject.Path)).EqualTo("one"));
             Assert.That(result, Has.One.Property(nameof(FileObject.Path)).EqualTo("two"));
@@ -149,36 +152,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         }
 
         [Test]
-        public void should_use_proper_key_for_exists_check()
+        public async Task should_use_proper_key_for_deletion()
         {
-            client.Setup(c => c.GetObjectMetadata(It.IsAny<string>(), It.IsAny<string>())).Returns(new GetObjectMetadataResponse
-            {
-                HttpStatusCode = HttpStatusCode.OK
-            });
+            client.Setup(c => c.DeleteObjectAsync(It.IsAny<DeleteObjectRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new DeleteObjectResponse());
 
-            Assert.That(this.storage.IsExist("somePath"), Is.EqualTo(true));
+            await this.storage.RemoveAsync("somePath");
 
-            client.Verify(c => c.GetObjectMetadata(settings.BucketName, settings.BasePath + "/somePath"), Times.Once);
-        }
-
-
-        [Test]
-        public void should_return_false_if_no_key_for_exists_check()
-        {
-            client.Setup(c => c.GetObjectMetadata(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new AmazonS3Exception("Error", ErrorType.Sender, "NoSuchKey", "", HttpStatusCode.NotFound));
-
-            Assert.DoesNotThrow(() => Assert.That(this.storage.IsExist("somePath"), Is.EqualTo(false)));
-        }
-
-        [Test]
-        public void should_use_proper_key_for_deletion()
-        {
-            client.Setup(c => c.DeleteObject(It.IsAny<string>(), It.IsAny<string>())).Returns(new DeleteObjectResponse());
-
-            this.storage.Remove("somePath");
-
-            client.Verify(c => c.DeleteObject(settings.BucketName, settings.BasePath + "/somePath"), Times.Once);
+            client.Verify(c => c.DeleteObjectAsync(settings.BucketName, settings.BasePath + "/somePath", It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

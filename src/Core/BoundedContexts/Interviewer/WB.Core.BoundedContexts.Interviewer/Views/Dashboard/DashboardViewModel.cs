@@ -329,7 +329,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         #region Offline synchronization
 
         public IMvxCommand StartOfflineSyncCommand => new MvxCommand(this.StartOfflineSynchronization);
-        public event EventHandler OnOfflineSynchronizationStarted;
+        public Action OnOfflineSynchronizationStarted;
 
         private void StartOfflineSynchronization()
         {
@@ -344,7 +344,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.IsSynchronizationInProgress = true;
             this.Synchronization.IsSynchronizationInfoShowed = true;
 
-            this.OnOfflineSynchronizationStarted?.Invoke(this, EventArgs.Empty);
+            this.OnOfflineSynchronizationStarted?.Invoke();
         }
 
         protected override async Task OnStartDiscovery()

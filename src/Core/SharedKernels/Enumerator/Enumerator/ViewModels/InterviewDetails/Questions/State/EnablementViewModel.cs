@@ -1,25 +1,24 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using MvvmCross.ViewModels;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class EnablementViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>,
-        ILiteEventHandler<QuestionsEnabled>,
-        ILiteEventHandler<QuestionsDisabled>, 
-        ILiteEventHandler<StaticTextsDisabled>,
-        ILiteEventHandler<StaticTextsEnabled>,
+        IViewModelEventHandler<GroupsEnabled>,
+        IViewModelEventHandler<GroupsDisabled>,
+        IViewModelEventHandler<QuestionsEnabled>,
+        IViewModelEventHandler<QuestionsDisabled>, 
+        IViewModelEventHandler<StaticTextsDisabled>,
+        IViewModelEventHandler<StaticTextsEnabled>,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
         public event EventHandler EntityEnabled;
@@ -27,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected EnablementViewModel() { }
 
-        public EnablementViewModel(IStatefulInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry, 
+        public EnablementViewModel(IStatefulInterviewRepository interviewRepository, IViewModelEventRegistry eventRegistry, 
             IQuestionnaireStorage questionnaireRepository)
         {
             if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
@@ -39,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        private string interviewId;
+        public string InterviewId { get; private set; }
+    
         private Identity entityIdentity;
 
         public void Init(string interviewId, Identity entityIdentity)
@@ -47,10 +47,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
-            this.interviewId = interviewId;
+            this.InterviewId = interviewId;
             this.entityIdentity = entityIdentity;
 
-            var interview = this.interviewRepository.Get(this.interviewId);
+            var interview = this.interviewRepository.Get(this.InterviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.HideIfDisabled = questionnaire.ShouldBeHiddenIfDisabled(entityIdentity.Id);
 
@@ -72,9 +72,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpdateSelfFromModel()
         {
-            var interview = this.interviewRepository.Get(this.interviewId);
+            this.Enabled = GetEnablementFromInterview();
+        }
 
-            this.Enabled = interview.IsEnabled(this.entityIdentity);
+        public bool GetEnablementFromInterview()
+        {
+            var interview = this.interviewRepository.Get(this.InterviewId);
+            return interview.IsEnabled(this.entityIdentity);
         }
 
         public void Handle(GroupsEnabled @event)

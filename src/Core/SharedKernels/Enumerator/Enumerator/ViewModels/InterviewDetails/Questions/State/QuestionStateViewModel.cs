@@ -5,11 +5,12 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
-        ILiteEventHandler<TAnswerEvent>,
+        IViewModelEventHandler<TAnswerEvent>,
         IQuestionStateViewModel,
         IDisposable
         where TAnswerEvent : QuestionAnswered
@@ -20,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public EnablementViewModel Enablement { get; private set; }
         public CommentsViewModel Comments { get; private set; }
 
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly AnswersRemovedNotifier answersRemovedNotifier;
         private Identity questionIdentity;
@@ -29,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected QuestionStateViewModel() { }
 
         public QuestionStateViewModel(
-            ILiteEventRegistry liteEventRegistry,
+            IViewModelEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
             ValidityViewModel validityViewModel, 
             QuestionHeaderViewModel questionHeaderViewModel,
@@ -52,9 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
-
-            this.liteEventRegistry.Subscribe(this, interviewId);
-
+            
             var interview = this.interviewRepository.Get(interviewId);
             this.IsAnswered = interview.WasAnswered(entityIdentity);
 
@@ -69,6 +68,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
             this.Header.ShowComments += this.ShowCommentsCommand;
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
         private void AnswerRemoved(object sender, EventArgs eventArgs)

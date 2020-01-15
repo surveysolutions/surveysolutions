@@ -150,9 +150,6 @@
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>填写全部或某些识别型的字段</value>
   </data>
-  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>为此任务选择负责人 （督导员或调查员）</value>
-  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>创建基于</value>
   </data>

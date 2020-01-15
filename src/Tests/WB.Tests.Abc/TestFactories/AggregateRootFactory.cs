@@ -4,7 +4,9 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
@@ -19,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Infrastructure.Native.Questionnaire;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -72,13 +75,17 @@ namespace WB.Tests.Abc.TestFactories
             IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            IPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance> translationsStorage = null)
+            IPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance> translationsStorage = null,
+            IAuthorizedUser authorizedUser = null,
+            IReusableCategoriesStorage categoriesStorage = null)
             => new Questionnaire(
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyAccessor>(),
                 questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                translationsStorage ?? new InMemoryPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance>());
+                translationsStorage ?? new InMemoryPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance>(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                categoriesStorage ?? Mock.Of<IReusableCategoriesStorage>());
 
         public StatefulInterview StatefulInterview(Guid interviewId, 
             Guid? questionnaireId = null,
@@ -100,7 +107,8 @@ namespace WB.Tests.Abc.TestFactories
             Action<Mock<IInterviewLevel>> setupLevel = null,
             List<InterviewAnswer> answers = null,
             List<string> protectedAnswers = null,
-            IQuestionOptionsRepository optionsRepository = null)
+            IQuestionOptionsRepository optionsRepository = null,
+            Type expressionStorageType = null)
         {
             questionnaireId = questionnaireId ?? questionnaire?.PublicKey ?? Guid.NewGuid();
             if (questionnaire != null)
@@ -118,6 +126,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaire ?? Create.Entity.QuestionnaireDocumentWithOneQuestion(), 1,
                 questionOptionsRepository: questionOptionsRepository);
 
+            plainQuestionnaire.ExpressionStorageType = expressionStorageType ?? typeof(DummyInterviewExpressionStorage);
+
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(plainQuestionnaire, questionnaire ?? 
                 Create.Entity.QuestionnaireDocumentWithOneQuestion());
 
@@ -129,7 +139,6 @@ namespace WB.Tests.Abc.TestFactories
                 .Returns(CreateDefaultInterviewExpressionStateProvider(setupLevel));
 
             serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>()).Returns(questionOptionsRepository);
-
 
             var statefulInterview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
@@ -201,6 +210,12 @@ namespace WB.Tests.Abc.TestFactories
                 && _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState);
 
             return defaultExpressionStatePrototypeProvider;
+        }
+
+        public AssignmentAggregateRoot AssignmentAggregateRoot()
+        {
+            return new AssignmentAggregateRoot();
+
         }
     }
 }

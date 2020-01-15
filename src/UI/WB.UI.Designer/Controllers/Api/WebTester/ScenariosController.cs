@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Scenarios;
-using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Services;
 
@@ -23,19 +23,45 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         }
 
         [Route("{id:Guid}")]
-        [Authorize]
-        [QuestionnairePermissions]
-        public async Task<IActionResult> Post(Guid id, [FromForm]PostScenarioModel model)
+        [QuestionnairePermissions(true)]
+        [HttpPost]
+        public async Task<IActionResult> Post(Guid id, [FromBody]PostScenarioModel model)
         {
-            var newScenario = new StoredScenario();
-            newScenario.QuestionnaireId = id;
-            newScenario.Steps = model.ScenarioText;
-            newScenario.Title = "";
-
-            await this.dbContext.Scenarios.AddAsync(newScenario);
+            var existingScenario = await this.dbContext.Scenarios.FindAsync(model.ScenarioId);
+            if (existingScenario == null)
+            {
+                var newScenario = new StoredScenario
+                {
+                    QuestionnaireId = id, 
+                    Steps = model.ScenarioText, 
+                    Title = model.ScenarioTitle ?? "New scenario"
+                };
+                await this.dbContext.Scenarios.AddAsync(newScenario);
+            }
+            else
+            {
+                existingScenario.Steps = model.ScenarioText;
+            }
+            
             await this.dbContext.SaveChangesAsync();
 
-            return RedirectToAction("Details", "Questionnaire", new {id = id.FormatGuid()});
+            return Ok();
+        }
+
+        [Route("{id:Guid}")]
+        [QuestionnairePermissions]
+        [HttpGet]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            var scenarios = await this.dbContext.Scenarios.Where(x => x.QuestionnaireId == id)
+                                                          .OrderBy(x => x.Title)
+                                                          .Select(x => new
+                                                          {
+                                                              x.Title,
+                                                              x.Id
+                                                          }).ToListAsync();
+
+            return Ok(scenarios);
         }
 
         [Route("{token}/{scenarioId:int}")]
@@ -57,5 +83,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
     public class PostScenarioModel
     {
         public string ScenarioText { get; set; }
+        public int? ScenarioId { get; set; }
+        public string ScenarioTitle { get; set; }
     }
 }

@@ -10,8 +10,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void RemoveEventSourceById(Guid interviewId);
         void StoreEvents(CommittedEventStream events);
         int GetLastEventKnownToHq(Guid interviewId);
-        List<CommittedEvent> GetPendingEvents(Guid interviewId);
+        
         bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId, params string[] typeNames);
+        CommittedEvent GetEventByEventSequence(Guid eventSourceId, int eventSequence);
+
         int GetMaxSequenceForAnyEvent(Guid interviewId, params string[] typeNames);
 
         List<Guid> GetListOfAllItemsIds();

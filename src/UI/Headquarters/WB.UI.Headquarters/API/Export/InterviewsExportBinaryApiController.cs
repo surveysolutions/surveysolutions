@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Shared.Web.Filters;
 
@@ -40,9 +42,9 @@ namespace WB.UI.Headquarters.API.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage GetInterviewImage(Guid interviewId, string answer)
+        public async Task<HttpResponseMessage> GetInterviewImage(Guid interviewId, string answer)
         {
-            var descriptors = this.imageFileStorage.GetBinaryFilesForInterview(interviewId);
+            var descriptors = await this.imageFileStorage.GetBinaryFilesForInterview(interviewId);
             var file = descriptors.FirstOrDefault(d => d.FileName == answer);
             if (file == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
@@ -57,7 +59,7 @@ namespace WB.UI.Headquarters.API.Export
             else
             {
                 var response = Request.CreateResponse(HttpStatusCode.OK);
-                response.Content = new ByteArrayContent(file.GetData());
+                response.Content = new ByteArrayContent(await file.GetData());
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType ?? @"image/png");
                 return response;
             }
@@ -67,15 +69,15 @@ namespace WB.UI.Headquarters.API.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage GetInterviewAudio(Guid interviewId, string fileName)
+        public async Task<HttpResponseMessage> GetInterviewAudio(Guid interviewId, string fileName)
         {
-            var descriptors = this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
+            var descriptors = await this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
             var file = descriptors.FirstOrDefault(d => d.FileName == fileName);
 
             if (file == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
             var response = Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new ByteArrayContent(file.GetData());
+            response.Content = new ByteArrayContent(await file.GetData());
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType ?? @"audio/mpeg");
             return response;
         }
@@ -84,40 +86,45 @@ namespace WB.UI.Headquarters.API.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage GetAudioAuditDescriptorsForInterviews([FromUri]Guid[] id)
+        public async Task<HttpResponseMessage> GetAudioAuditDescriptorsForInterviews([FromUri]Guid[] id)
         {
-            var audioAuditInfo = id.Select(interviewId =>
+            List<(Guid InterviewId, object Files)> response = new List<(Guid interviewId, object Files)>();
+            foreach (var interviewId in id)
             {
-                var audioAuditRecords = audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
-                return new
-                {
-                    InterviewId = interviewId,
-                    Files = audioAuditRecords.Select(descriptor =>
-                        new
-                        {
-                            FileName = descriptor.FileName,
-                            ContentType = descriptor.ContentType
-                        }
-                    ).OrderBy(x => x.FileName).ToArray()
-                };
-            }).OrderBy(x => x.InterviewId).ToArray();
+                List<InterviewBinaryDataDescriptor> audioAuditRecords = await audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
+                var results = audioAuditRecords.Select(descriptor =>
+                    new 
+                    {
+                        descriptor.FileName,
+                        descriptor.ContentType
+                    }
+                ).OrderBy(x => x.FileName).ToArray();
 
-            return Request.CreateResponse(HttpStatusCode.OK, audioAuditInfo);
+                response.Add((interviewId, results));
+            }
+
+            var audioAuditInfo = response.OrderBy(x => x.InterviewId);
+
+            return Request.CreateResponse(HttpStatusCode.OK, audioAuditInfo.Select(x => new
+            {
+                InterviewId = x.InterviewId,
+                Files = x.Files
+            }));
         }
 
         [Route("api/export/v1/interview/{interviewId}/audioAudit/{fileName}")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage GetAudioAudit(Guid interviewId, string fileName)
+        public async Task<HttpResponseMessage> GetAudioAudit(Guid interviewId, string fileName)
         {
-            var descriptors = this.audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
+            var descriptors = await this.audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
             var file = descriptors.FirstOrDefault(d => d.FileName == fileName);
 
             if (file == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
             var response = Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new ByteArrayContent(file.GetData());
+            response.Content = new ByteArrayContent(await file.GetData());
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
             return response;
         }
