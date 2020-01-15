@@ -39,14 +39,12 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ILogger logger;
         private readonly IMapStorageService mapStorageService;
         private readonly IExportFactory exportFactory;
-        private readonly IMapService mapPropertiesProvider;
         private readonly ICsvReader recordsAccessorFactory;
         private readonly IArchiveUtils archiveUtils;
 
         public MapsApiController(ICommandService commandService,
             IMapBrowseViewFactory mapBrowseViewFactory, ILogger logger,
             IMapStorageService mapStorageService, IExportFactory exportFactory,
-            IMapService mapPropertiesProvider,
             IFileSystemAccessor fileSystemAccessor,
             ICsvReader recordsAccessorFactory,
             IArchiveUtils archiveUtils)
@@ -56,7 +54,6 @@ namespace WB.UI.Headquarters.Controllers
             this.mapStorageService = mapStorageService;
             this.exportFactory = exportFactory;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.mapPropertiesProvider = mapPropertiesProvider;
             this.recordsAccessorFactory = recordsAccessorFactory;
             this.archiveUtils = archiveUtils;
         }
@@ -147,12 +144,6 @@ namespace WB.UI.Headquarters.Controllers
                 return response;
             }
 
-            if (!this.mapPropertiesProvider.IsEngineEnabled())
-            {
-                logger.Error($"Map engine is not initialized");
-                response.Errors.Add(Maps.MapEngineIsNotInitialized);
-                return response;
-            }
             try
             {
                 var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file.OpenReadStream());
