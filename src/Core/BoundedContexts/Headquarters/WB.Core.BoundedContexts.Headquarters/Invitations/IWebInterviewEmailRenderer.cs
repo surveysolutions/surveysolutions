@@ -1,8 +1,11 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Invitations
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public interface IWebInterviewEmailRenderer
     {
-        PersonalizedWebInterviewEmail RenderEmail(WebInterviewEmailTemplate emailTemplate, string password, string link, string surveyName, string address, string senderName);
-        PersonalizedWebInterviewEmail RenderEmail(EmailParams emailParams);
+        Task<PersonalizedWebInterviewEmail> RenderEmail(WebInterviewEmailTemplate emailTemplate, string password, string link, string surveyName,
+            string address, string senderName);
+        Task<PersonalizedWebInterviewEmail> RenderEmail(EmailParams emailParams);
     }
 }

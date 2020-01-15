@@ -1118,8 +1118,6 @@
     <Content Include="Views\ControlPanel\AppUpdates.cshtml" />
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
     <Content Include="Views\ControlPanel\ImportBrokenPackage.cshtml" />
-    <Content Include="Views\WebEmails\EmailHtml.cshtml" />
-    <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
     <Content Include="Views\Diagnostics\Logs.cshtml" />
@@ -1350,7 +1348,6 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\WebEmailsController.cs" />
     <Compile Include="Code\CustomAutofacHubActivator.cs" />
     <Compile Include="Injections\ILocalExportServiceRunner.cs" />
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
