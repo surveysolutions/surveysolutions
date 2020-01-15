@@ -11,7 +11,6 @@ namespace WB.UI.Headquarters.Models.Users
 
         [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredUserNameErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [RegularExpression(UserNameRegularExpression, ErrorMessageResourceName = nameof(FieldsAndValidations.UserNameErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
-        //[Remote("IsUniqueUsername", "Account", HttpMethod = "POST", ErrorMessageResourceName = nameof(FieldsAndValidations.UserName_Taken), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         public string UserName { get; set; }
 
         public string Password { get; set; }

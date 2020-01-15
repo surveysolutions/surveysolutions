@@ -12,8 +12,9 @@
             <div class="profile">
                 <div class="col-sm-12">
                     <form-group
-                        :label="$t('Pages.AccountManage_Login')"
+                        :label="$t('FieldsAndValidations.UserNameFieldName')"
                         :error="modelState['UserName']"
+                        :mandatory="true"
                     >
                         <TextInput
                             v-model.trim="userName"
@@ -21,10 +22,28 @@
                         />
                     </form-group>
                     <form-group
+                        v-if="isInterviewer"
+                        :label="$t('Pages.Interviewers_SupervisorTitle')"
+                        :error="modelState['SupervisorId']"
+                        :mandatory="true"
+                    >
+                        <div class="field" :class="{answered: supervisorId != null}">
+                            <Typeahead
+                                control-id="supervisorId"
+                                :value="supervisor"
+                                :ajax-params="{ }"
+                                :fetch-url="model.api.responsiblesUrl"
+                                @selected="supervisorSelected"
+                            ></Typeahead>
+                        </div>
+                    </form-group>
+                    <form-group
                         :label="$t('FieldsAndValidations.NewPasswordFieldName')"
                         :error="modelState['Password']"
+                        :mandatory="true"
                     >
                         <TextInput
+                            type="password"
                             v-model.trim="password"
                             :haserror="modelState['Password'] !== undefined"
                         />
@@ -32,8 +51,10 @@
                     <form-group
                         :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
                         :error="modelState['ConfirmPassword']"
+                        :mandatory="true"
                     >
                         <TextInput
+                            type="password"
                             v-model.trim="confirmPassword"
                             :haserror="modelState['ConfirmPassword'] !== undefined"
                         />
@@ -52,7 +73,7 @@
                             {{$t('FieldsAndValidations.IsLockedFieldName')}}
                         </label>
                     </form-group>
-                    <form-group v-if="canLockBySupervisor">
+                    <form-group v-if="isInterviewer">
                         <input
                             class="checkbox-filter single-checkbox"
                             data-val="true"
@@ -71,6 +92,7 @@
                     <div class="separate-line"></div>
                 </div>
                 <div class="col-sm-12">
+                    <h5 class="extra-margin-bottom" v-html="$t('Pages.PublicSection')"></h5>
                     <form-group
                         :label="$t('FieldsAndValidations.PersonNameFieldName')"
                         :error="modelState['PersonName']"
@@ -134,6 +156,7 @@ export default {
             isLockedByHeadquarters: false,
             isLockedBySupervisor: false,
             successMessage: null,
+            supervisor: null
         }
     },
     computed: {
@@ -161,9 +184,6 @@ export default {
         isApiUser() {
             return this.userInfo.role == 'ApiUser'
         },
-        canLockBySupervisor() {
-            return this.isInterviewer
-        },
         lockMessage() {
             if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
             if (this.isSupervisor) return this.$t('Pages.Supervisor_LockWarning')
@@ -173,7 +193,7 @@ export default {
         referrerTitle() {
             if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
             if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
-            if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
+            if (this.isInterviewer) return this.$t('Pages.Profile_InterviewersList')
             if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
             if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
 
@@ -182,7 +202,7 @@ export default {
         referrerUrl() {
             if (this.isHeadquarters) return '../../Headquarters'
             if (this.isSupervisor) return '../../Supervisor'
-            if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
+            if (this.isInterviewer) return '../../Interviewers'
             if (this.isObserver) return '../../Observer'
             if (this.isApiUser) return '../../ApiUser'
 
@@ -208,8 +228,14 @@ export default {
         confirmPassword: function(val) {
             delete this.modelState['ConfirmPassword']
         },
+        supervisorId: function(val) {
+            delete this.modelState['SupervisorId']
+        },
     },
     methods: {
+        supervisorSelected(newValue) {
+            this.supervisor = newValue;
+        },
         createAccount: function(event) {
             this.successMessage = null
             for (var error in this.modelState) {
@@ -221,6 +247,7 @@ export default {
                 method: 'post',
                 url: this.model.api.createUserUrl,
                 data: {
+                    supervisorId: self.supervisor != null ? self.supervisor.key : null,
                     userName: self.userName,
                     personName: self.personName,
                     email: self.email,
@@ -236,7 +263,7 @@ export default {
                 },
             }).then(
                 response => {
-                    self.successMessage = self.$t('Strings.HQ_AccountController_AccountUpdatedSuccessfully')
+                    window.location.href = self.referrerUrl
                 },
                 error => {
                     self.processModelState(error.response.data, self)
