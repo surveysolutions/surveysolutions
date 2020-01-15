@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
@@ -6,12 +8,14 @@ using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.API.WebInterview.Services;
+using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Services;
@@ -53,6 +57,7 @@ namespace WB.UI.Headquarters
             }).CreateMapper());
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
+            ConfigureEventBus(registry);
 
             registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
             registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
@@ -74,6 +79,28 @@ namespace WB.UI.Headquarters
                     services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
                     break;
             }
+        }
+
+        private void ConfigureEventBus(IIocRegistry registry)
+        {
+            EventHandlersConfig eventBusConfig = configuration.GetSection("EventHandlers").Get<EventHandlersConfig>();
+
+            var eventBusSettings =  new EventBusSettings
+            {
+                DisabledEventHandlerTypes =
+                    eventBusConfig.Disabled
+                        .Select(Type.GetType)
+                        .Where(x => x != null)
+                        .ToArray(),
+
+                EventHandlerTypesWithIgnoredExceptions =
+                    eventBusConfig.IgnoredException
+                        .Select(Type.GetType)
+                        .Where(x => x != null)
+                        .ToArray(),
+            };
+
+            registry.BindToConstant(() => eventBusSettings);
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

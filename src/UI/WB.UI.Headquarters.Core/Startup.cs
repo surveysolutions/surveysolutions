@@ -116,8 +116,6 @@ namespace WB.UI.Headquarters
             var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
-            builder.Register<EventBusSettings>((ctx) => new EventBusSettings()); // TODO REMOVE KP-13449
-
             autofacKernel.Load(
                 new NcqrsModule(),
                 eventStoreModule,
