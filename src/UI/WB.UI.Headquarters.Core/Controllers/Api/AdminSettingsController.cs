@@ -211,7 +211,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 var template = new WebInterviewEmailTemplate(EmailTemplateTexts.InvitationTemplate.Subject, EmailTemplateTexts.InvitationTemplate.Message, EmailTemplateTexts.InvitationTemplate.PasswordDescription, EmailTemplateTexts.InvitationTemplate.LinkText);
 
-                var email = emailRenderer.RenderEmail(template, "XXXXXXXX", "#", 
+                var email = await emailRenderer.RenderEmail(template, "XXXXXXXX", "#", 
                     "SURVEY NAME EXAMPLE", settings.Address, settings.SenderName);
 
                 var sendingResult = await this.emailService.SendEmailAsync(model.Email, email.Subject, email.MessageHtml, email.MessageText);
