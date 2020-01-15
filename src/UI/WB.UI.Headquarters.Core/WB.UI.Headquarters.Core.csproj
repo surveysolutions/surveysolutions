@@ -15,6 +15,10 @@
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningsAsErrors>NU1605;NU1701</WarningsAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
     <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
