@@ -12,6 +12,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Maps;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Maps;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -25,7 +26,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public MapsController(
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
-            IMapService mapPropertiesProvider, IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser)
         {
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
             this.authorizedUser = authorizedUser;
