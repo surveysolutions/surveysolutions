@@ -70,11 +70,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>Maps.resx</DependentUpon>
     </Content>
-    <Content Include="Resources\Maps.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>Maps.designer.cs</LastGenOutput>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-    </Content>
     <Content Include="Resources\Maps.ro.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Maps.resx</DependentUpon>
@@ -132,7 +127,6 @@
     <EmbeddedResource Remove="Resources\Maps.ar.resx" />
     <EmbeddedResource Remove="Resources\Maps.es.resx" />
     <EmbeddedResource Remove="Resources\Maps.fr.resx" />
-    <EmbeddedResource Remove="Resources\Maps.resx" />
     <EmbeddedResource Remove="Resources\Maps.ro.resx" />
     <EmbeddedResource Remove="Resources\Maps.ru.resx" />
     <EmbeddedResource Remove="Resources\Maps.sq.resx" />
@@ -224,11 +218,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>MapReport.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Maps.designer.cs">
-      <DependentUpon>Maps.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Resources\Maps.sq.designer.cs">
       <DependentUpon>Maps.sq.resx</DependentUpon>
@@ -400,6 +389,11 @@
     <EmbeddedResource Update="Resources\MapReport.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MapReport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Maps.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Maps.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\OutdatedBrowser.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
