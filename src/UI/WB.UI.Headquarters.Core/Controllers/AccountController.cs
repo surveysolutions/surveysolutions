@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Administrator, Headquarters")]
         [AntiForgeryFilter]
         public async Task<ActionResult> Manage(Guid? id)
         {
@@ -130,7 +130,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Administrator, Headquarters")]
         [AntiForgeryFilter]
         public ActionResult Create(string id)
         {
@@ -151,6 +151,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarters")]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
@@ -204,6 +205,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarters")]
         public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
@@ -237,21 +239,19 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public async Task<ActionResult> UpdateUser([FromBody]EditUserModel editModel)
+        [Authorize(Roles = "Administrator, Headquarters")]
+        public async Task<ActionResult> UpdateUser([FromBody] EditUserModel editModel)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
 
             var currentUser = await this.userRepository.FindByIdAsync(editModel.UserId);
-            if(currentUser == null) return NotFound("User not found");
+            if (currentUser == null) return NotFound("User not found");
 
             currentUser.Email = editModel.Email;
             currentUser.FullName = editModel.PersonName;
             currentUser.PhoneNumber = editModel.PhoneNumber;
-
-            if (this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter)
-                currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
-            if (this.authorizedUser.IsSupervisor)
-                currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+            currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
+            currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
 
             var updateResult = await this.userRepository.UpdateAsync(currentUser);
 
