@@ -9,6 +9,7 @@ namespace WB.Core.Infrastructure.FileSystem
         void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
         
         IEnumerable<ExtractedFile> GetFilesFromArchive(byte[] archivedFileAsArray);
+        ExtractedFile GetFileFromArchive(string archiveFilePath, string fileName);
 
         bool IsZipFile(string filePath);
         bool IsZipStream(Stream zipStream);
