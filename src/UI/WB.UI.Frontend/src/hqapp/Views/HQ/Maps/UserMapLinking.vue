@@ -68,7 +68,7 @@ export default {
             const uploadingErrorMessage = this.$t("Pages.Map_UploadingError");
             
             const fd = new FormData();
-            fd.append("", this.$refs.uploader.files[0]);
+            fd.append("file", this.$refs.uploader.files[0]);
         
             $.ajax({
                 url: this.$config.model.uploadUrl,

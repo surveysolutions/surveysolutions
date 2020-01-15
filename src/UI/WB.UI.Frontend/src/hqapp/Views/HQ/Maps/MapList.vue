@@ -83,7 +83,7 @@ export default {
             return;
         }
 
-        fd.append("", fileToUpload);
+        fd.append("file", fileToUpload);
         
         $.ajax({
                 url: this.$config.model.uploadMapsFileUrl,

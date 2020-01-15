@@ -51,7 +51,7 @@
     <PackageReference Include="Dapper" Version="2.0.4" />
     <PackageReference Include="Dropbox.Api" Version="4.9.4" />
     <PackageReference Include="EPPlus" Version="4.5.3.2" />
-    <PackageReference Include="GDAL" Version="1.11.1" />
+    <PackageReference Include="Gdal.Core" Version="1.0.0" />
     <PackageReference Include="GeoJSON.Net" Version="1.2.14" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.41.1.1715" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />

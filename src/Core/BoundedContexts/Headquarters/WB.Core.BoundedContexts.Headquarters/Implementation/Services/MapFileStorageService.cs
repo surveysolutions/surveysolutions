@@ -12,7 +12,6 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
 using OSGeo.GDAL;
 using OSGeo.OGR;
-using OSGeo.OSR;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Users;
