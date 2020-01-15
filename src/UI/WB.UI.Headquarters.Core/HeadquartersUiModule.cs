@@ -7,6 +7,8 @@ using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Maps;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
@@ -40,6 +42,7 @@ namespace WB.UI.Headquarters
 
             services.AddScoped<ServiceApiKeyAuthorization>();
 
+            registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
             registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IAudioProcessingService, AudioProcessingService>();
