@@ -6,7 +6,6 @@ using System.Net.Http.Formatting;
 using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Mvc;
-using Esri.ArcGISRuntime.Portal;
 using WB.Enumerator.Native.WebInterview;
 using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
 
