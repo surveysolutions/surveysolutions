@@ -9,4 +9,4 @@
 <div class="row-element mb-20">
     <h2>@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(), Model.QuestionnaireTitle)</h2>
 </div>
-@Html.Partial("_StartOrResumeForm", Model)
+<partial name="_StartOrResumeForm" model="Model" />
