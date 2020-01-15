@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Resources;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -18,16 +14,14 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.UI.Headquarters.Controllers.Api;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Shared.Web.Extensions;
+using WB.UI.Headquarters.Resources;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator, Headquarter")]
     public class MapsApiController : ControllerBase
@@ -245,7 +239,8 @@ namespace WB.UI.Headquarters.Controllers
 
             }
 
-            return this.Ok(string.Format(Maps.UploadMappingsSummaryFormat, mappings.Count, errorsCount));
+            var message = string.Format(Maps.UploadMappingsSummaryFormat, mappings.Count, errorsCount);
+            return this.Ok(message);
         }
 
         [HttpPost]
