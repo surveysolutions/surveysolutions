@@ -1,68 +1,62 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
-using Resources;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
-using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers.Api;
+using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Extensions;
-using WB.UI.Shared.Web.Filters;
+
 
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
-    public class UsersApiController : BaseApiController
+    public class UsersApiController : ControllerBase
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory usersFactory;
-        private readonly HqUserManager userManager;
+        private readonly IUserRepository userManager;
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IExportFactory exportFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewerProfileFactory interviewerProfileFactory;
         private readonly IUserImportService userImportService;
         private readonly IMoveUserToAnotherTeamService moveUserToAnotherTeamService;
+        private readonly IUserArchiveService userArchiveService;
 
         public UsersApiController(
-            ICommandService commandService,
             IAuthorizedUser authorizedUser,
-            ILogger logger,
             IUserViewFactory usersFactory,
-            HqUserManager userManager,
+            IUserRepository userManager,
             IInterviewerVersionReader interviewerVersionReader,
             IExportFactory exportFactory, 
             IInterviewerProfileFactory interviewerProfileFactory,
             IFileSystemAccessor fileSystemAccessor,
             IUserImportService userImportService, 
-            IMoveUserToAnotherTeamService moveUserToAnotherTeamService)
-            : base(commandService, logger)
+            IMoveUserToAnotherTeamService moveUserToAnotherTeamService,
+            IUserArchiveService userArchiveService)
         {
             this.authorizedUser = authorizedUser;
             this.usersFactory = usersFactory;
@@ -73,10 +67,10 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewerProfileFactory = interviewerProfileFactory;
             this.userImportService = userImportService;
             this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
+            this.userArchiveService = userArchiveService;
         }
 
         [HttpPost]
-        [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public async Task<DataTableResponse<InterviewerListItem>> AllInterviewers([FromBody] DataTableRequestWithFilter request)
         {
@@ -87,8 +81,7 @@ namespace WB.UI.Headquarters.Controllers
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            var currentUserRole = this.authorizedUser.Role;
-            if (currentUserRole == UserRoles.Supervisor)
+            if (authorizedUser.IsSupervisor)
                 supervisorId = this.authorizedUser.Id;
 
             var interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
@@ -131,7 +124,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<HttpResponseMessage> AllInterviewers([FromUri] DataTableRequestWithFilter reqest, [FromUri] string exportType)
+        public async Task<IActionResult> AllInterviewers([FromQuery] DataTableRequestWithFilter reqest, [FromQuery] string exportType)
         {
             Guid? supervisorId = null;
 
@@ -142,8 +135,7 @@ namespace WB.UI.Headquarters.Controllers
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            var currentUserRole = this.authorizedUser.Role;
-            if (currentUserRole == UserRoles.Supervisor)
+            if (this.authorizedUser.IsSupervisor)
                 supervisorId = this.authorizedUser.Id;
 
             var interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
@@ -191,16 +183,13 @@ namespace WB.UI.Headquarters.Controllers
                 data.SearchBy, true);
         }
 
-        [HttpPost]
-        [CamelCase]
         [Authorize(Roles = "Administrator, Observer")]
-        public DataTableResponse<InterviewerListItem> AllHeadquarters([FromBody] DataTableRequest request)
+        public DataTableResponse<InterviewerListItem> AllHeadquarters(DataTableRequest request)
         {
             return this.GetUsersInRoleForDataTable(request, UserRoles.Headquarter);
         }
 
         [HttpPost]
-        [CamelCase]
         [Authorize(Roles = "Administrator")]
         public DataTableResponse<InterviewerListItem> AllObservers([FromBody] DataTableRequest request)
         {
@@ -209,7 +198,6 @@ namespace WB.UI.Headquarters.Controllers
 
 
         [HttpPost]
-        [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public DataTableResponse<SupervisorListItem> AllSupervisors([FromBody] DataTableRequestWithFilter request)
         {
@@ -244,7 +232,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [CamelCase]
         [Authorize(Roles = "Administrator")]
         public DataTableResponse<InterviewerListItem> AllApiUsers([FromBody] DataTableRequest request)
         {
@@ -291,27 +278,42 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
+        public async Task<CommandApiController.JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
         {
-            var archiveResults = request.Archive
-                ? await this.userManager.ArchiveUsersAsync(request.UserIds)
-                : await this.userManager.UnarchiveUsersAsync(request.UserIds);
+            if (request.Archive)
+                await this.userArchiveService.ArchiveUsersAsync(request.UserIds);
+            else
+                await this.userArchiveService.UnarchiveUsersAsync(request.UserIds);
 
-            return new JsonBundleCommandResponse
+            throw new ArgumentException("Need implement archive and unarchive");
+
+            return new CommandApiController.JsonBundleCommandResponse
+            {
+                CommandStatuses = new List<CommandApiController.JsonCommandResponse>
+                {
+                    new CommandApiController.JsonCommandResponse
+                    {
+                        IsSuccess = true
+                    }
+                }
+            };
+
+
+            /*return new CommandApiController.JsonBundleCommandResponse
             {
                 CommandStatuses = archiveResults.Select(x =>
-                    new JsonCommandResponse
+                    new CommandApiController.JsonCommandResponse
                     {
                         IsSuccess = x.Succeeded,
                         DomainException = string.Join(@"; ", x.Errors)
                     }).ToList()
-            };
+            };*/
         }
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [Localizable(false)]
-        public HttpResponseMessage ImportUsersTemplate() => this.CreateReportResponse(ExportFileType.Tab, new ReportView
+        public IActionResult ImportUsersTemplate() => this.CreateReportResponse(ExportFileType.Tab, new ReportView
         {
             Headers = this.userImportService.GetUserProperties(),
             Data = new object[][] { }
@@ -319,12 +321,11 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [CamelCase]
         [ApiNoCache]
-        [ObserverNotAllowedApi]
-        public async Task<IHttpActionResult> ImportUsers(ImportUsersRequest request)
+        [ObserverNotAllowed]
+        public async Task<IActionResult> ImportUsers(ImportUsersRequest request)
         {
-            if (request?.File?.FileBytes == null)
+            if (request?.File == null)
                 return this.BadRequest(BatchUpload.Prerequisite_FileOpen);
 
             var fileExtension = Path.GetExtension(request.File.FileName).ToLower();
@@ -334,7 +335,7 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
-                var importUserErrors = this.userImportService.VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
+                var importUserErrors = this.userImportService.VerifyAndSaveIfNoErrors(request.File.OpenReadStream(), request.File.FileName)
                     .Take(8).Select(ToImportError).ToArray();
 
                 if (!importUserErrors.Any())
@@ -350,22 +351,19 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [CamelCase]
-        public HttpResponseMessage CancelToImportUsers()
+        public IActionResult CancelToImportUsers()
         {
             this.userImportService.RemoveAllUsersToImport();
-            return Request.CreateResponse(HttpStatusCode.NoContent);
+            return NoContent();
         }
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [CamelCase]
         [ApiNoCache]
         public UsersImportStatus ImportStatus() => this.userImportService.GetImportStatus();
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [CamelCase]
         [ApiNoCache]
         public UsersImportCompleteStatus ImportCompleteStatus() => this.userImportService.GetImportCompleteStatus();
 
@@ -397,25 +395,20 @@ namespace WB.UI.Headquarters.Controllers
             public string Recomendation { get; set; }
         }
 
-        private HttpResponseMessage CreateReportResponse(ExportFileType type, ReportView report, string reportName)
+        private IActionResult CreateReportResponse(ExportFileType type, ReportView report, string reportName)
         {
             var exportFile = this.exportFactory.CreateExportFile(type);
 
             Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report));
-            var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
-
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-            {
-                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
-            };
-
+            var fileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}";
+            var result = File(exportFileStream, exportFile.MimeType, fileNameStar);
             return result;
         }
     }
 
     public class ImportUsersRequest
     {
-        public HttpFile File { get; set; }
+        public IFormFile File { get; set; }
     }
 
     public class ArchiveUsersRequest
