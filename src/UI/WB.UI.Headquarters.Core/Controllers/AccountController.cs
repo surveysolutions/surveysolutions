@@ -139,8 +139,12 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(new
             {
-                UserInfo = new {Role = id},
-                Api = new {CreateUserUrl = Url.Action("CreateUser")}
+                UserInfo = new {Role = role.ToString()},
+                Api = new
+                {
+                    CreateUserUrl = Url.Action("CreateUser"),
+                    ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead")
+                }
             });
         }
 
@@ -150,6 +154,15 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            if (!Enum.TryParse(model.Role, true, out UserRoles role))
+                return BadRequest("Unknown user type");
+
+            if (role == UserRoles.Interviewer && !model.SupervisorId.HasValue)
+                this.ModelState.AddModelError(nameof(CreateUserModel.SupervisorId), FieldsAndValidations.RequiredSupervisorErrorMessage);
+
+            if(await this.userRepository.FindByNameAsync(model.UserName) != null)
+                this.ModelState.AddModelError(nameof(CreateUserModel.UserName), FieldsAndValidations.UserName_Taken);
 
             if (model.SupervisorId.HasValue)
             {
@@ -182,7 +195,6 @@ namespace WB.UI.Headquarters.Controllers
                         this.ModelState.AddModelError(nameof(CreateUserModel.Password), string.Join(@", ", identityResult.Errors.Select(x => x.Description)));
                     else
                         await this.userRepository.AddToRoleAsync(user, model.Role, CancellationToken.None);
-
                 }
             }
             
