@@ -376,6 +376,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     this.ApplyValidity(rosterInstance.Validity, rosterInstance.Status);
                 });
 
+                tableRosterInstances = tableRosterInstances.Where(x => !(x.IsDisabled && x.HideIfDisabled)).ToArray();
+
                 return new TableOrMatrixRoster()
                 {
                     Id = id,
