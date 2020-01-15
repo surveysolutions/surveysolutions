@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers
             IInterviewerProfileFactory interviewerProfileFactory,
             IFileSystemAccessor fileSystemAccessor,
             IUserImportService userImportService, 
-            IMoveUserToAnotherTeamService moveUserToAnotherTeamService,
+            //IMoveUserToAnotherTeamService moveUserToAnotherTeamService,
             IUserArchiveService userArchiveService)
         {
             this.authorizedUser = authorizedUser;
@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewerProfileFactory = interviewerProfileFactory;
             this.userImportService = userImportService;
-            this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
+            //this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
             this.userArchiveService = userArchiveService;
         }
 
@@ -242,7 +242,7 @@ namespace WB.UI.Headquarters.Controllers
             UserRoles userRoles)
         {
             var users = this.usersFactory.GetUsersByRole(request.PageIndex, request.PageSize, request.GetSortOrder(),
-                request.Search.Value, false, userRoles);
+                request.Search?.Value, false, userRoles);
 
             return new DataTableResponse<InterviewerListItem>
             {
