@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICsvReader recordsAccessorFactory;
         private readonly IArchiveUtils archiveUtils;
 
-        public MapsApiController(ICommandService commandService,
+        public MapsApiController(
             IMapBrowseViewFactory mapBrowseViewFactory, ILogger logger,
             IMapStorageService mapStorageService, IExportFactory exportFactory,
             IFileSystemAccessor fileSystemAccessor,

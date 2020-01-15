@@ -40,8 +40,6 @@ namespace WB.UI.Headquarters
 
             services.AddScoped<ServiceApiKeyAuthorization>();
 
-            registry.Bind<IMapService, MapService>();
-
             registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IAudioProcessingService, AudioProcessingService>();
