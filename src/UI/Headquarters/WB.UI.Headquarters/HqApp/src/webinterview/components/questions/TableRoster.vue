@@ -1,10 +1,10 @@
 <template>
-    <div class="question table-view scroller" :id="hash">
+    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
         <ag-grid-vue
             ref="tableRoster"
             class="ag-theme-customStyles"
-            style="height:1024px"
-            domLayout="normal"
+            
+            domLayout="autoHeight"
             rowHeight="40"
             headerHeight="50"
             :defaultColDef="defaultColDef"
@@ -78,8 +78,8 @@
             ["$me.instances"]() {
                 if (this.countOfInstances != this.$me.instances.length) {
                     this.countOfInstances = this.$me.instances.length
-                    this.setTableRosterHeight()
                     this.initQuestionsInRows()
+                    this.setTableRosterHeight()
                 }
             }
         },
@@ -199,13 +199,16 @@
             },
 
             setTableRosterHeight() {
-                if (this.$me.instances.length > 20) {
-                    this.gridApi.setDomLayout('normal')
-                    this.$refs.tableRoster.$el.style.height = '1024px';
+                if(this.$refs.tableRoster != undefined)
+                {
+                    if (this.$me.instances.length > 20) {
+                        this.gridApi.setDomLayout('normal')
+                        this.$refs.tableRoster.$el.style.height = '1024px';
+                    }
+                    else {
+                        this.gridApi.setDomLayout('autoHeight');
+                        this.$refs.tableRoster.$el.style.height = '';
                 }
-                else {
-                    this.gridApi.setDomLayout('autoHeight');
-                    this.$refs.tableRoster.$el.style.height = '';
                 }
             },
 

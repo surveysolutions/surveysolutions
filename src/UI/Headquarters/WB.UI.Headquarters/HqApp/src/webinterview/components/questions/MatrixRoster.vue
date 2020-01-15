@@ -1,5 +1,5 @@
 <template>    
-    <div class="question table-view scroller" :id="hash">        
+    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">        
         <h5 v-dateTimeFormatting v-html="title"></h5>
         <div class="information-block instruction" v-if="instructions">            
             <p v-dateTimeFormatting v-html="instructions"></p>
@@ -7,8 +7,8 @@
         <ag-grid-vue 
             ref="matrixRoster"
             class="ag-theme-customStyles roster-matrix"
-            style="height:1536px"
-            domLayout='normal'
+            
+            domLayout='autoHeight'
             rowHeight="40"
             headerHeight="50"
 
@@ -84,9 +84,9 @@
             },
             ["$me.instances"]() {
                 if (this.countOfInstances != this.$me.instances.length) {
-                    this.countOfInstances = this.$me.instances.length
-                    this.setTableRosterHeight()
+                    this.countOfInstances = this.$me.instances.length                    
                     this.initQuestionsInRows()
+                    this.setTableRosterHeight()
                 }
             },
             ["$me.questions"]() {
@@ -160,8 +160,7 @@
             initQuestionsInRows() {
                 var self = this;
 
-                var rosterInstancesWithQuestionsAsRows = _.map(
-                    //_.filter(this.$me.instances, function(instance){ return !instance.isDisabled || (instance.isDisabled && !instance.hideIfDisabled); }),                    
+                var rosterInstancesWithQuestionsAsRows = _.map(                                       
                     this.$me.instances,
                     (instance, key) => {
                         var instanceAsRow = {
@@ -213,13 +212,16 @@
             },
 
             setTableRosterHeight() {
-                if (this.$me.instances.length > 30) {
-                    this.gridApi.setDomLayout('normal')
-                    this.$refs.matrixRoster.$el.style.height = '1536px';
-                }
-                else {
-                    this.gridApi.setDomLayout('autoHeight');
-                    this.$refs.matrixRoster.$el.style.height = '';
+                if(this.$refs.tableRoster != undefined)
+                {
+                    if (this.$me.instances.length > 30) {
+                        this.gridApi.setDomLayout('normal')
+                        this.$refs.matrixRoster.$el.style.height = '1536px';
+                    }
+                    else {
+                        this.gridApi.setDomLayout('autoHeight');
+                        this.$refs.matrixRoster.$el.style.height = '';
+                    }
                 }
             },
 
