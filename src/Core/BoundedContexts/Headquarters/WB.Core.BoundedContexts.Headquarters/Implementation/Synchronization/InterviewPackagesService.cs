@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
@@ -13,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
@@ -213,7 +215,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 //Uow would contain partial data
                 //so a new scope created
 
-                InScopeExecutor.Current.Execute((serviceLocator) =>
+                InScopeExecutor.Current.Execute(serviceLocator =>
                 {
                     var interviewsLocal =
                         serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
@@ -249,7 +251,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     bool shouldChangeInterviewKey =
                         CheckIfInterviewKeyNeedsToBeChanged(interviewsLocal, interview.InterviewId, serializedEvents);
 
-                    bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(
+                    var shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(
                         serviceLocator.GetInstance<IUserRepository>(),
                         interview.ResponsibleId, serializedEvents, out Guid? newSupervisorId);
 
@@ -378,16 +380,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         }
 
         private bool CheckIfInterviewerWasMovedToAnotherTeam(IUserRepository userRepositoryLocal,
-            Guid responsibleId,
-            IEvent[] interviewEvents, out Guid? newSupervisorId)
+                Guid responsibleId, IEvent[] interviewEvents, out Guid? newSupervisorId)
         {
             newSupervisorId = null;
+
             SupervisorAssigned supervisorAssigned = interviewEvents.OfType<SupervisorAssigned>().LastOrDefault();
+
             if (supervisorAssigned == null)
                 return false;
-            HqUser interviewer = userRepositoryLocal.FindByIdAsync(responsibleId).Result;
+            HqUser interviewer = userRepositoryLocal.FindById(responsibleId);
             if (interviewer == null)
                 return false;
+
             newSupervisorId = interviewer.Profile.SupervisorId;
             return newSupervisorId != supervisorAssigned.SupervisorId;
         }

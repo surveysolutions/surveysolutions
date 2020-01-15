@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PreloadingVerificationMessages {
@@ -214,11 +214,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User is not Supervisor or Interviewer for 1 or more observations..
+        ///   Looks up a localized string similar to User is not Headquarters, Supervisor or Interviewer for 1 or more observations..
         /// </summary>
-        public static string PL0028_UserIsNotSupervisorOrInterviewer {
+        public static string PL0028_UserIsNotHQOrSupervisorOrInterviewer {
             get {
-                return ResourceManager.GetString("PL0028_UserIsNotSupervisorOrInterviewer", resourceCulture);
+                return ResourceManager.GetString("PL0028_UserIsNotHQOrSupervisorOrInterviewer", resourceCulture);
             }
         }
         

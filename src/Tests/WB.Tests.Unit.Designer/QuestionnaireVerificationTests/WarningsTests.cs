@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
@@ -764,6 +765,12 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .ExpectWarning("WB0231");
 
         [Test]
+        public void conmbobox_multiple_option_with_21_options_Should_not_raise_warning()
+            => Create
+                .MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 21).ToList(), isCombobox: true)
+                .ExpectNoWarning("WB0231");
+
+        [Test]
         public void multi_option_with_20_options()
             => Create
                 .MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 20).ToList())
@@ -792,6 +799,19 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     isComboBox: true,
                     answers: Enumerable.Repeat(Create.Answer(), 10).ToList())
                 .ExpectNoWarning("WB0225");
+
+        [Test]
+        public void single_option_with_reusable_categories_with_9_options_in_combobox_mode()
+        {
+            var categoriesId = Id.g1;
+            var questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.SingleOptionQuestion(isComboBox: true, categoriesId: categoriesId)
+            });
+            questionnaire.Categories.Add(Create.Categories(categoriesId, "options"));
+
+            questionnaire.ExpectWarning("WB0225");
+        }
 
         [Test]
         public void multi_option_with_options_1_2_4_max_int()
@@ -829,5 +849,46 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     new Answer() { AnswerValue = "10", AnswerText = "10+" }, 
                 })
                 .ExpectWarning("WB0288");
+
+        [Test]
+        public void when_categorical_questions_have_the_same_categories()
+        {
+            var warnings = Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            {
+                Create.SingleOptionQuestion(answers: new List<Answer>
+                {
+                    new Answer() {AnswerValue = "1", AnswerText = "1", ParentValue = "1"},
+                    new Answer() {AnswerValue = "2", AnswerText = "2", ParentValue = "1"}
+                }),
+                Create.MultyOptionsQuestion(options: new List<Answer>
+                {
+                    new Answer() {AnswerValue = "1", AnswerText = "1", ParentValue = "1"},
+                    new Answer() {AnswerValue = "2", AnswerText = "2", ParentValue = "1"}
+                }),
+                Create.SingleOptionQuestion(answers: new List<Answer>
+                {
+                    new Answer() {AnswerValue = "1", AnswerText = "1", ParentValue = "1"},
+                    new Answer() {AnswerValue = "2", AnswerText = "2", ParentValue = "1"},
+                    new Answer() {AnswerValue = "3", AnswerText = "3", ParentValue = "1"}
+                }),
+                Create.MultyOptionsQuestion(options: new List<Answer>
+                {
+                    new Answer() {AnswerValue = "1", AnswerText = "1", ParentValue = "1"},
+                    new Answer() {AnswerValue = "2", AnswerText = "2", ParentValue = "1"},
+                    new Answer() {AnswerValue = "3", AnswerText = "3", ParentValue = "1"}
+                }),
+                Create.MultyOptionsQuestion(options: new List<Answer>
+                {
+                    new Answer() {AnswerValue = "1", AnswerText = "1", ParentValue = "1"},
+                    new Answer() {AnswerValue = "2", AnswerText = "2", ParentValue = "1"},
+                    new Answer() {AnswerValue = "3", AnswerText = "3", ParentValue = "1"}
+                })
+            }).ExpectWarning("WB0296").Where(x => x.Code == "WB0296");
+
+            Assert.That(warnings, Has.Exactly(2).Items);
+            Assert.That(warnings.Select(x => x.Code), Has.All.EqualTo("WB0296"));
+            Assert.That(warnings.First().References, Has.Exactly(2).Items);
+            Assert.That(warnings.Last().References, Has.Exactly(3).Items);
+        }
     }
 }

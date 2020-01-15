@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using Plugin.Permissions.Abstractions;
 using SQLite;
 using SQLitePCL;
@@ -77,7 +78,7 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
-            var timestamp = $"{DateTime.Now:s}";
+            var timestamp = $"{DateTime.Now:s}".Replace(":", "_");
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, $"backup-{timestamp}.zip");
 
             var backupTempFolder = this.fileSystemAccessor.CombinePath(backupToFolderPath,  $"temp-backup-{timestamp}");
@@ -88,8 +89,9 @@ namespace WB.UI.Shared.Enumerator.Services
             try
             {
                 this.CreateDeviceInfoFile();
+                this.CreateFilesListInfoFile();
 
-                await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
+                await Task.Run(this.BackupSqliteDbs).ConfigureAwait(false);
 
                 this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupTempFolder, false,
                     new[] {".log", ".dll", ".back", ".info", ".dat", ".attachment"});
@@ -104,6 +106,7 @@ namespace WB.UI.Shared.Enumerator.Services
             catch (Exception ex)
             {
                 this.logger.Error(ex.Message, ex);
+                throw;
             }
             finally
             {
@@ -182,8 +185,8 @@ namespace WB.UI.Shared.Enumerator.Services
                 try
                 {
                     string destDBPath;
-                    var backupConnectionString = new SQLiteConnectionString(dbPathToBackup, true, null);
-                    using (var connection = new SQLiteConnectionWithLock(backupConnectionString, openFlags: SQLiteOpenFlags.ReadOnly))
+                    var backupConnectionString = new SQLiteConnectionString(dbPathToBackup, SQLiteOpenFlags.ReadOnly, true, null);
+                    using (var connection = new SQLiteConnectionWithLock(backupConnectionString))
                     {
                         destDBPath = $"{connection.DatabasePath}.{DateTime.UtcNow:yyyy-MM-dd_HH-mm-ss-fff}";
 
@@ -292,6 +295,55 @@ namespace WB.UI.Shared.Enumerator.Services
             }
         }
 
+        public async Task SendLogsAsync(CancellationToken token)
+        {
+            var backupTo =
+                this.fileSystemAccessor.CombinePath(privateStorage, "logs.zip");
+            try
+            {
+                var backupHeaders = new Dictionary<string, string>()
+                {
+                    {"DeviceId", this.deviceSettings.GetDeviceId()},
+                };
+
+                var path = this.fileSystemAccessor.CombinePath(privateStorage, "Logs");
+
+                if (this.fileSystemAccessor.IsFileExists(backupTo))
+                {
+                    this.fileSystemAccessor.DeleteFile(backupTo);
+                }
+
+                await this.archiver.ZipDirectoryToFileAsync(path, backupTo)
+                    .ConfigureAwait(false);
+
+                if (token.IsCancellationRequested) return;
+
+                using (var logsFileStream = this.fileSystemAccessor.ReadFile(backupTo))
+                {
+                    await this.restService.SendStreamAsync(
+                        stream: logsFileStream,
+                        customHeaders: backupHeaders,
+                        url: "api/enumerator/logs",
+                        credentials:
+                        this.principal.IsAuthenticated
+                            ? new RestCredentials
+                            {
+                                Login = this.principal.CurrentUserIdentity.Name,
+                                Token = this.principal.CurrentUserIdentity.Token
+                            }
+                            : null,
+                        token: token).ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                if (this.fileSystemAccessor.IsFileExists(backupTo))
+                {
+                    this.fileSystemAccessor.DeleteFile(backupTo);
+                }
+            }
+        }
+
         private void ReCreatePrivateDirectory()
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(this.privateStorage)) return;
@@ -305,6 +357,36 @@ namespace WB.UI.Shared.Enumerator.Services
             var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "device.info");
             var deviceTechnicalInformation = this.deviceSettings.GetDeviceTechnicalInformation();
             this.fileSystemAccessor.WriteAllText(tabletInfoFilePath, deviceTechnicalInformation);
+
+        }
+
+        private void CreateFilesListInfoFile()
+        {
+            var internalFiles = this.fileSystemAccessor.CombinePath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "files.info");
+
+            var files = this.fileSystemAccessor.GetFilesInDirectory(internalFiles, true);
+            var sb = new StringBuilder();
+            sb.AppendLine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + " files list:");
+            sb.AppendLine();
+
+            foreach(var file in files)
+            {
+                var fi = new FileInfo(file);
+                sb.Append($"\t{file}");
+
+                // we want to always read hash for .apk files or add hash if it's already exists 
+                if (file.EndsWith(".apk") || this.fileSystemAccessor.IsFileExists(file + ".md5"))
+                {
+                    var hash = this.fileSystemAccessor.ReadHash(file);
+                    sb.Append($"\t[md5:{Convert.ToBase64String(hash)}]");
+                }
+
+                sb.Append($"\t{fi.Length}({fi.Length.Bytes().ToString("0.00")})\t{fi.LastWriteTimeUtc}");
+                sb.AppendLine();
+            }
+
+            this.fileSystemAccessor.WriteAllText(tabletInfoFilePath, sb.ToString());
         }
 
         private void DecryptKeyStore()

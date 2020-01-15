@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
             IStatefulInterview interview = null,
             IPrincipal principal = null,
             ICommandService commandService = null,
-            ILiteEventRegistry eventRegistry = null)
+            IViewModelEventRegistry eventRegistry = null)
         {
             var interviewRepository = Create.Storage.InterviewRepository(interview ?? Create.AggregateRoot.StatefulInterview(Id.gA));
 

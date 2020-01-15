@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
@@ -63,8 +64,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Create.Entity.QuestionnaireDocumentWithOneQuestion(
                     questionnaireId: questionnaireIdentity.QuestionnaireId), questionnaireIdentity.Version);
 
-            var assignmentsRepository = Create.Storage.InMemoryPlainStorage<Assignment>();
-            assignmentsRepository.Store(new Assignment(questionnaireIdentity, assignmentId, 1, false, "", password, true), assignmentId);
+            var assignmentsRepository = Create.Storage.InMemoryReadSideStorage<Assignment, Guid>();
+            assignmentsRepository.Store(new Assignment(assignmentId, 1, questionnaireIdentity, assignmentId, 1, false, "", password, true, null), assignmentId);
 
             var verifier = Create.Service.ImportDataVerifier(assignmentsRepository: assignmentsRepository);
 
@@ -105,8 +106,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Create.Entity.QuestionnaireDocumentWithOneQuestion(
                     questionnaireId: questionnaireIdentity.QuestionnaireId), questionnaireIdentity.Version);
 
-            var assignmentsRepository = Create.Storage.InMemoryPlainStorage<Assignment>();
-            assignmentsRepository.Store(new Assignment(questionnaireIdentity, assignmentId, 1, false, "", password, true), assignmentId);
+            var assignmentsRepository = Create.Storage.InMemoryReadSideStorage<Assignment, Guid>();
+            assignmentsRepository.Store(new Assignment(assignmentId, 1, questionnaireIdentity, assignmentId, 1, false, "", password, true, null), assignmentId);
 
             var verifier = Create.Service.ImportDataVerifier(assignmentsRepository: assignmentsRepository);
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Code

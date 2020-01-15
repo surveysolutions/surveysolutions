@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         {
             var interviewId = Id.g1;
 
-            IPlainStorage<InterviewView> interviews = new InMemoryPlainStorage<InterviewView>();
+            IPlainStorage<InterviewView> interviews = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             interviews.Store(Create.Entity.InterviewView(interviewId: interviewId, canBeDeleted: true));
 
             var denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviews);

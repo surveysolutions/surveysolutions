@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class AudioQuestionViewModel :
         MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid interviewId;
         private string variableName;
 
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IPermissionsService permissions;
         private readonly IAudioDialog audioDialog;
         private readonly IAudioFileStorage audioFileStorage;
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<AudioQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            ILiteEventRegistry liteEventRegistry,
+            IViewModelEventRegistry liteEventRegistry,
             IPermissionsService permissions,
             IAudioDialog audioDialog,
             IAudioFileStorage audioFileStorage,
@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
-        public IMvxCommand TogglePlayback => new MvxCommand(() =>
+        public IMvxCommand TogglePlayback => new MvxAsyncCommand(async () =>
         {
             if (this.IsPlaying)
             {
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             else
             {
-                this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
+                await this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
                 this.IsPlaying = true;
             }
         });
@@ -283,8 +283,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.QuestionState.Dispose();
             this.liteEventRegistry.Unsubscribe(this);
+            this.QuestionState.Dispose();
         }
     }
 }

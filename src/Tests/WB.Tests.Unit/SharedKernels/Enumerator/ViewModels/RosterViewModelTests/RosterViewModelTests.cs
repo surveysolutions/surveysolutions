@@ -4,6 +4,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Tests.Abc;
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
         protected RosterViewModel CreateViewModel(IStatefulInterviewRepository interviewRepository = null,
             IInterviewViewModelFactory interviewViewModelFactory = null,
-            ILiteEventRegistry eventRegistry = null)
+            IViewModelEventRegistry eventRegistry = null)
         {
             var viewModelFactory = new Mock<IInterviewViewModelFactory>();
             viewModelFactory.Setup(x => x.GetNew<GroupViewModel>())

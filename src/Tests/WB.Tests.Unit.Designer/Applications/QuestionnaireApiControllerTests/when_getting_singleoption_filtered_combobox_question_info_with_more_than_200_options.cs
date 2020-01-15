@@ -2,6 +2,7 @@ using System;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Controllers.Api.Designer;
@@ -35,7 +36,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result.WereOptionsTruncated.Should().BeTrue();
 
         private static QuestionnaireApiController controller;
-        private static string questionnaireId = "22222222222222222222222222222222";
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Mock<IQuestionnaireInfoFactory> questionnaireInfoViewFactoryMock;
         private static NewEditQuestionView result;

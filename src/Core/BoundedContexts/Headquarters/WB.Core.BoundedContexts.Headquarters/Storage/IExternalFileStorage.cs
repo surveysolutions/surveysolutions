@@ -18,17 +18,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             throw new NotImplementedException();
         }
 
-        public byte[] GetBinary(string key)
+        public Task<byte[]> GetBinaryAsync(string key)
         {
             throw new NotImplementedException();
         }
 
-        public List<FileObject> List(string prefix)
+        public Task<List<FileObject>> ListAsync(string prefix)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(string path)
+        public Task RemoveAsync(string path)
         {
             throw new NotImplementedException();
         }
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             throw new NotImplementedException();
         }
 
-        public bool IsExist(string path)
+        public Task<bool> ExistsAsync(string path)
         {
             throw new NotImplementedException();
         }

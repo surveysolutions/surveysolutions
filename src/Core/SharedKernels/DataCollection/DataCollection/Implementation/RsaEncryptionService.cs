@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation
                 var publicKeyBytes = this.secureStorage.Retrieve(PublicKey);
                 var publicKey = Encoding.UTF8.GetString(publicKeyBytes);
 
-                rsaPublic.FromXmlString(publicKey);
+                RSACryptoServiceProviderExtensions.FromXmlString(rsaPublic, publicKey);
 
                 return rsaPublic.Encrypt(value, false);
             }
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation
                 var privateKeyBytes = this.secureStorage.Retrieve(PrivateKey);
                 var privateKey = Encoding.UTF8.GetString(privateKeyBytes);
 
-                rsaPrivate.FromXmlString(privateKey);
+                RSACryptoServiceProviderExtensions.FromXmlString(rsaPrivate, privateKey);
 
                 return rsaPrivate.Decrypt(value, false);
             }

@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Linq;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class AnswersRemovedNotifier : 
-        ILiteEventHandler,
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         IDisposable
     {
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private Identity Identity;
 
         public event EventHandler AnswerRemoved;
 
-        public AnswersRemovedNotifier(ILiteEventRegistry eventRegistry)
+        public AnswersRemovedNotifier(IViewModelEventRegistry eventRegistry)
         {
             this.eventRegistry = eventRegistry;
         }

@@ -4,6 +4,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 {
@@ -25,6 +26,16 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
     public class GetQuestionnaireTranslationResponse : ICommunicationMessage
     {
         public List<TranslationDto> Translations { get; set; }
+    }
+
+    public class GetQuestionnaireReusableCategoriesRequest : ICommunicationMessage
+    {
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+    }
+
+    public class GetQuestionnaireReusableCategoriesResponse : ICommunicationMessage
+    {
+        public List<ReusableCategoriesDto> Categories { get; set; }
     }
 
     public class GetCompanyLogoRequest : ICommunicationMessage

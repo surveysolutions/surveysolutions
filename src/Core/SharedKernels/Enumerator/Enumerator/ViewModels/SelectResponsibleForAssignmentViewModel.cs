@@ -61,6 +61,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             get => this.canReassign;
             protected set => this.RaiseAndSetIfChanged(ref this.canReassign, value);
         }
+
+        private string comments;
+        public string Comments
+        {
+            get => this.comments;
+            protected set => this.RaiseAndSetIfChanged(ref this.comments, value);
+        }
+
         private IMvxAsyncCommand reassignCommand;
         public IMvxAsyncCommand ReassignCommand => reassignCommand ??
                                                    (reassignCommand = new MvxAsyncCommand(this.ReassignAsync, () => this.CanReassign));
@@ -104,6 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             assignment.ReceivedByInterviewerAt = null;
             assignment.ResponsibleId = interviewer.Id;
             assignment.ResponsibleName = interviewer.Login;
+            assignment.Comments = this.Comments;
 
             this.assignmentsStorage.Store(assignment);
 

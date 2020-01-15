@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -19,7 +20,7 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> EmailLink(string interviewId, string email)
         {
             var assignmentId = interviewSummary.GetById(interviewId)?.AssignmentId ?? 0;
-            var assignment = assignments.GetById(assignmentId);
+            var assignment = assignments.GetAssignment(assignmentId);
 
             int invitationId = invitationService.CreateInvitationForPublicLink(assignment, interviewId);
             
@@ -41,9 +42,9 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
+        public async Task<ActionResult> Audio(Guid interviewId, string questionId, HttpPostedFileBase file)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
             var questionIdentity = Identity.Parse(questionId);
             InterviewTreeQuestion question = interview.GetQuestion(questionIdentity);
@@ -64,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
 
-                    audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, audioInfo.Binary, audioInfo.MimeType);
+                    audioFileStorage.StoreInterviewBinaryData(interviewId, fileName, audioInfo.Binary, audioInfo.MimeType);
 
                     var command = new AnswerAudioQuestionCommand(interview.Id,
                         interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
@@ -75,16 +76,16 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (Exception e)
             {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
+                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionIdentity, e);
                 throw;
             }
             return this.Json("ok");
         }
 
         [HttpPost]
-        public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
+        public async Task<ActionResult> Image(Guid interviewId, string questionId, HttpPostedFileBase file)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
@@ -102,7 +103,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     await file.InputStream.CopyToAsync(ms);
 
-                    this.imageProcessingService.ValidateImage(ms.ToArray());
+                    this.imageProcessingService.Validate(ms.ToArray());
 
                     filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
                     var responsibleId = interview.CurrentResponsibleId;
@@ -116,9 +117,9 @@ namespace WB.UI.Headquarters.Controllers
             catch (Exception e) 
             {
                 if(filename != null)
-                    this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                    await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
 
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
+                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionIdentity, e);
                 throw;
             }
             return this.Json("ok");

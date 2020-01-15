@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Java.Interop;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
@@ -49,5 +50,12 @@ namespace WB.UI.Supervisor.Activities
         }
 
         public override void OnBackPressed(){ }
+
+        [Export("FastLogin")]
+        public void FastLogin(string password)
+        {
+            this.ViewModel.Password = password;
+            this.ViewModel.SignInCommand.ExecuteAsync();
+        }
     }
 }

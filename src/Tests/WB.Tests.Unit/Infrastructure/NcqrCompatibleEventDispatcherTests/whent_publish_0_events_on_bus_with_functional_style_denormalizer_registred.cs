@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var ncqrsStyleDenormalizerMock = new Mock<IEventHandler>();
             functionalStyleEventHandlerMock = ncqrsStyleDenormalizerMock.As<IFunctionalEventHandler>();
 
-            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            var denormalizerRegistry = Create.Service.DenormalizerRegistryNative();
             denormalizerRegistry.RegisterFunctional<IFunctionalEventHandler>();
 
             ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(denormalizerRegistry: denormalizerRegistry);

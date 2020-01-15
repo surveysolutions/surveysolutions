@@ -12,12 +12,18 @@ export default {
     },
 
     actions: {
-        async loadTakeNew({ commit}) {
-            const interviewDetails = await Vue.$api.call(api => api.getInterviewDetails())
-            commit("SET_INTERVIEW_DETAILS", interviewDetails);
+        loadTakeNew({ commit}, { interviewId }) {
+            const details = Vue.$api.interview.get("getInterviewDetails", { interviewId })
+                .then(interviewDetails => {
+                    commit("SET_INTERVIEW_DETAILS", interviewDetails);
+                })
 
-            const data = await Vue.$api.call(api => api.getPrefilledQuestions())
-            commit("SET_TAKENEW_RESPONSE", data)
+            const question = Vue.$api.interview.get('getPrefilledQuestions', { interviewId }).then(data => {
+                commit("SET_TAKENEW_RESPONSE", data)
+            })
+
+            Vue.$api.hub.changeSection(null)
+            return Promise.all([details, question])
         }
     },
 

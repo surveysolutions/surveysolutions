@@ -183,5 +183,33 @@ namespace WB.Services.Export.Tests.Questionnaire
             Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultiOptionLinkedFirstLevel));
             Assert.That(exportedQuestionHeaderItem.QuestionType, Is.EqualTo(QuestionType.MultyOption));
         }
+
+        [Test]
+        public void when_combobox_with_max_answers_count_equal_2_then_columns_by_multioption_question_should_be_2()
+        {
+            // arrange
+            var comboboxQuestionId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.MultyOptionsQuestion(
+                    id: comboboxQuestionId,
+                    variable: "mult", 
+                    isFilteredCombobox: true,
+                    maxAnswersCount: 2,
+                    options: new[] {Create.Answer("opt 1", 1), Create.Answer("opt 2", 2), Create.Answer("opt 3", 3)}));
+
+            var QuestionnaireExportStructureFactory = CreateExportViewFactory();
+
+
+            // act
+            var questionnaireExportStructure = QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
+
+            // assert
+            HeaderStructureForLevel headerStructureForLevel = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
+            ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[comboboxQuestionId] as ExportedQuestionHeaderItem;
+
+            Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Count, Is.EqualTo(2));
+            Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Select(x => x.Name).ToArray(), Is.EquivalentTo(new[] { "mult__0", "mult__1" }));
+        }
     }
 }

@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.TopologicalSorter;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
@@ -46,7 +47,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             IQuestionnaireTranslator questionnaireTranslator, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
             IDynamicCompilerSettingsProvider compilerSettings,
-            IExpressionsPlayOrderProvider graphProvider)
+            IExpressionsPlayOrderProvider graphProvider,
+            ICategoriesService categoriesService)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
@@ -58,7 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             verifiers = new IPartialVerifier[]
             {
-                new QuestionVerifications(substitutionService),
+                new QuestionVerifications(substitutionService, categoriesService),
                 new GroupVerifications(fileSystemAccessor),
                 new AttachmentVerifications(attachmentService), 
                 new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, compilerSettings), 
@@ -67,7 +69,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 new QuestionnaireVerifications(substitutionService, keywordsProvider), 
                 new StaticTextVerifications(), 
                 new TranslationVerifications(translationService), 
-                new VariableVerifications(substitutionService)
+                new VariableVerifications(substitutionService),
+                new CategoriesVerifications(keywordsProvider), 
             };
         }
        

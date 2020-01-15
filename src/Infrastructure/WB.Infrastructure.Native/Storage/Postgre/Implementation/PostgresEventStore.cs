@@ -18,20 +18,19 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     [Localizable(false)]
-    public class PostgresEventStore  : IHeadquartersEventStore
+    public class PostgresEventStore : IHeadquartersEventStore
     {
         private readonly PostgreConnectionSettings connectionSettings;
-        private static readonly object lockObject = new object();
         private readonly IEventTypeResolver eventTypeResolver;
-        
+
         private static int BatchSize = 4096;
         private static string tableNameWithSchema;
         private readonly string tableName;
         private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
-        private readonly IUnitOfWork sessionProvider; 
+        private readonly IUnitOfWork sessionProvider;
 
-        public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
+        public PostgresEventStore(PostgreConnectionSettings connectionSettings,
             IEventTypeResolver eventTypeResolver,
             IUnitOfWork sessionProvider)
         {
@@ -63,47 +62,30 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private IEnumerable<CommittedEvent> ReadBatch(Guid id, int minVersion, int processed)
         {
-            using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-
-                using (var tr = connection.BeginTransaction())
+            var rawEvents = sessionProvider.Session.Connection.Query<RawEvent>(
+                $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                $"FROM {tableNameWithSchema} " +
+                $"WHERE eventsourceid= @sourceId AND eventsequence >= @minVersion " +
+                $"ORDER BY eventsequence LIMIT @batchSize OFFSET @processed",
+                new
                 {
-                    var rawEvents = connection.Query<RawEvent>(
-                        $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
-                        $"FROM {tableNameWithSchema} " +
-                        $"WHERE eventsourceid= @sourceId AND eventsequence >= @minVersion " +
-                        $"ORDER BY eventsequence LIMIT @batchSize OFFSET @processed",
-                        new
-                        {
-                            sourceId = id,
-                            minVersion = minVersion,
-                            batchSize = BatchSize,
-                            processed = processed
-                        }, buffered: true, transaction: tr);
+                    sourceId = id,
+                    minVersion = minVersion,
+                    batchSize = BatchSize,
+                    processed = processed
+                }, buffered: true);
 
-                    foreach (var committedEvent in ToCommittedEvent(rawEvents))
-                    {
-                        yield return committedEvent;
-                    }
-                }
+            foreach (var committedEvent in ToCommittedEvent(rawEvents))
+            {
+                yield return committedEvent;
             }
         }
 
         public int? GetLastEventSequence(Guid id)
         {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                using (connection.BeginTransaction())
-                {
-                    var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT MAX(eventsequence) as eventsourceid FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId";
-                    command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
-                    var executeScalar = command.ExecuteScalar() as int?;
-                    return executeScalar;
-                }
-            }
+            return this.sessionProvider.Session.Connection.ExecuteScalar<int?>(
+                $"SELECT MAX(eventsequence) as eventsourceid FROM {tableNameWithSchema} WHERE eventsourceid=@sourceId", 
+                new { sourceId = id });
         }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
@@ -122,8 +104,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             ValidateStreamVersion(eventStream, connection);
 
-            var copyFromCommand =
-                $"COPY {tableNameWithSchema}(id, origin, timestamp, eventsourceid, value, eventsequence, eventtype) FROM STDIN BINARY;";
+            var copyFromCommand = $"COPY {tableNameWithSchema}(id, origin, timestamp, eventsourceid, value, eventsequence, eventtype) FROM STDIN BINARY;";
             var npgsqlConnection = connection.Connection as NpgsqlConnection;
 
             using (var writer = npgsqlConnection.BeginBinaryImport(copyFromCommand))
@@ -174,8 +155,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             {
                 using (var validateVersionCommand = connection.Connection.CreateCommand())
                 {
-                    validateVersionCommand.CommandText =
-                        $"SELECT EXISTS(SELECT 1 FROM {tableNameWithSchema} WHERE eventsourceid = :sourceId)";
+                    validateVersionCommand.CommandText = $"SELECT EXISTS(SELECT 1 FROM {tableNameWithSchema} WHERE eventsourceid = :sourceId)";
                     AppendEventSourceParameter(validateVersionCommand);
 
                     var streamExists = validateVersionCommand.ExecuteScalar() as bool?;
@@ -200,64 +180,31 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        public int CountOfAllEvents()
-        {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = $"select reltuples::bigint from pg_class where relname='{this.tableName}'";
-                var scalar = command.ExecuteScalar();
-
-                var result = scalar == null ? 0 : Convert.ToInt32(scalar);
-                if (result == 0)
-                {
-                    var countCommand = connection.CreateCommand();
-                    countCommand.CommandText = $"select count(id) from {tableNameWithSchema}";
-                    var exactCountScalar = countCommand.ExecuteScalar();
-                    result = exactCountScalar == null ? 0 : Convert.ToInt32(exactCountScalar);
-                }
-                return result;
-            }
-        }
-
         public bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId, params string[] typeNames)
         {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = $@"select 1 from {tableNameWithSchema} where
+            var connection = sessionProvider.Session.Connection as NpgsqlConnection;
+            var command = connection.CreateCommand();
+            command.CommandText = $@"select 1 from {tableNameWithSchema} where
                                         eventsourceid = :eventSourceId
                                         and eventsequence > :eventSequence
                                         and eventtype = ANY(:eventTypes)
                                         limit 1";
-                command.Parameters.AddWithValue("eventSourceId", NpgsqlDbType.Uuid, eventSourceId);
-                command.Parameters.AddWithValue("eventSequence", NpgsqlDbType.Bigint, sequence);
-                command.Parameters.AddWithValue("eventTypes", NpgsqlDbType.Array | NpgsqlDbType.Text, typeNames);
-                var scalar = command.ExecuteScalar();
-                return scalar != null;
-            }
+            command.Parameters.AddWithValue("eventSourceId", NpgsqlDbType.Uuid, eventSourceId);
+            command.Parameters.AddWithValue("eventSequence", NpgsqlDbType.Bigint, sequence);
+            command.Parameters.AddWithValue("eventTypes", NpgsqlDbType.Array | NpgsqlDbType.Text, typeNames);
+            var scalar = command.ExecuteScalar();
+            return scalar != null;
         }
 
         public int? GetMaxEventSequenceWithAnyOfSpecifiedTypes(Guid eventSourceId, params string[] typeNames)
         {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = $@"select MAX(eventsequence) from {tableNameWithSchema} where
-                                        eventsourceid = :eventSourceId
-                                        and eventtype = ANY(:eventTypes)
-                                        limit 1";
-                command.Parameters.AddWithValue("eventSourceId", NpgsqlDbType.Uuid, eventSourceId);
-                command.Parameters.AddWithValue("eventTypes", NpgsqlDbType.Array | NpgsqlDbType.Text, typeNames);
-                var scalar = command.ExecuteScalar();
-                return scalar == DBNull.Value ? null : (int?) scalar;
-            }
+            return this.sessionProvider.Session.Connection.ExecuteScalar<int?>(
+                $@"select MAX(eventsequence) from {tableNameWithSchema} where
+                                        eventsourceid = @eventSourceId
+                                        and eventtype = ANY(@eventTypes)
+                                        limit 1", new { eventSourceId, eventTypes = typeNames} );
         }
 
-      
         public async Task<EventsFeedPage> GetEventsFeedAsync(long startWithGlobalSequence, int pageSize)
         {
             var rawEventsData = await this.sessionProvider.Session.Connection
@@ -266,13 +213,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                    FROM {tableNameWithSchema} 
                    WHERE globalsequence > @minVersion 
                    ORDER BY globalsequence 
-                   LIMIT @batchSize", 
+                   LIMIT @batchSize",
                    new { minVersion = startWithGlobalSequence, batchSize = pageSize });
 
             var globalSequence = await this.sessionProvider.Session.Connection.ExecuteScalarAsync<long?>("SELECT max(globalsequence) FROM events.events") ?? 0;
 
             var events = ToCommittedEvent(rawEventsData).ToList();
-            
+
             return new EventsFeedPage(globalSequence, events);
         }
 
@@ -288,6 +235,43 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     new { minVersion = startWithGlobalSequence, batchSize = pageSize }, buffered: false);
 
             return rawEventsData;
+        }
+
+        public async Task<List<CommittedEvent>> GetEventsInReverseOrderAsync(Guid aggregateRootId, int offset, int limit)
+        {
+            List<CommittedEvent> result = new List<CommittedEvent>();
+            var connection = sessionProvider.Session.Connection as NpgsqlConnection;
+            var rawEvents = await connection.QueryAsync<RawEvent>(
+                        $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                        $"FROM {tableNameWithSchema} " +
+                        "WHERE eventsourceid = @sourceId " +
+                        "ORDER BY eventsequence DESC LIMIT @limit OFFSET @offset",
+                        new
+                        {
+                            sourceId = aggregateRootId,
+                            limit = limit,
+                            offset = offset
+                        });
+
+            foreach (var committedEvent in ToCommittedEvent(rawEvents))
+            {
+                result.Add(committedEvent);
+            }
+
+            return result;
+        }
+
+        public async Task<int> TotalEventsCountAsync(Guid aggregateRootId)
+        {
+            var connection = sessionProvider.Session.Connection as NpgsqlConnection;
+            var result = await connection.ExecuteScalarAsync<int?>(
+                    $"SELECT COUNT(id) FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId",
+                    new
+                    {
+                        sourceId = aggregateRootId
+                    });
+
+            return result.GetValueOrDefault();
         }
 
         public async Task<long> GetMaximumGlobalSequence()
@@ -306,7 +290,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 {
                     using (JsonTextReader jsonTextReader = new JsonTextReader(sr))
                     {
-                        return (IEvent) serializer.Deserialize(jsonTextReader, type);
+                        return (IEvent)serializer.Deserialize(jsonTextReader, type);
                     }
                 }
             }

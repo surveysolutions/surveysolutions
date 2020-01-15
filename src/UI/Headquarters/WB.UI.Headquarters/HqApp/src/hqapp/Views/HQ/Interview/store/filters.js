@@ -39,40 +39,38 @@ export default {
 
     actions: {
         async fetchSearchResults({ commit, state }) {
-            const res = await Vue.$api.call(api => {
-                const flags = getSelectedFlags(state);
-                const skip = state.search.needToClear ? 0 : state.search.skip;
-                return api.search(flags, skip, state.search.pageSize)
-            })
+            const flags = getSelectedFlags(state);
+            const skip = state.search.needToClear ? 0 : state.search.skip;
+            const limit = state.search.pageSize
+            const res = await Vue.$api.interview.get('search', { flags, skip, limit })
             commit("LOG_LAST_ACTIVITY")
             commit("SET_SEARCH_RESULT", res)
         },
 
         applyFiltering({ commit, state, dispatch }, filter) {
             commit("CHANGE_FILTERS", filter);
-            
+
             var hasFilter = false;
             Object.keys(state.filter).forEach(key => {
-                if(state.filter[key] != false) 
-                {
-                    hasFilter = true;                    
+                if (state.filter[key] != false) {
+                    hasFilter = true;
                 }
             });
 
-            if(hasFilter)
+            if (hasFilter)
                 dispatch("showSearchResults");
             else
                 dispatch("hideSearchResults");
         },
 
-        async getStatusesHistory() {
-            return await Vue.$api.call(api => api.getStatusesHistory());
+        getStatusesHistory({ rootState }) {
+            return Vue.$api.interview('getStatusesHistory')
         },
 
         resetAllFilters({ commit, state, dispatch }) {
-            commit("RESET_FILTERS");          
+            commit("RESET_FILTERS");
 
-            if(state.search.needToClear)
+            if (state.search.needToClear)
                 dispatch("fetchSearchResults");
         },
 
@@ -119,7 +117,7 @@ export default {
 
         RESET_FILTERS(state) {
             Object.keys(state.filter).forEach(key => {
-                if(state.filter[key] != false) 
+                if (state.filter[key] != false)
                     state.search.needToClear = true;
                 Vue.set(state.filter, key, false)
             })

@@ -1,7 +1,8 @@
 {
   "dependencies": {
-    "chalk": "^2.3.0",
+    "chalk": "^3.0.0",
     "minimist": "^1.2.0",
-    "puppeteer": "^1.0.0"
+    "puppeteer": "^2.0.0",
+    "puppeteer-cluster": "^0.17.0"
   }
 }

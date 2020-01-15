@@ -27,7 +27,7 @@
         }, 
         computed: {
             hasMask(){
-                return this.$me.mask!=null;
+                return this.$me.mask != null
             },
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
@@ -55,8 +55,6 @@
                         return
                     }
 
-                    this.$me.answer = answer
-
                     if (this.$me.mask && !target.data("maskCompleted")) {
                         this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
                     }
@@ -65,9 +63,6 @@
                     }
                 })
             }
-        },
-        created() {
-
         },
         mounted() {
             Vue.nextTick(() => {

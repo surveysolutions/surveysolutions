@@ -4,6 +4,7 @@ using Android.Runtime;
 using AndroidX.Work;
 using Java.Lang;
 using MvvmCross;
+using NLog;
 using Exception = System.Exception;
 
 namespace WB.UI.Shared.Enumerator.Services.Notifications
@@ -22,7 +23,8 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
 
         public override Result DoWork()
         {
-            Android.Util.Log.Debug("NotificationsGenerationWorker", $"Was called");
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Trace("DoWork called");
 
             try
             {
@@ -36,15 +38,16 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
                 publisher.Init(context);
                 publisher.Notify(context, notificationsToSend, true);
                 
+                logger.Trace("DoWork InvokeSuccess");
                 return Result.InvokeSuccess();
             }
             catch (InterruptedException e)
             {
-                Android.Util.Log.Debug("NotificationsGenerationWorker", $"Error (InterruptedException): {e.Message}");
+                logger.Debug(e);
             }
             catch (Exception e)
             {
-                Android.Util.Log.Debug("NotificationsGenerationWorker", $"Error: {e.Message}");
+                logger.Error(e);
             }
 
             return Result.InvokeFailure();

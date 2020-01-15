@@ -28,6 +28,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
                 item => new InterviewApiItem(item.InterviewId, 
                     item.QuestionnaireId, 
                     item.QuestionnaireVersion,
+                    item.AssignmentId,
                     item.ResponsibleId,
                     item.ResponsibleName,
                     item.ErrorsCount,

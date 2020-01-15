@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Accessors
         Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion);
 
         void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64);
+
         void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly);
 
         Task StoreAssemblyAsync(QuestionnaireIdentity  questionnaireIdentity, byte[] assembly);

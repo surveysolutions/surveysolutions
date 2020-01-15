@@ -12,8 +12,6 @@ namespace WB.UI.Headquarters
     {
         public static void Register()
         {
-            var thisAssembly = typeof(SwaggerConfig).Assembly;
-
             GlobalConfiguration.Configuration 
                 .EnableSwagger("docs/{apiVersion}/swagger", c =>
                     {

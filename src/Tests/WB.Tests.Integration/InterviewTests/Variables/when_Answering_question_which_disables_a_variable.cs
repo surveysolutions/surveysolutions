@@ -24,8 +24,9 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                     Create.Entity.Variable(variableId, variableName: "v1", expression: "txt.Length")
                 })
             });
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupInterview(questionnaire);
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
             eventContext = new EventContext();
 
             BecauseOf();
@@ -35,6 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         public void BecauseOf() =>
@@ -46,6 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         [NUnit.Framework.Test] public void should_raise_VariablesDisabled_event_for_the_variable () =>
            eventContext.ShouldContainEvent<VariablesDisabled>(@event => @event.Variables[0].Id== variableId);
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;

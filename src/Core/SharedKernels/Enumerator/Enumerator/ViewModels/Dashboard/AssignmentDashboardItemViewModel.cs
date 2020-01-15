@@ -32,6 +32,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         public int? Quantity => this.Assignment.Quantity;
 
+        public override string Comments => this.Assignment.Comments;
+
         public bool HasAdditionalActions => Actions.Any(a => a.ActionType == ActionType.Context);
         public string AssignmentIdLabel { get; } = String.Empty;
 

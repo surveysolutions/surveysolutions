@@ -3,6 +3,7 @@ using ApprovalTests;
 using ApprovalTests.Core;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using ApprovalTests.Reporters.TestFrameworks;
 using NUnit.Framework;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;

@@ -5,18 +5,19 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
     internal class when_getting_cascading_question_edit_view : QuestionnaireInfoFactoryTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionDetailsReaderMock = new Mock<IDesignerQuestionnaireStorage>();
             questionnaireView = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: docId, chapterId: g1Id, children: new IComposite[]
             {
                 Create.Roster(rosterId: g2Id, title: "Roster", fixedRosterTitles: new[] {new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")}, children: new List<IComposite>
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 Create.SingleQuestion(q3Id, "list_question", title: "cascading_question_3", cascadeFromQuestionId: q2Id),
             });
             questionDetailsReaderMock
-                .Setup(x => x.GetById(questionnaireId))
+                .Setup(x => x.Get(questionnaireId))
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
@@ -57,8 +58,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static QuestionnaireInfoFactory factory;
         private static NewEditQuestionView result;
         private static QuestionnaireDocument questionnaireView;
-        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
-        private static string questionnaireId = "11111111111111111111111111111111";
+        private static Mock<IDesignerQuestionnaireStorage> questionDetailsReaderMock;
         private static Guid questionId = q3Id;
     }
 }

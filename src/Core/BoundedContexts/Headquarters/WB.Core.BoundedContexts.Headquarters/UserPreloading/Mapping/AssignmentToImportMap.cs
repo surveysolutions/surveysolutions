@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
             this.Property(x => x.Password);
             this.Property(x => x.WebMode);
             this.Property(x => x.IsAudioRecordingEnabled);
+            this.Property(x => x.Headquarters);
+            this.Property(x => x.Comments);
 
             this.Property(x => x.Answers, mapper =>
             {

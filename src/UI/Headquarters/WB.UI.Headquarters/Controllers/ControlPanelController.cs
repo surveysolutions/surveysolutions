@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -25,6 +27,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -52,6 +55,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory userViewFactory;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly IClientApkProvider clientApkProvider;
+        private readonly IAuthorizedUser currentUser;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
@@ -65,7 +70,9 @@ namespace WB.UI.Headquarters.Controllers
             IInterviewPackagesService interviewPackagesService, 
             IUserViewFactory userViewFactory, 
             IJsonAllTypesSerializer serializer,
-            IClientApkProvider clientApkProvider)
+            IClientApkProvider clientApkProvider,
+            IAuthorizedUser currentUser, 
+            IFileSystemAccessor fileSystemAccessor)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
@@ -78,6 +85,8 @@ namespace WB.UI.Headquarters.Controllers
             this.userViewFactory = userViewFactory;
             this.serializer = serializer;
             this.clientApkProvider = clientApkProvider;
+            this.currentUser = currentUser;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public ActionResult CreateHeadquarters()
@@ -111,7 +120,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(@"Headquarters successfully created");
                     return this.RedirectToAction("LogOn", "Account");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form
@@ -139,7 +148,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(@"Administrator successfully created");
                     return this.RedirectToAction("LogOn", "Account");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form
@@ -185,7 +194,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 else
                 {
-                    AddErrors(updateResult);
+                    AddErrors(updateResult.Errors);
                     foreach (var error in updateResult.Errors)
                     {
                         this.Error(error, true);
@@ -202,23 +211,36 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Versions() => this.View();
 
+        [Localizable(false)]
         public ActionResult AppUpdates()
         {
             var folder = clientApkProvider.ApkClientsFolder();
             var appFiles = Directory.EnumerateFiles(folder);
+
+            var sb = new StringBuilder();
 
             return View(appFiles
                 .Select(app => new FileInfo(app))
                 .OrderBy(fi => fi.Name)
                 .Select(fi =>
                 {
-                    int? version = null;
+                    sb.Clear();
+
+                    sb.Append("<strong>");
+                    sb.Append(fi.Name);
+
                     if (fi.Name.EndsWith(".apk", StringComparison.OrdinalIgnoreCase))
                     {
-                        version = this.androidPackageReader.Read(fi.FullName)?.Version;
+                        var build = this.androidPackageReader.Read(fi.FullName)?.BuildNumber;
+                        if(build != null) sb.Append($" [build:{build}]");
+                        var hash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(fi.FullName));
+                        sb.Append($" [md5:{hash}]");
                     }
 
-                    return $"<strong>{fi.Name}{(version.HasValue ? $" [ver. {version}]" : "")}</strong> ({fi.Length.Bytes().ToString("0.00")}) {fi.LastWriteTimeUtc}";
+                    sb.Append("</strong>");
+                    sb.Append($" ({fi.Length.Bytes().ToString("0.00")}) {fi.LastWriteTimeUtc}");
+
+                    return sb.ToString();
                 }).ToList());
         }
 
@@ -399,7 +421,36 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-#endregion
+        [HttpGet]
+        public ActionResult ReevaluateInterview()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ReevaluateInterview(Guid? interviewId)
+        {
+            if (!interviewId.HasValue)
+            {
+                return this.HttpNotFound();
+            }
+            else
+            {
+                try
+                {
+                    this.CommandService.Execute(new ReevaluateInterview(interviewId.Value, this.currentUser.Id));
+                }
+                catch (Exception exception)
+                {
+                        Logger.Error($"Exception while reevaluatng: {interviewId}", exception);
+                        return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, exception.Message);
+                }
+            }
+            
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        #endregion
 
         public ActionResult SynchronizationLog() => this.View();
 

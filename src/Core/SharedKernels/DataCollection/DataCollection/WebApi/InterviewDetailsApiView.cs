@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Events;
+using Ncqrs.Eventing;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
@@ -29,6 +31,38 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public InterviewMetaInfo MetaInfo { get; set; }
         public string Events { get; set; }
     }
+
+    public class InterviewPackageContainer
+    {
+        public InterviewPackageContainer(Guid interviewId, IReadOnlyCollection<CommittedEvent> events)
+        {
+            InterviewId = interviewId;
+            Events = events;
+
+            if (events.Count == 0)
+                Tag = null;
+            else
+            {
+                var first = events.First();
+                var last = events.Last();
+
+                Tag = new EventStreamSignatureTag
+                {
+                    FirstEventId = first.EventIdentifier,
+                    LastEventId = last.EventIdentifier,
+
+                    FirstEventTimeStamp = first.EventTimeStamp,
+                    LastEventTimeStamp = last.EventTimeStamp
+                };
+            }
+        }
+
+        public Guid InterviewId { get; }
+        public EventStreamSignatureTag Tag { get; }
+
+        public IReadOnlyCollection<CommittedEvent> Events { get; }
+    }
+
 
     public class InterviewerInterviewApiView
     {

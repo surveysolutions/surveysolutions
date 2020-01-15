@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -21,12 +22,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
             var interviewer = CreateInterviewerIdentity(userName, userPasswordHash);
 
-            var principal = new Mock<IPrincipal>();
-            principal.Setup(x => x.SignIn(userName, newUserPassword, true)).Returns(true);
-
-            InterviewersPlainStorageMock
-               .Setup(x => x.FirstOrDefault())
-               .Returns(interviewer);
+            Principal.Setup(x => x.SignIn(userName, newUserPassword, true)).Returns(true);
+            Principal.Setup(x => x.GetInterviewerByName(It.IsAny<string>())).Returns(interviewer);
+            Principal.Setup(x => x.DoesIdentityExist()).Returns(true);
+            Principal.Setup(x => x.GetExistingIdentityNameOrNull()).Returns(userName);
 
             synchronizationServiceMock
               .Setup(x => x.LoginAsync(
@@ -36,10 +35,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
             viewModel = CreateLoginViewModel(
                 viewModelNavigationService: ViewModelNavigationServiceMock.Object,
-                interviewersPlainStorage: InterviewersPlainStorageMock.Object,
                 passwordHasher: passwordHasher,
                 synchronizationService: synchronizationServiceMock.Object,
-                principal: principal.Object);
+                principal: Principal.Object);
 
             await viewModel.Initialize();
             viewModel.Password = newUserPassword;
@@ -54,11 +52,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
         [NUnit.Framework.Test]
         public void should_store_entered_password() =>
-           InterviewersPlainStorageMock.Verify(x => x.Store(Moq.It.Is<InterviewerIdentity>(i => i.PasswordHash == userPasswordHash)), Times.Once);
+            Principal.Verify(x => x.SaveInterviewer(Moq.It.Is<InterviewerIdentity>(i => i.PasswordHash == userPasswordHash)), Times.Once);
 
         [NUnit.Framework.Test]
         public void should_store_token_from_login() =>
-           InterviewersPlainStorageMock.Verify(x => x.Store(Moq.It.Is<InterviewerIdentity>(i => i.Token == userToken)), Times.Once);
+            Principal.Verify(x => x.SaveInterviewer(Moq.It.Is<InterviewerIdentity>(i => i.Token == userToken)), Times.Once);
 
         [NUnit.Framework.Test]
         public void should_login_remotly() =>
@@ -73,6 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
         static Mock<IOnlineSynchronizationService> synchronizationServiceMock = new Mock<IOnlineSynchronizationService>();
         static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
-        static Mock<IPlainStorage<InterviewerIdentity>> InterviewersPlainStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
+        static Mock<IInterviewerPrincipal> Principal = new Mock<IInterviewerPrincipal>();
+
     }
 }

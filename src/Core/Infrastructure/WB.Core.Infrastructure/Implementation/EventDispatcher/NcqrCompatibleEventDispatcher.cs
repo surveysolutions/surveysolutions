@@ -169,7 +169,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     errorsDuringHandling);
         }
 
-        public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
+        public IReadOnlyCollection<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
         {
             var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
             if (this.eventBusSettings.IsIgnoredAggregate(aggregateRoot.EventSourceId))
@@ -180,6 +180,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents) => this.Publish(committedEvents);
+        public void PublishCommittedEvents(IReadOnlyCollection<CommittedEvent> committedEvents) => this.Publish(committedEvents);
     }
 }

@@ -170,7 +170,7 @@ export default {
                 queryObject.templateVersion = templateVersion
             }
             if(!_.isUndefined(templateId)) {
-                queryObject.templateId = templateId
+                queryObject.templateId = templateId == undefined ? '' : this.formatGuid(templateId);
             }
 
             if (row.responsible) {
@@ -187,6 +187,15 @@ export default {
                 this.$config.model.interviewsUrl + (queryString ? "?" + queryString : "")
 
             return `<a href=\"${linkUrl}\">${formatedNumber}</a>`
+        },
+        formatGuid(guid){
+            var parts = [];
+            parts.push(guid.slice(0,8));
+            parts.push(guid.slice(8,12));
+            parts.push(guid.slice(12,16));
+            parts.push(guid.slice(16,20));
+            parts.push(guid.slice(20,32));
+            return parts.join('-'); 
         }
     },
     computed: {

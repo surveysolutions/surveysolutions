@@ -25,8 +25,9 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                     Create.Entity.Variable(id: variableId, type: VariableType.Boolean, expression: "true"));
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupStatefullInterviewWithExpressionStorageWithoutCreate(questionnaire);
+            interview = SetupStatefullInterviewWithExpressionStorageWithoutCreate(appDomainContext.AssemblyLoadContext, questionnaire);
 
             command = Create.Command.CreateInterview(Guid.Empty, userId, questionnaireIdentity, responsibleSupervisorId, null, null, null);
             BecauseOf();
@@ -54,8 +55,10 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Guid questionnaireId;
         private static long questionnaireVersion;

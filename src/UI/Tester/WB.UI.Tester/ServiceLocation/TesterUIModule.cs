@@ -40,7 +40,6 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
-            registry.BindAsSingleton<IGlobalLiteEventHandler, DummyGlobalLiteEventHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo info)

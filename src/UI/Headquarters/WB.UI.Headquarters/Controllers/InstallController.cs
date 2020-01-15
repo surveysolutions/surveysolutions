@@ -30,9 +30,9 @@ namespace WB.UI.Headquarters.Controllers
             this.signInManager = identityManager;
         }
 
-        public async Task<ActionResult> Finish()
+        public ActionResult Finish()
         {
-            var isExistAnyUser = await this.userManager.IsExistAnyUser();
+            var isExistAnyUser = this.userManager.IsExistAnyUser();
             if (isExistAnyUser)
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
 
@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Finish(FinishIntallationModel model)
         {
-            var isExistAnyUser = await this.userManager.IsExistAnyUser();
+            var isExistAnyUser = this.userManager.IsExistAnyUser();
             if (isExistAnyUser)
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden); 
 
@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     return this.RedirectToAction("Index", "Headquarters");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form

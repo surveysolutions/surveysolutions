@@ -50,13 +50,13 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             );
 
             var optionsRepo = Moq.Mock.Of<IQuestionOptionsRepository>(x =>
-                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
+                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, 1, Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
                 {
                     Value = 1,
                     ParentValue = 1,
                     Title = "1"
                 }
-                && x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, "", Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
+                && x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, "", Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>(), null) == new CategoricalOption
                 {
                     Value = 1,
                     ParentValue = 1,
@@ -65,8 +65,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             );
 
             Moq.Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IQuestionOptionsRepository>()).Returns(optionsRepo);
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupStatefullInterview(questionnaire, questionOptionsRepository: optionsRepo);
+            interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire, questionOptionsRepository: optionsRepo);
 
             interview.AnswerSingleOptionQuestion(userId, parentQuestionId, RosterVector.Empty, DateTime.Now, 1);
             interview.AnswerSingleOptionQuestion(userId, cascadingQuestionId, RosterVector.Empty, DateTime.Now, 1);
@@ -77,6 +78,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         public void Cleanup ()
         {
             interview = null;
+            appDomainContext.Dispose();
         }
 
         [Test]
@@ -86,6 +88,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         }
 
         
+        private static AppDomainContext appDomainContext;
         private static StatefulInterview interview;
         private static readonly Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static readonly Guid cascadingQuestionId = Guid.Parse("33333333333333333333333333333333");

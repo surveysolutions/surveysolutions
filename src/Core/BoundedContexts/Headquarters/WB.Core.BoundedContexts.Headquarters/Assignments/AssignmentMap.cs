@@ -1,31 +1,36 @@
 ﻿using System.Collections.Generic;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
-    [PlainStorage]
     public class AssignmentMap : ClassMapping<Assignment>
     {
         public AssignmentMap()
         {
-            Id(x => x.Id, mapper => mapper.Generator(Generators.Identity));
             DynamicUpdate(true);
+
+            Id(x => x.PublicKey, mapper => mapper.Column("PublicKey"));
+            NaturalId(mapping => mapping.Property(x => x.Id, mapper => mapper.Unique(true)));
+
             Property(x => x.ResponsibleId);
             Property(x => x.Quantity);
             Property(x => x.Archived);
             Property(x => x.CreatedAtUtc);
             Property(x => x.UpdatedAtUtc);
             Property(x => x.ReceivedByTabletAtUtc);
-            Property(x => x.IsAudioRecordingEnabled);
+            Property(x => x.AudioRecording);
             Property(x => x.Password);
             Property(x => x.Email);
             Property(x => x.WebMode);
+            Property(x => x.Comments);
 
             Component(x => x.QuestionnaireId, cmp =>
             {
@@ -47,7 +52,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             Set(x => x.InterviewSummaries, set =>
             {
-                set.Key(key => key.Column("assignmentid"));
+                set.Key(key =>
+                {
+                    key.PropertyRef(a => a.Id);
+                    key.Column(nameof(InterviewSummary.AssignmentId));
+                });
                 set.Lazy(CollectionLazy.Extra);
                 set.Cascade(Cascade.None);
                 set.Schema(new UnitOfWorkConnectionSettings().ReadSideSchemaName);
@@ -56,7 +65,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             List(x => x.IdentifyingData, mapper =>
             {
                 mapper.Table("AssignmentsIdentifyingAnswers");
-                mapper.Key(k => k.Column("AssignmentId"));
+                mapper.Key(key =>
+                {
+                    key.PropertyRef(a => a.Id);
+                    key.Column("AssignmentId");
+                });
                 mapper.Index(i => i.Column("Position"));
                 mapper.Cascade(Cascade.All);
             }, r => r.Component(c =>

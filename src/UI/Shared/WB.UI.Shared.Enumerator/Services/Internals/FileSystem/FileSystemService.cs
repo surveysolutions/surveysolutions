@@ -3,13 +3,16 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using PCLStorage;
 using WB.Core.Infrastructure.FileSystem;
+using FileAccess = System.IO.FileAccess;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 {
     internal class FileSystemService : FileSystemAccessorBase, IFileSystemAccessor
     {
-
         public long GetFileSize(string filePath)
         {
             if (!this.IsFileExists(filePath))
@@ -141,7 +144,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
                         this.CopyFileOrDirectory(directory, destDir, overrideAll, fileExtentionsFilter);
                 }
 
-                foreach (var file in this.GetFilesInDirectory(sourceDir, false))
+                var files = this.GetFilesInDirectory(sourceDir, false);
+                foreach (var file in files)
                     this.CopyFile(file, destDir, overrideAll, fileExtentionsFilter);
             }
             else
@@ -167,6 +171,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 
         private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll, string[] fileExtensionsFilter)
         {
+            CopyFileAsync(sourcePath, backupFolderPath, overrideAll, fileExtensionsFilter).Wait();
+        }
+
+        private async Task CopyFileAsync(string sourcePath, string backupFolderPath, bool overrideAll, string[] fileExtensionsFilter)
+        {
             var sourceFileName = this.GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
@@ -177,7 +186,22 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
                     return;
             }
 
-            File.Copy(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), overrideAll);
+            // NOTE: File.Copy throw exception when copy files to backup in public storage
+            //var destFileName = this.CombinePath(backupFolderPath, sourceFileName);
+            //File.Copy(sourcePath, destFileName, overrideAll);
+
+            var sourceFile = await PCLStorage.FileSystem.Current.GetFileFromPathAsync(sourcePath);
+            var destFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(backupFolderPath);
+            if (!overrideAll && (await destFolder.GetFilesAsync()).Any(f => f.Name == sourceFileName))
+                return;
+
+            var destFile = await destFolder.CreateFileAsync(sourceFile.Name, CreationCollisionOption.ReplaceExisting);
+
+            using (var outFileStream = await destFile.OpenAsync(PCLStorage.FileAccess.ReadAndWrite))
+            using (var sourceStream = await sourceFile.OpenAsync(PCLStorage.FileAccess.Read))
+            {
+                await sourceStream.CopyToAsync(outFileStream);
+            }
         }
 
         public string ChangeExtension(string path1, string newExtension)
@@ -187,9 +211,26 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 
         public void MoveFile(string pathToFile, string newPathToFile)
         {
-            if (File.Exists(newPathToFile))
-                File.Delete(newPathToFile);
-            File.Move(pathToFile, newPathToFile);
+            //File.Copy throws exception
+            //https://github.com/xamarin/xamarin-android/issues/3426
+            //workaround
+
+            File.Delete(newPathToFile);
+
+            using (FileStream sourceStream = new FileStream(pathToFile, FileMode.Open))
+            {
+                byte[] buffer = new byte[1024 * 1024];
+                using (FileStream destStream = new FileStream(newPathToFile, FileMode.Create))
+                {
+                    int i;
+                    while ((i = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        destStream.Write(buffer, 0, i);
+                    }
+                }
+            }
+
+            File.Delete(pathToFile);
         }
     }
 }

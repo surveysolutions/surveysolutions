@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
 
@@ -15,6 +16,7 @@ namespace WB.UI.WebTester.Infrastructure
         private readonly IQuestionOptionsRepository questionOptionsRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly IWebTesterTranslationStorage storage;
+        private static readonly MemoryCache translationsCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
 
         public WebTesterTranslationService(IWebTesterTranslationStorage storage, 
             IQuestionOptionsRepository questionOptionsRepository,
@@ -25,15 +27,20 @@ namespace WB.UI.WebTester.Infrastructure
             this.substitutionService = substitutionService;
         }
 
-        public void Store(List<TranslationInstance> translations)
+        public PlainQuestionnaire Translate(PlainQuestionnaire questionnaire, long version, string language)
         {
-            this.storage.Store(translations);
-        }
+            return translationsCache.GetOrCreate($"{questionnaire.QuestionnaireIdentity}${language}", (entry) =>
+            {
+                QuestionnaireDocument result = storage.GetTranslated(questionnaire.QuestionnaireDocument, version,
+                    language, out Translation translation);
+                var plainQuestionnaire = new PlainQuestionnaire(result, version, questionOptionsRepository, substitutionService, translation);
+                plainQuestionnaire.ExpressionStorageType = questionnaire.ExpressionStorageType;
+                plainQuestionnaire.WarmUpPriorityCaches();
 
-        public PlainQuestionnaire Translate(QuestionnaireDocument questionnaire, long version, string language)
-        {
-            QuestionnaireDocument result = storage.GetTranslated(questionnaire, version, language, out Translation translation);
-            return new PlainQuestionnaire(result, version, questionOptionsRepository, substitutionService, translation);
+                entry.SlidingExpiration = TimeSpan.FromSeconds(15);
+
+                return plainQuestionnaire;
+            });
         }
     }
 }

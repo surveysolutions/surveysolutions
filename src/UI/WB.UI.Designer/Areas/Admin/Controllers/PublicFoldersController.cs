@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Areas.Admin.Controllers
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -28,6 +29,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             this.encryptionService = encryptionService;
         }
 
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) 
+            => Task.FromResult(this.GetInterviewBinaryData(interviewId, fileName));
+
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var metadataView = this.fileMetadataViewStorage.FirstOrDefault(metadata =>
@@ -36,17 +40,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return metadataView == null ? null : this.GetFileById(metadataView.FileId);
         }
 
-        public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
+        public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
             var metadataViews = this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId);
-            return metadataViews.Select(m =>
+            var interviewBinaryDataDescriptors = metadataViews.Select(m =>
                 new InterviewBinaryDataDescriptor(
                     m.InterviewId,
                     m.FileName,
                     m.ContentType,
-                    () => this.GetFileById(m.FileId)
+                    () => Task.FromResult(this.GetFileById(m.FileId))
                 )
             ).ToList();
+            return Task.FromResult(interviewBinaryDataDescriptors);
         }
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
@@ -83,14 +88,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
         }
 
-        public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
+        public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             var metadataView = GetMetadata(interviewId, fileName);
 
-            if (metadataView == null) return;
+            if (metadataView != null)
+            {
+                this.fileViewStorage.Remove(metadataView.FileId);
+                this.fileMetadataViewStorage.Remove(metadataView.Id);
+            }
 
-            this.fileViewStorage.Remove(metadataView.FileId);
-            this.fileMetadataViewStorage.Remove(metadataView.Id);
+            return Task.CompletedTask;
         }
 
         private TMetadataView GetMetadata(Guid interviewId, string fileName)

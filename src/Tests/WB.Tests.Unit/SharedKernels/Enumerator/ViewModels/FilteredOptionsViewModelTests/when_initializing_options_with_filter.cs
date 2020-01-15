@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
                 new CategoricalOption() {Title = "c", Value = 3},
             }.ToList();
 
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetTopFilteredOptionsForQuestion(questionId, null, string.Empty, 200) == options);
+            var interview = Mock.Of<IStatefulInterview>(x => x.GetTopFilteredOptionsForQuestion(questionId, null, string.Empty, 200, It.IsAny<int[]>()) == options);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();

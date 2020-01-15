@@ -8,6 +8,7 @@ using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -22,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -80,9 +82,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
-                Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
-                this.questionnaireItemsRepository, this.questionnaireItemsRepository, Mock.Of<IQuestionOptionsRepository>(),
-                Mock.Of<ISubstitutionService>());
+                Mock.Of<ITranslationStorage>(),
+                Mock.Of<IQuestionnaireTranslator>(),
+                this.questionnaireItemsRepository, 
+                this.questionnaireItemsRepository, 
+                Mock.Of<IQuestionOptionsRepository>(),
+                Mock.Of<ISubstitutionService>(),
+                Create.Service.ExpressionStatePrototypeProvider(),
+                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>());
 
             this.interviewFlagsStorage = new PostgresPlainStorageRepository<InterviewFlag>(IntegrationCreate.UnitOfWork(IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
@@ -119,9 +126,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var questionnaireItemsRepositoryLocal = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
 
             var questionnaireStorageLocal = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
-                Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
-                questionnaireItemsRepositoryLocal, questionnaireItemsRepositoryLocal, Mock.Of<IQuestionOptionsRepository>(),
-                Mock.Of<ISubstitutionService>());
+                Mock.Of<ITranslationStorage>(), 
+                Mock.Of<IQuestionnaireTranslator>(),
+                questionnaireItemsRepositoryLocal,
+                questionnaireItemsRepositoryLocal, 
+                Mock.Of<IQuestionOptionsRepository>(),
+                Mock.Of<ISubstitutionService>(),
+                Create.Service.ExpressionStatePrototypeProvider(),
+                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>());
 
             document.Id = document.PublicKey.FormatGuid();
             questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);

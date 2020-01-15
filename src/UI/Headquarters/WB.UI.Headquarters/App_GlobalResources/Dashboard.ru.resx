@@ -222,4 +222,16 @@
   <data name="WebMode" xml:space="preserve">
     <value>Веб режим</value>
   </data>
+  <data name="Details" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="ShowOnDesigner">
+    <value>Посмотреть на Дизайнере</value>
+  </data>
+  <data name="ImportedBy" xml:space="preserve">
+    <value>Импортировано</value>
+  </data>
+  <data name="ImportedByText" xml:space="preserve">
+    <value>{{role}} пользователем {{name}}</value>
+  </data>
 </root>

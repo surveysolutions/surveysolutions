@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
@@ -27,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             public string Text { get; set; }
         }
 
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
+        private readonly IDesignerQuestionnaireStorage questionnaireDocumentReader;
        
         private readonly IExpressionProcessor expressionProcessor;
 
@@ -170,16 +171,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         private static readonly string BreadcrumbSeparator = " / ";
 
         public QuestionnaireInfoFactory(
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+            IDesignerQuestionnaireStorage questionnaireDocumentReader,
             IExpressionProcessor expressionProcessor)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.expressionProcessor = expressionProcessor;
         }
 
-        public Guid GetSectionIdForItem(string questionnaireId, Guid? entityid)
+        public Guid GetSectionIdForItem(QuestionnaireRevision questionnaireId, Guid? entityid)
         {
-            var document = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var document = this.questionnaireDocumentReader.Get(questionnaireId);
             document.ConnectChildrenWithParent();
             var firstSectionId = document.Children.First().PublicKey;
             if (entityid == null)
@@ -201,9 +202,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return sectionId == Guid.Empty ? entity.PublicKey : sectionId;
         }
 
-        public NewEditGroupView GetGroupEditView(string questionnaireId, Guid groupId)
+        public NewEditGroupView GetGroupEditView(QuestionnaireRevision questionnaireId, Guid groupId)
         {
-            var document = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var document = this.questionnaireDocumentReader.Get(questionnaireId);
             var group = document?.Find<IGroup>(groupId);
             if (@group == null)
                 return null;
@@ -227,9 +228,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         }
 
 
-        public NewEditRosterView GetRosterEditView(string questionnaireId, Guid rosterId)
+        public NewEditRosterView GetRosterEditView(QuestionnaireRevision questionnaireId, Guid rosterId)
         {
-            var document = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var document = this.questionnaireDocumentReader.Get(questionnaireId);
 
             var roster = document?.Find<IGroup>(rosterId);
             if (roster == null)
@@ -270,9 +271,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        public NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId)
+        public NewEditQuestionView GetQuestionEditView(QuestionnaireRevision questionnaireId, Guid questionId)
         {
-            var document = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var document = this.questionnaireDocumentReader.Get(questionnaireId);
 
             var question = document?.Find<IQuestion>(questionId);
             if (question == null)
@@ -295,9 +296,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        public NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId)
+        public NewEditStaticTextView GetStaticTextEditView(QuestionnaireRevision questionnaireId, Guid staticTextId)
         {
-            var document = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var document = this.questionnaireDocumentReader.Get(questionnaireId);
 
             var staticText = document?.Find<IStaticText>(staticTextId);
             if (staticText == null)
@@ -320,9 +321,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(string questionnaireId, Guid rosterId, Guid rosterSizeQuestionId)
+        public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(QuestionnaireRevision questionnaireId, Guid rosterId, Guid rosterSizeQuestionId)
         {
-            var document = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var document = this.questionnaireDocumentReader.Get(questionnaireId);
             if (document == null)
                 return null;
 
@@ -354,9 +355,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return this.PrepareGroupedQuestionsListForDropdown(questionnaire, filteredQuestions);
         }
 
-        public VariableView GetVariableEditView(string questionnaireId, Guid variableId)
+        public VariableView GetVariableEditView(QuestionnaireRevision questionnaireId, Guid variableId)
         {
-            var document = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var document = this.questionnaireDocumentReader.Get(questionnaireId);
 
             var variable = document?.Find<IVariable>(variableId);
             if (variable == null)
@@ -376,9 +377,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string questionnaireId, Guid id)
+        public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(QuestionnaireRevision questionnaireId, Guid id)
         {
-            var questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var questionnaireDocument = this.questionnaireDocumentReader.Get(questionnaireId);
             if (questionnaireDocument == null)
                 return null;
 
@@ -445,15 +446,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return RosterType.Fixed;
         }
 
-        private void ReplaceGuidsInValidationAndConditionRules(NewEditQuestionView model, ReadOnlyQuestionnaireDocument questionnaire, string questionnaireKey)
+        private void ReplaceGuidsInValidationAndConditionRules(NewEditQuestionView model,
+            ReadOnlyQuestionnaireDocument questionnaire, QuestionnaireRevision questionnaireKey)
         {
             var expressionReplacer = new ExpressionReplacer(questionnaire.Questionnaire);
-            Guid questionnaireGuid = Guid.Parse(questionnaireKey);
-            model.EnablementCondition = expressionReplacer.ReplaceGuidsWithStataCaptions(model.EnablementCondition, questionnaireGuid);
+
+            model.EnablementCondition = expressionReplacer.ReplaceGuidsWithStataCaptions(
+                model.EnablementCondition, questionnaireKey.QuestionnaireId);
 
             foreach (var validationExpression in model.ValidationConditions)
             {
-                validationExpression.Expression = expressionReplacer.ReplaceGuidsWithStataCaptions(validationExpression.Expression, questionnaireGuid);
+                validationExpression.Expression = expressionReplacer.ReplaceGuidsWithStataCaptions(
+                    validationExpression.Expression, questionnaireKey.QuestionnaireId);
             }
         }
 
@@ -500,6 +504,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.LinkedFilterExpression = multyOptionsQuestion.LinkedFilterExpression;
                     questionView.Options = CreateCategoricalOptions(multyOptionsQuestion.Answers);
                     questionView.OptionsFilterExpression = multyOptionsQuestion.Properties.OptionsFilterExpression;
+                    questionView.CategoriesId = multyOptionsQuestion.CategoriesId.FormatGuid();
                     return questionView;
                 case QuestionType.TextList:
                     var textListQuestion = (ITextListQuestion) question;
@@ -523,6 +528,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.OptionsFilterExpression = singleoptionQuestion.Properties.OptionsFilterExpression;
                     questionView.ShowAsList = singleoptionQuestion.ShowAsList;
                     questionView.ShowAsListThreshold = singleoptionQuestion.ShowAsListThreshold;
+                    questionView.CategoriesId = singleoptionQuestion.CategoriesId.FormatGuid();
                     return questionView;
                 case QuestionType.Text:
                     var textQuestion = (TextQuestion)question;
@@ -663,14 +669,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 var rosterScope = document.GetRosterScope(roster);
                 filteredQuestions = document.Find<IQuestion>()
-                    .Where(x => x.QuestionType != QuestionType.Multimedia && x.QuestionType != QuestionType.GpsCoordinates)
+                    .Where(x => x.QuestionType == QuestionType.SingleOption 
+                                || x.QuestionType == QuestionType.Numeric
+                                || x.QuestionType == QuestionType.Text
+                                || x.QuestionType == QuestionType.DateTime
+                                || x.QuestionType == QuestionType.QRBarcode)
                     .Where(x => document.GetRosterScope(x).Equals(rosterScope))
                     .ToList();
             }
             else
             {
                 filteredQuestions = document.Find<IQuestion>()
-                    .Where(x => x.QuestionType != QuestionType.Multimedia && x.QuestionType != QuestionType.GpsCoordinates)
+                    .Where(x => x.QuestionType == QuestionType.SingleOption
+                                || x.QuestionType == QuestionType.Numeric
+                                || x.QuestionType == QuestionType.Text
+                                || x.QuestionType == QuestionType.DateTime
+                                || x.QuestionType == QuestionType.QRBarcode)
                     .Where(x => x.GetParent()?.PublicKey == roster.PublicKey)
                     .ToList();
             }

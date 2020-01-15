@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(HQ.SuccessfullyCreatedFormat.FormatString(model.UserName));
                     return this.RedirectToAction("Index");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form
@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(string.Format(HQ.UserWasUpdatedFormat, model.UserName));
                     return this.RedirectToAction("Index");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form

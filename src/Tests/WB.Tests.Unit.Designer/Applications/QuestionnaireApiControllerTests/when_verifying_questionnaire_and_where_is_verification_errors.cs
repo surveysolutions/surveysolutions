@@ -3,9 +3,11 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.Designer;
@@ -16,7 +18,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_verifying_questionnaire_and_where_is_verification_errors : QuestionnaireApiControllerTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocument().AsReadOnly();
             questionnaireView = CreateQuestionnaireView(questionnaireDocument.Questionnaire);
 
@@ -64,7 +66,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                         Guid.NewGuid(), "ccccccccccccccccc"))
             };
 
-            var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
+            var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => 
+                x.Load(Moq.It.IsAny<QuestionnaireRevision>()) == questionnaireView);
+
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
             verifierMock
@@ -91,16 +95,16 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         private void BecauseOf() =>
             result = (VerificationResult) (controller.Verify(questionnaireId) as OkObjectResult).Value;
 
-        [NUnit.Framework.Test] public void should_call_verifier_once () =>
+        [Test] public void should_call_verifier_once () =>
             verifierMock.Verify(x => x.Verify(questionnaireView), Times.Once);
-
-        [NUnit.Framework.Test] public void should_call_errors_mapper_once () =>
+        
+        [Test] public void should_call_errors_mapper_once () =>
             errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, Moq.It.IsAny<ReadOnlyQuestionnaireDocument>()), Times.Once);
 
-        [NUnit.Framework.Test] public void should_return_messages_created_by_mapper_as_action_result () =>
+        [Test] public void should_return_messages_created_by_mapper_as_action_result () =>
             result.Errors.Should().BeEquivalentTo(mappedAndEnrichedVerificationErrors);
 
-        [NUnit.Framework.Test] public void should_return_warnings_created_by_mapper_as_action_result () =>
+        [Test] public void should_return_warnings_created_by_mapper_as_action_result () =>
             result.Warnings.Should().BeEquivalentTo(mappedAndEnrichedVerificationWarnings);
 
         private static ReadOnlyQuestionnaireDocument questionnaireDocument; 
@@ -113,6 +117,5 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         private static VerificationMessage[] mappedAndEnrichedVerificationErrors;
         private static VerificationMessage[] mappedAndEnrichedVerificationWarnings;
         private static VerificationResult result;
-        private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
     }
 }

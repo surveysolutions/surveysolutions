@@ -267,6 +267,9 @@
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Открыть профиль ответственного</value>
   </data>
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>Открыть задание</value>
+  </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Опросник</value>
   </data>

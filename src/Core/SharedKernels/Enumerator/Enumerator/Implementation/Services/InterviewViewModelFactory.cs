@@ -231,14 +231,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         {
                             return InterviewEntityType.LinkedToRosterSingleOptionQuestionModel;
                         }
-                        if (questionnaire.IsQuestionFilteredCombobox(entityId))
-                        {
-                            return InterviewEntityType.FilteredSingleOptionQuestionModel;
-                        }
-                        return questionnaire.IsQuestionCascading(entityId)
-                            ? InterviewEntityType.CascadingSingleOptionQuestionModel
-                            : InterviewEntityType.SingleOptionQuestionModel;
 
+                        if (questionnaire.IsQuestionCascading(entityId))
+                            return InterviewEntityType.CascadingSingleOptionQuestionModel;
+
+                        if (questionnaire.IsQuestionFilteredCombobox(entityId))
+                            return InterviewEntityType.FilteredSingleOptionQuestionModel;
+
+                        return InterviewEntityType.SingleOptionQuestionModel;
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(entityId))
                             return InterviewEntityType.YesNoQuestionModel;

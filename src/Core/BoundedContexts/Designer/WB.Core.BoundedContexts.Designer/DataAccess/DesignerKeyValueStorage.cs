@@ -49,6 +49,13 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             });            
         }
 
+        public bool HasNotEmptyValue(string id)
+        {
+            var entity = FindEntry(id);
+
+            return entity != null && entity.State != EntityState.Deleted;
+        }
+
         public void Remove(string id)
         {
             var entity = FindEntry(id);
@@ -68,8 +75,6 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
         public void Store(T entity, string id)
         {
-            var key = CacheKey(id);
-            memoryCache.Remove(CacheKey(id));
             var entry = FindEntry(id);
             
             if (entry != null && entry.State != EntityState.Deleted)
@@ -85,6 +90,9 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                 
                 dbContext.Add(instance);
             }
+
+            memoryCache.Remove(CacheKey(id));
+            GetById(id);
         }
 
         private string CacheKey(string id) => QueryType.Name + id;

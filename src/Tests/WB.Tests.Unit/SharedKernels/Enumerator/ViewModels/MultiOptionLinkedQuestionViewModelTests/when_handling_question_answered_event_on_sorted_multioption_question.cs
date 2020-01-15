@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         static CategoricalMultiLinkedToQuestionViewModel questionViewModel;
         static Identity questionId;
         static StatefulInterview interview;
-        static LiteEventRegistry eventRegistry;
+        static ViewModelEventRegistry eventRegistry;
         static Guid interviewId;
         static Guid interviewerId = Guid.Parse("11111111111111111111111111111111");
     }

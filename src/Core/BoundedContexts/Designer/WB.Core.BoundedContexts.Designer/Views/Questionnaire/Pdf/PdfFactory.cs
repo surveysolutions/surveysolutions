@@ -7,10 +7,13 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -29,19 +32,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private readonly PdfSettings pdfSettings;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly ICategoriesService categoriesService;
 
         public PdfFactory(
             DesignerDbContext dbContext, 
             ITranslationsService translationService,
             IOptions<PdfSettings> pdfSettings,
             IQuestionnaireTranslator questionnaireTranslator,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
+            ICategoriesService categoriesService)
         {
             this.dbContext = dbContext;
             this.translationService = translationService;
             this.pdfSettings = pdfSettings.Value;
             this.questionnaireTranslator = questionnaireTranslator;
             this.questionnaireStorage = questionnaireStorage;
+            this.categoriesService = categoriesService;
         }
 
         public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
@@ -53,18 +59,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 return null;
             }
 
+            ITranslation translationData = null;
+
             if (translation.HasValue)
             {
                 var translationMetadata = questionnaire.Translations.FirstOrDefault(t => t.Id == translation.Value);
                 if (translationMetadata == null)
                     throw new ArgumentException("Questionnaire doesn't contains translation: " + translation);
 
-                var translationData = translationService.Get(questionnaire.PublicKey, translationMetadata.Id);
+                translationData = translationService.Get(questionnaire.PublicKey, translationMetadata.Id);
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             } 
             else if (useDefaultTranslation && questionnaire.DefaultTranslation != null)
             {
-                var translationData = translationService.Get(questionnaire.PublicKey, questionnaire.DefaultTranslation.Value);
+                translationData = translationService.Get(questionnaire.PublicKey, questionnaire.DefaultTranslation.Value);
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             }
 
@@ -120,10 +128,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 ItemsWithLongValidations = CollectItemsWithLongValidations(allItems, pdfSettings),
                 QuestionsWithLongInstructions = Find<IQuestion>(allItems, x => x.Instructions?.Length > this.pdfSettings.InstructionsExcerptLength).ToList(),
                 QuestionsWithLongOptionsFilterExpression = Find<IQuestion>(allItems, x => x.Properties.OptionsFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength || x.LinkedFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
-                QuestionsWithLongOptionsList = Find<IQuestion>(allItems, x => x.QuestionType != QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
+                QuestionsWithLongOptionsList = Find<ICategoricalQuestion>(allItems, x => !x.CategoriesId.HasValue && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
-                QuestionsWithLongSpecialValuesList = Find<IQuestion>(allItems, x => x.QuestionType == QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList()
-
+                QuestionsWithLongSpecialValuesList = Find<IQuestion>(allItems, x => x.QuestionType == QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
+                CategoriesList = GetCategoriesList(questionnaire, translationData)
             };
 
             pdfView.FillStatistics(allItems, pdfView.Statistics);
@@ -133,6 +141,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             pdfView.Statistics.QuestionsWithValidationConditionsCount = Find<IQuestion>(allItems, x => x.ValidationConditions.Any()).Count();
             
             return pdfView;
+        }
+
+        private List<PdfQuestionnaireModel.Categories> GetCategoriesList(QuestionnaireDocument questionnaire, ITranslation translationData)
+        {
+            return questionnaire.Categories.Select(x => new PdfQuestionnaireModel.Categories
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Items = this.categoriesService.GetCategoriesById(questionnaire.PublicKey, x.Id).Select(y => new PdfQuestionnaireModel.CategoriesItem
+                {
+                    Id = y.Id,
+                    ParentId = y.ParentId,
+                    Text = translationData != null 
+                        ? translationData.GetCategoriesText(x.Id, y.Id, y.ParentId) ?? y.Text
+                        : y.Text
+                }).ToList()
+            }).ToList();
         }
 
         public string LoadQuestionnaireTitle(Guid questionnaireId)

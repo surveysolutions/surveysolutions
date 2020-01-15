@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.CommandBus;
+﻿using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -12,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             if (aggregate.ReceivedByInterviewer)
                 throw new InterviewException(
-                    Enumerator.Native.Resources.WebInterview.InterviewReceivedByInterviewer,
+                    WebInterviewResources.InterviewReceivedByInterviewer,
                     InterviewDomainExceptionType.InterviewRecievedByDevice)
                 {
                     Data =

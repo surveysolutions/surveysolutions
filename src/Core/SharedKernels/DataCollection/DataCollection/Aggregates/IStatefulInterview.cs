@@ -148,7 +148,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsFirstEntityBeforeSecond(Identity first, Identity second);
 
-        List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize);
+        List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds);
 
         bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity question, int threshold);
 

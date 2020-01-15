@@ -5,7 +5,10 @@
             <div class="buttons">
                 <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" ng-i18next>Help</a>
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank" ng-i18next>History</a>
+                <button class="btn" type="button" ng-click="showDownloadPdf()" ng-i18next>DownloadPdf</button>
                 <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" href="../../questionnaire/backup/{{questionnaire.questionnaireId}}" ng-i18next>Backup</a>
+
+                <a class="btn"  ng-if="questionnaire.questionnaireRevision" href="../../questionnaire/clone/{{questionnaire.questionnaireId}}${{questionnaire.questionnaireRevision}}" target="_blank" ng-i18next>SaveAs</a>
                 <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights && !questionnaire.isSharedWithUser" ng-click="showShareInfo()" ng-i18next>Settings</button>
 
                 <div class="btn-group">
@@ -32,7 +35,7 @@
                                                                     rostersCount: '{{questionnaire.rostersCount}}' })QuestionnaireSummary">
 
                     </span>
-                    <input id="verification-btn" type="button" class="btn" ng-i18next="[value]Compile" value="COMPILE" ng-click="verify()" />
+                    <input id="verification-btn" type="button" class="btn" ng-i18next="[value]Compile" value="COMPILE" ng-click="verify()" ng-if="questionnaire.questionnaireRevision === null" />
                     <span ng-show="verificationStatus.warnings!=null && verificationStatus.errors!=null">
                         <span data-toggle="modal" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) > 0" class="error-message ng-hide" ng-class="{'no-errors': verificationStatus.errors.length == 0}">
                             <a href="javascript:void(0);"
@@ -51,7 +54,8 @@
                         <span class="text-success"><em ng-i18next="[i18next]({dateTime: verificationStatus.time})SavedAtTimestamp"></em></span>
                     </span>
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
-                    <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable" ng-i18next="[value]Test" value="Test" ng-click="webTest()" />
+                    <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null" ng-i18next="[value]Test" value="Test" ng-click="webTest()" />
+                    <span class="error-message strong" ng-show="questionnaire.previewRevision !== null && questionnaire.previewRevision !== undefined" ng-i18next="({revision: questionnaire.previewRevision })Preview"></span>
                 </div>
             </div>
         </div>
@@ -129,15 +133,15 @@
                         <ul ng-model="scenarios">
                             <li class="macroses-panel-item" ng-repeat="scenario in scenarios">
                                 <ng-form name="scenario.form">
-                                    <a href ng-click="deleteScenario($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href="javascript:void(0)" ng-if="!questionnaire.isReadOnlyForUser" ng-click="deleteScenario($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="input-group macroses-name">
                                         <input focus-on-out="focusScenario{{scenario.id}}" ng-i18next="[placeholder]SideBarScenarioName" maxlength="32" spellcheck="false" ng-model="scenario.title" name="name" class="form-control" type="text" />
                                     </div>
                                     <div class="divider"></div>
                                     <button type="button" class="btn lighter-hover" ng-click="runScenario(scenario)" ng-i18next>Run</button>
-                                    <button type="button" class="btn lighter-hover" ng-click="showScenarioEditor(scenario.id)" ng-i18next>Edit</button>
-                                    <div class="actions" ng-show="scenario.form.$dirty">
-                                        <button type="submit" ng-disabled="scenario.form.$invalid" class="btn lighter-hover" ng-click="saveScenario(scenario)" ng-i18next>Save</button>
+                                    <button type="button" class="btn lighter-hover" ng-click="showScenarioEditor(scenario.id)" ng-i18next>View</button>
+                                    <div class="actions" ng-show="scenario.form.$dirty" ng-if="!questionnaire.isReadOnlyForUser">
+                                        <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || scenario.form.$invalid" class="btn lighter-hover" ng-click="saveScenario(scenario)" ng-i18next>Save</button>
                                         <button type="button" class="btn lighter-hover" ng-click="cancel(scenario)" ng-i18next>Cancel</button>
                                     </div>
                                 </ng-form>
@@ -173,7 +177,7 @@
                         <ul ng-model="macros">
                             <li class="macros-panel-item" ng-repeat="macro in macros">
                                 <ng-form name="macro.form">
-                                    <a href ng-click="deleteMacro($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteMacro($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="input-group macros-name">
                                         <span class="input-group-addon">$</span>
                                         <input focus-on-out="focusMacro{{macro.itemId}}" ng-i18next="[placeholder]SideBarMacroName" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
@@ -185,7 +189,7 @@
                                         <textarea ng-i18next="[placeholder]SideBarMacroDescription" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea>
                                     </div>
                                     <div class="actions" ng-show="macro.form.$dirty">
-                                        <button type="submit" ng-disabled="macro.form.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro)" ng-i18next>Save</button>
+                                        <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || macro.form.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro)" ng-i18next>Save</button>
                                         <button type="button" class="btn lighter-hover" ng-click="cancel(macro)" ng-i18next>Cancel</button>
                                         <button class="btn btn-default pull-right" ng-show="isDescriptionEmpty(macro)" type="button" ng-click="toggleDescription(macro)"
                                                 ng-i18next="{{macro.isDescriptionVisible ? 'SideBarMacroHideDescription' : 'SideBarMacroShowDescription'}}"></button>
@@ -196,7 +200,7 @@
 
                     </form>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" ng-i18next="[value]SideBarAddMacro" value="ADD NEW Macro" ng-click="addNewMacro()">
+                        <input type="button" class="btn lighter-hover" ng-disabled="questionnaire.isReadOnlyForUser" ng-i18next="[value]SideBarAddMacro" value="ADD NEW Macro" ng-click="addNewMacro()">
                     </div>
                 </perfect-scrollbar>
             </div>
@@ -222,7 +226,7 @@
                         <ul ng-model="lookupTables">
                             <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                 <ng-form name="table.form">
-                                    <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <input focus-on-out="focusLookupTable{{table.itemId}}" required="" ng-i18next="[placeholder]SideBarLookupTableName"
                                            maxlength="32" spellcheck="false" autocomplete="off"
                                            ng-model="table.name" name="name" class="form-control table-name" type="text" />
@@ -233,7 +237,7 @@
 
                                     <div class="actions clearfix" ng-class="{dirty: table.form.$dirty }">
                                         <div ng-show="table.form.$dirty" class="pull-left">
-                                            <button type="submit" ng-disabled="table.form.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table);$event.stopPropagation()" ng-i18next>Save</button>
+                                            <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || table.form.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table);$event.stopPropagation()" ng-i18next>Save</button>
                                             <button type="button" class="btn lighter-hover" ng-click="cancel(table);$event.stopPropagation()" ng-i18next>Cancel</button>
                                         </div>
                                         <div class="permanent-actions clearfix">
@@ -249,7 +253,7 @@
                         </ul>
                     </form>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" ng-i18next="[value]SideBarLookupTableAdd" value="ADD NEW Lookup table" ng-click="addNewLookupTable()">
+                        <input type="button" class="btn lighter-hover" ng-disabled="questionnaire.isReadOnlyForUser" ng-i18next="[value]SideBarLookupTableAdd" value="ADD NEW Lookup table" ng-click="addNewLookupTable()">
                     </div>
                 </perfect-scrollbar>
             </div>
@@ -294,7 +298,7 @@
                         <div class="attachment-list">
                             <ng-form name="attachment.form" ng-repeat="attachment in attachments">
                                 <div class="attachments-panel-item" ng-class="{'has-error': attachment.form.name.$error.pattern}" ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                    <a href ng-click="deleteAttachment($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteAttachment($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="attachment">
                                         <div class="attachment-preview">
                                             <div class="attachment-preview-cover clearfix">
@@ -318,7 +322,7 @@
                                             <div class="attachment-meta" ng-include="'Image-attachment-info-template.html'"></div>
                                             <div class="actions clearfix" ng-class="{dirty: attachment.form.$dirty }">
                                                 <div ng-show="attachment.form.$dirty" class="pull-left">
-                                                    <button type="submit" ng-disabled="attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()" ng-i18next>Save</button>
+                                                    <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()" ng-i18next>Save</button>
                                                     <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()" ng-i18next>Cancel</button>
                                                 </div>
                                                 <div class="permanent-actions pull-right clearfix">
@@ -359,7 +363,7 @@
                                 <div class="translations-panel-item" ng-class="{'has-error': translation.form.name.$error.pattern}"
                                      ngf-drop="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)"
                                      ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                    <a href ng-click="deleteTranslation($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteTranslation($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="translation-content">
                                         <input focus-on-out="focusTranslation{{translation.translationId}}"
                                                required=""
@@ -375,7 +379,7 @@
                                         </div>
                                         <div class="actions" ng-class="{dirty: translation.form.$dirty }">
                                             <div ng-show="translation.form.$dirty" class="pull-left">
-                                                <button type="submit" ng-disabled="translation.form.$invalid" class="btn lighter-hover" ng-click="saveTranslation(translation);$event.stopPropagation()"
+                                                <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || translation.form.$invalid" class="btn lighter-hover" ng-click="saveTranslation(translation);$event.stopPropagation()"
                                                         ng-i18next>
                                                     Save
                                                 </button>
@@ -390,6 +394,7 @@
 
                                             <div class="permanent-actions pull-right">
                                                 <button type="button" class="btn lighter-hover"
+                                                        ng-disabled="isReadOnlyForUser"
                                                         ng-show="!translation.isDefault"
                                                         ng-click="setDefaultTranslation($index, true);$event.stopPropagation()" ng-i18next>
                                                     MarkAsDefault
@@ -418,10 +423,96 @@
                         </p>
                         <p>
                             <input type="button" ng-i18next="[value]SideBarTranslationsUploadNew" value="Upload new translation"
+                                   ng-disabled="isReadOnlyForUser"
                                    class="btn lighter-hover" ngf-select
                                    ngf-change="createAndUploadFile($file);$event.stopPropagation()"
                                    ngf-max-size="10MB"
                                    accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                   ngf-select-disabled="isReadOnlyForUser"
+                                   ngf-drop-disabled="isReadOnlyForUser" />
+                        </p>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="left-side-panel categories" ng-class="{unfolded: isFolded }" ng-controller="CategoriesCtrl">
+        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="left-side-panel-content categories-panel">
+            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+                <div class="foldback-button"></div>
+            </div>
+            <div class="categories">
+                <perfect-scrollbar class="scroller">
+                    <h3 ng-i18next="[i18next]({count: categoriesList.length })SideBarCategoriesCounter"></h3>
+
+                    <div class="empty-list" ng-show="categoriesList.length == 0">
+                        <p ng-i18next="SideBarCategoriesEmptyLine1"></p>
+                        <p ng-i18next="SideBarCategoriesEmptyLine2"></p>
+                        <p>
+                            <span class="variable-name" ng-i18next="VariableName"></span>
+                            {{'SideBarCategoriesEmptyLine3' | i18next}}
+                        </p>
+                    </div>
+                    <form role="form" name="categoriesForm" novalidate>
+                        <div class="categories-list">
+                            <ng-form name="categories.form" ng-repeat="categories in categoriesList">
+                                <div class="categories-panel-item" ng-class="{'has-error': categories.form.name.$error.pattern}"
+                                     ngf-drop="" ngf-change="fileSelected(categories, $file)"
+                                     ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                                    <a href ng-click="deleteCategories($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <div class="categories-content">
+                                        <input focus-on-out="focusCategories{{categories.categoriesId}}"
+                                               required=""
+                                               ng-i18next="[placeholder]SideBarCategoriesName"
+                                               maxlength="32"
+                                               spellcheck="false"
+                                               ng-model="categories.name"
+                                               name="name"
+                                               class="form-control table-name"
+                                               type="text" />
+                                        <div class="drop-box" ng-i18next="SideBarLookupTableDropFile">
+                                            Drop File here
+                                        </div>
+                                        <div class="actions" ng-class="{dirty: categories.form.$dirty }">
+                                            <div ng-show="categories.form.$dirty" class="pull-left">
+                                                <button type="submit" ng-disabled="categories.form.$invalid" class="btn lighter-hover" ng-click="saveCategories(categories);$event.stopPropagation()"
+                                                        ng-i18next>
+                                                    Save
+                                                </button>
+                                                <button type="button" class="btn lighter-hover" ng-click="cancel(categories);$event.stopPropagation()" ng-i18next>Cancel</button>
+                                            </div>
+
+                                            <div class="permanent-actions pull-right">
+                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + categories.categoriesId}}" class="btn btn-default"
+                                                   target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
+
+                                                <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                                        ngf-change="fileSelected(categories, $file);$event.stopPropagation()" type="button">
+                                                    <span ng-i18next>Update</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </form>
+                    <div class="button-holder">
+                        <p>
+                            <span ng-i18next="SideBarTranslationGetTemplate"></span>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/template' }}" target="_blank" ng-i18next>
+                                SideBarTranslationGetTemplateLinkTextXlsx
+                            </a>
+                        </p>
+                        <p>
+                            <input type="button" ng-i18next="[value]SideBarCategoriesUploadNew" value="Upload new categories"
+                                   class="btn lighter-hover" ngf-select
+                                   ngf-change="createAndUploadFile($file);$event.stopPropagation()"
+                                   ngf-max-size="10MB"
+                                   accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
                                    ngf-select-disabled="isReadOnlyForUser"
                                    ngf-drop-disabled="isReadOnlyForUser" />
                         </p>
@@ -648,7 +739,8 @@
                                 </li>
                             </ul>
                             <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">
-                                <button type="submit" class="btn btn-lg ng-isolate-scope" ng-disabled="metadata.form.$invalid" ng-class="{ 'btn-primary': metadata.form.$dirty }" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
+                                <button type="submit" class="btn btn-lg ng-isolate-scope" ng-disabled="questionnaire.isReadOnlyForUser || metadata.form.$invalid" ng-class="{ 'btn-primary': metadata.form.$dirty }" 
+                                        ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
                                 <button type="button" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>Cancel</button>
                             </div>
                         </ng-form>
@@ -713,7 +805,8 @@
             <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" ng-i18next="[title]SideBarSectionsTitle"></a></li>
             <li><a class="left-menu-metadata" ng-class="{unfolded: isUnfoldedMetadata }" ng-click="unfoldMetadata();" ng-i18next="[title]SideBarMetadataTitle"></a></li>
             <li><a class="left-menu-translations" ng-class="{unfolded: isUnfoldedTranslations }" ng-click="unfoldTranslations();" ng-i18next="[title]SideBarTranslationsTitle"></a></li>
-            <li><a class="left-menu-scenarios" ng-show="questionnaire.hasViewerAdminRights" ng-class="{unfolded: isUnfoldedScenarios }" ng-click="unfoldScenarios();" ng-i18next="[title]SideBarScenarioTitle"></a></li>
+            <li><a class="left-menu-categories" ng-class="{unfolded: isUnfoldedCategories }" ng-click="unfoldCategories();" ng-i18next="[title]SideBarCategoriesTitle"></a></li>
+            <li><a class="left-menu-scenarios" ng-if="questionnaire.questionnaireRevision === null" ng-class="{unfolded: isUnfoldedScenarios }" ng-click="unfoldScenarios();" ng-i18next="[title]SideBarScenarioTitle"></a></li>
             <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" ng-i18next="[title]SideBarMacroTitle"></a></li>
             <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" ng-i18next="[title]SideBarLookupTitle"></a></li>
             <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();" ng-i18next="[title]SideBarAttachmentsTitle"></a></li>
@@ -726,8 +819,8 @@
 <script type="text/ng-template" id="Image-attachment-info-template.html">
     <p>
         <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
-        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-if="attachment.content.details.width" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>{{attachment.content.details.width ? ',&nbsp;' : ''}} 
-        <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>, 
+        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-if="attachment.content.details.width" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>{{attachment.content.details.width ? ',&nbsp;' : ''}}
+        <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>,
         <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}" ng-i18next="({size: formatBytes(attachment.content.size)})SideBarAttachmentDetailsSize"></span>
     </p>
     <p ng-i18next="({lastUpdate: attachment.meta.lastUpdated})SideBarAttachmentUploaded"></p>
@@ -739,7 +832,7 @@
             <button type="button" class="close" ng-click="closeVerifications()" aria-hidden="true"></button>
             <h3 class="modal-title">
                 <span ng-i18next="CompilationLabel"></span>
-                
+
                 <span ng-if="verificationStatus.typeOfMessageToBeShown === 'error'" ng-i18next="({count: verificationStatus.messagesToShow.length})CompilationErrorsCounter"></span>
                 <span ng-if="verificationStatus.typeOfMessageToBeShown === 'warning'" ng-i18next="({count: verificationStatus.messagesToShow.length})CompilationWarningsCounter"></span>
             </h3>
@@ -763,6 +856,7 @@
                                             <span ng-if="reference.type == 'Attachment'" class="icon icon-attachment icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Variable'" class="icon icon-variable icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Translation'" class="icon icon-translation icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
+                                            <span ng-if="reference.type == 'Categories'" class="icon icon-categories icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span class="title">{{reference.title | escape}}</span>
                                             <span class="variable" ng-bind-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                         </a>

@@ -10,9 +10,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
     public class InSchemaPostgresProcessor : PostgresProcessor
     {
-        public string SchemaName { get; }
-
-        public InSchemaPostgresProcessor(string schemaName, 
+        public string DefaultSchemaName { get; }
+         
+        public InSchemaPostgresProcessor(string defaultSchemaName, 
             PostgresDbFactory factory, 
             PostgresGenerator generator,
             ILogger<PostgresProcessor> logger, 
@@ -20,28 +20,28 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             IConnectionStringAccessor connectionStringAccessor)
             : base(factory, generator, logger, options, connectionStringAccessor, new PostgresOptions())
         {
-            this.SchemaName = schemaName;
+            this.DefaultSchemaName = defaultSchemaName;
         }
 
         public override DataSet ReadTableData(string schemaName, string tableName) =>
-            base.ReadTableData(this.SchemaName, tableName);
+            base.ReadTableData(schemaName ?? this.DefaultSchemaName, tableName);
 
         public override bool ColumnExists(string schemaName, string tableName, string columnName) =>
-            base.ColumnExists(this.SchemaName, tableName, columnName);
+            base.ColumnExists(schemaName ?? this.DefaultSchemaName, tableName, columnName);
 
         public override bool TableExists(string schemaName, string tableName) =>
-            base.TableExists(this.SchemaName, tableName);
+            base.TableExists(schemaName ?? this.DefaultSchemaName, tableName);
 
         public override bool SequenceExists(string schemaName, string sequenceName) =>
-            base.SequenceExists(this.SchemaName, sequenceName);
+            base.SequenceExists(schemaName ?? this.DefaultSchemaName, sequenceName);
 
         public override bool ConstraintExists(string schemaName, string tableName, string constraintName) =>
-            base.ConstraintExists(this.SchemaName, tableName, constraintName);
+            base.ConstraintExists(schemaName ?? this.DefaultSchemaName, tableName, constraintName);
 
         public override bool IndexExists(string schemaName, string tableName, string indexName) =>
-            base.IndexExists(this.SchemaName, tableName, indexName);
+            base.IndexExists(schemaName ?? this.DefaultSchemaName, tableName, indexName);
 
-        public override bool DefaultValueExists(string schemaName, string tableName, string columnName,
-            object defaultValue) => base.DefaultValueExists(this.SchemaName, tableName, columnName, defaultValue);
+        public override bool DefaultValueExists(string schemaName, string tableName, string columnName, object defaultValue) => 
+            base.DefaultValueExists(schemaName ?? this.DefaultSchemaName, tableName, columnName, defaultValue);
     }
 }

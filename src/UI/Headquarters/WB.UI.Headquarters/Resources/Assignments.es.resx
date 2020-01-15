@@ -144,9 +144,6 @@
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>Complete todos o algunos de los campos de identificación</value>
   </data>
-  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Seleccionar responsable (Supervisor o Entrevistador) para esta tarea</value>
-  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Creado</value>
   </data>

@@ -82,7 +82,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 step.Context = context;
-                await step.ExecuteAsync();
+                this.logger.Trace($"Executing synchronization step {step.GetType().Name}");
+                await step.ExecuteAsync().ConfigureAwait(false);
             }
         }
 
@@ -234,7 +235,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     {
                         Username = this.RestCredentials.Login,
                         Password = this.RestCredentials.Password
-                    }, this.RestCredentials, cancellationToken);
+                    }, this.RestCredentials, cancellationToken).ConfigureAwait(false);
 
                     this.RestCredentials.Password = this.RestCredentials.Password;
                     this.RestCredentials.Token = token;
@@ -248,9 +249,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.UpdatePasswordOfResponsible(this.RestCredentials);
                 }
 
-                await CanSynchronizeAsync(progress, cancellationToken, statistics);
+                await CanSynchronizeAsync(progress, cancellationToken, statistics).ConfigureAwait(false);
 
-                await CheckAfterStartSynchronization(cancellationToken);
+                await CheckAfterStartSynchronization(cancellationToken).ConfigureAwait(false);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -258,10 +259,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     try
                     {
-                        var deviceInfo = await deviceInformationService.GetDeviceInfoAsync();
+                        var deviceInfo = await deviceInformationService.GetDeviceInfoAsync().ConfigureAwait(false);
 
                         await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo),
-                            cancellationToken);
+                            cancellationToken).ConfigureAwait(false);
                     }
                     catch (Exception e)
                     {
@@ -269,7 +270,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     }
                 }
 
-                await Synchronize(progress, cancellationToken, statistics);
+                await Synchronize(progress, cancellationToken, statistics).ConfigureAwait(false);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -279,7 +280,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     {
                         var hqTimestamp = await this.synchronizationService.SendSyncStatisticsAsync(
                             this.ToSyncStatisticsApiView(statistics, stopwatch),
-                            this.RestCredentials, cancellationToken);
+                            this.RestCredentials, cancellationToken).ConfigureAwait(false);
 
                         this.enumeratorSettings.SetLastHqSyncTimestamp(hqTimestamp);
 
@@ -287,7 +288,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     }
                     catch (Exception e)
                     {
-                        await this.TrySendUnexpectedExceptionToServerAsync(e);
+                        await this.TrySendUnexpectedExceptionToServerAsync(e).ConfigureAwait(false);
                     }
                 }
 
@@ -450,7 +451,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Stage = SyncStage.FailedUnexpectedException
                 });
 
-                await this.TrySendUnexpectedExceptionToServerAsync(ex);
+                await this.TrySendUnexpectedExceptionToServerAsync(ex).ConfigureAwait(false);
 
                 auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
 
@@ -459,7 +460,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             if (!cancellationToken.IsCancellationRequested && this.shouldUpdatePasswordOfResponsible)
             {
-                var newPassword = await this.GetNewPasswordAsync();
+                var newPassword = await this.GetNewPasswordAsync().ConfigureAwait(false);
                 if (newPassword == null)
                 {
                     this.shouldUpdatePasswordOfResponsible = false;
@@ -476,7 +477,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     this.remoteLoginRequired = true;
                     this.RestCredentials.Password = newPassword;
-                    await this.SynchronizeAsync(progress, cancellationToken);
+                    await this.SynchronizeAsync(progress, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -488,7 +489,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             try
             {
                 await this.synchronizationService.CanSynchronizeAsync(this.RestCredentials, this.principal.CurrentUserIdentity.TenantId,
-                    cancellationToken);
+                    cancellationToken).ConfigureAwait(false);
             }
             catch (SynchronizationException ex) when (ex.Type == SynchronizationExceptionType.UpgradeRequired)
             {

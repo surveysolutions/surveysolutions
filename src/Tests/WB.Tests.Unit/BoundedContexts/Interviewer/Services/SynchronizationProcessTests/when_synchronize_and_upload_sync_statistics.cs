@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task Context()
         {
             var principal = SetUp.InterviewerPrincipal("name", "pass");
-
+            
             var interviewId = Guid.NewGuid();
 
             var questionnaireIdentity = new QuestionnaireIdentity(
@@ -82,11 +82,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     Duration = this.totalDuration
                 });
 
-            IPlainStorage<InterviewerIdentity> localInterviewers = new InMemoryPlainStorage<InterviewerIdentity>();
+            IPlainStorage<InterviewerIdentity> localInterviewers = Create.Storage.InMemorySqlitePlainStorage<InterviewerIdentity>();
             localInterviewers.Store(Create.Other.InterviewerIdentity());
 
             var viewModel = Create.Service.SynchronizationProcess(principal: principal,
-                interviewersPlainStorage: localInterviewers,
                 interviewViewRepository: interviewViewRepository,
                 httpStatistician: httpStatistician.Object,
                 synchronizationService: synchronizationServiceMock.Object

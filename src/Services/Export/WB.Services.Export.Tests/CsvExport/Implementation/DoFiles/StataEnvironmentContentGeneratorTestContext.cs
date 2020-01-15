@@ -15,12 +15,14 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
         protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator(
             IFileSystemAccessor fileSystemAccessor)
         {
-            return new StataEnvironmentContentService(fileSystemAccessor, 
-                new QuestionnaireLabelFactory(),
+            return new StataEnvironmentContentService(
                 Create.InterviewActionsExporter(Create.HeadquartersApi()),
                 Create.CommentsExporter(),
                 Create.InterviewErrorsExporter(),
-                Create.DiagnosticsExporter());
+                Create.DiagnosticsExporter(),
+                Create.AssignmentActionsExporter(),
+                Create.InterviewsDoFilesExporter(fileSystemAccessor, new QuestionnaireLabelFactory())
+                );
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)
@@ -65,7 +67,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
         protected static LabelItem CreateLabelItem(string caption = "caption", string title = "title")
         {
-            return new LabelItem {Caption = caption, Title = title};
+            return new LabelItem(caption, title);
         }
 
         protected static List<HeaderColumn> GetHeaderColumns(string variableName, string title)

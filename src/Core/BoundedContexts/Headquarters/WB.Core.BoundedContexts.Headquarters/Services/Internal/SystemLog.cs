@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void ExportStared(string processName, DataExportFormat format)
         {
-            this.Append(LogEntryType.ExportStared, processName, "exported", format.ToString());
+            this.Append(LogEntryType.ExportStarted, processName, "exported", format.ToString());
         }
 
         public void QuestionnaireDeleted(string title, QuestionnaireIdentity questionnaire)
@@ -43,6 +43,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.EmailProviderChanged, "Update", $"Previous provider was {previousProvider}, current provider is {currentProvider}");
         }
 
+        public void UsersImported(int importedSupervisors, int importedInterviewers, string responsibleName)
+            => this.Append(LogEntryType.UsersImported, "Users", "Import",
+                $"User {responsibleName} created {importedSupervisors + importedInterviewers} users in batch mode, " +
+                $"of which {importedInterviewers} are interviewers and {importedSupervisors} supervisors",
+                responsibleName:responsibleName);
+
+        public void AssignmentsImported(long assignmentsCount, string questionnaireTitle, long questionnaireVersion,
+            int firstAssignmentId, int lastAssignmentId, string responsibleName)
+            => this.Append(LogEntryType.AssignmentsImported, "Assignments", "Import",
+                $"User {responsibleName} created {assignmentsCount} assignment(s) {firstAssignmentId}-{lastAssignmentId} " +
+                $"for {questionnaireTitle} (v{questionnaireVersion})",
+                responsibleName: responsibleName);
+
+        public void InterviewerArchived(string interviewerName)
+            => this.Append(LogEntryType.InterviewerArchived, "Interviewer", "Archive",
+                $"User {this.authorizedUser.UserName} has archived interviewer account {interviewerName}");
+
+        public void InterviewerUnArchived(string interviewerName)
+            => this.Append(LogEntryType.InterviewerUnArchived, "Interviewer", "Unarhive",
+                $"User {this.authorizedUser.UserName} has unarchived interviewer account {interviewerName}");
+
+        public void SupervisorArchived(string supervisorName)
+            => this.Append(LogEntryType.SupervisorArchived, "Supervisor", "Archive",
+                $"User {this.authorizedUser.UserName} has archived interviewer account {supervisorName}");
+
+        public void SupervisorUnArchived(string supervisorName)
+            => this.Append(LogEntryType.SupervisorUnarchived, "Supervisor", "Unarhive",
+                $"User {this.authorizedUser.UserName} has unarchived interviewer account {supervisorName}");
+
         public void UserCreated(UserRoles role, string userName)
         {
             this.Append(LogEntryType.UserCreated, $"{role} user '{userName}'", "created");
@@ -63,9 +92,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.UserMovedToAnotherTeam, $"User {interviewerName}", "moved", $"From team {previousSupervisorName}' to {newSupervisorName}");
         }
 
-        private void Append(LogEntryType type, string target, string action, string args = null)
+        private void Append(LogEntryType type, string target, string action, string args = null, string responsibleName = null)
         {
-            AppendLogEntry(this.authorizedUser.Id, this.authorizedUser.UserName,
+            AppendLogEntry(this.authorizedUser.Id, responsibleName ?? this.authorizedUser.UserName,
                 type, $"{target}: {action}; {args ?? string.Empty}");
         }
 

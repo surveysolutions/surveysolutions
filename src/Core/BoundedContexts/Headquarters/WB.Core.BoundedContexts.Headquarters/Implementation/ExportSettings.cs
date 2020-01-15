@@ -1,4 +1,6 @@
-﻿using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+﻿using PasswordGenerator;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -66,11 +68,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         }
 
         public string ApiKey =>
-            this.exportServiceSettings.GetById(ExportEncryptionSettings.ExportServiceStorageKey).Key;
+            this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
 
         private string GeneratePassword()
         {
-            return System.Web.Security.Membership.GeneratePassword(12, 4);
+            var pwd = new Password(true, true, true, true, 12);
+            var result = pwd.Next();
+            return result;
         }
     }
 }

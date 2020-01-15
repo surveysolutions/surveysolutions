@@ -194,7 +194,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             var questionnaireDefinedOrder = new List<Identity>();
             var index = 0;
-            foreach (var optionValue in this.questionnaire.GetMultiSelectAnswerOptionsAsValues(this.rosterSizeQuestionId))
+            var optionValues = this.questionnaire.IsQuestionFilteredCombobox(this.rosterSizeQuestionId)
+                ? this.questionnaire.GetCategoricalMultiOptionsByValues(this.rosterSizeQuestionId, newMultiAnswer.Select(Convert.ToInt32).ToArray()).Select(x => x.Value)
+                : this.questionnaire.GetMultiSelectAnswerOptionsAsValues(this.rosterSizeQuestionId);
+
+            foreach (var optionValue in optionValues)
             {
                 if (!newMultiAnswer.Contains(optionValue)) continue;
                 questionnaireDefinedOrder.Add(
@@ -221,7 +225,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
 
-            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last());
+            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last(), null);
             roster.SetRosterTitle(rosterTitle);
         }
     }
@@ -280,7 +284,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
 
-            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last());
+            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last(), null);
             roster.SetRosterTitle(rosterTitle);
         }
     }

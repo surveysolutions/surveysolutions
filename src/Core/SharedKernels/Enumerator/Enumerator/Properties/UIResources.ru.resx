@@ -699,4 +699,11 @@
   <data name="Interview_Comment_Resolve" xml:space="preserve">
     <value>Вопрос решён</value>
   </data>
+  <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+      <value>Оставьте комментарий для нового ответственного</value>
+      <comment>Комментарий:</comment>
+  </data>
+  <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+    <value>У приложения не хватает прав для обновления. Пожалуйста разрешите этому приложению "Установку неизвестных приложений" в настройках</value>
+</data>
 </root>

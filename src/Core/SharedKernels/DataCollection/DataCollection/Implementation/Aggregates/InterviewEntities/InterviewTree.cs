@@ -541,19 +541,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue)
+        public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue, int? parentValue)
         {
-            var option = this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue);
+            var option = this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue, parentValue);
             if(Questionnaire.GetQuestionType(questionId) == QuestionType.Numeric && option == null)
                 return null;
 
             return option.Title;
         }
         
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
-        {
-            return this.Questionnaire.GetOptionsForQuestion(questionId, parentQuestionValue, filter);
-        }
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter) 
+            => this.Questionnaire.GetOptionsForQuestion(questionId, parentQuestionValue, filter, null);
 
         public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder() =>
             this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerableDepthFirst(node => node.Children);

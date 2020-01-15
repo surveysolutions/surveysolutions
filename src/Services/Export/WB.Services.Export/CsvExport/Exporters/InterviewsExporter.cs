@@ -20,7 +20,6 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    [Localizable(false)]
     public class InterviewsExporter : IInterviewsExporter
     {
         private readonly IInterviewFactory interviewFactory;
@@ -223,6 +222,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 Levels = interviewFactory.GetInterviewDataLevels(questionnaire, interview),
                 InterviewId = interviewToExport.Id,
+                AssignmentId = interviewToExport.AssignmentId,
                 ErrorsCount = errorsCount
             };
             InterviewDataExportView interviewDataExportView = CreateInterviewDataExportView(exportStructure, interviewData, questionnaire);
@@ -473,6 +473,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                     return interview.InterviewId.GetRandomDouble().ToString(CultureInfo.InvariantCulture);
                 case ServiceVariableType.InterviewKey:
                     return interview.InterviewKey ?? string.Empty;
+                case ServiceVariableType.AssignmentId:
+                    return interview.AssignmentId?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
             }
 
             return String.Empty;

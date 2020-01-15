@@ -1,59 +1,53 @@
 using System;
-using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebInterviewInvoker : IWebInterviewInvoker
     {
-        private readonly Lazy<IHubConnectionContext<dynamic>> lazyHubContext;
+        private readonly IHubContext<WebInterview> lazyHubContext;
 
-        public WebInterviewInvoker(Lazy<IHubConnectionContext<dynamic>> lazyHubContext)
+        public WebInterviewInvoker(IHubContext<WebInterview> lazyHubContext)
         {
             this.lazyHubContext = lazyHubContext;
         }
 
-        private IHubConnectionContext<dynamic> HubClients => lazyHubContext.Value;
+        private IHubContext<WebInterview> HubClients => lazyHubContext;
 
         public void RefreshEntities(string interviewId, string[] identities)
         {
-            this.HubClients.Group(interviewId).refreshEntities(identities);
+            this.HubClients.Clients.Group(interviewId).SendAsync("refreshEntities", identities);
         }
 
         public void RefreshSection(Guid interviewId)
         {
-            this.HubClients.Group(interviewId.FormatGuid()).refreshSection();
+            this.HubClients.Clients.Group(interviewId.FormatGuid()).SendAsync("refreshSection", Array.Empty<object>());
         }
 
         public void RefreshSectionState(Guid interviewId)
         {
-            this.HubClients.Group(interviewId.FormatGuid()).refreshSectionState();
+            this.HubClients.Clients.Group(interviewId.FormatGuid()).SendAsync("refreshSectionState", Array.Empty<object>());
         }
 
         public void ReloadInterview(Guid interviewId)
         {
-            this.HubClients.Group(interviewId.FormatGuid()).reloadInterview();
+            this.HubClients.Clients.Group(interviewId.FormatGuid()).SendAsync("reloadInterview", Array.Empty<object>());
         }
 
         public void FinishInterview(Guid interviewId)
         {
-            this.HubClients.Group(interviewId.FormatGuid()).finishInterview();
+            this.HubClients.Clients.Group(interviewId.FormatGuid()).SendAsync("finishInterview", Array.Empty<object>());
         }
 
         public void MarkAnswerAsNotSaved(string section, string questionId, string errorMessage)
         {
-            this.HubClients.Group(section).markAnswerAsNotSaved(questionId, errorMessage);
-        }
-
-        public void ReloadInterviews(QuestionnaireIdentity questionnaireIdentity)
-        {
-            this.HubClients.Group(questionnaireIdentity.ToString()).reloadInterview();
+            this.HubClients.Clients.Group(section).SendAsync("markAnswerAsNotSaved", questionId, errorMessage);
         }
 
         public void ShutDown(Guid interviewId)
         {
-            this.HubClients.Group(interviewId.FormatGuid()).shutDown();
+            this.HubClients.Clients.Group(interviewId.FormatGuid()).SendAsync("shutDown", Array.Empty<object>());
         }
     }
 }

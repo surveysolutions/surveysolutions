@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Utils;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer
@@ -32,13 +33,13 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         protected readonly IUserViewFactory userViewFactory;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IProductVersion productVersion;
         private readonly IAssignmentsService assignmentsService;
         private readonly IClientApkProvider clientApkProvider;
         private readonly HqSignInManager signInManager;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewInformationFactory interviewFactory;
-        
+        private readonly IInterviewerVersionReader interviewerVersionReader;
+
         public enum ClientVersionFromUserAgent
         {
             Unknown = 0,
@@ -50,27 +51,27 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             IUserViewFactory userViewFactory,
             IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
-            IProductVersion productVersion,
             HqSignInManager signInManager,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewInformationFactory interviewFactory,
             IAssignmentsService assignmentsService,
             IClientApkProvider clientApkProvider,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings)
+            IPlainKeyValueStorage<TenantSettings> tenantSettings,
+            IInterviewerVersionReader interviewerVersionReader)
             : base(interviewerSettingsStorage, tenantSettings)
         {
             this.tabletInformationService = tabletInformationService;
             this.userViewFactory = userViewFactory;
             this.syncVersionProvider = syncVersionProvider;
             this.authorizedUser = authorizedUser;
-            this.productVersion = productVersion;
             this.signInManager = signInManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.interviewFactory = interviewFactory;
             this.assignmentsService = assignmentsService;
             this.clientApkProvider = clientApkProvider;
-         }
+            this.interviewerVersionReader = interviewerVersionReader;
+        }
         
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
@@ -121,9 +122,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName);
+                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
 
-            return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
+            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
         }
 
         [HttpGet]
@@ -131,9 +132,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
+                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
 
-            return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName);
+            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
         }
 
         [HttpPost]
@@ -187,18 +188,18 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             {
                 return this.Request.CreateResponse(HttpStatusCode.Conflict);
             }
-
-            var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
-            var interviewerVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.interviewer");
-
-            if (IsNeedUpdateAppBySettings(interviewerVersion, currentVersion))
-            {
-                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
-            }
-
-            if (interviewerVersion != null && interviewerVersion > currentVersion)
+            
+            var serverApkBuildNumber = interviewerVersionReader.InterviewerBuildNumber;
+            var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
+            
+            if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
             {
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
+            }
+
+            if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
+            {
+                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
             if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced)

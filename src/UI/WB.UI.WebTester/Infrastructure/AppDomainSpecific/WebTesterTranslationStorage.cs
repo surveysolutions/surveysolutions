@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
@@ -10,16 +11,13 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
     public class WebTesterTranslationStorage : IWebTesterTranslationStorage
     {
         private readonly IQuestionnaireTranslator translator;
-        private List<TranslationInstance> translationsList;
+        private readonly IPlainStorageAccessor<TranslationInstance> translations;
 
-        public WebTesterTranslationStorage(IQuestionnaireTranslator translator)
+        public WebTesterTranslationStorage(IQuestionnaireTranslator translator,
+            IPlainStorageAccessor<TranslationInstance> translations)
         {
             this.translator = translator;
-        }
-
-        public void Store(List<TranslationInstance> translations)
-        {
-            this.translationsList = translations;
+            this.translations = translations;
         }
 
         public QuestionnaireDocument GetTranslated(QuestionnaireDocument questionnaire, long version, string language, out Translation translation)
@@ -36,7 +34,9 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
                 if (translation != null)
                 {
                     var translationId = translation.Id;
-                    questionnaireTranslation = new QuestionnaireTranslation(translationsList.Where(t => t.TranslationId == translationId));
+                    questionnaireTranslation = new QuestionnaireTranslation(translations.Query(_ => 
+                        _.Where(t => t.TranslationId == translationId && t.QuestionnaireId.QuestionnaireId == questionnaire.PublicKey && 
+                                     t.QuestionnaireId.Version == version)));
                 }
 
                 result = this.translator.Translate(questionnaire, questionnaireTranslation);

@@ -7,5 +7,7 @@ namespace WB.Services.Export.Questionnaire.Services
     {
         Task<QuestionnaireDocument> GetQuestionnaireAsync(QuestionnaireId questionnaireId,
             CancellationToken token = default);
+
+        void InvalidateQuestionnaire(QuestionnaireId questionnaireId);
     }
 }

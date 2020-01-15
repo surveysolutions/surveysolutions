@@ -33,7 +33,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
             this.session?.Flush();
-            transaction?.Commit();
+
+            if(transaction?.IsActive == true)
+                transaction.Commit();
         }
 
         public ISession Session
@@ -60,6 +62,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public void Dispose()
         {
             if (isDisposed) return;
+            if (transaction?.IsActive == true)
+            {
+                transaction.Rollback();
+            }
 
             transaction?.Dispose();
             session?.Dispose();

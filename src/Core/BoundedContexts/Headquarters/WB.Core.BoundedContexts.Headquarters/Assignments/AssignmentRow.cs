@@ -26,5 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public bool? WebMode { get; set; }
 
         public DateTime? ReceivedByTabletAtUtc { get; set; }
+        public string Comments { get; set; }
     }
 }

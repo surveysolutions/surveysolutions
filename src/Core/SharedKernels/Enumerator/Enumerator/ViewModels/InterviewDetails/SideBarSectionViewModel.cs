@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -24,15 +25,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
     [DebuggerDisplay("Title = {Title.PlainText}, Id = {SectionIdentity}")]
     public class SideBarSectionViewModel : MvxNotifyPropertyChanged, ISideBarSectionItem,
-        ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>,
-        ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>
+        IViewModelEventHandler<RosterInstancesAdded>,
+        IViewModelEventHandler<RosterInstancesRemoved>,
+        IViewModelEventHandler<GroupsEnabled>,
+        IViewModelEventHandler<GroupsDisabled>
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IMvxMessenger messenger;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
 
         private readonly AnswerNotifier answerNotifier;
         public DynamicTextViewModel Title { get; }
@@ -47,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IMvxMessenger messenger,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             DynamicTextViewModel dynamicTextViewModel,
             AnswerNotifier answerNotifier)
         {
@@ -64,8 +65,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            this.eventRegistry.Subscribe(this, interviewId);
-
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
 
             this.SectionIdentity = sectionIdentity;
@@ -95,6 +94,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.answerNotifier.Init(this.interviewId);
             this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             this.Tag = "SideBar_Section_" + sectionIdentity;
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)

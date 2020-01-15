@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
             interview.Apply(Create.Event.QuestionsDisabled(textListQuestionId, RosterVector.Empty));
 
             //act
-            viewModel.Handle(Create.Event.QuestionsDisabled(textListQuestionId, RosterVector.Empty));
+            viewModel.HandleAsync(Create.Event.QuestionsDisabled(textListQuestionId, RosterVector.Empty));
             //assert
             Assert.That(viewModel.Options, Is.Empty);
         }

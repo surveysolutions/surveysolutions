@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         })
                     );
                 
-                var interview = SetupInterview(questionnaireDocument, new object[] { });
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, new object[] { });
 
                 interview.AnswerTextQuestion(userId, txtSourceOfLinkId, Create.Entity.RosterVector(new[] {0}), DateTime.Now,"a");
                 interview.AnswerTextQuestion(userId, txtSourceOfLinkId, Create.Entity.RosterVector(new[] {1}), DateTime.Now, "b");
@@ -83,7 +83,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
 
         [Serializable]
         internal class InvokeResults

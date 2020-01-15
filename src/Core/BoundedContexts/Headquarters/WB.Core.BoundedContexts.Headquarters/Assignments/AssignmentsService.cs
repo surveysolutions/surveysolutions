@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -13,10 +16,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     internal class AssignmentsService : IAssignmentsService
     {
-        private readonly IPlainStorageAccessor<Assignment> assignmentsAccessor;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor;
         private readonly IInterviewAnswerSerializer answerSerializer;
 
-        public AssignmentsService(IPlainStorageAccessor<Assignment> assignmentsAccessor, IInterviewAnswerSerializer answerSerializer)
+        public AssignmentsService(
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor,
+            IInterviewAnswerSerializer answerSerializer)
         {
             this.assignmentsAccessor = assignmentsAccessor;
             this.answerSerializer = answerSerializer;
@@ -25,34 +30,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public List<Assignment> GetAssignments(Guid responsibleId)
         {
             return this.assignmentsAccessor.Query(x =>
-            x.Where(assigment =>
-                assigment.ResponsibleId == responsibleId
-                && !assigment.Archived
-                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity)
-                && (assigment.WebMode == null || assigment.WebMode == false))
+            x.Where(assignment =>
+                assignment.ResponsibleId == responsibleId
+                && !assignment.Archived
+                && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
+                && (assignment.WebMode == null || assignment.WebMode == false))
             .ToList());
         }
 
         public List<Assignment> GetAssignmentsForSupervisor(Guid supervisorId)
         {
             return this.assignmentsAccessor.Query(x =>
-                x.Where(assigment =>
-                        (assigment.ResponsibleId == supervisorId || assigment.Responsible.ReadonlyProfile.SupervisorId == supervisorId)
-                        && !assigment.Archived
-                        && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity)
-                        && (assigment.WebMode == null || assigment.WebMode == false))
+                x.Where(assignment =>
+                        (assignment.ResponsibleId == supervisorId || assignment.Responsible.ReadonlyProfile.SupervisorId == supervisorId)
+                        && !assignment.Archived
+                        && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
+                        && (assignment.WebMode == null || assignment.WebMode == false))
                     .ToList());
         }
 
-        public List<int> GetAllAssignmentIds(Guid responsibleId)
+        public List<Guid> GetAllAssignmentIds(Guid responsibleId)
         {
             return this.assignmentsAccessor.Query(x =>
-                x.Where(assigment => assigment.ResponsibleId == responsibleId)
-                .Select(assigment => assigment.Id)
+                x.Where(assignment => assignment.ResponsibleId == responsibleId)
+                .Select(assignment => assignment.PublicKey)
                 .ToList());
         }
 
         public Assignment GetAssignment(int id)
+        {
+            var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id));
+            return assignment.SingleOrDefault();
+        }
+
+        public Assignment GetAssignmentByAggregateRootId(Guid id)
         {
             return this.assignmentsAccessor.GetById(id);
         }
@@ -63,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 .Any(a =>
                     a.ResponsibleId == responsible
                     && !a.Archived
-                    && a.IsAudioRecordingEnabled));
+                    && a.AudioRecording));
 
             return result;
         }
@@ -74,24 +85,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 .Any(a =>
                     a.QuestionnaireId == questionnaireIdentity
                     && !a.Archived
-                    && a.IsAudioRecordingEnabled));
+                    && a.AudioRecording));
 
             return result;
+        }
+
+        public bool DoesExistPasswordInDb(QuestionnaireIdentity questionnaireIdentity, string password)
+        {
+            var hasPasswordInDb = this.assignmentsAccessor.Query(x =>
+                x.Any(y => y.Quantity == 1 &&
+                           (y.WebMode == null || y.WebMode == true) &&
+                           y.QuestionnaireId == questionnaireIdentity &&
+                           (y.Email == null || y.Email == "") &&
+                           y.Password == password));
+
+            return hasPasswordInDb;
+        }
+
+        public List<int> GetAllAssignmentIdsForMigrateToNewVersion(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var idsToMigrate = assignmentsAccessor.Query(_ =>
+                _.Where(x => x.QuestionnaireId.Id == questionnaireIdentity.Id && x.QuestionnaireId.Version == questionnaireIdentity.Version && !x.Archived)
+                    .Select(x => x.Id).ToList());
+            return idsToMigrate;
         }
 
         public bool HasAssignmentWithProtectedVariables(Guid responsibleId)
         {
-            List<List<string>> listOfProtectedValiablesFromAssignments = this.assignmentsAccessor.Query(_ => _
-                .Where(assigment =>
-                    assigment.ResponsibleId == responsibleId
-                    && !assigment.Archived
-                    && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
+            List<List<string>> listOfProtectedVariablesFromAssignments = this.assignmentsAccessor.Query(_ => _
+                .Where(assignment =>
+                    assignment.ResponsibleId == responsibleId
+                    && !assignment.Archived
+                    && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity))
                 .Select(x => x.ProtectedVariables)
                 .ToList());
 
-            bool result = listOfProtectedValiablesFromAssignments.Any(x => (x?.Count ?? 0) > 0);
+            bool result = listOfProtectedVariablesFromAssignments.Any(x => (x?.Count ?? 0) > 0);
             return result;
         }
+
+
 
         public List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId)
         {
@@ -140,13 +173,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             var assignmentApiView = new AssignmentApiDocument
             {
                 Id = assignment.Id,
+                PublicId = assignment.PublicKey,
                 QuestionnaireId = assignment.QuestionnaireId,
                 Quantity = assignment.InterviewsNeeded,
                 CreatedAtUtc = assignment.CreatedAtUtc,
                 ProtectedVariables = assignment.ProtectedVariables,
                 ResponsibleId = assignment.ResponsibleId,
                 ResponsibleName = assignment.Responsible.Name,
-                IsAudioRecordingEnabled = assignment.IsAudioRecordingEnabled
+                IsAudioRecordingEnabled = assignment.AudioRecording,
+                Comments = assignment.Comments
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);
@@ -175,13 +210,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             }
 
             return assignmentApiView;
-        }
-
-        public void Reassign(int assignmentId, Guid responsibleId)
-        {
-            var assignment = this.assignmentsAccessor.GetById(assignmentId);
-            assignment.Reassign(responsibleId);
-            assignmentsAccessor.Store(assignment, assignmentId);
         }
     }
 }

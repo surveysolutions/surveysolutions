@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -27,11 +28,11 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
-        public ActionResult InterviewFile(Guid interviewId, string fileName)
+        public async Task<ActionResult> InterviewFile(Guid interviewId, string fileName)
         {
             byte[] file = null; 
             if(fileName != null)
-                file = this.imageFileRepository.GetInterviewBinaryData(interviewId, fileName);
+                file = await this.imageFileRepository.GetInterviewBinaryDataAsync(interviewId, fileName);
 
             if (file == null || file.Length == 0)
                 return

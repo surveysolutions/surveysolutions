@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.API
 {
@@ -33,6 +34,11 @@ namespace WB.UI.Headquarters.API
             public bool NotificationsEnabled { get; set; }
         }
 
+        public class WebInterviewSettingsModel
+        {
+            public bool AllowEmails { get; set; }
+        }
+
         public class ProfileSettingsModel
         {
             public bool AllowInterviewerUpdateProfile { get; set; }
@@ -47,7 +53,8 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
-        
+        private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
+
         private readonly IEmailService emailService;
         private readonly ISystemLog auditLog;
         private readonly IWebInterviewEmailRenderer emailRenderer;
@@ -57,7 +64,10 @@ namespace WB.UI.Headquarters.API
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
-            IEmailService emailService, ISystemLog auditLog, 
+            IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage,
+            IEmailService emailService, 
+            ISystemLog auditLog, 
+            ISystemLogViewFactory systemLogViewFactory,
             IWebInterviewEmailRenderer emailRenderer)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
@@ -65,6 +75,9 @@ namespace WB.UI.Headquarters.API
             this.systemLogViewFactory = systemLogViewFactory ?? throw new ArgumentNullException(nameof(systemLogViewFactory));
             this.emailProviderSettingsStorage = emailProviderSettingsStorage ?? throw new ArgumentNullException(nameof(emailProviderSettingsStorage));
             this.profileSettingsStorage = profileSettingsStorage ?? throw new ArgumentNullException(nameof(profileSettingsStorage));
+            
+            this.webInterviewSettingsStorage = webInterviewSettingsStorage ??
+                                               throw new ArgumentNullException(nameof(webInterviewSettingsStorage));
             this.emailService = emailService;
             this.auditLog = auditLog;
             this.emailRenderer = emailRenderer;
@@ -121,6 +134,30 @@ namespace WB.UI.Headquarters.API
                 AppSetting.InterviewerSettings);
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
+        }
+
+        [HttpGet]
+        public HttpResponseMessage WebInterviewSettings()
+        {
+            var webInterviewSettings = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings);
+
+            return Request.CreateResponse(new WebInterviewSettingsModel
+            {
+                AllowEmails = webInterviewSettings?.AllowEmails ?? false
+            });
+        }
+
+        [HttpPost]
+        public HttpResponseMessage WebInterviewSettings([FromBody] WebInterviewSettingsModel message)
+        {
+            this.webInterviewSettingsStorage.Store(
+                new WebInterviewSettings
+                {
+                    AllowEmails = message.AllowEmails
+                },
+                AppSetting.WebInterviewSettings);
+
+            return Request.CreateResponse(HttpStatusCode.OK, new { sucess = true });
         }
 
         [HttpGet]

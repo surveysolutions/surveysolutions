@@ -27,6 +27,7 @@ const pages = {
             "DataTables",
             "Common",
             "Users",
+            "Interviews",
             "Assignments",
             "Strings",
             "Report",
@@ -38,7 +39,10 @@ const pages = {
             "WebInterviewSettings",
             "MapReport",
             "Settings",
-			"DataExport"			
+            "DataExport",
+            "Dashboard",
+            "TabletLogs",
+			"Roles"
         ]
     },
     webinterview: {
@@ -172,6 +176,7 @@ module.exports = {
                     json: JSON.stringify(locales),
                     dictionary: localization.getDictionaryDefinition(locales)
                 };
+                options.page = page;
                 options.isHot = isHot;
                 options.assetsPath = pages[page].assetsPath || assetsPath;
                 options.minify = false;

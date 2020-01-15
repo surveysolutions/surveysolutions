@@ -1,0 +1,387 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AllData" xml:space="preserve">
+    <value>Të gjitha të dhënat</value>
+  </data>
+  <data name="ApprovedByHQ" xml:space="preserve">
+    <value>Miratuar nga ZQ</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Miratuar nga supervizori</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Mesatarja </value>
+  </data>
+  <data name="ByAnswerValue" xml:space="preserve">
+    <value>Filtro sipas vlerës numerike</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Përfundoi </value>
+  </data>
+  <data name="CompletionDate" xml:space="preserve">
+    <value>Data e përfundimit</value>
+  </data>
+  <data name="ConditionQuestion" xml:space="preserve">
+    <value>Pyetje me kusht</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Numërimi</value>
+  </data>
+  <data name="CumulativeInterviewChart" xml:space="preserve">
+    <value>Diagrami Kumulativ i Intervistës</value>
+  </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>Diagrami kumulativ i intervistës tregon evoluimin e numrit të intervistave në çdo status gjatë kohës</value>
+  </data>
+  <data name="DatesRange" xml:space="preserve">
+    <value>Diapazoni i datave</value>
+  </data>
+  <data name="HeatMapView" xml:space="preserve">
+    <value>Shfaq heatmap-in e mbivendosjes</value>
+  </data>
+  <data name="HeatRadius" xml:space="preserve">
+    <value>Rrezja e nxehtësisë</value>
+  </data>
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>Modeli i importimit të përdoruesve </value>
+  </data>
+  <data name="InterviewChart" xml:space="preserve">
+    <value>Diagrami i intervistës</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Intervistuesi u caktua</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Intervistuesit</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Muaji i kaluar</value>
+  </data>
+  <data name="LastNDays" xml:space="preserve">
+    <value>Ditët {{days}} e kaluara</value>
+  </data>
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>Përditësuar më</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Javën e kaluar</value>
+  </data>
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>Të dhënat e hartës po ngarkohen </value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Maksimale</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>Mesatare</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Minimale</value>
+  </data>
+  <data name="Percentile05" xml:space="preserve">
+    <value>Nivel përqindjeje 05</value>
+  </data>
+  <data name="Percentile50" xml:space="preserve">
+    <value>Nivel përqindjeje 50</value>
+  </data>
+  <data name="Percentile95" xml:space="preserve">
+    <value>Nivel përqindjeje 95</value>
+  </data>
+  <data name="PivotView" xml:space="preserve">
+    <value>Tabela Pivot </value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Muaji i mëparshëm</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Java e mëparshme</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Pyetje</value>
+  </data>
+  <data name="QuestionLabel" xml:space="preserve">
+    <value>Etiketa e Pyetjes</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Pyetësor</value>
+  </data>
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>Ka një problem përputhshmërie midis versioneve të pyetësorit. Disa përgjigje në versionin e mëparshëm të pyetësorit nuk ekzistojnë më në variantin e fundit të pyetësorit. Këto përgjigje nuk u pranuan</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Teksti i pyetjes</value>
+  </data>
+  <data name="QuickRanges" xml:space="preserve">
+    <value>Vargjet e të dhënave të shpejta</value>
+  </data>
+  <data name="RangeRelativeToData" xml:space="preserve">
+    <value>Vargu që lidhet me të dhënat</value>
+  </data>
+  <data name="RejectedByHQ" xml:space="preserve">
+    <value>Refuzuar nga HQ</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Refuzuar nga supervizori</value>
+  </data>
+  <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+    <value>Kohëzgjatja mesatare e caktimit të rastit</value>
+  </data>
+  <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+    <value>Koha mesatare e përpunimit nga ZQ </value>
+  </data>
+  <data name="Report_Average_Interview_Duration" xml:space="preserve">
+    <value>Kohëzgjatja mesatare e intervistës </value>
+  </data>
+  <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+    <value>Koha e përgjithshme mesatare e përpunimit të rastit</value>
+  </data>
+  <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+    <value>Koha mesatare e përpunimit nga supervizori</value>
+  </data>
+  <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+    <value>Ditët sipas Statusit të Intervistës </value>
+  </data>
+  <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+    <value>Pajisjet dhe Intervistuesit</value>
+  </data>
+  <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+    <value>Numri i intervistave të përfunduara </value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+    <value>Numri i transaksioneve të intervistave nga ZQ </value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+    <value>Numri i transaksioneve të intervistave nga Supervizori </value>
+  </data>
+  <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+    <value>Numri i intervistave të miratuara nga ZQ</value>
+  </data>
+  <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+    <value>Sasia sipas Intervistuesve</value>
+  </data>
+  <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+    <value>Sasia sipas Supervizorëve</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+    <value>Shpejtësia midis Statuseve sipas Intervistuesve </value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+    <value>Shpejtësia midis Statuseve sipas Supervizorëve</value>
+  </data>
+  <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+    <value>Shpejtësia sipas Intervistuesve </value>
+  </data>
+  <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+    <value>Shpejtësia sipas Supervizorëve </value>
+  </data>
+  <data name="Report_Status_Duration" xml:space="preserve">
+    <value>Kohëzgjatja e Statusit</value>
+  </data>
+  <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+    <value>Supervizorët dhe Statuset</value>
+  </data>
+  <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+    <value>Anketat dhe Statuset</value>
+  </data>
+  <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+    <value>Pjesëtarët e Ekipeve dhe Statuset </value>
+  </data>
+  <data name="Report_Teams_and_Statuses" xml:space="preserve">
+    <value>Ekipet dhe Statuset</value>
+  </data>
+  <data name="Restarted" xml:space="preserve">
+    <value>Rifilloi</value>
+  </data>
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>Ruaje si imazh</value>
+  </data>
+  <data name="SelectConditionQuestion" xml:space="preserve">
+    <value>Zgjidh pyetjen me kusht</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Zgjidh pyetjen</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Numëro ditët e intervistës në Status </value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>Shuma</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Supervizori</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Supervizori i caktuar</value>
+  </data>
+  <data name="SupervisorsAndSurveys" xml:space="preserve">
+    <value>Supervizorët dhe Anketat</value>
+  </data>
+  <data name="SurveyName" xml:space="preserve">
+    <value>Titulli i Pyetësorit</value>
+  </data>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Anketat dhe Statuset</value>
+  </data>
+  <data name="TeamLeadsOnly" xml:space="preserve">
+    <value>Sipas Ekipeve</value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Ekipet dhe Statuset</value>
+  </data>
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>Raporti i Ekipeve dhe Statuseve tregon numrin e intervistave për secilin status sipas ekipeve</value>
+  </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>Raporti i Ekipeve dhe Statuseve tregon numrin e intervistave për secilin status sipas intervistuesit</value>
+  </data>
+  <data name="TemplateVersion" xml:space="preserve">
+    <value>Versioni i pyetësorit</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Këtë muaj</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>Këtë javë</value>
+  </data>
+  <data name="ToAllQuestionnaires" xml:space="preserve">
+    <value>Kthehu te pyetësorët</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Të përditësuar {0}</value>
+  </data>
+  <data name="UpdateNow" xml:space="preserve">
+    <value>Përditëso tani</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>Përditësimi po kryhet</value>
+  </data>
+  <data name="Variables" xml:space="preserve">
+    <value>Variablet</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versioni</value>
+  </data>
+  <data name="ViewOptions" xml:space="preserve">
+    <value>Shih opsionet</value>
+  </data>
+  <data name="WithInterviewers" xml:space="preserve">
+    <value>Sipas Pjesëtarëve të Ekipit</value>
+  </data>
+</root>
