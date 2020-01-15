@@ -323,9 +323,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
 
-            registry.BindWithConstructorArgumentInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>(
-                "eventBusSettings",
-                new EventBusSettings()); // todo restore KP-13449
+            registry.BindInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>();
 
             registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => syncPackagesJobSetting);
             registry.BindToConstant<AssignmentImportOptions>(() => new AssignmentImportOptions(15));
