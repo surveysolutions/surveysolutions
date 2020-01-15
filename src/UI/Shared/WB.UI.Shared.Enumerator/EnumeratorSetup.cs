@@ -17,9 +17,9 @@ using MvvmCross.Binding.Combiners;
 using MvvmCross.Converters;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Logging;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -57,6 +57,7 @@ namespace WB.UI.Shared.Enumerator
 
                 ProcessException(args.Exception);
             };
+
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
                 object exceptionObject = args.ExceptionObject;
@@ -74,25 +75,22 @@ namespace WB.UI.Shared.Enumerator
 
         protected virtual void ProcessException(Exception exception)
         {
-            NLog.LogManager.GetLogger("Global").Error(exception);
+            NLog.LogManager.GetCurrentClassLogger().Error(exception);
         }
 
-        protected override void InitializeViewLookup()
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
         {
-            base.InitializeViewLookup();
-            var viewModelViewLookup = new Dictionary<Type, Type>
-            {
-                {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
-                {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
-                {typeof(OverviewViewModel), typeof (OverviewFragment)},
-                {typeof(PdfViewModel), typeof (PdfViewFragment)},
-                {typeof(OverviewNodeDetailsViewModel), typeof(OverviewNodeDetailsFragment)},
-                {typeof(SelectResponsibleForAssignmentViewModel), typeof(SelectResponsibleForAssignmentFragment)},
-            };
-
-            var container = Mvx.IoCProvider.Resolve<IMvxViewsContainer>();
-            container.AddAll(viewModelViewLookup);
+            var lookup = base.InitializeViewLookup(viewModelViewLookup);
+            lookup.Add<EnumerationStageViewModel, InterviewEntitiesListFragment>();
+            lookup.Add<CoverInterviewViewModel, CoverInterviewFragment>();
+            lookup.Add<OverviewViewModel, OverviewFragment>();
+            lookup.Add<PdfViewModel, PdfViewFragment>();
+            lookup.Add<OverviewNodeDetailsViewModel, OverviewNodeDetailsFragment>();
+            lookup.Add<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentFragment>();
+            return lookup;
         }
+
+        public override MvxLogProviderType GetDefaultLogProviderType() => MvxLogProviderType.NLog;
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)
         {

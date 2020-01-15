@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Services.Export.Interview;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -28,7 +29,8 @@ namespace WB.Services.Export.Host.Controllers
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
-            IJobService jobService, IQuestionnaireStorage questionnaireStorage)
+            IJobService jobService, 
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.exportProcessesService = exportProcessesService ?? throw new ArgumentNullException(nameof(exportProcessesService));
             this.jobsStatusReporting = jobsStatusReporting ?? throw new ArgumentNullException(nameof(jobsStatusReporting));
@@ -221,9 +223,12 @@ namespace WB.Services.Export.Host.Controllers
             {
                 var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId);
 
-                if (!questionnaire?.IsDeleted ?? false)
+                if (questionnaire != null)
                 {
-                    filteredJobList.Add(job);
+                    if (!questionnaire.IsDeleted)
+                    {
+                        filteredJobList.Add(job);
+                    }
                 }
             }
 

@@ -11,26 +11,27 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class ValidityViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<AnswersDeclaredValid>,
-        ILiteEventHandler<AnswersDeclaredInvalid>,
-        ILiteEventHandler<StaticTextsDeclaredValid>,
-        ILiteEventHandler<StaticTextsDeclaredInvalid>,
-        ILiteEventHandler<QuestionsEnabled>,
-        ILiteEventHandler<SubstitutionTitlesChanged>,
+        IAsyncViewModelEventHandler<AnswersDeclaredValid>,
+        IAsyncViewModelEventHandler<AnswersDeclaredInvalid>,
+        IAsyncViewModelEventHandler<StaticTextsDeclaredValid>,
+        IAsyncViewModelEventHandler<StaticTextsDeclaredInvalid>,
+        IAsyncViewModelEventHandler<QuestionsEnabled>,
+        IAsyncViewModelEventHandler<SubstitutionTitlesChanged>,
         ICompositeEntity,
         IDisposable
     {
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
 
         protected ValidityViewModel() { }
 
-        public ValidityViewModel(ILiteEventRegistry liteEventRegistry,
+        public ValidityViewModel(IViewModelEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             ErrorMessagesViewModel errorMessagesViewModel)
@@ -51,9 +52,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId;
             this.navigationState = navigationState;
             this.Identity = entityIdentity;
+            this.UpdateValidStateAsync().WaitAndUnwrapException();
 
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.UpdateValidStateAsync().WaitAndUnwrapException();
         }
 
         private string exceptionErrorMessageFromViewModel;
@@ -96,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public async void Handle(AnswersDeclaredValid @event)
+        public async Task HandleAsync(AnswersDeclaredValid @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
@@ -104,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(AnswersDeclaredInvalid @event)
+        public async Task HandleAsync(AnswersDeclaredInvalid @event)
         {
             if (@event.FailedValidationConditions.Keys.Contains(this.Identity))
             {
@@ -112,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(StaticTextsDeclaredValid @event)
+        public async Task HandleAsync(StaticTextsDeclaredValid @event)
         {
             if (@event.StaticTexts.Contains(this.Identity))
             {
@@ -120,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(StaticTextsDeclaredInvalid @event)
+        public async Task HandleAsync(StaticTextsDeclaredInvalid @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
@@ -128,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(QuestionsEnabled @event)
+        public async Task HandleAsync(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
@@ -137,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        public async void Handle(SubstitutionTitlesChanged @event)
+        public async Task HandleAsync(SubstitutionTitlesChanged @event)
         {
             if (@event.Questions.Contains(this.Identity) || @event.StaticTexts.Contains(this.Identity))
             {

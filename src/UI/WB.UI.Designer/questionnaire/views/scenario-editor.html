@@ -1,7 +1,7 @@
 <div class="modal-header blue-strip handle">
     <button type="button" class="close" aria-hidden="true" ng-click="$close()"></button>
-    <h3 class="modal-title">
-        Edit scenario
+    <h3 class="modal-title" ng-i18next>
+        ScenarioDetails
     </h3>
 </div>
 <div class="modal-body">
@@ -10,12 +10,8 @@
             <div id="edit-scenario" 
                 ui-ace="{ onLoad : aceLoaded,
                     mode: 'json',
-                    showGutter: false }" ng-model="scenario.steps"></div>
-        
+                    showGutter: false }" 
+                ng-model="scenario.steps"></div>
         </form>
-        
     </div>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-lg btn-primary" ng-click="onSave()" ng-i18next="Save" ng-disabled="frmEditor.$pristine"></button>
 </div>

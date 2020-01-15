@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 
 using NSubstitute;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -18,13 +19,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
             var interviewer = CreateInterviewerIdentity(userName);
 
-            InterviewersPlainStorageMock
-               .Setup(x => x.FirstOrDefault())
-               .Returns(interviewer);
+            InterviewerPrincipal
+               .Setup(x => x.DoesIdentityExist())
+               .Returns(true);
+
+            InterviewerPrincipal
+                .Setup(x => x.GetExistingIdentityNameOrNull())
+                .Returns(interviewer.Name);
 
             viewModel = CreateLoginViewModel(
                 viewModelNavigationService: ViewModelNavigationServiceMock.Object,
-                interviewersPlainStorage: InterviewersPlainStorageMock.Object);
+                principal: InterviewerPrincipal.Object);
             await BecauseOf();
         }
 
@@ -39,6 +44,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";
         static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
-        static Mock<IPlainStorage<InterviewerIdentity>> InterviewersPlainStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
+        static Mock<IInterviewerPrincipal> InterviewerPrincipal = new Mock<IInterviewerPrincipal>();
     }
 }

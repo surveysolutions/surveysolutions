@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
@@ -17,7 +16,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.Attachments = new List<AttachmentView>();
             this.Translations = new List<TranslationView>();
         }
+
         public string QuestionnaireId { get; set; }
+        public string QuestionnaireRevision { get; set; }
         public string Title { get; set; }
         public string Variable { get; set; }
         public bool IsPublic { get; set; }
@@ -49,5 +50,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public bool? HideIfDisabled { get; set; }
 
         public List<ScenarioView> Scenarios { get; set; }
+        public List<CategoriesView> Categories { get; set; }
+        
+        public int? PreviewRevision { get; set; }
     }
 }

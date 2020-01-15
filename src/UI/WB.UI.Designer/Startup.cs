@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.IO.Compression;
 using System.Text;
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,11 +13,11 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using StackExchange.Exceptional;
@@ -27,13 +28,14 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.CommonWeb;
-using WB.UI.Designer.DependencyInjection;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
@@ -43,6 +45,7 @@ namespace WB.UI.Designer
 {
     public class Startup
     {
+        internal const string WebTesterCorsPolicy = "_webTester";
         private readonly IHostingEnvironment hostingEnvironment;
 
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
@@ -93,16 +96,60 @@ namespace WB.UI.Designer
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IPasswordHasher<DesignerIdentityUser>, PasswordHasher>();
-            services.AddDefaultIdentity<DesignerIdentityUser>()
+            services
+                .AddDefaultIdentity<DesignerIdentityUser>()
                 .AddRoles<DesignerIdentityRole>()
                 .AddEntityFrameworkStores<DesignerDbContext>();
+
+            services.AddHealthChecks()
+                .AddCheck<DatabaseConnectionCheck>("database");
+
+            services
+                .AddAuthentication(sharedOptions =>
+                {
+                    sharedOptions.DefaultScheme = "boc";
+                    sharedOptions.DefaultChallengeScheme = "boc";
+                })
+                .AddPolicyScheme("boc", "Basic or cookie", options =>
+                {
+                    options.ForwardDefaultSelector = context =>
+                    {
+                        if (context.Request.Headers.ContainsKey("Authorization"))
+                        {
+                            return "basic";
+                        }
+
+                        return IdentityConstants.ApplicationScheme;
+                    };
+                })
+                .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic",
+                    opts => { opts.Realm = "mysurvey.solutions"; });
+
             services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            services.AddMvc()                    
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                })
+                .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new QuestionnaireRevisionBinderProvider()));
+
+            services.AddCors(corsOpt =>
+            {
+                corsOpt.AddPolicy(WebTesterCorsPolicy, b =>
+                {
+                    var st = Configuration.GetSection("WebTester").GetValue<string>("BaseUri");
+                    Uri uri = new Uri(st);
+                    var webTesterOrigin = uri.Scheme + Uri.SchemeDelimiter + uri.Host;
+                    if (Regex.IsMatch(st, ":\\d+")) 
+                    {
+                        webTesterOrigin += ":" + uri.Port;
+                    }
+
+                    b.WithOrigins(webTesterOrigin).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
+            });
 
             // this code need to run lazy load KnownStoreTypes property
             if (!ErrorStore.KnownStoreTypes.Contains(typeof(PostgreSqlErrorStore)))
@@ -111,6 +158,10 @@ namespace WB.UI.Designer
             services.AddExceptional(Configuration.GetSection("Exceptional"), config =>
             {
                 config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
+
+                config.LogFilters.Header.Add("Authorization", "***");
+                config.LogFilters.Form.Add("Password", "***");
+                config.LogFilters.Form.Add("ConfirmPassword", "***");
 
                 if (config.Store.Type == "PostgreSql")
                 {
@@ -123,6 +174,7 @@ namespace WB.UI.Designer
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();
             services.AddTransient<IProductVersionHistory, ProductVersionHistory>();
+            services.AddTransient<IBasicAuthenticationService, BasicBasicAuthenticationService>();
 
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
             services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
@@ -145,6 +197,7 @@ namespace WB.UI.Designer
             services.AddTransient<IEmailSender, MailSender>();
             services.AddTransient<IViewRenderingService, ViewRenderingService>();
             services.AddTransient<IQuestionnaireHelper, QuestionnaireHelper>();
+            services.AddTransient<IDomainRepository, DomainRepository>();
             services.AddScoped<ILoggedInUser, LoggedInUser>();
 
             services.Configure<CompilerSettings>(Configuration.GetSection("CompilerSettings"));
@@ -158,7 +211,6 @@ namespace WB.UI.Designer
             aspCoreKernel.Load(
                 new EventFreeInfrastructureModule(),
                 new InfrastructureModule(),
-                new NcqrsModule(),
                 new DesignerBoundedContextModule(),
                 new QuestionnaireVerificationModule(),
                 new FileInfrastructureModule(),
@@ -211,6 +263,7 @@ namespace WB.UI.Designer
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
+            app.UseCors(WebTesterCorsPolicy);
             
             app.UseRequestLocalization(opt =>
             {
@@ -226,9 +279,12 @@ namespace WB.UI.Designer
                     new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
-                    new CultureInfo("zh")
+                    new CultureInfo("zh"),
+                    new CultureInfo("sq")
                 };
             });
+
+            app.UseHealthChecks("/.hc");
 
             app.UseMvc(routes =>
             {

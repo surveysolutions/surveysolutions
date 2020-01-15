@@ -120,7 +120,8 @@
         },
         selectGroup(context, index) {
             context.commit('selectGroup', index);
-            return context.dispatch('loadClassifications', context.state.groups[index].id);
+            if (context.state.groups.length > 0)
+                context.dispatch('loadClassifications', context.state.groups[index].id);
         },
         addClassification(context, classification) {
             context.commit('addClassification', classification);
@@ -148,7 +149,8 @@
         },
         selectClassification(context, index) {
             context.commit('selectClassification', index);
-            return context.dispatch('loadCategories', context.state.classifications[index].id);
+            if (context.state.classifications.length > 0)
+                context.dispatch('loadCategories', context.state.classifications[index].id);
         },
 
         loadGroups: function(context) {

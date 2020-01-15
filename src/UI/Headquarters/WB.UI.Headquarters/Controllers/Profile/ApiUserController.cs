@@ -58,7 +58,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(Pages.Profile_ApiUserWasCreated.FormatString(model.UserName));
                     return this.RedirectToAction("Index");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             return this.View(model);
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully.FormatString(model.UserName));
                     return this.RedirectToAction("Index");
                 }
-                AddErrors(updateResult);
+                AddErrors(updateResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form

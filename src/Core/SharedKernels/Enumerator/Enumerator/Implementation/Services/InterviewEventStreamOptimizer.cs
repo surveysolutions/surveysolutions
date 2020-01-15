@@ -12,24 +12,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class InterviewEventStreamOptimizer : IInterviewEventStreamOptimizer
     {
-        public IReadOnlyCollection<CommittedEvent> RemoveEventsNotNeededToBeSent(
-            IReadOnlyCollection<CommittedEvent> interviewEvents)
+        public IReadOnlyCollection<CommittedEvent> FilterEventsToBeSent(
+            IEnumerable<CommittedEvent> interviewEvents, Guid? lastCompletionCommitId)
         {
-            if (interviewEvents.Count == 0)
-                return interviewEvents;
+            if (!lastCompletionCommitId.HasValue)
+                return interviewEvents.ToReadOnlyCollection();
 
-            CommittedEvent lastCompletionCommittedEvent = interviewEvents.LastOrDefault(@event => @event.Payload is InterviewCompleted);
-            if (lastCompletionCommittedEvent != null)
-            {
-                Guid lastCompletionCommitId = lastCompletionCommittedEvent.CommitId;
-
-                return interviewEvents.Where(@event => !ShouldNotSendEvent(@event, lastCompletionCommitId))
-                                      .ToReadOnlyCollection();
-            }
-
-            return interviewEvents;
+            return interviewEvents.Where(@event => !ShouldNotSendEvent(@event, lastCompletionCommitId.Value)).ToReadOnlyCollection();
         }
-
+        
         private static bool ShouldNotSendEvent(CommittedEvent committedEvent, Guid lastCompletionCommitId)
             => IsInterviewerOnly(committedEvent.Payload)
             || IsCalculatedButNotAggregating(committedEvent, lastCompletionCommitId);

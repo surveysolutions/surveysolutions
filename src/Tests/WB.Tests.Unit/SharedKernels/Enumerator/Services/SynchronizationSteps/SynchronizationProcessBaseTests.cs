@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.SynchronizationSteps
             syncService.Setup(x => x.GetInterviewDetailsAsync(reassingedInterviewId, It.IsAny<IProgress<TransferProgress>>(), CancellationToken.None))
                 .ReturnsAsync(interviewDetails);
 
-            var localInterviews = new InMemoryPlainStorage<InterviewView>();
+            var localInterviews = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             localInterviews.Store(Create.Entity.InterviewView(interviewId: reassingedInterviewId, responsibleId: oldAssignee));
             var busMock = new Mock<ILiteEventBus>();
             var interviewerInterviewAccessorMock = new Mock<IInterviewsRemover>();
@@ -88,10 +88,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.SynchronizationSteps
             syncService.Setup(x => x.GetInterviewDetailsAsync(interviewId, It.IsAny<IProgress<TransferProgress>>(), CancellationToken.None))
                 .ReturnsAsync(interviewDetails);
 
-            var localInterviews = new InMemoryPlainStorage<InterviewView>();
+            var localInterviews = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             var busMock = new Mock<ILiteEventBus>();
 
-            var localInterviewSequence = new InMemoryPlainStorage<InterviewSequenceView, Guid>();
+            var localInterviewSequence = Create.Storage.InMemorySqlitePlainStorage<InterviewSequenceView, Guid>();
             localInterviewSequence.Store(Create.Entity.InterviewSequenceView(interviewId, 5));
 
             var process = Create.Service.InterviewerDownloadInterviews(synchronizationService: syncService.Object,
@@ -132,10 +132,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.SynchronizationSteps
             syncService.Setup(x => x.GetInterviewDetailsAsync(interviewId, It.IsAny<IProgress<TransferProgress>>(), CancellationToken.None))
                 .ReturnsAsync(interviewDetails);
 
-            var localInterviews = new InMemoryPlainStorage<InterviewView>();
+            var localInterviews = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             var busMock = new Mock<ILiteEventBus>();
 
-            var localInterviewSequence = new InMemoryPlainStorage<InterviewSequenceView, Guid>();
+            var localInterviewSequence = Create.Storage.InMemorySqlitePlainStorage<InterviewSequenceView, Guid>();
             localInterviewSequence.Store(Create.Entity.InterviewSequenceView(interviewId, 7));
 
             var process = Create.Service.InterviewerDownloadInterviews(synchronizationService: syncService.Object,
@@ -176,7 +176,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.SynchronizationSteps
             syncService.Setup(x => x.GetInterviewDetailsAsync(interviewId, It.IsAny<IProgress<TransferProgress>>(), CancellationToken.None))
                 .ReturnsAsync(interviewDetails);
 
-            var localInterviews = new InMemoryPlainStorage<InterviewView>();
+            var localInterviews = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             localInterviews.Store(Create.Entity.InterviewView(interviewId: interviewId, responsibleId: responsibleId));
             var busMock = new Mock<ILiteEventBus>();
 
@@ -197,7 +197,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.SynchronizationSteps
         {
             var responsible = Id.g1;
 
-            var localInterviews = new InMemoryPlainStorage<InterviewView>();
+            var localInterviews = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             var interviewId = Id.gA;
             var interview = Create.Entity.InterviewView(interviewId: interviewId, responsibleId: responsible);
             localInterviews.Store(interview);
@@ -219,7 +219,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.SynchronizationSteps
             syncService.Setup(x => x.CheckObsoleteInterviewsAsync(It.IsAny<List<ObsoletePackageCheck>>(), CancellationToken.None))
                 .ReturnsAsync(new List<Guid>());
 
-            var localInterviewSequence = new InMemoryPlainStorage<InterviewSequenceView, Guid>();
+            var localInterviewSequence = Create.Storage.InMemorySqlitePlainStorage<InterviewSequenceView, Guid>();
             localInterviewSequence.Store(Create.Entity.InterviewSequenceView(interviewId, 7));
 
             var step = Create.Service.InterviewerDownloadInterviews(synchronizationService: syncService.Object,

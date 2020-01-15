@@ -551,7 +551,7 @@
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
     <value>Questionnaires received by Interviewer</value>
   </data>
-  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+  <data name="InterviewerProfile_DownloadedAssignmentsCount" xml:space="preserve">
     <value>Assignments received by Interviewer</value>
   </data>
   <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
@@ -1131,7 +1131,7 @@
     <value>Max Scale</value>
   </data>
   <data name="MapList_Title" xml:space="preserve">
-    <value>Maps</value>
+    <value>Map files</value>
   </data>
   <data name="MapList_Upload" xml:space="preserve">
     <value>Upload .zip file</value>
@@ -1149,7 +1149,7 @@
     <value>Delete Map</value>
   </data>
   <data name="MapList_Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Interviewer Name</value>
   </data>
   <data name="MapList_Size" xml:space="preserve">
     <value>Size (MB)</value>
@@ -1274,5 +1274,26 @@
   </data>
   <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
     <value>Interviewer location was never recorded in any of the interviews that he/she has submitted</value>
+  </data>
+  <data name="Questionnaire_Info" xml:space="preserve">
+    <value>Questionnaire details</value>
+  </data>
+  <data name="Questionnaire_Stats" xml:space="preserve">
+    <value>Questionnaire Information</value>
+  </data>
+  <data name="Questionnaire_QuestionsCount" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="Questionnaire_QuestionsCountWithCond" xml:space="preserve">
+    <value>Questions with conditions</value>
+  </data>
+  <data name="Questionnaire_RostersCount" xml:space="preserve">
+    <value>Number of rosters</value>
+  </data>
+  <data name="Questionnaire_SectionsCount" xml:space="preserve">
+    <value>Number of sections</value>
+  </data>
+  <data name="Questionnaire_SubSectionsCount" xml:space="preserve">
+    <value>Number of sub-sections</value>
   </data>
 </root>

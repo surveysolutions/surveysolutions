@@ -5,7 +5,9 @@ using AutoFixture;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -32,12 +34,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            fixture.Register<IPlainStorageAccessor<Assignment>>(() => new TestPlainStorage<Assignment>(
-                new Dictionary<object, Assignment>
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() => new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(
+                new Dictionary<Guid, Assignment>
                 {
-                    { 1, Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1))},
-                    { 2, Create.Entity.Assignment(2, Create.Entity.QuestionnaireIdentity(Id.gB, 1))},
-                    { 3, Create.Entity.Assignment(3, Create.Entity.QuestionnaireIdentity(Id.gA, 2), 
+                    { Id.g1, Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1))},
+                    { Id.g2, Create.Entity.Assignment(2, Create.Entity.QuestionnaireIdentity(Id.gB, 1))},
+                    { Id.g3, Create.Entity.Assignment(3, Create.Entity.QuestionnaireIdentity(Id.gA, 2), 
                             updatedAt: DateTime.UtcNow.AddDays(1)) }
                 }
             ));
@@ -58,12 +60,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            fixture.Register<IPlainStorageAccessor<Assignment>>(() => new TestPlainStorage<Assignment>(
-                new Dictionary<object, Assignment>
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() => new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(
+                new Dictionary<Guid, Assignment>
                 {
-                    { 1, Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1), questionnaireTitle: "Aaaaa")},
-                    { 2, Create.Entity.Assignment(2, Create.Entity.QuestionnaireIdentity(Id.gB, 1), questionnaireTitle: "CCCCCC")},
-                    { 3, Create.Entity.Assignment(3, Create.Entity.QuestionnaireIdentity(Id.gA, 2), questionnaireTitle: "Asterix")}
+                    { Id.g1, Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1), questionnaireTitle: "Aaaaa")},
+                    { Id.g2, Create.Entity.Assignment(2, Create.Entity.QuestionnaireIdentity(Id.gB, 1), questionnaireTitle: "CCCCCC")},
+                    { Id.g3, Create.Entity.Assignment(3, Create.Entity.QuestionnaireIdentity(Id.gA, 2), questionnaireTitle: "Asterix")}
                 }
             ));
 
@@ -86,14 +88,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var fixture = NewFixture();
 
             var assignment = Create.Entity.Assignment(1);
-            assignment.MarkAsReceivedByTablet();
+            assignment.ReceivedByTabletAtUtc = DateTime.UtcNow;
 
-            fixture.Register<IPlainStorageAccessor<Assignment>>(() => 
-                new TestPlainStorage<Assignment>(
-                    new Dictionary<object, Assignment>
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() => 
+                new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(
+                    new Dictionary<Guid, Assignment>
                     {
-                        {1, assignment},
-                        {2, Create.Entity.Assignment(2)}
+                        {Id.g1, assignment},
+                        {Id.g2, Create.Entity.Assignment(2)}
                     }
             ));
 

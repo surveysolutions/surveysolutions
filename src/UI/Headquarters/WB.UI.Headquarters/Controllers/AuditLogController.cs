@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -29,7 +30,7 @@ namespace WB.UI.Headquarters.Controllers
             
             if (this.logReader.LogExists())
                 model.Log = this.logReader.Read();
-
+            
             return View(model);
         }
     }
@@ -37,6 +38,6 @@ namespace WB.UI.Headquarters.Controllers
     public class AuditLogModel
     {
         public string ServerFilePathLocation { get; set; }
-        public string[] Log { get; set; }
+        public string[] Log { get; set; } = Array.Empty<string>();
     }
 }

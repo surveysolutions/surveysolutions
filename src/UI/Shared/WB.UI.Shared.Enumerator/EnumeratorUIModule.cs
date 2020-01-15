@@ -35,7 +35,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomBindings.Models;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
@@ -44,6 +43,7 @@ using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Shared.Enumerator.Services.Notifications;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator
 {
@@ -109,7 +109,9 @@ namespace WB.UI.Shared.Enumerator
             
             registry.Bind<INotificationPublisher, NotificationPublisher>();
             registry.Bind<IEnumeratorWorkerManager, EnumeratorWorkerManager>();
-            
+            registry.Bind<ICurrentViewModelPresenter, CurrentViewModelPresenter>();
+            registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
+
             SetupLoggingFacility(registry);
         }
 
@@ -131,19 +133,44 @@ namespace WB.UI.Shared.Enumerator
         private void SetupLoggingFacility(IIocRegistry registry)
         {
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
-            var fileName = Path.Combine(pathToLocalDirectory, "Logs", "${shortdate}.log");
-            var fileTarget = new FileTarget("logFile")
+            var logsDirectory = Path.Combine(pathToLocalDirectory, "Logs");
+
+            var logMessageLayout = "${date:format=HH\\:mm\\:ss}[${logger:shortName=true}][${level}][${message}]${onexception:${exception:format=toString,Data:exceptionDataSeparator=\r\n}|${stacktrace}}";
+            var traceMessageLayout = logMessageLayout;
+
+            var fileTarget = new FileTarget("persistedLog")
             {
-                FileName = fileName,
-                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data:exceptionDataSeparator=\r\n}|${stacktrace}}]"
+                FileName = Path.Combine(logsDirectory, "${shortdate}.log"),
+                Layout = logMessageLayout
+            };
+
+            var traceFileTarget = new FileTarget("traceLog")
+            {
+                Layout = traceMessageLayout,
+                FileName = Path.Combine(logsDirectory, "Trace", "Trace.log"),
+                ArchiveFileName = Path.Combine(logsDirectory, "TraceArchive", "Trace-{#}.log"),
+                MaxArchiveFiles = 3,
+                ArchiveAboveSize = 2 * 1024 * 1024,
+                ArchiveNumbering = ArchiveNumberingMode.Sequence
             };
 
             var config = new LoggingConfiguration();
-            config.AddTarget("logFile", fileTarget);
-            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
+            config.AddRule(LogLevel.Info, LogLevel.Fatal, fileTarget, "WB.*");
+            config.AddRule(LogLevel.Trace, LogLevel.Fatal, traceFileTarget);
 
-            #if DEBUG
-            var androidTarget = new TraceTarget("android")
+            EnableDebugLogging(config);
+
+            registry.Bind<ILoggerProvider, NLogLoggerProvider>();
+
+            LogManager.Configuration = config;
+
+            LogManager.ReconfigExistingLoggers();
+        }
+
+        private static void EnableDebugLogging(LoggingConfiguration config)
+        {
+#if DEBUG
+            var androidTarget = new LogCatTarget
             {
                 Layout =
                     "[${logger:shortName=true}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"
@@ -151,11 +178,7 @@ namespace WB.UI.Shared.Enumerator
 
             config.AddTarget("android", androidTarget);
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, androidTarget));
-            #endif
-
-            registry.Bind<ILoggerProvider, NLogLoggerProvider>();
-
-            LogManager.Configuration = config;
+#endif
         }
     }
 }

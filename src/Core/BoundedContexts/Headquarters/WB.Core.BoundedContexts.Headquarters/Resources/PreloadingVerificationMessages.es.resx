@@ -165,9 +165,6 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>El responsable de una o mas observaciones se encuentra bloqueado.</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>El usuario no es el Supervisor o Entrevistador en una o mas observaciones.</value>
-  </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>La respuesta a una pregunta que define el tamaño de la lista no puede ser mayor a {0}</value>
   </data>

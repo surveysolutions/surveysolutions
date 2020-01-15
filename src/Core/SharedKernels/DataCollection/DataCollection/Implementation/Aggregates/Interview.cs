@@ -112,7 +112,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IInterviewExpressionStorage expressionStorageCached = null;
         protected IInterviewExpressionStorage GetExpressionStorage()
         {
-            return expressionStorageCached ?? (expressionStorageCached = this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity));
+            var cached = expressionStorageCached;
+            if (cached != null)
+            {
+                return cached;
+            }
+
+            var questionnaire = this.GetQuestionnaireOrThrow(this.Language);
+            var initialExpressionState = Activator.CreateInstance(questionnaire.ExpressionStorageType) as IInterviewExpressionStorage;
+            expressionStorageCached = initialExpressionState;
+
+            return expressionStorageCached;
         }
 
         public IServiceLocator ServiceLocatorInstance { get; set; }
@@ -722,7 +732,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
         private IQuestionOptionsRepository questionOptionsRepository;
 
-        private IQuestionnaire GetQuestionnaireOrThrow(string language)
+        protected virtual IQuestionnaire GetQuestionnaireOrThrow(string language)
         {
             var cacheKey = language ?? "Default-Language-9518C2F02FF54DC9A6BCB31507B03F06";
 
@@ -761,23 +771,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         /// Filter for regular categorical questions, such as YesNo, Single and Multi.
-        public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, 
-            int? parentQuestionValue, string filter, int itemsCount = 200)
+        public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity,
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
+            var options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
+
             if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
-                return questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter).Take(itemsCount).ToList();
+                return options.Take(itemsCount).ToList();
 
             if (this.UsesExpressionStorage)
-            {
-                var unfilteredOptionsForQuestion = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter);
+                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
 
-                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, unfilteredOptionsForQuestion);
-            }
-
-            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity,
-                questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
+            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity, options).Take(itemsCount).ToList();
         }
 
         protected List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount,
@@ -818,7 +825,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value);
+            return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value, parentQuestionValue);
         }
 
         public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
@@ -1184,8 +1191,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
+                var parentValue = treeQuestion.GetAsInterviewTreeCascadingQuestion()?.GetCascadingParentQuestion()
+                    ?.GetAnswer()?.SelectedValue;
+
                 new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
-                    .RequireFixedSingleOptionAnswerAllowed(selectedValue, this.QuestionnaireIdentity);
+                    .RequireFixedSingleOptionAnswerAllowed(selectedValue, parentValue, this.QuestionnaireIdentity);
             }
 
             var changedInterviewTree = CloneTree();
@@ -1686,8 +1696,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        //todo should respect changes calculated in ExpressionState
-        public void ReevaluateSynchronizedInterview(Guid responsibleId)
+        
+        public void ReevaluateInterview(Guid responsibleId)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -2734,7 +2744,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 else
                 {
                     roster.UpdateRosterTitle((questionId, answerOptionValue) =>
-                        questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
+                        questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue, null).Title);
                 }
             }
         }

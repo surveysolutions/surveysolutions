@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using MvvmCross.Plugin.Messenger;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -40,12 +41,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>>
                 {DefaultValue = DefaultValue.Mock};
             var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(),
-                Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>());
+                Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
                    && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer &&
-                   _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200) ==
+                   _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200, It.IsAny<int[]>()) ==
                    new List<CategoricalOption>()
                    {
                        new CategoricalOption() {Title = "abc", Value = 1},
@@ -101,7 +102,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
                    && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer &&
-                   _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200) == new List<CategoricalOption>() { option });
+                   _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200, It.IsAny<int[]>()) == new List<CategoricalOption>() { option });
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
@@ -109,7 +110,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
 
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
-            var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>());
+            var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
 
             var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel();
 

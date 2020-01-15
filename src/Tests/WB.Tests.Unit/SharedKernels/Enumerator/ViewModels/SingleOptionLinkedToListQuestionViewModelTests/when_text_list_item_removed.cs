@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
             interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new Tuple<decimal, string>[0]);
 
             //act
-            viewModel.Handle(Create.Event.LinkedToListOptionsChanged(new[]
+            viewModel.HandleAsync(Create.Event.LinkedToListOptionsChanged(new[]
             {
                 Create.Event.ChangedLinkedToListOptions(Identity.Create(singleOptionQuestionId, RosterVector.Empty))
             }));

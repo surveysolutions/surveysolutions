@@ -15,10 +15,14 @@ namespace WB.Infrastructure.Native.Storage
         protected const string oldAssemblyGenericReplacePattern = ", Main.Core";
         protected const string newAssemblyGenericReplacePattern = ", WB.Core.SharedKernels.Questionnaire";
 
-        protected readonly Dictionary<string, string> typesMap = new Dictionary<string, string>();
-        protected readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
+        protected static readonly Dictionary<string, string> typesMap = new Dictionary<string, string>();
+        protected static readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
 
         protected MainCoreAssemblyRedirectSerializationBaseBinder()
+        {
+        }
+
+        static MainCoreAssemblyRedirectSerializationBaseBinder()
         {
             var assembly = typeof(QuestionnaireDocument).Assembly;
 

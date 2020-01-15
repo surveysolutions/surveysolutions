@@ -1019,5 +1019,25 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var hasAnyPL0003error = errors.Any(e => e.Code == "PL0003");
             Assert.That(hasAnyPL0003error, Is.False);
         }
+
+        [Test]
+        public void when_verify_columns_with_comment_column_should_return_empty_errors()
+        {
+            // arrange
+            var txtVariable = "txt";
+            var commentColumn = "_comment";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion(variable: txtVariable)));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { txtVariable, commentColumn });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
     }
 }

@@ -13,7 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -41,13 +41,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
         private readonly IUserViewFactory userViewFactory;
         private readonly IQuestionOptionsRepository questionOptionsRepository;
-        private readonly IPlainStorageAccessor<Assignment> assignmentsRepository;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsRepository;
 
         public ImportDataVerifier(IFileSystemAccessor fileSystem,
             IInterviewTreeBuilder interviewTreeBuilder,
             IUserViewFactory userViewFactory,
             IQuestionOptionsRepository questionOptionsRepository,
-            IPlainStorageAccessor<Assignment> assignmentsRepository)
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsRepository)
         {
             this.fileSystem = fileSystem;
             this.interviewTreeBuilder = interviewTreeBuilder;
@@ -320,7 +320,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentIntegerAnswer>(Integer_IsNegativeRosterSize, "PL0022", messages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative),
             Error<AssignmentResponsible>(Responsible_NotFound, "PL0026", messages.PL0026_ResponsibleWasNotFound),
             Error<AssignmentResponsible>(Responsible_IsLocked, "PL0027", messages.PL0027_ResponsibleIsLocked),
-            Error<AssignmentResponsible>(Responsible_HasInvalidRole, "PL0028", messages.PL0028_UserIsNotSupervisorOrInterviewer),
+            Error<AssignmentResponsible>(Responsible_HasInvalidRole, "PL0028", messages.PL0028_UserIsNotHQOrSupervisorOrInterviewer),
             Error<AssignmentIntegerAnswer>(Integer_ExceededRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxRosterRowCount)),
             Error<AssignmentIntegerAnswer>(Integer_ExceededLongRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxLongRosterRowCount)),
             Errors<AssignmentGpsAnswer>(Gps_DontHaveLongitudeOrLatitude, "PL0030", messages.PL0030_GpsMandatoryFilds),
@@ -396,7 +396,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var enumerableRows = allRowsByAllFiles
                 .Where(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire))
                 .Select(x => x.InterviewIdValue.Value);
-            var allInterviewIdsFromMainFile = Enumerable.ToHashSet(enumerableRows);
+            var allInterviewIdsFromMainFile = enumerableRows.ToHashSet();
 
             var allInterviewsIdsFromFirstLevelRoster = allRowsByAllFiles
                 .Where(x => x.RosterInstanceCodes.Length == 1)
@@ -470,7 +470,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var enumerableVariables = numericRosterSizeQuestions
                 .SelectMany(questionnaire.GetRosterGroupsByRosterSizeQuestion)
                 .Select(questionnaire.GetRosterVariableName);
-            var rosterNamesByNumericRosters = Enumerable.ToHashSet(enumerableVariables);
+            var rosterNamesByNumericRosters = enumerableVariables.ToHashSet();
 
             var rowsByNumericRosters = allRowsByAllFiles.GroupBy(z => z.QuestionnaireOrRosterName)
                 .Where(x => rosterNamesByNumericRosters.Contains(x.Key));
@@ -564,7 +564,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                  columnName == ServiceColumns.EmailColumnName ||
                  columnName == ServiceColumns.PasswordColumnName ||
                  columnName == ServiceColumns.WebModeColumnName ||
-                 columnName == ServiceColumns.RecordAudioColumnName) && 
+                 columnName == ServiceColumns.RecordAudioColumnName ||
+                 columnName == ServiceColumns.CommentsColumnName) && 
                 IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire)) return false;
 
             if (ServiceColumns.AllSystemVariables.Contains(columnName)) return false;
@@ -880,11 +881,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         }
 
         private bool Responsible_HasInvalidRole(AssignmentResponsible responsible) 
-            => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible != null && !responsible.Responsible.IsSupervisorOrInterviewer;
+            => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible != null && !responsible.Responsible.IsHQOrSupervisorOrInterviewer;
 
         private bool Responsible_IsLocked(AssignmentResponsible responsible)
             => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible != null &&
-               responsible.Responsible.IsSupervisorOrInterviewer && responsible.Responsible.IsLocked;
+               responsible.Responsible.IsHQOrSupervisorOrInterviewer && responsible.Responsible.IsLocked;
 
         private bool Responsible_NotFound(AssignmentResponsible responsible) 
             => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible == null;

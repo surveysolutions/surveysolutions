@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -7,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.CsvExport.Exporters;
-using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -29,7 +29,9 @@ namespace WB.Services.Export.CsvExport.Implementation
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         private readonly IProductVersion productVersion;
+        private readonly IPdfExporter pdfExporter;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IAssignmentActionsExporter assignmentActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
 
         public TabularFormatExportService(
@@ -42,7 +44,9 @@ namespace WB.Services.Export.CsvExport.Implementation
             IQuestionnaireExportStructureFactory exportStructureFactory,
             IQuestionnaireStorage questionnaireStorage,
             IProductVersion productVersion, 
-            IFileSystemAccessor fileSystemAccessor)
+            IPdfExporter pdfExporter,
+            IFileSystemAccessor fileSystemAccessor,
+            IAssignmentActionsExporter assignmentActionsExporter)
         {
             this.logger = logger;
             this.interviewsToExportSource = interviewsToExportSource;
@@ -53,7 +57,9 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.exportStructureFactory = exportStructureFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.productVersion = productVersion;
+            this.pdfExporter = pdfExporter;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.assignmentActionsExporter = assignmentActionsExporter;
         }
 
         public async Task ExportInterviewsInTabularFormatAsync(
@@ -76,17 +82,20 @@ namespace WB.Services.Export.CsvExport.Implementation
             var exportCommentsProgress = new ExportProgress();
             var exportInterviewActionsProgress = new ExportProgress();
             var exportDiagnosticsProgress = new ExportProgress();
+            var exportAssignmentActionsProgress = new ExportProgress();
 
             ProgressAggregator progressAggregator = new ProgressAggregator();
             progressAggregator.Add(exportInterviewsProgress, 0.4);
-            progressAggregator.Add(exportCommentsProgress, 0.2);
+            progressAggregator.Add(exportCommentsProgress, 0.1);
             progressAggregator.Add(exportInterviewActionsProgress, 0.2);
-            progressAggregator.Add(exportDiagnosticsProgress, 0.2);
+            progressAggregator.Add(exportDiagnosticsProgress, 0.1);
+            progressAggregator.Add(exportAssignmentActionsProgress, 0.2);
 
             progressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(questionnaireIdentity, status, fromDate, toDate);
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
+            var assignmentIdsToExport = new HashSet<int>(interviewsToExport.Where(x => x.AssignmentId.HasValue).Select(x => x.AssignmentId.Value)).ToList();
 
             Stopwatch exportWatch = Stopwatch.StartNew();
 
@@ -94,7 +103,9 @@ namespace WB.Services.Export.CsvExport.Implementation
                 this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, tempPath, tenant, exportCommentsProgress, cancellationToken),
                 this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cancellationToken),
                 this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cancellationToken),
-                this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cancellationToken)
+                this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cancellationToken),
+                this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath, exportAssignmentActionsProgress, cancellationToken),
+                this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath)
             );
 
             exportWatch.Stop();
@@ -107,10 +118,17 @@ namespace WB.Services.Export.CsvExport.Implementation
         
         public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension)
         {
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
             QuestionnaireExportStructure questionnaireExportStructure = await this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
+
+            var questionnaireUrl = $"https://designer.mysurvey.solutions/questionnaire/details/{questionnaire.PublicKey.ToString("N")}";
+            if (questionnaire.Revision > 0)
+                questionnaireUrl += $"${questionnaire.Revision}";
 
             var descriptionBuilder = new StringBuilder();
             descriptionBuilder.AppendLine($"Generated by Survey Solutions export module {this.productVersion} on {DateTime.Today:D}");
+            descriptionBuilder.AppendLine($"The data in this download were collected using the Survey Solutions questionnaire \"{questionnaire.Title}\". ");
+            descriptionBuilder.AppendLine($"You can open the questionnaire in the Survey Solutions Designer online by that link: {questionnaireUrl}");
 
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {

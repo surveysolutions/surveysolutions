@@ -11,9 +11,11 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -40,30 +42,48 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
         }
 
-        [HttpPost]
-        public AllInterviewsView AllInterviews(DocumentListViewModel data)
+        [HttpGet]
+        [CamelCase]
+        public InterviewsDataTableResponse Interviews([FromUri] InterviewsDataTableRequest request)
         {
+
             var input = new AllInterviewsInputModel
             {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Orders = data.SortOrder,
-                QuestionnaireId = data.TemplateId,
-                QuestionnaireVersion = data.TemplateVersion,
-                SupervisorOrInterviewerName = data.ResponsibleName,
-                Statuses = data.Status.HasValue ? new [] {data.Status.Value} : null,
-                SearchBy = data.SearchBy,
-                AssignmentId = data.AssignmentId,
-                UnactiveDateStart = data.UnactiveDateStart?.ToUniversalTime(),
-                UnactiveDateEnd = data.UnactiveDateEnd?.ToUniversalTime(),
-                TeamId = data.TeamId
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.GetSortOrderRequestItems(),
+                QuestionnaireId = request.QuestionnaireId,
+                QuestionnaireVersion = request.QuestionnaireVersion,
+                SupervisorOrInterviewerName = request.ResponsibleName,
+                Statuses = request.Status != null ? new[] { request.Status.Value } : null,
+                SearchBy = request.SearchBy ?? request.Search.Value,
+                TeamId = request.TeamId,
+                UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
+                UnactiveDateEnd = request.UnactiveDateEnd?.ToUniversalTime(),
+                AssignmentId = request.AssignmentId,
+                //ResponsibleId = request.ResponsibleId
             };
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
 
-            foreach (var x in allInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
+            foreach (var x in allInterviews.Items)
+            {
+                Enum.TryParse(x.Status, out InterviewStatus myStatus);
+                x.Status = myStatus.ToLocalizeString();
 
-            return allInterviews;
+                foreach (var y in x.FeaturedQuestions)
+                    y.Question = y.Question.RemoveHtmlTags();
+            }
+
+            var response = new InterviewsDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = allInterviews.TotalCount,
+                RecordsFiltered = allInterviews.TotalCount,
+                Data = allInterviews.Items
+            };
+
+            return response;
         }
 
         [HttpGet]
@@ -99,32 +119,42 @@ namespace WB.UI.Headquarters.Controllers
 
             return response;
         }
-
-        [HttpPost]
-        public TeamInterviewsView TeamInterviews(DocumentListViewModel data)
+        
+        [HttpGet]
+        [CamelCase]
+        public TeamInterviewsDataTableResponse GetTeamInterviews([FromUri] InterviewsDataTableRequest request)
         {
             var input = new TeamInterviewsInputModel
             {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Orders = data.SortOrder,
-                QuestionnaireId = data.TemplateId,
-                QuestionnaireVersion = data.TemplateVersion,
-                SearchBy = data.SearchBy,
-                Status = data.Status,
-                ResponsibleName = data.ResponsibleName,
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.GetSortOrderRequestItems(),
+                QuestionnaireId = request.QuestionnaireId,
+                QuestionnaireVersion = request.QuestionnaireVersion,
+                SearchBy = request.SearchBy,
+                Status = request.Status,
+                ResponsibleName = request.ResponsibleName,
                 ViewerId = this.authorizedUser.Id,
-                UnactiveDateStart = data.UnactiveDateStart?.ToUniversalTime(),
-                UnactiveDateEnd = data.UnactiveDateEnd?.ToUniversalTime(),
-                AssignmentId = data.AssignmentId
+                UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
+                UnactiveDateEnd = request.UnactiveDateEnd?.ToUniversalTime(),
+                AssignmentId = request.AssignmentId
             };
 
-            var teamInterviews =  this.teamInterviewViewFactory.Load(input);
+            var teamInterviews = this.teamInterviewViewFactory.Load(input);
 
             foreach (var x in teamInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
 
-            return teamInterviews;
+            var response = new TeamInterviewsDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = teamInterviews.TotalCount,
+                RecordsFiltered = teamInterviews.TotalCount,
+                Data = teamInterviews.Items
+            };
+
+            return response;
         }
+
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Supervisor, Headquarter")]

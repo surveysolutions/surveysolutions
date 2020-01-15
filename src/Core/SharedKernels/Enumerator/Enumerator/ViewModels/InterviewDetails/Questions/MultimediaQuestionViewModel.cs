@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultimediaQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPictureChooser pictureChooser;
         private readonly IUserInteractionService userInteractionService;
         private readonly IInterviewFileStorage imageFileStorage;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private Guid interviewId;
         private Identity questionIdentity;
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IImageFileStorage imageFileStorage,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IQuestionnaireStorage questionnaireStorage,
             IPictureChooser pictureChooser,
             IUserInteractionService userInteractionService,
@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (multimediaQuestion.IsAnswered())
             {
                 var multimediaAnswer = multimediaQuestion.GetAnswer();
-                this.Answer = this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.FileName);
+                this.Answer =  this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.FileName);
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                     catch (InterviewException ex)
                     {
-                        this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                        await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
                         this.QuestionState.Validity.ProcessException(ex);
                     }
                 }
@@ -192,13 +192,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             {
                                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                                 this.Answer =
-                                    this.imageFileStorage.GetInterviewBinaryData(this.interviewId,
+                                    await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId,
                                         pictureFileName);
                                 this.QuestionState.Validity.ExecutedWithoutExceptions();
                             }
                             catch (InterviewException ex)
                             {
-                                this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
                                 this.QuestionState.Validity.ProcessException(ex);
                             }
                         }
@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 var pictureFileName = this.GetPictureFileName();
-                this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
 
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,

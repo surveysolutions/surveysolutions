@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             questionnaireStorage.SetReturnsDefault(questionnaire);
             interviewRepository.SetReturnsDefault(interview);
 
-            eventRegistry = new Mock<ILiteEventRegistry>();
+            eventRegistry = new Mock<IViewModelEventRegistry>();
 
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object, 
                 interviewRepository: interviewRepository.Object,
@@ -83,7 +84,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         static Identity questionId;
         static NavigationState navigationState;
         private static Guid questionGuid;
-        private static Mock<ILiteEventRegistry> eventRegistry;
+        private static Mock<IViewModelEventRegistry> eventRegistry;
     }
 }
 

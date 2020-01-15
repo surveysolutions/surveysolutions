@@ -18,11 +18,6 @@
                         style="width:300px" 
                         :src="audioRecordPath">
                     </audio>
-                    <button v-if="!isRecording" 
-                        v-on:click="startRecording" 
-                        :disabled="!$me.acceptAnswer" 
-                        type="button"
-                        class="btn btn-default btn-lg btn-action-questionnaire"><span></span>{{ $t("WebInterviewUI.AudioRecordNew") }}</button>
                 </div>
                 <wb-lock />
             </div>
@@ -156,7 +151,7 @@ export default {
                     },
                     doneCallback: (blob) => {
                         self.$store.dispatch('answerAudioQuestion', {
-                            id: self.id,
+                            identity: self.id,
                             file: blob
                         })
                     }

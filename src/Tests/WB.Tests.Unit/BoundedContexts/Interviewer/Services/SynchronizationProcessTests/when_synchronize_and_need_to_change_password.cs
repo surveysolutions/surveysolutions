@@ -32,6 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
 
             var principalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
+            principalMock.Setup(x => x.GetInterviewerByName(It.IsAny<string>())).Returns(interviewerIdentity);
             
             userInteractionServiceMock
                 .Setup(x => x.ConfirmWithTextInputAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
@@ -65,7 +66,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var viewModel = Create.Service.SynchronizationProcess(principal: principalMock.Object,
                 synchronizationService: synchronizationServiceMock.Object,
-                interviewersPlainStorage: interviewerStorageMock.Object,
                 userInteractionService: userInteractionServiceMock.Object,
                 passwordHasher: passwordHasherMock.Object);
 
@@ -74,8 +74,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             // Assert
 
-            interviewerStorageMock.Verify(x => x.Store(It.Is<InterviewerIdentity>(i => i.PasswordHash == newPassword)), Times.Once);
-            interviewerStorageMock.Verify(x => x.Store(It.Is<InterviewerIdentity>(i => i.Token == "new token")), Times.Once);
+            principalMock.Verify(x => x.SaveInterviewer(It.Is<InterviewerIdentity>(i => i.PasswordHash == newPassword)), Times.Once);
+            principalMock.Verify(x => x.SaveInterviewer(It.Is<InterviewerIdentity>(i => i.Token == "new token")), Times.Once);
             principalMock.Verify(x => x.SignIn("name", newPassword, true), Times.Once);
         }
     }

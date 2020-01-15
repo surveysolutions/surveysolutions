@@ -5,86 +5,112 @@ import { batchedAction } from "../helpers"
 
 import modal from "../components/modal"
 
+function getAnswer(state, identity) {
+    const question = state.entityDetails[identity]
+    if (question == null) return null;
+    return question.answer;
+}
+
 export default {
-    async loadInterview({ commit }) {
-        const info = await Vue.$api.call(api => api.getInterviewDetails())
-        commit("SET_INTERVIEW_INFO", info)
-        const flag = await Vue.$api.call(api => api.hasCoverPage())
-        commit("SET_HAS_COVER_PAGE", flag)
+    loadInterview({ commit }) {
+        const details = Vue.$api.interview.get('getInterviewDetails').then(info =>  commit("SET_INTERVIEW_INFO", info))
+        const cover =  Vue.$api.interview.get('hasCoverPage').then(flag => commit("SET_HAS_COVER_PAGE", flag))
+        return Promise.all([ details, cover ])
     },
 
     async getLanguageInfo({ commit }) {
-        const languageInfo = await Vue.$api.call(api => api.getLanguageInfo())
+        const languageInfo = await Vue.$api.interview.get('getLanguageInfo')
         commit("SET_LANGUAGE_INFO", languageInfo)
     },
 
-    fetchEntity: batchedAction(async ({ commit, dispatch }, ids) => {
-        const details = await Vue.$api.call(api => api.getEntitiesDetails(uniq(map(ids, "id"))))
+    fetchEntity: batchedAction(async ({ commit, dispatch, rootState }, ids) => {
+        const sectionId = rootState.route.params.sectionId || null
+        const elementIds = uniq(map(ids, "id"))
+        const details = await Vue.$api.interview.get('getEntitiesDetails', { sectionId: sectionId, ids: elementIds })
         dispatch("fetch", { ids, done: true })
 
         commit("SET_ENTITIES_DETAILS", {
             entities: details,
             lastActivityTimestamp: new Date()
         })
-    }, "fetch", /* limit */ 100),
+    }, "fetch", /* limit */ 20),
 
-    answerSingleOptionQuestion({ dispatch }, { answer, questionId }) {
-        Vue.$api.callAndFetch(questionId, api => api.answerSingleOptionQuestion(answer, questionId))
+    answerSingleOptionQuestion({ state }, { answer, identity }) {
+        const storedAnswer = getAnswer(state, identity)
+        if (storedAnswer != null && storedAnswer.value == answer) return; // skip same answer on same question
+
+        Vue.$api.interview.answer(identity, 'answerSingleOptionQuestion', { answer })
     },
-    answerTextQuestion({ dispatch }, { identity, text }) {
-        Vue.$api.callAndFetch(identity, api => api.answerTextQuestion(identity, text))
+    answerTextQuestion({ state, commit }, { identity, text }) {
+        if (getAnswer(state, identity) == text) return; // skip same answer on same question
+
+        commit("SET_ANSWER", { identity, answer: text }) // to prevent answer blinking in TableRoster
+        Vue.$api.interview.answer(identity, 'answerTextQuestion', {  answer: text })
     },
-    answerMultiOptionQuestion({ dispatch }, { answer, questionId }) {
-        Vue.$api.callAndFetch(questionId, api => api.answerMultiOptionQuestion(answer, questionId))
+    answerMultiOptionQuestion({ }, { answer, identity }) {
+        Vue.$api.interview.answer(identity, 'answerMultiOptionQuestion', { answer })
     },
-    answerYesNoQuestion({ dispatch }, { questionId, answer }) {
-        Vue.$api.callAndFetch(questionId, api => api.answerYesNoQuestion(questionId, answer))
+    answerYesNoQuestion({ }, { identity, answer }) {
+        Vue.$api.interview.answer(identity, 'answerYesNoQuestion', { answer })
     },
-    answerIntegerQuestion({ dispatch }, { identity, answer }) {
-        Vue.$api.callAndFetch(identity, api => api.answerIntegerQuestion(identity, answer))
+    answerIntegerQuestion({ commit }, { identity, answer }) {
+        commit("SET_ANSWER", { identity, answer: answer }) // to prevent answer blinking in TableRoster
+        Vue.$api.interview.answer(identity, 'answerIntegerQuestion', { answer })
     },
-    answerDoubleQuestion({ dispatch }, { identity, answer }) {
-        Vue.$api.callAndFetch(identity, api => api.answerDoubleQuestion(identity, answer))
+    answerDoubleQuestion({ commit }, { identity, answer }) {
+        commit("SET_ANSWER", { identity, answer: answer }) // to prevent answer blinking in TableRoster
+        return Vue.$api.interview.answer(identity, 'answerDoubleQuestion', { answer })
     },
-    answerGpsQuestion({ dispatch }, { identity, answer }) {
-        Vue.$api.callAndFetch(identity, api => api.answerGpsQuestion(identity, answer))
+    answerGpsQuestion({ }, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerGpsQuestion', { answer })
     },
-    answerDateQuestion({ dispatch }, { identity, date }) {
-        Vue.$api.callAndFetch(identity, api => api.answerDateQuestion(identity, date))
+    answerDateQuestion({ state }, { identity, date }) {
+        if (getAnswer(state, identity) == date) return; // skip answer on same question
+        return Vue.$api.interview.answer(identity, 'answerDateQuestion', { answer: date })
     },
-    answerTextListQuestion({ dispatch }, { identity, rows }) {
-        Vue.$api.callAndFetch(identity, api => api.answerTextListQuestion(identity, rows))
+    answerTextListQuestion({ }, { identity, rows }) {
+        return Vue.$api.interview.answer(identity, 'answerTextListQuestion', { answer: rows })
     },
-    answerLinkedSingleOptionQuestion({ dispatch }, { questionIdentity, answer }) {
-        Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
+    answerLinkedSingleOptionQuestion({ }, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerLinkedSingleOptionQuestion', { answer })
     },
-    answerLinkedMultiOptionQuestion({ dispatch }, { questionIdentity, answer }) {
-        Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedMultiOptionQuestion(questionIdentity, answer))
+    answerLinkedMultiOptionQuestion({ }, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerLinkedMultiOptionQuestion', { answer })
     },
-    answerLinkedToListMultiQuestion({ dispatch }, { questionIdentity, answer }) {
-        Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedToListMultiQuestion(questionIdentity, answer))
+
+    // TODO: there is no usages, check
+    answerLinkedToListMultiQuestion({ }, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerLinkedToListMultiQuestion', {  answer })
     },
-    answerLinkedToListSingleQuestion({ dispatch }, { questionIdentity, answer }) {
-        Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedToListSingleQuestion(questionIdentity, answer))
+
+    // TODO: there is no usages, check
+    answerLinkedToListSingleQuestion({ }, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerLinkedToListSingleQuestion', { answer })
     },
-    answerMultimediaQuestion({ dispatch }, { id, file }) {
-        Vue.$api.callAndFetch(id, api => api.answerPictureQuestion(id, file))
+
+    answerMultimediaQuestion({ }, { identity, file }) {
+        return Vue.$api.interview.upload(Vue.$config.imageUploadUri, identity, file)
     },
-    answerAudioQuestion({ dispatch }, { id, file }) {
-        Vue.$api.callAndFetch(id, api => api.answerAudioQuestion(id, file))
+
+    answerAudioQuestion({ }, { identity, file }) {
+        return Vue.$api.interview.upload(Vue.$config.audioUploadUri, identity, file)
     },
-    answerQRBarcodeQuestion({ dispatch }, { identity, text }) {
-        Vue.$api.callAndFetch(identity, api => api.answerQRBarcodeQuestion(identity, text))
+
+    answerQRBarcodeQuestion({ }, { identity, text }) {
+        return Vue.$api.interview.answer(identity, 'answerQRBarcodeQuestion', { answer: text })
     },
-    removeAnswer({ dispatch }, questionId) {
-        Vue.$api.callAndFetch(questionId, api => api.removeAnswer(questionId))
+
+    removeAnswer({ }, identity) {
+        return Vue.$api.interview.answer(identity, 'removeAnswer')
     },
-    async sendNewComment({ dispatch, commit }, { questionId, comment }) {
-        commit("POSTING_COMMENT", { questionId: questionId })
-        await Vue.$api.call(api => api.sendNewComment(questionId, comment))
+
+    sendNewComment({ commit }, { identity, comment }) {
+        commit("POSTING_COMMENT", { identity: identity })
+        return Vue.$api.interview.answer(identity, 'sendNewComment', { comment })
     },
-    async resolveComment({ dispatch }, { questionId, commentId }) {
-        await Vue.$api.call(api => api.resolveComment(questionId))
+
+    resolveComment({ }, { identity }) {
+        return Vue.$api.interview.answer(identity, 'resolveComment')
     },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
@@ -145,7 +171,7 @@ export default {
         }
     },
 
-    refreshReviewSearch: debounce(({dispatch}) => {
+    refreshReviewSearch: debounce(({ dispatch }) => {
         dispatch("fetchSearchResults")
     }, 200),
 
@@ -168,18 +194,18 @@ export default {
 
     fetchSectionEntities: debounce(async ({ dispatch, commit, rootState }) => {
         const sectionId = rootState.route.params.sectionId
-        const interviewId = rootState.route.params.interviewId
+        //      const interviewId = rootState.route.params.interviewId
 
         const id = sectionId
         const isPrefilledSection = id === undefined
 
         if (isPrefilledSection) {
-            const prefilledPageData = await Vue.$api.call(api => api.getPrefilledEntities())
+            const prefilledPageData = await Vue.$api.interview.get('getPrefilledEntities')
             if (!prefilledPageData.hasAnyQuestions) {
                 const loc = {
                     name: "section",
                     params: {
-                        interviewId: interviewId,
+                        //interviewId: interviewId,
                         sectionId: prefilledPageData.firstSectionId
                     }
                 }
@@ -192,7 +218,7 @@ export default {
             try {
                 commit("SET_LOADING_PROGRESS", true)
 
-                const section = await Vue.$api.call(api => api.getFullSectionInfo(id))
+                const section = await Vue.$api.interview.get('getFullSectionInfo', { sectionId: id })
 
                 commit("SET_SECTION_DATA", section.entities)
                 commit("SET_ENTITIES_DETAILS", {
@@ -212,7 +238,7 @@ export default {
         const isPrefilledSection = sectionId === undefined
 
         if (!isPrefilledSection) {
-            const isEnabled = await Vue.$api.call(api => api.isEnabled(sectionId))
+            const isEnabled = await Vue.$api.interview.get('isEnabled', { id: sectionId })
             if (!isEnabled) {
                 const firstSectionId = state.firstSectionId
                 const firstSectionLocation = {
@@ -229,22 +255,23 @@ export default {
     }, 200),
 
     fetchBreadcrumbs: debounce(async ({ commit, rootState }) => {
-        const crumps = await Vue.$api.call(api => api.getBreadcrumbs(rootState.route.params.sectionId))
+        const sectionId = rootState.route.params.sectionId
+        const crumps = await Vue.$api.interview.get('getBreadcrumbs', { sectionId })
         commit("SET_BREADCRUMPS", crumps)
     }, 200),
 
     fetchCompleteInfo: debounce(async ({ commit }) => {
-        const completeInfo = await Vue.$api.call(api => api.getCompleteInfo())
+        const completeInfo = await Vue.$api.interview.get('getCompleteInfo')
         commit("SET_COMPLETE_INFO", completeInfo)
     }, 200),
 
     fetchInterviewStatus: debounce(async ({ commit }) => {
-        const interviewState = await Vue.$api.call(api => api.getInterviewStatus())
+        const interviewState = await Vue.$api.interview.get('getInterviewStatus')
         commit("SET_INTERVIEW_STATUS", interviewState)
     }, 200),
 
     fetchCoverInfo: debounce(async ({ commit }) => {
-        const coverInfo = await Vue.$api.call(api => api.getCoverInfo())
+        const coverInfo = await Vue.$api.interview.get('getCoverInfo')
         commit("SET_COVER_INFO", coverInfo)
     }, 200),
 
@@ -253,22 +280,22 @@ export default {
 
         commit("COMPLETE_INTERVIEW");
 
-        Vue.$api.call(api => api.completeInterview(comment))
+        Vue.$api.interview.answer(null, 'completeInterview', { comment })
     },
 
     cleanUpEntity: batchedAction(({ commit }, ids) => {
         commit("CLEAR_ENTITIES", { ids })
     }, null, /* limit */ 100),
 
-    changeLanguage(ctx, language) {
-        Vue.$api.call(api => api.changeLanguage(language))
+    changeLanguage({ }, language) {
+        return Vue.$api.interview.answer(null, 'changeLanguage', { language: language.language })
     },
 
     stop() {
-        Vue.$api.stop()
+        Vue.$api.hub.stop() 
     },
 
-    changeSection(ctx, sectionId) {
-        return Vue.$api.setState((state) => state.sectionId = sectionId)
+    changeSection({ }, { to, from }) {
+        return Vue.$api.hub.changeSection(to, from)
     }
 }

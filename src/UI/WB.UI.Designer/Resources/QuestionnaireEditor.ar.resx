@@ -906,4 +906,28 @@
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} تحذيرات</value>
   </data>
+  <data name="DownloadPdf" xml:space="preserve">
+      <value>تنزيل PDF</value>
+      <comment>تنزيل PDF</comment>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+      <value>إنشاء ملف pdf</value>
+      <comment>إنشاء ملف pdf</comment>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+      <value>يرجى اختيار لغة لتقديم PDF الاستبيان عليها</value>
+      <comment>يرجى اختيار لغة لتقديم PDF الاستبيان عليها</comment>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+      <value>جار تهيئة</value>
+      <comment>جار تهيئة</comment>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+      <value>اعادة محاولة التصدير كملف PDF</value>
+      <comment>اعادة محاولة التصدير كملف PDF</comment>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+      <value>أصلي</value>
+      <comment>أصلي</comment>
+  </data>
 </root>

@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class RealQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>, 
+        IAsyncViewModelEventHandler<AnswersRemoved>, 
         ICompositeQuestionWithChildren,
         IDisposable
     {
@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ThrottlingViewModel throttlingModel;
         private readonly SpecialValuesViewModel specialValues;
@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
             IQuestionnaireStorage questionnaireRepository, 
-            ILiteEventRegistry liteEventRegistry, 
+            IViewModelEventRegistry liteEventRegistry, 
             SpecialValuesViewModel specialValues, 
             ThrottlingViewModel throttlingModel)
         {
@@ -111,8 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
-
-            this.liteEventRegistry.Subscribe(this, interviewId);
+            
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
@@ -133,6 +132,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (!this.specialValues.HasSpecialValues)
                 this.throttlingModel.ThrottlePeriod = 0;
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
         private void InitSpecialValues(string interviewId, Identity entityIdentity)
@@ -234,7 +235,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.throttlingModel.Dispose();
         }
 
-        public async void Handle(AnswersRemoved @event)
+        public async Task HandleAsync(AnswersRemoved @event)
         {
             if (this.isDisposed) return;
 

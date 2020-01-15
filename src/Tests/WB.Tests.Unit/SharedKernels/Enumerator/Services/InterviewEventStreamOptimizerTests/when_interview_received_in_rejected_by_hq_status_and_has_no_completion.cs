@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewEventStreamOp
 
             var optimizer = Create.Service.InterviewEventStreamOptimizer();
 
-            IReadOnlyCollection<CommittedEvent> tobeSent = optimizer.RemoveEventsNotNeededToBeSent(eventStream);
+            IReadOnlyCollection<CommittedEvent> tobeSent = optimizer.FilterEventsToBeSent(eventStream, null);
             Assert.That(tobeSent.Count, Is.EqualTo(2));
         }
     }

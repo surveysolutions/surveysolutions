@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -20,9 +21,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class GroupNavigationViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<GroupsEnabled>, 
-        ILiteEventHandler<GroupsDisabled>, 
-        ILiteEventHandler<RosterInstancesTitleChanged>,
+        IViewModelEventHandler<GroupsEnabled>, 
+        IViewModelEventHandler<GroupsDisabled>, 
+        IViewModelEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
 
@@ -48,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly ICommandService commandService;
         private readonly AnswerNotifier answerNotifier;
@@ -87,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public GroupNavigationViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService, 
             DynamicTextViewModel title,
@@ -107,8 +108,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.interviewId = interviewId;
             this.Identity = groupIdentity;
             this.navigationState = navigationState;
-
-            this.eventRegistry.Subscribe(this, interviewId);
 
             var interview = this.interviewRepository.Get(interviewId);
             this.questionnaireIdentity = interview.QuestionnaireIdentity;
@@ -132,6 +131,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var questionsToListen = interview.GetChildQuestions(groupIdentity);
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
             this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)

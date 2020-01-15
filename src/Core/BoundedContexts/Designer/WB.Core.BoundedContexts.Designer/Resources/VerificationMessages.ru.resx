@@ -750,7 +750,7 @@
       <value>Табличный ростер может содержать только тестовые и числовые вопросы.</value>
       <comment>Табличный ростер может содержать только тестовые и числовые вопросы.</comment>
   </data>
-  <data name="WB0286_TableRosterWorksOnlyInWebMode" xml:space="preserve">
+  <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
       <value>Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим.</value>
       <comment>Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим.</comment>
   </data>
@@ -761,5 +761,56 @@
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
       <value>Заголовок {1} и код {0} числовые и отличается значениями</value>
       <comment>Заголовок {1} и код {0} числовые и отличается значениями</comment>
+  </data>
+  <data name="WB0289" xml:space="preserve">
+      <value>Название категорий не может быть больше чем {0} символов.</value>
+      <comment>Имя коллекции категорий не может быть больше чем {0} символов.</comment>
+  </data>
+  <data name="WB0290" xml:space="preserve">
+      <value>Название категорий не может заканчиваться на символ подчёркивания</value>
+      <comment>Имя коллекции категорий не может заканчиваться на символ подчёркивания</comment>
+  </data>
+  <data name="WB0291" xml:space="preserve">
+      <value>Название категорий не должно иметь двух и более последовательных символов подчёркивания</value>
+      <comment>Название категорий не должно иметь двух и более последовательных символов подчёркивания</comment>
+  </data>
+  <data name="WB0292" xml:space="preserve">
+      <value>Название категорий не может быть пустым</value>
+      <comment>Название категорий не может быть пустым</comment>
+  </data>
+  <data name="WB0293" xml:space="preserve">
+      <value>Название категорий совпадает с зарезервированным словом</value>
+      <comment>Название категорий совпадает с зарезервированным словом</comment>
+  </data>
+  <data name="WB0294" xml:space="preserve">
+      <value>Название категорий должно содержать только латинские буквы, цифры и символ подчёркивания</value>
+      <comment>Название категорий должно содержать только латинские буквы, цифры и символ подчёркивания</comment>
+  </data>
+  <data name="WB0295" xml:space="preserve">
+      <value>Название категорий не может начинаться с цифры или символа подчёркивания</value>
+      <comment>Название категорий не может начинаться с цифры или символа подчёркивания</comment>
+  </data>
+  <data name="WB0296" xml:space="preserve">
+      <value>У вопросов одинаковые категории.Вместо предопределенных пользователем категорий используйте повторно используемые категории.</value>
+      <comment>У вопросов одинаковые категории.Вместо предопределенных пользователем категорий используйте повторно используемые категории.</comment>
+  </data>
+  <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+      <value>Матричное представление может содержать только категориальные не каскадные и не списковые вопросы.</value>
+  </data>
+  <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+      <value>Матричное представление может содержать не больше чем {0} вопросов.</value>
+  </data>  
+  <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+    <value>Матричное представление ростера не может содержать идентифицирующие вопросы и вопросы для супервизора.</value>
+  </data>
+  <data name="WB0300" xml:space="preserve">
+    <value>Матричное представление ростера не может содержать вопрос с подстановкой %rostertitle%.</value>
+  </data>
+  <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+      <value>Матричное представление ростера не может содержать связанные вопросы.
+</value>
+  </data>
+  <data name="WB0302" xml:space="preserve">
+      <value>В подстановках не могут быть использованы переменные с таким же уровнем вложенности.</value>
   </data>
 </root>

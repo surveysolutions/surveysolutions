@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -20,29 +21,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.filePlainStorageAccessor = filePlainStorageAccessor ?? throw new ArgumentNullException(nameof(filePlainStorageAccessor));
         }
 
-        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
+        public async Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName)
         {
             string fileId = AudioAuditFile.GetFileId(interviewId, fileName);
             var audioAuditData = filePlainStorageAccessor.GetById(fileId);
             if (audioAuditData.Data == null)
             {
-                var databaseFile = externalFileStorage.GetBinary(AudioAuditS3Folder + fileId);
+                var databaseFile = await externalFileStorage.GetBinaryAsync(AudioAuditS3Folder + fileId);
                 return databaseFile;
             }
             return audioAuditData.Data;
         }
 
-        public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
+        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
             var databaseFiles = filePlainStorageAccessor.Query(q => q.Where(f => f.InterviewId == interviewId));
 
-            return databaseFiles.Select(file
+            var interviewBinaryDataDescriptors = databaseFiles.Select(file
                 => new InterviewBinaryDataDescriptor(
                     interviewId,
                     file.FileName,
                     file.ContentType,
-                    () => GetInterviewBinaryData(interviewId, file.FileName)
+                    () => GetInterviewBinaryDataAsync(interviewId, file.FileName)
                 )).ToList();
+            return Task.FromResult(interviewBinaryDataDescriptors);
         }
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
@@ -59,11 +66,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.externalFileStorage.Store(AudioAuditS3Folder + id, data, contentType);
         }
 
-        public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
+        public async Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             var fileId = AudioAuditFile.GetFileId(interviewId, fileName);
             this.filePlainStorageAccessor.Remove(fileId);
-            this.externalFileStorage.Remove(AudioAuditS3Folder + fileId);
+            await this.externalFileStorage.RemoveAsync(AudioAuditS3Folder + fileId);
         }
     }
 }

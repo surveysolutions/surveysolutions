@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
@@ -36,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         event EventHandler OnMaxDurationReached;
 
         event EventHandler<PlaybackCompletedEventArgs> OnPlaybackCompleted;
-        void Play(Guid interviewId, Identity questionId, string fileName);
+        Task Play(Guid interviewId, Identity questionId, string fileName);
         void Stop();
 
         string GetAuditPath();

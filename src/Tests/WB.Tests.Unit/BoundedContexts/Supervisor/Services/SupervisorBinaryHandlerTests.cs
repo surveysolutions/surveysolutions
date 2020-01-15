@@ -27,13 +27,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         {
             fixture.Register<IPlainStorage<CompanyLogo>>(() =>
             {
-                var storage = new InMemoryPlainStorage<CompanyLogo>();
+                var storage = Create.Storage.InMemorySqlitePlainStorage<CompanyLogo>();
 
-                storage.inMemroyStorage[CompanyLogo.StorageKey] = new CompanyLogo
+                storage.Store(new CompanyLogo
                 {
+                    Id = CompanyLogo.StorageKey,
                     ETag = "Sd",
                     File = new byte[200]
-                };
+                });
 
                 return storage;
             });
@@ -53,13 +54,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         {
             fixture.Register<IPlainStorage<CompanyLogo>>(() =>
             {
-                var storage = new InMemoryPlainStorage<CompanyLogo>();
+                var storage = Create.Storage.InMemorySqlitePlainStorage<CompanyLogo>();
 
-                storage.inMemroyStorage[CompanyLogo.StorageKey] = new CompanyLogo
+                storage.Store(new CompanyLogo
                 {
+                    Id = CompanyLogo.StorageKey,
                     ETag = "match",
                     File = new byte[200]
-                };
+                });
 
                 return storage;
             });
@@ -77,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         [Test]
         public async Task should_return_logo_not_exists_if_no_logo()
         {
-            fixture.Register<IPlainStorage<CompanyLogo>>(() => new InMemoryPlainStorage<CompanyLogo>());
+            fixture.Register<IPlainStorage<CompanyLogo>>(() => Create.Storage.InMemorySqlitePlainStorage<CompanyLogo>());
 
             var handler = fixture.Create<SupervisorBinaryHandler>();
 

@@ -62,33 +62,14 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToActionPermanent("Interviews");
+            return RedirectToActionPermanent("Index","Interviews");
         }
 
         public ActionResult Interviews(Guid? questionnaireId)
         {
-            if (questionnaireId.HasValue)
-            {
-                this.Success(
-                    $@"{HQ.InterviewWasCreated} <a class=""btn btn-success"" href=""{this.Url.Action("TakeNew", "HQ",
-                        new { id = questionnaireId.Value })}""><i class=""icon-plus""></i>{HQ.CreateOneMore}</a>");
-            }
-            this.ViewBag.ActivePage = MenuItem.Docs;
-            return this.View(this.Filters());
+            return RedirectToActionPermanent("Index", "Interviews");
         }
-
-        public ActionResult InterviewsRedesigned(Guid? questionnaireId)
-        {
-            if (questionnaireId.HasValue)
-            {
-                this.Success(
-                    $@"{HQ.InterviewWasCreated} <a class=""btn btn-success"" href=""{this.Url.Action("TakeNew", "HQ",
-                        new { id = questionnaireId.Value })}""><i class=""icon-plus""></i>{HQ.CreateOneMore}</a>");
-            }
-            this.ViewBag.ActivePage = MenuItem.Docs;
-            return this.View(this.Filters());
-        }
-
+        
         [ObserverNotAllowed]
         [AuthorizeOr403(Roles = "Administrator")]
         public ActionResult CloneQuestionnaire(Guid id, long version)
@@ -99,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers
             if (questionnaireBrowseItem == null)
                 return new HttpNotFoundResult(string.Format(HQ.QuestionnaireNotFoundFormat, id.FormatGuid(), version));
 
-            return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title, questionnaireBrowseItem.AllowCensusMode));
+            return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title, questionnaireBrowseItem.AllowCensusMode, questionnaireBrowseItem.Comment));
         }
 
         [HttpPost]
@@ -117,7 +98,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var newVersion = this.questionnaireVersionProvider.GetNextVersion(model.Id);
                 this.CommandService.Execute(new CloneQuestionnaire(
-                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.authorizedUser.Id));
+                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.authorizedUser.Id, comment: model.Comment));
             }
             catch (QuestionnaireException exception)
             {
@@ -179,7 +160,7 @@ namespace WB.UI.Headquarters.Controllers
                 responsiblesUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
                 createNewAssignmentUrl = Url.Content(@"~/api/Assignments/Create"),
                 maxInterviewsByAssignment = Constants.MaxInterviewsCountByAssignment,
-                assignmentsUrl = Url.Action("Index", "Assignments")
+                assignmentsUrl = Url.Action("Index", "Assignments", new { id = (int?)null })
             });
         }
         

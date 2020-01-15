@@ -11,14 +11,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class GroupViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<RosterInstancesTitleChanged>,
-        ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>,
+        IViewModelEventHandler<RosterInstancesTitleChanged>,
         IInterviewEntityViewModel,
         IDisposable
     {
@@ -47,7 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         
         private GroupStatus status;
         public GroupStatus Status
@@ -71,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             AnswerNotifier answerNotifier,
             IGroupStateCalculationStrategy groupStateCalculationStrategy,
             DynamicTextViewModel dynamicTextViewModel,
-            ILiteEventRegistry eventRegistry)
+            IViewModelEventRegistry eventRegistry)
         {
             this.Enablement = enablement;
             this.interviewRepository = interviewRepository;
@@ -96,8 +95,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             this.isRoster = questionnaire.IsRosterGroup(entityIdentity.Id);
 
-            this.eventRegistry.Subscribe(this, interviewId);
-
             if (!questionnaire.HasGroup(entityIdentity.Id))
             {
                 throw new InvalidOperationException($"Questionnaire {statefulInterview.QuestionnaireIdentity} has no group with id {entityIdentity.Id}");
@@ -117,6 +114,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 this.answerNotifier.Init(this.interviewId); 
                 this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             }
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)
@@ -137,16 +136,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             if (changedInstance != null)
                 this.RosterInstanceTitle = changedInstance.Title;
-        }
-
-        public void Handle(RosterInstancesAdded @event)
-        {
-            
-        }
-
-        public void Handle(RosterInstancesRemoved @event)
-        {
-
         }
 
         public virtual void Dispose()

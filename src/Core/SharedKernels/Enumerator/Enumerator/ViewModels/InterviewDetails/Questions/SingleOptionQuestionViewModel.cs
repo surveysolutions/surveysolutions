@@ -21,11 +21,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IInterviewEntityViewModel, 
         IDisposable,
         ICompositeQuestionWithChildren,
-        ILiteEventHandler<AnswersRemoved>
+        IViewModelEventHandler<AnswersRemoved>
     {
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly QuestionInstructionViewModel instructionViewModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel,

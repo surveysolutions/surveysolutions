@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         public FilteredSingleOptionQuestionViewModel(
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             FilteredOptionsViewModel filteredOptionsViewModel,
             IPrincipal principal,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,

@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class QRBarcodeQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel, 
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQRBarcodeScanService qrBarcodeScanService;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
 
         private Identity questionIdentity;
         private Guid interviewId;
@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IQRBarcodeScanService qrBarcodeScanService,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)

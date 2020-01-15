@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             var serviceLocator = Create.Service.ServiceLocatorService(secondOldSchoolEventHandlerMock, handler2, handler1);
 
-            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            var denormalizerRegistry = Create.Service.DenormalizerRegistryNative();
             denormalizerRegistry.Register<TestDenormalzierNonThrowing>();
             denormalizerRegistry.Register<TestDenormalzier>();
             denormalizerRegistry.Register<TestDenormalzier1>();

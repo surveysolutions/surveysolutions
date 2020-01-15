@@ -2,6 +2,7 @@
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using ApprovalTests.Reporters.TestFrameworks;
 using NUnit.Framework;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Infrastructure.Tenant;

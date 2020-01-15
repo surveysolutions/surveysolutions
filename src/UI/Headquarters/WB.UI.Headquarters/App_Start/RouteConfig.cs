@@ -51,6 +51,12 @@ namespace WB.UI.Headquarters
                 action = "Index"
             });
 
+            routes.MapRoute("Assignments", "assignments/{id}", new
+            {
+                controller = "Assignments",
+                action = "Index"
+            });
+
             routes.MapRoute("Default", "{controller}/{action}/{id}",
                 new { controller = "Account", action = "Index", id = UrlParameter.Optional });
         }

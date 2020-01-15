@@ -165,9 +165,6 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>პასუხისმგებელი არის დაბლოკილი მომხმარებელი ერთი ან მეტი დაკვირვებისთვის</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>მომხმარებელი არც ზედამხედველი და არც ინტერვიუერია ერთი ან მეტი დაკვირვებისთვის</value>
-  </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>როსტერის ზომასთან დაკავშირებულ კითხვაზე პასუხი არ შეიძლება {0} -ზე მეტი იყოს</value>
   </data>

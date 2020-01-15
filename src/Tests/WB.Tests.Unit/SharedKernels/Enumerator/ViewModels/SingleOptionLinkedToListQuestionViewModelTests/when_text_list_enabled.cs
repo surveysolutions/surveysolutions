@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
 
             interview.Apply(Create.Event.QuestionsEnabled(textListQuestionId, RosterVector.Empty));
             //act
-            viewModel.Handle(Create.Event.QuestionsEnabled(textListQuestionId, RosterVector.Empty));
+            viewModel.HandleAsync(Create.Event.QuestionsEnabled(textListQuestionId, RosterVector.Empty));
             //assert
             Assert.That(viewModel.Options[0].Value, Is.EqualTo(1));
             Assert.That(viewModel.Options[0].Title, Is.EqualTo("option 1"));

@@ -42,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public DateTime? ReceivedByInterviewerAt { get; set; }
 
         public DateTime? LastUpdated { get; set; }
+        public string Comments { get; set; }
 
         public class AssignmentAnswer
         {

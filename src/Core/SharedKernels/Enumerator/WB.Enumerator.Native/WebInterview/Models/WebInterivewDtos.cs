@@ -11,6 +11,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
 {
     public class ChangeLanguageRequest
     {
+        public Guid InterviewId { get; set; }
         public string Language { get; set; }
     }
 
@@ -245,14 +246,16 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
         public Validity Validity { get; set; } = new Validity();
     }
-    
-    public class TableRoster : InterviewEntity
+
+    public class RosterEntity : InterviewEntity
     {
         public Validity Validity { get; set; } = new Validity();
-
-        public TableRosterQuestionReference[] Questions { get; set; }
-
         public TableRosterInstance[] Instances { get; set; }
+    }
+
+    public class TableOrMatrixRoster : RosterEntity
+    {
+        public TableOrMatrixRosterQuestionReference[] Questions { get; set; }
     }
 
     public class TableRosterInstance : InterviewEntity
@@ -263,14 +266,18 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
     }
 
-    public class TableRosterQuestionReference 
+    public class RosterQuestionReference
     {
         public string Id { get; set; }
         public string Title { get; set; }
         public string EntityType { get; set; }
         public string Instruction { get; set; }
     }
-    
+
+    public class TableOrMatrixRosterQuestionReference : RosterQuestionReference
+    {
+        public CategoricalOption[] Options { get; set; }
+    }
 
     public class Sidebar
     {

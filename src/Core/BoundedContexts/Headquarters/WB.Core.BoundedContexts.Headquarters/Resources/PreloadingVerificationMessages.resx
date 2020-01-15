@@ -166,8 +166,8 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>Responsible is a locked user for 1 or more observations.</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>User is not Supervisor or Interviewer for 1 or more observations.</value>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+    <value>User is not Headquarters, Supervisor or Interviewer for 1 or more observations.</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>Answer to roster size question cannot be greater than {0}.</value>

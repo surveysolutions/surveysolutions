@@ -165,9 +165,6 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>负责人被锁定</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>提供的用户不是督导员或调查员</value>
-  </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>登记表大小问题的答案不能超过{0}。</value>
   </data>

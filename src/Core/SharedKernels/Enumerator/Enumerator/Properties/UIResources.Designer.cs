@@ -450,6 +450,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no permission granted to application to self update. Please enable &quot;Allow from this source&quot; option in &apos;App info&apos; settings menu..
+        /// </summary>
+        public static string ErrorMessage_PermissionForUnkownSourcesRequired {
+            get {
+                return ResourceManager.GetString("ErrorMessage_PermissionForUnkownSourcesRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Timeout when connecting to the Survey Solutions Designer website. Check your internet connection..
         /// </summary>
         public static string ErrorMessage_RequestTimeout {
@@ -1220,6 +1229,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interviewer_Done {
             get {
                 return ResourceManager.GetString("Interviewer_Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leave comment for a new responsible.
+        /// </summary>
+        public static string Interviewer_Reassign_Comment {
+            get {
+                return ResourceManager.GetString("Interviewer_Reassign_Comment", resourceCulture);
             }
         }
         

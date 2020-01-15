@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class TimestampQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly QuestionStateViewModel<DateTimeQuestionAnswered> questionState;
         public IQuestionStateViewModel QuestionState => this.questionState;
 
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering, 
-            ILiteEventRegistry liteEventRegistry)
+            IViewModelEventRegistry liteEventRegistry)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -60,8 +60,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
-            this.liteEventRegistry.Subscribe(this, interviewId);
-
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetDateTimeQuestion(entityIdentity);
             this.answerFormatString = answerModel.UiFormatString;
@@ -69,6 +67,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.SetToView(answerModel.GetAnswer().Value);
             }
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
         private Identity questionIdentity;
@@ -138,8 +138,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
-            this.liteEventRegistry.Unsubscribe(this); 
         }
 
         public void Handle(AnswersRemoved @event)

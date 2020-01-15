@@ -543,9 +543,6 @@
   <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
     <value>1个任务新建失败</value>
   </data>
-  <data name="UploadDescription" xml:space="preserve">
-    <value>上传包含识别数据的文件以创建新任务。给定督导员或调查员的用户名可以设置批量任务。</value>
-  </data>
   <data name="HiddenQuestions" xml:space="preserve">
     <value>隐藏问题</value>
   </data>
@@ -560,9 +557,6 @@
   </data>
   <data name="Select_Responsible" xml:space="preserve">
     <value>指定默认的负责人（必须的）</value>
-  </data>
-  <data name="Select_Responsible_Description" xml:space="preserve">
-    <value>如果分配任务的批量文件中没有问卷负责人，则指定此督导员/调查员的账号：</value>
   </data>
   <data name="ViewListPreloadedData" xml:space="preserve">
     <value>查看前导值列表</value>

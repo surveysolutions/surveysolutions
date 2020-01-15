@@ -5,11 +5,12 @@ namespace WB.Services.Export.Services
 {
     public struct InterviewToExport
     {
-        public InterviewToExport(Guid id, string key, InterviewStatus status)
+        public InterviewToExport(Guid id, string key, InterviewStatus status, int? assignmentId)
         {
             Id = id;
             Key = key;
             Status = status;
+            AssignmentId = assignmentId;
         }
 
         public Guid Id { get; }
@@ -17,5 +18,7 @@ namespace WB.Services.Export.Services
         public string Key { get; }
 
         public InterviewStatus Status { get; }
+
+        public int? AssignmentId { get; }
     }
 }

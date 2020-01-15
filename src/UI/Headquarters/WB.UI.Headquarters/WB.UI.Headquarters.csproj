@@ -68,8 +68,8 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac, Version=4.9.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Autofac.4.9.2\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.9.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Autofac.4.9.4\lib\net45\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
@@ -80,14 +80,23 @@
     <Reference Include="Autofac.Integration.SignalR, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Autofac.SignalR.3.0.2\lib\net40\Autofac.Integration.SignalR.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Integration.WebApi, Version=4.2.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Autofac.WebApi2.4.2.1\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    <Reference Include="Autofac.Integration.WebApi, Version=4.3.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Autofac.WebApi2.4.3.1\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.WebApi.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Autofac.WebApi2.Owin.4.0.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper, Version=8.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AWSSDK.Core.3.3.103.45\lib\net45\AWSSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AWSSDK.S3.3.3.104.31\lib\net45\AWSSDK.S3.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.SimpleEmail, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AWSSDK.SimpleEmail.3.3.101.52\lib\net45\AWSSDK.SimpleEmail.dll</HintPath>
     </Reference>
     <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
@@ -101,20 +110,20 @@
     <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Dapper.1.60.6\lib\net451\Dapper.dll</HintPath>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Dapper.2.0.4\lib\netstandard2.0\Dapper.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetZip, Version=1.13.3.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\DotNetZip.1.13.3\lib\net40\DotNetZip.dll</HintPath>
+    <Reference Include="DotNetZip, Version=1.13.4.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\DotNetZip.1.13.4\lib\net40\DotNetZip.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\..\..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework6.Npgsql, Version=3.2.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\EntityFramework6.Npgsql.3.2.0\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="gdalconst_csharp, Version=1.0.7127.27225, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\GDAL.2.4.2\lib\net40\gdalconst_csharp.dll</HintPath>
@@ -123,22 +132,23 @@
       <HintPath>..\..\..\..\packages\GDAL.2.4.2\lib\net40\gdal_csharp.dll</HintPath>
     </Reference>
     <Reference Include="GeoJSON.Net, Version=1.1.72.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\GeoJSON.Net.1.1.72\lib\net45\GeoJSON.Net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\GeoJSON.Net.1.2.14\lib\net45\GeoJSON.Net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Humanizer, Version=2.6.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Humanizer.Core.2.6.2\lib\netstandard2.0\Humanizer.dll</HintPath>
+    <Reference Include="Humanizer, Version=2.7.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Humanizer.Core.2.7.2\lib\netstandard2.0\Humanizer.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\ImageResizer.4.2.5\lib\net45\ImageResizer.dll</HintPath>
+    <Reference Include="Iteedee.ApkReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Iteedee.ApkReader.1.0.1\lib\Iteedee.ApkReader.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=0.17.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Markdig.0.17.0\lib\net40\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=0.17.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Markdig.0.17.1\lib\net40\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -146,51 +156,66 @@
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.2\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Identity.Owin.2.2.2\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.SignalR.Core.2.4.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.4.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNetCore.Cryptography.Internal.3.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNetCore.Cryptography.KeyDerivation.3.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.EntityFrameworkCore, Version=2.2.4.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.EntityFrameworkCore.2.2.4\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Abstractions, Version=2.2.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.EntityFrameworkCore.Abstractions.2.2.6\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=2.2.4.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.EntityFrameworkCore.Relational.2.2.4\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Extensions.Caching.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Caching.Memory, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Extensions.Caching.Memory.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Caching.Memory.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Configuration.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Configuration.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Configuration.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Configuration.Abstractions.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Configuration.Binder.2.2.4\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Configuration.Binder.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Extensions.DependencyInjection.2.2.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.DependencyInjection.3.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Logging, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Logging.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Identity.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Identity.Core.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Identity.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Logging.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Logging.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Options, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Options.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Logging.Abstractions.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Options, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Options.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Primitives.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Owin.4.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -218,16 +243,16 @@
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NHibernate.5.2.5\lib\net461\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NHibernate.5.2.6\lib\net461\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NLog.4.6.5\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NLog.4.6.7\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NLog.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NLog.Web.4.8.4\lib\net35\NLog.Web.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NLog.Web.4.8.5\lib\net35\NLog.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Npgsql, Version=4.0.7.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Npgsql.4.0.7\lib\net451\Npgsql.dll</HintPath>
+    <Reference Include="Npgsql, Version=4.0.10.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Npgsql.4.0.10\lib\net451\Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="ogr_csharp, Version=1.0.7127.27224, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\GDAL.2.4.2\lib\net40\ogr_csharp.dll</HintPath>
@@ -235,9 +260,19 @@
     <Reference Include="osr_csharp, Version=1.0.7127.27224, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\GDAL.2.4.2\lib\net40\osr_csharp.dll</HintPath>
     </Reference>
+    <Reference Include="Npgsql.EntityFrameworkCore.PostgreSQL, Version=2.2.4.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Npgsql.EntityFrameworkCore.PostgreSQL.2.2.4\lib\netstandard2.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll</HintPath>
+    </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="PasswordGenerator, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\PasswordGenerator.2.0.5\lib\netstandard2.0\PasswordGenerator.dll</HintPath>
+    </Reference>
+    <Reference Include="Polly, Version=7.0.0.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Polly.7.1.1\lib\netstandard2.0\Polly.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="Prometheus.NetStandard, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\prometheus-net.2.1.3\lib\netstandard2.0\Prometheus.NetStandard.dll</HintPath>
     </Reference>
@@ -254,13 +289,16 @@
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
     </Reference>
     <Reference Include="Refit, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Refit.4.7.9\lib\net461\Refit.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Refit.4.7.51\lib\net461\Refit.dll</HintPath>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
     <Reference Include="Remotion.Linq.EagerFetching, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Remotion.Linq.EagerFetching.2.2.0\lib\net45\Remotion.Linq.EagerFetching.dll</HintPath>
+    </Reference>
+    <Reference Include="SendGrid, Version=9.12.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Sendgrid.9.12.0\lib\net452\SendGrid.dll</HintPath>
     </Reference>
     <Reference Include="SignalR.Extras.Autofac, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\SignalR.Extras.Autofac.1.2.0\lib\net45\SignalR.Extras.Autofac.dll</HintPath>
@@ -274,6 +312,9 @@
     <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0\lib\net461\StackExchange.Exceptional.Shared.dll</HintPath>
     </Reference>
+    <Reference Include="Supercluster, Version=0.1.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SuperclusterBox.0.1.18\lib\netstandard2.0\Supercluster.dll</HintPath>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
     </Reference>
@@ -281,19 +322,38 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.ComponentModel.Annotations.4.6.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Diagnostics.DiagnosticSource.4.5.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Interactive.Async, Version=3.2.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Interactive.Async.3.2.0\lib\net46\System.Interactive.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -301,14 +361,42 @@
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Text.Encodings.Web.4.5.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
@@ -721,6 +809,16 @@
     <Content Include="App_GlobalResources\Reports.zh.resx">
       <DependentUpon>Reports.resx</DependentUpon>
     </Content>
+    <Content Include="App_GlobalResources\Roles.resx">
+      <SubType>Designer</SubType>
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Roles.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Roles.ru.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Roles.ru.designer.cs</LastGenOutput>
+      <DependentUpon>Roles.resx</DependentUpon>
+    </Content>
     <Content Include="App_GlobalResources\Settings.ar.resx">
       <DependentUpon>Settings.resx</DependentUpon>
     </Content>
@@ -887,6 +985,66 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Maps.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\BatchUpload.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>BatchUpload.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Common.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Common.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Dashboard.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Dashboard.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\DataExport.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>DataExport.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\HQ.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>HQ.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Import.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Import.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\MainMenu.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MainMenu.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\MapReport.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MapReport.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Maps.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Maps.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireClonning.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireClonning.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireImport.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireImport.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Reports.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Reports.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Settings.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Settings.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\TakeNewInterview.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>TakeNewInterview.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Users.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Users.sq.designer.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
@@ -1067,45 +1225,53 @@
     <EmbeddedResource Include="Resources\Archived.ro.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Archived.sq.resx" />
     <EmbeddedResource Include="Resources\Assignments.ar.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.ro.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.sq.resx" />
     <EmbeddedResource Include="Resources\AuditLog.ar.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AuditLog.ro.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AuditLog.sq.resx" />
     <EmbeddedResource Include="Resources\DataTables.ar.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DataTables.ro.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataTables.sq.resx" />
     <EmbeddedResource Include="Resources\Details.ar.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.ro.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Details.sq.resx" />
     <EmbeddedResource Include="Resources\DevicesInterviewers.ar.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DevicesInterviewers.ro.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DevicesInterviewers.sq.resx" />
     <EmbeddedResource Include="Resources\EnumNames.ar.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.ro.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EnumNames.sq.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.ro.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FieldsAndValidations.sq.resx" />
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ar.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
@@ -1160,6 +1326,7 @@
     <EmbeddedResource Include="Resources\ImportQuestionnaire.fr.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.sq.resx" />
     <EmbeddedResource Include="Resources\Interviews.ar.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
@@ -1169,6 +1336,7 @@
     <EmbeddedResource Include="Resources\Interviews.ro.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews.sq.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.ar.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
@@ -1178,6 +1346,7 @@
     <EmbeddedResource Include="Resources\LimitsIndicator.ro.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LimitsIndicator.sq.resx" />
     <EmbeddedResource Include="Resources\LoginToDesigner.ar.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
@@ -1187,6 +1356,7 @@
     <EmbeddedResource Include="Resources\LoginToDesigner.ro.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginToDesigner.sq.resx" />
     <EmbeddedResource Include="Resources\OutdatedBrowser.ar.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
@@ -1199,12 +1369,14 @@
     <EmbeddedResource Include="Resources\OutdatedBrowser.ro.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\OutdatedBrowser.sq.resx" />
     <EmbeddedResource Include="Resources\Pages.es.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.ro.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Pages.sq.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.ar.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
@@ -1214,6 +1386,12 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.ro.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PeriodicStatusReport.sq.resx" />
+    <EmbeddedResource Include="Resources\Questionnaire.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Questionnaire.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Questionnaire.ru.resx" />
     <EmbeddedResource Include="Resources\ReviewInterview.ar.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
@@ -1226,6 +1404,7 @@
     <EmbeddedResource Include="Resources\ReviewInterview.ro.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ReviewInterview.sq.resx" />
     <EmbeddedResource Include="Resources\ReviewInterview.zh.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
@@ -1241,6 +1420,13 @@
     <EmbeddedResource Include="Resources\SyncLogMessages.ro.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SyncLogMessages.sq.resx" />
+    <EmbeddedResource Include="Resources\TabletLogs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TabletLogs.ru.resx" />
     <EmbeddedResource Include="Resources\TabletSyncMessages.ar.resx">
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1250,6 +1436,7 @@
     <EmbeddedResource Include="Resources\TabletSyncMessages.ro.resx">
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TabletSyncMessages.sq.resx" />
     <EmbeddedResource Include="Resources\Troubleshooting.ar.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
@@ -1262,6 +1449,7 @@
     <EmbeddedResource Include="Resources\Troubleshooting.ro.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Troubleshooting.sq.resx" />
     <EmbeddedResource Include="Resources\UnderConstruction.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
@@ -1270,6 +1458,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
       <DependentUpon>UnderConstruction.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.sq.resx" />
     <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.fr.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
@@ -1277,6 +1466,7 @@
     <EmbeddedResource Include="Resources\UploadUsers.ro.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UploadUsers.sq.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.zh.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
     </EmbeddedResource>
@@ -1295,6 +1485,7 @@
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ru.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.sq.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1307,12 +1498,15 @@
       <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSettings.sq.resx" />
     <EmbeddedResource Include="Resources\WebInterviewSetup.ro.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSetup.sq.resx" />
     <EmbeddedResource Include="Resources\WebInterviewUI.ro.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.sq.resx" />
     <EmbeddedResource Include="Resources\WebInterviewUI.uk-UA.resx" />
     <EmbeddedResource Include="Resources\WebInterviewUI.zh.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
@@ -1854,7 +2048,6 @@
     <Content Include="Views\Shared\AdminMenu.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\SurveySetup\BatchUpload.cshtml" />
-    <Content Include="Views\HQ\Interviews.cshtml" />
     <Content Include="Views\Reports\MapReport.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
     <Content Include="Views\Reports\TeamsAndStatuses.cshtml" />
@@ -1897,7 +2090,6 @@
     <Content Include="Views\Interviewer\Edit.cshtml" />
     <Content Include="Views\Reports\SpeedAndQuantity.cshtml" />
     <Content Include="Views\Reports\SurveysAndStatusesForSv.cshtml" />
-    <Content Include="Views\Survey\Interviews.cshtml" />
     <Content Include="Views\Reports\TeamMembersAndStatuses.cshtml" />
     <Content Include="Views\TabletReport\PackagesInfo.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
@@ -1935,7 +2127,6 @@
     <Content Include="Views\Shared\QueueIndicator.cshtml" />
     <Content Include="Views\Interviewer\Profile.cshtml" />
     <Content Include="Views\Shared\_notice.cshtml" />
-    <Content Include="Views\HQ\InterviewsRedesigned.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextBoxFormField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PasswordFormField.cshtml" />
     <Content Include="Views\Shared\Profile\_FormFieldPartialLayout.cshtml" />
@@ -1996,8 +2187,12 @@
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
-    <Content Include="Views\Shared\_PoweredBy.cshtml" />
     <Content Include="Views\DataExport\New.cshtml" />
+    <Content Include="Views\Interviews\Index.cshtml" />
+    <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
+    <Content Include="Views\Assignments\Details.cshtml" />
+    <Content Include="Views\Questionnaires\Details.cshtml" />
+    <Content Include="Views\Diagnostics\Logs.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -2017,12 +2212,120 @@
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\AssignmentsUpgradeApiController.cs" />
+    <Compile Include="API\Automation\QuestionnaireAutomationController.cs" />
     <Compile Include="API\DataCollection\AttachmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
+    <Compile Include="API\DataCollection\Enumerator\EnumeratorWebApiConfig.cs" />
+    <Compile Include="API\DataCollection\Enumerator\LogsApiController.cs" />
+    <Compile Include="API\DataCollection\Enumerator\v1\ReusableCategoriesApiV1Controller.cs" />
+    <Compile Include="API\Export\UserExportApiController.cs" />
+    <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
+    <Compile Include="App_GlobalResources\BatchUpload.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BatchUpload.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Common.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Dashboard.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dashboard.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\DataExport.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExport.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\HQ.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HQ.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Import.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Import.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\MainMenu.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainMenu.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\MapReport.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MapReport.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Maps.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireClonning.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireClonning.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireImport.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireImport.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Reports.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Roles.Designer.cs">
+      <DependentUpon>Roles.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="App_GlobalResources\Settings.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Settings.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\TakeNewInterview.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TakeNewInterview.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Users.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Users.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="API\WebInterview\InterviewCommandsController.cs" />
+    <Compile Include="API\WebInterview\InterviewDataController.cs" />
+    <Compile Include="API\TabletLogsApiController.cs" />
+    <Compile Include="Controllers\DiagnosticsController.cs" />
+    <Compile Include="API\WebInterview\Pipeline\WebInterviewDataAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
+    <Compile Include="Controllers\QuestionnairesController.cs" />
+    <Compile Include="Filters\WebInterviewObserverNotAllowedActionFilter.cs" />
+    <Compile Include="Models\QuestionnaireDetailsModel.cs" />
+    <Compile Include="Resources\TabletLogs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TabletLogs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Questionnaire.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Questionnaire.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AspNetAppPathResolver.cs" />
     <Compile Include="Services\ClientApkProvider.cs" />
+    <Compile Include="Services\DesignerUserCredentials.cs" />
+    <Compile Include="Services\HqSignInManager.cs" />
     <Compile Include="Services\IClientApkProvider.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerInterviewsControllerBase.cs" />
@@ -2219,7 +2522,6 @@
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\AppSettings.cs" />
-    <Compile Include="Code\CamelCaseAttribute.cs" />
     <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializer.cs" />
     <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
     <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
@@ -2568,7 +2870,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
-      <Project>{3017EC6D-AE4A-4C19-A653-352999592A7E}</Project>
+      <Project>{3017ec6d-ae4a-4c19-a653-352999592a7e}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -2587,8 +2889,8 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj">
-      <Project>{2e701301-76ff-4738-9049-e28fe1b33d86}</Project>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native-old\WB.Enumerator.Native.csproj">
+      <Project>{7fa1b5c3-6441-4e77-b90f-84722e60b02f}</Project>
       <Name>WB.Enumerator.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
@@ -2607,6 +2909,10 @@
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\..\..\packages\AWSSDK.S3.3.3.104.31\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
+    <Analyzer Include="..\..\..\..\packages\AWSSDK.SimpleEmail.3.3.101.52\analyzers\dotnet\cs\AWSSDK.SimpleEmail.CodeAnalysis.dll" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -2660,13 +2966,13 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-    <Error Condition="!Exists('..\..\..\..\packages\Refit.4.7.9\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.7.9\build\net461\refit.targets'))" />
+    <Error Condition="'$(Configuration)' == 'Debug' and !Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\GDAL.Native.2.4.2\build\net40\GDAL.Native.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\GDAL.Native.2.4.2\build\net40\GDAL.Native.targets'))" />
   </Target>
   <Import Project="..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" />
-  <Import Project="..\..\..\..\packages\Refit.4.7.9\build\net461\refit.targets" Condition="Exists('..\..\..\..\packages\Refit.4.7.9\build\net461\refit.targets')" />
+  <Import Project="..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets" Condition="Exists('..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets')" />
   <Import Project="..\..\..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\..\..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
   <Import Project="..\..\..\..\packages\GDAL.Native.2.4.2\build\net40\GDAL.Native.targets" Condition="Exists('..\..\..\..\packages\GDAL.Native.2.4.2\build\net40\GDAL.Native.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

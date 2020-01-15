@@ -178,6 +178,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bind to reusable categories.
+        /// </summary>
+        public static string BindToReusableCategories {
+            get {
+                return ResourceManager.GetString("BindToReusableCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -196,11 +205,38 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Obtained {0} row from categories file.
+        /// </summary>
+        public static string CategoriesObtained {
+            get {
+                return ResourceManager.GetString("CategoriesObtained", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Obtained {0} rows from categories file.
+        /// </summary>
+        public static string CategoriesObtained_plural {
+            get {
+                return ResourceManager.GetString("CategoriesObtained_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change password.
         /// </summary>
         public static string ChangePassword {
             get {
                 return ResourceManager.GetString("ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please choose translation.
+        /// </summary>
+        public static string ChooseLanguageTitle {
+            get {
+                return ResourceManager.GetString("ChooseLanguageTitle", resourceCulture);
             }
         }
         
@@ -448,6 +484,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete set of categories &quot;{{trimmedTitle}}&quot;? Source of categories for categorical questions dependent on it will be changed to user defined categories.
+        /// </summary>
+        public static string DeleteConfirmCategories {
+            get {
+                return ResourceManager.GetString("DeleteConfirmCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete &quot;{{trimmedTitle}}&quot;?.
         /// </summary>
         public static string DeleteConfirmQuestion {
@@ -462,6 +507,15 @@ namespace WB.UI.Designer.Resources {
         public static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download PDF.
+        /// </summary>
+        public static string DownloadPdf {
+            get {
+                return ResourceManager.GetString("DownloadPdf", resourceCulture);
             }
         }
         
@@ -790,6 +844,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generate pdf.
+        /// </summary>
+        public static string GeneratePdf {
+            get {
+                return ResourceManager.GetString("GeneratePdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geometry type.
         /// </summary>
         public static string GeometryType {
@@ -822,6 +885,15 @@ namespace WB.UI.Designer.Resources {
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of attachment file that will be displayed..
+        /// </summary>
+        public static string HelpAttachmentName {
+            get {
+                return ResourceManager.GetString("HelpAttachmentName", resourceCulture);
             }
         }
         
@@ -871,7 +943,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet..
+        ///   Looks up a localized string similar to By default, a disabled item is grayed-out. Checking this option will hide a disabled question or section on a tablet..
         /// </summary>
         public static string HelpHideIfDisabled {
             get {
@@ -936,7 +1008,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
         ///Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
-        ///Table - the questions of the roster are shown in the same level as rows and columns of the table. Supported only in Web survey, tablet falls back to &apos;Sub-Section&apos; mode..
+        ///Table - the questions of the roster are shown in the same level as rows and columns of the table. 
+        ///Matrix - a categorical question of the roster is displayed as matrix. 
+        ///Table and Matrix views are supported only in Web survey, tablet falls back to &apos;Sub-Section&apos; mode..
         /// </summary>
         public static string HelpRosterDisplayMode {
             get {
@@ -1049,6 +1123,15 @@ namespace WB.UI.Designer.Resources {
         public static string History {
             get {
                 return ResourceManager.GetString("History", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close categories panel.
+        /// </summary>
+        public static string HotkeysCloseCategories {
+            get {
+                return ResourceManager.GetString("HotkeysCloseCategories", resourceCulture);
             }
         }
         
@@ -1202,6 +1285,15 @@ namespace WB.UI.Designer.Resources {
         public static string IncorrectRosterTitle {
             get {
                 return ResourceManager.GetString("IncorrectRosterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initializing.
+        /// </summary>
+        public static string Initializing {
+            get {
+                return ResourceManager.GetString("Initializing", resourceCulture);
             }
         }
         
@@ -1476,6 +1568,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview revision #{{revision}}.
+        /// </summary>
+        public static string Preview {
+            get {
+                return ResourceManager.GetString("Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Public access.
         /// </summary>
         public static string PublicAccessSettings {
@@ -1557,7 +1658,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current time.
+        ///   Looks up a localized string similar to Current timestamp(date &amp; time).
         /// </summary>
         public static string QuestionCurrentTime {
             get {
@@ -1773,6 +1874,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Radio button list.
+        /// </summary>
+        public static string QuestionRadioButtonList {
+            get {
+                return ResourceManager.GetString("QuestionRadioButtonList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question scope.
         /// </summary>
         public static string QuestionScope {
@@ -1917,6 +2027,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Retry export as PDF.
+        /// </summary>
+        public static string RetryExportPDF {
+            get {
+                return ResourceManager.GetString("RetryExportPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reusable categories.
+        /// </summary>
+        public static string ReusableCategories {
+            get {
+                return ResourceManager.GetString("ReusableCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add item.
         /// </summary>
         public static string RosterAddItem {
@@ -1940,6 +2068,15 @@ namespace WB.UI.Designer.Resources {
         public static string RosterDisplayMode_Flat {
             get {
                 return ResourceManager.GetString("RosterDisplayMode_Flat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matrix.
+        /// </summary>
+        public static string RosterDisplayMode_Matrix {
+            get {
+                return ResourceManager.GetString("RosterDisplayMode_Matrix", resourceCulture);
             }
         }
         
@@ -2025,11 +2162,29 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List question or question from roster group.
+        /// </summary>
+        public static string RostersQuestion {
+            get {
+                return ResourceManager.GetString("RostersQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roster ID.
         /// </summary>
         public static string RosterVariableName {
             get {
                 return ResourceManager.GetString("RosterVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run.
+        /// </summary>
+        public static string Run {
+            get {
+                return ResourceManager.GetString("Run", resourceCulture);
             }
         }
         
@@ -2043,11 +2198,29 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save as.
+        /// </summary>
+        public static string SaveAs {
+            get {
+                return ResourceManager.GetString("SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to saved at {{dateTime, H:mm}}.
         /// </summary>
         public static string SavedAtTimestamp {
             get {
                 return ResourceManager.GetString("SavedAtTimestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenario.
+        /// </summary>
+        public static string ScenarioDetails {
+            get {
+                return ResourceManager.GetString("ScenarioDetails", resourceCulture);
             }
         }
         
@@ -2093,6 +2266,15 @@ namespace WB.UI.Designer.Resources {
         public static string SectionVariableName {
             get {
                 return ResourceManager.GetString("SectionVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select categories.
+        /// </summary>
+        public static string SelectCategories {
+            get {
+                return ResourceManager.GetString("SelectCategories", resourceCulture);
             }
         }
         
@@ -2516,6 +2698,78 @@ namespace WB.UI.Designer.Resources {
         public static string SideBarAttachmentUploaded {
             get {
                 return ResourceManager.GetString("SideBarAttachmentUploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Categories.
+        /// </summary>
+        public static string SideBarCategoriesCounter {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this tab to manage reusable categories..
+        /// </summary>
+        public static string SideBarCategoriesEmptyLine1 {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesEmptyLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You may download and update categories..
+        /// </summary>
+        public static string SideBarCategoriesEmptyLine2 {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesEmptyLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to will be showed in list of reusable categories for any types of categorical questions..
+        /// </summary>
+        public static string SideBarCategoriesEmptyLine3 {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesEmptyLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to name of categories.
+        /// </summary>
+        public static string SideBarCategoriesName {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to categories with no name.
+        /// </summary>
+        public static string SideBarCategoriesNoName {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesNoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories.
+        /// </summary>
+        public static string SideBarCategoriesTitle {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload new categories.
+        /// </summary>
+        public static string SideBarCategoriesUploadNew {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesUploadNew", resourceCulture);
             }
         }
         
@@ -3195,6 +3449,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source of categories.
+        /// </summary>
+        public static string SourceOfCategories {
+            get {
+                return ResourceManager.GetString("SourceOfCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Static text.
         /// </summary>
         public static string StaticText {
@@ -3236,6 +3499,15 @@ namespace WB.UI.Designer.Resources {
         public static string ToggleSearch {
             get {
                 return ResourceManager.GetString("ToggleSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original.
+        /// </summary>
+        public static string Translation_Original {
+            get {
+                return ResourceManager.GetString("Translation_Original", resourceCulture);
             }
         }
         
@@ -3456,6 +3728,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User defined categories.
+        /// </summary>
+        public static string UserDefinedCategories {
+            get {
+                return ResourceManager.GetString("UserDefinedCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition.
         /// </summary>
         public static string ValidationCondition {
@@ -3506,6 +3787,15 @@ namespace WB.UI.Designer.Resources {
         public static string VariableVariableName {
             get {
                 return ResourceManager.GetString("VariableVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        public static string View {
+            get {
+                return ResourceManager.GetString("View", resourceCulture);
             }
         }
         

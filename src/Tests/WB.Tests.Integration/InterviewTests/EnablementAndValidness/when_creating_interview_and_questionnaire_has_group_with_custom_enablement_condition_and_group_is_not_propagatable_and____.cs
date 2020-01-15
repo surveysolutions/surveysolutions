@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 using (var eventContext = new EventContext())
                 {
-                    SetupInterviewWithExpressionStorage(questionnaireDocument);
+                    SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                     return new InvokeResults()
                     {
                         GroupDisabled =
@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
 
         [Serializable]
         internal class InvokeResults

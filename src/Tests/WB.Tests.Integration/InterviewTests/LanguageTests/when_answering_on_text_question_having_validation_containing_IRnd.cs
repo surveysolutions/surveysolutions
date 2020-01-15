@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
 
@@ -24,27 +25,28 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 SetUp.MockedServiceLocator();
 
                 var id = new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                var userId = Guid.NewGuid();
 
                 var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(id, children: new IComposite[]
                 {
                     Create.Entity.TextQuestion(questionId: questionId, 
                         variable: "test",
                         validationExpression: "Quest.IRnd() > 2"),
-                    Create.Entity.Variable(variableId, VariableType.Double, "v1", "Quest.IRnd()")
+                    Create.Entity.Variable(variableId, VariableType.Double, "v1", "Quest.IRnd()"),
+                    Create.Entity.Variable(userId, VariableType.Double, "v2", $"(new Guid(\"{precalculatedId}\")).GetRandomDouble()")
                 });
-
-                var userId = Guid.NewGuid();
                 
                 using (var eventContext = new EventContext())
                 {
-                    var interview = SetupInterview(questionnaireDocument);
+                    var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                     interview.AnswerTextQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, "test");
 
                     return new InvokeResult
                     {
-                        CalculatedRandom = new Random(interview.EventSourceId.GetHashCode()).NextDouble(),
+                        CalculatedRandom = ExtentionsV4.GetRandomDouble(interview.EventSourceId),
                         AnswerDeclaredInvalidEventCount = eventContext.Count<AnswersDeclaredInvalid>(),
-                        IRndValue = (double)GetFirstEventByType<VariablesChanged>(eventContext.Events).ChangedVariables.First().NewValue
+                        IRndValue = (double)GetFirstEventByType<VariablesChanged>(eventContext.Events).ChangedVariables.First().NewValue,
+                        PrecalculatedIRndValue = (double)GetFirstEventByType<VariablesChanged>(eventContext.Events).ChangedVariables.Skip(1).First().NewValue
                     };
                 }
             });
@@ -61,16 +63,24 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [NUnit.Framework.Test] public void should_raise_VariablesChanged_event () =>
             result.IRndValue.Should().Be(result.CalculatedRandom);
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        [NUnit.Framework.Test]
+        public void should_raise_VariablesChanged_event_for_Precalculated() =>
+            result.PrecalculatedIRndValue.Should().Be(precalculatedRandom);
+
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
         private static readonly Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid variableId = Guid.Parse("21111111111111111111111111111111");
-        
+
+        private static readonly string precalculatedId = "13d0572ed4724d97bdf0fc09ca53402f";
+        private static readonly double precalculatedRandom = 0.71404480222335309;
+
         [Serializable]
         private class InvokeResult
         {
             public int AnswerDeclaredInvalidEventCount { get; set; }
             public double IRndValue { get; set; }
+            public double PrecalculatedIRndValue { get; set; }
             public double CalculatedRandom { get; set; }
         }
     }

@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class GpsCoordinatesQuestionViewModel :
         MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILogger logger;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IGpsLocationService locationService;
         private readonly IUserInterfaceStateService userInterfaceStateService;
 
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IUserInterfaceStateService userInterfaceStateService,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            ILiteEventRegistry liteEventRegistry,
+            IViewModelEventRegistry liteEventRegistry,
             ILogger logger)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
@@ -89,8 +89,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var interview = this.interviewRepository.Get(interviewId);
 
-            this.liteEventRegistry.Subscribe(this, interviewId);
-
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
@@ -105,6 +103,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.Answer = new GpsLocation(gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Latitude,
                     gpsAnswer.Longitude, DateTimeOffset.MinValue);
             }
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
         private async Task RemoveAnswerAsync()
@@ -199,8 +199,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.QuestionState.Dispose();
             this.liteEventRegistry.Unsubscribe(this);
+            this.QuestionState.Dispose();
         }
 
         public void Handle(AnswersRemoved @event)

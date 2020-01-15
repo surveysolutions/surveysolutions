@@ -89,8 +89,20 @@
                 return input || '';
             };
 
+            utilityService.trimText = function(text) {
+                return utilityService.sanitize(text).substring(0, 50) + (text.length > 50 ? "..." : "");
+            };
+
+            utilityService.createDeletePopup = function (message) {
+                return {
+                    title: message,
+                    okButtonTitle: $i18next.t("Delete"),
+                    cancelButtonTitle: $i18next.t("Cancel")
+                };
+            };
+
             utilityService.createQuestionForDeleteConfirmationPopup = function (title) {
-                var trimmedTitle = utilityService.sanitize(title).substring(0, 50) + (title.length > 50 ? "..." : "");
+                var trimmedTitle = utilityService.trimText(title);
                 var message = $i18next.t('DeleteConfirmQuestion',  {trimmedTitle: trimmedTitle});
                 return {
                     title: message,
@@ -100,7 +112,7 @@
             };
 
             utilityService.replaceOptionsConfirmationPopup = function (title) {
-                var trimmedTitle = utilityService.sanitize(title).substring(0, 50) + (title.length > 50 ? "..." : "");
+                var trimmedTitle = utilityService.trimText(title);
                 var message = $i18next.t('ReplaceOptionsConfirmation',  {trimmedTitle: trimmedTitle});
                 return {
                     title: message,
@@ -110,7 +122,7 @@
             };
 
             utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup = function (title, count) {
-                var trimmedTitle = utilityService.sanitize(title).substring(0, 50) + (title.length > 50 ? "..." : "");
+                var trimmedTitle = utilityService.trimText(title);
                 var message = $i18next.t('OnlyFirstOptionsWillBeTakenConfirmation',  {trimmedTitle: trimmedTitle, count: count });
                 return {
                     title: message,

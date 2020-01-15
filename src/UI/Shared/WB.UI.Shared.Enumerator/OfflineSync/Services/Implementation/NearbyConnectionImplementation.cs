@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -15,6 +16,7 @@ using WB.UI.Shared.Enumerator.OfflineSync.Entities;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 {
+    [Localizable(false)]
     public class NearbyConnectionClient : INearbyConnectionClient
     {
         private readonly IGoogleApiClientFactory apiClientFactory;
@@ -44,10 +46,10 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             var result = await ExecuteNearbyActionWithTimeoutAsync(
                 NearbyClass.Connections.StartDiscovery(Api, serviceName,
                     new OnDiscoveryCallback(OnFoundEndpoint, OnLostEndpoint, cancellationToken),
-                    new DiscoveryOptions(Strategy.P2pStar)))
+                    new DiscoveryOptions.Builder().SetStrategy(Strategy.P2pStar).Build()))
                 .ConfigureAwait(false);
 
-            LogNonSuccesfulResult(result, new ActionArgs((nameof(serviceName), serviceName)));
+            LogNonSuccessfulResult(result, new ActionArgs((nameof(serviceName), serviceName)));
 
             this.logger.Verbose($"{serviceName} EXIT. Result: {result.Status}");
 
@@ -62,7 +64,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                 new OnConnectionLifecycleCallback(
                     new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected),
                     cancellationToken),
-                new AdvertisingOptions(Strategy.P2pStar))
+                 new AdvertisingOptions.Builder().SetStrategy(Strategy.P2pStar).Build())
                 .ConfigureAwait(false);
 
             if (!result.Status.IsSuccess)
@@ -86,9 +88,9 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                             OnDisconnected), cancellationToken)))
                 .ConfigureAwait(false);
 
-            LogNonSuccesfulResult(nearbyStatus, new ActionArgs(("name", name), ("endpoint", endpoint)));
+            LogNonSuccessfulResult(nearbyStatus, new ActionArgs(("name", name), ("endpoint", endpoint)));
 
-            logger.Verbose($"({name}, {endpoint}) EXECUTE DONE => {nearbyStatus.Status.ToString()}");
+            logger.Verbose($"({name}, {endpoint}) EXECUTE DONE => {nearbyStatus.Status}");
 
             return ToConnectionStatus(nearbyStatus);
         }
@@ -102,7 +104,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                     new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate))))
                 .ConfigureAwait(false);
 
-            LogNonSuccesfulResult(result, new ActionArgs(("endpoint", endpoint)));
+            LogNonSuccessfulResult(result, new ActionArgs(("endpoint", endpoint)));
 
             logger.Verbose($"({endpoint}) EXIT => {result.Status}");
 
@@ -123,7 +125,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                         NearbyClass.Connections.SendPayload(Api, to, send.NearbyPayload))
                     .ConfigureAwait(false);
 
-                LogNonSuccesfulResult(result, new ActionArgs(("to", to)));
+                LogNonSuccessfulResult(result, new ActionArgs(("to", to)));
 
                 this.logger.Verbose($"({to}, '{payload}') EXIT => {result.Status}");
 
@@ -198,7 +200,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             InitiatedConnection?.Invoke(this, info);
         }
 
-        private void LogNonSuccesfulResult(Statuses result, ActionArgs args, [CallerMemberName] string method = null)
+        private void LogNonSuccessfulResult(Statuses result, ActionArgs args, [CallerMemberName] string method = null)
         {
             if (result.IsSuccess) return;
 

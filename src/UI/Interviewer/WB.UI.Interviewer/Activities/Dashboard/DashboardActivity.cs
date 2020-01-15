@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Android.App;
 using Android.Bluetooth;
 using Android.Content;
@@ -184,7 +183,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void OnStart()
         {
             base.OnStart();
-            this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
+            this.BindService(new Intent(this, typeof(SyncBgService)), 
+                new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
         }
 
         private void ViewPager_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
@@ -196,7 +196,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             base.OnViewModelSet();
             this.ViewModel.Synchronization.SyncBgService = this;
-            this.ViewModel.OnOfflineSynchronizationStarted += OnOfflineSynchronizationStarted;
+            this.ViewModel.OnOfflineSynchronizationStarted = OnOfflineSynchronizationStarted;
             this.ViewModel.PropertyChanged += OnPropertyChanged;
         }
 
@@ -281,6 +281,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.communicator?.StopAll();
             this.GoogleApi?.Disconnect();
+
             if (this.bluetoothReceiver != null)
             {
                 UnregisterReceiver(this.bluetoothReceiver);
@@ -319,13 +320,13 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             {
                 this.GoogleApi?.Dispose();
                 this.GoogleApi = null;
-                this.ViewModel.OnOfflineSynchronizationStarted -= this.OnOfflineSynchronizationStarted;
+                this.ViewModel.OnOfflineSynchronizationStarted = null;
             }
 
             base.Dispose(disposing);
         }
 
-        private void OnOfflineSynchronizationStarted(object sender, EventArgs e)
+        private void OnOfflineSynchronizationStarted()
         {
             if (!this.CheckPlayServices()) return;
 
@@ -374,8 +375,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             if (this.GoogleApi == null)
             {
                 this.GoogleApi = new GoogleApiClient.Builder(this)
-                    .AddConnectionCallbacks(this)
-                    .AddOnConnectionFailedListener(this)
+                    .EnableAutoManage(this, this)
                     .AddApi(NearbyClass.CONNECTIONS_API)
                     .Build();
 

@@ -22,18 +22,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionLinkedToListQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<TextListQuestionAnswered>,
-        ILiteEventHandler<LinkedToListOptionsChanged>,
-        ILiteEventHandler<QuestionsEnabled>,
-        ILiteEventHandler<QuestionsDisabled>,
+        IAsyncViewModelEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<TextListQuestionAnswered>,
+        IAsyncViewModelEventHandler<LinkedToListOptionsChanged>,
+        IAsyncViewModelEventHandler<QuestionsEnabled>,
+        IAsyncViewModelEventHandler<QuestionsDisabled>,
         ICompositeQuestionWithChildren,
         IDisposable
     {
         private readonly Guid userId;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         protected IStatefulInterview interview;
         private readonly ThrottlingViewModel throttlingModel;
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
@@ -126,9 +126,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             };
             
-            this.eventRegistry.Subscribe(this, interviewId);
-
             this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         public void Dispose()
@@ -230,14 +230,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 : null;
         }
 
-        public async void Handle(QuestionsEnabled @event)
+        public async Task HandleAsync(QuestionsEnabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
             await this.RefreshOptionsFromModelAsync();
         }
 
-        public async void Handle(QuestionsDisabled @event)
+        public async Task HandleAsync(QuestionsDisabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.ClearOptionsAsync();
         }
 
-        public async void Handle(AnswersRemoved @event)
+        public async Task HandleAsync(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
@@ -276,7 +276,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(LinkedToListOptionsChanged @event)
+        public async Task HandleAsync(LinkedToListOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 

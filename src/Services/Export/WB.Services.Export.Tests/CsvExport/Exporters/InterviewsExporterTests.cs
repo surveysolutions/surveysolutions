@@ -38,8 +38,9 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public async Task It_should_export_service_column_with_interview_key()
         {
             //arrange
-            Guid interviewId = Id.g1;
+            Guid interviewId = Id.g2;
             var interviewKey = "11-11-11-11";
+            var assignmentId = 11;
 
             var questionnaire = Create.QuestionnaireDocument(
                 variableName: "MyQuestionnaire"
@@ -48,7 +49,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaire);
             var interviewIdsToExport = new List<InterviewToExport>
             {
-                new InterviewToExport(interviewId, interviewKey, InterviewStatus.Completed)
+                new InterviewToExport(interviewId, interviewKey, InterviewStatus.Completed, assignmentId)
             };
 
             string[][] answers = { new string[1] };
@@ -75,6 +76,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             Assert.That(dataInCsvFile[0].File, Is.EqualTo("MyQuestionnaire.tab"));
 
+            Assert.That(dataInCsvFile[0].Data[0].Length, Is.EqualTo(6));
             Assert.That(dataInCsvFile[0].Data[0], Has.Length.EqualTo(dataInCsvFile[1].Data[0].Length),
                 "Length of header columns should be equal to data columns length");
 
@@ -83,13 +85,16 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             
 
             Assert.That(dataInCsvFile[0].Data[0][2], Is.EqualTo(ServiceColumns.InterviewRandom));
-            Assert.That(dataInCsvFile[1].Data[0][2], Is.EqualTo("0.72624326996796"));
+            Assert.That(dataInCsvFile[1].Data[0][2], Is.EqualTo("0.7262432699679598"));
 
             Assert.That(dataInCsvFile[0].Data[0][3], Is.EqualTo(ServiceColumns.HasAnyError));
             Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("0"));
 
             Assert.That(dataInCsvFile[0].Data[0][4], Is.EqualTo(ServiceColumns.InterviewStatus));
             Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo(((int)InterviewStatus.Completed).ToString()));
+
+            Assert.That(dataInCsvFile[0].Data[0][5], Is.EqualTo(ServiceColumns.AssignmentId));
+            Assert.That(dataInCsvFile[1].Data[0][5], Is.EqualTo(assignmentId.ToString()));
         }
 
         private List<Create.CsvData> dataInCsvFile;

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
@@ -18,13 +19,21 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 Binder = new PortableOldToNewAssemblyRedirectSerializationBinder()
             };
 #pragma warning restore 612, 618
-    }
+        }
 
-    public string Serialize(object item)
+        public string Serialize(object item)
         {
             return JsonConvert.SerializeObject(item, jsonSerializerSettings);
         }
-        
+
+        public string SerializeWithoutTypes(object item) => JsonConvert.SerializeObject(item, new JsonSerializerSettings
+        {
+            Converters = new List<JsonConverter>
+            {
+                new Newtonsoft.Json.Converters.StringEnumConverter()
+            }
+        });
+
         public T Deserialize<T>(string payload)
         {
             return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSettings);

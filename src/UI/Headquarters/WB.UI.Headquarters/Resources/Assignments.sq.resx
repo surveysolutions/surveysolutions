@@ -1,0 +1,474 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Action" xml:space="preserve">
+    <value>Veprim</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Arkivuar</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Regjistrimi audio u ndryshua </value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Regjistrimi audio u çaktivizua </value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Regjistrimi audio u aktivizua </value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>U krijua</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Komento: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Iu caktua {{responsible}}</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>U fshi</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Madhësia ndryshoi</value>
+  </data>
+  <data name="Action_QuantityChanged_To" xml:space="preserve">
+    <value>Madhësia ndryshoi në {{quantity}}</value>
+  </data>
+  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+    <value>Madhësia ndryshoi në të Pakufizuar </value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>U ricaktua</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Iu ricaktua {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Komento: {{comment}}</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Marrë nga tableti</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>Nxirr nga arkiva </value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Modaliteti Ueb ndryshoi </value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Modaliteti Ueb u çaktivizua</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Modaliteti Ueb u aktivizua</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Aktivizuar</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>Nga</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Të gjitha detyrat</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Arkiv</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Arkivuar</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Detyra {{id}} nuk mund të mbyllet, pasi e ka modalitetin ueb të aktivizuar </value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>Historiku</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>Identifikuesi i Detyrës</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Informacion i hollësishëm mbi detyrën </value>
+  </data>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>Detyrat</value>
+  </data>
+  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+    <value>Madhësia nuk mund të ndryshohet për modalitetin Ueb.</value>
+  </data>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{{count}} Detyra e përzgjedhur </value>
+  </data>
+  <data name="AssignmentsSelected_plural" xml:space="preserve">
+    <value>{{count}} Detyrat e përzgjedhura</value>
+  </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>Caktoja</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>Aktivizo regjistrimin audio</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>Kur të aktivizohet, aplikacioni do të regjistrojë procesin e intervistës. Me ndezjen e kontrollit të audios, një sasi të dhënash të sinkronizuara do të jenë shumë më të mëdha</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>Cilësimet e regjistrimit audio për detyrën {{id}}</value>
+  </data>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>Korrigjo madhësinë për detyrën {{assignmentId}}</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Mbyll</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Komento</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Numërim</value>
+  </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Plotësoni të gjitha ose disa prej fushave identifikuese</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Zgjidh përgjegjësin (Zyra qendrore ose Supervizori ose Intervistuesi) për këtë detyrë </value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>Kjo Detyrë do të përdoret me Modalitetin Ueb </value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Krijuar më</value>
+  </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Nis një intervistë të re</value>
+  </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>Krijo një detyrë të re për pyetësorin {{questionnaire}}</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Hollësitë</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>Komento</value>
+  </data>
+  <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>Fjalëkalimi sipas detyrave për modalitetin ueb me vlerë 1 duhet të jetë unik</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>Email-i do të përdoret në komunikimin me marrësin e detyrës</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>Vendosni komentin tuaj këtu</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Vendosni Email-in</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Vendosni fjalëkalimin</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>Detyra nuk mund të krijohet. </value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Pyetje identifikuese</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Duhen intervistat</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Email-i është i pavlefshëm</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Fjalëkalimi është i pavlefshëm</value>
+  </data>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>Fusha e Madhësisë duhet të jetë -1 ose më shumë.</value>
+  </data>
+  <data name="InvalidSizeMessage" xml:space="preserve">
+    <value>Madhësia është e pavlefshme</value>
+  </data>
+  <data name="InvalidSizeWithEmail" xml:space="preserve">
+    <value>Për detyrat me email-in e dhënë, madhësia është 1</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Regjistrim audio</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} detyra të përzgjedhura do të mbyllen. Madhësia do të vendoset sipas numrin aktual të intervistave të mbledhura.</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Detyrë e re</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{{count}} Detyra do të ndryshohet </value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+    <value>{{count}} Detyrat do të ndryshohen </value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Fjalëkalimi</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Fjalëkalimi do të përdoret për të mbrojtur detyrën </value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>Të paktën 6 numra dhe shkronja të mëdha ose simbole me një karakter '?' për të krijuar fjalëkalimin</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Pyetësor</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>ver. {{version}}</value>
+  </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>Marrë nga tableti</value>
+  </data>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>Shfaqi të gjitha</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>Nuk është marrë nga tableti</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>Marrë nga tableti</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Përzgjidh pyetësorin ekzistues për kaluar në nivel të ri detyrat nga</value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Zgjidh pyetësorin nga i cili do të bësh upgrade</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Zgjidh përgjegjësin</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Status i arkivuar</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Madhësia e detyrës së përzgjedhur {{id}} do të ndryshojë nga {{quantity}} në {{collected}} (numri i intervistave të mbledhura aktualisht)</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Madhësia</value>
+  </data>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>Specifiko numrin maksimal të intervistave që do të gjenerohen për këtë detyrë. Vlerat e lejuara: -1 është për Detyrën e pakufizuar, 0 është për Detyrën bosh, numrat për madhësinë e detyrës</value>
+  </data>
+  <data name="SizeForWebMode" xml:space="preserve">
+    <value>Detyra me madhësi 1 për modalitetin ueb duhet të ketë email ose fjalëkalim të dhënë </value>
+  </data>
+  <data name="SizeInstructions" xml:space="preserve">
+    <value>Duhet të jetë një numër, -1 për të pakufizuar, 1 nëse email-i është specifikuar </value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Ndalo</value>
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>Tregues nëse detyra është aktive ose është arkivuar.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Zgjidh një pyetësor për të parë detyrat shoqëruese. Zgjidh “Të gjithë pyetësorët” për të parë detyrat shoqëruese të secilit pyetësor.</value>
+  </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>Zgjidh një version pyetësori për të parë detyrat e tij shoqëruese. Zgjidh “Të gjitha versionet” për të parë detyrat shoqëruese të secilit version të pyetësorit të zgjedhur.</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>Shfaq vetëm detyrat që janë marrë ose nuk janë marrë nga tabletat.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Përdoruesi përgjegjës. Kliko në fushë për të zgjedhur një emër përdoruesi ose duke e selektuar atë drejtpërdrejt, ose duke e shtypur për të filtruar më tej listën e emrave të përdoruesve.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>Numri i intervistave të dorëzuara aktualisht për këtë detyrë. Mund të jenë krijuar më shumë intervista, por nuk janë sinkronizuar. Klikoni mbi çdo qelizë për të parë intervistat përkatëse. Klikoni mbi ikonën e renditjes për të renditur sipas numrit.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Kur u krijua fillimisht detyra. Klikoni mbi ikonën e renditjes për të renditur sipas kohës.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Informacion që identifikon çdo detyrë. Ato janë përgjigjet e pyetjeve të shenjuara si identifikuese në Designer.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>Numri i intervistave të nevojshme për përfundimin e detyrës.</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Regjistro procesin e intervistës </value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Përdoruesi aktualisht përgjegjës për detyrën. Klikoni mbi ikonën e renditjes për të renditur sipas emrit të përdoruesit.</value>
+  </data>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>Numri maksimal i intervistave që mund të zhvillohen për këtë detyrë. Klikoni mbi secilën qelizë për të ndryshuar këtë numër. Klikoni mbi ikonën “rendit” për të renditur sipas madhësisë.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>Kur është përditësuar detyra herën e fundit. Klikoni mbi ikonën “rendit” për të renditur sipas kohës.</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Detyra u krijua në Modalitetin Ueb </value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Nxirr nga arkiva</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>I/e pakufizuar</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Përditësuar më</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Kalo në nivel të ri</value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Kalimi në nivel të ri u ndërpre</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>Detyrat ekzistuese të papërfunduara do të kalojnë në nivel të ri nga pyetësori i përzgjedhur dhe do të arkivohen. </value>
+  </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>Lista e shkarkimeve</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>Pritni derisa të përfundojnë përmirësimet e tjera </value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>U krye</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Kalimi në nivel të ri u krye me sukses: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>Kalimi në nivel të ri nga {{from}} në {{to}} përfundoi</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Nuk u kalua në nivel të ri: {{count}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Kalimi në nivel të ri {{processed}} nga {{totalCount}}</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Kalimi i detyrave nga niveli {{from}} në {{to}}</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Modaliteti Ueb</value>
+  </data>
+</root>

@@ -91,11 +91,12 @@ namespace WB.Services.Export.CsvExport.Exporters
 
                 case QuestionType.MultyOption:
                 {
-                    if (!header.QuestionSubType.HasValue)
-                        return GetCategoricalMultiAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
-
                     switch (header.QuestionSubType)
                     {
+                        case null:
+                            return GetCategoricalMultiAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
+                        case QuestionSubtype.MultyOption_Combobox:
+                            return GetMultiLinkedToListAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
                         case QuestionSubtype.MultiOptionOrdered:
                             return GetCategoricalMultiOrderedAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
                         case QuestionSubtype.MultiOptionYesNo:

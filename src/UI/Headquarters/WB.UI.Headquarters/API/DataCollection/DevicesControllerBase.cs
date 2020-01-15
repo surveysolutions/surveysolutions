@@ -52,11 +52,11 @@ namespace WB.UI.Headquarters.API.DataCollection
                 : this.Request.CreateResponse(HttpStatusCode.OK);
         }
         
-        public virtual HttpResponseMessage LinkCurrentResponsibleToDevice(string id, int version)
+        public virtual async Task<IHttpActionResult> LinkCurrentResponsibleToDevice(string id, int version)
         {
-            this.userManager.LinkDeviceToInterviewerOrSupervisor(this.authorizedUser.Id, id, DateTime.UtcNow);
+            await this.userManager.LinkDeviceToInterviewerOrSupervisorAsync(this.authorizedUser.Id, id, DateTime.UtcNow);
 
-            return this.Request.CreateResponse(HttpStatusCode.OK);
+            return this.Ok();
         }
 
         public virtual async Task<IHttpActionResult> Info(DeviceInfoApiView info)
@@ -105,6 +105,7 @@ namespace WB.UI.Headquarters.API.DataCollection
 
             user.Profile.DeviceAppBuildVersion = info.AppBuildVersion;
             user.Profile.DeviceAppVersion = info.AppVersion;
+            user.Profile.StorageFreeInBytes = info.StorageInfo?.Free;
 
             await this.userManager.UpdateAsync(user);
 

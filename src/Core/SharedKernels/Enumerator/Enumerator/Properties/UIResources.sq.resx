@@ -1,0 +1,699 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>Përgjigjja u pranua. U deshën {0} për t’u përpunuar </value>
+  </data>
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>Mos merr parasysh</value>
+  </data>
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>HARTË AKTIVE:</value>
+  </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Zona: {0:0.00} m2</value>
+  </data>
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>HARTA TË DISPONUESHME NË PAJISJE </value>
+  </data>
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>Mbyll</value>
+  </data>
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Redakto</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Gjatësia: {0:0.00} m</value>
+  </data>
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>Vendndodhja</value>
+  </data>
+  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>Vendndodhja juaj është jashtë kufijve të hartës</value>
+  </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Harta</value>
+  </data>
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>Nuk u bë asnjë ndryshim për t’u ruajtur.</value>
+  </data>
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>Nuk u gjet asnjë hartë. Ju lutemi, përditësoni hartat</value>
+  </data>
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+    <value>Perimetri: {0:0.00} m</value>
+  </data>
+  <data name="AreaMap_PointsFormat" xml:space="preserve">
+    <value>Pikë: {0}</value>
+  </data>
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>Ruaj</value>
+  </data>
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Zhbëj</value>
+  </data>
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Përditëso hartat</value>
+  </data>
+  <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>Përditësimi dështoi</value>
+  </data>
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Përditëso hartat</value>
+  </data>
+  <data name="AssignmentN" xml:space="preserve">
+    <value>Detyra #{0}</value>
+  </data>
+  <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>Nuk mundi të shkruajë skedarin audio. Sigurohuni që pajisja ka hapësirë të lirë në një memorie të brendshme</value>
+  </data>
+  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>Përjashtim i papritur gjatë fillimit të regjistrimit audio</value>
+  </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} të regjistrimit audio</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>Nuk ka ende pyetësorë                                                                            Ju mund të krijoni ose redaktoni pyetësorët tuaj në Survey Solutions Designer</value>
+  </data>
+  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+    <value>Nuk u gjet asnjë pyetësor</value>
+  </data>
+  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+    <value>{0:dd MMM HH:mm}</value>
+  </data>
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>Im/ime</value>
+  </data>
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>Publik</value>
+  </data>
+  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>I/E ndarë me mua</value>
+  </data>
+  <data name="Dashboard_ToolbarText" xml:space="preserve">
+    <value>Pyetësorë</value>
+  </data>
+  <data name="DateQuestion_Hint" xml:space="preserve">
+    <value>Trokit për të vendosur datën</value>
+  </data>
+  <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>Pajisja juaj nuk e mbështet këtë funksion </value>
+  </data>
+  <data name="EndpointHint" xml:space="preserve">
+    <value>Pika fundore e sinkronizimit </value>
+  </data>
+  <data name="EndpointText" xml:space="preserve">
+    <value>Pika Fundore e Shërbimit të Uebit:</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Gabim</value>
+  </data>
+  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>Llogaria juaj e përdoruesit është bllokuar. Ju lutemi, kontaktoni ekipin e mbështetjes në support@mysurvey.solutions.</value>
+  </data>
+  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Llogaria juaj nuk u miratua. Ju lutemi, konfirmoni në fillim llogarinë tuaj.</value>
+  </data>
+  <data name="ErrorMessage_InternalServerError" xml:space="preserve">
+    <value>Gabim i serverit. Ju lutemi, kontaktoni ekipin e mbështetës në support@mysurvey.solutions</value>
+  </data>
+  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
+    <value>URL-ja e dhënë e Survey Solutions Designer është e pavlefshme.</value>
+  </data>
+  <data name="ErrorMessage_Maintenance" xml:space="preserve">
+    <value>Faqja e internetit e Survey Solutions Designer është në modalitet mirëmbajtjeje tani. Na falni për shqetësimin</value>
+  </data>
+  <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
+    <value>Koha përfundoi kur po lidheshit me faqen e Survey Solutions Designer. Kontrolloni lidhjen tuaj me internetin.</value>
+  </data>
+  <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
+    <value>Nuk jeni të lidhur me Survey Solutions Designer. Ju lutemi, sigurohuni që faqja është e disponueshme.</value>
+  </data>
+  <data name="ErrorMessage_Unauthorized" xml:space="preserve">
+    <value>Emri i regjistrimit ose fjalëkalimi juaj është i pasaktë</value>
+  </data>
+  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>Ka dalë versioni i ri i aplikacionit. Ju lutemi, përditësoni aplikacionin</value>
+  </data>
+  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+    <value>Trokitni për të vendosur tekstin</value>
+  </data>
+  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+    <value>Aplikacioni duhet të ketë leje të përdorë vendndodhjen e pajisjes suaj aktuale për t’iu përgjigjur kësaj pyetjeje. Provojeni prapë t’i përgjigjeni pyetjes dhe të lejoni aksesin. Nëse nuk e shihni dritaren e lejeve, shkoni te Cilësimet dhe lejojeni aplikacionin të përdorë vendndodhjen e pajisjes.</value>
+  </data>
+  <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>GPS nuk mundi të përcaktonte vendndodhjen tuaj. Për të zgjidhur problemin, ju lutemi provoni këto: sigurohuni që jeni në mjedise të jashtme, konfirmoni që GPS-ja juaj është aktivizuar ose ndryshoni cilësimet e kufirit kohor të GPS-së suaj</value>
+  </data>
+  <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>Trokit për të vendosur numrin</value>
+  </data>
+  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>Komenti juaj</value>
+  </data>
+  <data name="Interview_Comment_Resolve" xml:space="preserve">
+    <value>Zgjidh</value>
+  </data>
+  <data name="Interview_Complete_Answered" xml:space="preserve">
+    <value>Me përgjigje</value>
+  </data>
+  <data name="Interview_Complete_Button" xml:space="preserve">
+    <value>E përfunduar</value>
+  </data>
+  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+    <value>Pasi të keni përfunduar këtë intervistë, ajo do të shënohet si e përfunduar dhe do t’i ngarkohet supervizorit gjatë sinkronizimit tuaj të radhës </value>
+  </data>
+  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+    <value>Entitete me gabime:</value>
+  </data>
+  <data name="Interview_Complete_Errors" xml:space="preserve">
+    <value>Gabim(e)</value>
+  </data>
+  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+    <value>{0} entitetet e para me gabime:</value>
+  </data>
+  <data name="Interview_Complete_No" xml:space="preserve">
+    <value>Jo</value>
+  </data>
+  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
+    <value>Shënim për supervizorin</value>
+  </data>
+  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
+    <value>Statusi i pyetjeve</value>
+  </data>
+  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
+    <value>Ju jeni pranë përfundimit të kësaj interviste </value>
+  </data>
+  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>Ju jeni pranë përfundimit të intervistës {0}</value>
+  </data>
+  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
+    <value>I përfunduar</value>
+  </data>
+  <data name="Interview_Complete_Unanswered" xml:space="preserve">
+    <value>Pa përgjigje</value>
+  </data>
+  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+    <value>Për të plotësuar ekranin</value>
+  </data>
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>{0} pyetjet e para me komente:</value>
+  </data>
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>Pyetjet me komentet e supervizorit:</value>
+  </data>
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>Faqe e parë</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>Shënim i supervizorit:</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{0} përgjigje</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>një përgjigje</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{0} gabime</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>një gabim</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Rubrika u përfundua: {0}</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Rubrika të panisura</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Rubrika të nisura: {0}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{0} nënrubrika</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>një nënrubrikë</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>asnjë nënrubrikë</value>
+  </data>
+  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+    <value>Komenti i Zyrës Qendrore</value>
+  </data>
+  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+    <value>Shfaq udhëzimin</value>
+  </data>
+  <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>Udhëzim</value>
+  </data>
+  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+    <value>Koment i intervistuesit</value>
+  </data>
+  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>Kategoritë do të jenë vlefshme pas përgjigjes së pyetjes së referuar</value>
+  </data>
+  <data name="Interview_MaxAnswersCount" xml:space="preserve">
+    <value>{0} nga {1} kategoritë e përzgjedhura </value>
+  </data>
+  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>Rubrika tjetër</value>
+  </data>
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>Koment i përdoruesit</value>
+  </data>
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>Vështrim i përgjithshëm</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>Informacion shtesë</value>
+  </data>
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>Komente</value>
+  </data>
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Vështrim i përgjithshëm</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Pa përgjigje</value>
+  </data>
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>Paralajmërim(e)</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+    <value>Të {0} pyetjet kanë përgjigje</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+    <value>Shënim: {0} pyetje janë pa përgjigje </value>
+  </data>
+  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+    <value>Përgjigjja "{0}" nuk përputhet me asnjë kategori</value>
+  </data>
+  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+    <value>Përgjigjja "{0}" nuk përputhet me asnjë kategori </value>
+  </data>
+  <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
+    <value>Fshih të përfunduarat</value>
+  </data>
+  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+    <value>Vlera bosh nuk mund të ruhet </value>
+  </data>
+  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>Përgjigjja '{0}' është e pasaktë pasi pyetje është përdorur si madhësi e rosterit dhe përgjigjja e specifikuar është negative</value>
+  </data>
+  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>Vlera e vendosur nuk mund të analizohet si vlerë e plotë</value>
+  </data>
+  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+    <value>Përgjigjja '{0}' është e pasaktë, pasi përgjigjja është më e gjatë sesa kufiri i sipërm '{1}' i Rosterit.</value>
+  </data>
+  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>Vlerat bosh nuk lejohen</value>
+  </data>
+  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Jeni të sigurt që doni të hiqni {0} rresht(a) nga secili roster përkatës?</value>
+  </data>
+  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>Vlera e vendosur nuk mund të analizohet si vlerë dhjetore </value>
+  </data>
+  <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
+    <value>Shfaq të përfunduarat</value>
+  </data>
+  <data name="Interview_Question_Text_Empty" xml:space="preserve">
+    <value>Përgjigjja nuk duhet të jetë bosh</value>
+  </data>
+  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>Ju lutemi, plotësoni të gjitha vlerat e kërkuara </value>
+  </data>
+  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>Trokit për të ndryshuar zonën</value>
+  </data>
+  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>Regjistro të ri</value>
+  </data>
+  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Trokit për të regjistruar audion</value>
+  </data>
+  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>Trokit për të regjistruar GPS-në</value>
+  </data>
+  <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
+    <value>Përgjigjja e re për një pyetje të mbrojtur duhet të jetë më e gjatë ose e barabartë me {0}</value>
+  </data>
+  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>Trokit për të bërë foto</value>
+  </data>
+  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>Trokit për të marrë barkodin </value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
+    <value>Jeni të sigurt që doni të hiqni rosterat përkatës?</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Jeni të sigurt që doni të hiqni rosterin përkatës '{0}' nga çdo roster i lidhur?</value>
+  </data>
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>Trokit për të regjistruar orën aktuale </value>
+  </data>
+  <data name="Interview_ShowPdf" xml:space="preserve">
+    <value>Shfaq PDF </value>
+  </data>
+  <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>Fshi</value>
+  </data>
+  <data name="Interview_SignatureSignHere" xml:space="preserve">
+    <value>Regjistrohu këtu</value>
+  </data>
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>Komenti i supervizorit</value>
+  </data>
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>Ruaj nënshkrimin</value>
+  </data>
+  <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>Intervistuesi Survey Solutions</value>
+  </data>
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>Regjistrim audio</value>
+  </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>Diagnostikimi </value>
+  </data>
+  <data name="Interviewer_Done" xml:space="preserve">
+    <value>U krye</value>
+  </data>
+  <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+    <value>Lini komente për përgjegjësin e ri </value>
+  </data>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>Juve ju është caktuar tashmë një tjetër pajisje </value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>Rilidh</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>Nëse rilidheni me këtë pajisje &lt;br/&gt; të gjitha të dhënat tek e vjetra do të humbasin</value>
+  </data>
+  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>Provo të regjistrohesh në internet</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Çelësi i Intervistës: {0}</value>
+  </data>
+  <data name="LoginNameHint" xml:space="preserve">
+    <value>Të dhënat tuaja të regjistrimit</value>
+  </data>
+  <data name="LoginText" xml:space="preserve">
+    <value>Hyr</value>
+  </data>
+  <data name="LoginTitleText" xml:space="preserve">
+    <value>Testuesi i Pyetësorit i Survey Solutions </value>
+  </data>
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Dil nga Map Editor</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>Fshi gjithçka</value>
+  </data>
+  <data name="Messages_WaitPendingOperation" xml:space="preserve">
+    <value>Ju lutemi, pritni derisa veprimi aktual të përfundojë </value>
+  </data>
+  <data name="MissingPermission" xml:space="preserve">
+    <value>Aplikacioni nuk ka leje të mjaftueshme për të ekzekutuar veprimin e kërkuar</value>
+  </data>
+  <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>Aplikacioni duhet të ketë leje të përdorë kamerën për t’iu përgjigjur kësaj pyetjeje. Provojeni prapë t’i përgjigjeni pyetjes dhe të lejosh aksesin. Nëse nuk e shihni dritaren e lejeve, shkoni te Cilësimet dhe lejoni aplikacionin të përdorë kamerën.</value>
+  </data>
+  <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>Aplikacioni duhet të ketë leje të përdorë mikrofonin për t’iu përgjigjur kësaj pyetjeje. Provojeni prapë t’i përgjigjeni pyetjes dhe të lejoni aksesin. Nëse nuk e shihni dritaren e lejeve, shkoni te Cilësimet dhe lejoni aplikacionin të përdorë mikrofonin.</value>
+  </data>
+  <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>Aplikacioni duhet të ketë leje për përdorimin e memories për t’iu përgjigjur kësaj pyetjeje. Provojeni prapë t’i përgjigjeni pyetjes dhe të lejoni akses. Nëse nuk shihni dritaren e lejeve, shkoni te Cilësimet dhe lejojeni aplikacionin të përdorë memorien.</value>
+  </data>
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Zgjidh nga galeria</value>
+  </data>
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Zgjidh një opsion</value>
+  </data>
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Bëj foto</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Jo</value>
+  </data>
+  <data name="Notifications_SummaryTitle" xml:space="preserve">
+    <value>{0} njoftime</value>
+  </data>
+  <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>Ndërprit</value>
+  </data>
+  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>Kthehu në dashboard</value>
+  </data>
+  <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>Kjo pajisje nuk është e mbështetur.</value>
+  </data>
+  <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>Shërbimet Google Play duhen instaluar.</value>
+  </data>
+  <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Shpejtësia: {0}, Koha e mbetur: {1}</value>
+  </data>
+  <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>Provojeni prapë</value>
+  </data>
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>Sinkronizimi i detyrave dhe intervistave </value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Fjalëkalimi</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>Shërbimet Google Play nuk janë të disponueshme</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>Vendndodhja e Klientit nuk u hap</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>Ju nuk mund ta hapni më shumë se njëherë shërbimin MvxLocation</value>
+  </data>
+  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>HAP</value>
+  </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
+    <value>Shkarko përditësimet për aplikacionin e Intervistuesit </value>
+  </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+    <value>Nëse intervistuesi nuk ka akses në internet, ky funksion duhet aktivizuar, pasi u jep mundësi për të përditësuar aplikacionin e tyre gjatë sinkronizimit jashtë linje me aplikacionin Supervizori </value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+    <value>Numri i metrave për të caktuar saktësinë</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+    <value>Saktësia e dëshiruar e pyetjeve të GPS-së </value>
+  </data>
+  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+    <value>Shfaq vendndodhjen në hartë</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+    <value>Ngarko hartën për të shfaqur vendndodhjen për pyetjet e GPS-së</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>Tableti do të vibrojë kur një përgjigje nuk e kalon verifikimin</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>Vibron kur jepet një përgjigje e pavlefshme</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+    <value>Trokit për të vendosur numrin dhjetor </value>
+  </data>
+  <data name="StaySignedInText" xml:space="preserve">
+    <value>Qëndro i regjistruar</value>
+  </data>
+  <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Supervizori i Survey Solutions</value>
+  </data>
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>Mirato</value>
+  </data>
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>Cakto</value>
+  </data>
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>Refuzo</value>
+  </data>
+  <data name="Synchronization_FoundDevice" xml:space="preserve">
+    <value>Pajisja ({0}) e intervistuesit u gjet</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>Ju nuk keni asnjë detyrë në këtë pajisje. Dërgo të dhënat e tabletit, fshi të dhënat e aplikacionit dhe hyr me një llogari tjetër </value>
+  </data>
+  <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>Trokit për të vendosur një objekt të ri</value>
+  </data>
+  <data name="TextQuestion_Hint" xml:space="preserve">
+    <value>Trokit për të vendosur tekstin</value>
+  </data>
+  <data name="TextQuestion_MaskHint" xml:space="preserve">
+    <value>Trokit për të vendosur tekstin ({0})</value>
+  </data>
+  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>Përgjigjja është e pavlefshme</value>
+  </data>
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+    <value>Intervista përmban një numër të përgjithshëm të njësive të rosterit dhe pyetjeve që i tejkalon kufizimet e sistemit.</value>
+  </data>
+  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>Përgjigjja nuk u ruajt</value>
+  </data>
+  <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+    <value>Rosteri aktual nuk ekziston më. Ju lutemi, shfletoni te rubrika ose rosteri tjetër i vlefshëm duke përdorur menunë e shfletimit.</value>
+  </data>
+  <data name="VariableEmptyValue" xml:space="preserve">
+    <value>&lt;empty&gt;</value>
+  </data>
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>Versioni i aplikacionit tuaj nuk e mbështet këtë funksion</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Paralajmërim</value>
+  </data>
+  <data name="Warnings" xml:space="preserve">
+    <value>Paralajmërime</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Po</value>
+  </data>
+</root>

@@ -29,7 +29,8 @@ input#edit-question-title, input#edit-group-title {
 }
 
 #roster-editor .dropdown-with-breadcrumbs-and-icons,
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons {
+
+.dropdown-with-breadcrumbs-and-icons {
     label {
         font-weight: normal;
         display: block;
@@ -37,13 +38,15 @@ input#edit-question-title, input#edit-group-title {
         font-size: 14px;
         color: #5d5d5d;
     }
-    .linked-roster-source{ 
+
+    .linked-roster-source {
         margin-left: 0px;
         font-style: italic;
         font-family: Georgia, serif;
         font-weight: normal;
         color: @questionnaire-tree-roster-color;
     }
+
     .btn-group {
         width: 100%;
 
@@ -75,7 +78,8 @@ input#edit-question-title, input#edit-group-title {
                 letter-spacing: normal;
                 font-weight: normal;
             }
-            .var-name-line{
+
+            .var-name-line {
                 color: #3da802;
                 font-weight: bold;
             }
@@ -85,42 +89,42 @@ input#edit-question-title, input#edit-group-title {
             top: 14px;
         }
 
-        .selected-block{
-            width:100%;
-            position:relative;
+        .selected-block {
+            width: 100%;
+            position: relative;
         }
 
-        .var-block{
-                position:absolute; 
-                margin: auto; 
-                top: 0; 
-                bottom: 0; 
-                right: 0; 
-                display:table; 
-                background-color:#fff;
+        .var-block {
+            position: absolute;
+            margin: auto;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            display: table;
+            background-color: #fff;
 
-                .var-name{
-                    color: #3da802;
-                    vertical-align:middle;
-                    display:table-cell;
-                }
-
-                &:before {
-                    @w: 75px;
-                    display: block;
-                    position: absolute;
-                    height: 100%;
-                    content: '';
-                    width: @w;
-                    top: 0px;
-                    left: -@w;
-                    #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
-                }
-
-                &:hover {
-                  background-color:  #f1f2f3;                
-                }
+            .var-name {
+                color: #3da802;
+                vertical-align: middle;
+                display: table-cell;
             }
+
+            &:before {
+                @w: 75px;
+                display: block;
+                position: absolute;
+                height: 100%;
+                content: '';
+                width: @w;
+                top: 0px;
+                left: -@w;
+                #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
+            }
+
+            &:hover {
+                background-color: #f1f2f3;
+            }
+        }
     }
 
     .dropdown-menu {
@@ -132,40 +136,45 @@ input#edit-question-title, input#edit-group-title {
         border: none;
 
         li {
-               padding-left: 5px;
-               padding-right: 5px;
-               span{    
-                   padding-right: 5px;
-                    padding-left: 5px;
-               }
+            padding-left: 5px;
+            padding-right: 5px;
+
+            span {
+                padding-right: 5px;
+                padding-left: 5px;
+            }
         }
 
-        li a{
+        li a {
             .arial-font();
             padding-top: 1px;
             padding-bottom: 1px;
             color: @questionnarie-question-editor-color;
-            position: relative;            
+            position: relative;
             padding-right: 5px;
             padding-left: 5px;
             margin-left: 10px;
+
             &.linked-question-source {
                 margin-left: 0px;
                 padding-right: 5px;
                 padding-left: 20px;
             }
-            &.linked-roster-source{ 
+
+            &.linked-roster-source {
                 margin-left: 0px;
                 font-style: italic;
                 font-family: Georgia, serif;
-                font-weight: normal;    
+                font-weight: normal;
                 padding-right: 5px;
                 padding-left: 5px;
                 color: @questionnaire-tree-roster-color;
             }
-            i{
-                    position: relative;
+
+            i {
+                position: relative;
             }
+
             &:after {
                 @w: 50px;
                 display: block;
@@ -179,22 +188,23 @@ input#edit-question-title, input#edit-group-title {
             }
 
             &:hover {
-                background:  #f1f2f3;
+                background: #f1f2f3;
                 border-radius: 4px;
-                .var-block{
-                    background-color:  #f1f2f3;
 
-                     &:before {
-                         @w: 75px;
-                         display: block;
-                         position: absolute;
-                         height: 100%;
-                         content: '';
-                         width: @w;
-                         top: 0px;
-                         left: -@w;
-                         #gradient > .horizontal(rgba(241, 242, 243, 0.0), rgba(241, 242, 243, 1.0));
-                     }
+                .var-block {
+                    background-color: #f1f2f3;
+
+                    &:before {
+                        @w: 75px;
+                        display: block;
+                        position: absolute;
+                        height: 100%;
+                        content: '';
+                        width: @w;
+                        top: 0px;
+                        left: -@w;
+                        #gradient > .horizontal(rgba(241, 242, 243, 0.0), rgba(241, 242, 243, 1.0));
+                    }
                 }
             }
         }
@@ -216,7 +226,6 @@ input#edit-question-title, input#edit-group-title {
         color: @questionnarie-question-placeholder-color;
     }
 }
-
 .question-editor .options-editor
 {
     margin-top: 0;
@@ -385,48 +394,67 @@ input#edit-question-title, input#edit-group-title {
     }
 }
 
-.help-bracket{
-    color:#bfd8ed;
-}
-
-.edit-question-note{
-    font-family: "Helvetica Neue","Helvetica",Arial,sans-serif;
-    font-size: 14px;
-    color: #c1c7cb;
-}
-
-.roster-type-specific-block,
-.question-type-specific-block {
-    background: @questionnarie-question-specific-block-color;
-    padding: 8px;
-    border-radius: 0 0 4px 4px;
-    .clearfix();
-}
-
-#roster-editor {
-
-    #rosterTypeBtn {
-        border-color: @designer-editor-lightblue-bg-color;
-    }
-
-    .input-variable-name:before {
-        top: 35px;
-    }
-}
-
-#question-editor {
-    .input-variable-name:before {
-        top: 35px;
-    }
-}
-
-textarea.form-control, textarea#edit-group-description {
-    height: 37px;
+.dropdown-with-fixed-width {
+    padding: 10px 40px 10px 10px;
+    background-color: #ffffff;
+    border: 2px solid #cccccc;
+    text-transform: none;
+    text-align: left;
     min-height: 37px;
-}
-
-#static-text-editor{
-    #edit-static-attachment-name {
-        color: #e004c9;
+    width: 220px;
+    > span.dropdown-arrow {
+        background: url(../i/dropdown-arrow.png) no-repeat center center;
+        width: 19px;
+        height: 12px;
+        position: absolute;
+        right: 10px;
     }
 }
+
+
+
+    .help-bracket {
+        color: #bfd8ed;
+    }
+
+    .edit-question-note {
+        font-family: "Helvetica Neue","Helvetica",Arial,sans-serif;
+        font-size: 14px;
+        color: #c1c7cb;
+    }
+
+    .roster-type-specific-block,
+    .question-type-specific-block {
+        background: @questionnarie-question-specific-block-color;
+        padding: 8px;
+        border-radius: 0 0 4px 4px;
+        .clearfix();
+    }
+
+    #roster-editor {
+
+        #rosterTypeBtn {
+            border-color: @designer-editor-lightblue-bg-color;
+        }
+
+        .input-variable-name:before {
+            top: 35px;
+        }
+    }
+
+    #question-editor {
+        .input-variable-name:before {
+            top: 35px;
+        }
+    }
+
+    textarea.form-control, textarea#edit-group-description {
+        height: 37px;
+        min-height: 37px;
+    }
+
+    #static-text-editor {
+        #edit-static-attachment-name {
+            color: #e004c9;
+        }
+    }

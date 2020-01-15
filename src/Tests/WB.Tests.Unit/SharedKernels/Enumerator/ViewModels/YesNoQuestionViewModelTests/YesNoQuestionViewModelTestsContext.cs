@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
     {
         protected static CategoricalYesNoViewModel CreateViewModel(
            IQuestionnaireStorage questionnaireStorage = null,
-           ILiteEventRegistry eventRegistry = null,
+           IViewModelEventRegistry eventRegistry = null,
            IStatefulInterviewRepository interviewRepository = null,
            IPrincipal principal = null,
            AnsweringViewModel answeringViewModel = null,
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             mockOfViewModelFactory.Setup(x => x.GetNew<CategoricalYesNoOptionViewModel>()).Returns(() =>
                 new CategoricalYesNoOptionViewModel(userInteraction));
 
-            var liteEventRegistry = eventRegistry ?? Mock.Of<ILiteEventRegistry>();
+            var liteEventRegistry = eventRegistry ?? Mock.Of<IViewModelEventRegistry>();
 
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
             var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();

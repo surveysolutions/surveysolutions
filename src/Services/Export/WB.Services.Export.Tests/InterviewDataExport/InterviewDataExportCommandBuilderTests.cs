@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using ApprovalTests.Reporters.TestFrameworks;
+using Moq;
 using Npgsql;
 using NpgsqlTypes;
 using NUnit.Framework;
@@ -151,11 +151,85 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             Approvals.Verify(command.CommandText);
         }
 
+        [Test]
+        public void when_get_several_arguments_to_insert_interview_command_with_200000_arguments()
+        {
+            var commandBuilder = CreateBuilder();
+            ExportBulkCommand exportBulkCommand = new ExportBulkCommand();
+            var interviewIds = Enumerable.Range(1, 200000).Select(value => new Guid($"00000000-0000-0000-0000-00{value:0000000000}"));
+
+            commandBuilder.AppendInsertInterviewCommandForTable(exportBulkCommand, fakeTableName1, interviewIds);
+            var command = exportBulkCommand.GetCommand();
+
+            Assert.That(command.Parameters.Count, Is.EqualTo(200000));
+            Approvals.Verify(command.CommandText);
+        }
+
+        [Test]
+        public void when_get_several_arguments_to_add_roster_instance_command_with_200000_arguments()
+        {
+            var commandBuilder = CreateBuilder();
+            ExportBulkCommand exportBulkCommand = new ExportBulkCommand();
+
+            var rosterInfos = Enumerable.Range(1, 200000).Select(value =>
+                new RosterTableKey() { InterviewId = new Guid($"00000000-0000-0000-0000-00{value:0000000000}"), RosterVector = rosterVector1 }
+            );
+
+            commandBuilder.AppendAddRosterInstanceForTable(
+                exportBulkCommand,
+                fakeTableName1, 
+                rosterInfos);
+            var command = exportBulkCommand.GetCommand();
+
+            Assert.That(command.Parameters.Count, Is.EqualTo(400000));
+            Approvals.Verify(command.CommandText);
+        }
+
+        [Test]
+        public void when_get_several_arguments_to_remove_roster_instance_command_with_200000_arguments()
+        {
+            var commandBuilder = CreateBuilder();
+            ExportBulkCommand exportBulkCommand = new ExportBulkCommand();
+            var rosterInfos = Enumerable.Range(1, 200000).Select(value =>
+                new RosterTableKey() { InterviewId = new Guid($"00000000-0000-0000-0000-00{value:0000000000}"), RosterVector = rosterVector1 }
+            );
+
+            commandBuilder.AppendRemoveRosterInstanceForTable(
+                exportBulkCommand,
+                fakeTableName1,
+                rosterInfos);
+            var command = exportBulkCommand.GetCommand();
+
+            Assert.That(command.Parameters.Count, Is.EqualTo(400000));
+            Approvals.Verify(command.CommandText);
+        }
+
+        [Test]
+        public void when_get_several_arguments_to_update_row_in_same_table_with_200000_arguments()
+        {
+            var commandBuilder = CreateBuilder();
+            ExportBulkCommand exportBulkCommand = new ExportBulkCommand();
+
+            var rosterTableKey = new RosterTableKey() { InterviewId = interviewId1, RosterVector = rosterVector1 };
+            var updateValueInfos = Enumerable.Range(1, 200000).Select(value =>
+                new UpdateValueInfo() { ColumnName = fakeColumnName1, Value = value, ValueType = NpgsqlDbType.Integer }
+            );
+
+            commandBuilder.AppendUpdateValueForTable(
+                exportBulkCommand,
+                fakeTableName1, 
+                rosterTableKey, 
+                updateValueInfos);
+            var command = exportBulkCommand.GetCommand();
+
+            Assert.That(command.Parameters.Count, Is.EqualTo(200008));
+            Approvals.Verify(command.CommandText);
+        }
+
 
         private IInterviewDataExportBulkCommandBuilder CreateBuilder() => new InterviewDataExportBulkCommandBuilder();
 
         private readonly string fakeTableName1 = "fakeTableName1";
-        private readonly string fakeTableName2 = "fakeTableName2";
         private readonly string fakeColumnName1 = "fakeColumnName1";
         private readonly string fakeColumnName2 = "fakeColumnName2";
         private readonly Guid interviewId1 = Guid.NewGuid();

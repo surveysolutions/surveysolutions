@@ -9,7 +9,8 @@ namespace WB.Services.Export.Services.Implementation
         public ExportServiceDataProvider(IDiagnosticsExporter diagnosticsExporter,
             IInterviewErrorsExporter interviewErrorsExporter,
             IInterviewActionsExporter interviewActionsExporter,
-            ICommentsExporter commentsExporter)
+            ICommentsExporter commentsExporter,
+            IAssignmentActionsExporter assignmentActionsExporter)
         {
             serviceLabels.Add(diagnosticsExporter.DiagnosticsFileName, 
                 diagnosticsExporter.DiagnosticsFileColumns.ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType, x.VariableValueLabels)));
@@ -19,6 +20,8 @@ namespace WB.Services.Export.Services.Implementation
                 interviewActionsExporter.ActionFileColumns.ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType, x.VariableValueLabels)));
             serviceLabels.Add(commentsExporter.CommentsFileName, 
                 commentsExporter.CommentsFileColumns.ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType, x.VariableValueLabels)));
+            serviceLabels.Add(assignmentActionsExporter.AssignmentActionsFileName,
+                assignmentActionsExporter.ActionFileColumns.ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType, x.VariableValueLabels)));
         }
 
         private readonly Dictionary<string, Dictionary<string, HeaderItemDescription>> serviceLabels = 

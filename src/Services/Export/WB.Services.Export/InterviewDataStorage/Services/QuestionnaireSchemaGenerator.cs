@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Export.Questionnaire;
@@ -55,7 +53,6 @@ namespace WB.Services.Export.InterviewDataStorage.Services
                         CreateValidityTableForGroup(connection, storedGroup);
                     }
 
-                    dbContext.SaveChanges();
 
                     logger.LogInformation("Created database structure for {tenantName} ({questionnaireId} [{table}])",
                         this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId,
@@ -98,7 +95,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             var columns = new List<CreateTableColumnInfo>();
             columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
             if (group.IsRoster)
-                columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
+                columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.RosterVector, InterviewDatabaseConstants.SqlTypes.IntArray, isPrimaryKey: true));
 
             var questions = group.DataColumns.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
@@ -212,65 +209,10 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         {
             connection.Execute(commandBuilder.GenerateCreateSchema(tenant));
         }
-
-        public async Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)
+        
+        public Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)
         {
-            List<string> tablesToDelete = new List<string>();
-
-            using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
-            {
-                await db.OpenAsync();
-
-                logger.LogInformation("Start drop tenant scheme: {tenant}", tenant);
-
-                var schemas = (await db.QueryAsync<string>(
-                    "select nspname from pg_catalog.pg_namespace n " +
-                    "join pg_catalog.pg_description d on d.objoid = n.oid " +
-                    "where d.description = @tenant",
-                    new
-                    {
-                        tenant 
-                    })).ToList();
-
-                foreach (var schema in schemas)
-                {
-                    var tables = await db.QueryAsync<string>(
-                        "select tablename from pg_tables where schemaname= @schema",
-                        new { schema });
-
-                    foreach (var table in tables)
-                    {
-                        tablesToDelete.Add($@"""{schema}"".""{table}""");
-                    }
-                }
-
-                foreach (var tables in tablesToDelete.Batch(30))
-                {
-                    using (var tr = db.BeginTransaction())
-                    {
-                        foreach (var table in tables)
-                        {
-                            await db.ExecuteAsync($@"drop table if exists {table}");
-                            logger.LogInformation("Dropped {table}", table);
-                        }
-
-                        await tr.CommitAsync();
-                    }
-                }
-
-                using (var tr = db.BeginTransaction())
-                {
-                    foreach (var schema in schemas)
-                    {
-                        await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
-                        logger.LogInformation("Dropped schema {schema}.", schema);
-                    }
-
-                    await tr.CommitAsync();
-                }
-            }
+            return dbContext.DropTenantSchemaAsync(tenant, cancellationToken);
         }
-
-
     }
 }

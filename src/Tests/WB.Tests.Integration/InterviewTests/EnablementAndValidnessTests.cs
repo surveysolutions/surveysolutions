@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests
                     Abc.Create.Entity.Variable(variableId, VariableType.LongInteger, "v", "i")
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
 
                 using (var eventContext = new EventContext())
                 {
@@ -102,7 +102,7 @@ namespace WB.Tests.Integration.InterviewTests
                         "s_name + name + \" is too young\"")
                 );
 
-                var interview = SetupStatefullInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupStatefullInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                 interview.AnswerTextQuestion(userId, questionFirstId, RosterVector.Empty, DateTime.UtcNow, "John");
                 interview.AnswerTextQuestion(userId, questionSecondId, RosterVector.Empty, DateTime.UtcNow, "Smith");
 
@@ -160,7 +160,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
 
                 using (var eventContext = new EventContext())
                 {
@@ -209,7 +209,7 @@ namespace WB.Tests.Integration.InterviewTests
                         })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
 
                 using (var eventContext = new EventContext())
                 {
@@ -263,7 +263,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
 
                 using (var eventContext = new EventContext())
                 {
@@ -323,7 +323,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
 
                 using (var eventContext = new EventContext())
                 {
@@ -390,7 +390,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
 
                 using (var eventContext = new EventContext())
                 {
@@ -469,7 +469,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
                 interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty,
                     DateTime.Now, 1);
                 interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now,
@@ -540,7 +540,7 @@ namespace WB.Tests.Integration.InterviewTests
                     )
                 );
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, numeric1Id, RosterVector.Empty, DateTime.UtcNow, 1);
                 interview.AnswerNumericIntegerQuestion(userId, numeric2Id, RosterVector.Empty, DateTime.UtcNow, 1);
@@ -599,7 +599,7 @@ namespace WB.Tests.Integration.InterviewTests
                     Create.Entity.TextQuestion(questionWithConditionId, variable: "tbq", enablementCondition: "lq == new[] { 0 }")
                 );
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 1);
                 interview.AnswerTextQuestion(userId, rosterTitleQuestionId, new RosterVector(new[] { 0 }), DateTime.UtcNow, "roster title 0");
@@ -661,7 +661,7 @@ namespace WB.Tests.Integration.InterviewTests
                     Create.Entity.TextQuestion(questionWithConditionId, variable: "tbq", enablementCondition: "lq == new[] { 0 }")
                 );
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 1);
                 interview.AnswerTextQuestion(userId, rosterTitleQuestionId, new RosterVector(new[] { 0 }), DateTime.UtcNow, "roster title 0");
@@ -724,7 +724,7 @@ namespace WB.Tests.Integration.InterviewTests
                     Create.Entity.TextQuestion(questionWithConditionId, variable: "tbq", enablementCondition: "lq == new[] { 0 }")
                 );
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 1);
                 interview.AnswerTextQuestion(userId, rosterTitleQuestionId, new RosterVector(new[] { 0 }), DateTime.UtcNow, "roster title 0");
@@ -788,7 +788,7 @@ namespace WB.Tests.Integration.InterviewTests
                     Create.Entity.TextQuestion(questionWithConditionId, variable: "tbq", enablementCondition: "lq == new[] { 0 }")
                 );
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 1);
                 interview.AnswerTextQuestion(userId, rosterTitleQuestionId, new RosterVector(new[] { 0 }), DateTime.UtcNow, "roster title 0");
@@ -849,7 +849,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 10);
 
@@ -899,7 +899,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 10);
 

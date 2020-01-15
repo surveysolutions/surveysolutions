@@ -100,12 +100,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionnaire =
                 this.questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(summary.QuestionnaireId, summary.QuestionnaireVersion), null);
 
-            string roster = this.unknown;
+            string roster = string.Empty;
 
             if (evnt.Payload.RosterVector.Length > 0)
             {
                 var lastRosterId = questionnaire.GetRostersFromTopToSpecifiedEntity(evnt.Payload.QuestionId).Last();
-                roster = questionnaire.GetRosterVariableName(lastRosterId);
+                roster = questionnaire.GetRosterVariableName(lastRosterId) ?? unknown;
             }
             
             string variable = questionnaire.GetQuestionVariableName(evnt.Payload.QuestionId);

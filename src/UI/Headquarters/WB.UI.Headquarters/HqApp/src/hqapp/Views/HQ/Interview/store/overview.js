@@ -17,9 +17,9 @@ export default {
     },
 
     actions: {
-        async loadAdditionalInfo({ dispatch, commit }, { id }) {
-            const data = await Vue.$api.call(api => api.overviewItemAdditionalInfo(id));
-            commit("SET_ADDITIONAL_INFO", { 
+        async loadAdditionalInfo({ dispatch, commit, rootState }, { id }) {
+            const data = await Vue.$api.interview.get('overviewItemAdditionalInfo', { id });
+            commit("SET_ADDITIONAL_INFO", {
                 id,
                 data
             });
@@ -30,8 +30,8 @@ export default {
             dispatch("loadOverview", { skip: 0 });
         },
 
-        async loadOverview({ commit, dispatch, state }, { skip }) {
-            const data = await Vue.$api.call(api => api.overview(skip, state.pageSize));
+        async loadOverview({ commit, dispatch, state, rootState }, { skip }) {
+            const data = await Vue.$api.interview.get('overview', { skip, take: state.pageSize });
 
             commit("SET_OVERVIEW_RESPONSE", data);
 
@@ -57,11 +57,10 @@ export default {
             state.total = data.total
             state.entities = _.concat(state.entities, data.items)
             state.loaded = state.entities.length
-            if(data.isLastPage) state.isLoaded = true
+            if (data.isLastPage) state.isLoaded = true
         },
 
-        SET_ADDITIONAL_INFO(state, additionalInfo)
-        {
+        SET_ADDITIONAL_INFO(state, additionalInfo) {
             Vue.set(state.additionalInfo, additionalInfo.id, additionalInfo.data);
         }
     },

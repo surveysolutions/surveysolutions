@@ -24,7 +24,7 @@ namespace WB.Services.Export.Host.Controllers
         {
             if (string.IsNullOrWhiteSpace(tenant)) return BadRequest("No tenant specified");
             
-            this.logger.LogCritical("Export service stopped for tenant {tenant} due to the request", tenant);
+            this.logger.LogCritical("Export service tenant {tenant} data deleted due to the request", tenant);
             await this.questionnaireSchemaGenerator.DropTenantSchemaAsync(tenant);
             return Ok();
         }

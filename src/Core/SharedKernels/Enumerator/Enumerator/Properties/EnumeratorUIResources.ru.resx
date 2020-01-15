@@ -911,4 +911,13 @@
   <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
     <value>Пользователь создан на другом сервере</value>
   </data>
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>Отправить лог</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>Отправить подробный лог файл на сервер</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>Логи отправлены</value>
+  </data>
 </root>

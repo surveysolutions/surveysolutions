@@ -10,6 +10,8 @@ using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
+using MvvmCross.Plugin;
+using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -40,16 +42,28 @@ using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Logging;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Interviewer
 {
     public class Setup : EnumeratorSetup<InterviewerMvxApplication>
     {
-        protected override void InitializeViewLookup()
+        private IModule[] modules;
+
+        public Setup()
         {
-            base.InitializeViewLookup();
             
-            var viewModelViewLookup = new Dictionary<Type, Type>()
+#if PRODUCTION
+            CrashReporting.Init("bd034ac8-bec5-41d7-83f7-e40c1300fd10");
+#else
+            CrashReporting.Init("1d21a663-e5fc-4535-9b25-4f22d6fa2b31");
+#endif
+        }
+
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
+        {
+            var lookup = base.InitializeViewLookup(viewModelViewLookup);
+            lookup.AddAll(new Dictionary<Type, Type>()
             {
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
@@ -67,10 +81,9 @@ namespace WB.UI.Interviewer
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
-            };
+            });
 
-            var container = Mvx.IoCProvider.Resolve<IMvxViewsContainer>();
-            container.AddAll(viewModelViewLookup);
+            return lookup;
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -88,15 +101,29 @@ namespace WB.UI.Interviewer
             registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
         }
 
-
         protected override IMvxIoCProvider CreateIocProvider()
         {
             return new AutofacMvxIocProvider(this.CreateAndInitializeIoc());
         }
 
+        protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
+        {
+            base.InitializeApp(pluginManager, app);
+            
+            var status = new UnderConstructionInfo();
+            status.Run();
+
+            foreach (var module in modules)
+            {
+                module.Init(ServiceLocator.Current, status).Wait();
+            }
+
+            status.Finish();
+        }
+
         private IContainer CreateAndInitializeIoc()
         {
-            var modules = new IModule[] {
+            this.modules = new IModule[] {
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
@@ -127,15 +154,6 @@ namespace WB.UI.Interviewer
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
-
-            var status = new UnderConstructionInfo();
-            status.Run();
-
-            foreach (var module in modules)
-            {
-                module.Init(container.Resolve<IServiceLocator>(), status).Wait();
-            }
-            status.Finish();
 
             return container;
         }

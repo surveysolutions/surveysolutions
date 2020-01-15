@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -25,27 +26,30 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 this.fileSystemAccessor.CreateDirectory(this.basePath);
         }
 
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) 
+            => Task.FromResult(this.GetInterviewBinaryData(interviewId, fileName));
+
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var filePath = this.GetPathToFile(fileName);
-            if (!this.fileSystemAccessor.IsFileExists(filePath))
-                return null;
-            return this.fileSystemAccessor.ReadAllBytes(filePath);
+
+            return !fileSystemAccessor.IsFileExists(filePath) ? null : fileSystemAccessor.ReadAllBytes(filePath);
         }
 
-        public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
+        public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
             var directoryPath = this.GetPathToInterviewDirectory();
 
             if (!this.fileSystemAccessor.IsDirectoryExists(directoryPath))
-                return new List<InterviewBinaryDataDescriptor>();
+                return Task.FromResult(new List<InterviewBinaryDataDescriptor>());
 
-            return this.fileSystemAccessor.GetFilesInDirectory(directoryPath).Select(filePath =>
+            var interviewBinaryDataDescriptors = this.fileSystemAccessor.GetFilesInDirectory(directoryPath).Select(filePath =>
                 new InterviewBinaryDataDescriptor(
                     interviewId, 
                     this.fileSystemAccessor.GetFileName(filePath),
                     null,
-                    () => this.fileSystemAccessor.ReadAllBytes(filePath))).ToList();
+                    () => Task.FromResult(this.fileSystemAccessor.ReadAllBytes(filePath)))).ToList();
+            return Task.FromResult(interviewBinaryDataDescriptors);
         }
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
@@ -63,13 +67,12 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             fileSystemAccessor.WriteAllBytes(filePath, data);
         }
 
-        public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
+        public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             var filePath = this.GetPathToFile(fileName);
-            if (!this.fileSystemAccessor.IsFileExists(filePath))
-                return;
-
-            this.fileSystemAccessor.DeleteFile(filePath);
+            if (this.fileSystemAccessor.IsFileExists(filePath))
+                this.fileSystemAccessor.DeleteFile(filePath);
+            return Task.CompletedTask;
         }
 
         private string GetPathToFile(string fileName)

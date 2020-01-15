@@ -18,6 +18,42 @@ html, body {
     text-decoration: underline;
 }
 
+.questionnaire-logo {
+
+    img {
+        display: inline-block;
+        height: 55px;
+        width: auto;
+        margin-right: 10px;
+    }
+
+    a {
+        color: #727d84;
+        font-size: 18px;
+        line-height: 20px;
+        font-weight: bold;
+        display: table-cell;
+    }
+
+    a:hover, a:focus {
+        text-decoration: none;
+    }
+
+    .logo {
+        padding-right: 5px;
+        border-right: 2px solid #727d84;
+    }
+
+    .navbar-text {
+        vertical-align: middle;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: 0;
+        float: none;
+        font-size: 23px;
+        line-height: 25px;
+    }
+}
 .container-wb-list {
     position: absolute;
     left: 0;
@@ -36,15 +72,13 @@ html, body {
 
         header {
             .questionnaire-logo {
-                background: url("../i/logo-designer.png") no-repeat;
+                display: table;
                 width: 270px;
                 height: 54px;
                 margin: 12px 33px;
                 position: absolute;
                 top: 0;
                 left: 0;
-                text-indent: -9999999px;
-                background-size: 100% auto;
             }
 
             .nav-tabs {
@@ -136,16 +170,9 @@ html, body {
                 }
             }
         }
-
-        .edit-form {
-            .form-group {
-                .field-validation-error {
-                    color: @error-text;
-                }
-            }
-        }
     }
 }
+
 
 div#table-message {
     height: 115px;
@@ -279,20 +306,22 @@ table#questionnaire-table-header,
 table#questionnaire-table-content {
     tr {
         td, th {
+            &:nth-child(1) {
+                width: 45%;
+            }
+
             &:nth-child(2) {
-                width: 16%;
+                width: 10%;
+                white-space: nowrap;
             }
 
             &:nth-child(3) {
-                width: 15%;
+                width: 10%;
+                white-space: nowrap;
             }
 
             &:nth-child(4) {
-                width: 17%;
-            }
-
-            &:nth-child(5) {
-                width: 10%;
+                width: 30%;
             }
         }
     }
@@ -624,18 +653,6 @@ table.table-content {
     color: #000;
 }
 
-.disableSelection {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    outline: 0;
-}
-
-
-
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node {
     display: block;
     overflow: hidden;
@@ -668,7 +685,7 @@ table.table-content {
 .breadcrumb.public-questionnaires-breadcrumb:before,
 .folder-tree .tree-icon,
 .tree-icon {
-    background: url("images/DR-2017-folders-icons-G2-color.png") no-repeat;
+    background: url("../images/DR-2017-folders-icons-G2-color.png") no-repeat;
     background-size: 32px 96px;
     vertical-align: top;
     background-position: 0 -66px;
@@ -812,4 +829,7 @@ table.table-header.page-with-breadcrumbs {
     position: relative;
     width: 100%;
     height: 100%;
+}
+#designer-list #edit-form .form-group .field-validation-error {
+    color: @error-text;
 }

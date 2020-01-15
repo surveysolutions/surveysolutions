@@ -6,7 +6,8 @@ namespace WB.UI.Headquarters.Services
     {
         HttpResponseMessage GetApkAsHttpResponse(HttpRequestMessage request, string appName, string responseFileName);
         HttpResponseMessage GetPatchFileAsHttpResponse(HttpRequestMessage request, string fileName);
-        int? GetLatestVersion(string appName);
+        int? GetApplicationBuildNumber(string appName);
+        string GetApplicationVersionString(string appName);
         string ApkClientsFolder();
     }
 }

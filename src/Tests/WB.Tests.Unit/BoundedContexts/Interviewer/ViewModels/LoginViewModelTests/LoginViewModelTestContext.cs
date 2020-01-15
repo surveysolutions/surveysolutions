@@ -1,6 +1,7 @@
 ﻿using Moq;
 using MvvmCross.Tests;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -11,6 +12,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTests
 {
@@ -23,18 +25,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         
         protected static LoginViewModel CreateLoginViewModel(
             IViewModelNavigationService viewModelNavigationService = null,
-            IPrincipal principal = null,
+            IInterviewerPrincipal principal = null,
             IPasswordHasher passwordHasher = null,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             IOnlineSynchronizationService synchronizationService = null,
             ILogger logger = null)
         {
             return new LoginViewModel(
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
-                principal ?? Mock.Of<IPrincipal>(),
+                principal ?? Mock.Of<IInterviewerPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
-                new InMemoryPlainStorage<CompanyLogo>(), 
+                Create.Storage.InMemorySqlitePlainStorage<CompanyLogo>(), 
                 synchronizationService ?? Mock.Of<IOnlineSynchronizationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 Mock.Of<IAuditLogService>());

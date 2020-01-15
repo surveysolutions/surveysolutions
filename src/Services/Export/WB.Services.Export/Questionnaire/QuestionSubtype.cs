@@ -11,6 +11,7 @@
         SingleOptionLinkedFirstLevel = 6,
         MultiOptionLinkedNestedLevel = 7,
         SingleOptionLinkedNestedLevel = 8,
-        NumericInteger = 9
+        NumericInteger = 9,
+        MultyOption_Combobox = 10
     }
 }

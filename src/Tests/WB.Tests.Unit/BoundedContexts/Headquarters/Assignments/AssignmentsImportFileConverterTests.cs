@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(assignmentRows[0].Responsible.Value, Is.EqualTo(responsible));
             Assert.That(assignmentRows[0].Responsible.Responsible.InterviewerId, Is.EqualTo(interviewerId));
             Assert.That(assignmentRows[0].Responsible.Responsible.SupervisorId, Is.EqualTo(supervisorId));
-            Assert.That(assignmentRows[0].Responsible.Responsible.IsSupervisorOrInterviewer, Is.EqualTo(true));
+            Assert.That(assignmentRows[0].Responsible.Responsible.IsHQOrSupervisorOrInterviewer, Is.EqualTo(true));
             Assert.That(assignmentRows[0].Responsible.Responsible.IsLocked, Is.EqualTo(true));
             Assert.That(assignmentRows[0].Responsible.Column, Is.EqualTo(column));
         }
@@ -742,6 +742,28 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(assignmentRows[0].WebMode, Is.Not.Null);
             Assert.That(assignmentRows[0].WebMode.Value, Is.EqualTo(columnValue));
             Assert.That(assignmentRows[0].WebMode.WebMode, Is.EqualTo(null));
+        }
+
+        [Test]
+        public void when_getting_assignment_row_and_file_has_comment_value_should_return_row_with_comment_preloading_value()
+        {
+            //arrange
+            var comment = "some comment about assignment";
+            var column = "_Comment";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(column, comment)));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            //assert
+            Assert.That(assignmentRows, Has.One.Items);
+            Assert.That(assignmentRows[0].Comments, Is.Not.Null);
+            Assert.That(assignmentRows[0].Comments.Value, Is.EqualTo(comment));
+            Assert.That(assignmentRows[0].Comments.Column, Is.EqualTo(column));
         }
     }
 }

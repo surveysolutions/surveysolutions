@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public CategoricalMultiComboboxViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
-            IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
+            IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal,
             IUserInteractionService userInteraction, AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel, QuestionInstructionViewModel instructionViewModel,
@@ -54,19 +54,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
 
-            this.UpdateComboboxInMainThreadAsync(answeredOptions).WaitAndUnwrapException();
+            this.UpdateComboboxAsync(answeredOptions).WaitAndUnwrapException();
         }
 
-        private async Task UpdateComboboxInMainThreadAsync(int[] answeredOptions)
-        {
-            await mainThreadDispatcher.ExecuteOnMainThreadAsync(async () =>
+        private async Task UpdateComboboxAsync(int[] answeredOptions) =>
+            await this.InvokeOnMainThreadAsync(async () =>
             {
                 answeredOptions = answeredOptions ?? Array.Empty<int>();
 
                 this.comboboxViewModel.ExcludeOptions(answeredOptions);
 
                 var hasNoOptionsForAnswers = answeredOptions.Length == this.maxAllowedAnswers ||
-                                             answeredOptions.Length == this.filteredOptionsViewModel.GetOptions().Count;
+                                             answeredOptions.Length == Constants.MaxMultiComboboxAnswersCount;
 
                 if (hasNoOptionsForAnswers && this.comboboxCollection.Contains(this.comboboxViewModel))
                     this.comboboxCollection.Remove(this.comboboxViewModel);
@@ -76,7 +75,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 await comboboxViewModel.UpdateFilter(null, true);
             });
-        }
 
         private async Task ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
         {
@@ -96,11 +94,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
             if(answeredOptions == null) yield break;
 
-            var allOptions = this.filteredOptionsViewModel.GetOptions();
-
             foreach (var optionCode in answeredOptions)
             {
-                var categoricalOption = allOptions.Find(x => x.Value == optionCode);
+                var categoricalOption = interview.GetOptionForQuestionWithoutFilter(this.Identity, optionCode);
 
                 var vm = new CategoricalMultiComboboxOptionViewModel(this.userInteraction);
 
@@ -113,20 +109,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public override async void Handle(AnswersRemoved @event)
+        public override async Task HandleAsync(AnswersRemoved @event)
         {
             if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
 
-            await this.UpdateComboboxInMainThreadAsync(null);
-            await this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateComboboxAsync(null);
+            await this.UpdateViewModelsAsync();
         }
 
-        public override async void Handle(MultipleOptionsQuestionAnswered @event)
+        public override async Task HandleAsync(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            await this.UpdateComboboxInMainThreadAsync(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
-            await this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateComboboxAsync(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
+            await this.UpdateViewModelsAsync();
         }
 
         public override void Dispose()

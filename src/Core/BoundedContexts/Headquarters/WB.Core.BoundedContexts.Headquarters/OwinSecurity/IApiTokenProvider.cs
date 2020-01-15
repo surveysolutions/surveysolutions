@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public interface IApiTokenProvider<in TKey> where TKey : IEquatable<TKey>
+    public interface IApiTokenProvider
     {
-        Task<string> GenerateTokenAsync(TKey userId);
-        Task<bool> ValidateTokenAsync(TKey userId, string token);
+        Task<string> GenerateTokenAsync(Guid userId);
+        Task<bool> ValidateTokenAsync(Guid userId, string token);
     }
 }

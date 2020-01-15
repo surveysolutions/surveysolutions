@@ -38,8 +38,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                             Create.Entity.ValidationCondition("numr.Sum(x => x.num2 ?? 0) < 25", message: $"error %var1%")
                         })
                 }));
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupStatefullInterview(questionnaire);
+            interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 2);
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionId, Create.RosterVector(0), DateTime.Now, 10);
@@ -49,6 +50,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionId, Create.RosterVector(1), DateTime.Now, 20);
         }
 
+        public void TearDown()
+        {
+            appDomainContext.Dispose();
+        }
 
         [Test]
         public void should_substitute_2_into_error_message() =>
@@ -75,6 +80,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Create.Identity(questionId, 0),
                 Create.Identity(questionId, 1));
 
+        static AppDomainContext appDomainContext;
         static EventContext events;
         static StatefulInterview interview;
         static Guid rosterSizeQuestionId;

@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
 
             Assert.That(sendTabletInformationViewModel.IsPackageBuild, Is.EqualTo(false));
             Assert.That(sendTabletInformationViewModel.IsPackageSendingAttemptCompleted, Is.EqualTo(true));
-            Assert.That(sendTabletInformationViewModel.PackageSendingAttemptResponceText, Is.EqualTo(EnumeratorUIResources.Troubleshooting_InformationPackageIsSuccessfullySent));
+            Assert.That(sendTabletInformationViewModel.PackageSendingAttemptResponseText, Is.EqualTo(EnumeratorUIResources.Troubleshooting_InformationPackageIsSuccessfullySent));
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
 
             Assert.That(sendTabletInformationViewModel.IsPackageBuild, Is.EqualTo(false));
             Assert.That(sendTabletInformationViewModel.IsPackageSendingAttemptCompleted, Is.EqualTo(true));
-            Assert.That(sendTabletInformationViewModel.PackageSendingAttemptResponceText,
+            Assert.That(sendTabletInformationViewModel.PackageSendingAttemptResponseText,
                 Is.EqualTo(exceptionMessage));
         }
 

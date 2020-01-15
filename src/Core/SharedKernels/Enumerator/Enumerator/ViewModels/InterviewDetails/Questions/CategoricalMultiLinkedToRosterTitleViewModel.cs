@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public CategoricalMultiLinkedToRosterTitleViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionStateViewModel,
-            IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
+            IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher) : base(
             questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal, answering,
@@ -33,12 +33,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToRosterId).ToHashSet();
         }
 
-        public override async void Handle(RosterInstancesTitleChanged @event)
+        public override async Task HandleAsync(RosterInstancesTitleChanged @event)
         {
             if (!@event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId ||
                                                   this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
 
-            await this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateViewModelsAsync();
         }
     }
 }

@@ -24,11 +24,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         public void Setup()
         {
             var eventStore = new Mock<IEnumeratorEventStorage>();
-            eventStore.Setup(e => e.GetPendingEvents(interviewId)).Returns(() => events);
+            eventStore.Setup(e => e.Read(interviewId, It.IsAny<int>())).Returns(() => events);
 
             var optimizer = new Mock<IInterviewEventStreamOptimizer>();
             optimizer
-                .Setup(ieso => ieso.RemoveEventsNotNeededToBeSent(It.IsAny<IReadOnlyCollection<CommittedEvent>>()))
+                .Setup(ieso => ieso.FilterEventsToBeSent(It.IsAny<IReadOnlyCollection<CommittedEvent>>(), Moq.It.IsAny<Guid?>()))
                 .Returns(() => events.ToReadOnlyCollection());
 
             subject = Create.Service.InterviewerInterviewAccessor(
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 new CommittedEvent(Guid.NewGuid(), "origin", lastEvent.eventId, interviewId, 1, lastEvent.timeStamp, 2, null)
             };
 
-            var check = subject.GetInterviewEventStreamCheckData(interviewId);
+            var check = subject.GetInterviewEventStreamContainer(interviewId).Tag;
 
             Assert.That(check.FirstEventId, Is.EqualTo(firstEvent.eventId));
             Assert.That(check.LastEventId, Is.EqualTo(lastEvent.eventId));
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         {
             events = new List<CommittedEvent>();
 
-            var check = subject.GetInterviewEventStreamCheckData(interviewId);
+            var check = subject.GetInterviewEventStreamContainer(interviewId).Tag;
 
             Assert.Null(check);
         }

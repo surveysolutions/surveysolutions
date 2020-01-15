@@ -1,21 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Mapping.ByCode;
+using WB.Core.SharedKernels.DataCollection.Events.Assignment;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Infrastructure.Native.Storage
 {
     [Obsolete]
     public class OldToNewAssemblyRedirectSerializationBinder : MainCoreAssemblyRedirectSerializationBaseBinder
     {
+        protected static readonly Dictionary<string, Type> nameToType = new Dictionary<string, Type>();
+
+        static OldToNewAssemblyRedirectSerializationBinder()
+        {
+            var interviewAnswerType = typeof(InterviewAnswer);
+            var assembly = interviewAnswerType.Assembly;
+            typesMap[interviewAnswerType.Name] = interviewAnswerType.FullName;
+            typeToName[interviewAnswerType] = interviewAnswerType.Name;
+            nameToType[interviewAnswerType.Name] = interviewAnswerType;
+
+            foreach (var type in assembly.GetTypes().Where(t => t.IsPublic && t.GetBaseTypes().Any(type => type == typeof(AbstractAnswer))))
+            {
+                if (typesMap.ContainsKey(type.Name))
+                    throw new InvalidOperationException($"Assembly contains more then one type with same name. Duplicate type: {type.Name}");
+
+                typesMap[type.Name] = type.FullName;
+                typeToName[type] = type.Name;
+                nameToType[type.Name] = type;
+            }
+        }
         public override Type BindToType(string assemblyName, string typeName)
         {
-            if (String.Equals(assemblyName, oldAssemblyNameToRedirect, StringComparison.Ordinal) ||
-                String.Equals(assemblyName, targetAssemblyName, StringComparison.Ordinal) ||
-                String.IsNullOrEmpty(assemblyName))
+            var typeNameWithoutNamespace = typeName.Split('.').Last();
+            if (string.IsNullOrEmpty(assemblyName) && nameToType.TryGetValue(typeNameWithoutNamespace, out Type type))
+            {
+                typeName = type.FullName;
+                assemblyName = type.Assembly.FullName;
+            }
+            else if (string.Equals(assemblyName, oldAssemblyNameToRedirect, StringComparison.Ordinal) ||
+                string.Equals(assemblyName, targetAssemblyName, StringComparison.Ordinal) ||
+                string.IsNullOrEmpty(assemblyName))
             {
                 assemblyName = targetAssemblyName;
-                string fullTypeName;
 
-                if (typesMap.TryGetValue(typeName.Split('.').Last(), out fullTypeName))
+                if (typesMap.TryGetValue(typeNameWithoutNamespace, out string fullTypeName))
                     typeName = fullTypeName;
             }
             else
@@ -29,8 +58,7 @@ namespace WB.Infrastructure.Native.Storage
 
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {
-            string name;
-            if (typeToName.TryGetValue(serializedType, out name))
+            if (typeToName.TryGetValue(serializedType, out string name))
             {
                 assemblyName = null;
                 typeName = name;

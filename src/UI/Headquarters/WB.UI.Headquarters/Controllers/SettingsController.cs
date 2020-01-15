@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using ImageResizer;
 using Resources;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -53,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateLogo()
         {
             if (Request.Files.Count > 0)
@@ -70,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers
 
                             try
                             {
-                                this.imageProcessingService.ValidateImage(array);
+                                this.imageProcessingService.Validate(array);
 
                                 this.appSettingsStorage.Store(new CompanyLogo
                                 {
@@ -78,8 +79,9 @@ namespace WB.UI.Headquarters.Controllers
                                 }, CompanyLogo.CompanyLogoStorageKey);
                                 WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
                             }
-                            catch (ImageCorruptedException)
+                            catch (Exception e)
                             {
+                                Logger.Error("Error on logo handling", e);
                                 WriteToTempData(Alerts.ERROR, Settings.LogoNotUpdated);
                             }
                         }

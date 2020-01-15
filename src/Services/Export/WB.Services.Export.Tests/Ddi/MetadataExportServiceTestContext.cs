@@ -84,7 +84,7 @@ namespace WB.Services.Export.Tests.Ddi
 
         protected static LabelItem CreateLabelItem(string caption="caption", string title="title")
         {
-            return new LabelItem() {Caption = caption, Title = title};
+            return new LabelItem(caption, title);
         }
 
         protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)

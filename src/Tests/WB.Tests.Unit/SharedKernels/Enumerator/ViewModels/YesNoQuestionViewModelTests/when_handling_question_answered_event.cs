@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         public void BecauseOf() 
         {
-            viewModel.Handle(new YesNoQuestionAnswered(Guid.NewGuid(), questionGuid, Empty.RosterVector, DateTime.Now, new []
+            viewModel.HandleAsync(new YesNoQuestionAnswered(Guid.NewGuid(), questionGuid, Empty.RosterVector, DateTime.Now, new []
             {
                 new AnsweredYesNoOption(5, true), 
                 new AnsweredYesNoOption(2, false), 

@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             appDomainContext = null;
         }
 
-        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        protected static AppDomainContext appDomainContext;
 
         public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {

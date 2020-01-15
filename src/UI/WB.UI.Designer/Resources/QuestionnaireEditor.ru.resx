@@ -593,7 +593,7 @@
     <value>Поле со списком</value>
   </data>
   <data name="QuestionCurrentTime" xml:space="preserve">
-    <value>Текущее время</value>
+    <value>Текущее время (дата и время)</value>
   </data>
   <data name="QuestionDecimalPlaces" xml:space="preserve">
     <value>Размер дробной части</value>
@@ -732,6 +732,9 @@
   </data>
   <data name="HelpSourceQuestion" xml:space="preserve">
     <value>Вопрос источник (ответ генерирует соответствующее количество строк)</value>
+  </data>
+  <data name="HelpAttachmentName" xml:space="preserve">
+    <value>Имя файла вложения, которое будет отображено в тексте.</value>
   </data>
   <data name="HelpTitles" xml:space="preserve">
     <value>Имена строк.</value>
@@ -1168,7 +1171,9 @@
   <data name="HelpRosterDisplayMode" xml:space="preserve">
     <value>Подсекция - все вопросы ростера показываются за кнопкой экземпляра ростера.
     Плоский - вопросы ростера отображаются на том же уровне, разделенные заголовком соответсвующего экземпляра ростера.
-    Табличный - вопросы ростера отображаются на том же уровне как строки и столбцы таблицы. Работает только в Web режиме, на планшетах отображается в режиме "Подсекция"</value>
+    Табличный - вопросы ростера отображаются на том же уровне как строки и столбцы таблицы. 
+    Матричный - категориальный вопрос отображается в виде матрицы ответов.
+    Табличный и Матричный виды работают только в Web режиме, на планшетах отображается в режиме "Подсекция"</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Добавить</value>
@@ -1264,6 +1269,9 @@
   <data name="RosterDisplayMode_Table" xml:space="preserve">
     <value>Табличный</value>
   </data>
+  <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+    <value>Матричный</value>
+  </data>
   <data name="RosterDisplayMode" xml:space="preserve">
     <value>Режим отображения:</value>
   </data>
@@ -1280,27 +1288,143 @@
     <value>Да</value>
   </data>
   <data name="SideBarScenarioCounter" xml:space="preserve">
-      <value>{{count}} Сценарий:</value>
-      <comment>{{count}} Сценарий:</comment>
+    <value>{{count}} Сценарий:</value>
+    <comment>{{count}} Сценарий:</comment>
   </data>
   <data name="SideBarScenarioCounter_plural" xml:space="preserve">
-      <value>{{count}} Сценарии:</value>
-      <comment>{{count}} Сценарии:</comment>
+    <value>{{count}} Сценарии:</value>
+    <comment>{{count}} Сценарии:</comment>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
-      <value>На этой вкладке вы можите видеть ваши сценарии.</value>
-      <comment>На этой вкладке вы можите видеть ваши сценарии.</comment>
+    <value>На этой вкладке вы можите видеть ваши сценарии.</value>
+    <comment>На этой вкладке вы можите видеть ваши сценарии.</comment>
   </data>
   <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
-      <value>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </value>
-      <comment>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </comment>
+    <value>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </value>
+    <comment>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </comment>
   </data>
   <data name="SideBarScenarioTitle" xml:space="preserve">
-      <value>Сценарии</value>
-      <comment>заголовок сценария</comment>
+    <value>Сценарии</value>
+    <comment>заголовок сценария</comment>
   </data>
   <data name="SideBarScenarioName" xml:space="preserve">
-      <value>заголовок сценария</value>
-      <comment>заголовок сценария</comment>
+    <value>заголовок сценария</value>
+    <comment>заголовок сценария</comment>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Выполнить</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Просмотреть</value>
+  </data>
+  <data name="ScenarioDetails" xml:space="preserve">
+    <value>Сценарий</value>
+  </data>
+
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+      <value>Пожалуйста, выберите перевод</value>
+      <comment>Пожалуйста, выберите перевод</comment>
+  </data>
+  <data name="DownloadPdf" xml:space="preserve">
+      <value>Скачать PDF</value>
+      <comment>Скачать PDF</comment>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+      <value>Сгенерировать pdf</value>
+      <comment>Сгенерировать pdf</comment>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+      <value>Инициализация</value>
+      <comment>Инициализация</comment>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+      <value>Повторить экспорт в PDF</value>
+      <comment>Повторить экспорт в PDF</comment>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+      <value>Оргинальный</value>
+      <comment>Оргинальный</comment>
+</data>
+  <data name="SaveAs" xml:space="preserve">
+      <value>Сохранить как</value>
+      <comment>Сохранить как</comment>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Просмотр ревизии №{{revision}}</value>
+  </data>
+  <data name="SideBarCategoriesName" xml:space="preserve">
+      <value>имя для списка категорий</value>
+      <comment>имя для списка категорий</comment>
+  </data>
+  <data name="SideBarCategoriesCounter" xml:space="preserve">
+      <value>{{count}} списков категорий</value>
+      <comment>{{count}} списков категорий</comment>
+  </data>
+  <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+      <value>Используйте вкладку для управления списками категорий.</value>
+      <comment>Используйте вкладку для управления списками категорий.</comment>
+  </data>
+  <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+      <value>Вы можете скачать и обновить списки категорий.</value>
+      <comment>Вы можете скачать и обновить списки категорий.</comment>
+  </data>
+  <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+      <value>будет отображаться в списке повторно используемых категорий для любого типа категориальных вопросов.</value>
+      <comment>будет отображаться в списке повторно используемых категорий для любого типа категориальных вопросов.</comment>
+  </data>
+  <data name="SideBarCategoriesTitle" xml:space="preserve">
+      <value>Категории</value>
+      <comment>Категории</comment>
+  </data>
+  <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+      <value>Загрузить новый список категорий</value>
+      <comment>Загрузить новый список категорий</comment>
+  </data>
+  <data name="HotkeysCloseCategories" xml:space="preserve">
+      <value>Закрыть панель категорий</value>
+      <comment>Закрыть панель категорий</comment>
+  </data>
+  <data name="SideBarCategoriesNoName" xml:space="preserve">
+      <value>список категорий без имени</value>
+      <comment>список категорий без имени</comment>
+  </data>
+  <data name="BindToReusableCategories" xml:space="preserve">
+      <value>Связать с категориями</value>
+      <comment>Связать с категориями</comment>
+  </data>
+  <data name="SelectCategories" xml:space="preserve">
+      <value>Выбрать категории</value>
+      <comment>Выбрать категории</comment>
+  </data>
+  <data name="UserDefinedCategories" xml:space="preserve">
+      <value>Категории определенные пользователем </value>
+      <comment>Определенные пользователем</comment>
+  </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+      <value>Источник категорий</value>
+      <comment>Источник категорий</comment>
+  </data>
+  <data name="RostersQuestion" xml:space="preserve">
+      <value>Список или вопрос из ростера</value>
+      <comment>Вопрос из ростера</comment>
+  </data>
+  <data name="ReusableCategories" xml:space="preserve">
+      <value>Из списка категорий</value>
+      <comment>Из списка категорий</comment>
+  </data>
+  <data name="QuestionRadioButtonList" xml:space="preserve">
+      <value>Переключатели</value>
+      <comment>Переключатели</comment>
+  </data>
+  <data name="CategoriesObtained" xml:space="preserve">
+      <value>Получено {0} строка из файла с категориями</value>
+      <comment>Получено {0} строка из файла с категориями</comment>
+  </data>
+  <data name="CategoriesObtained_plural" xml:space="preserve">
+      <value>Получено {0} строк(и) из файла с категориями</value>
+      <comment>Получено {0} строк из файла с категориями</comment>
+  </data>
+  <data name="DeleteConfirmCategories" xml:space="preserve">
+      <value>Вы уверены, что хотите удалить категории "{{trimmedTitle}}"? Источник категорий для зависимых категориальных вопросов будет сброшен в категории определенные пользователем</value>
   </data>
 </root>

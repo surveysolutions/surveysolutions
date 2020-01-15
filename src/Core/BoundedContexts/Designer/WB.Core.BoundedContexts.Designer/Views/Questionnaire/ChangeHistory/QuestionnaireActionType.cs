@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         RosterBecameAGroup = 8,
         ReplaceAllTexts = 9,
         Revert = 10,
-        Mark = 11
+        Mark = 11,
+        ImportToHq = 12,
     }
 }

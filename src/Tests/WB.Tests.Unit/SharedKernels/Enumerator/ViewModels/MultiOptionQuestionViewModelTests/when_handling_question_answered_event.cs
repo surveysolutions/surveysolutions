@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
         public void BecauseOf() 
         {
-            viewModel.Handle(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionGuid, Empty.RosterVector, DateTime.Now, new []{2m, 1m}));
+            viewModel.HandleAsync(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionGuid, Empty.RosterVector, DateTime.Now, new []{2m, 1m}));
         }
 
         [Test] public void should_set_checked_order_to_options () => viewModel.Options.Second().CheckedOrder.Should().Be(1);

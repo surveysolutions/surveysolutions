@@ -42,10 +42,9 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
+        [ActivePage(MenuItem.Observers)]
         public async Task<ActionResult> Create(UserModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Observers;
-
             if (this.ModelState.IsValid)
             {
                 var creationResult = await this.CreateUserAsync(model, UserRoles.Observer);
@@ -54,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(HQ.ObserverCreatedFormat.FormatString(model.UserName));
                     return this.RedirectToAction("Index");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             return this.View(model);
@@ -102,7 +101,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(string.Format(HQ.UserWasUpdatedFormat, model.UserName));
                     return this.RedirectToAction("Index");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form

@@ -45,7 +45,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             //workaround
             //inflated map doesn't work (should be fixed in next Esri release) 
-            var map = new MapView();
+            var map = new MapView(this);
             var bindingSet = this.CreateBindingSet<AreaEditorActivity, AreaEditorViewModel>();
 
             bindingSet.Bind(map)

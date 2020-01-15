@@ -1,12 +1,12 @@
 using Android.OS;
 using Android.Support.Graphics.Drawable;
 using Android.Views;
-using HockeyApp.Android;
 using MvvmCross;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Logging;
-using MvvmCross.Platforms.Android.Core;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using NLog;
 using Plugin.CurrentActivity;
 using Plugin.Permissions;
 using WB.UI.Shared.Enumerator.Services;
@@ -14,26 +14,53 @@ using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
+    [MvxActivityPresentation]
     public abstract class BaseActivity<TViewModel> : MvxAppCompatActivity<TViewModel> where TViewModel : class, IMvxViewModel
     {
+        
         protected abstract int ViewResourceId { get; }
+        private Logger log;
 
         protected override void OnCreate(Bundle bundle)
         {
+            log = LogManager.GetLogger(this.GetType().Name);
+            log.Trace("Create");
             base.OnCreate(bundle);
             CrossCurrentActivity.Current.Init(this, bundle);
         }
 
+        protected override void OnStart()
+        {
+            log.Trace("Start");
+            base.OnStart();
+        }
+
         protected override void OnResume()
         {
-            CrashManager.Register(this, new AutoSendingCrashListener());
+            log.Trace("Resume");
+            var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
+            messenger.Publish(new ApplicationResumeMessage(this));
             base.OnResume();
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
         {
+            log.Trace($"OnRequestPermissionsResult permissions {string.Join(',', permissions)} grantResults {string.Join(',', grantResults)}");
+
             PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        protected override void OnPause()
+        {
+            log.Trace("Pause");
+            base.OnPause();
+        }
+
+        protected override void OnStop()
+        {
+            log.Trace("Stop");
+            base.OnStop();
         }
 
         protected override void OnViewModelSet()
@@ -65,11 +92,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             try
             {
-                var mvxLogProvider = Mvx.IoCProvider.Resolve<IMvxLogProvider>();
-                var log = mvxLogProvider.GetLogFor(this.GetType().Name);
-                log.Error(message + System.Environment.NewLine);
-                log.Error($"RAM: {AndroidInformationUtils.GetRAMInformation()} {System.Environment.NewLine}");
-                log.Error($"Disk: {AndroidInformationUtils.GetDiskInformation()} {System.Environment.NewLine}");
+                log.Error($"{message} RAM: {AndroidInformationUtils.GetRAMInformation()} Disk: {AndroidInformationUtils.GetDiskInformation()}");
             }
             catch
             {

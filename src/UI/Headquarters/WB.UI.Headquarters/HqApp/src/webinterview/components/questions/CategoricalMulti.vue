@@ -112,7 +112,7 @@
             },
             answerMulti(value) {
                 if (!this.$me.isRosterSize) {
-                    this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
+                    this.$store.dispatch("answerMultiOptionQuestion", { answer: value, identity: this.$me.id })
                     return;
                 }
 
@@ -121,7 +121,7 @@
                 const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
 
                 if (!isNeedRemoveRosters) {
-                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, questionId: this.$me.id });
+                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id });
                     return;
                 }
 
@@ -136,7 +136,7 @@
 
                 modal.confirm(confirmMessage, result => {
                     if (result) {
-                        this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
+                        this.$store.dispatch("answerMultiOptionQuestion", { answer: value, identity: this.$me.id })
                         return;
                     } else {
                         this.fetch()

@@ -16,10 +16,12 @@
         var $globalNoticeSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "GlobalNoticeSettings" })';
         var $interviewerSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "InterviewerSettings" })';
         var $profileSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "ProfileSettings" })';
-        
+        var $webInterviewSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "WebInterviewSettings" })';
+
         $(function () {
             var notifier = new Notifier();
-            var model = new Supervisor.VM.SiteSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $interviewerSettingsUrl, $profileSettingsUrl);
+            var model = new Supervisor.VM.SiteSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl,
+                $globalNoticeSettingsUrl, $interviewerSettingsUrl, $profileSettingsUrl, $webInterviewSettingsUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -157,6 +159,28 @@
                 </div>
             </div>
         </div>
+
+        <div class="row extra-margin-bottom contain-input">
+            <div class="col-sm-7">
+                <h2>
+                    @Settings.WebInterviewEmailNotifications_Title
+                </h2>
+            </div>
+            <div class="col-sm-7">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox"
+                               data-bind="checked: isEmailAllowed, click: updateWebInterviewEmailNotifications"
+                               id="allowWebInterviewEmailNotifications" type="checkbox">
+                        <label for="allowWebInterviewEmailNotifications" style="font-weight: bold">
+                            <span class="tick"></span>@Settings.AllowWebInterviewEmailNotifications
+                            <p style="font-weight: normal">@Settings.AllowWebInterviewEmailNotificationsDesc</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row extra-margin-bottom contain-input">
             <div class="col-sm-7">
                 <h2>@Settings.LogoSettings</h2>
@@ -165,6 +189,7 @@
                 </p>
             </div>
             <form action="@Url.Action("UpdateLogo", "Settings")" method="post" enctype="multipart/form-data" class="col-sm-7" data-bind="submit: onLogoSubmit">
+                @Html.AntiForgeryToken()
                 <div class="block-filter">
                     <div class="form-group">
                         <label for="companyLogo">@Settings.Logo: </label>

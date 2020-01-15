@@ -38,6 +38,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public const string EmailColumnName = "_email";
         public const string PasswordColumnName = "_password";
         public const string RecordAudioColumnName = "_record_audio";
+        public const string CommentsColumnName = "_comment";
 
         //system generated
         public static readonly SortedDictionary<ServiceVariableType, ServiceVariable> SystemVariables = new SortedDictionary<ServiceVariableType, ServiceVariable>

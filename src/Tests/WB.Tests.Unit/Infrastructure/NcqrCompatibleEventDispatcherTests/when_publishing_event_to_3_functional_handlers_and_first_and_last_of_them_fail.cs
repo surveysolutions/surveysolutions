@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             var serviceLocator = Create.Service.ServiceLocatorService(secondFunctionalEventHandlerMock, handler2, handler1);
 
-            var eventRegistry = Create.Service.DenormalizerRegistry();
+            var eventRegistry = Create.Service.DenormalizerRegistryNative();
             eventRegistry.RegisterFunctional<TestFunctionalDenormalzierNonThrowing>();
             eventRegistry.Register<TestDenormalzier>();
             eventRegistry.Register<TestDenormalzier1>();

@@ -36,7 +36,7 @@
             <wb-warnings v-if="!noValidation" />
             <wb-comments v-if="!noComments" :isShowingAddCommentDialog="isShowingAddCommentDialog" />
         </div>
-        <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
+        <wb-progress :visible="isFetchInProgress"  />
     </div>
 </template>
 

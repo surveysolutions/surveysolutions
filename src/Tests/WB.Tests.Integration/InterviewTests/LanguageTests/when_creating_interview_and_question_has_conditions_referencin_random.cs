@@ -1,5 +1,5 @@
 using System;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 using (var eventContext = new EventContext())
                 {
-                    SetupInterview(questionnaireDocument);
+                    SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                     return new InvokeResult
                     {
@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event () =>
             result.QuestionsDisabledEventCount.Should().Be(1);
         
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
         private static readonly Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid groupId = Guid.Parse("22222222222222222222222222222222");

@@ -20,15 +20,15 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in items" :key="item.id">
-                        <td>{{item.StatusHumanized}}</td>
-                        <td class="date">{{formatDate(item.Date)}}</td>
+                        <td>{{item.statusHumanized}}</td>
+                        <td class="date">{{formatDate(item.date)}}</td>
                         <td>
-                            <span v-bind:class="[item.ResponsibleRole]">{{item.Responsible}}</span>
+                            <span v-bind:class="[item.responsibleRole]">{{item.responsible}}</span>
                         </td>
                         <td>
-                            <span v-bind:class="[item.AssigneeRole]">{{item.Assignee}}</span>
+                            <span v-bind:class="[item.assigneeRole]">{{item.assignee}}</span>
                         </td>
-                        <td data-bind="text: Comment">{{item.Comment}}</td>
+                        <td data-bind="text: Comment">{{item.comment}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -41,7 +41,7 @@
 
 <script>
 import { DateFormats } from "~/shared/helpers";
-import vue from "vue"
+import Vue from "vue"
 
 export default {
   data: function() {
@@ -57,9 +57,10 @@ export default {
       $(this.$refs.modal).modal("hide");
     },
     async show() {
-      if (this.items == null)
-        this.items = await vue.$api.call(api => api.getStatusesHistory());
-        
+      if (this.items == null){
+        this.items = await Vue.$api.interview.get('getStatusesHistory');
+      }
+
       this.$refs.modal.modal();
     }
   }

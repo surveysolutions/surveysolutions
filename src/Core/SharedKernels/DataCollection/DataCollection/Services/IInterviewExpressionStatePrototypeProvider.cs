@@ -11,5 +11,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
         ILatestInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion);
 
         IInterviewExpressionStorage GetExpressionStorage(QuestionnaireIdentity questionnaireIdentity);
+        Type GetExpressionStorageType(QuestionnaireIdentity questionnaireIdentity);
     }
 }

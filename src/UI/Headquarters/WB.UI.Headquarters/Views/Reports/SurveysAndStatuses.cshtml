@@ -17,7 +17,7 @@
     @Scripts.Render("~/js/common")
 
     <script type="text/javascript">
-        var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
+        var $interviewsUrl = '@Url.Action("Index", "Interviews")';
         var $allQuestionnaires = '@HttpUtility.JavaScriptStringEncode(Strings.AllQuestionnaires)';
         var $selfUrl = '@Url.Action("SurveysAndStatuses")';
         var totalRowClass = 'total-row';
@@ -39,7 +39,7 @@
                     {
                         render: function(data, type, row) {
                             if (row.questionnaireVersion) {
-                                return getLinkToInterviews(model, data, row);
+                                return getLinkToInterviews(model, data, row,'', model.Url.query['responsible']);
                             }
                             else {
                                 var responsible = model.Url.query['responsible'];

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.WeakSubscription;
 using WB.Core.SharedKernels.DataCollection;
@@ -34,8 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 var audioQuestion = treeQuestion.GetAsInterviewTreeAudioQuestion();
                 fileName = audioQuestion.GetAnswer().FileName;
 
-                this.Audio = audioFileStorage.GetInterviewBinaryData(interviewId,
-                    fileName);
+                this.Audio = audioFileStorage.GetInterviewBinaryData(interviewId, fileName);
                 this.audioService.WeakSubscribe<IAudioService, PlaybackCompletedEventArgs>(nameof(audioService.OnPlaybackCompleted), PlaybackCompleted);
             }
         }
@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
         }
 
-        public IMvxCommand TogglePlayback => new MvxCommand(() =>
+        public IMvxCommand TogglePlayback => new MvxAsyncCommand(async () =>
         {
             if (this.IsPlaying)
             {
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
             else
             {
-                this.audioService.Play(this.interviewId, this.questionIdentity, fileName);
+                await this.audioService.Play(this.interviewId, this.questionIdentity, fileName);
                 this.IsPlaying = true;
             }
         }, () => CanBePlayed);

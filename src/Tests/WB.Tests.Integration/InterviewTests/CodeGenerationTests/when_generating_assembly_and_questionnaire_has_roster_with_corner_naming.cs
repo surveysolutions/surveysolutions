@@ -1,5 +1,5 @@
 using System;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             appDomainContext = null;
         }
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResults results;
         private static string[] namesToCheck = new[] { "parent", "conditionExpressions" };
 

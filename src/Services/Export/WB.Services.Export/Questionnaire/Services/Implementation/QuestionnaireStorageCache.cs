@@ -6,16 +6,14 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
     internal class QuestionnaireStorageCache : IQuestionnaireStorageCache
     {
-        private readonly TenantDbContext tenantDbContext;
         private readonly IMemoryCache memoryCache;
         private readonly ITenantContext tenantContext;
         private string keyPart;
 
-        public QuestionnaireStorageCache(TenantDbContext tenantDbContext,
+        public QuestionnaireStorageCache(
             IMemoryCache memoryCache,
             ITenantContext tenantContext)
         {
-            this.tenantDbContext = tenantDbContext;
             this.memoryCache = memoryCache;
             this.tenantContext = tenantContext;
         }
@@ -31,16 +29,8 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             if (memoryCache.TryGetValue(Key(id), out var res))
             {
                 document = res as QuestionnaireDocument;
-                if (document == null) return false;
-
-                // should be (and actually is) fast due to EF entity cache
-                var db = this.tenantDbContext.GeneratedQuestionnaires.Find(id.ToString());
-
-                if (db == null) return false;
-
-                if (document.IsDeleted && db.DeletedAt == null) return false;
-
-                if (!document.IsDeleted && db.DeletedAt != null) return false;
+                if (document == null)
+                    return false;
 
                 return true;
             }

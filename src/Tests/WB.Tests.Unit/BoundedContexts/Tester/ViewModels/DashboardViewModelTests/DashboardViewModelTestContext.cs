@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using Main.Core.Documents;
 using Moq;
 using MvvmCross.Tests;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
@@ -16,7 +15,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
@@ -25,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         public DashboardViewModelTestContext()
         {
-            base.Setup();
+            Setup();
         }
 
         public static DashboardViewModel CreateDashboardViewModel(
@@ -39,7 +37,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
             IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null,
             IAttachmentContentStorage attachmentContentStorage = null,
-            IPlainStorage<TranslationInstance> translationsStorage = null,
             IQuestionnaireStorage questionnaireRepository = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
@@ -47,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
             var localDashboardLastUpdateStorageMock = new Mock<IPlainStorage<DashboardLastUpdate>>();
             localDashboardLastUpdateStorageMock
-                .Setup(x => x.Where(Moq.It.IsAny<Expression<Func<DashboardLastUpdate, bool>>>()))
+                .Setup(x => x.Where(It.IsAny<Expression<Func<DashboardLastUpdate, bool>>>()))
                 .Returns(
                     new List<DashboardLastUpdate>
                     {
@@ -78,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 ));
         }
 
-        protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
+        protected static readonly Guid userId = Id.gF;
         protected static readonly string userName = "Vasya";
         protected static readonly Mock<IPrincipal> mockOfPrincipal = new Mock<IPrincipal>();
     }

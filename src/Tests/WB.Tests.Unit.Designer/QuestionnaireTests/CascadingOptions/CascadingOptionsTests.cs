@@ -63,7 +63,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadingOptions
                     validationExpression: null,
                     validationMessage: null,
                     showAsList: true,
-                    showAsListThreshold: 20));
+                    showAsListThreshold: 20,
+                    categoriesId: null));
 
             //AAA
             var categoricalQuestion = (questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId) as SingleQuestion);
@@ -145,7 +146,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadingOptions
                 validationExpression: null,
                 validationMessage: null,
                 showAsList: false,
-                showAsListThreshold: null));
+                showAsListThreshold: null,
+                categoriesId: null));
             
             Assert.That(questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId).Answers.Count, Is.EqualTo(2));
         }

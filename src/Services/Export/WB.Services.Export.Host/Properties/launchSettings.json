@@ -2,7 +2,7 @@
   "profiles": {
     "Export.Host": {
       "commandName": "Project",
-      "commandLineArgs": "--console --kestrel",
+      "commandLineArgs": "--console",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
