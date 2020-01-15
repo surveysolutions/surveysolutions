@@ -1,9 +1,11 @@
-﻿namespace WB.UI.Headquarters.Configs
+﻿using System;
+
+namespace WB.UI.Headquarters.Configs
 {
     public class EventHandlersConfig
     {
-        public string[] Disabled { get; set; }
+        public string[] Disabled { get; set; } = Array.Empty<string>();
 
-        public string[] IgnoredException { get; set; }
+        public string[] IgnoredException { get; set; } = Array.Empty<string>();
     }
 }
