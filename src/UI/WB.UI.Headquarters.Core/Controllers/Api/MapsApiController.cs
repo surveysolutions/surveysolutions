@@ -126,11 +126,9 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ObserverNotAllowed]
-        public async Task<JsonMapResponse> Upload()
+        public async Task<JsonMapResponse> Upload(IFormFile file)
         {
             var response = new JsonMapResponse();
-
-            IFormFile file = Request.Form.Files.SingleOrDefault();
 
             if (file == null)
             {
@@ -205,10 +203,8 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ObserverNotAllowed]
-        public IActionResult UploadMappings()
+        public IActionResult UploadMappings(IFormFile file)
         {
-            IFormFile file = Request.Form.Files.SingleOrDefault();
-
             if (file == null)
             {
                 return this.StatusCode(StatusCodes.Status406NotAcceptable, Maps.MappingsLoadingError);
@@ -297,7 +293,7 @@ namespace WB.UI.Headquarters.Controllers
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
                 Orders = request.GetSortOrderRequestItems(),
-                SearchBy = request.Search.Value,
+                SearchBy = request.Search?.Value,
                 MapName = request.MapName
             };
 
@@ -348,7 +344,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<CommandApiController.JsonCommandResponse> DeleteMap(DeleteMapRequestModel request)
+        public async Task<CommandApiController.JsonCommandResponse> DeleteMap([FromBody] DeleteMapRequestModel request)
         {
             await this.mapStorageService.DeleteMap(request.Map);
             return new CommandApiController.JsonCommandResponse() { IsSuccess = true };
