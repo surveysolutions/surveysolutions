@@ -1,9 +1,9 @@
 <template>
-  <HqLayout :title="title" :hasFilter="false">
+  <HqLayout :hasFilter="false">
     <div slot='subtitle'>
         <div class="neighbor-block-to-search">
             <div class="topic-with-button">
-                <h1>@Html.Raw(string.Format(Users.HeadquartersCountDescription, @"<span data-bind='text: formatNumber(UsersCount())'></span>"))</h1>
+                <h1>{{ title }}</h1>
                 <a v-if="this.model.showAddUser" class="btn btn-success" :href="this.model.createUrl">{{ $t('Users.AddHeadquarters') }}</a>
             </div>
             <ol v-if="this.model.showInstruction" class="list-unstyled">
@@ -34,7 +34,7 @@ import moment from "moment";
 export default {
     data() {
         return {
-            usersCount : null
+            usersCount : ''
         }
     },
     mounted() {
@@ -50,12 +50,12 @@ export default {
             requestData.search = (this.questionnaireId || {}).key
         },
         onTableReload(data) {
-            this.usersCount = data.usersCount
+            this.usersCount = data.recordsTotal
         },
         contextMenuItems({rowData, rowIndex}) {
-            if (this.model.showContextMenu)
-                return;
-                
+            if (!this.model.showContextMenu)
+                return [];
+
             const self = this
             const menu = []
             menu.push({
@@ -80,6 +80,7 @@ export default {
             return this.model.reportNameDescription
         },
         tableOptions() {
+            var self = this
             return {
                 deferLoading: 0,
                 columns: [
@@ -89,7 +90,7 @@ export default {
                         orderable: true,
                         className: "nowrap",
                         render: function(data, type, row) {
-                            return `<a href='${this.model.editUrl}/${row.userId}'>${data}</a>`;
+                            return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`;
                         }
                     },
                     {
