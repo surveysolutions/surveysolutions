@@ -266,6 +266,32 @@ namespace WB.UI.Headquarters.Controllers
                     : null,
                 ShowAddUser = authorizedUser.IsAdministrator,
             });
+        }        
+        
+        public class ApiUsersModel
+        {
+            public string DataUrl { get; set; }
+            public string EditUrl { get; set; }
+            public string CreateUrl { get; set; }
+            public bool ShowAddUser { get; set; }
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [ActivePage(MenuItem.ApiUsers)]
+        [Route("/ApiUsers")]
+        public ActionResult ApiUsers()
+        {
+            return this.View(new ApiUsersModel()
+            {
+                DataUrl = Url.Action("AllApiUsers", "UsersApi"),
+                EditUrl = authorizedUser.IsAdministrator
+                    ? Url.Action("Manage", "Account")
+                    : null,
+                CreateUrl = authorizedUser.IsAdministrator
+                    ? Url.Action("Create", "Account", new{ id = UserRoles.ApiUser })
+                    : null,
+                ShowAddUser = authorizedUser.IsAdministrator,
+            });
         }
     }
 }

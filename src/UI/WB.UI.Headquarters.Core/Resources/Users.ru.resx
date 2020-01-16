@@ -242,7 +242,7 @@
     <value>Интервьюеры ({0})</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
-    <value>API Пользователи ({0})</value>
+      <value>API Пользователи ({{count}})</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
       <value>Хедквотеры ({{count}})</value>

@@ -1,6 +1,7 @@
 import Headquarters from "./Headquarters"
 import Manage from "./Manage"
 import Observers from "./Observers"
+import ApiUsers from "./ApiUsers"
 import Create from "./Create"
 import Supervisors from "./Supervisors"
 
@@ -16,8 +17,12 @@ export default class UsersComponent {
     get routes() {
         return [{
             path: '/Headquarters', component: Headquarters
-        },{
+        },
+        {
             path: '/Observers', component: Observers
+        },
+        {
+            path: '/ApiUsers', component: ApiUsers
         },
         {
             path: '/Supervisors', component: Supervisors

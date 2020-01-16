@@ -142,7 +142,7 @@
     <value>Përdoruesit e API-t</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
-    <value>Përdoruesit e API-t ({0})</value>
+      <value>Përdoruesit e API-t ({{count}})</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
     <value>Supervizorët e arkivuar</value>
