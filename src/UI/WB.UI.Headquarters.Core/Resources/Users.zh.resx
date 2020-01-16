@@ -253,7 +253,7 @@
     <value>编辑督导员</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>（{0}个调查员）</value>
+      <value>（{{count}}个调查员）</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
     <value>您团队中的督导员</value>

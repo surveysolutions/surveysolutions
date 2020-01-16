@@ -259,7 +259,7 @@
     <value>Redakto Supervizorin</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>Supervizorët ({0})</value>
+      <value>Supervizorët ({{count}})</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
     <value>supervizorë në ekipin tuaj</value>
