@@ -268,7 +268,7 @@
     <value>调查员的问题</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
-    <value>调查员 ({0})</value>
+      <value>调查员 ({{count}})</value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
       <value>观测员 ({{count}})</value>

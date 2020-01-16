@@ -211,7 +211,7 @@
     <value>ინტერვიუერები</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
-    <value>ინტერვიუერები ({0})</value>
+      <value>ინტერვიუერები ({{count}})</value>
   </data>
   <data name="Locked" xml:space="preserve">
     <value>ჩაკეტილი</value>
