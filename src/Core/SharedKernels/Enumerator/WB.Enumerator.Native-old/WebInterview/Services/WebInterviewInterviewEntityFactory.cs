@@ -367,6 +367,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         RosterVector = ri.Identity.RosterVector.ToString(),
                         RosterTitle = ri.RosterTitle,
                         Status = this.CalculateSimpleStatus(ri, isReviewMode, callerInterview, questionnaire),
+                        IsDisabled = ri.IsDisabled()
                     }).ToArray();
 
                 ListExtensions.ForEach(tableRosterInstances, rosterInstance =>
@@ -374,6 +375,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     this.ApplyDisablement(rosterInstance, identity, questionnaire);
                     this.ApplyValidity(rosterInstance.Validity, rosterInstance.Status);
                 });
+
+                tableRosterInstances = tableRosterInstances.Where(x => !(x.IsDisabled && x.HideIfDisabled)).ToArray();
 
                 return new TableOrMatrixRoster()
                 {
@@ -431,7 +434,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)
         {
-            if (result.IsDisabled)
+            if (result.IsDisabled && result.Title != null)
             {
                 result.Title = HtmlRemovalRegex.Replace(result.Title, string.Empty);
             }
