@@ -181,7 +181,7 @@
       <value>Supervisors ({{count}})</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
-    <value>Interviewers ({0})</value>
+      <value>Interviewers ({{count}})</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
       <value>API Users ({{count}})</value>

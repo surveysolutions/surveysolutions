@@ -211,7 +211,7 @@
     <value>Intervistuesit</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
-    <value>Intervistuesit ({0})</value>
+      <value>Intervistuesit ({{count}})</value>
   </data>
   <data name="Locked" xml:space="preserve">
     <value>Bllokuar</value>

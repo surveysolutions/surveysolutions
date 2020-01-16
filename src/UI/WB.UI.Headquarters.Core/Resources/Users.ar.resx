@@ -211,7 +211,7 @@
     <value>الباحثين</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
-    <value>الباحثين ({0})</value>
+      <value>الباحثين ({{count}})</value>
   </data>
   <data name="Locked" xml:space="preserve">
     <value>مقفل</value>

@@ -162,6 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
+            registry.Bind<IMoveUserToAnotherTeamService, MoveUserToAnotherTeamService>();
 
             registry.Bind<IMapStorageService, MapFileStorageService>();
 

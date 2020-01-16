@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<IActionResult> AllInterviewers([FromQuery] DataTableRequestWithFilter reqest, [FromQuery] string exportType)
+        public async Task<IActionResult> AllInterviewers(DataTableRequestWithFilter reqest, [FromQuery] string exportType)
         {
             Guid? supervisorId = null;
 

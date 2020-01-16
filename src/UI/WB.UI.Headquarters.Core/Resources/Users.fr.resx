@@ -238,7 +238,7 @@
     <value>Problèmes de L'Enquêteur</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
-    <value>Enquêteurs ({0})</value>
+      <value>Enquêteurs ({{count}})</value>
   </data>
   <data name="NotLinkedToDeviceTitle" xml:space="preserve">
     <value>Nombre d'enquêteurs n'ayant pas encore synchronisé leurs tablettes avec le serveur</value>

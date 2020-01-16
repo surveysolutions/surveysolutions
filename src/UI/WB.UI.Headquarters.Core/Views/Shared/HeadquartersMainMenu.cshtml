@@ -39,7 +39,7 @@
         </a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
-            @Html.MainMenuItem("Index", "Interviewers", @MainMenu.Interviewers, MenuItem.Interviewers)
+            @Html.MainMenuItem("Interviewers", "Users", @MainMenu.Interviewers, MenuItem.Interviewers)
             @if (!authorizedUser.IsObserver)
             {
                 @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)

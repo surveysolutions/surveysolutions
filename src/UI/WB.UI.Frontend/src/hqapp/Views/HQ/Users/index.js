@@ -4,6 +4,7 @@ import Observers from "./Observers"
 import ApiUsers from "./ApiUsers"
 import Create from "./Create"
 import Supervisors from "./Supervisors"
+import Interviewers from "./Interviewers"
 
 import Vue from "vue"
 
@@ -20,6 +21,9 @@ export default class UsersComponent {
         },
         {
             path: '/Observers', component: Observers
+        },
+        {
+            path: '/Interviewers', component: Interviewers
         },
         {
             path: '/ApiUsers', component: ApiUsers
