@@ -17,10 +17,9 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Serilog;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -35,14 +34,11 @@ using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Files;
-using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.Logs;
@@ -58,7 +54,6 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Shared.Web.Configuration;
-using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.UnderConstruction;
 using WB.UI.Shared.Web.Versions;
 
@@ -121,7 +116,6 @@ namespace WB.UI.Headquarters
                 eventStoreModule,
                 GetQuartzModule(),
                 new InfrastructureModule(),
-                new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(),
                 new WebInterviewModule(),
                 new DataCollectionSharedKernelModule(),
@@ -237,7 +231,6 @@ namespace WB.UI.Headquarters
 
             services.AddResponseCaching();
             services.AddResponseCompression();
-            services.AddLogging();
             services.AddSignalR().AddNewtonsoftJsonProtocol();
 
             services.AddHttpContextAccessor();
@@ -332,6 +325,7 @@ namespace WB.UI.Headquarters
             InitModules(app, env);
             
             app.UseStaticFiles();
+            app.UseSerilogRequestLogging();
             app.UseUnderConstruction();
 
             app.UseRouting();

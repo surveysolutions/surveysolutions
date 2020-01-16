@@ -5,21 +5,18 @@ using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.BoundedContexts.Headquarters.Maps;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
-using WB.UI.Headquarters.API.WebInterview.Services;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Services;
-using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
@@ -80,6 +77,16 @@ namespace WB.UI.Headquarters
                     services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
                     break;
             }
+
+            registry.Bind<ILoggerProvider, SerilogLoggerProvider>();
+
+            registry.BindToMethod<ILogger>(context =>
+            {
+                if (context.MemberDeclaringType != null)
+                    return new SerilogLogger(context.MemberDeclaringType);
+
+                return new SerilogLogger();
+            });
         }
 
         private void ConfigureEventBus(IIocRegistry registry)
