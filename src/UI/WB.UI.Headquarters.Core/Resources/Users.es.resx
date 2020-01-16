@@ -259,7 +259,7 @@
     <value>Editar supervisor</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>Supervisores ({0})</value>
+      <value>Supervisores ({{count}})</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
     <value>supervisores en su equipo</value>

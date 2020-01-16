@@ -265,7 +265,7 @@
     <value>Modifier le Chef d'Equipe</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>Chefs d'Equipe ({0})</value>
+      <value>Chefs d'Equipe ({{count}})</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
     <value>Chef d'Equipe dans votre équipe</value>

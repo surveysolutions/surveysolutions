@@ -1,0 +1,11 @@
+﻿@using WB.UI.Headquarters.Code
+@model object
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = Users.Supervisors;
+}
+
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>

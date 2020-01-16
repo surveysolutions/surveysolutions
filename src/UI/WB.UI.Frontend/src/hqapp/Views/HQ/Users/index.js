@@ -1,4 +1,7 @@
 import Headquarters from "./Headquarters"
+import Manage from "./Manage"
+import Create from "./Create"
+import Supervisors from "./Supervisors"
 
 import Vue from "vue"
 
@@ -12,8 +15,20 @@ export default class UsersComponent {
     get routes() {
         return [{
             path: '/Headquarters', component: Headquarters
+        },
+        {
+            path: '/Supervisors', component: Supervisors
+        },
+        {
+            path: '/Users/Manage/:userId', component: Manage
+        },
+        {
+            path: '/Users/Manage/', component: Manage
+        },
+        {
+            path: '/Users/Create/:role', component: Create
         }]
     }
-    
+
     //get modules() { return { Upload } }
 }

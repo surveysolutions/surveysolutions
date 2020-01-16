@@ -221,7 +221,7 @@
     <comment>Редактирование супервизора</comment>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>Супервизоры ({0})</value>
+      <value>Супервизоры ({{count}})</value>
   </data>
   <data name="ArchivingStatusTitle" xml:space="preserve">
     <value>Архив статус</value>

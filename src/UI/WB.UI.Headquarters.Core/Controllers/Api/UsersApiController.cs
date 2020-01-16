@@ -200,34 +200,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.GetUsersInRoleForDataTable(request, UserRoles.Observer);
         }
 
-
-        [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
-        public DataTableResponse<SupervisorListItem> AllSupervisors([FromBody] DataTableRequestWithFilter request)
-        {
-            var users = this.usersFactory.GetSupervisors(request.PageIndex, request.PageSize, request.GetSortOrder(),
-                request.Search.Value);
-
-            return new DataTableResponse<SupervisorListItem>
-            {
-                Draw = request.Draw + 1,
-                RecordsTotal = users.TotalCount,
-                RecordsFiltered = users.TotalCount,
-                Data = users.Items.ToList().Select(x => new SupervisorListItem
-                {
-                    UserId = x.UserId,
-                    UserName = x.UserName,
-                    CreationDate = x.CreationDate,
-                    Email = x.Email,
-                    IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
-                    IsArchived = x.IsArchived
-                })
-            };
-        }
-
-        public class SupervisorListItem : UserListItem
-        {
-        }
+        public DataTableResponse<InterviewerListItem> AllSupervisors(DataTableRequest request) => this.GetUsersInRoleForDataTable(request, UserRoles.Supervisor);
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
