@@ -107,6 +107,7 @@
                         :error="modelState['OldPassword']"
                     >
                         <TextInput
+                            type="password"
                             v-model.trim="oldPassword"
                             :haserror="modelState['OldPassword'] !== undefined"
                         />
@@ -116,6 +117,7 @@
                         :error="modelState['Password']"
                     >
                         <TextInput
+                            type="password"
                             v-model.trim="password"
                             :haserror="modelState['Password'] !== undefined"
                         />
@@ -125,6 +127,7 @@
                         :error="modelState['ConfirmPassword']"
                     >
                         <TextInput
+                            type="password"
                             v-model.trim="confirmPassword"
                             :haserror="modelState['ConfirmPassword'] !== undefined"
                         />
