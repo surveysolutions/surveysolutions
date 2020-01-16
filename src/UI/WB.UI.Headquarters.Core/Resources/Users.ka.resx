@@ -142,7 +142,7 @@
     <value>API მომხმარებლები</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
-    <value>API მომხმარებელი ({0})</value>
+      <value>API მომხმარებელი ({{count}})</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
     <value>დაარქივებული ზედამხედველები</value>

@@ -202,9 +202,8 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public DataTableResponse<UserListItem> AllSupervisors(DataTableRequest request) => this.GetUsersInRoleForDataTable(request, UserRoles.Supervisor);
 
-        [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public DataTableResponse<UserListItem> AllApiUsers([FromBody] DataTableRequest request)
+        public DataTableResponse<UserListItem> AllApiUsers(DataTableRequest request)
         {
             return this.GetUsersInRoleForDataTable(request, UserRoles.ApiUser);
         }
