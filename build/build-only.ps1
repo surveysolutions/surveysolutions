@@ -101,16 +101,14 @@ try {
         }
 
         Log-Block "Building HQ web package and support tool" {
-            # BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
-            BuildAspNetCoreWebPackage $ProjectHeadquartersCore $BuildConfiguration $BuildNumber $branch `
-                | ForEach-Object { if (-not $_) { Exit 1 } }
+            BuildAspNetCoreWebPackage $ProjectHeadquartersCore $BuildConfiguration $BuildNumber $branch
         }
         
         "BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch" | Write-Verbose
-        BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch | ForEach-Object { if (-not $_) { Exit 1 } }
+        BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch
         
         Log-Block "Collecting/building artifacts" {
-            AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
+            AddArtifacts $ProjectHeadquartersCore $BuildConfiguration -folder "Headquarters"
             AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
         }
 

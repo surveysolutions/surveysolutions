@@ -373,25 +373,28 @@ function BuildAspNetCoreWebPackage
 
     return Log-Block "Building Asp.Net Core package for project $Project branch: $branch" {
         try {
+
+            $file = get-childitem $Project
+            $output =  $file.directoryname + "\obj\" + $BuildConfiguration + "\package"
             $arg = @("publish"
                 $Project
                 "--configuration", $BuildConfiguration
                 "--version-suffix", $branch
                 "/bl"
                 '--runtime', 'win-x64'
-                "--output", "obj\$BuildConfiguration\package"
+                "--output", $output
                 "/p:PublishProfile=WebDeployPackage",
                 "/p:BuildNumber=$BuildNumber"
             )
 
             "dotnet $arg" | out-Host
             & dotnet $arg
-            
-            $LASTEXITCODE | out-host 
+
             $ok = $LASTEXITCODE -eq 0
-            $ok | out-host
+            "dotnet exit code: $LASTEXITCODE"
             if($ok -eq $False) {
                 Log-Error $result
+                throw
             }
 
             return $ok
