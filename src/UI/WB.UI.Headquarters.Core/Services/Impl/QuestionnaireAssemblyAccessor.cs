@@ -138,7 +138,7 @@ namespace WB.UI.Headquarters.Services.Impl
             throw new NotImplementedException();
         }
 
-        public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
+        public string? GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
         {
             var assembly = GetAssemblyHolder(questionnaireId, questionnaireVersion);
 

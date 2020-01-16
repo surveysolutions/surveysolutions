@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers
             IInterviewerProfileFactory interviewerProfileFactory,
             IFileSystemAccessor fileSystemAccessor,
             IUserImportService userImportService, 
-            //IMoveUserToAnotherTeamService moveUserToAnotherTeamService,
+            IMoveUserToAnotherTeamService moveUserToAnotherTeamService,
             IUserArchiveService userArchiveService)
         {
             this.authorizedUser = authorizedUser;
@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewerProfileFactory = interviewerProfileFactory;
             this.userImportService = userImportService;
-            //this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
+            this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
             this.userArchiveService = userArchiveService;
         }
 
@@ -257,16 +257,16 @@ namespace WB.UI.Headquarters.Controllers
 
             throw new ArgumentException("Need implement archive and unarchive");
 
-            return new CommandApiController.JsonBundleCommandResponse
-            {
-                CommandStatuses = new List<CommandApiController.JsonCommandResponse>
-                {
-                    new CommandApiController.JsonCommandResponse
-                    {
-                        IsSuccess = true
-                    }
-                }
-            };
+            //return new CommandApiController.JsonBundleCommandResponse
+            //{
+            //    CommandStatuses = new List<CommandApiController.JsonCommandResponse>
+            //    {
+            //        new CommandApiController.JsonCommandResponse
+            //        {
+            //            IsSuccess = true
+            //        }
+            //    }
+            //};
 
 
             /*return new CommandApiController.JsonBundleCommandResponse

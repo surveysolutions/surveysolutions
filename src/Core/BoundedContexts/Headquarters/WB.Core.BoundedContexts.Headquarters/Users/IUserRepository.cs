@@ -15,5 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         HqUser FindById(Guid userId);
         Task<string> GetEmailAsync(HqUser user);
         Task<HqUser> FindByEmailAsync(string email, CancellationToken cancellationToken = new CancellationToken());
+        Task<Microsoft.AspNetCore.Identity.IdentityResult> UpdateAsync(HqUser interviewer, CancellationToken cancellationToken = new CancellationToken());
     }
 }
