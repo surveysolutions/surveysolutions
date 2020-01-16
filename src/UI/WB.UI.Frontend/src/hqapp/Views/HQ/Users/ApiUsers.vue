@@ -13,7 +13,6 @@
       ref="table"
       :tableOptions="tableOptions"
       @ajaxComplete="onTableReload"
-      exportable
       noSelect
     >
     </DataTables>
