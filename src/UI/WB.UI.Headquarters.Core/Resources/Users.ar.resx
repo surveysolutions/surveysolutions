@@ -235,7 +235,7 @@
     <value>المراقبين</value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-    <value>المراقبين  ({0})</value>
+      <value>المراقبين  ({{count}})</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
     <value>البريد الالكتروني للمراقب</value>

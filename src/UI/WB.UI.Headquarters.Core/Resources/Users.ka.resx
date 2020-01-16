@@ -235,7 +235,7 @@
     <value>დამკვირვებლები</value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-    <value>დამკვირვებლები ({0})</value>
+      <value>დამკვირვებლები ({{count}})</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
     <value>დამკვირვებელთა ელფოსტა</value>
