@@ -11,6 +11,7 @@ import Export from "./Export"
 import Interviews from "./Interviews"
 import QuestionnaireDetails from "./Questionnaires"
 import Template from "./Template"
+import UsersUpload from "./Users/Upload"
 
 export default [
     Assignments,
@@ -25,5 +26,6 @@ export default [
     Export,
     Interviews,
     QuestionnaireDetails,
-    Template
+    Template,
+    UsersUpload
 ]

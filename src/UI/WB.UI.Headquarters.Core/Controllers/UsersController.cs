@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -125,6 +126,28 @@ namespace WB.UI.Headquarters.Controllers
                 }
             });
         }
+
+        [ActivePage(MenuItem.UserBatchUpload)]
+        [ObserverNotAllowed]
+        public ActionResult Upload() => View(new
+        {
+            Api = new
+            {
+                UploadUsersUrl = Url.Action("Upload"),
+                QuestionnairesUrl = Url.Action("Index", "SurveySetup"),
+                ImportUsersTemplateUrl = Url.Action("ImportUsersTemplate", "UsersApi"),
+                ImportUsersUrl = Url.Action("ImportUsers", "UsersApi"),
+                ImportUsersStatusUrl = Url.Action("ImportStatus", "UsersApi"),
+                ImportUsersCompleteStatusUrl = Url.Action("ImportCompleteStatus", "UsersApi"),
+                ImportUsersCancelUrl = Url.Action("CancelToImportUsers", "UsersApi"),
+                SupervisorCreateUrl = Url.Action("Create", new {id = UserRoles.Supervisor}),
+                InterviewerCreateUrl = Url.Action("Create", new {id = UserRoles.Interviewer})
+            },
+            Config = new
+            {
+                AllowedUploadFileExtensions = new[] {TextExportFile.Extension, TabExportFile.Extention}
+            }
+        });
 
         [HttpPost]
         [ValidateAntiForgeryToken]
