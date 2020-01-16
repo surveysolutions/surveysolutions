@@ -15,7 +15,6 @@
       @ajaxComplete="onTableReload"
       :contextMenuItems="contextMenuItems"
       :supportContextMenu="model.showContextMenu"
-      exportable
       noSelect
     >
     </DataTables>
