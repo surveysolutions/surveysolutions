@@ -72,6 +72,9 @@ export default {
         hasTotalRow: {
             type: Boolean, default: false
         },
+        supportContextMenu: {
+            type: Boolean, default: true
+        },
         contextMenuItems: {
             type: Function
         },
@@ -384,6 +387,7 @@ export default {
         },
 
         initContextMenu() {
+            if (this.supportContextMenu != true) return;
             if (this.contextMenuItems == null) return;
             var contextMenuOptions = {
                 selector: "#" + this.$refs.table.attributes.id.value + " tbody tr td:not(.checkbox-cell)",
@@ -394,6 +398,8 @@ export default {
                     if (selectedRow.rowData == null) return false;
 
                     var items = this.contextMenuItems(selectedRow)
+                    if (items == null)
+                        return;
                     return { items: items };
                 },
                 trigger: 'left'

@@ -19,6 +19,7 @@ using WB.UI.Headquarters.Models.Users;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
+using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
@@ -265,6 +266,12 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.signInManager.SignOutAsync();
             return this.Redirect("~/");
+        }
+
+        [Authorize(Roles = "Administrator, Observer")]
+        public ActionResult ObservePerson(string personName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

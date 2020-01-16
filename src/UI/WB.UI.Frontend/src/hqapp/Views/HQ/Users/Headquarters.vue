@@ -1,11 +1,7 @@
 <template>
-  <HqLayout :hasFilter="false">
+  <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl" :topicButton="$t('Users.AddHeadquarters')">
     <div slot='subtitle'>
         <div class="neighbor-block-to-search">
-            <div class="topic-with-button">
-                <h1>{{ title }}</h1>
-                <a v-if="this.model.showAddUser" class="btn btn-success" :href="this.model.createUrl">{{ $t('Users.AddHeadquarters') }}</a>
-            </div>
             <ol v-if="this.model.showInstruction" class="list-unstyled">
                 <li>{{ $t('Pages.Users_Headquarters_Instruction1') }}</li>
                 <li>{{ $t('Pages.Users_Headquarters_Instruction2') }}</li>
@@ -16,9 +12,9 @@
     <DataTables
       ref="table"
       :tableOptions="tableOptions"
-      :addParamsToRequest="addParamsToRequest"
       @ajaxComplete="onTableReload"
       :contextMenuItems="contextMenuItems"
+      :supportContextMenu="model.showContextMenu"
       exportable
       noSelect
     >
@@ -46,15 +42,12 @@ export default {
                 this.$refs.table.reload();
             }
         },
-        addParamsToRequest(requestData) {
-            requestData.search = (this.questionnaireId || {}).key
-        },
         onTableReload(data) {
             this.usersCount = data.recordsTotal
         },
         contextMenuItems({rowData, rowIndex}) {
             if (!this.model.showContextMenu)
-                return [];
+                return null;
 
             const self = this
             const menu = []
