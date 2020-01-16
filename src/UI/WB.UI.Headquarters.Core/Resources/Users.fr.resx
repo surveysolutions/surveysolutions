@@ -229,7 +229,7 @@
     <value>Date de création du compte Quartier Général</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-    <value>Quartier Général ({0})</value>
+      <value>Quartier Général ({count})</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>E-mail du Quartier Général</value>
