@@ -23,7 +23,6 @@
             @ajaxComplete="onTableReload"
             :contextMenuItems="contextMenuItems"
             :supportContextMenu="user.isObserver"
-            exportable
             noSelect
         ></DataTables>
     </HqLayout>
