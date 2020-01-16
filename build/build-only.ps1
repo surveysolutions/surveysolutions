@@ -14,6 +14,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
+$ProjectHeadquartersCore = 'src\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.Core.csproj'
 $ProjectWebTester = 'src\UI\WB.UI.WebTester\WB.UI.WebTester.csproj'
 $MainSolution = 'src\WB without Xamarin.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
@@ -41,30 +42,20 @@ New-Item $artifactsFolder -Type Directory -Force | Out-Null
 
 try {
 
-    $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
+   # $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
 
-    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
+    $buildSuccessful = $true # BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
     if ($buildSuccessful) { 
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force | Out-Null
 
         if($nostatic -eq $False){
-
-            BuildStaticContent "WB.UI.FrontEnd" "src\UI\WB.UI.FrontEnd" @("build") | % { if (-not $_) {
+        
+            BuildStaticContent "WB.UI.Frontend" "src\UI\WB.UI.Frontend" @("build") | % { if (-not $_) {
                 Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for WB.UI.FrontEnd'
                 Exit 
             }}
-
             
-            CreateZip "$artifactsFolder\stats" "$artifactsFolder\stats.zip"
-            CreateZip "$artifactsFolder\coverage" "$artifactsFolder\coverage.zip"
-
-            Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
-            Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
-        }
-
-        Log-Block "Run configuration transformations" {
-            RunConfigTransform $ProjectHeadquarters $BuildConfiguration
         }
 
         if($noandroid.IsPresent -eq $False) 
@@ -110,13 +101,11 @@ try {
         }
 
         Log-Block "Building HQ web package and support tool" {
-            BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
-
-            if($nosupport.IsPresent -eq $False) {
-                BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
-            }
+            # BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
+            BuildAspNetCoreWebPackage $ProjectHeadquartersCore $BuildConfiguration $BuildNumber $branch `
+                | ForEach-Object { if (-not $_) { Exit 1 } }
         }
-
+        
         "BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch" | Write-Verbose
         BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch | ForEach-Object { if (-not $_) { Exit 1 } }
         

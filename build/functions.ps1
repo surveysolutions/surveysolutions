@@ -376,9 +376,9 @@ function BuildAspNetCoreWebPackage
             $arg = @("publish"
                 $Project
                 "--configuration", $BuildConfiguration
-                "-v", "n"
                 "--version-suffix", $branch
                 '--runtime', 'win-x64'
+                "-output", "obj\$BuildConfiguration\package"
                 "/p:PublishProfile=WebDeployPackage",
                 "/p:BuildNumber=$BuildNumber"
             )
