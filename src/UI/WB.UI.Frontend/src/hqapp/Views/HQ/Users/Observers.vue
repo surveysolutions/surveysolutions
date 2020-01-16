@@ -1,10 +1,10 @@
 <template>
-  <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl" :topicButton="$t('Users.AddHeadquarters')">
+  <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl" :topicButton="$t('Users.AddObserver')">
     <div slot='subtitle'>
         <div class="neighbor-block-to-search">
-            <ol v-if="this.model.showInstruction" class="list-unstyled">
-                <li>{{ $t('Pages.Users_Headquarters_Instruction1') }}</li>
-                <li>{{ $t('Pages.Users_Headquarters_Instruction2') }}</li>
+            <ol class="list-unstyled">
+                <li>{{ $t('Pages.Users_Observers_Instruction1') }}</li>
+                <li>{{ $t('Pages.Users_Observers_Instruction2') }}</li>
             </ol>
         </div>
     </div>
@@ -13,8 +13,6 @@
       ref="table"
       :tableOptions="tableOptions"
       @ajaxComplete="onTableReload"
-      :contextMenuItems="contextMenuItems"
-      :supportContextMenu="model.showContextMenu"
       exportable
       noSelect
     >
@@ -45,30 +43,14 @@ export default {
         },
         onTableReload(data) {
             this.usersCount = formatNumber(data.recordsTotal)
-        },
-        contextMenuItems({rowData, rowIndex}) {
-            if (!this.model.showContextMenu)
-                return null;
-
-            const self = this
-            const menu = []
-            menu.push({
-                name: self.$t('Users.ImpersonateAsUser'),
-                callback: () => {
-                    const link = self.model.impersonateUrl + '?personName=' + rowData.userName
-                    //window.location.href = link
-                    window.open(link, "_blank")
-                }
-            })
-            return menu
-        },
+        }
     },
     computed: {
         model() {
             return this.$config.model;
         },
         title() {
-            return this.$t('Users.HeadquartersCountDescription', {count: this.usersCount})
+            return this.$t('Users.ObserversCountDescription', {count: this.usersCount})
         },
         tableOptions() {
             var self = this
@@ -97,7 +79,7 @@ export default {
                     {
                         data: "email",
                         className: "date",
-                        title: this.$t("Users.HeadquartersEmail"),
+                        title: this.$t("Users.ObserversEmail"),
                         orderable: false,
                         render: function(data, type, row) {
                             return data ? "<a href='mailto:" + data + "'>" + data + "</a>" : "";

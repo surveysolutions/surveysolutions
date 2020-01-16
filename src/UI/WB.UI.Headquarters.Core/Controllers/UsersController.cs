@@ -241,5 +241,31 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.ModelState.ErrorsToJsonResult();
         }
+
+        public class ObserversModel
+        {
+            public string DataUrl { get; set; }
+            public string EditUrl { get; set; }
+            public string CreateUrl { get; set; }
+            public bool ShowAddUser { get; set; }
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [ActivePage(MenuItem.Observers)]
+        [Route("/Observers")]
+        public ActionResult Observers()
+        {
+            return this.View(new ObserversModel()
+            {
+                DataUrl = Url.Action("AllObservers", "UsersApi"),
+                EditUrl = authorizedUser.IsAdministrator
+                    ? Url.Action("Manage", "Account")
+                    : null,
+                CreateUrl = authorizedUser.IsAdministrator
+                    ? Url.Action("Create", "Account", new{ id = UserRoles.Observer })
+                    : null,
+                ShowAddUser = authorizedUser.IsAdministrator,
+            });
+        }
     }
 }

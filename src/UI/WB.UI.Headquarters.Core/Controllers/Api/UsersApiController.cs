@@ -193,9 +193,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.GetUsersInRoleForDataTable(request, UserRoles.Headquarter);
         }
 
-        [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public DataTableResponse<UserListItem> AllObservers([FromBody] DataTableRequest request)
+        public DataTableResponse<UserListItem> AllObservers(DataTableRequest request)
         {
             return this.GetUsersInRoleForDataTable(request, UserRoles.Observer);
         }

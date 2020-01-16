@@ -235,7 +235,7 @@
     <value>Vrojtuesit</value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-    <value>Vrojtuesit ({0})</value>
+      <value>Vrojtuesit ({{count}})</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
     <value>Email-i i vrojtuesit</value>
