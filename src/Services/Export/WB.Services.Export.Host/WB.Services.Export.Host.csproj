@@ -14,9 +14,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PublishTrimmed>true</PublishTrimmed>
-    <!--<PublishReadyToRun>true</PublishReadyToRun>-->
-    <PublishSingleFile>true</PublishSingleFile>
+    <PublishTrimmed>True</PublishTrimmed>
+    <PublishSingleFile>True</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
   
