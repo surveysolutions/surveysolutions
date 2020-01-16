@@ -1053,7 +1053,6 @@
     <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
-    <Content Include="Views\Reports\SurveysAndStatusesForSv.cshtml" />
     <Content Include="Views\TabletReport\PackagesInfo.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\_ControlPanelLayout.cshtml" />
