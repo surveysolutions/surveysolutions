@@ -242,53 +242,37 @@ namespace WB.UI.Headquarters.Controllers
             return this.ModelState.ErrorsToJsonResult();
         }
 
-        public class ObserversModel
-        {
-            public string DataUrl { get; set; }
-            public string EditUrl { get; set; }
-            public string CreateUrl { get; set; }
-            public bool ShowAddUser { get; set; }
-        }
-
         [Authorize(Roles = "Administrator")]
         [ActivePage(MenuItem.Observers)]
         [Route("/Observers")]
         public ActionResult Observers()
         {
-            return this.View(new ObserversModel()
+            return this.View(new
             {
                 DataUrl = Url.Action("AllObservers", "UsersApi"),
                 EditUrl = authorizedUser.IsAdministrator
-                    ? Url.Action("Manage", "Account")
+                    ? Url.Action("Manage")
                     : null,
                 CreateUrl = authorizedUser.IsAdministrator
-                    ? Url.Action("Create", "Account", new{ id = UserRoles.Observer })
+                    ? Url.Action("Create", new{ id = UserRoles.Observer })
                     : null,
                 ShowAddUser = authorizedUser.IsAdministrator,
             });
         }        
         
-        public class ApiUsersModel
-        {
-            public string DataUrl { get; set; }
-            public string EditUrl { get; set; }
-            public string CreateUrl { get; set; }
-            public bool ShowAddUser { get; set; }
-        }
-
         [Authorize(Roles = "Administrator")]
         [ActivePage(MenuItem.ApiUsers)]
         [Route("/ApiUsers")]
         public ActionResult ApiUsers()
         {
-            return this.View(new ApiUsersModel()
+            return this.View(new
             {
                 DataUrl = Url.Action("AllApiUsers", "UsersApi"),
                 EditUrl = authorizedUser.IsAdministrator
-                    ? Url.Action("Manage", "Account")
+                    ? Url.Action("Manage")
                     : null,
                 CreateUrl = authorizedUser.IsAdministrator
-                    ? Url.Action("Create", "Account", new{ id = UserRoles.ApiUser })
+                    ? Url.Action("Create", new{ id = UserRoles.ApiUser })
                     : null,
                 ShowAddUser = authorizedUser.IsAdministrator,
             });
