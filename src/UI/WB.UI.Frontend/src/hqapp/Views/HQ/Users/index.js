@@ -6,10 +6,6 @@ import Create from "./Create"
 import Supervisors from "./Supervisors"
 import Interviewers from "./Interviewers"
 
-import Vue from "vue"
-
-Vue.component("Upload", () => import("./Upload/index"))
-
 export default class UsersComponent {
     constructor(rootStore) {
         this.rootStore = rootStore;
@@ -41,6 +37,4 @@ export default class UsersComponent {
             path: '/Users/Create/:role', component: Create
         }]
     }
-
-    //get modules() { return { Upload } }
 }

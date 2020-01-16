@@ -27,9 +27,9 @@
                         :error="modelState['SupervisorId']"
                         :mandatory="true"
                     >
-                        <div class="field" :class="{answered: supervisorId != null}">
+                        <div class="field" :class="{answered: supervisor != null}">
                             <Typeahead
-                                control-id="supervisorId"
+                                control-id="supervisor"
                                 :value="supervisor"
                                 :ajax-params="{ }"
                                 :fetch-url="model.api.responsiblesUrl"
@@ -228,7 +228,7 @@ export default {
         confirmPassword: function(val) {
             delete this.modelState['ConfirmPassword']
         },
-        supervisorId: function(val) {
+        supervisor: function(val) {
             delete this.modelState['SupervisorId']
         },
     },
