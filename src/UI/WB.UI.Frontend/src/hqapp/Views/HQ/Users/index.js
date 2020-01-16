@@ -1,5 +1,8 @@
-import Upload from "./Upload/index"
 import Headquarters from "./Headquarters"
+
+import Vue from "vue"
+
+Vue.component("Upload", () => import("./Upload/index"))
 
 export default class UsersComponent {
     constructor(rootStore) {
