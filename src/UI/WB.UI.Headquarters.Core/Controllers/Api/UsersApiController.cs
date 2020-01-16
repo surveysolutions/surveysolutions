@@ -201,7 +201,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
-        public DataTableResponse<InterviewerListItem> AllSupervisors(DataTableRequest request) => this.GetUsersInRoleForDataTable(request, UserRoles.Supervisor);
+        public DataTableResponse<UserListItem> AllSupervisors(DataTableRequest request) => this.GetUsersInRoleForDataTable(request, UserRoles.Supervisor);
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
