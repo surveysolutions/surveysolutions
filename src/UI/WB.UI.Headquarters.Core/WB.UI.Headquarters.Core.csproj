@@ -81,6 +81,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <ExcludeFromManifest>True</ExcludeFromManifest>
     </EmbeddedResource>
+
+    <Compile Update="Resources\*.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+
     <Content Update="wwwroot\**\*.*">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
