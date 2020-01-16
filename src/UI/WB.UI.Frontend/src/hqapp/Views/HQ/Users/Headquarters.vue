@@ -67,7 +67,7 @@ export default {
             return this.$config.model;
         },
         title() {
-            return this.$t('Users.HeadquartersCountDescription').replace('{0}', this.usersCount)
+            return this.$t('Users.HeadquartersCountDescription', {count: this.usersCount})
         },
         description() {
             return this.model.reportNameDescription
