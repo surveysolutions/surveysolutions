@@ -412,7 +412,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observers ({0}).
+        ///   Looks up a localized string similar to Observers ({{count}}).
         /// </summary>
         public static string ObserversCountDescription {
             get {

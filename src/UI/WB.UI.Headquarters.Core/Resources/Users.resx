@@ -190,7 +190,7 @@
       <value>Headquarters ({{count}})</value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-    <value>Observers ({0})</value>
+      <value>Observers ({{count}})</value>
   </data>
   <data name="Supervisors_Edit" xml:space="preserve">
     <value>Edit Supervisor</value>

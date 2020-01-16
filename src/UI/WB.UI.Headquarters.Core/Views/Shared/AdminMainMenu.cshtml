@@ -35,10 +35,10 @@
             @MainMenu.TeamsAndRoles <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Index", "Headquarters", @MainMenu.Headquarters, MenuItem.Headquarters)
+            @Html.MainMenuItem("Headquarters", "Users", @MainMenu.Headquarters, MenuItem.Headquarters)
             @Html.MainMenuItem("Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
             @Html.MainMenuItem("Index", "Interviewers", @MainMenu.Interviewers, MenuItem.Interviewers)
-            @Html.MainMenuItem("Index", "Observers", @MainMenu.Observers, MenuItem.Observers)
+            @Html.MainMenuItem("Observers", "Users", @MainMenu.Observers, MenuItem.Observers)
             @Html.MainMenuItem("Index", "ApiUsers", @MainMenu.ApiUsers, MenuItem.ApiUsers)
             @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
         </ul>

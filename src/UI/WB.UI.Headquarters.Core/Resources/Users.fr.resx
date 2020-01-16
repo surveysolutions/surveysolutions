@@ -247,7 +247,7 @@
     <value>Nombre d'enquêteurs dans l'équipe</value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-    <value>Observateurs ({0})</value>
+      <value>Observateurs ({{count}})</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
     <value>E-mail de l'observateur</value>

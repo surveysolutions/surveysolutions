@@ -271,6 +271,6 @@
     <value>调查员 ({0})</value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-    <value>观测员 ({0})</value>
+      <value>观测员 ({{count}})</value>
   </data>
 </root>
