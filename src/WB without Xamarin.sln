@@ -83,7 +83,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Shared.Web.Core", "UI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.WebTester", "UI\WB.UI.WebTester\WB.UI.WebTester.csproj", "{C7E6E0CE-C850-4F60-82A0-DAC200200747}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Headquarters.Core", "UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.Core.csproj", "{0AA94CA9-0FEB-4014-A0FF-3C48BAB321DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Headquarters.Core", "UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj", "{0AA94CA9-0FEB-4014-A0FF-3C48BAB321DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
