@@ -193,7 +193,7 @@
     <value>المقرات الرئيسية</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-    <value>المقرات الرئيسية ({0})</value>
+      <value>المقرات الرئيسية ({count})</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>ايميلات المقرات الرئيسية</value>
