@@ -1,0 +1,12 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.UI.Headquarters.Code
+@model WB.UI.Headquarters.Controllers.UsersController.HeadquartersModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = Users.Headquarters;
+}
+
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>

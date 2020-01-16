@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Administrator, Headquarters")]
         [AntiForgeryFilter]
         public async Task<ActionResult> Manage(Guid? id)
         {
@@ -130,7 +130,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Administrator, Headquarters")]
         [AntiForgeryFilter]
         public ActionResult Create(string id)
         {
@@ -139,17 +139,31 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(new
             {
-                UserInfo = new {Role = id},
-                Api = new {CreateUserUrl = Url.Action("CreateUser")}
+                UserInfo = new {Role = role.ToString()},
+                Api = new
+                {
+                    CreateUserUrl = Url.Action("CreateUser"),
+                    ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead")
+                }
             });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarters")]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            if (!Enum.TryParse(model.Role, true, out UserRoles role))
+                return BadRequest("Unknown user type");
+
+            if (role == UserRoles.Interviewer && !model.SupervisorId.HasValue)
+                this.ModelState.AddModelError(nameof(CreateUserModel.SupervisorId), FieldsAndValidations.RequiredSupervisorErrorMessage);
+
+            if(await this.userRepository.FindByNameAsync(model.UserName) != null)
+                this.ModelState.AddModelError(nameof(CreateUserModel.UserName), FieldsAndValidations.UserName_Taken);
 
             if (model.SupervisorId.HasValue)
             {
@@ -182,7 +196,6 @@ namespace WB.UI.Headquarters.Controllers
                         this.ModelState.AddModelError(nameof(CreateUserModel.Password), string.Join(@", ", identityResult.Errors.Select(x => x.Description)));
                     else
                         await this.userRepository.AddToRoleAsync(user, model.Role, CancellationToken.None);
-
                 }
             }
             
@@ -192,6 +205,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarters")]
         public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
@@ -225,21 +239,19 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public async Task<ActionResult> UpdateUser([FromBody]EditUserModel editModel)
+        [Authorize(Roles = "Administrator, Headquarters")]
+        public async Task<ActionResult> UpdateUser([FromBody] EditUserModel editModel)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
 
             var currentUser = await this.userRepository.FindByIdAsync(editModel.UserId);
-            if(currentUser == null) return NotFound("User not found");
+            if (currentUser == null) return NotFound("User not found");
 
             currentUser.Email = editModel.Email;
             currentUser.FullName = editModel.PersonName;
             currentUser.PhoneNumber = editModel.PhoneNumber;
-
-            if (this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter)
-                currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
-            if (this.authorizedUser.IsSupervisor)
-                currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+            currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
+            currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
 
             var updateResult = await this.userRepository.UpdateAsync(currentUser);
 

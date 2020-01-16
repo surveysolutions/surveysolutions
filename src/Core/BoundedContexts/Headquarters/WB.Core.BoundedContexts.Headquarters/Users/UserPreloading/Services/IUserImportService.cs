@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 
@@ -6,7 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {
     public interface IUserImportService
     {
-        IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName);
+        IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(Stream data, string fileName);
         Task ScheduleRunUserImportAsync();
         string[] GetUserProperties();
         UserToImport GetUserToImport();

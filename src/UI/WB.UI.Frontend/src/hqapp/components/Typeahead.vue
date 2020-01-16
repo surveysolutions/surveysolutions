@@ -56,7 +56,7 @@
 
 <script>
 import Fuse from "fuse.js";
-import { assign, chain, find, escape } from 'lodash'
+import { assign, chain, find, escape, escapeRegExp } from 'lodash'
 
 export default {
     name: "Typeahead",

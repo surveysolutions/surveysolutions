@@ -7,9 +7,16 @@
             v-bind:value="value"
             v-on="inputListeners"
             ref="input"
+            autocomplete="new-password"
         />
 
-        <button type="button" class="btn btn-link btn-clear" v-if="hasValue" @click="clearFilter">
+        <button
+            type="button"
+            class="btn btn-link btn-clear"
+            v-if="hasValue"
+            @click="clearFilter"
+            tabindex="-1"
+        >
             <span></span>
         </button>
     </div>
