@@ -245,7 +245,7 @@
     <value>API Пользователи ({0})</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>Хедквотеры ({count})</value>
+      <value>Хедквотеры ({{count}})</value>
   </data>
   <data name="InterviewerIssues" xml:space="preserve">
     <value>Проблемы</value>

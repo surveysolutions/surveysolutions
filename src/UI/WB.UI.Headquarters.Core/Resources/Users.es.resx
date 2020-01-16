@@ -193,7 +193,7 @@
     <value>Sedes</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>Sedes {count}</value>
+      <value>Sedes {{count}}</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>Correo electrónico de sede</value>

@@ -262,7 +262,7 @@
     <value>API用户 （{0}）</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>总部 ({count})</value>
+      <value>总部 ({{count}})</value>
   </data>
   <data name="InterviewerIssues" xml:space="preserve">
     <value>调查员的问题</value>
