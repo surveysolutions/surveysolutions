@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Services.Impl
     {
         private readonly IAssemblyService assemblyService;
         private readonly ILogger logger;
-        private static readonly ConcurrentDictionary<string, AssemblyHolder> AssemblyCache = new ConcurrentDictionary<string, AssemblyHolder>();
+        private static readonly ConcurrentDictionary<string, AssemblyHolder?> AssemblyCache = new ConcurrentDictionary<string, AssemblyHolder?>();
 
         public QuestionnaireAssemblyAccessor(IAssemblyService assemblyService, ILogger logger)
         {
@@ -33,9 +33,9 @@ namespace WB.UI.Headquarters.Services.Impl
             {
                 this.FileName = assemblyFileName;
                 this.AssemblyContent = assemblyContent;
-                assembly = new Lazy<Assembly>(() =>
+                assembly = new Lazy<Assembly?>(() =>
                 {
-                    var state = typeof(WB.Core.SharedKernels.DataCollection.IInterviewExpressionState).Assembly;
+                    var state = typeof(Core.SharedKernels.DataCollection.IInterviewExpressionState).Assembly;
                     var ass = Assembly.Load(assemblyContent);
                     var ctx = AssemblyLoadContext.GetLoadContext(ass);
                     if (ctx == null)
@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Services.Impl
                 });
             }
 
-            private readonly Lazy<Assembly> assembly;
+            private readonly Lazy<Assembly?> assembly;
 
             private string FileName { get; }
 
@@ -64,7 +64,7 @@ namespace WB.UI.Headquarters.Services.Impl
             public byte[] AssemblyContent { get; }
         }
 
-        private AssemblyHolder GetAssemblyHolder(Guid questionnaireId, long questionnaireVersion)
+        private AssemblyHolder? GetAssemblyHolder(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var assembly = AssemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder);
@@ -94,7 +94,7 @@ namespace WB.UI.Headquarters.Services.Impl
         {
             if (assembly.Length == 0)
             {
-                throw new ArgumentException($"Assembly file is empty. Cannot be saved. Questionnaire: {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}", 
+                throw new ArgumentException($@"Assembly file is empty. Cannot be saved. Questionnaire: {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}", 
                     nameof(assembly));
             }
 
@@ -161,7 +161,7 @@ namespace WB.UI.Headquarters.Services.Impl
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)
         {
-            return String.Format("assembly_{0}_v{1}.dll", questionnaireId, questionnaireVersion);
+            return $"assembly_{questionnaireId}_v{questionnaireVersion}.dll";
         }
     }
 }
