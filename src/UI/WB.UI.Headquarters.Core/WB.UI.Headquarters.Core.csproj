@@ -21,12 +21,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
-    <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
-    <Compile Remove="Services\HqSignInManager.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.6.0" />
     <PackageReference Include="AntiXSS.NetStandard" Version="0.1.87" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
@@ -79,8 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Code\CommandDeserialization\" />
-    <Folder Include="wwwroot\apidocs\" />
+      <Folder Include="wwwroot\apidocs\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -93,13 +86,5 @@
     </Content>
     <EmbeddedResource Include="wwwroot\**\*" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Pages\**" />
-    <Content Remove="Pages\**" />
-    <EmbeddedResource Remove="Pages\**" />
-    <None Remove="Pages\**" />
-  </ItemGroup>
-
   
 </Project>
