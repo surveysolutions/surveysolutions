@@ -5,16 +5,25 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -27,7 +36,11 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IUserViewFactory userViewFactory;
+        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly IRestServiceSettings restServiceSettings;
+        private readonly IAuthorizedUser authorizedUser;
+        private readonly ICommandService commandService;
+        private readonly ILogger<QuestionnairesController> logger;
 
         public QuestionnairesController(
             IQuestionnaireStorage questionnaireStorage,
@@ -35,7 +48,11 @@ namespace WB.UI.Headquarters.Controllers
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IRestServiceSettings restServiceSettings,
             IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory, 
+            IQuestionnaireVersionProvider questionnaireVersionProvider, 
+            IAuthorizedUser authorizedUser, 
+            ICommandService commandService,
+            ILogger<QuestionnairesController> logger)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.browseViewFactory = browseViewFactory ?? throw new ArgumentNullException(nameof(browseViewFactory));
@@ -43,6 +60,10 @@ namespace WB.UI.Headquarters.Controllers
             this.restServiceSettings = restServiceSettings ?? throw new ArgumentNullException(nameof(restServiceSettings));
             this.pdfStorage = pdfStorage ?? throw new ArgumentNullException(nameof(pdfStorage));
             this.userViewFactory = userViewFactory ?? throw new ArgumentNullException(nameof(userViewFactory));
+            this.questionnaireVersionProvider = questionnaireVersionProvider;
+            this.authorizedUser = authorizedUser;
+            this.commandService = commandService;
+            this.logger = logger;
         }
 
         public IActionResult Details(string id)
@@ -105,6 +126,58 @@ namespace WB.UI.Headquarters.Controllers
             FillStats(questionnaireIdentity, model);
 
             return View(model);
+        }
+
+        [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator")]
+        [ActivePage(MenuItem.Questionnaires)]
+        public IActionResult Clone(Guid id, long version)
+        {
+            QuestionnaireBrowseItem questionnaireBrowseItem = this.browseViewFactory.GetById(new QuestionnaireIdentity(id, version));
+
+            if (questionnaireBrowseItem == null)
+                return NotFound(string.Format(HQ.QuestionnaireNotFoundFormat, id.FormatGuid(), version));
+
+            var cloneQuestionnaireModel = new CloneQuestionnaireModel(id, 
+                version, 
+                questionnaireBrowseItem.Title, 
+                questionnaireBrowseItem.AllowCensusMode, 
+                questionnaireBrowseItem.Comment);
+
+            return this.View(cloneQuestionnaireModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator")]
+        [ActivePage(MenuItem.Questionnaires)]
+        public IActionResult Clone(CloneQuestionnaireModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+            try
+            {
+                var newVersion = this.questionnaireVersionProvider.GetNextVersion(model.Id);
+                this.commandService.Execute(new CloneQuestionnaire(
+                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.authorizedUser.Id, comment: model.Comment));
+            }
+            catch (QuestionnaireException exception)
+            {
+                model.Error = exception.Message;
+
+                return this.View(model);
+            }
+            catch (Exception exception)
+            {
+                this.logger.LogError(exception, "Unexpected error occurred while cloning questionnaire (id: {id}, version: {version}).", model.Id, model.Version);
+                model.Error = QuestionnaireClonning.UnexpectedError;
+                return this.View(model);
+            }
+
+            return this.RedirectToAction("Index", "SurveySetup");
         }
 
         public IActionResult Pdf(string id, Guid? translation = null)

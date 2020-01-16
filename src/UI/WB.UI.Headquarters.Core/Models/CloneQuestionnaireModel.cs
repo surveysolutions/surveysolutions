@@ -29,5 +29,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         [Display(ResourceType = typeof(Assignments), Name = nameof(Assignments.DetailsComments))]
         public string Comment { get; set; }
+
+        public string Error { get; set; }
+        public string QuestionnaireFullName { get; set; }
     }
 }
