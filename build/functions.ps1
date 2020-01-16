@@ -378,7 +378,7 @@ function BuildAspNetCoreWebPackage
                 "--configuration", $BuildConfiguration
                 "--version-suffix", $branch
                 '--runtime', 'win-x64'
-                "-output", "obj\$BuildConfiguration\package"
+                "--output", "obj\$BuildConfiguration\package"
                 "/p:PublishProfile=WebDeployPackage",
                 "/p:BuildNumber=$BuildNumber"
             )
