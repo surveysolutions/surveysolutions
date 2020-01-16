@@ -1,17 +1,17 @@
 <template>
-    <HqLayout
+      <HqLayout
         :title="$t('Pages.SurveysAndStatuses_Overview')"
-        :subtitle="$t('Pages.SurveysAndStatuses_HeadquartersDescription')"
+        :subtitle="$t('Pages.SurveysAndStatuses_SupervisorDescription')"
         :hasFilter="true"
     >
         <Filters slot="filters">
-            <FilterBlock :title="$t('Pages.SurveysAndStatuses_SupervisorTitle')">
+            <FilterBlock :title="$t('Pages.SurveysAndStatuses_InterviewerTitle')">
                 <Typeahead
                     control-id="responsibleSelector"
                     ref="responsibleIdControl"
                     data-vv-name="responsibleId"
                     data-vv-as="responsible"
-                    :placeholder="$t('Strings.AllTeams')"
+                    :placeholder="$t('Strings.AllInterviewers')"
                     :value="responsible" 
                     v-on:selected="selectResponsible"
                     :fetch-url="$config.model.responsiblesUrl"
@@ -34,9 +34,9 @@
     </HqLayout>
 </template>
 <script>
-
 import routeSync from "~/shared/routeSync"
 import escape from "lodash"
+import { formatNumber } from "./helpers"
 
 export default {
     mixins: [routeSync],
@@ -156,10 +156,7 @@ export default {
                     className: 'type-numeric',
                     title: this.$t('Reports.ApprovedBySupervisor'),
                     render(data, type, row) {
-                        return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "ApprovedBySupervisor")
+                        return "<span>" + formatNumber(data) + "</span>"
                     }
                 },
                 {
@@ -180,10 +177,7 @@ export default {
                     className: 'type-numeric',
                     title: this.$t('Reports.ApprovedByHQ'),
                     render(data, type, row) {
-                        return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "ApprovedByHeadquarters")
+                        return "<span>" + formatNumber(data) + "</span>";
                     }
                 },
                 {
