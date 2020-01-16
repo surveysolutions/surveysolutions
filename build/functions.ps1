@@ -374,15 +374,10 @@ function BuildAspNetCoreWebPackage
     return Log-Block "Building Asp.Net Core package for project $Project branch: $branch" {
         try {
 
-            $file = get-childitem $Project
-            $output =  $file.directoryname + "\obj\" + $BuildConfiguration + "\package"
             $arg = @("publish"
                 $Project
-                "--configuration", $BuildConfiguration
+                "-c", $BuildConfiguration, '-r', 'win-x64', "/bl"
                 "--version-suffix", $branch
-                "/bl"
-                '--runtime', 'win-x64'
-                "--output", $output
                 "/p:PublishProfile=WebDeployPackage",
                 "/p:BuildNumber=$BuildNumber"
             )
