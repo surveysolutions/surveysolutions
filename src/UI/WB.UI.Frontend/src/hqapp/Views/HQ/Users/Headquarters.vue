@@ -76,6 +76,7 @@ export default {
                 columns: [
                     {
                         data: "userName",
+                        name: 'UserName',
                         title: this.$t("Users.UserName"),
                         className: "nowrap",
                         render: function(data, type, row) {
@@ -84,6 +85,7 @@ export default {
                     },
                     {
                         data: "creationDate",
+                        name: "CreationDate",
                         className: "date",
                         title: this.$t("Users.CreationDate"),
                         render: function(data, type, row) {
@@ -93,6 +95,7 @@ export default {
                     },
                     {
                         data: "email",
+                        name: "Email",
                         className: "date",
                         title: this.$t("Users.HeadquartersEmail"),
                         render: function(data, type, row) {
