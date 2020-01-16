@@ -32,7 +32,7 @@
                                     {{this.$t('LoginToDesigner.UserDesignerCredentials')}}</p>
                             </div>
                             <div class="alert alert-danger" v-if="errorMessage">
-                                <p>{{this.$t('errorMessage')}}</p>
+                                <p v-html="errorMessage"></p>
                             </div>
                             <div class="form-group"  :class="{'has-error': errors.has('UserName')}">
                                 <input type="text" name="UserName" class="form-control" autofocus="autofocus" 
@@ -91,7 +91,7 @@ export default {
                     }
                     else {
                         this.invalidCredentials = false
-                        this.errorMessage = error.response.message
+                        this.errorMessage = error.response.data.message
                     }
                 })
             }
