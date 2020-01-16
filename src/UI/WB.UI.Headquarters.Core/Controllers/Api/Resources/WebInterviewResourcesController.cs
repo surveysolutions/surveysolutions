@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
 
         [HttpGet]
-        public IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
+        public new IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 

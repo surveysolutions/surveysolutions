@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.commandService.Execute(command);
             }
-            catch (InterviewException ie)
+            catch (InterviewException)
             {
                 //Error(Assignments.ErrorToCreateAssignment + ie.Message); todo KP-13496
                 return this.RedirectToAction("Index", "SurveySetup");

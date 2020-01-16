@@ -19,14 +19,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
     public class MoveUserToAnotherTeamService : IMoveUserToAnotherTeamService
     {
         private readonly IAssignmentsService assignmentsService;
-        private readonly UserManager<HqUser> userManager;
+        private readonly IUserRepository userManager;
         private readonly ISystemLog auditLog;
         private readonly ICommandService commandService;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
 
         public MoveUserToAnotherTeamService(
             IAssignmentsService assignmentsService, 
-            UserManager<HqUser> userManager, 
+            IUserRepository userManager, 
             ICommandService commandService,
             ISystemLog auditLog,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader)
@@ -85,9 +85,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
 
         private async Task<Microsoft.AspNetCore.Identity.IdentityResult> MoveToAnotherTeamAsync(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
-            var interviewer = await this.userManager.FindByIdAsync(interviewerId.FormatGuid());
-            var newSupervisor = await this.userManager.FindByIdAsync(newSupervisorId.FormatGuid());
-            var previousSupervisor = await this.userManager.FindByIdAsync(previousSupervisorId.FormatGuid());
+            var interviewer = await this.userManager.FindByIdAsync(interviewerId);
+            var newSupervisor = await this.userManager.FindByIdAsync(newSupervisorId);
+            var previousSupervisor = await this.userManager.FindByIdAsync(previousSupervisorId);
 
             interviewer.Profile.SupervisorId = newSupervisorId;
 
