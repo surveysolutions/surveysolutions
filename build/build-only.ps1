@@ -14,7 +14,6 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
-$ProjectHeadquartersCore = 'src\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.Core.csproj'
 $ProjectWebTester = 'src\UI\WB.UI.WebTester\WB.UI.WebTester.csproj'
 $MainSolution = 'src\WB without Xamarin.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
@@ -101,14 +100,14 @@ try {
         }
 
         Log-Block "Building HQ web package and support tool" {
-            BuildAspNetCoreWebPackage $ProjectHeadquartersCore $BuildConfiguration $BuildNumber $branch
+            BuildAspNetCoreWebPackage $ProjectHeadquarters $BuildConfiguration $BuildNumber $branch
         }
         
         "BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch" | Write-Verbose
         BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch
         
         Log-Block "Collecting/building artifacts" {
-            AddArtifacts $ProjectHeadquartersCore $BuildConfiguration -folder "Headquarters"
+            AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
             AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
         }
 
