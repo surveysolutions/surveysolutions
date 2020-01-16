@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -35,9 +36,15 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(new HeadquartersModel()
             {
                 DataUrl = Url.Action("AllHeadquarters", "UsersApi"),
-                ImpersonateUrl = Url.Action("ObservePerson", "Account"),
-                EditUrl = Url.Action("Manage", "Account"),
-                CreateUrl = Url.Action("Create", "Account"),
+                ImpersonateUrl = authorizedUser.IsObserver
+                    ? Url.Action("ObservePerson", "Account")
+                    : null,
+                EditUrl = authorizedUser.IsAdministrator
+                    ? Url.Action("Manage", "Account")
+                    : null,
+                CreateUrl = authorizedUser.IsAdministrator
+                    ? Url.Action("Create", "Account", new{ id = UserRoles.Headquarter })
+                    : null,
                 ShowAddUser = authorizedUser.IsAdministrator,
                 ShowInstruction = !authorizedUser.IsObserving && !authorizedUser.IsObserver,
                 ShowContextMenu = authorizedUser.IsObserver,
