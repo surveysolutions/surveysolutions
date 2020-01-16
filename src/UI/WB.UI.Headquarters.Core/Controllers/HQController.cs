@@ -67,57 +67,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             return RedirectToActionPermanent("Index", "Interviews");
         }
-        
-        [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator")]
-        [ActivePage(MenuItem.Questionnaires)]
-        public IActionResult CloneQuestionnaire(Guid id, long version)
-        {
-            QuestionnaireBrowseItem questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
-
-            if (questionnaireBrowseItem == null)
-                return NotFound(string.Format(HQ.QuestionnaireNotFoundFormat, id.FormatGuid(), version));
-
-            return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title, questionnaireBrowseItem.AllowCensusMode, questionnaireBrowseItem.Comment));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator")]
-        [ActivePage(MenuItem.Questionnaires)]
-        public IActionResult CloneQuestionnaire(CloneQuestionnaireModel model)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(model);
-            }
-            try
-            {
-                var newVersion = this.questionnaireVersionProvider.GetNextVersion(model.Id);
-                this.commandService.Execute(new CloneQuestionnaire(
-                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.authorizedUser.Id, comment: model.Comment));
-            }
-            catch (QuestionnaireException exception)
-            {
-                this.ModelState.AddModelError<CloneQuestionnaireModel>(x => x.NewTitle, exception.Message);
-                return this.View(model);
-            }
-            catch (Exception exception)
-            {
-                this.logger.LogError($"Unexpected error occurred while cloning questionnaire (id: {model.Id}, version: {model.Version}).", exception);
-                //this.Error(QuestionnaireClonning.UnexpectedError); todo KP-13494
-                return this.View(model);
-            }
-
-            //this.Success( todo KP-13494
-            //    model.NewTitle == model.OriginalTitle
-            //        ? string.Format(HQ.QuestionnaireClonedFormat, model.OriginalTitle)
-            //        : string.Format(HQ.QuestionnaireClonedAndRenamedFormat, model.OriginalTitle, model.NewTitle));
-
-            return this.RedirectToAction("Index", "SurveySetup");
-        }
-
+       
         [ObserverNotAllowed]
         [Authorize(Roles = "Administrator")]
         public IActionResult ExportQuestionnaire(Guid id, long version)

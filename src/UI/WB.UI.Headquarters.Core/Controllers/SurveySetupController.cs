@@ -92,7 +92,7 @@ namespace WB.UI.Headquarters.Controllers
             surveySetupModel.MigrateAssignmentsUrl = Url.Action("UpgradeAssignments", "SurveySetup");
             surveySetupModel.WebInterviewUrl = Url.Action("Settings", "WebInterviewSetup");
             surveySetupModel.DownloadLinksUrl = Url.Action("Download", "LinksExport");
-            surveySetupModel.CloneQuestionnaireUrl = Url.Action("CloneQuestionnaire", "HQ");
+            surveySetupModel.CloneQuestionnaireUrl = Url.Action("Clone", "Questionnaires");
             surveySetupModel.ExportQuestionnaireUrl = Url.Action("ExportQuestionnaire", "HQ");
             surveySetupModel.SendInvitationsUrl = Url.Action("SendInvitations", "WebInterviewSetup");
             surveySetupModel.ImportQuestionnaireUrl = Url.Action("Import", "Template");

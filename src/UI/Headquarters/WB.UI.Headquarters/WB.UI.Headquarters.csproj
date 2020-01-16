@@ -1033,7 +1033,6 @@
     <Content Include="Views\ApiUser\Create.cshtml" />
     <Content Include="Views\ApiUser\Edit.cshtml" />
     <Content Include="Views\ApiUser\Index.cshtml" />
-    <Content Include="Views\HQ\CloneQuestionnaire.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
     <Content Include="Views\ControlPanel\Designer.cshtml" />
