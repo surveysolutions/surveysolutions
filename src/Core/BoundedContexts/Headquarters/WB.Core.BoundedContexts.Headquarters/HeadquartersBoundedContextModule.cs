@@ -32,6 +32,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
@@ -211,6 +212,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
             registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
             registry.Bind<IUserArchiveService, UserArchiveService>();
+            registry.Bind<IMoveUserToAnotherTeamService, MoveUserToAnotherTeamService>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();
