@@ -259,7 +259,7 @@
     <value>ზედამხედველის ედიტირება</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>ზედამხედველები ({0})</value>
+      <value>ზედამხედველები ({{count}})</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
     <value>ზედამხედველები თქვენს გუნდში</value>

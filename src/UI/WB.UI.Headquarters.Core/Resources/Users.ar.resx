@@ -259,7 +259,7 @@
     <value>تحرير المشرفين</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>المشرفين ({0})</value>
+      <value>المشرفين ({{count}})</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
     <value>المشرفين في الفريق الخاص بك</value>

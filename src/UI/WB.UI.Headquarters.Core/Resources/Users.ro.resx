@@ -259,7 +259,7 @@
     <value>Editați controlori</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>Controlori ({0})</value>
+      <value>Controlori ({{count}})</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
     <value>controlorii din echipa dvs</value>
