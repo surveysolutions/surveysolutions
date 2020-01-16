@@ -1025,9 +1025,6 @@
     <Content Include="Views\ControlPanel\ReexportInterviews.cshtml" />
     <Content Include="Views\ControlPanel\CreateAdmin.cshtml" />
     <Content Include="Views\Shared\AdminMainMenu.cshtml" />
-    <Content Include="Views\Headquarters\Create.cshtml" />
-    <Content Include="Views\Headquarters\Edit.cshtml" />
-    <Content Include="Views\Headquarters\Index.cshtml" />
     <Content Include="Views\Observer\Create.cshtml" />
     <Content Include="Views\Observer\Edit.cshtml" />
     <Content Include="Views\Observer\Index.cshtml" />
@@ -1357,7 +1354,6 @@
     <Compile Include="Controllers\TabletReportApiController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\Profile\TeamController.cs" />
-    <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Filters\ActivePageAttribute.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
@@ -1396,7 +1392,6 @@
     <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Controllers\Profile\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
-    <Compile Include="Controllers\Profile\HeadquartersController.cs" />
     <Compile Include="Controllers\TypeExtensions.cs" />
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
@@ -1418,7 +1413,6 @@
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessState.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
-    <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataExportStatusReader.cs" />
     <Compile Include="Services\MetricsService.cs" />
