@@ -10,15 +10,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
     {
         public IEnumerable<T> ReadAll<T>(Stream csvFileStream, string delimiter, bool hasHeaderRow = true)
         {
-            using (var reader = new CsvHelper.CsvReader(new StreamReader(csvFileStream),
-                GetConfiguration(delimiter, hasHeaderRow, true)))
-            {
-                reader.Read();
-                reader.ReadHeader();
+            csvFileStream.Seek(0, SeekOrigin.Begin);
 
-                while (reader.Read())
-                    yield return reader.GetRecord<T>();
-            }
+            using var reader = new CsvHelper.CsvReader(new StreamReader(csvFileStream),
+                GetConfiguration(delimiter, hasHeaderRow, true));
+            reader.Read();
+            reader.ReadHeader();
+
+            while (reader.Read())
+                yield return reader.GetRecord<T>();
         }
 
         public IEnumerable<string[]> ReadRowsWithHeader(Stream csvFileStream, string delimiter)
