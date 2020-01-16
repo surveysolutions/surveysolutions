@@ -34,11 +34,12 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
+    <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.Core.csproj" />
     <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
-    <PackageReference Include="AutoMapper" Version="8.1.1" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
