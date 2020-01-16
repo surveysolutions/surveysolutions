@@ -41,13 +41,6 @@ namespace WB.UI.Headquarters.Controllers
             this.mapReport = mapReport;
         }
 
-        [AuthorizeOr403(Roles = "Supervisor")]
-        [ActivePage(MenuItem.SurveyAndStatuses)]
-        public ActionResult SurveysAndStatusesForSv(SurveysAndStatusesModel model)
-        {
-            return this.View(model);
-        }
-
 
         [AuthorizeOr403(Roles = "Administrator, Supervisor, Headquarter")]
         [ActivePage(MenuItem.MapReport)]

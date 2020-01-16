@@ -53,9 +53,20 @@ namespace WB.UI.Headquarters.Controllers
             model.DataUrl = Url.Action("HeadquarterSurveysAndStatusesReport", "ReportDataApi");
             model.InterviewsUrl = Url.Action("Index", "Interviews");
             model.ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead");
+            model.SelfUrl = Url.Action("SurveysAndStatuses");
 
-            model.ReportName = Pages.SurveysAndStatuses_Overview;
-            model.Subtitle = Pages.SurveysAndStatuses_HeadquartersDescription;
+            return this.View(model);
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        [ActivePage(MenuItem.SurveyAndStatuses)]
+        public ActionResult SurveysAndStatusesForSv()
+        {
+            var model = new SurveysAndStatusesModel();
+            model.DataUrl = Url.Action("SupervisorSurveysAndStatusesReport", "ReportDataApi");
+            model.InterviewsUrl = Url.Action("Index", "Interviews");
+            model.ResponsiblesUrl = Url.Action("AsigneeInterviewersBySupervisor", "Teams");
+            model.SelfUrl = Url.Action("SurveysAndStatusesForSv");
 
             return this.View(model);
         }
