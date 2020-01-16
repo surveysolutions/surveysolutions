@@ -1,6 +1,7 @@
 <template>
     <div :class="questionStyle" :id='`mr_view_${questionId}`'>
-        <popover  class="tooltip-wrapper" trigger="hover-focus" append-to="body" :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0" style="">
+        <popover  class="tooltip-wrapper" trigger="hover-focus" append-to="body" 
+                  :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)">
             <a class="has-tooltip" type="primary" data-role="trigger"></a>
             <template slot="popover">
                 <div class="error-tooltip" v-if="!question.validity.isValid">
@@ -17,9 +18,9 @@
             </template>
 
         </popover>        
-            <div class="radio cell-bordered" style="width:220px !important;max-width:220px;"  v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
-                    <div  class="field" style="width:220px;"> 
-                        <input v-if="answeredOrAllOptions.some(e => e.value === option.value)" class="wb-radio" type="radio" 
+            <div class="radio cell-bordered" style="width:180px !important;max-width:180px;"  v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
+                    <div  class="field" style="width:180px;"> 
+                        <input v-if="!disabled && answeredOrAllOptions.some(e => e.value === option.value)" class="wb-radio" type="radio" 
                           :id="`${$me.id}_${option.value}`" 
                           :name="$me.id" 
                           :value="option.value" 
@@ -78,9 +79,9 @@
             },
             questionStyle() {
                 return [{
-                    'disabled-question' : this.question.isDisabled,
-                    'has-error' : !this.question.validity.isValid,
-                    'has-warnings' : this.question.validity.warnings.length > 0,
+                    'disabled-element' : this.question.isDisabled,
+                    'has-error' : !this.question.isDisabled && !this.question.validity.isValid,
+                    'has-warnings' : !this.question.isDisabled &&  this.question.validity.warnings.length > 0,
                     'not-applicable' : this.question.isLocked,
                     'syncing': this.isFetchInProgress
                 }, 'cell-unit', 'options-group', ' h-100',' d-flex']
