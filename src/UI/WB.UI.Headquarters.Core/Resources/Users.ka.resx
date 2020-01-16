@@ -193,7 +193,7 @@
     <value>სათაო ოფისი</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>სათაო ოფისი ({count})</value>
+      <value>სათაო ოფისი ({{count}})</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>სათაო ოფისის ელ-ფოსტა</value>

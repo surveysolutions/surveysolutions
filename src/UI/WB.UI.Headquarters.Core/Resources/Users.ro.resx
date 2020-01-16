@@ -193,7 +193,7 @@
     <value>RINS</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>RINS ({count})</value>
+      <value>RINS ({{count}})</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>Email-ul  RINS</value>
