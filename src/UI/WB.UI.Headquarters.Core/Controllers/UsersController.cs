@@ -276,6 +276,25 @@ namespace WB.UI.Headquarters.Controllers
                     : null,
                 ShowAddUser = authorizedUser.IsAdministrator,
             });
+        }     
+
+        [Authorize(Roles = "Administrator")]
+        [ActivePage(MenuItem.Interviewers)]
+        [Route("/Interviewers")]
+        public ActionResult Interviewers()
+        {
+            return this.View(new
+            {
+                DataUrl = Url.Action("AllInterviewers", "UsersApi"),
+                ImpersonateUrl = authorizedUser.IsObserver ? Url.Action("ObservePerson", "Account") : null,
+                ArchiveUsersUrl = authorizedUser.IsObserver ? Url.Action("ArchiveUsers", "UsersApi") : null,
+                InterviewersUrl = Url.Action("Interviewers"),
+                SupervisorsUrl = Url.Action("Supervisors"),
+                MoveUserToAnotherTeamUrl = Url.Action("MoveUserToAnotherTeam", "UsersApi"),
+                EditUrl = authorizedUser.IsAdministrator ? Url.Action("Manage") : null,
+                CreateUrl = authorizedUser.IsAdministrator ? Url.Action("Create", new{ id = UserRoles.Interviewer }) : null,
+                ShowAddUser = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+            });
         }
     }
 }

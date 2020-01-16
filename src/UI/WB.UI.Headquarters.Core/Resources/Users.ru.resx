@@ -239,7 +239,7 @@
       <value>Наблюдатели ({{count}})</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
-    <value>Интервьюеры ({0})</value>
+      <value>Интервьюеры ({{count}})</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
       <value>API Пользователи ({{count}})</value>
