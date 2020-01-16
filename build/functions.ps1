@@ -377,17 +377,19 @@ function BuildAspNetCoreWebPackage
                 $Project
                 "--configuration", $BuildConfiguration
                 "--version-suffix", $branch
+                "/bl"
                 '--runtime', 'win-x64'
                 "--output", "obj\$BuildConfiguration\package"
                 "/p:PublishProfile=WebDeployPackage",
                 "/p:BuildNumber=$BuildNumber"
             )
 
-            "dotnet $arg" | Write-Host
-            & dotnet $arg | Write-Host
+            "dotnet $arg" | out-Host
+            & dotnet $arg
             
+            $LASTEXITCODE | out-host 
             $ok = $LASTEXITCODE -eq 0
-
+            $ok | out-host
             if($ok -eq $False) {
                 Log-Error $result
             }

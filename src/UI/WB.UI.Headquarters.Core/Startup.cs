@@ -273,10 +273,10 @@ namespace WB.UI.Headquarters
 
 #if RELEASE            
             var physicalProvider =  environment.ContentRootFileProvider;
-            var manifestEmbeddedProvider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "wwwroot");
-            var compositeProvider = new CompositeFileProvider(physicalProvider, manifestEmbeddedProvider);
+            var manifestEmbeddedProvider = new Microsoft.Extensions.FileProviders.ManifestEmbeddedFileProvider(typeof(Program).Assembly, "wwwroot");
+            var compositeProvider = new Microsoft.Extensions.FileProviders.CompositeFileProvider(physicalProvider, manifestEmbeddedProvider);
 
-            services.AddSingleton<IFileProvider>(compositeProvider);
+            services.AddSingleton<Microsoft.Extensions.FileProviders.IFileProvider>(compositeProvider);
             environment.WebRootFileProvider = compositeProvider;
 #endif
             if (Configuration["no-quartz"].ToBool(false) == false)
