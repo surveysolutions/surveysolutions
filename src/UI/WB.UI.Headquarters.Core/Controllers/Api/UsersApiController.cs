@@ -151,21 +151,25 @@ namespace WB.UI.Headquarters.Controllers
             return this.CreateReportResponse(type, interviewersReport, Reports.Interviewers);
         }
 
-        public class InterviewerListItem
+        public class UserListItem
         {
-            public virtual Guid UserId { get; set; }
-            public virtual string UserName { get; set; }
-            public virtual string FullName { get; set; }
-            public virtual DateTime CreationDate { get; set; }
-            public virtual string SupervisorName { get; set; }
-            public virtual string Email { get; set; }
-            public virtual string DeviceId { get; set; }
-            public virtual bool IsLocked { get; set; }
-            public virtual bool IsArchived { get; set; }
-            public virtual string EnumeratorVersion { get; set; }
+            public Guid UserId { get; set; }
+            public string UserName { get; set; }
+            public DateTime CreationDate { get; set; }
+            public string Email { get; set; }
+            public bool IsLocked { get; set; }
+            public bool IsArchived { get; set; }
+        }
+
+        public class InterviewerListItem : UserListItem
+        {
+            public string FullName { get; set; }
+            public string SupervisorName { get; set; }
+            public string DeviceId { get; set; }
+            public string EnumeratorVersion { get; set; }
             public bool IsUpToDate { get; set; }
-            public virtual Guid? SupervisorId { get; set; }
-            public virtual long TrafficUsed { get; set; }
+            public Guid? SupervisorId { get; set; }
+            public long TrafficUsed { get; set; }
         }
 
         [HttpPost]
@@ -184,14 +188,14 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Administrator, Observer")]
-        public DataTableResponse<InterviewerListItem> AllHeadquarters(DataTableRequest request)
+        public DataTableResponse<UserListItem> AllHeadquarters(DataTableRequest request)
         {
             return this.GetUsersInRoleForDataTable(request, UserRoles.Headquarter);
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public DataTableResponse<InterviewerListItem> AllObservers([FromBody] DataTableRequest request)
+        public DataTableResponse<UserListItem> AllObservers([FromBody] DataTableRequest request)
         {
             return this.GetUsersInRoleForDataTable(request, UserRoles.Observer);
         }
@@ -221,35 +225,29 @@ namespace WB.UI.Headquarters.Controllers
             };
         }
 
-        public class SupervisorListItem
+        public class SupervisorListItem : UserListItem
         {
-            public virtual Guid UserId { get; set; }
-            public virtual string UserName { get; set; }
-            public virtual DateTime CreationDate { get; set; }
-            public virtual string Email { get; set; }
-            public virtual bool IsLocked { get; set; }
-            public virtual bool IsArchived { get; set; }
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public DataTableResponse<InterviewerListItem> AllApiUsers([FromBody] DataTableRequest request)
+        public DataTableResponse<UserListItem> AllApiUsers([FromBody] DataTableRequest request)
         {
             return this.GetUsersInRoleForDataTable(request, UserRoles.ApiUser);
         }
 
-        private DataTableResponse<InterviewerListItem> GetUsersInRoleForDataTable(DataTableRequest request,
+        private DataTableResponse<UserListItem> GetUsersInRoleForDataTable(DataTableRequest request,
             UserRoles userRoles)
         {
             var users = this.usersFactory.GetUsersByRole(request.PageIndex, request.PageSize, request.GetSortOrder(),
                 request.Search?.Value, false, userRoles);
 
-            return new DataTableResponse<InterviewerListItem>
+            return new DataTableResponse<UserListItem>
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = users.TotalCount,
                 RecordsFiltered = users.TotalCount,
-                Data = users.Items.ToList().Select(x => new InterviewerListItem
+                Data = users.Items.ToList().Select(x => new UserListItem
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
