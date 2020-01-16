@@ -5,12 +5,12 @@
                 <div class="topic-with-button">
                     <h1>{{ $t('Users.SupervisorsCountDescription', {count: this.usersCount}) }}</h1>
                     <a
-                        v-if="this.model.showAddUser"
+                        v-if="!user.isObserver"
                         class="btn btn-success"
-                        :href="this.model.createUrl + '/supervisor'"
+                        :href="api.createUrl"
                     >{{ $t('Users.AddSupervisor') }}</a>
                 </div>
-                <ol v-if="this.model.showInstruction" class="list-unstyled">
+                <ol v-if="!user.isObserver && !user.isObserving" class="list-unstyled">
                     <li>{{ $t('Pages.Users_Supervisors_Instruction1') }}</li>
                     <li>{{ $t('Pages.Users_Supervisors_Instruction2') }}</li>
                 </ol>
@@ -20,9 +20,9 @@
         <DataTables
             ref="table"
             :tableOptions="tableOptions"
-            :addParamsToRequest="addParamsToRequest"
             @ajaxComplete="onTableReload"
             :contextMenuItems="contextMenuItems"
+            :supportContextMenu="user.isObserver"
             exportable
             noSelect
         ></DataTables>
@@ -47,22 +47,18 @@ export default {
                 this.$refs.table.reload()
             }
         },
-        addParamsToRequest(requestData) {
-            requestData.search = (this.questionnaireId || {}).key
-        },
         onTableReload(data) {
             this.usersCount = data.recordsTotal
         },
         contextMenuItems({rowData, rowIndex}) {
-            if (!this.model.showContextMenu) return []
+            if (!this.user.isObserver) return null
 
             const self = this
             const menu = []
             menu.push({
                 name: self.$t('Users.ImpersonateAsUser'),
                 callback: () => {
-                    const link = self.model.impersonateUrl + '?personName=' + rowData.userName
-                    //window.location.href = link
+                    const link = self.api.impersonateUrl + '?personName=' + rowData.userName
                     window.open(link, '_blank')
                 },
             })
@@ -73,8 +69,11 @@ export default {
         model() {
             return this.$config.model
         },
-        description() {
-            return this.model.reportNameDescription
+        user(){
+            return this.model.currentUser
+        },
+        api(){
+            return this.model.api
         },
         tableOptions() {
             var self = this
@@ -83,17 +82,18 @@ export default {
                 columns: [
                     {
                         data: 'userName',
-                        name: "UserName",
+                        name: 'UserName',
                         title: this.$t('Users.UserName'),
                         orderable: true,
                         className: 'nowrap',
                         render: function(data, type, row) {
-                            return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`
+                            if (self.user.isObserver) return data
+                            else return `<a href='${self.api.editUrl}/${row.userId}'>${data}</a>`
                         },
                     },
                     {
                         data: 'creationDate',
-                        name: "CreationDate",
+                        name: 'CreationDate',
                         className: 'date',
                         title: this.$t('Users.CreationDate'),
                         orderable: true,
@@ -104,7 +104,7 @@ export default {
                     },
                     {
                         data: 'email',
-                        name: "Email",
+                        name: 'Email',
                         className: 'date',
                         title: this.$t('Users.SupervisorEmail'),
                         orderable: true,
@@ -114,7 +114,7 @@ export default {
                     },
                     {
                         data: 'isArchived',
-                        name: "IsArchived",
+                        name: 'IsArchived',
                         title: this.$t('Users.ArchivingStatusTitle'),
                         orderable: true,
                         render: function(data, type, row) {
@@ -123,7 +123,7 @@ export default {
                     },
                 ],
                 ajax: {
-                    url: this.$config.model.dataUrl,
+                    url: this.api.dataUrl,
                     type: 'GET',
                     contentType: 'application/json',
                 },

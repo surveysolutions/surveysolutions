@@ -28,24 +28,13 @@ namespace WB.UI.Headquarters.Controllers
             this.authorizedUser = authorizedUser;
             this.userRepository = userRepository;
         }
-
-        public class HeadquartersModel
-        {
-            public string DataUrl { get; set; }
-            public string ImpersonateUrl { get; set; }
-            public string EditUrl { get; set; }
-            public string CreateUrl { get; set; }
-            public bool ShowAddUser { get; set; }
-            public bool ShowInstruction { get; set; }
-            public bool ShowContextMenu { get; set; }
-        }
-
+        
         [Authorize(Roles = "Administrator, Observer")]
         [ActivePage(MenuItem.Headquarters)]
         [Route("/Headquarters")]
         public ActionResult Headquarters()
         {
-            return this.View(new HeadquartersModel()
+            return this.View(new 
             {
                 DataUrl = Url.Action("AllHeadquarters", "UsersApi"),
                 ImpersonateUrl = authorizedUser.IsObserver
@@ -68,15 +57,20 @@ namespace WB.UI.Headquarters.Controllers
         [Route("/Supervisors")]
         public ActionResult Supervisors()
         {
-            return this.View(new HeadquartersModel()
+            return this.View(new
             {
-                DataUrl = Url.Action("AllSupervisors", "UsersApi"),
-                ImpersonateUrl = Url.Action("ObservePerson", "Account"),
-                EditUrl = Url.Action("Manage"),
-                CreateUrl = Url.Action("Create", new{ id = UserRoles.Supervisor }),
-                ShowAddUser = authorizedUser.IsAdministrator,
-                ShowInstruction = !authorizedUser.IsObserving && !authorizedUser.IsObserver,
-                ShowContextMenu = authorizedUser.IsObserver,
+                Api = new
+                {
+                    DataUrl = Url.Action("AllSupervisors", "UsersApi"),
+                    ImpersonateUrl = Url.Action("ObservePerson", "Account"),
+                    EditUrl = Url.Action("Manage"),
+                    CreateUrl = Url.Action("Create", new {id = UserRoles.Supervisor}),
+                },
+                CurrentUser = new
+                {
+                    IsObserver = authorizedUser.IsObserver,
+                    IsObserving = authorizedUser.IsObserving
+                }
             });
         }
 
@@ -90,7 +84,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(new
             {
-                UserInfo = new ManageAccountDto
+                UserInfo = new
                 {
                     UserId = user.Id,
                     Email = user.Email,
@@ -118,6 +112,9 @@ namespace WB.UI.Headquarters.Controllers
             if (!Enum.TryParse(id, true, out UserRoles role))
                 return BadRequest("Unknown user type");
 
+            if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
+                return Forbid();
+
             return View(new
             {
                 UserInfo = new {Role = role.ToString()},
@@ -139,6 +136,9 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!Enum.TryParse(model.Role, true, out UserRoles role))
                 return BadRequest("Unknown user type");
+
+            if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
+                return Forbid();
 
             if (role == UserRoles.Interviewer && !model.SupervisorId.HasValue)
                 this.ModelState.AddModelError(nameof(CreateUserModel.SupervisorId), FieldsAndValidations.RequiredSupervisorErrorMessage);
