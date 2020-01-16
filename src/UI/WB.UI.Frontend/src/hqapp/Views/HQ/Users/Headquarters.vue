@@ -56,7 +56,6 @@ export default {
                 name: self.$t('Users.ImpersonateAsUser'),
                 callback: () => {
                     const link = self.model.impersonateUrl + '?personName=' + rowData.userName
-                    //window.location.href = link
                     window.open(link, "_blank")
                 }
             })
@@ -78,7 +77,6 @@ export default {
                     {
                         data: "userName",
                         title: this.$t("Users.UserName"),
-                        orderable: true,
                         className: "nowrap",
                         render: function(data, type, row) {
                             return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`;
@@ -88,7 +86,6 @@ export default {
                         data: "creationDate",
                         className: "date",
                         title: this.$t("Users.CreationDate"),
-                        orderable: false,
                         render: function(data, type, row) {
                             var localDate = moment.utc(data).local();
                             return localDate.format(window.CONFIG.dateFormat);
@@ -98,7 +95,6 @@ export default {
                         data: "email",
                         className: "date",
                         title: this.$t("Users.HeadquartersEmail"),
-                        orderable: false,
                         render: function(data, type, row) {
                             return data ? "<a href='mailto:" + data + "'>" + data + "</a>" : "";
                         }
