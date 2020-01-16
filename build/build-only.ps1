@@ -13,7 +13,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\functions.ps1"
 
-$ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
+$ProjectHeadquarters = 'src\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj'
 $ProjectWebTester = 'src\UI\WB.UI.WebTester\WB.UI.WebTester.csproj'
 $MainSolution = 'src\WB without Xamarin.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
