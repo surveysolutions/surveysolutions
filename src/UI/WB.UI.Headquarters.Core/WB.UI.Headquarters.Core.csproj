@@ -31,6 +31,8 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
 
@@ -58,34 +60,6 @@
 
   <ItemGroup>
     <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
-    <Content Include="Resources\Maps.ar.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Maps.es.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Maps.fr.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Maps.ro.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Maps.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Maps.sq.resx">
-      <LastGenOutput>Maps.sq.designer.cs</LastGenOutput>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-    </Content>
-    <Content Include="Resources\Maps.zh.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Maps.resx</DependentUpon>
-    </Content>
     <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">
       <DependentUpon>appsettings.ini</DependentUpon>
     </Content>
@@ -121,16 +95,6 @@
     <Content Remove="Implementation\services\**" />
     <EmbeddedResource Remove="Implementation\services\**" />
     <None Remove="Implementation\services\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove="Resources\Maps.ar.resx" />
-    <EmbeddedResource Remove="Resources\Maps.es.resx" />
-    <EmbeddedResource Remove="Resources\Maps.fr.resx" />
-    <EmbeddedResource Remove="Resources\Maps.ro.resx" />
-    <EmbeddedResource Remove="Resources\Maps.ru.resx" />
-    <EmbeddedResource Remove="Resources\Maps.sq.resx" />
-    <EmbeddedResource Remove="Resources\Maps.zh.resx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -219,10 +183,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>MapReport.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Maps.sq.designer.cs">
-      <DependentUpon>Maps.sq.resx</DependentUpon>
+    <Compile Update="Resources\Maps.designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>Maps.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\OutdatedBrowser.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -392,8 +356,8 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Maps.resx">
       <SubType>Designer</SubType>
-      <LastGenOutput>Maps.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Maps.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\OutdatedBrowser.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
