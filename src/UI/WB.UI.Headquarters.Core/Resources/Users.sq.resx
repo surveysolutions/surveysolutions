@@ -193,7 +193,7 @@
     <value>Zyra qendrore</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>Zyra qendrore ({count})</value>
+      <value>Zyra qendrore ({{count}})</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>Email-i i zyrës qendrore</value>

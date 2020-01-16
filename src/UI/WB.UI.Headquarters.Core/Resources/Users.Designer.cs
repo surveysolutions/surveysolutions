@@ -286,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters ({count}).
+        ///   Looks up a localized string similar to Headquarters ({{count}}).
         /// </summary>
         public static string HeadquartersCountDescription {
             get {
