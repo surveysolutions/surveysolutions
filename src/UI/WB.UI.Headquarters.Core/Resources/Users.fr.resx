@@ -220,7 +220,7 @@
     <value>Ajouter un Enquêteur</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
-    <value>Utilisateurs API ({0})</value>
+      <value>Utilisateurs API ({{count}})</value>
   </data>
   <data name="ArchivingStatusTitle" xml:space="preserve">
     <value>Statut d'archivage</value>

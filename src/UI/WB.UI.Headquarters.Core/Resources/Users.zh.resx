@@ -259,7 +259,7 @@
     <value>您团队中的督导员</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
-    <value>API用户 （{0}）</value>
+      <value>API用户 （{{count}}）</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
       <value>总部 ({{count}})</value>

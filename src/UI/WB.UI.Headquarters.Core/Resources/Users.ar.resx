@@ -142,7 +142,7 @@
     <value>مستخدم API</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
-    <value>مستخدم API ({0})</value>
+      <value>مستخدم API ({{count}})</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
     <value>المشرفين الذين تم أرشفتهم</value>

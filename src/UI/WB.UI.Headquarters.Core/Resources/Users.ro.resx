@@ -142,7 +142,7 @@
     <value>Utilizatori API</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
-    <value>Utilizatori API  ({0})</value>
+      <value>Utilizatori API  ({{count}})</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
     <value>Arhiva controlorilor</value>

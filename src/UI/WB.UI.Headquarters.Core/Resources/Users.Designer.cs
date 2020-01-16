@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Users ({0}).
+        ///   Looks up a localized string similar to API Users ({{count}}).
         /// </summary>
         public static string ApiUsersCountDescription {
             get {
