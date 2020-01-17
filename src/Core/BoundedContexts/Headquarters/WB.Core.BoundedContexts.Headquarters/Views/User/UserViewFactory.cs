@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 }).ToArray();
         }
 
-        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
+        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role)
         {
             var allUsers = ApplyFilter(this.userRepository.Users, searchBy, archived, role)
                 .Select(x => new InterviewersItem

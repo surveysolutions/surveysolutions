@@ -27,6 +27,8 @@
             @selectedRowsChanged="rows => selectedSupervisors = rows"
             @totalRows="(rows) => usersCount = rows"
             @page="resetSelection"
+            mutliRowSelect
+            :noPaging="false"
         ></DataTables>
         <Confirm
             ref="confirmArchive"
@@ -68,7 +70,6 @@
 
 <script>
 import moment from 'moment'
-import {map} from 'lodash'
 
 export default {
     data() {
@@ -104,10 +105,10 @@ export default {
         async archiveSupervisorsAsync(isArchive) {
             await this.$http.post(this.api.archiveUsersUrl, {
                 archive: isArchive,
-                userIds: map(this.selectedSupervisors, 'userId'),
+                userIds: this.selectedSupervisors,
             })
 
-            this.reloadTable()
+            this.loadData()
         },
         archiveSupervisors() {
             var self = this
