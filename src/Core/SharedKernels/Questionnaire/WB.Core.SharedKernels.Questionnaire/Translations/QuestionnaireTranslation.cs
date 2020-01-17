@@ -31,7 +31,15 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             => this.GetUniqueTranslationByType(questionId, TranslationType.Instruction);
 
         public string GetAnswerOption(Guid questionId, string answerOptionValue, string answerParentValue)
-            => this.GetTranslationByTypeAndIndex(questionId, $"{answerOptionValue}${answerParentValue}", TranslationType.OptionTitle);
+        {
+            //fallback for questionnaires imported before version 20.01
+            var translation =  this.GetTranslationByTypeAndIndex(questionId, $"{answerOptionValue}${answerParentValue}",
+                TranslationType.OptionTitle);
+
+            return (translation == null && answerParentValue == null)
+              ? this.GetTranslationByTypeAndIndex(questionId, $"{answerOptionValue}", TranslationType.OptionTitle)
+              : translation;
+        }
 
         public string GetSpecialValue(Guid questionId, string answerOptionValue)
             => this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.SpecialValue);
@@ -47,7 +55,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         public bool IsEmpty() => !this.translations.Any();
 
         public string GetCategoriesText(Guid categoriesId, int id, int? parentId)
-            => this.GetTranslationByTypeAndIndex(categoriesId, $"{id}${parentId}", TranslationType.Categories);
+        {
+            var translation = this.GetTranslationByTypeAndIndex(categoriesId, $"{id}${parentId}", TranslationType.Categories);
+            //fallback for questionnaires imported before version 20.01
+            return (translation == null && parentId == null)
+                ? this.GetTranslationByTypeAndIndex(categoriesId, $"{id}", TranslationType.Categories)
+                : translation;
+        }
 
         private string GetTranslationByTypeAndIndex(Guid questionOrCategoriesId, string answerOptionValue, TranslationType translationType) =>
             this.translations.ContainsKey(questionOrCategoriesId)
@@ -55,14 +69,8 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
                 : null;
 
         private string GetUniqueTranslationByType(Guid entityId, TranslationType translationType)
-        {
-            if (this.translations.ContainsKey(entityId))
-            {
-                var translationInstance = this.translations[entityId].SingleOrDefault(x => x.Type == translationType);
-                return translationInstance?.Value;
-            }
-
-            return null;
-        }
+            => this.translations.ContainsKey(entityId) 
+               ? this.translations[entityId].SingleOrDefault(x => x.Type == translationType)?.Value
+               : null;
     }
 }
