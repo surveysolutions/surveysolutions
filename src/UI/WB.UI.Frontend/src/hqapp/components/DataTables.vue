@@ -88,7 +88,8 @@ export default {
         noSearch: Boolean,
         exportable: Boolean,
         // support for rows selection
-        selectable: Boolean,
+        selectable: Boolean,        
+        mutliRowSelect: { type: Boolean, default: false },
         selectableId: { type: String, default: 'id' },
         pagingType: {
             type: String, 
@@ -136,8 +137,9 @@ export default {
         init(shouldDestroy = false) {
             var self = this;
 
-            var options = $.extend({
+            var optionsFromProperties = {
                 processing: false,
+                rowId: self.selectableId,
                 deferLoading: 200,
                 select: !this.noSelect,
                 serverSide: true,
@@ -177,7 +179,17 @@ export default {
                 conditionalPaging: true,
                 paging: !this.noPaging,
                 searching: !this.noSearch
-            }, this.tableOptions);
+            }
+
+            if (this.mutliRowSelect) {
+                optionsFromProperties.select = {
+                    style: 'multi',
+                    selector: 'td>.checkbox-filter',
+                    info: false,
+                }
+            }
+
+            var options = $.extend(optionsFromProperties, this.tableOptions);
 
             options.createdRow = (row, data, dataIndex) => {
                 if(this.hasTotalRow) {

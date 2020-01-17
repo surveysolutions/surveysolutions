@@ -70,9 +70,8 @@ namespace WB.UI.Headquarters.Controllers
             this.userArchiveService = userArchiveService;
         }
 
-        [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<DataTableResponse<InterviewerListItem>> AllInterviewers([FromBody] DataTableRequestWithFilter request)
+        public async Task<DataTableResponse<InterviewerListItem>> AllInterviewers(DataTableRequestWithFilter request)
         {
             Guid? supervisorId = null;
 
@@ -92,7 +91,7 @@ namespace WB.UI.Headquarters.Controllers
             var interviewers = this.usersFactory.GetInterviewers(pageIndex,
                 pageSize,
                 request.GetSortOrder(),
-                request.Search.Value,
+                request.Search?.Value,
                 request.Archived,
                 interviewerApkVersion,
                 supervisorId,
@@ -122,16 +121,15 @@ namespace WB.UI.Headquarters.Controllers
             };
         }
 
-        [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<IActionResult> AllInterviewers(DataTableRequestWithFilter reqest, [FromQuery] string exportType)
+        public async Task<IActionResult> ExportAllInterviewers(DataTableRequestWithFilter request, [FromQuery] string exportType)
         {
             Guid? supervisorId = null;
 
             Enum.TryParse(exportType, true, out ExportFileType type);
 
-            if (!string.IsNullOrWhiteSpace(reqest.SupervisorName))
-                supervisorId = (await this.userManager.FindByNameAsync(reqest.SupervisorName))?.Id;
+            if (!string.IsNullOrWhiteSpace(request.SupervisorName))
+                supervisorId = (await this.userManager.FindByNameAsync(request.SupervisorName))?.Id;
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
@@ -140,11 +138,11 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
 
-            var filteredInterviewerIdsToExport = this.usersFactory.GetInterviewersIds(reqest.Search.Value,
-                reqest.Archived,
+            var filteredInterviewerIdsToExport = this.usersFactory.GetInterviewersIds(request.Search?.Value,
+                request.Archived,
                 interviewerApkVersion,
                 supervisorId,
-                reqest.Facet);
+                request.Facet);
 
             var interviewersReport = this.interviewerProfileFactory.GetInterviewersReport(filteredInterviewerIdsToExport);
 
