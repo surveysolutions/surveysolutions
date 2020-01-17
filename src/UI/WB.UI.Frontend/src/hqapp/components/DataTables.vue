@@ -213,6 +213,8 @@ export default {
                     },
                     responsivePriority: 1
                 })
+                if(!options.order)
+                    options.order = [[1, 'desc']]
             }
 
             if(options.ajax != null) {
