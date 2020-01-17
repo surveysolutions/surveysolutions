@@ -281,7 +281,7 @@ namespace WB.UI.Headquarters.Controllers
                     : null,
                 ShowAddUser = authorizedUser.IsAdministrator,
             });
-        }        
+        }  
         
         [Authorize(Roles = "Administrator")]
         [ActivePage(MenuItem.ApiUsers)]
@@ -301,7 +301,7 @@ namespace WB.UI.Headquarters.Controllers
             });
         }     
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
         [ActivePage(MenuItem.Interviewers)]
         [Route("/Interviewers")]
         public ActionResult Interviewers()
@@ -314,9 +314,13 @@ namespace WB.UI.Headquarters.Controllers
                 InterviewersUrl = Url.Action("Interviewers"),
                 SupervisorsUrl = Url.Action("Supervisors"),
                 MoveUserToAnotherTeamUrl = Url.Action("MoveUserToAnotherTeam", "UsersApi"),
+                InterviewerProfile = Url.Action("Profile", "Interviewer"),
                 EditUrl = authorizedUser.IsAdministrator ? Url.Action("Manage") : null,
                 CreateUrl = authorizedUser.IsAdministrator ? Url.Action("Create", new{ id = UserRoles.Interviewer }) : null,
-                ShowAddUser = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+                ShowAddUser = (authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter) && !authorizedUser.IsObserving,
+                ShowFirstInstructions = !authorizedUser.IsSupervisor && !authorizedUser.IsObserving,
+                ShowSupervisorColumn = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+                CanArchiveUnarchive = authorizedUser.IsAdministrator,
             });
         }
     }
