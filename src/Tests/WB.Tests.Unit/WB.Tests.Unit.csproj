@@ -61,13 +61,6 @@
     <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
-    <PackageReference Include="SQLitePCL.native.sqlite3.v110_xp" Version="0.9.3" />
-    <PackageReference Include="SQLitePCL.plugin.sqlite3.net45" Version="0.9.3" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.13" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.13" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.osx" Version="1.1.13" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.v110_xp" Version="1.1.13" />
-    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3.net45" Version="1.1.13" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
   </ItemGroup>
   <ItemGroup>
