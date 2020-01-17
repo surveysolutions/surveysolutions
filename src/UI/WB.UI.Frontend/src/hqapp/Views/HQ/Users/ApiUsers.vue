@@ -14,6 +14,7 @@
       :tableOptions="tableOptions"
       @ajaxComplete="onTableReload"
       noSelect
+      :noPaging="false"
     >
     </DataTables>
 

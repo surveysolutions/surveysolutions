@@ -16,6 +16,7 @@
       :contextMenuItems="contextMenuItems"
       :supportContextMenu="model.showContextMenu"
       noSelect
+      :noPaging="false"
     >
     </DataTables>
 
