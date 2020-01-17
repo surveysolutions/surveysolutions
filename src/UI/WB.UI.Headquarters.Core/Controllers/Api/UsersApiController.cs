@@ -198,7 +198,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
-        public DataTableResponse<UserListItem> AllSupervisors(DataTableRequest request) => this.GetUsersInRoleForDataTable(request, UserRoles.Supervisor);
+        public DataTableResponse<UserListItem> AllSupervisors(DataTableRequest request) => this.GetUsersInRoleForDataTable(request, UserRoles.Supervisor, null);
 
         [Authorize(Roles = "Administrator")]
         public DataTableResponse<UserListItem> AllApiUsers(DataTableRequest request)
@@ -207,10 +207,10 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         private DataTableResponse<UserListItem> GetUsersInRoleForDataTable(DataTableRequest request,
-            UserRoles userRoles)
+            UserRoles userRoles, bool? archived = false)
         {
             var users = this.usersFactory.GetUsersByRole(request.PageIndex, request.PageSize, request.GetSortOrder(),
-                request.Search?.Value, false, userRoles);
+                request.Search?.Value, archived, userRoles);
 
             return new DataTableResponse<UserListItem>
             {
@@ -246,36 +246,14 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<CommandApiController.JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
+        public async Task<CommandApiController.JsonCommandResponse> ArchiveUsers([FromBody]ArchiveUsersRequest request)
         {
             if (request.Archive)
                 await this.userArchiveService.ArchiveUsersAsync(request.UserIds);
             else
                 await this.userArchiveService.UnarchiveUsersAsync(request.UserIds);
 
-            throw new ArgumentException("Need implement archive and unarchive");
-
-            //return new CommandApiController.JsonBundleCommandResponse
-            //{
-            //    CommandStatuses = new List<CommandApiController.JsonCommandResponse>
-            //    {
-            //        new CommandApiController.JsonCommandResponse
-            //        {
-            //            IsSuccess = true
-            //        }
-            //    }
-            //};
-
-
-            /*return new CommandApiController.JsonBundleCommandResponse
-            {
-                CommandStatuses = archiveResults.Select(x =>
-                    new CommandApiController.JsonCommandResponse
-                    {
-                        IsSuccess = x.Succeeded,
-                        DomainException = string.Join(@"; ", x.Errors)
-                    }).ToList()
-            };*/
+            return new CommandApiController.JsonCommandResponse() {IsSuccess = true};
         }
 
         [HttpGet]
