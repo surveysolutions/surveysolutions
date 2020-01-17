@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
@@ -313,8 +314,7 @@ namespace WB.UI.Headquarters.Controllers
                 DataUrl = Url.Action("AllInterviewers", "UsersApi"),
                 ImpersonateUrl = authorizedUser.IsObserver ? Url.Action("ObservePerson", "Account") : null,
                 ArchiveUsersUrl = authorizedUser.IsObserver ? Url.Action("ArchiveUsers", "UsersApi") : null,
-                InterviewersUrl = Url.Action("Interviewers"),
-                SupervisorsUrl = Url.Action("Supervisors"),
+                SupervisorsUrl = Url.Action("SupervisorsCombobox", "Teams"),
                 MoveUserToAnotherTeamUrl = Url.Action("MoveUserToAnotherTeam", "UsersApi"),
                 InterviewerProfile = Url.Action("Profile", "Interviewer"),
                 EditUrl = authorizedUser.IsAdministrator ? Url.Action("Manage") : null,
@@ -323,6 +323,21 @@ namespace WB.UI.Headquarters.Controllers
                 ShowFirstInstructions = !authorizedUser.IsSupervisor && !authorizedUser.IsObserving,
                 ShowSupervisorColumn = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
                 CanArchiveUnarchive = authorizedUser.IsAdministrator,
+                InterviewerIssues = new[]
+                {
+                    new ComboboxViewItem() { Key = InterviewerFacet.None.ToString(),                  Value = EnumNames.InterviewerFacet_None   },
+                    new ComboboxViewItem() { Key = InterviewerFacet.NeverSynchonized.ToString(),      Value = DevicesInterviewers.NeverSynchronized  },
+                    new ComboboxViewItem() { Key = InterviewerFacet.NoAssignmentsReceived.ToString(), Value = DevicesInterviewers.NoAssignments },
+                    new ComboboxViewItem() { Key = InterviewerFacet.NeverUploaded.ToString(),         Value = DevicesInterviewers.NeverUploaded },
+                    new ComboboxViewItem() { Key = InterviewerFacet.TabletReassigned.ToString(),      Value = DevicesInterviewers.TabletReassigned },
+                    new ComboboxViewItem() { Key = InterviewerFacet.OutdatedApp.ToString(),           Value = DevicesInterviewers.OldInterviewerVersion },
+                    new ComboboxViewItem() { Key = InterviewerFacet.LowStorage.ToString(),            Value = DevicesInterviewers.LowStorage },
+                },
+                ArchiveStatuses = new[]
+                {
+                    new ComboboxViewItem() { Key = "false", Value = Pages.Interviewers_ActiveUsers   },
+                    new ComboboxViewItem() { Key = "true",  Value = Pages.Interviewers_ArchivedUsers },
+                }
             });
         }
     }
