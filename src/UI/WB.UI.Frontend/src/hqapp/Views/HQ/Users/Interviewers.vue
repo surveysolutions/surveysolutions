@@ -1,5 +1,5 @@
 <template>
-  <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl" :topicButton="$t('Users.AddInterviewer')">
+  <HqLayout :hasFilter="true" :title="title" :topicButtonRef="this.model.createUrl" :topicButton="$t('Users.AddInterviewer')">
     <div slot='subtitle'>
         <div class="neighbor-block-to-search">
             <ol class="list-unstyled">
@@ -9,6 +9,53 @@
         </div>
     </div>
 
+    <Filters slot="filters">
+      <FilterBlock v-if="model.showSupervisorColumn" :title="$t('Pages.Interviewers_SupervisorTitle')">
+        <Typeahead
+          ref="supervisorControl"
+          control-id="supervisor"
+          fuzzy
+          data-vv-name="supervisor"
+          data-vv-as="supervisor"
+          :placeholder="$t('Common.AllSupervisors')"
+          :value="supervisor"
+          :fetch-url="$config.model.supervisorsUrl"
+          v-on:selected="supervisorSelected"
+        />
+      </FilterBlock>
+
+
+      <FilterBlock :title="$t('Users.InterviewerIssues')">
+        <Typeahead
+          ref="facetControl"
+          control-id="facet"
+          fuzzy
+          no-clear
+          data-vv-name="facet"
+          data-vv-as="facet"
+          :value="facet"
+          :values="this.$config.model.interviewerIssues"
+          v-on:selected="facetSelected"
+        />
+      </FilterBlock>
+
+      <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
+        <Typeahead
+          ref="archiveStatusControl"
+          control-id="archiveStatus"
+          fuzzy
+          no-clear
+          :noPaging="false"
+          data-vv-name="archiveStatus"
+          data-vv-as="archiveStatus"
+          :value="archiveStatus"
+          :values="this.$config.model.archiveStatuses"
+          v-on:selected="archiveStatusSelected"
+        />
+      </FilterBlock>
+      
+    </Filters>
+
     <DataTables
       ref="table"
       :tableOptions="tableOptions"
@@ -17,31 +64,37 @@
       selectable
       mutliRowSelect
       :selectableId="'userId'"
-      @selectedRowsChanged="rows => selectedRows = rows"
+      @selectedRowsChanged="rows => selectedInterviewers = rows"
+      :addParamsToRequest="addParamsToRequest"
     >
-      <div class="panel panel-table" v-if="selectedRows.length">
+      <Confirm ref="confirmArchive" id="confirmArchive" slot="modals">
+        {{$t('Pages.Interviewers_ArchiveInterviewersConfirmMessage')}}
+      </Confirm>
+      <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
+        {{$t('Archived.UnarchiveInterviewerWarning')}} <br/>
+        {{$t('Pages.Interviewers_ArchiveInterviewersConfirm')}}
+      </Confirm>
+      <div class="panel panel-table" v-if="selectedInterviewers.length">
         <div class="panel-body">
             <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled">
             <label for="q1az">
                 <span class="tick"></span>
-                {{ selectedRows.length + " " + $t("Pages.Interviewers_Selected") }}
+                {{ selectedInterviewers.length + " " + $t("Pages.Interviewers_Selected") }}
             </label>
             <button type="button" 
                 v-if="isVisibleArchive" 
                 class="btn btn-default btn-danger" 
-                @click="archiveInterviewers"
-                data-bind="visible: Archived() != 'true'">
+                @click="archiveInterviewers">
                 {{ $t("Pages.Interviewers_Archive") }}
             </button>
             <button type="button" 
                 v-if="isVisibleUnarchive" 
                 class="btn btn-default btn-success"
-                @click="unarchiveInterviewers"
-                data-bind="visible: Archived() == 'true'">
+                @click="unarchiveInterviewers">
                 {{ $t("Pages.Interviewers_Unarchive") }}
             </button>
             <button type="button" class="btn btn-default btn-warning last-btn"
-                v-if="selectedRows.length"
+                v-if="selectedInterviewers.length"
                 @click="moveToAnotherTeam">
                 {{ $t("Pages.Interviewers_MoveToAnotherTeam") }}
             </button>
@@ -56,15 +109,40 @@
 
 import moment from "moment";
 import { formatNumber } from "./formatNumber"
+import routeSync from "~/shared/routeSync";
 
 export default {
+    mixins: [routeSync],
+
     data() {
         return {
+            supervisor: null,
+            facet: null,
+            archiveStatus: null,
             usersCount : '',
-            selectedRows: []
+            selectedInterviewers: []
         }
     },
     mounted() {
+
+        if (this.query.supervisor) {
+            //this.supervisor = _.find(this.$config.model.facets, { key: this.query.supervisor })
+        }
+
+        if (this.query.facet) {
+            this.facet = _.find(this.$config.model.interviewerIssues, { key: this.query.facet })
+        }
+        else if (this.facet == null && this.model.interviewerIssues.length > 0) {
+            this.facet = this.model.interviewerIssues[0]
+        }
+
+        if (this.query.archive) {
+            this.archiveStatus = _.find(this.$config.model.archiveStatuses, { key: this.query.archive })
+        }
+        else if (this.archiveStatus == null && this.model.archiveStatuses.length > 0) {
+            this.archiveStatus = this.model.archiveStatuses[0]
+        }
+
         this.loadData()
     },
     methods: {
@@ -76,14 +154,45 @@ export default {
         onTableReload(data) {
             this.usersCount = formatNumber(data.recordsTotal)
         },
-        archiveInterviewers() {
+        async archiveInterviewersAsync(isArchive) {
+            await this.$http.post(this.api.archiveUsersUrl, {
+                archive: isArchive,
+                userIds: this.selectedInterviewers,
+            })
 
+            this.loadData()
+        },
+        archiveInterviewers() {
+            var self = this
+            this.$refs.confirmArchive.promt(async ok => {
+                if (ok) await self.archiveInterviewersAsync(true)
+            })
         },
         unarchiveInterviewers() {
-
+            var self = this
+            this.$refs.confirmUnarchive.promt(async ok => {
+                if (ok) await self.archiveInterviewersAsync(false)
+            })
         },
         moveToAnotherTeam() {
-
+            
+        },
+        supervisorSelected(option) {
+            this.supervisor = option
+            this.loadData()
+        },
+        facetSelected(option) {
+            this.facet = option
+            this.loadData()
+        },
+        archiveStatusSelected(option) {
+            this.archiveStatus = option
+            this.loadData()
+        },
+        addParamsToRequest(requestData) {
+            requestData.supervisorName = (this.supervisor || {}).value 
+            requestData.archived = (this.archiveStatus || {}).key 
+            requestData.facet = (this.facet || {}).key 
         }
     },
     computed: {
@@ -94,10 +203,10 @@ export default {
             return this.$t('Users.InterviewersCountDescription', {count: this.usersCount})
         },
         isVisibleArchive() {
-            return this.selectedRows.length && this.model.canArchiveUnarchive
+            return this.selectedInterviewers.length && this.model.canArchiveUnarchive && this.archiveStatus != true
         },
         isVisibleUnarchive() {
-            return this.selectedRows.length && this.model.canArchiveUnarchive
+            return this.selectedInterviewers.length && this.model.canArchiveUnarchive && this.archiveStatus == true
         },
         tableOptions() {
             var self = this
@@ -190,9 +299,7 @@ export default {
                     type: "GET",
                     contentType: 'application/json'
                 },
-                
                 responsive: false,
-                order: [[0, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip'
             }
         }
