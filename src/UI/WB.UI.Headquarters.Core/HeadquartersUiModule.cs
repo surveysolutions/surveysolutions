@@ -79,6 +79,7 @@ namespace WB.UI.Headquarters
             }
 
             registry.Bind<ILoggerProvider, SerilogLoggerProvider>();
+            registry.Bind<Microsoft.Extensions.Logging.ILoggerProvider, Serilog.Extensions.Logging.SerilogLoggerProvider>();
 
             registry.BindToMethod<ILogger>(context =>
             {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -16,7 +17,7 @@ namespace WB.UI.Designer.Extensions
 
             DatabaseManagement.InitDatabase(connectionString, schemaName);
             var dbUpgradeSettings = new DbUpgradeSettings(firstMigration.Assembly, firstMigration.Namespace);
-            DbMigrationsRunner.MigrateToLatest(connectionString, schemaName, dbUpgradeSettings);
+            DbMigrationsRunner.MigrateToLatest(connectionString, schemaName, dbUpgradeSettings, host.Services.GetService<ILoggerProvider>());
 
             return host;
         }
