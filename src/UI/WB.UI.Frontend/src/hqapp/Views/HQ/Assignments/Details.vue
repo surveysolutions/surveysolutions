@@ -126,6 +126,7 @@
 <script>
 import Vue from "vue";
 import { DateFormats } from "~/shared/helpers";
+import moment from "moment"
 
 export default {
     computed: {

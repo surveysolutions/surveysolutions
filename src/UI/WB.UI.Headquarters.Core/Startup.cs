@@ -236,7 +236,6 @@ namespace WB.UI.Headquarters
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddHttpContextAccessor();
 
@@ -361,14 +360,6 @@ namespace WB.UI.Headquarters
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Reports}/{action=SurveyAndStatuses}/{id?}",
-                    defaults: new
-                    {
-                        controller = "Reports",
-                        action = "SurveyAndStatuses"
-                    });
 
                 endpoints.MapHub<WebInterview>("interview",
                     options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });

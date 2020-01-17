@@ -1,18 +1,16 @@
 ﻿using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web.Http;
 using Ionic.Zip;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
     [Authorize(Roles = "Administrator, Headquarter")]
-    public class LinksExportController : ApiController
+    public class LinksExportController : ControllerBase
     {
         private readonly ISampleWebInterviewService sampleWebInterviewService;
         private readonly IFileSystemAccessor fileNameService;
@@ -28,27 +26,17 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
-        public HttpResponseMessage Download(string id)
+        public IActionResult Download(string id)
         {
-            var response = this.Request.CreateResponse(HttpStatusCode.OK);
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
 
             byte[] uncompressedDataStream = this.sampleWebInterviewService.Generate(questionnaireIdentity, this.Url.Content("~/WebInterview"));
 
             var compressedBytes = Compress(uncompressedDataStream);
 
-            response.Content = new ByteArrayContent(compressedBytes);
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            response.Headers.CacheControl = new CacheControlHeaderValue
-            {
-                NoCache = true
-            };
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = this.GetOutputFileName(questionnaireIdentity)
-            };
-
-            return response;
+            var fileContentResult = File(compressedBytes, "application/octet-stream");
+            fileContentResult.FileDownloadName = this.GetOutputFileName(questionnaireIdentity);
+            return fileContentResult;
         }
 
         private string GetOutputFileName(QuestionnaireIdentity questionnaireIdentity)

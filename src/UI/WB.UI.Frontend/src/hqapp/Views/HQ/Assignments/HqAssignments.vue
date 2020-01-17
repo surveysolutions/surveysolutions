@@ -371,7 +371,7 @@ export default {
                     title: 'Id',
                     responsivePriority: 2,
                     render(data, type, row) {
-                        var result = "<a href='Assignments/" + row.id + "'>" + data + '</a>'
+                        var result = `<a href="Assignments/${row.id}">${data}</a>`
                         return result
                     },
                 },

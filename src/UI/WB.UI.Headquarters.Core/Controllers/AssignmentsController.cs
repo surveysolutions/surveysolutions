@@ -38,7 +38,9 @@ namespace WB.UI.Headquarters.Controllers
         }
         
         [ActivePage(MenuItem.Assignments)]
-        public IActionResult Index(int? id)
+        [Route("{controller}/{id}")]
+        [Route("{controller}/{action=Index}")]
+        public IActionResult Index(int? id = null)
         {
             if (id.HasValue) return GetAssignmentDetails(id.Value);
 
