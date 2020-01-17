@@ -34,7 +34,7 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
-    <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.Core.csproj" />
+    <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj" />
     <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
   </ItemGroup>
   <ItemGroup>
