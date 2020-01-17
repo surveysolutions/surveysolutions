@@ -66,11 +66,13 @@ namespace WB.UI.Headquarters.Controllers
                     ImpersonateUrl = Url.Action("ObservePerson", "Account"),
                     EditUrl = Url.Action("Manage"),
                     CreateUrl = Url.Action("Create", new {id = UserRoles.Supervisor}),
+                    ArchiveUsersUrl = Url.Action("ArchiveUsers", "UsersApi")
                 },
                 CurrentUser = new
                 {
                     IsObserver = authorizedUser.IsObserver,
-                    IsObserving = authorizedUser.IsObserving
+                    IsObserving = authorizedUser.IsObserving,
+                    IsAdministrator = authorizedUser.IsAdministrator
                 }
             });
         }

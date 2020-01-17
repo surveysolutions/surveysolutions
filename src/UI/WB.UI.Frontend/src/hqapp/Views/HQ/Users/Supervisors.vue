@@ -20,23 +20,64 @@
         <DataTables
             ref="table"
             :tableOptions="tableOptions"
-            @ajaxComplete="onTableReload"
             :contextMenuItems="contextMenuItems"
             :supportContextMenu="user.isObserver"
-            noSelect
+            :selectable="!this.user.isObserver && !this.user.isObserving"
+            selectableId="userId"
+            @selectedRowsChanged="rows => selectedSupervisors = rows"
+            @totalRows="(rows) => usersCount = rows"
+            @page="resetSelection"
         ></DataTables>
+        <Confirm
+            ref="confirmArchive"
+            id="confirmArchive"
+            slot="modals"
+        >{{$t('Pages.Supervisors_ArchiveSupervisorsConfirmMessage')}}</Confirm>
+        <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
+            {{$t('Archived.UnarchiveSupervisorWarning')}} <br/>
+            {{$t('Pages.Supervisors_UnarchiveSupervisorsConfirm')}}
+        </Confirm>
+
+        <div class="panel panel-table" v-if="user.isAdministrator && hasSelectedSupervisors">
+            <div class="panel-body">
+                <input
+                    class="double-checkbox-white"
+                    id="q1az"
+                    type="checkbox"
+                    checked
+                    disabled="disabled"
+                />
+                <label for="q1az">
+                    <span class="tick"></span>
+                    <span>{{selectedSupervisors.length}} {{$t('Pages.Supervisors_Selected')}}</span>
+                </label>
+                <button
+                    type="button"
+                    class="btn btn-default btn-danger"
+                    @click="archiveSupervisors"
+                >{{$t('Pages.Supervisors_Archive')}}</button>
+                <button
+                    type="button"
+                    class="btn btn-default btn-success"
+                    @click="unArchiveSupervisors"
+                >{{$t('Pages.Supervisors_Unarchive')}}</button>
+            </div>
+        </div>
     </HqLayout>
 </template>
 
 <script>
 import moment from 'moment'
+import {map} from 'lodash'
 
 export default {
     data() {
         return {
-            usersCount: '',
+            usersCount: 0,
+            selectedSupervisors: [],
         }
     },
+    computed: {},
     mounted() {
         this.loadData()
     },
@@ -45,9 +86,6 @@ export default {
             if (this.$refs.table) {
                 this.$refs.table.reload()
             }
-        },
-        onTableReload(data) {
-            this.usersCount = data.recordsTotal
         },
         contextMenuItems({rowData, rowIndex}) {
             if (!this.user.isObserver) return null
@@ -63,15 +101,38 @@ export default {
             })
             return menu
         },
+        async archiveSupervisorsAsync(isArchive) {
+            await this.$http.post(this.api.archiveUsersUrl, {
+                archive: isArchive,
+                userIds: map(this.selectedSupervisors, 'userId'),
+            })
+
+            this.reloadTable()
+        },
+        archiveSupervisors() {
+            var self = this
+            this.$refs.confirmArchive.promt(async ok => {
+                if (ok) await self.archiveSupervisorsAsync(true)
+            })
+        },
+        unArchiveSupervisors() {
+            var self = this
+            this.$refs.confirmUnarchive.promt(async ok => {
+                if (ok) await self.archiveSupervisorsAsync(false)
+            })
+        },
+        resetSelection() {
+            this.selectedSupervisors.splice(0, this.selectedSupervisors.length)
+        },
     },
     computed: {
         model() {
             return this.$config.model
         },
-        user(){
+        user() {
             return this.model.currentUser
         },
-        api(){
+        api() {
             return this.model.api
         },
         tableOptions() {
@@ -126,10 +187,11 @@ export default {
                     type: 'GET',
                     contentType: 'application/json',
                 },
-                responsive: false,
-                order: [[0, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
+        },
+        hasSelectedSupervisors() {
+            return this.selectedSupervisors.length > 0
         },
     },
 }
