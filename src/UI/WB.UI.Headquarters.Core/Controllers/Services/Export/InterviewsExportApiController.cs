@@ -72,7 +72,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public ActionResult<List<InterviewCommentariesDto>> GetInterviewCommentariesBatch([FromQuery] Guid[] id)
+        public ActionResult<List<InterviewCommentariesDto>> GetInterviewCommentariesBatch([FromQuery(Name = "id[]")] Guid[] id)
         {
             var keys = this.interviewStatuses.Query(_ => _
                     .Where(x => id.Contains(x.InterviewId))
@@ -102,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public ActionResult<List<InterviewDiagnosticsInfo>> GetInterviewDiagnosticsBatch([FromQuery] Guid[] id)
+        public ActionResult<List<InterviewDiagnosticsInfo>> GetInterviewDiagnosticsBatch([FromQuery(Name = "id[]")] Guid[] id)
         {
             var entities = this.interviewDiagnosticsFactory.GetByBatchIds(id);
             return entities;
@@ -112,7 +112,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public ActionResult<List<InterviewSummariesDto>> GetInterviewSummariesBatch([FromQuery] Guid[] id)
+        public ActionResult<List<InterviewSummariesDto>> GetInterviewSummariesBatch([FromQuery(Name = "id[]")] Guid[] id)
         {
             var interviews =
                 this.interviewStatuses.Query(_ => _
@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public ActionResult<List<InterviewHistoryDto>> GetInterviewHistory([FromQuery] Guid[] id)
+        public ActionResult<List<InterviewHistoryDto>> GetInterviewHistory([FromQuery(Name = "id[]")] Guid[] id)
         {
             var items = this.interviewHistoryFactory.Load(id);
             return items.Select(i => new InterviewHistoryDto {InterviewId = i.InterviewId, Records = i.Records}).ToList();
