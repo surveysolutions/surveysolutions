@@ -11,14 +11,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
     public static class DbMigrationsRunner
     {
         public static void MigrateToLatest(string connectionString, string schemaName,
-            DbUpgradeSettings dbUpgradeSettings)
+            DbUpgradeSettings dbUpgradeSettings, ILoggerProvider loggerProvider)
         {
             var npgConnBuilder = new NpgsqlConnectionStringBuilder(connectionString);
             npgConnBuilder.CommandTimeout = 0;
 
             var serviceProvider = new ServiceCollection()
                 // Logging is the replacement for the old IAnnouncer
-                .AddSingleton<ILoggerProvider, NLogLoggerProvider>()
+                .AddSingleton<ILoggerProvider>(loggerProvider)
                 .AddSingleton<IServiceLocator>((s) => ServiceLocator.Current.GetInstance<IServiceLocator>())
                 .AddSingleton(new DefaultConventionSet(defaultSchemaName: null, workingDirectory: null))
                 .Configure<ProcessorOptions>(opt => { opt.PreviewOnly = false; })

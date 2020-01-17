@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 using NpgsqlTypes;
 using Quartz;
@@ -62,7 +63,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             var connectionString = serviceLocator.GetInstance<UnitOfWorkConnectionSettings>();
             DatabaseManagement.InitDatabase(connectionString.ConnectionString, "quartz");
             var dbUpgradeSettings = new DbUpgradeSettings(migrationsAssembly, nameSpace);
-            DbMigrationsRunner.MigrateToLatest(connectionString.ConnectionString, "quartz", dbUpgradeSettings);
+            DbMigrationsRunner.MigrateToLatest(connectionString.ConnectionString, "quartz", dbUpgradeSettings,
+                serviceLocator.GetInstance<ILoggerProvider>());
             return Task.CompletedTask;
         }
     }
