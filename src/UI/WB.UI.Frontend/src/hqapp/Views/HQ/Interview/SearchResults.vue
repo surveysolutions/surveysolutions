@@ -10,12 +10,12 @@
             </h2>
             <h2 v-else>
                 {{ $t("Details.NoSearchResults")}}
-            </h2>           
+            </h2>
 
             <search-section-result 
                 v-for="(search, index) in searchResult.results"
                 :key="search.sectionId + index"
-                :search="search">               
+                :search="search">
             </search-section-result>
 
             <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
@@ -35,7 +35,7 @@ export default {
     methods: {
         hideSearchResults() {
             this.$store.dispatch("resetAllFilters");
-            this.$store.dispatch("hideSearchResults");                        
+            this.$store.dispatch("hideSearchResults");
         },
 
         infiniteHandler($state) {
