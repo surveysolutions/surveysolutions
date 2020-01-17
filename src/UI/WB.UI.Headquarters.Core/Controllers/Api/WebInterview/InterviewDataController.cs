@@ -123,7 +123,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         [HttpGet]
         [Route("search")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
-        public SearchResults Search(Guid interviewId, [FromQuery] FilterOption[] flags = null, int skip = 0, int limit = 50)
+        public SearchResults Search(Guid interviewId, [FromQuery(Name="flags[]")] FilterOption[] flags = null, int skip = 0, int limit = 50)
         {
             FilterOption[] flagsEnum = flags ?? new FilterOption[0];
             var interview = GetCallerInterview(interviewId);

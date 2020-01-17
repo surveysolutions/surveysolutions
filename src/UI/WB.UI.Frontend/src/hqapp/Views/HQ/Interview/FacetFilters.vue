@@ -4,27 +4,27 @@
             <h4>{{ $t("WebInterview.Filters_Title") }}</h4>
 
             <filters-block separate>
-                <filter-item option="withComments" :title="$t('WebInterview.Filters_WithComments')" @change="change" />
+                <filter-item option="WithComments" :title="$t('WebInterview.Filters_WithComments')" @change="change" />
             </filters-block>
 
             <filters-block separate>
-                <filter-item option="flagged" :title="$t('WebInterview.Filters_Flagged')" @change="change"/>
-                <filter-item option="notFlagged" :title="$t('WebInterview.Filters_NotFlagged')" @change="change" />
+                <filter-item option="Flagged" :title="$t('WebInterview.Filters_Flagged')" @change="change"/>
+                <filter-item option="NotFlagged" :title="$t('WebInterview.Filters_NotFlagged')" @change="change" />
             </filters-block>
 
             <filters-block separate>
-                <filter-item option="invalid" :title="$t('WebInterview.Filters_Invalid')" @change="change"/>
-                <filter-item option="valid" :title="$t('WebInterview.Filters_Valid')" @change="change" />
+                <filter-item option="Invalid" :title="$t('WebInterview.Filters_Invalid')" @change="change"/>
+                <filter-item option="Valid" :title="$t('WebInterview.Filters_Valid')" @change="change" />
             </filters-block>
 
             <filters-block separate>
-                <filter-item option="answered" :title="$t('WebInterview.Filters_Answered')" @change="change" />
-                <filter-item option="notAnswered" :title="$t('WebInterview.Filters_NotAnswered')" @change="change" />
+                <filter-item option="Answered" :title="$t('WebInterview.Filters_Answered')" @change="change" />
+                <filter-item option="NotAnswered" :title="$t('WebInterview.Filters_NotAnswered')" @change="change" />
             </filters-block>
 
             <filters-block separate>
-                <filter-item option="forSupervisor" :title="$t('WebInterview.Filters_ForSupervisor')" @change="change" />
-                <filter-item option="forInterviewer" :title="$t('WebInterview.Filters_ForInterviewer')" @change="change" />
+                <filter-item option="ForSupervisor" :title="$t('WebInterview.Filters_ForSupervisor')" @change="change" />
+                <filter-item option="ForInterviewer" :title="$t('WebInterview.Filters_ForInterviewer')" @change="change" />
             </filters-block>
 
             <filters-block>
