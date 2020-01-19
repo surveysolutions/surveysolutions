@@ -13,7 +13,8 @@ namespace WB.Services.Scheduler.Services
         Task<List<JobItem>> GetRunningOrQueuedJobs(TenantInfo tenant);
         Task<JobItem> GetFreeJobAsync(CancellationToken token = default);
         Task<JobItem> GetJobAsync(TenantInfo tenant, string tag);
-        Task<JobItem> GetJobAsync(long id);
+        ValueTask<JobItem> GetJobAsync(long id);
+        Task<List<JobItem>> GetJobsAsync(long[] ids);
         Task<bool> HasMostRecentFinishedJobIdWithSameTag(long jobId, TenantInfo tenant);
     }
 }

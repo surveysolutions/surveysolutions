@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -28,6 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         Task<ExportDataAvailabilityView> GetDataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity);
 
         Task<DataExportProcessView> GetProcessStatus(long id);
+        Task<List<DataExportProcessView>> GetProcessStatuses(long[] id);
 
         Task<bool> WasExportFileRecreated(long id);
     }

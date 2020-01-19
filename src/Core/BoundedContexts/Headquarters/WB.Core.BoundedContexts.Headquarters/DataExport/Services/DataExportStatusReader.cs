@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -108,6 +109,37 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             processView.Id = id;
             return processView;
+        }
+
+        public async Task<List<DataExportProcessView>> GetProcessStatuses(long[] ids)
+        {
+            var processViews = await this.exportServiceApi.GetJobsStatuses(ids);
+
+            foreach (var processView in processViews)
+            {
+                if (processView == null)
+                {
+                    return null;
+                }
+
+                if (processView.Error != null)
+                {
+                    switch (processView.Error.Type)
+                    {
+                        case DataExportError.Canceled:
+                            processView.Error.Message = Resources.DataExport.Error_Canceled;
+                            break;
+                        case DataExportError.NotEnoughExternalStorageSpace:
+                            processView.Error.Message = Resources.DataExport.Error_NotEnoughExternalStorageSpace;
+                            break;
+                        default:
+                            processView.Error.Message = Resources.DataExport.Error_Unhandled;
+                            break;
+                    }
+                }
+            }
+
+            return processViews;
         }
 
         public async Task<bool> WasExportFileRecreated(long processId)

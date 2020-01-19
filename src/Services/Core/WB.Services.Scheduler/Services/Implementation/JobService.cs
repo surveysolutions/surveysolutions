@@ -56,7 +56,6 @@ namespace WB.Services.Scheduler.Services.Implementation
             return newItem.Entity;
         }
 
-        
         public async Task<JobItem> GetFreeJobAsync(CancellationToken token = default)
         {
             await using var tr = await db.Database.BeginTransactionAsync(token);
@@ -118,14 +117,19 @@ namespace WB.Services.Scheduler.Services.Implementation
             return hasMoreRecentJob;
         }
 
-        public async Task<JobItem> GetJobAsync(long id)
+        public ValueTask<JobItem> GetJobAsync(long id)
         {
-            return await db.Jobs.FindAsync(id);
+            return db.Jobs.FindAsync(id);
         }
 
-        public async Task<JobItem> GetJobAsync(TenantInfo tenant, string tag)
+        public Task<List<JobItem>> GetJobsAsync(long[] ids)
         {
-            return await db.Jobs
+            return db.Jobs.Where(j => ids.Contains(j.Id)).ToListAsync();
+        }
+
+        public Task<JobItem> GetJobAsync(TenantInfo tenant, string tag)
+        {
+            return db.Jobs
                 .Where(j => j.Tenant == tenant.Id.Id && j.Tag == tag)
                 .FirstOrDefaultAsync();
         }
