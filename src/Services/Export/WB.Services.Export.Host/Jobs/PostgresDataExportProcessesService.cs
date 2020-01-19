@@ -96,6 +96,13 @@ namespace WB.Services.Export.Host.Jobs
             return AsDataExportProcessArgs(job);
         }
 
+        public async Task<List<DataExportProcessArgs>> GetProcessesAsync(long[] processIds)
+        {
+            var jobs = await this.jobService.GetJobsAsync(processIds);
+            
+            return jobs.Where(j => j != null).Select(AsDataExportProcessArgs).ToList();
+        }
+
         public void UpdateDataExportProgress(long processId, int progressInPercents, TimeSpan estimatedTime = default)
         {
             logger.LogTrace("Update progress: {progressInPercents}%", progressInPercents);

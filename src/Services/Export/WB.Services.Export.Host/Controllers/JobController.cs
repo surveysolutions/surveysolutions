@@ -186,6 +186,13 @@ namespace WB.Services.Export.Host.Controllers
             return await this.jobsStatusReporting.GetDataExportStatusAsync(processId, tenant);
         }
 
+        [HttpGet]
+        [Route("api/v1/jobs")]
+        public async Task<List<DataExportProcessView>> GetDataExportStatuses([FromQuery] long[] processIds, TenantInfo tenant)
+        {
+            return await this.jobsStatusReporting.GetDataExportStatusesAsync(processIds, tenant);
+        }
+
         [HttpDelete]
         [Route("api/v1/job")]
         public async Task<ActionResult> DeleteDataExportProcess(string processId, TenantInfo tenant)
