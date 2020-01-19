@@ -116,35 +116,8 @@ namespace WB.UI.Headquarters.API
         [ObserverNotAllowed]
         public async Task<ActionResult<List<DataExportProcessView>>> Status([FromQuery(Name = "id[]")] long[] ids)
         {
-            var query = new TransformBlock<long, DataExportProcessView>(
-                async id =>
-                {
-                    try
-                    {
-                        return await dataExportStatusReader.GetProcessStatus(id);
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                });
-
-            var buffer = new BufferBlock<DataExportProcessView>();
-            using var _ = query.LinkTo(buffer, new DataflowLinkOptions {PropagateCompletion = true});
-            
-            foreach (var id in ids) query.Post(id);
-
-            query.Complete();
-            await query.Completion;
-
-            var result = new List<DataExportProcessView>();
-
-            while (buffer.TryReceive(f => f != null, out var item))
-            {
-                result.Add(item);
-            }
-
-            return result;
+            var statuses = await this.dataExportStatusReader.GetProcessStatuses(ids);
+            return statuses;
         }
 
         [HttpGet]
