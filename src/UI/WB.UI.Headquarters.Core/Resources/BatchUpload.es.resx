@@ -352,7 +352,7 @@
     <value>Ultima actualización</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>Puede crear asignaciones individuales ingresando todos los datos requeridos en {0}</value>
+      <value>Puede crear asignaciones individuales ingresando todos los datos requeridos en {{url}}</value>
   </data>
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>modo manual</value>

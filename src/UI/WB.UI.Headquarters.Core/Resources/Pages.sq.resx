@@ -1066,7 +1066,7 @@
     <value>Hollësitë e të dhënave personale (fakultative) &lt;br&gt; do të shihen vetëm nga përdoruesit e ZQ-së</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{0} (ver. {1})</value>
+      <value>{{name}} (ver. {{version}})</value>
   </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
     <value>(ver. {1}) {0} </value>

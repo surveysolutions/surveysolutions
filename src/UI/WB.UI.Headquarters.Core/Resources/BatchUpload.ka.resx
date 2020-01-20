@@ -352,7 +352,7 @@
     <value>განახლებულია უკანასკნელი თარიღი</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>თქვენ შეგიძლიათ {0}-ში შექმნათ ინდივიდუალური დავალებები ყველა აუცილებელი მონაცემებით </value>
+      <value>თქვენ შეგიძლიათ {{url}}-ში შექმნათ ინდივიდუალური დავალებები ყველა აუცილებელი მონაცემებით </value>
   </data>
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>მექანიკური რეჟიმი</value>

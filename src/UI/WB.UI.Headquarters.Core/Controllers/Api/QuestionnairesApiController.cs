@@ -66,6 +66,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 RecordsFiltered = items.TotalCount,
                 Data = items.Items.ToList().Select(x => new QuestionnaireListItemModel
                 {
+                    Id = x.Id,
                     QuestionnaireId = x.QuestionnaireId,
                     Version = x.Version,
                     Title = x.Title,

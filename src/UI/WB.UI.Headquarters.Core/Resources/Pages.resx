@@ -843,8 +843,8 @@
     <value>Password</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{0} (ver. {1})</value>
-    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+      <value>{{name}} (ver. {{version}})</value>
+      <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
     <value>Download latest interviewer app</value>

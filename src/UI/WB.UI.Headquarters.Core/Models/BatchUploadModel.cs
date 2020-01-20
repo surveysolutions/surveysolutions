@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.UI.Headquarters.Resources;
 
@@ -8,8 +9,7 @@ namespace WB.UI.Headquarters.Models
 {
     public class BatchUploadModel
     {
-        public Guid QuestionnaireId { get; set; }
-        public long QuestionnaireVersion { get; set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
 
         public string QuestionnaireTitle { get; set; }
 
