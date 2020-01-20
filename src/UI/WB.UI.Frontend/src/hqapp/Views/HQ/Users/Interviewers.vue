@@ -67,13 +67,6 @@
       @selectedRowsChanged="rows => selectedInterviewers = rows"
       :addParamsToRequest="addParamsToRequest"
     >
-      <Confirm ref="confirmArchive" id="confirmArchive" slot="modals">
-        {{$t('Pages.Interviewers_ArchiveInterviewersConfirmMessage')}}
-      </Confirm>
-      <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
-        {{$t('Archived.UnarchiveInterviewerWarning')}} <br/>
-        {{$t('Pages.Interviewers_ArchiveInterviewersConfirm')}}
-      </Confirm>
       <div class="panel panel-table" v-if="selectedInterviewers.length">
         <div class="panel-body">
             <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled">
@@ -101,7 +94,17 @@
         </div>
       </div>
     </DataTables>
+    <Confirm ref="confirmArchive" id="confirmArchive" slot="modals">
+        {{$t('Pages.Interviewers_ArchiveInterviewersConfirmMessage')}}
+    </Confirm>
+    <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
+        {{$t('Archived.UnarchiveInterviewerWarning')}} <br/>
+        {{$t('Pages.Interviewers_ArchiveInterviewersConfirm')}}
+    </Confirm>
 
+    <InterviewersMoveToOtherTeam ref="interviewersMoveToOtherTeam" :interviewers="selectedInterviewersFullInfo"
+        :moveUserToAnotherTeamUrl="model.moveUserToAnotherTeamUrl">
+    </InterviewersMoveToOtherTeam>
   </HqLayout>
 </template>
 
@@ -110,9 +113,14 @@
 import moment from "moment";
 import { formatNumber } from "./formatNumber"
 import routeSync from "~/shared/routeSync";
+import InterviewersMoveToOtherTeam from "./InterviewersMoveToOtherTeam"
 
 export default {
     mixins: [routeSync],
+        
+    components: {
+        InterviewersMoveToOtherTeam        
+    },
 
     data() {
         return {
@@ -120,7 +128,8 @@ export default {
             facet: null,
             archiveStatus: null,
             usersCount : '',
-            selectedInterviewers: []
+            selectedInterviewers: [],
+            allInterviewers: []
         }
     },
     mounted() {
@@ -153,9 +162,10 @@ export default {
         },
         onTableReload(data) {
             this.usersCount = formatNumber(data.recordsTotal)
+            this.allInterviewers = data.data
         },
         async archiveInterviewersAsync(isArchive) {
-            await this.$http.post(this.api.archiveUsersUrl, {
+            await this.$http.post(this.model.archiveUsersUrl, {
                 archive: isArchive,
                 userIds: this.selectedInterviewers,
             })
@@ -174,9 +184,6 @@ export default {
                 if (ok) await self.archiveInterviewersAsync(false)
             })
         },
-        moveToAnotherTeam() {
-            
-        },
         supervisorSelected(option) {
             this.supervisor = option
             this.loadData()
@@ -193,6 +200,9 @@ export default {
             requestData.supervisorName = (this.supervisor || {}).value 
             requestData.archived = (this.archiveStatus || {}).key 
             requestData.facet = (this.facet || {}).key 
+        },
+        moveToAnotherTeam() {
+            this.$refs.interviewersMoveToOtherTeam.moveToAnotherTeam()
         }
     },
     computed: {
@@ -202,11 +212,17 @@ export default {
         title() {
             return this.$t('Users.InterviewersCountDescription', {count: this.usersCount})
         },
+        selectedInterviewersFullInfo() {
+            var self = this
+            return _.map(this.selectedInterviewers, interviewerId => {
+                return _.find(self.allInterviewers, interviewer => interviewer.userId == interviewerId)
+            })
+        },
         isVisibleArchive() {
-            return this.selectedInterviewers.length && this.model.canArchiveUnarchive && this.archiveStatus != true
+            return this.selectedInterviewers.length && this.model.canArchiveUnarchive && this.archiveStatus.key == 'false'
         },
         isVisibleUnarchive() {
-            return this.selectedInterviewers.length && this.model.canArchiveUnarchive && this.archiveStatus == true
+            return this.selectedInterviewers.length && this.model.canArchiveUnarchive && this.archiveStatus.key == 'true'
         },
         tableOptions() {
             var self = this
@@ -294,6 +310,12 @@ export default {
             return {
                 deferLoading: 0,
                 columns: columns,
+                "createdRow": function(row, data) {
+                    if (data.isLocked) {
+                        var jqCell = $(row.cells[1]);
+                        jqCell.addClass("locked-user");
+                    }
+                },
                 ajax: {
                     url: this.$config.model.dataUrl,
                     type: "GET",
