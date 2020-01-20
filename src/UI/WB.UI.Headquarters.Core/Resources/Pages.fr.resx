@@ -688,7 +688,7 @@
     <value>Entretiens finis (terminés et approuvés par le QG)</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0} (chef d'équipe: {1})</value>
+      <value>{{interviewer}} (chef d'équipe: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>Vitesse moyenne de synchronisation</value>
@@ -703,10 +703,10 @@
     <value>sur</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
-    <value>{0}%, source d'alimentation: {1}, l'économiseur de batterie est {2}</value>
+      <value>{{percent}}%, source d'alimentation: {{power}}, l'économiseur de batterie est {{powerSaver}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>Type: {0} {1}, Opérateur: {2}</value>
+      <value>Type: {{networkType}} {{networkSubType}}, Opérateur: {{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
     <value>Vitesse de connexion</value>
@@ -715,10 +715,10 @@
     <value>Type de connexion</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>Type: {0}</value>
+      <value>Type: {{networkType}}</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
-    <value>{0} importé, {1} téléchargé</value>
+      <value>{{uploaded}} importé, {{downloaded}} téléchargé</value>
   </data>
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>Statistiques de l'appareil et de la connexion</value>
@@ -754,10 +754,10 @@
     <value>Questionnaires reçus par l'enquêteur</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-    <value>E-mail: {0}</value>
+      <value>E-mail: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
-    <value>Nom complet: {0}</value>
+      <value>Nom complet: {{fullName}}</value>
   </data>
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>Modifier les informations personnelles</value>
@@ -805,7 +805,7 @@
     <value>Nombre total de synchronisations réussies</value>
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
-    <value>Numéro de téléphone: {0}</value>
+      <value>Numéro de téléphone: {{phone}}</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
     <value>rejeté à nouveau sur l'appareil</value>

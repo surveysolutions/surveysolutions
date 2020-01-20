@@ -635,16 +635,16 @@
     <value>Интервьюер: {0}</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0} (супервизор: {1})</value>
+      <value>{{interviewer}} (супервизор: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-    <value>E-mail: {0}</value>
+      <value>E-mail: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
-    <value>ФИО: {0}</value>
+      <value>ФИО: {{fullName}}</value>
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
-    <value>Телефон: {0}</value>
+      <value>Телефон: {{phone}}</value>
   </data>
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>Редактировать данные пользователя</value>
@@ -680,7 +680,7 @@
     <value>Состояние батареи (%)</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
-    <value>{0}%, источник питания: {1}, экономия заряда батареи: {2}</value>
+      <value>{{percent}}%, источник питания: {{power}}, экономия заряда батареи: {{powerSaver}}</value>
   </data>
   <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
     <value>включена</value>
@@ -737,16 +737,16 @@
     <value>Длительность синхронизации</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>Соединение: тип: {0} {1}, мобильный оператор: {2}</value>
+      <value>Соединение: тип: {{networkType}} {1}, мобильный оператор: {{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>Соединение: {0}</value>
+      <value>Соединение: {{networkType}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
     <value>Скорость соединения</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
-    <value>{0} загружено, {1} скаченно</value>
+      <value>{{uploaded}} загружено, {{downloaded}} скаченно</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>Средняя скорость синхронизации</value>

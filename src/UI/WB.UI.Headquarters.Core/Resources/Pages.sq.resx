@@ -496,7 +496,7 @@
     <value>intervista të kryera (të përfunduara dhe të miratuara nga zq)</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0} (supervizori: {1})</value>
+      <value>{{interviewer}} (supervizori: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>Shpejtësia mesatare e sinkronizimit</value>
@@ -511,10 +511,10 @@
     <value>Ndezur</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
-    <value>{0}%, burim energjie: {1}, kursyesi i baterisë është {2}</value>
+      <value>{{percent}}%, burim energjie: {{power}}, kursyesi i baterisë është {{powerSaver}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>Lloji: {0} {1}, Operatori: {2}</value>
+      <value>Lloji: {{networkType}} {{networkSubType}}, Operatori: {{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
     <value>Shpejtësia e lidhjes</value>
@@ -523,10 +523,10 @@
     <value>Lloji i lidhjes</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>Lloji: {0}</value>
+      <value>Lloji: {{networkType}}</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
-    <value>{0} të ngarkuara, {1} të shkarkuara</value>
+      <value>{{uploaded}} të ngarkuara, {{downloaded}} të shkarkuara</value>
   </data>
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>Statistikat e pajisjes dhe lidhjes</value>
@@ -565,10 +565,10 @@
     <value>Pyetësorët e marrë nga Intervistuesi </value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-    <value>E-mail: {0}</value>
+      <value>E-mail: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
-    <value>Emri i plotë: {0}</value>
+      <value>Emri i plotë: {{fullName}}</value>
   </data>
   <data name="InterviewerProfile_IncomingTraffic" xml:space="preserve">
     <value>Trafiku hyrës</value>
@@ -625,7 +625,7 @@
     <value>Trafiku dalës</value>
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
-    <value>Numër telefoni: {0}</value>
+      <value>Numër telefoni: {{phone}}</value>
   </data>
   <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
     <value>Kodi QR që thjeshton konfigurimin e aplikacionit të intervistuesit</value>

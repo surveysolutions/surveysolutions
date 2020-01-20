@@ -466,7 +466,7 @@
     <value>ინტერვიუები (დასრულებული და დამტკიცებული სათაო ოფისი მიერ)</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0} (ზედამხედველი: {1})</value>
+      <value>{{interviewer}} (ზედამხედველი: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>საშუალო სინქრონიზაციის სიჩქარე</value>
@@ -481,10 +481,10 @@
     <value>ჩართვა</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
-    <value>{0}%, კვების წყარო: {1}, ბატარეის ოპტიმიზაცია {2}</value>
+      <value>{{percent}}%, კვების წყარო: {{power}}, ბატარეის ოპტიმიზაცია {{powerSaver}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>ტიპი: {0} {1}, ოპერატორი: {2}</value>
+      <value>ტიპი: {{networkType}} {{networkSubType}}, ოპერატორი: {{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
     <value>კავშირის სიჩქარე</value>
@@ -496,7 +496,7 @@
     <value>ტიპი: {0}</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
-    <value>{0} ატვირთულია, {1} გადმოწერილია</value>
+      <value>{{uploaded}} ატვირთულია, {{downloaded}} გადმოწერილია</value>
   </data>
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>მოწყობილობის და კავშირის სტატისტიკა</value>
@@ -532,10 +532,10 @@
     <value>ინტერვიუერის მიერ მიღებული კითხვარები</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-    <value>ელ-ფოსტა: {0}</value>
+      <value>ელ-ფოსტა: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
-    <value>სრული სახელი: {0}</value>
+      <value>სრული სახელი: {{fullName}}</value>
   </data>
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>პირადი ინფორმაციის რედაქტირება</value>
@@ -583,7 +583,7 @@
     <value>წარმატებული სინქრონიზაციების საერთო რაოდენობა</value>
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
-    <value>ტელეფონის ნომერი: {0}</value>
+      <value>ტელეფონის ნომერი: {{phone}}</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
     <value>ისევ უარი თქვა აპარატზე</value>
