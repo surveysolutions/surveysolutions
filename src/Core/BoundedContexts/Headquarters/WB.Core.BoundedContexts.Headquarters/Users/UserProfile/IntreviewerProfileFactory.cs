@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             IInterviewerVersionReader interviewerVersionReader, 
             IInterviewFactory interviewFactory,
             IAuthorizedUser currentUser,
-            //IQRCodeHelper qRCodeHelper,
+            IQRCodeHelper qRCodeHelper,
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage)
         {
             this.userManager = userManager;
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             this.interviewerVersionReader = interviewerVersionReader;
             this.interviewFactory = interviewFactory;
             this.currentUser = currentUser;
-            //this.qRCodeHelper = qRCodeHelper;
+            this.qRCodeHelper = qRCodeHelper;
             this.profileSettingsStorage = profileSettingsStorage;
         }
 

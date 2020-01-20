@@ -607,7 +607,7 @@
     <value>已完成的访谈（完成且被总部审核通过）</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0}（督导员：{1}）</value>
+      <value>{{interviewer}}（督导员：{{supervisor}}）</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>平均同步速度</value>
@@ -622,10 +622,10 @@
     <value>开</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
-    <value>{0}%，电源：{1}，省电模式：{2}</value>
+      <value>{{percent}}%，电源：{{power}}，省电模式：{{powerSaver}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>类型：{0}{1}，操作员：{2}</value>
+      <value>类型：{{networkType}} {{networkSubType}}，操作员：{{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
     <value>连接速度</value>
@@ -634,10 +634,10 @@
     <value>连接类型</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>类型：{0}</value>
+      <value>类型：{{networkType}}</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
-    <value>已上传{0}，已下载{1}</value>
+      <value>已上传{{uploaded}}，已下载 {{downloaded}}</value>
   </data>
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>设备和连接统计</value>
@@ -670,10 +670,10 @@
     <value>调查员已收到的问卷</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-    <value>电子邮箱：{0}</value>
+      <value>电子邮箱：{{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
-    <value>全名：{0}</value>
+      <value>全名：{{fullName}}</value>
   </data>
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>编辑个人信息</value>
@@ -715,7 +715,7 @@
     <value>成功同步的数量</value>
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
-    <value>电话号码：{0}</value>
+      <value>电话号码：{{phone}}</value>
   </data>
   <data name="InterviewerProfile_ServerDate" xml:space="preserve">
     <value>同步开始时的服务器时间</value>

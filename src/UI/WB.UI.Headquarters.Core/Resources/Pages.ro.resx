@@ -478,7 +478,7 @@
     <value>interviuri realizate (finalizate și aprobate de RINS)</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0} (controlor: {1})</value>
+      <value>{{interviewer}} (controlor: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>Viteza medie de sincronizare</value>
@@ -493,10 +493,10 @@
     <value>activ</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
-    <value>{0}%, sursa de alimentare: {1}, economizorul de baterie este {2}</value>
+      <value>{{percent}}%, sursa de alimentare: {{power}}, economizorul de baterie este {{powerSaver}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>Tip: {0} {1}, Operator: {2}</value>
+      <value>Tip: {{networkType}} {{networkSubType}}, Operator: {{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
     <value>Viteza conexiunii</value>
@@ -505,10 +505,10 @@
     <value>Tipul conexiunii</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>Tip: {0}</value>
+      <value>Tip: {{networkType}}</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
-    <value>{0} încărcat, {1} descărcat</value>
+      <value>{{uploaded}} încărcat, {{downloaded}} descărcat</value>
   </data>
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>Statisticile conexiunii și dispozitivului</value>
@@ -544,10 +544,10 @@
     <value>Chestionare primite de anchetator</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-    <value>E-mail: {0}</value>
+      <value>E-mail: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
-    <value>Nume complet: {0}</value>
+      <value>Nume complet: {{fullName}}</value>
   </data>
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>Editați informațiile personale</value>
@@ -595,7 +595,7 @@
     <value>Numărul total de sincronizări reușite</value>
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
-    <value>Număr de telefon: {0}</value>
+      <value>Număr de telefon: {{phone}}</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
     <value>respins din nou pe dispozitiv</value>
