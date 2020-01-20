@@ -112,9 +112,9 @@ namespace WB.UI.Headquarters.API
             public bool Running { get; set; }
         }
 
-        [HttpGet]
+        [HttpPost]
         [ObserverNotAllowed]
-        public async Task<ActionResult<List<DataExportProcessView>>> Status([FromQuery(Name = "id[]")] long[] ids)
+        public async Task<ActionResult<List<DataExportProcessView>>> Status([FromBody] long[] ids)
         {
             var statuses = await this.dataExportStatusReader.GetProcessStatuses(ids);
             return statuses;
