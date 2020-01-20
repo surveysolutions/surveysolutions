@@ -1204,7 +1204,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} (supervisor: {1}).
+        ///   Looks up a localized string similar to {{interviewer}} (supervisor: {{supervisor}}).
         /// </summary>
         public static string InterviewerProfile_AssignedToFormat {
             get {
@@ -1249,7 +1249,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}%, power source: {1}, battery saver is {2}.
+        ///   Looks up a localized string similar to {{percent}}%, power source: {{power}}, battery saver is {{powerSaver}}.
         /// </summary>
         public static string InterviewerProfile_BatteryStatusFormat {
             get {
@@ -1258,7 +1258,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type: {0} {1}, Operator: {2}.
+        ///   Looks up a localized string similar to Type: {{networkType}} {{networkSubType}}, Operator: {{operator}}.
         /// </summary>
         public static string InterviewerProfile_ConnectionMobileFormat {
             get {
@@ -1285,7 +1285,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type: {0}.
+        ///   Looks up a localized string similar to Type: {{networkType}}.
         /// </summary>
         public static string InterviewerProfile_ConnectionWifiFormat {
             get {
@@ -1294,7 +1294,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} uploaded, {1} downloaded.
+        ///   Looks up a localized string similar to {{uploaded}} uploaded, {{downloaded}} downloaded.
         /// </summary>
         public static string InterviewerProfile_DataStatsFormat {
             get {
@@ -1411,7 +1411,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E-mail: {0}.
+        ///   Looks up a localized string similar to E-mail: {{email}}.
         /// </summary>
         public static string InterviewerProfile_EmailFormat {
             get {
@@ -1420,7 +1420,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Full name: {0}.
+        ///   Looks up a localized string similar to Full name: {{fullName}}.
         /// </summary>
         public static string InterviewerProfile_FullNameFormat {
             get {
@@ -1591,7 +1591,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Phone number: {0}.
+        ///   Looks up a localized string similar to Phone number: {{phone}}.
         /// </summary>
         public static string InterviewerProfile_PhoneFormat {
             get {

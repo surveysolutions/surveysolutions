@@ -1,0 +1,60 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.UI.Headquarters.Code
+@using WB.UI.Headquarters.Configs
+
+@model WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerProfileModel
+@inject IOptions<GoogleMapsConfig> googleMapsConfig
+@inject IAuthorizedUser authorizedUser
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = string.Format(Pages.InterviewerProfile_TitleFormat, Model.InterviewerName);
+}
+
+@section Scripts{
+    <script type="text/javascript"
+            src="@googleMapsConfig.Value.ApiBaseUrl/maps/api/js?key=@googleMapsConfig.Value.ApiKey">
+    </script>
+    
+    @if (Model.DeviceLocationOrLastKnownLocationLat.HasValue && Model.DeviceLocationOrLastKnownLocationLon.HasValue)
+        {
+            <script>
+                function getAddress() {
+                    var geocoder = new google.maps.Geocoder;
+                    geocoder.geocode(
+                        { 'location': { lat: @Model.DeviceLocationOrLastKnownLocationLat.Value, lng: @Model.DeviceLocationOrLastKnownLocationLon.Value } },
+                        function(results, status) {
+                            if (status === 'OK') {
+                                if (results[0]) {
+                                    $("#device-address").text(results[0].formatted_address);
+                                }
+                            }
+                        });
+                }
+            </script>
+    }
+    
+    @Html.RenderHqConfig(new
+    {
+        ShowMap = Model.HasAnyGpsAnswerForInterviewer,
+        InitialLocation = new {lat = Model.DeviceLocationOrLastKnownLocationLat ?? 0, lng = Model.DeviceLocationOrLastKnownLocationLon ?? 0},
+        AuthorizedUser = new
+        {
+            IsInterviewer = this.authorizedUser.IsInterviewer,
+            IsHeadquarters = this.authorizedUser.IsHeadquarter||this.authorizedUser.IsAdministrator
+        },
+        FullModel = Model,
+        Api = new
+        {
+            InterviewerPoints = Url.Action("InterviewerPoints", "Interviewer"),
+            InteriewSummaryUrl = Url.Action("InterviewSummaryForMapPoints", "InterviewApi"),
+            InterviewDetailsUrl = Url.Action("Review", "Interview"),
+            InterviewerTrafficUsage = Url.Action("TrafficUsage", "Interviewer"),
+            ListUrl = Url.Action("Interviewers", "Users"),
+            UnarhiveUrl = Url.Action("UnArchive", "Users", new {Id = Model.InterviewerId}),
+            ManageUrl = Url.Action("Manage", "Users", new {Id = Model.InterviewerId}),
+            AudioAuditLogUrl = Url.Action("Index", "InterviewerAuditLog", new {Id = Model.InterviewerId})
+        }
+    })
+}
+
+<div id="vueApp"></div>

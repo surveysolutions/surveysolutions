@@ -460,7 +460,7 @@
     <value>المقابلات المنتهية (تمت اكمالها والموافقة عليها من قبل المقر الرئيسي)</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0} (المشرف: {1})</value>
+      <value>{{interviewer}} (المشرف: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>معدل سرعة المزامنة</value>
@@ -475,10 +475,10 @@
     <value>مفعل</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
-    <value>{0}٪، مصدر الطاقة: {1}، موفر البطارية {2}</value>
+      <value>{{percent}}٪، مصدر الطاقة: {{power}}، موفر البطارية {{powerSaver}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>النوع: {0} {1}، المشغل: {2}</value>
+      <value>النوع: {{networkType}} {{networkSubType}}، المشغل: {{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
     <value>سرعة الاتصال</value>
@@ -487,10 +487,10 @@
     <value>نوع الاتصال</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>النوع :{0}</value>
+      <value>النوع :{{networkType}}</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
-    <value>{0} تم تحميلة {1} تم تنزيلة</value>
+      <value>{{uploaded}} تم تحميلة {{downloaded}} تم تنزيلة</value>
   </data>
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>احصائيات الجهاز و الاتصال</value>
@@ -526,10 +526,10 @@
     <value>الاستبيانات المستلمة بواسطة المقابل</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-    <value>البريد الالكتروني: {0}</value>
+      <value>البريد الالكتروني: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
-    <value>الاسم الكامل: {0}</value>
+      <value>الاسم الكامل: {{fullName}}</value>
   </data>
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>تحرير المعلومات الشخصية</value>
@@ -577,7 +577,7 @@
     <value>العدد الكلي للمزامنات الناجحة</value>
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
-    <value>رقم الهاتف: {0}</value>
+      <value>رقم الهاتف: {{phone}}</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
     <value>رفض مرة أخرى على الجهاز</value>

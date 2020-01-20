@@ -376,16 +376,16 @@
     <value>Interviewer: {0}</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0} (supervisor: {1})</value>
+    <value>{{interviewer}} (supervisor: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-    <value>E-mail: {0}</value>
+    <value>E-mail: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
-    <value>Full name: {0}</value>
+    <value>Full name: {{fullName}}</value>
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
-    <value>Phone number: {0}</value>
+    <value>Phone number: {{phone}}</value>
   </data>
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>Edit personal info</value>
@@ -424,7 +424,7 @@
     <value>Battery status (%)</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
-    <value>{0}%, power source: {1}, battery saver is {2}</value>
+    <value>{{percent}}%, power source: {{power}}, battery saver is {{powerSaver}}</value>
   </data>
   <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
     <value>on</value>
@@ -490,11 +490,11 @@
     <value>Synchronization duration</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>Type: {0} {1}, Operator: {2}</value>
+    <value>Type: {{networkType}} {{networkSubType}}, Operator: {{operator}}</value>
     <comment>{0} - NetworkType, {1} Network subtype, {2} - Mobile operator name, i.e. Vodafon</comment>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>Type: {0}</value>
+    <value>Type: {{networkType}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
     <value>Connection type</value>
@@ -503,8 +503,7 @@
     <value>Connection speed</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
-    <value>{0} uploaded, {1} downloaded</value>
-    <comment>{0}, {1} - Data amount </comment>
+    <value>{{uploaded}} uploaded, {{downloaded}} downloaded</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>Average sync speed</value>

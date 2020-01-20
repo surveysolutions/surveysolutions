@@ -1,5 +1,61 @@
 <template>
-<div class="container-fluid">
+
+<HqLayout :hasFilter="false" :hasRow="false" :mainClass="'enumerators'">
+     <div slot="headers">
+        <ol class="breadcrumb" v-if="!this.$config.model.authorizedUser.isInterviewer">
+            <li><a :href="this.$config.model.api.listUrl">{{$t('Pages.InterviewerProfile_Interviewers')}}</a></li>
+        </ol>
+        <h1>
+            <span v-if="this.$config.model.fullModel.isArchived" class="badge">{{$t('Common.Archived')}}</span>
+            {{$t('Pages.InterviewerProfile_AssignedToFormat', { interviewer: this.$config.model.fullModel.interviewerName, supervisor: this.$config.model.fullModel.supervisorName}) }}
+        </h1>
+
+        <ul class="list-unstyled">
+            <li v-if="this.$config.model.fullModel.email">{{$t('Pages.InterviewerProfile_EmailFormat', {email: this.$config.model.fullModel.email})}}</li>
+            <li v-if="this.$config.model.fullModel.fullName">{{$t('Pages.InterviewerProfile_FullNameFormat', {fullName: this.$config.model.fullModel.fullName})}}</li>
+            <li v-if="this.$config.model.fullModel.phone">{{$t('Pages.InterviewerProfile_PhoneFormat', {phone: this.$config.model.fullModel.phone})}}</li>
+            
+            <li v-if="this.$config.model.fullModel.isModifiable">
+                <a v-if="!this.$config.model.fullModel.isArchived" :href="this.$config.model.api.manageUrl">{{$t('Pages.InterviewerProfile_Info')}}</a>
+                <form v-if="this.$config.model.fullModel.isArchived && $config.model.fullModel.isHeadquarters" 
+                    :action="this.$config.model.api.unarhiveUrl" method="post">
+                    <input class="btn btn-success" type="submit" :value="$t('Pages.Unarchive')"/>
+                </form>
+            </li>
+            <li v-if="!this.$config.model.authorizedUser.isInterviewer">
+                <a :href="this.$config.model.api.audioAuditLogUrl">{{$t('Pages.InterviewerProfile_ShowAuditLog')}}</a>
+            </li>
+        </ul>
+        <figure class="qrcode-wrapper" v-if="this.$config.model.fullModel.supportQRCodeGeneration">
+            <a target="_blank" :title="$t('Pages.InterviewerProfile_QrCodeAlt')" href="https://support.mysurvey.solutions/interviewer/config/set-up-an-interviewer-tablet-by-scanning-a-barcode/">
+                <img id="download-qr" :alt="$t('Pages.InterviewerProfile_QrCodeAlt')"  width="250" height="250" :src="this.$config.model.fullModel.qrCodeAsBase64String" />
+            </a>
+        </figure>
+    </div>
+     <div class="row">
+        <div class="col-sm-12">
+            <div class="interviews-information clearfix">
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">{{this.$config.model.fullModel.newInterviewsOnDevice}}</div>
+                    <div class="description">{{$t('Pages.InterviewerProfile_NewOnDevice')}}</div>
+                </div>
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">{{this.$config.model.fullModel.rejectedInterviewsOnDevice}}</div>
+                    <div class="description">{{$t('Pages.InterviewerProfile_Rejected')}}</div>
+                </div>
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">{{this.$config.model.fullModel.waitingInterviewsForApprovalCount}}</div>
+                    <div class="description">{{$t('Pages.InterviewerProfile_WaitingForApproval')}}</div>
+                </div>
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">{{this.$config.model.fullModel.approvedInterviewsByHqCount}}</div>
+                    <div class="description">{{$t('Pages.InterviewerProfile_Approved')}}</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <div class="row" v-if="showMap">
         <div class="col-sm-9 map" v-if="markersExist">
             <div ref="map" id="map-canvas" class="extra-margin-bottom" style="width:100%; height: 400px"></div>
@@ -46,13 +102,230 @@
             </div>
         </div>
     </div>
+    <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="col-sm-12 clearfix">
+            <h3>{{$t('Pages.InterviewerProfile_Sync_Activity_Title')}}</h3>
+            <div class="graphic-wrapper clearfix">
+                <div class="graphic">
+                    <div class="day-unit" v-for="syncDay in this.$config.model.fullModel.synchronizationActivity.days">
+                        <div class="day">
+                            {{syncDay.day}}
+                        </div>
+                        <div class="quarter-of-day" v-for="syncDayQuarter in syncDay.quarters">
+                            <div class="recent-activity" v-if="!syncDayQuarter.HasAnyActivity">
+                                <div v-if="syncDayQuarter.failedSynchronizationsCount > 0" class="failed-connection"></div>
+                                <div v-else-if="syncDayQuarter.synchronizationsWithoutChangesCount > 0" class="successful-connection"></div>
+                            </div>
+                            <div class="recent-activity" v-else>
+                                <div v-for="item in syncDayQuarter.downloadedAssignmentsInProportionCount" class="downloaded"></div>
+                                <div v-for="item in syncDayQuarter.uploadedInterviewsInProportionCount" class="uploaded"></div>
+                                <div v-if="syncDayQuarter.hasMoreThanMaxActionsCount" class="over-limit">
+                                    <span></span>
+                                </div>
+                            </div>
+                                
+                            <div class="unfinished-assignments">
+                                <div class="half-of-quarter">
+                                    <div v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount" class="unfinished-unit"></div>
+                                </div>
+                                <div class="half-of-quarter">
+                                    <div v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount" class="unfinished-unit"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <div class="day-unit">
+                        <div class="quarter-of-day">
+                            <div class="recent-activity">
+
+                            </div>
+                            <div class="unfinished-assignments">
+                                <div class="half-of-quarter"></div>
+                                <div class="half-of-quarter"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="graphic-explanation">
+                    <div class="recent-activity">
+                        <ul class="list-unstyled">
+                            <li><span class="downloaded"></span>{{$t('Pages.InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc')}}</li>
+                            <li><span class="uploaded"></span>{{$t('Pages.InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc')}}</li>
+                            <li><span class="successful-connection"></span>{{$t('Pages.InterviewerProfile_Sync_Activity_Nothing_To_Sync')}}</li>
+                            <li><span class="failed-connection"></span>{{$t('Pages.InterviewerProfile_Sync_Activity_Failed_Sync')}}</li>
+                        </ul>
+                    </div>
+                    <div class="unfinished-assignments">
+                        <p class="primary-text">{{$t('Pages.InterviewerProfile_Sync_Activity_All_Assignments_Desc')}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="col-sm-6 connection-statistics">
+            <h3>{{$t('Pages.InterviewerProfile_DeviceAndConnectionStatistics')}}</h3>
+            <ul class="list-unstyled">
+                <li><b>{{$t('Pages.InterviewerProfile_DeviceModel')}}: {{this.fullModel.deviceType}} {{this.fullModel.deviceManufacturer}} {{this.fullModel.deviceModel}} ({{this.fullModel.deviceBuildNumber}})</b></li>
+                <li>
+                    <b>
+                        {{$t('Pages.InterviewerProfile_InterviewerAppVersion')}}: {{this.fullModel.interviewerAppVersion}} —
+                        <span v-if="!this.fullModel.hasUpdateForInterviewerApp" class="success-text">{{$t('Pages.InterviewerProfile_InterviewerUpToDate')}}</span>
+                        <span v-else class="error-text">{{$t('Pages.InterviewerProfile_InterviewerCanBeUpdated')}}</span>
+                    </b>
+                </li>
+                <li v-if="this.fullModel.deviceAssignmentDate">
+                    <b>
+                        {{$t('Pages.InterviewerProfile_DeviceAssignmentDate')}}: 
+                        {{formatDate(this.fullModel.deviceAssignmentDate)}} (UTC)
+                        <span v-if="this.fullModel.registredDevicesCount > 1" style="color: red;">({{$t('Pages.InterviewerProfile_Relinked')}})</span>
+                    </b>
+                </li>
+            </ul>
+            <ul class="list-unstyled">
+                <li>{{$t('Pages.InterviewerProfile_NumberOfSuccessSynchronizations')}}: {{this.fullModel.totalNumberOfSuccessSynchronizations}}</li>
+                <li>{{$t('Pages.InterviewerProfile_NumberOfFailedSynchronizations')}}: {{this.fullModel.totalNumberOfFailedSynchronizations}}</li>
+                <li v-if="this.fullModel.averageSyncSpeedBytesPerSecond">
+                    {{$t('Pages.InterviewerProfile_AverageSyncSpeed')}}: 
+                    <span v-html="formatKb(this.fullModel.averageSyncSpeedBytesPerSecond)"></span>/s
+                </li>
+                <li>
+                    {{$t('Pages.InterviewerProfile_TotalTrafficUsed')}}: 
+                    <span v-html="formatKb(this.fullModel.trafficUsed)"></span> 
+                </li>
+            </ul>
+            <ConnectionStats :prefix="$t('Pages.InterviewerProfile_LastSuccessSync')" :syncInfo="this.fullModel.lastSuccessfulSync"></ConnectionStats>
+            <ConnectionStats :prefix="$t('Pages.InterviewerProfile_LastFailedSync')" :syncInfo="this.fullModel.lastFailedSync"></ConnectionStats>
+
+            <ul v-if="this.fullModel.lastCommunicationDate" class="list-unstyled">
+                <li>{{$t('Pages.InterviewerProfile_LastSyncronizationDate')}}: 
+                    {{formatDate(this.fullModel.lastCommunicationDate)}} ({{formatLastCommunication()}})</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row"  v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="col-sm-8 detailed-statistics-block">
+            <h3>{{$t('Pages.InterviewerProfile_DeviceInfo')}}</h3>
+            <table class="table table-striped table-bordered">
+                <tbody>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_DeviceId')}}</td>
+                    <td>{{this.fullModel.deviceId}}}</td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_DeviceSerial')}}</td>
+                    <td>{{this.fullModel.deviceSerialNumber}}</td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_DeviceModel')}}</td>
+                    <td>{{this.fullModel.deviceType}} {{this.fullModel.deviceManufacturer}}
+                         {{this.fullModel.deviceModel}} ({{this.fullModel.deviceBuildNumber}})</td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_DeviceLanguage')}}</td>
+                    <td>{{this.fullModel.deviceLanguage}}</td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_AndroidVersion')}}</td>
+                    <td>{{this.fullModel.androidVersion}}</td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_InterviewerVersion')}}</td>
+                    <td>{{this.fullModel.surveySolutionsVersion}}</td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_InterviewerUpdatedDate')}}</td>
+                    <td>{{formatDate(this.fullModel.lastSurveySolutionsUpdatedDate)}} (UTC)</td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_DeviceLocation')}}</td>
+                    <td id="device-address">{{this.fullModel.deviceLocationOrLastKnownLocationLat}} {{this.fullModel.deviceLocationOrLastKnownLocationLon}}</td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_DeviceOrientation')}}</td>
+                    <td>{{this.fullModel.deviceOrientation}}</td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_BatteryStatus')}}</td>
+                    <td>
+                        {{
+                            $t('Pages.InterviewerProfile_BatteryStatusFormat', 
+                            {
+                                percent: this.fullModel.batteryStatus,
+                                power: this.fullModel.batteryPowerSource,
+                                powerSaver: this.fullModel.isPowerSaveMode ? $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOn') : $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOff')
+                            })
+                        }}
+                    </td>
+                </tr>
+                <tr :class="{'text-danger': this.fullModel.storageFreeInBytes < 1024 * 1024 * 100}">
+                    <td>{{$t('Pages.InterviewerProfile_StorageInfo')}}</td>
+                    <td v-html="`${ouputBytes(this.fullModel.storageFreeInBytes)} / ${ouputBytes(this.fullModel.storageTotalInBytes)}`">
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_MemoryInfo')}}</td>
+                    <td v-html="`${ouputBytes(this.fullModel.ramFreeInBytes)} / ${ouputBytes(this.fullModel.ramTotalInBytes)}`">
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{$t('Pages.InterviewerProfile_StorageSizeInfo')}}</td>
+                    <td>
+                        {{ouputBytes(this.fullModel.databaseSizeInBytes)}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 </div>
+<div class="row"  v-if="this.$config.model.fullModel.hasDeviceInfo">
+    <div class="col-sm-8 detailed-statistics-block">
+        <h3>{{$t('Pages.InterviewerProfile_LastConnectionStatistics')}}</h3>
+        <table class="table table-striped table-bordered">
+            <tbody>
+            <tr>
+                <td>{{$t('Pages.InterviewerProfile_ServerDate')}}</td>
+                <td>{{formatDate(this.fullModel.serverTimeAtTheBeginningOfSync)}} (UTC)</td>
+            </tr>
+            <tr :class="{'text-danger': this.fullModel.deviceHasWrongTime}">
+                <td>{{$t('Pages.InterviewerProfile_DeviceDate')}}</td>
+                <td>{{formatDate(this.fullModel.tabletTimeAtTeBeginningOfSync)}} (UTC)</td>
+            </tr>
+            <tr>
+                <td>{{$t('Pages.InterviewerProfile_ConnectionType')}}</td>
+                <td>{{this.fullModel.connectionType}} {{this.fullModel.connectionSubType}}</td>
+            </tr>
+            <tr>
+                <td>{{$t('Pages.InterviewerProfile_DownloadedQuestionnairesCount')}}</td>
+                <td>{{this.fullModel.questionnairesReceived}}</td>
+            </tr>
+            <tr>
+                <td>{{$t('Pages.InterviewerProfile_DownloadedAssignmentsCount')}}</td>
+                <td>{{this.fullModel.assignmentsReceived}}</td>
+            </tr>
+            <tr>
+                <td>{{$t('Pages.InterviewerProfile_UploadedInterviewsCount')}}</td>
+                <td>{{this.fullModel.completedInterviewsReceivedFromInterviewer}}</td>
+            </tr>
+            <tr>
+                <td>{{$t('Pages.InterviewerProfile_StartedAssignments')}}</td>
+                <td>{{this.fullModel.assignmentsThatHaveBeenStarted}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</HqLayout>
 </template>
 
 <script>
     import MarkerClusterer from "@google/markerclustererplus";
     import Vue from "vue";
     import * as toastr from "toastr";
+    import {DateFormats, humanFileSize} from '~/shared/helpers'
+    import moment from "moment"
+    import ConnectionStats from "./ConnectionStats"
 
     export default {
         data: function() {
@@ -81,9 +354,17 @@
             this.initializeTrafficUsage();
         },
         methods: {
-            formatKb(kb){
+            formatDate(d) {
+                return moment.utc(d).format(DateFormats.dateTime);
+            },
+            formatKb(kb) {
                 return kb.toLocaleString() + "&nbsp;" + this.$t("Pages.Kb");
-
+            },
+            ouputBytes(val){
+                return humanFileSize(val, false);
+            },
+            formatLastCommunication(){
+                return moment.utc(this.fullModel.lastCommunicationDate).fromNow()
             },
             initializeTrafficUsage(){
                 const self = this;
@@ -352,9 +633,15 @@
             model() {
                 return this.$config.model;
             },
+            fullModel(){
+                return this.model.fullModel
+            },
             showMap(){
                 return this.$config.model.showMap;
             }
+        },
+        components: {
+            ConnectionStats
         }
     }; 
 </script>
