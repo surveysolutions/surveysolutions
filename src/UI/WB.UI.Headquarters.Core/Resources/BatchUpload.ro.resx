@@ -361,7 +361,7 @@
     <value>Data ultimei încărcări</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>Puteți aloca individual interviuri introducând toate câmpurile cerute în {0}</value>
+      <value>Puteți aloca individual interviuri introducând toate câmpurile cerute în {{url}}</value>
   </data>
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>modul manual</value>

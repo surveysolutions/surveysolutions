@@ -1009,7 +1009,7 @@
     <value>Detaliile cu informații personale (opțional) &lt;br&gt; vor fi vizibile numai pentru RINS</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{0} (ver. {1})</value>
+      <value>{{name}} (ver. {{version}})</value>
   </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
     <value>(ver. {1}) {0} </value>

@@ -812,7 +812,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can create individual assignments by entering all required data in {0}.
+        ///   Looks up a localized string similar to You can create individual assignments by entering all required data in {{url}}.
         /// </summary>
         public static string ManualModeDescription {
             get {

@@ -2977,7 +2977,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} (ver. {1}).
+        ///   Looks up a localized string similar to {{name}} (ver. {{version}}).
         /// </summary>
         public static string QuestionnaireNameFormat {
             get {

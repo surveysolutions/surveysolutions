@@ -862,7 +862,7 @@
     <value>Detalles de información personal (opcional) &lt;br&gt; será visible por usuarios HQ  (de sede)</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{0} (ver. {1})</value>
+      <value>{{name}} (ver. {{version}})</value>
   </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
     <value>(ver. {1}) {0} </value>

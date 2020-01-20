@@ -2,6 +2,7 @@ import Layout from "./Layout"
 import Assignments from "./HqAssignments"
 import CreateNew from "./CreateNew"
 import Details from "./Details"
+import Upload from "./Upload"
 import localStore from "./store"
 
 import Vue from "vue"
@@ -11,10 +12,10 @@ export default class AssignmentsComponent {
     }
 
     get routes() {
-        return[
+        return [
             {
                 path: '/HQ/TakeNewAssignment/:interviewId',
-                component: CreateNew 
+                component: CreateNew
             },
             {
                 path: '/Assignments', component: Layout,
@@ -24,7 +25,11 @@ export default class AssignmentsComponent {
                     },
                     {
                         path: ':assignmentId', component: Details
-                    }]}];
+                    }, 
+                    {
+                        path: 'Upload/:questionnaireId', component: Upload
+                    }]
+            }];
     }
 
     initialize() {
