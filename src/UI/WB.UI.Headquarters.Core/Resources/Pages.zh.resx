@@ -1135,16 +1135,16 @@
     <value>已完成但有错误。请稍后重试。如果问题依旧，请联系支持。</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-    <value>调查员{0}将被转移到督导员{1}的团队。</value>
+      <value>调查员{{interviewers}}将被转移到督导员{{supervisor}}的团队。</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-    <value>调查员{0}在督导员{1}的团队中。没有进行任何操作。</value>
+      <value>调查员{{interviewers}}在督导员{{supervisor}}的团队中。没有进行任何操作。</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-    <value>将调查员及其任务及问卷一起转移到督导员{0}的团队。</value>
+      <value>将调查员及其任务及问卷一起转移到督导员{{supervisor}}的团队。</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
-    <value>选择要转移到的团队{0}</value>
+      <value>选择要转移到的团队{{names}}</value>
   </data>
   <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
     <value>转移到另外的团队</value>
@@ -1159,7 +1159,7 @@
     <value>{0}和{1}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
-    <value>{0}和{1}更多</value>
+      <value>{{names}}和{{more}}更多</value>
   </data>
   <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>使原督导员仍负责已转移调查员现有的任务和问卷。</value>

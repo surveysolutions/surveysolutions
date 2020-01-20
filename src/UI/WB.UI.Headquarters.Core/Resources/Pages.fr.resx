@@ -1057,16 +1057,16 @@
     <value>Terminé avec des erreurs. Veuillez répéter l'action plus tard. Écrivez au Support Technique si les problèmes se répètent à l'avenir.</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-    <value>Le(s) enquêteur(s) {0} seront déplacés vers une équipe du superviseur {1}.</value>
+      <value>Le(s) enquêteur(s) {{interviewers}} seront déplacés vers une équipe du superviseur {{supervisor}}.</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-    <value>Le(s) enquêteur(s) {0} font partie de l'équipe du superviseur {1} et aucune action ne sera effectuée.</value>
+      <value>Le(s) enquêteur(s) {{interviewers}} font partie de l'équipe du superviseur {{supervisor}} et aucune action ne sera effectuée.</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-    <value>Déplacez les enquêteurs avec leurs affectations et entretiens à l'équipe du superviseur {0}.</value>
+      <value>Déplacez les enquêteurs avec leurs affectations et entretiens à l'équipe du superviseur {{supervisor}}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
-    <value>Sélectionnez une équipe où déplacer {0}</value>
+      <value>Sélectionnez une équipe où déplacer {{names}}</value>
   </data>
   <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
     <value>Passer à une autre équipe</value>
@@ -1081,7 +1081,7 @@
     <value>{0} et {1}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
-    <value>{0} et {1} autres</value>
+      <value>{{names}} et {{more}} autres</value>
   </data>
   <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>Rendre le superviseur d’origine responsable des affectations existantes et des entretiens des enquêteurs déplacés.</value>

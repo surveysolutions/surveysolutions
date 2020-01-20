@@ -742,10 +742,10 @@
     <value>Nuk është lidhur asnjëherë</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-    <value>Intervistuesi(t) {0} do të zhvendosen te ekipi i përgjegjësit {1}.</value>
+      <value>Intervistuesi(t) {{interviewers}} do të zhvendosen te ekipi i përgjegjësit {{supervisor}}.</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-    <value>Intervistuesi(t) {0} janë në ekipin e supervizorit {1} dhe nuk do të kryhet asnjë veprim </value>
+      <value>Intervistuesi(t) {{interviewers}} janë në ekipin e supervizorit {{supervisor}} dhe nuk do të kryhet asnjë veprim </value>
   </data>
   <data name="Interviewers_InterviewerVersion" xml:space="preserve">
     <value>Versioni i aplikacionit</value>
@@ -754,10 +754,10 @@
     <value>Versioni i Aplikacionit të Intervistuesit që është raportuar gjatë sinkronizimit të fundit të tabletit të tij/saj me serverin </value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-    <value>Zhvendos intervistuesin(t) me detyrat dhe intervistat e tyre në ekipin e supervizorit {0}.</value>
+      <value>Zhvendos intervistuesin(t) me detyrat dhe intervistat e tyre në ekipin e supervizorit {{supervisor}}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
-    <value>Përzgjidh ekipin për të kaluar {0}</value>
+      <value>Përzgjidh ekipin për të kaluar {{names}}</value>
   </data>
   <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
     <value>Kalo në një ekip tjetër</value>
@@ -772,7 +772,7 @@
     <value>{0} dhe {1}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
-    <value>{0} dhe {1} më shumë</value>
+      <value>{{names}} dhe {{more}} më shumë</value>
   </data>
   <data name="Interviewers_NotConnected" xml:space="preserve">
     <value>Nuk është i lidhur</value>
