@@ -72,9 +72,7 @@ export default {
         async getJobsUpdate({ commit }, ids) {
             const api = Vue.$config.model.api
 
-            const response = await Vue.$http.get(api.exportStatusUrl, {
-                params: { id: ids },
-            });
+            const response = await Vue.$http.post(api.exportStatusUrl, ids);
 
             if (response.data == null) {
                 return

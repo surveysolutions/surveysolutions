@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         Task<DataExportProcessView> GetJobsStatus(long processId);
 
         [Get("/api/v1/jobs")]
-        Task<List<DataExportProcessView>> GetJobsStatuses(long[] processIds);
+        Task<List<DataExportProcessView>> GetJobsStatuses([Query(CollectionFormat.Multi)]long[] processIds);
 
         [Delete("/api/v1/job/byId")]
         Task DeleteProcess(long jobId);
