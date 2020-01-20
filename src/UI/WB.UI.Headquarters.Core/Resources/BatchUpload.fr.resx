@@ -460,7 +460,7 @@
     <value>Aucun entretien n'a été créé</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>Vous pouvez créer des affectations individuelles en entrant toutes les données requises dans {0}</value>
+      <value>Vous pouvez créer des affectations individuelles en entrant toutes les données requises dans {{url}}</value>
   </data>
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>mode manuel</value>

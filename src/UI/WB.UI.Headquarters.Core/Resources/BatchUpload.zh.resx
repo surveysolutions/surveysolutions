@@ -523,7 +523,7 @@
     <value>正在导入访谈</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>您可以通过在{0}中输入全部必填数据创建单个任务</value>
+      <value>您可以通过在{{url}}中输入全部必填数据创建单个任务</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
     <value>{0}个任务新建失败</value>

@@ -355,7 +355,7 @@
     <value>تاريخ آخر تحديث</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>يمكنك إنشاء مهام فردية عن طريق إدخال جميع البيانات المطلوبة في {0}</value>
+      <value>يمكنك إنشاء مهام فردية عن طريق إدخال جميع البيانات المطلوبة في {{url}}</value>
   </data>
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>الوضع اليدوي</value>

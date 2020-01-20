@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Survey;
-using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
@@ -22,7 +17,6 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class HQController : Controller
     {
-        private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IQuestionnaireExporter questionnaireExporter;
@@ -30,13 +24,11 @@ namespace WB.UI.Headquarters.Controllers
 
         public HQController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
-            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IQuestionnaireExporter questionnaireExporter,
             EventBusSettings eventBusSettings)
         {
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
-            this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.questionnaireExporter = questionnaireExporter;
             this.eventBusSettings = eventBusSettings;
         }
@@ -59,12 +51,14 @@ namespace WB.UI.Headquarters.Controllers
             return File(file.FileStream, "application/zip", file.Filename);
         }
 
-        public IActionResult TakeNew(string questionnaireId)
+        public IActionResult TakeNew(string id)
         {
+            if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity identity))
+                return NotFound(id);
+            
             var newInterviewId = Guid.NewGuid();
             this.eventBusSettings.IgnoredAggregateRoots.Add(newInterviewId.FormatGuid());
 
-            var identity = QuestionnaireIdentity.Parse(questionnaireId);
             var command = new CreateTemporaryInterviewCommand(newInterviewId, this.authorizedUser.Id, identity);
 
             try
@@ -93,20 +87,6 @@ namespace WB.UI.Headquarters.Controllers
                 maxInterviewsByAssignment = Constants.MaxInterviewsCountByAssignment,
                 assignmentsUrl = Url.Action("Index", "Assignments", new { id = (int?)null })
             });
-        }
-        
-        private DocumentFilter Filters()
-        {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
-
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load();
-
-            return new DocumentFilter
-            {
-                Templates = usersAndQuestionnaires.Questionnaires,
-                Statuses = statuses
-            };
         }
     }
 }

@@ -83,7 +83,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Shared.Web.Core", "UI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.WebTester", "UI\WB.UI.WebTester\WB.UI.WebTester.csproj", "{C7E6E0CE-C850-4F60-82A0-DAC200200747}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Headquarters.Core", "UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj", "{0AA94CA9-0FEB-4014-A0FF-3C48BAB321DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Headquarters", "UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj", "{0AA94CA9-0FEB-4014-A0FF-3C48BAB321DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj", "{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -285,6 +287,14 @@ Global
 		{0AA94CA9-0FEB-4014-A0FF-3C48BAB321DF}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{0AA94CA9-0FEB-4014-A0FF-3C48BAB321DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AA94CA9-0FEB-4014-A0FF-3C48BAB321DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Debug-ESRI|Any CPU.ActiveCfg = Debug-ESRI|Any CPU
+		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Debug-ESRI|Any CPU.Build.0 = Debug-ESRI|Any CPU
+		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Deploy-dev|Any CPU.ActiveCfg = Debug-ESRI|Any CPU
+		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Deploy-dev|Any CPU.Build.0 = Debug-ESRI|Any CPU
+		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

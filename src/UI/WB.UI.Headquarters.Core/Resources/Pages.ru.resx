@@ -616,8 +616,8 @@
     <value>Версия интервьюера полученная по время последней синхронизации планшета</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{0} (вер. {1})</value>
-    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+      <value>{{name}} (вер. {{version}})</value>
+      <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
     <value>Скачать последнюю версию</value>
