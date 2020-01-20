@@ -1942,7 +1942,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer(s) {0} will be moved to a team of supervisor {1}..
+        ///   Looks up a localized string similar to Interviewer(s) {{interviewers}} will be moved to a team of supervisor {{supervisor}}..
         /// </summary>
         public static string Interviewers_InterviewersToMove {
             get {
@@ -1951,7 +1951,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer(s) {0} are in the team of supervisor {1} and no actions will be performed..
+        ///   Looks up a localized string similar to Interviewer(s) {{interviewers}} are in the team of supervisor {{supervisor}} and no actions will be performed..
         /// </summary>
         public static string Interviewers_InterviewersToStay {
             get {
@@ -1978,7 +1978,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the team of supervisor {0}..
+        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the team of supervisor {{supervisor}}..
         /// </summary>
         public static string Interviewers_MoveAllToNewTeam {
             get {
@@ -1987,7 +1987,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a team where to move {0}.
+        ///   Looks up a localized string similar to Select a team where to move {{names}}.
         /// </summary>
         public static string Interviewers_MoveInterviewerPopupTitle {
             get {
@@ -2032,7 +2032,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} and {1} more.
+        ///   Looks up a localized string similar to {{names}} and {{more}} more.
         /// </summary>
         public static string Interviewers_NamesFormatMoreThanLimit {
             get {

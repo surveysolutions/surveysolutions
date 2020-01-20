@@ -694,10 +694,10 @@
     <value>Niciodată conectat</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-    <value>Anchetatorul(i) {0} va fi mutat într-o echipă a supraveghetorului {1}.</value>
+      <value>Anchetatorul(i) {{interviewers}} va fi mutat într-o echipă a supraveghetorului {{supervisor}}.</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-    <value>Anchetatorul(i) {0} se află în echipa supraveghetorului {1} și nu se vor efectua acțiuni.</value>
+      <value>Anchetatorul(i) {{interviewers}} se află în echipa supraveghetorului {{supervisor}} și nu se vor efectua acțiuni.</value>
   </data>
   <data name="Interviewers_InterviewerVersion" xml:space="preserve">
     <value>Versiunea aplicației</value>
@@ -706,10 +706,10 @@
     <value>Versiunea aplicației Interviewer raportată în timpul ultimei sincronizări a tabletei sale cu serverul</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-    <value>Mutați anchetatorul(i) cu sarcinile și interviurile lui la echipa supraveghetorului {0}.</value>
+      <value>Mutați anchetatorul(i) cu sarcinile și interviurile lui la echipa supraveghetorului {{supervisor}}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
-    <value>Selectați o echipă unde să mutați {0}</value>
+      <value>Selectați o echipă unde să mutați {{names}}</value>
   </data>
   <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
     <value>Treceți la o altă echipă</value>
@@ -724,7 +724,7 @@
     <value>{0} și {1}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
-    <value>{0} și {1} mai mult</value>
+      <value>{{names}} și {{more}} mai mult</value>
   </data>
   <data name="Interviewers_NotConnected" xml:space="preserve">
     <value>Neconectat</value>
