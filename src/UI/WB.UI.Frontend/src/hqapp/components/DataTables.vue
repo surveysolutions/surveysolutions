@@ -191,7 +191,11 @@ export default {
 
             var options = $.extend(optionsFromProperties, this.tableOptions);
 
+            var baseCreatedRow = options.createdRow
             options.createdRow = (row, data, dataIndex) => {
+                if (baseCreatedRow != undefined)
+                    baseCreatedRow(row, data, dataIndex)
+
                 if(this.hasTotalRow) {
                     if (dataIndex === 0){
                         $(row).addClass('total-row');

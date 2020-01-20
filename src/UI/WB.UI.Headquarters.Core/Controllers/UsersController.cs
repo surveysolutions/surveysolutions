@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 DataUrl = Url.Action("AllInterviewers", "UsersApi"),
                 ImpersonateUrl = authorizedUser.IsObserver ? Url.Action("ObservePerson", "Account") : null,
-                ArchiveUsersUrl = authorizedUser.IsObserver ? Url.Action("ArchiveUsers", "UsersApi") : null,
+                ArchiveUsersUrl = authorizedUser.IsAdministrator ? Url.Action("ArchiveUsers", "UsersApi") : null,
                 SupervisorsUrl = Url.Action("SupervisorsCombobox", "Teams"),
                 MoveUserToAnotherTeamUrl = Url.Action("MoveUserToAnotherTeam", "UsersApi"),
                 InterviewerProfile = Url.Action("Profile", "Interviewer"),
