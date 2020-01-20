@@ -61,11 +61,13 @@
       :tableOptions="tableOptions"
       @ajaxComplete="onTableReload"
       exportable
-      selectable
-      mutliRowSelect
+      :selectable="model.canArchiveUnarchive"
+      :mutliRowSelect="model.canArchiveUnarchive"
       :selectableId="'userId'"
       @selectedRowsChanged="rows => selectedInterviewers = rows"
       :addParamsToRequest="addParamsToRequest"
+      :contextMenuItems="contextMenuItems"
+      :supportContextMenu="model.showContextMenu"
     >
       <div class="panel panel-table" v-if="selectedInterviewers.length">
         <div class="panel-body">
@@ -203,6 +205,21 @@ export default {
         },
         moveToAnotherTeam() {
             this.$refs.interviewersMoveToOtherTeam.moveToAnotherTeam()
+        },
+        contextMenuItems({rowData, rowIndex}) {
+            if (!this.model.showContextMenu)
+                return null;
+
+            const self = this
+            const menu = []
+            menu.push({
+                name: self.$t('Users.ImpersonateAsUser'),
+                callback: () => {
+                    const link = self.model.impersonateUrl + '?personName=' + rowData.userName
+                    window.open(link, "_blank")
+                }
+            })
+            return menu
         }
     },
     computed: {

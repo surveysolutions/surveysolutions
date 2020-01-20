@@ -323,6 +323,7 @@ namespace WB.UI.Headquarters.Controllers
                 ShowFirstInstructions = !authorizedUser.IsSupervisor && !authorizedUser.IsObserving,
                 ShowSupervisorColumn = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
                 CanArchiveUnarchive = authorizedUser.IsAdministrator,
+                ShowContextMenu = authorizedUser.IsObserver,
                 InterviewerIssues = new[]
                 {
                     new ComboboxViewItem() { Key = InterviewerFacet.None.ToString(),                  Value = EnumNames.InterviewerFacet_None   },
