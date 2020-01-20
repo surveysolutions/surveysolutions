@@ -51,19 +51,19 @@
                         <th>{{ $t('MainMenu.Assignments') }}</th>
                     </tr>
                 </thead>
-                <tbody  v-for="interviewer in interviewers" v-bind:key="interviewer.userId">
+                <tbody  v-for="interviewer in progressInterviewers" v-bind:key="interviewer.userId">
                     <tr>
                         <td><span class="interviewer">
-                            <a target="_blank" :href="model.interviewerProfileUrl + '/' + interviewer.userId" :text="interviewer.userName" :class="{'text-danger' : interviewer.inProgress }"></a>
+                            <a target="_blank" :href="$config.model.interviewerProfileUrl + '/' + interviewer.userId" :v-text="interviewer.userName" :class="{'text-danger' : interviewer.inProgress }">{{interviewer.userName}}</a>
                         </span></td>
-                        <td data-bind="text: interviewsProcessed"></td>
-                        <td data-bind="text: assignmentsProcessed"></td>
+                        <td v-text="interviewer.interviewsProcessed"></td>
+                        <td v-text="interviewer.assignmentsProcessed"></td>
                     </tr>
-                    <tr  v-if="interviewer.errors">
+                    <tr  v-if="interviewer.errors.length > 0">
                         <td colspan="5">
                             <p>{{ $t('Pages.Interviewers_FinishedWithErrors') }}</p>
-                            <ul v-for="error in errors"  v-bind:key="error.id">
-                                <li :v-text="error"></li>
+                            <ul v-for="error in interviewer.errors"  v-bind:key="error">
+                                <li :v-text="error">{{error}}</li>
                             </ul>
                         </td>
                     </tr>
@@ -79,10 +79,9 @@
 export default {
     data() {
         return {
-            moveUserToAnotherTeamUrl: null,
-            countInterviewersToAssign: 0,
             whatToDoWithAssignments : null,
-            supervisor: null
+            supervisor: null,
+            progressInterviewers: []
         }
     },
     props: {
@@ -119,6 +118,10 @@ export default {
             return this.$t('Pages.Interviewers_NamesFormatMoreThanLimit', { names: names.slice(0, limit).join(', '), more: names.length - limit})
         },       
         moveToAnotherTeam() {
+
+            this.whatToDoWithAssignments = null
+            this.supervisor = null
+
             var self = this
             this.$refs.move.promt(async ok => {
                 if (ok) {
@@ -134,50 +137,55 @@ export default {
                 }
             })
         },
-        runMoveInterviewersProgress() {
+        async runMoveInterviewersProgress() {
             var self = this
 
-            _.forEach(this.interviewers,
+            this.progressInterviewers = _.map(this.interviewers,
                 function (interviewer) {
-                    interviewer.inProgress = false;
-                    interviewer.processed = false;
-                    interviewer.interviewsProcessed = "-";
-                    interviewer.interviewsProcessedWithErrors = "-";
-                    interviewer.assignmentsProcessed = "-";
-                    interviewer.assignmentsProcessedWithErrors = "-";
-                    interviewer.errors = [];
+                    var progressItem = {}
+                    progressItem.userId = interviewer.userId
+                    progressItem.userName = interviewer.userName
+                    progressItem.supervisorId = interviewer.supervisorId
+                    progressItem.inProgress = false;
+                    progressItem.processed = false;
+                    progressItem.interviewsProcessed = "-";
+                    progressItem.interviewsProcessedWithErrors = "-";
+                    progressItem.assignmentsProcessed = "-";
+                    progressItem.assignmentsProcessedWithErrors = "-";
+                    progressItem.errors = [];
+                    return progressItem
                 });
 
-            this.$refs.progress.modal()
+            await this.$refs.progress.modal()
 
-            _.forEach(this.interviewers,
-                async function (interviewer) {
-                    
-                    interviewer.inProgress = true 
+            for(var index in this.progressInterviewers) {
+                var interviewer = this.progressInterviewers[index]
+                await self.migarateInterviewer(interviewer)
+                await self.timeout(500)
+            }
+        },
+        async migarateInterviewer(interviewer) {
+            var self = this
 
-                    var request = {
-                        InterviewerId: interviewer.userId,
-                        OldSupervisorId: interviewer.supervisorId,
-                        NewSupervisorId: supervisor.UserId,
-                        Mode: whatToDoWithAssignments
-                    }
+            interviewer.inProgress = true 
 
-                    var moveResult = await this.$http.post(this.moveUserToAnotherTeamUrl, {
-                        interviewerId: interviewer.userId,
-                        oldSupervisorId: interviewer.supervisorId,
-                        newSupervisorId: supervisor.UserId,
-                        mode: self.whatToDoWithAssignments
-                    })
+            var moveResult = await self.$http.post(self.$config.model.moveUserToAnotherTeamUrl, {
+                interviewerId: interviewer.userId,
+                oldSupervisorId: interviewer.supervisorId,
+                newSupervisorId: self.supervisor.key,
+                mode: self.whatToDoWithAssignments
+            })
 
-                    interviewer.inProgress = false
-                    interviewer.processed = true
-                    interviewer.interviewsProcessed = moveResult.interviewsProcessed
-                    interviewer.interviewsProcessedWithErrors = moveResult.interviewsProcessedWithErrors
-                    interviewer.assignmentsProcessed = moveResult.assignmentsProcessed
-                    interviewer.assignmentsProcessedWithErrors = moveResult.assignmentsProcessedWithErrors
-                    interviewer.errors = moveResult.errors
-                }
-            );
+            interviewer.inProgress = false
+            interviewer.processed = true
+            interviewer.interviewsProcessed = moveResult.data.interviewsProcessed
+            interviewer.interviewsProcessedWithErrors = moveResult.data.interviewsProcessedWithErrors
+            interviewer.assignmentsProcessed = moveResult.data.assignmentsProcessed
+            interviewer.assignmentsProcessedWithErrors = moveResult.data.assignmentsProcessedWithErrors
+            interviewer.errors = moveResult.data.errors
+        },
+        timeout(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
     },
     computed: {
@@ -189,14 +197,12 @@ export default {
         },
         interviewersToMove() {
             var self = this
-            var inters = _.filter(this.interviewers, function (interviewer) { 
+            return _.filter(this.interviewers, function (interviewer) { 
                 return interviewer.supervisorName != self.selectedSupervisor
             })
-            return inters
         },
         interviewersToStay() {
-            var inters = _.filter(this.interviewers, {supervisorName: this.selectedSupervisor })
-            return inters
+            return _.filter(this.interviewers, {supervisorName: this.selectedSupervisor })
         },
         interviewersToMoveNamesOnly() {
             return this.formatNames(this.interviewersToMove)
