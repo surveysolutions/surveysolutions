@@ -12,6 +12,7 @@ import Interviews from "./Interviews"
 import QuestionnaireDetails from "./Questionnaires"
 import Template from "./Template"
 import UsersUpload from "./Users/Upload"
+import ControlPanel from "./ControlPanel"
 
 export default [
     Assignments,
@@ -27,5 +28,6 @@ export default [
     Interviews,
     QuestionnaireDetails,
     Template,
-    UsersUpload
+    UsersUpload,
+    ControlPanel
 ]
