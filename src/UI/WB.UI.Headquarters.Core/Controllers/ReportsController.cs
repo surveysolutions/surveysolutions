@@ -54,8 +54,7 @@ namespace WB.UI.Headquarters.Controllers
             model.InterviewsUrl = Url.Action("Index", "Interviews");
             model.ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead");
             model.SelfUrl = Url.Action("SurveysAndStatuses");
-            throw new Exception("test");
-            // return this.View(model);
+            return this.View(model);
         }
 
         [Authorize(Roles = "Supervisor")]
