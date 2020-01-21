@@ -54,6 +54,7 @@
 
 <script>
 import * as toastr from "toastr";
+import moment from "moment";
 
 export default {
   data: function() {
