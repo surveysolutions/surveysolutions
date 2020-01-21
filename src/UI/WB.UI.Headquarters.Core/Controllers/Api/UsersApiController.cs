@@ -71,8 +71,11 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<DataTableResponse<InterviewerListItem>> AllInterviewers(DataTableRequestWithFilter request)
+        public async Task<IActionResult> AllInterviewers(DataTableRequestWithFilter request, [FromQuery] string exportType)
         {
+            if (!string.IsNullOrEmpty(exportType))
+                return await ExportAllInterviewers(request, exportType);
+
             Guid? supervisorId = null;
 
             if (!string.IsNullOrWhiteSpace(request.SupervisorName))
@@ -97,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
                 supervisorId,
                 request.Facet);
 
-            return new DataTableResponse<InterviewerListItem>
+            return new JsonResult(new DataTableResponse<InterviewerListItem>
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = interviewers.TotalCount,
@@ -118,7 +121,7 @@ namespace WB.UI.Headquarters.Controllers
                     TrafficUsed = (x.TrafficUsed ?? (0L)).InKb(),
                     IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
                 })
-            };
+            });
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
