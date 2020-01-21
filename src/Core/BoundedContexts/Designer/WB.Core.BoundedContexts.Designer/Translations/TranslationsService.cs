@@ -295,13 +295,21 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         public int Count(Guid questionnaireId, Guid translationId)
             => this.dbContext.TranslationInstances.Count(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId);
 
-        private TranslationRow GetExcelTranslation(TranslationsWithHeaderMap worksheetWithHeadersMap, int rowNumber) => new TranslationRow
+        private TranslationRow GetExcelTranslation(TranslationsWithHeaderMap worksheetWithHeadersMap, int rowNumber) => this.AdjustIndexValue(new TranslationRow
         {
             EntityId = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.EntityIdIndex}{rowNumber}"].GetValue<string>(),
             Type = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.TypeIndex}{rowNumber}"].GetValue<string>(),
             OptionValueOrValidationIndexOrFixedRosterId = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}"].GetValue<string>(),
             Translation = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.TranslationIndex}{rowNumber}"].GetValue<string>()
-        };
+        });
+
+        private TranslationRow AdjustIndexValue(TranslationRow row)
+        {
+            if (!string.IsNullOrEmpty(row.OptionValueOrValidationIndexOrFixedRosterId) && row.OptionValueOrValidationIndexOrFixedRosterId.EndsWith("$"))
+                row.OptionValueOrValidationIndexOrFixedRosterId = 
+                    row.OptionValueOrValidationIndexOrFixedRosterId.Substring(0, row.OptionValueOrValidationIndexOrFixedRosterId.Length - 1);
+            return row;
+        }
 
         private IEnumerable<ImportValidationError> Verify(TranslationsWithHeaderMap worksheetWithHeadersMap)
         {
