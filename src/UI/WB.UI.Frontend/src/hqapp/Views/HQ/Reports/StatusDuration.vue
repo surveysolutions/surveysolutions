@@ -250,7 +250,8 @@ export default {
         },
 
         reload() {
-            this.$refs.table.reload();
+            if (this.$refs.table)
+                this.$refs.table.reload();
         },
  
         selectQuestionnaire(value) {

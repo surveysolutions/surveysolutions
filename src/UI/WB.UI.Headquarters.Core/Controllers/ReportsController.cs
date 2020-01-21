@@ -243,6 +243,36 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
+        [ActivePage(MenuItem.StatusDuration)]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public ActionResult StatusDuration()
+        {
+            return this.View("StatusDuration", new StatusDurationModel
+            {
+                DataUrl = Url.Action("StatusDuration", "ReportDataApi"),
+                InterviewsBaseUrl = Url.Action("Index", "Interviews"),
+                AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
+                QuestionnairesUrl = Url.Action("QuestionnairesWithVersions", "QuestionnairesApi"),
+                QuestionnaireByIdUrl = Url.Action("QuestionnairesComboboxById", "QuestionnairesApi")
+            });
+        }
+
+        [ActivePage(MenuItem.StatusDuration)]
+        [Authorize(Roles = "Supervisor")]
+        public ActionResult TeamStatusDuration()
+        {
+            return this.View("StatusDuration", new StatusDurationModel
+            {
+                IsSupervisorMode = true,
+
+                DataUrl = Url.Action("TeamStatusDuration", "ReportDataApi"),
+                InterviewsBaseUrl = Url.Action("Index", "Interviews"),
+                AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
+                QuestionnairesUrl = Url.Action("QuestionnairesWithVersions", "QuestionnairesApi"),
+                QuestionnaireByIdUrl = Url.Action("QuestionnairesComboboxById", "QuestionnairesApi")
+            });
+        }
+
         private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName,
             PeriodiceReportType reportType,
             bool canNavigateToQuantityByTeamMember,
