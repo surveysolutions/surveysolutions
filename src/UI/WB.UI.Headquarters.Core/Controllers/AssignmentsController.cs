@@ -24,6 +24,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -212,7 +213,12 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        private async Task<ActionResult> UploadAdvanced(AssignmentUploadModel model)
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [ActivePage(MenuItem.Questionnaires)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public async Task<IActionResult> Upload(AssignmentUploadModel model)
         {
             if (!QuestionnaireIdentity.TryParse(model.QuestionnaireId, out QuestionnaireIdentity questionnaireIdentity))
                 return NotFound(model.QuestionnaireId);
@@ -225,211 +231,99 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
-               || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
-            {
-                return RedirectToAction(nameof(InterviewImportIsInProgress), new { id = questionnaireIdentity.ToString() });
-            }
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
+                status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                return BadRequest("Upload assignments in progress");
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-
             var fileName = model.File.FileName;
-            if (questionnaireInfo.IsDeleted)
-            {
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, fileName, Resources.BatchUpload.Prerequisite_Questionnaire));
-            }
 
-            if (@".zip" != this.fileSystemAccessor.GetFileExtension(fileName).ToLower())
-            {
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, fileName, Resources.BatchUpload.Prerequisite_ZipFile));
-            }
+            if (questionnaireInfo.IsDeleted)
+                return this.Ok(CreateError(questionnaireIdentity, fileName, BatchUpload.Prerequisite_Questionnaire));
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            var extension = this.fileSystemAccessor.GetFileExtension(fileName).ToLower();
+
+            var isTextFile = new[] {@".tab", @".txt"}.Contains(extension);
+            var isZip = @".zip" == extension;
+
+            if (!isTextFile && !isZip && model.Type == AssignmentUploadType.Simple)
+                return this.Ok(CreateError(questionnaireIdentity, fileName, BatchUpload.Prerequisite_TabOrTxtFile));
+
+            if (!isZip && model.Type == AssignmentUploadType.Advanced)
+                return this.Ok(CreateError(questionnaireIdentity, fileName, BatchUpload.Prerequisite_ZipFile));
 
             PreloadedFileInfo[] allImportedFileInfos = null;
             try
             {
-                allImportedFileInfos = this.assignmentsImportReader.ReadZipFileInfo(model.File.OpenReadStream()).ToArray();
+                if (isTextFile)
+                {
+                    var file = this.assignmentsImportReader.ReadTextFileInfo(model.File.OpenReadStream(), fileName);
+                    file.QuestionnaireOrRosterName = questionnaire.VariableName ?? questionnaire.Title; /*we expect that it is main file*/
+
+                    allImportedFileInfos = new[] {file};
+                }
+
+                if (isZip)
+                    allImportedFileInfos = this.assignmentsImportReader.ReadZipFileInfo(model.File.OpenReadStream())?.ToArray();
             }
             catch (ZipException)
             {
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, fileName, PreloadingVerificationMessages.ArchiveWithPasswordNotSupported));
+                return this.Ok(CreateError(questionnaireIdentity, fileName, PreloadingVerificationMessages.ArchiveWithPasswordNotSupported));
             }
 
-            if (allImportedFileInfos == null || !allImportedFileInfos.Any())
-            {
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, fileName, PreloadingVerificationMessages.PL0024_DataWasNotFound));
-            }
+            if (allImportedFileInfos?.Any() != true)
+                return this.Ok(CreateError(questionnaireIdentity, fileName, PreloadingVerificationMessages.PL0024_DataWasNotFound));
 
             try
             {
-                var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+                var preloadedFileInfo = this.GetSampleFile(isTextFile, isZip, allImportedFileInfos, questionnaire);
 
-                PanelImportVerificationError[] fileErrors = this.dataVerifier.VerifyFiles(fileName, allImportedFileInfos, questionnaire).Take(10).ToArray();
-                if (fileErrors.Any())
+                var errors = model.Type == AssignmentUploadType.Advanced
+                    ? this.dataVerifier.VerifyFiles(fileName, allImportedFileInfos, questionnaire).Take(10).ToArray()
+                    : this.dataVerifier.VerifyFile(fileName, preloadedFileInfo, questionnaire).Take(10).ToArray();
+
+                if (!errors.Any())
                 {
-                    return this.View("InterviewImportVerificationErrors",
-                        CreateError(questionnaireIdentity, fileName, errors: fileErrors));
-                }
-
-                var columnErrors = this.dataVerifier.VerifyColumns(allImportedFileInfos, questionnaire).Take(10).ToArray();
-                if (columnErrors.Any())
-                {
-                    return this.View("InterviewImportVerificationErrors",
-                        CreateError(questionnaireIdentity, fileName, errors: columnErrors));
-                }
-
-                var allImportedFiles = this.assignmentsImportReader.ReadZipFile(model.File.OpenReadStream()).ToArray();
-
-                PreloadedFile protectedFile = allImportedFiles.FirstOrDefault(x => x.FileInfo.QuestionnaireOrRosterName
-                                                                                             .Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase));
-                if (protectedFile != null)
-                {
-                    var protectedVariablesErrors = this.dataVerifier.VerifyProtectedVariables(
-                        fileName,
-                        protectedFile,
-                        questionnaire).Take(10).ToArray();
-
-                    if (protectedVariablesErrors.Length > 0)
+                    errors = this.dataVerifier.VerifyColumns(allImportedFileInfos, questionnaire).Take(10).ToArray();
+                    if (!errors.Any())
                     {
-                        return this.View("InterviewImportVerificationErrors",
-                            CreateError(questionnaireIdentity, fileName,
-                                errors: protectedVariablesErrors));
+                        if (model.Type == AssignmentUploadType.Advanced)
+                        {
+                            var allImportedFiles = this.assignmentsImportReader.ReadZipFile(model.File.OpenReadStream()).ToArray();
+
+                            var protectedFile = allImportedFiles.FirstOrDefault(x => x.FileInfo.QuestionnaireOrRosterName
+                                .Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase));
+
+                            if (protectedFile != null)
+                            {
+                                errors = this.dataVerifier.VerifyProtectedVariables(fileName, protectedFile, questionnaire).Take(10).ToArray();
+
+                                if (!errors.Any())
+                                {
+                                    errors = this.assignmentsImportService.VerifyPanelAndSaveIfNoErrors(fileName,
+                                        allImportedFiles.Where(x => !x.Equals(protectedFile)).ToArray(), model.ResponsibleId.Value, protectedFile, questionnaire).Take(10).ToArray();       
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var preloadedFile = isTextFile
+                                ? this.assignmentsImportReader.ReadTextFile(model.File.OpenReadStream(), fileName)
+                                : this.assignmentsImportReader.ReadFileFromZip(model.File.OpenReadStream(), preloadedFileInfo.FileName);
+
+                            if (preloadedFile.Rows.Length == 0)
+                                return this.Ok(CreateError(questionnaireIdentity, fileName, PreloadingVerificationMessages.PL0024_DataWasNotFound));
+
+                            errors = this.assignmentsImportService
+                                .VerifySimpleAndSaveIfNoErrors(preloadedFile, model.ResponsibleId.Value, questionnaire).Take(10).ToArray();
+                        }
                     }
                 }
 
-                var answerErrors = this.assignmentsImportService
-                    .VerifyPanelAndSaveIfNoErrors(fileName, allImportedFiles.Where(x => !x.Equals(protectedFile)).ToArray(), model.ResponsibleId.Value, protectedFile, questionnaire).Take(10).ToArray();
-
-                if (answerErrors.Any())
-                {
-                    return this.View("InterviewImportVerificationErrors",
-                        CreateError(questionnaireIdentity, fileName, errors: answerErrors));
-                }
-
-                await this.assignmentsVerificationTask.ScheduleRunAsync(3);
-            }
-            catch (Exception e)
-            {
-                this.logger.LogError(e, @"Import panel assignments error");
-
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, fileName, Pages.GlobalSettings_UnhandledExceptionMessage));
-            }
-
-            return this.RedirectToAction("InterviewVerificationProgress");
-        }
-
-        [Authorize(Roles = "Administrator, Headquarter")]
-        [ActivePage(MenuItem.Questionnaires)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        public async Task<ActionResult> Upload(AssignmentUploadModel model)
-        {
-            if (model.Type == AssignmentUploadType.Advanced)
-                return await UploadAdvanced(model);
-
-            if (!QuestionnaireIdentity.TryParse(model.QuestionnaireId, out QuestionnaireIdentity questionnaireIdentity))
-                return NotFound(model.QuestionnaireId);
-
-            if (!this.ModelState.IsValid)
-                return this.RedirectToAction(nameof(Upload), new { id = questionnaireIdentity.ToString() });
-
-            var status = this.assignmentsImportService.GetImportStatus();
-
-            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
-                || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
-            {
-                return RedirectToAction(nameof(InterviewImportIsInProgress), new { id = questionnaireIdentity });
-            }
-
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            var fileName = model.File.FileName;
-            if (questionnaireInfo.IsDeleted)
-            {
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, fileName, Resources.BatchUpload.Prerequisite_Questionnaire));
-            }
-
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-            var questionnaireFileName = this.fileSystemAccessor.MakeStataCompatibleFileName(questionnaireInfo.Title);
-
-            var extension = this.fileSystemAccessor.GetFileExtension(fileName).ToLower();
-            if (!new[] {@".tab", @".txt", @".zip"}.Contains(extension))
-            {
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, fileName, Resources.BatchUpload.Prerequisite_TabOrTxtFile));
-            }
-            
-            PreloadedFileInfo preloadedFileInfo = null;
-
-            var isFile = new[] { @".tab", @".txt" }.Contains(extension);
-            var isZip = @".zip" == extension;
-
-            if (isFile)
-            {
-                preloadedFileInfo = this.assignmentsImportReader.ReadTextFileInfo(model.File.OpenReadStream(), fileName);
-                preloadedFileInfo.QuestionnaireOrRosterName = questionnaire.VariableName ?? questionnaire.Title;/*we expect that it is main file*/
-            }
-            else if (isZip)
-            {
-                try
-                {
-                    var preloadedFiles = this.assignmentsImportReader.ReadZipFileInfo(model.File.OpenReadStream());
-
-                    preloadedFileInfo =
-                        preloadedFiles.FirstOrDefault(x => x.QuestionnaireOrRosterName == questionnaireFileName) ??
-                        preloadedFiles.FirstOrDefault(x => x.QuestionnaireOrRosterName == questionnaire.VariableName) ??
-                        preloadedFiles.FirstOrDefault();
-                }
-                catch (ZipException)
-                {
-                    return this.View("InterviewImportVerificationErrors",
-                        CreateError(questionnaireIdentity, fileName, PreloadingVerificationMessages.ArchiveWithPasswordNotSupported));
-                }
-            }
-
-            if (preloadedFileInfo == null)
-            {
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, fileName, PreloadingVerificationMessages.PL0024_DataWasNotFound));
-            }
-
-            try
-            {
-                var fileErrors = this.dataVerifier.VerifyFile(fileName, preloadedFileInfo, questionnaire).Take(10).ToArray();
-                if (fileErrors.Any())
-                {
-                    return this.View("InterviewImportVerificationErrors",
-                        CreateError(questionnaireIdentity, fileName, errors: fileErrors));
-                }
-
-                var columnErrors = this.dataVerifier.VerifyColumns(new[] { preloadedFileInfo }, questionnaire).Take(10).ToArray();
-                if (columnErrors.Any())
-                {
-                    return this.View("InterviewImportVerificationErrors",
-                        CreateError(questionnaireIdentity, fileName, errors: columnErrors));
-                }
-
-                var preloadedFile = isFile
-                    ? this.assignmentsImportReader.ReadTextFile(model.File.OpenReadStream(), fileName)
-                    : this.assignmentsImportReader.ReadFileFromZip(model.File.OpenReadStream(), preloadedFileInfo.FileName);
-
-                if (preloadedFile.Rows.Length == 0)
-                {
-                    return this.View("InterviewImportVerificationErrors",
-                        CreateError(questionnaireIdentity, fileName, PreloadingVerificationMessages.PL0024_DataWasNotFound));
-                }
-
-                var answerErrors = this.assignmentsImportService.VerifySimpleAndSaveIfNoErrors(preloadedFile, model.ResponsibleId.Value, questionnaire).Take(10).ToArray();
-                if (answerErrors.Any())
-                {
-                    return this.View("InterviewImportVerificationErrors",
-                        CreateError(questionnaireIdentity, fileName, errors: answerErrors));
-                }
+                if (errors.Any())
+                    return this.Ok(CreateError(questionnaireIdentity, fileName, errors: errors));
 
                 await this.assignmentsVerificationTask.ScheduleRunAsync(3);
             }
@@ -437,11 +331,25 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.logger.LogError(e, @"Import assignments error");
 
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, fileName, Pages.GlobalSettings_UnhandledExceptionMessage));
+                return this.Ok(CreateError(questionnaireIdentity, fileName, Pages.GlobalSettings_UnhandledExceptionMessage));
             }
 
-            return this.RedirectToAction("InterviewVerificationProgress");
+            return this.Ok();
+        }
+
+        private PreloadedFileInfo GetSampleFile(bool isTextFile, bool isZip, PreloadedFileInfo[] allImportedFileInfos, IQuestionnaire questionnaire)
+        {
+            var questionnaireFileName = this.fileSystemAccessor.MakeStataCompatibleFileName(questionnaire.Title);
+
+            if (isTextFile)
+                return allImportedFileInfos.FirstOrDefault();
+
+            if (isZip)
+                return allImportedFileInfos.FirstOrDefault(x => x.QuestionnaireOrRosterName == questionnaireFileName) ??
+                       allImportedFileInfos.FirstOrDefault(x => x.QuestionnaireOrRosterName == questionnaire.VariableName) ??
+                       allImportedFileInfos.FirstOrDefault();
+
+            return null;
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
