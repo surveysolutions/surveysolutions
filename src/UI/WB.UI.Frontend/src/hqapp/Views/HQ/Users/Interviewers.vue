@@ -62,7 +62,7 @@
       @ajaxComplete="onTableReload"
       exportable
       :selectable="model.canArchiveUnarchive"
-      :mutliRowSelect="model.canArchiveUnarchive"
+      mutliRowSelect
       :selectableId="'userId'"
       @selectedRowsChanged="rows => selectedInterviewers = rows"
       :addParamsToRequest="addParamsToRequest"
