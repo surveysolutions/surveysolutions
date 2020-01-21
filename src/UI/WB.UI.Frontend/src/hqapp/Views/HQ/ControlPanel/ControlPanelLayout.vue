@@ -11,6 +11,9 @@
                     <li>
                         <router-link to="/ControlPanel/Configuration">{{$t('ControlPanel.ConfigurationPage')}}</router-link>
                     </li>
+                    <li>
+                        <router-link to="/ControlPanel/TabletInfos">{{$t('ControlPanel.TabletInfos')}}</router-link>
+                    </li>
                 </ol>
             </div>
         </aside>

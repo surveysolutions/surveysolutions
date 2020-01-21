@@ -68,5 +68,14 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("ConfigurationPage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tablet packages.
+        /// </summary>
+        public static string TabletInfos {
+            get {
+                return ResourceManager.GetString("TabletInfos", resourceCulture);
+            }
+        }
     }
 }
