@@ -8,11 +8,21 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator")]
     public class ControlPanelController : Controller
     {
-        public IActionResult Configuration()
+        public ActionResult Index()
         {
             return View();
         }
 
+        public IActionResult TabletInfos()
+        {
+            return View("Index", new { DataUrl = Url.Action("TabletInfos", "ControlPanelApi")});
+        }
+
+        public IActionResult Configuration()
+        {
+            return View("Index");
+        }
+        
         public async Task Exceptions() => await ExceptionalMiddleware.HandleRequestAsync(HttpContext);
     }
 }
