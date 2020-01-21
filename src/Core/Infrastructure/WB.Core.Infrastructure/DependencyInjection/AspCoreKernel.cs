@@ -32,18 +32,15 @@ namespace WB.Core.Infrastructure.DependencyInjection
             initModules.AddRange(modules);
         }
 
-        
         public Task InitAsync(IServiceProvider serviceProvider)
         {
-            var status = new UnderConstructionInfo();
-            this.services.AddSingleton(typeof(UnderConstructionInfo), sp => status);
-            
-            var initTask = Task.Run(async () => await InitModules(status, serviceProvider));
+            var initTask = Task.Run(async () => await InitModules(serviceProvider));
             return initTask;
         }
 
-        private async Task InitModules(UnderConstructionInfo status, IServiceProvider serviceProvider)
+        private async Task InitModules(IServiceProvider serviceProvider)
         {
+            var status = serviceProvider.GetService<UnderConstructionInfo>();
             status.Run();
 
             try

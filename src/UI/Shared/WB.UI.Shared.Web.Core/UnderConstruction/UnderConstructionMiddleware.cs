@@ -20,9 +20,12 @@ namespace WB.UI.Shared.Web.UnderConstruction
         {
             if (underConstructionInfo.Status != UnderConstructionStatus.Finished)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
-                context.Response.Headers.Add("Retry-After", "30");
-                context.Request.Path = "/UnderConstruction";
+                if (!context.Request.Path.Value.StartsWith("/UnderConstruction"))
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.ServiceUnavailable;
+                    context.Response.Headers.Add("Retry-After", "30");
+                    context.Request.Path = "/UnderConstruction";
+                }
             }
 
             return next.Invoke(context);
