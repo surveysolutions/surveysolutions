@@ -680,6 +680,7 @@ $width-right-menu-small: 380px;
 }
 @media (max-width: $screen-xs-min) {
 	.navbar{
+		white-space: nowrap;
 		.navbar-header{
 			& > .interview-ID{
 				padding-left: 5px;

@@ -1,5 +1,5 @@
 <template>    
-    <div class="question table-view scroller" :id="hash">        
+    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">        
         <h5 v-dateTimeFormatting v-html="title"></h5>
         <div class="information-block instruction" v-if="instructions">            
             <p v-dateTimeFormatting v-html="instructions"></p>
@@ -7,8 +7,8 @@
         <ag-grid-vue 
             ref="matrixRoster"
             class="ag-theme-customStyles roster-matrix"
-            style="height:1024px"
-            domLayout='normal'
+            
+            domLayout='autoHeight'
             rowHeight="40"
             headerHeight="50"
 
@@ -67,7 +67,7 @@
             this.instructions = this.$me.questions.length > 0 ? this.$me.questions[0].instruction : null
 
             this.defaultColDef = {
-                width: 220, // set every column width
+                width: 180, // set every column width
                 height: 76,
                 resizable: true,
                 editable: false, // make every column editable
@@ -84,9 +84,9 @@
             },
             ["$me.instances"]() {
                 if (this.countOfInstances != this.$me.instances.length) {
-                    this.countOfInstances = this.$me.instances.length
-                    this.setTableRosterHeight()
+                    this.countOfInstances = this.$me.instances.length                    
                     this.initQuestionsInRows()
+                    this.setTableRosterHeight()
                 }
             },
             ["$me.questions"]() {
@@ -106,6 +106,7 @@
                 return {
                     suppressClickEdit:true,
                     suppressCellSelection:true,
+                    suppressMovableColumns:true,
                     context: {
                         componentParent: this
                     }
@@ -126,7 +127,7 @@
                                 instruction: question.instruction,
                                 question: question
                             },
-                            width:question.options.length * 220,
+                            width:question.options.length * 180,
                             
                             field: question.id, 
                             cellRendererFramework: 'MatrixRoster_QuestionEditor',
@@ -159,7 +160,7 @@
             initQuestionsInRows() {
                 var self = this;
 
-                var rosterInstancesWithQuestionsAsRows = _.map(
+                var rosterInstancesWithQuestionsAsRows = _.map(                                       
                     this.$me.instances,
                     (instance, key) => {
                         var instanceAsRow = {
@@ -211,13 +212,16 @@
             },
 
             setTableRosterHeight() {
-                if (this.$me.instances.length > 20) {
-                    this.gridApi.setDomLayout('normal')
-                    this.$refs.matrixRoster.$el.style.height = '1024px';
-                }
-                else {
-                    this.gridApi.setDomLayout('autoHeight');
-                    this.$refs.matrixRoster.$el.style.height = '';
+                if(this.$refs.tableRoster != undefined)
+                {
+                    if (this.$me.instances.length > 30) {
+                        this.gridApi.setDomLayout('normal')
+                        this.$refs.matrixRoster.$el.style.height = '1536px';
+                    }
+                    else {
+                        this.gridApi.setDomLayout('autoHeight');
+                        this.$refs.matrixRoster.$el.style.height = '';
+                    }
                 }
             },
 
