@@ -59,31 +59,30 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
 
 
-        public async Task InitAsync(bool restartOnInitiazationError)
+        public async Task InitAsync(bool restartOnInitializationError)
         {
             this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             Container = containerBuilder.Build();
-            await InitModules(restartOnInitiazationError);
+            await InitModules(restartOnInitializationError);
         }
 
-        public Task InitCoreAsync(ILifetimeScope container, bool restartOnInitiazationError)
+        public Task InitCoreAsync(ILifetimeScope container, bool restartOnInitializationError)
         {
             Container = container;
 
-            return InitModules(restartOnInitiazationError);
+            return InitModules(restartOnInitializationError);
         }
 
-        private Task InitModules(bool restartOnInitiazationError)
+        private Task InitModules(bool restartOnInitializationError)
         {
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            var initTask = Task.Run(() =>
-                InitModules(Container.Resolve<UnderConstructionInfo>(), Container, restartOnInitiazationError));
+            var initTask = Task.Run(() => InitModules(Container.Resolve<UnderConstructionInfo>(), Container, restartOnInitializationError));
             return initTask;
         }
 
         private async Task InitModules(UnderConstructionInfo status, ILifetimeScope container,
-            bool restartOnInitiazationError)
+            bool restartOnInitializationError)
         {
             status.Run();
 
@@ -119,7 +118,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             void ScheduleAppReboot()
             {
-                if (restartOnInitiazationError && !scheduledAppReboot)
+                if (restartOnInitializationError && !scheduledAppReboot)
                 {
                     container.Resolve<ILogger>().Error("Scheduled application pool reboot in 10 seconds");
 

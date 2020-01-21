@@ -187,6 +187,8 @@ namespace WB.UI.Headquarters
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddUnderConstruction();
+
             services.AddOptions();
             services.AddControllersWithViews().AddNewtonsoftJson(j =>
             {
@@ -291,13 +293,13 @@ namespace WB.UI.Headquarters
             {
                 app.UseHsts();
             }
-
-            InitModules(app, env);
             
+            InitModules(app);
+
             app.UseStaticFiles();
             app.UseSerilogRequestLogging();
             app.UseUnderConstruction();
-
+            
             app.UseRouting();
 
             app.UseAuthentication();
@@ -339,22 +341,10 @@ namespace WB.UI.Headquarters
             });
         }
 
-        private void InitModules(IApplicationBuilder app, IWebHostEnvironment env)
+        private void InitModules(IApplicationBuilder app)
         {
             var lifetimeScope = app.ApplicationServices.GetAutofacRoot();
-            
-            var initTask = autofacKernel.InitCoreAsync(lifetimeScope, false);
-
-            InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(lifetimeScope));
-
-            if (!env.IsDevelopment())
-            {
-                initTask.Wait();
-            }
-            else
-            {
-                initTask.Wait(TimeSpan.FromSeconds(10));
-            }
+            autofacKernel.InitCoreAsync(lifetimeScope, false).Wait(TimeSpan.FromSeconds(3));
         }
     }
 }

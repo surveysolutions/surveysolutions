@@ -1,12 +1,5 @@
-﻿@using Microsoft.AspNetCore.Hosting
-@using Microsoft.Extensions.Hosting
-@using WB.Core.Infrastructure.Versions
-@using WB.UI.Shared.Web.Extensions
-@inject IProductVersion productVersion
-@inject IWebHostEnvironment webHostEnvironment
-
+﻿@using WB.UI.Shared.Web.Extensions
 @model WB.UI.Shared.Web.Controllers.UnderConstructionController.UnderConstructionModel
-
 @{
     Layout = "";
 }
@@ -18,7 +11,6 @@
     <meta http-equiv='refresh' content='30' />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <details></details>
     @Html.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
 </head>
 <body style="display: block;" class="wide-navbar under-construction">
@@ -62,26 +54,18 @@
             </div>
         </div>
     </main>
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="text-left">
-                &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="https://www.worldbank.org/en/about/legal">@Pages.Layout_Legal</a>.
-            </div>
-            <div class="text-left">
-                @(productVersion.ToString())
-                @if (webHostEnvironment.IsDevelopment())
-                {
-                    <span id="build-config">[.NET Debug]</span>
-                }
-                @*@if (HttpContext.Current.IsDebuggingEnabled)
-                {
-                    <span id="compile-config" style="color: red">Web Debug</span>
-                }*@
-            </div>
-        </div>
-    </footer>
+
+    <partial name="Footer" />
+
     <script type='text/javascript'>
-        setTimeout(function () { document.location.reload(true); }, 1000 * 30);
+        var rq = new XMLHttpRequest();
+        rq.onload = function() {
+            document.location.reload(true);
+
+        };
+        rq.open('GET', '@Url.Action("Status", "UnderConstruction")', true);
+        rq.send(null);
+        setTimeout(function () { document.location.reload(true); }, 1000 * 15);
     </script>
 </body>
 </html>
