@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.Modularity;
-using WB.UI.Shared.Web.Resources;
 
 namespace WB.UI.Shared.Web.Controllers
 {
     public class UnderConstructionController : Controller
     {
-        public UnderConstructionInfo underConstructionInfo;
+        private readonly UnderConstructionInfo underConstructionInfo;
 
         public UnderConstructionController(UnderConstructionInfo underConstructionInfo)
         {
@@ -39,6 +39,13 @@ namespace WB.UI.Shared.Web.Controllers
             };
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Status()
+        {
+            await underConstructionInfo.WaitForFinish;
+            return Ok();
         }
     }
 }

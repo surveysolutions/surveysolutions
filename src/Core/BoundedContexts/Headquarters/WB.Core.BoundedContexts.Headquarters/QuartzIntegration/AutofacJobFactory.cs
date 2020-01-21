@@ -7,8 +7,11 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public class AutofacJobFactory : IJobFactory
     {
-        public AutofacJobFactory()
+        private readonly IServiceProvider serviceProvider;
+
+        public AutofacJobFactory(IServiceProvider serviceProvider)
         {
+            this.serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             Type jobType = jobDetail.JobType;
             try
             {
-                return new AsyncScopedJobDecorator(jobType);
+                return new AsyncScopedJobDecorator(serviceProvider, jobType);
             }
             catch (Exception e)
             {

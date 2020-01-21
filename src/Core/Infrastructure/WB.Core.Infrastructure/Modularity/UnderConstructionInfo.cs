@@ -5,14 +5,19 @@ namespace WB.Core.Infrastructure.Modularity
 {
     public class UnderConstructionInfo
     {
+        readonly TaskCompletionSource<bool> awaitingBlock = new TaskCompletionSource<bool>();
+
         public void Run()
         {
-            Status = UnderConstructionStatus.Running;
+           Status = UnderConstructionStatus.Running;
         }
+
+        public Task WaitForFinish => awaitingBlock.Task;
 
         public void Finish()
         {
             Status = UnderConstructionStatus.Finished;
+            awaitingBlock.SetResult(true);
         }
 
         public void Error(string message, Exception exception)
@@ -20,6 +25,7 @@ namespace WB.Core.Infrastructure.Modularity
             Status = UnderConstructionStatus.Error;
             Message = message;
             Exception = exception;
+            //AwaitingBlock.SetException(exception);
         }
 
         public UnderConstructionStatus Status { get; private set; } = UnderConstructionStatus.NotStarted;
