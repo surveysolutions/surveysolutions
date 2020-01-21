@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
@@ -13,11 +17,32 @@ namespace WB.UI.Headquarters.Controllers.Api
     {
         private readonly IConfiguration configuration;
         private static readonly Regex ConnectionStringPasswordRegex = new Regex("password=([^;]*);", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private readonly ITabletInformationService tabletInformationService;
 
 
-        public ControlPanelApiController(IConfiguration configuration)
+        public ControlPanelApiController(IConfiguration configuration, 
+            ITabletInformationService tabletInformationService)
         {
             this.configuration = configuration;
+            this.tabletInformationService = tabletInformationService;
+        }
+
+
+        public ActionResult<DataTableResponse<TabletInformationView>> TabletInfos(DataTableRequest request)
+        {
+            var items = this.tabletInformationService.GetAllTabletInformationPackages();
+
+            if (!string.IsNullOrEmpty(request.Search?.Value))
+                items = items.Where(x => x.UserName != null && x.UserName.StartsWith(request.Search.Value, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            var itemsSlice = items.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize);
+            return new DataTableResponse<TabletInformationView>
+            {
+                Data = itemsSlice,
+                Draw = request.Draw + 1,
+                RecordsFiltered = items.Count,
+                RecordsTotal = items.Count
+            };
         }
 
         public ActionResult<List<KeyValuePair<string, string>>> Configuration()
@@ -36,3 +61,4 @@ namespace WB.UI.Headquarters.Controllers.Api
             => ConnectionStringPasswordRegex.Replace(connectionString, "Password=*****;");
     }
 }
+

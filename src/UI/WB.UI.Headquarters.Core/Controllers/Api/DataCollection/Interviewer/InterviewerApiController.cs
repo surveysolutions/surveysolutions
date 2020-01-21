@@ -6,8 +6,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -23,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
@@ -142,28 +145,37 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpPost]
         [Route("v2/tabletInfo")]
-        public virtual async Task<IActionResult> PostTabletInformation(IFormFile formFile)
+        public virtual async Task<IActionResult> PostTabletInformation()
         {
-            if (formFile == null)
+            if (!Request.HasFormContentType)
             {
                 return StatusCode(StatusCodes.Status415UnsupportedMediaType);
             }
 
-            var formData = new MemoryStream();
-            await formFile.CopyToAsync(formData);
+            var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType),
+                new FormOptions().MultipartBoundaryLengthLimit);
+            var reader = new MultipartReader(boundary.ToString(), HttpContext.Request.Body);
 
-            var deviceId = this.Request.Headers["DeviceId"].Single();
+            var section = await reader.ReadNextSectionAsync();
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (section != null)
+            {
+                var formData = new MemoryStream();
+                await  section.Body.CopyToAsync(formData);
 
-            var user = userId != null
-                ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
-                : null;
+                var deviceId = this.Request.Headers["DeviceId"].Single();
 
-            this.tabletInformationService.SaveTabletInformation(
-                content: formData.ToArray(),
-                androidId: deviceId,
-                user: user);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var user = userId != null
+                    ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
+                    : null;
+
+                this.tabletInformationService.SaveTabletInformation(
+                    content: formData.ToArray(),
+                    androidId: deviceId,
+                    user: user);
+            }
 
             return Ok();
         }

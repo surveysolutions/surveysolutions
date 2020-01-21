@@ -120,4 +120,7 @@
   <data name="ConfigurationPage" xml:space="preserve">
     <value>Configuration</value>
   </data>
+  <data name="TabletInfos" xml:space="preserve">
+    <value>Tablet packages</value>
+  </data>
 </root>
