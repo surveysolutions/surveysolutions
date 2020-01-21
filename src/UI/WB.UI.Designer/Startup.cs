@@ -18,8 +18,6 @@ using Microsoft.Extensions.FileProviders;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
-using StackExchange.Exceptional;
-using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -38,6 +36,7 @@ using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Authentication;
+using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer
@@ -45,9 +44,9 @@ namespace WB.UI.Designer
     public class Startup
     {
         internal const string WebTesterCorsPolicy = "_webTester";
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             this.hostingEnvironment = hostingEnvironment;
             Configuration = configuration;
@@ -150,24 +149,7 @@ namespace WB.UI.Designer
                 });
             });
 
-            // this code need to run lazy load KnownStoreTypes property
-            if (!ErrorStore.KnownStoreTypes.Contains(typeof(PostgreSqlErrorStore)))
-                ErrorStore.KnownStoreTypes.Add(typeof(PostgreSqlErrorStore));
-
-            services.AddExceptional(Configuration.GetSection("Exceptional"), config =>
-            {
-                config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
-
-                config.LogFilters.Header.Add("Authorization", "***");
-                config.LogFilters.Form.Add("Password", "***");
-                config.LogFilters.Form.Add("ConfirmPassword", "***");
-
-                if (config.Store.Type == "PostgreSql")
-                {
-                    config.Store.TableName = "\"logs\".\"Errors\"";
-                    config.Store.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
-                }
-            });
+            services.AddDatabaseStoredExceptional(hostingEnvironment, Configuration);
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
