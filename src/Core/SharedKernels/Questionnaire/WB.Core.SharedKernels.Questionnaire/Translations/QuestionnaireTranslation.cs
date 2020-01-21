@@ -32,13 +32,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
 
         public string GetAnswerOption(Guid questionId, string answerOptionValue, string answerParentValue)
         {
-            //fallback for questionnaires imported before version 20.01
             var translation =  this.GetTranslationByTypeAndIndex(questionId, $"{answerOptionValue}${answerParentValue}",
                 TranslationType.OptionTitle);
-
-            return (translation == null && answerParentValue == null)
-              ? this.GetTranslationByTypeAndIndex(questionId, $"{answerOptionValue}", TranslationType.OptionTitle)
-              : translation;
+            
+            //fallback for questionnaires imported before version 20.01
+            //to support old cascading questions
+            //checking translations without parent 
+            return translation ?? this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.OptionTitle);
         }
 
         public string GetSpecialValue(Guid questionId, string answerOptionValue)
@@ -57,10 +57,11 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         public string GetCategoriesText(Guid categoriesId, int id, int? parentId)
         {
             var translation = this.GetTranslationByTypeAndIndex(categoriesId, $"{id}${parentId}", TranslationType.Categories);
+            
             //fallback for questionnaires imported before version 20.01
-            return (translation == null && parentId == null)
-                ? this.GetTranslationByTypeAndIndex(categoriesId, $"{id}", TranslationType.Categories)
-                : translation;
+            //to support old cascading questions
+            //checking translations without parent
+            return translation ?? this.GetTranslationByTypeAndIndex(categoriesId, $"{id}", TranslationType.Categories);
         }
 
         private string GetTranslationByTypeAndIndex(Guid questionOrCategoriesId, string answerOptionValue, TranslationType translationType) =>
