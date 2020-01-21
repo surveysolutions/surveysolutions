@@ -347,8 +347,6 @@ span.image-zoom-box, span.image-option {
   .table-view .ag-theme-customStyles .ag-header-cell {
     border-top: 1px solid #E5E5E5;
     border-bottom: 1px solid rgba(0, 0, 0, 0.3); }
-    .table-view .ag-theme-customStyles .ag-header-cell:last-of-type {
-      border-right: 1px solid #E5E5E5; }
     .table-view .ag-theme-customStyles .ag-header-cell .ag-header-cell-label {
       text-overflow: clip;
       overflow: visible;
@@ -368,6 +366,7 @@ span.image-zoom-box, span.image-option {
   .table-view .ag-theme-customStyles .ag-cell {
     border-bottom: 1px solid #E5E5E5;
     white-space: normal !important;
+    background-color: #fff;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -410,6 +409,10 @@ span.image-zoom-box, span.image-option {
         text-transform: none;
         letter-spacing: normal;
         font-style: italic; }
+    .table-view .ag-theme-customStyles .ag-cell.readonly {
+      background-color: #E5E5E5;
+      color: #3f3f3f;
+      cursor: not-allowed; }
   .table-view .ag-theme-customStyles .cell-unit {
     width: 100%;
     height: 100%;
@@ -441,13 +444,6 @@ span.image-zoom-box, span.image-option {
       border-radius: 0;
       height: 3px;
       background: transparent; }
-    .table-view .ag-theme-customStyles .cell-unit.not-applicable {
-      background-color: transparent;
-      background-image: linear-gradient(-45deg, #dbdfe2 15%, transparent 15%, transparent 50%, #dbdfe2 50%, #dbdfe2 65%, transparent 65%, transparent);
-      background-size: 8px 8px; }
-    .table-view .ag-theme-customStyles .cell-unit.disabled-question {
-      background-color: #E5E5E5;
-      border-color: #a0a0a0; }
     .table-view .ag-theme-customStyles .cell-unit.has-warnings {
       background-image: url("../img/warning2.svg");
       background-repeat: no-repeat;
@@ -462,8 +458,14 @@ span.image-zoom-box, span.image-option {
       background-position: 0 0;
       background-color: rgba(255, 46, 0, 0.2);
       border-color: #FF2E00; }
-  .table-view .ag-theme-customStyles:not(.roster-matrix) .ag-cell > .ag-input-text-wrapper {
-    width: 100%; }
+  .table-view .ag-theme-customStyles:not(.roster-matrix) .ag-header-cell {
+    border-right: 1px solid #E5E5E5; }
+  .table-view .ag-theme-customStyles:not(.roster-matrix) .ag-pinned-left-header .ag-header-cell {
+    border-right-color: rgba(0, 0, 0, 0.3); }
+  .table-view .ag-theme-customStyles:not(.roster-matrix) .ag-cell {
+    border-right: 1px solid #E5E5E5; }
+    .table-view .ag-theme-customStyles:not(.roster-matrix) .ag-cell > .ag-input-text-wrapper {
+      width: 100%; }
   .table-view .ag-theme-customStyles.roster-matrix .cell-bordered {
     border-right: 1px solid #E5E5E5; }
     .table-view .ag-theme-customStyles.roster-matrix .cell-bordered:not(.ag-header-cell-label) {
