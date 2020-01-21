@@ -1,5 +1,6 @@
 import webinterview from "~/webinterview/store" 
 import takeNew from "./takenew"
+import upload from "./upload"
 
 const store = {
     modules:{
@@ -18,5 +19,6 @@ const store = {
 
 export default {
     webinterview,
-    takeNew: store
+    takeNew: store,
+    upload
 };
