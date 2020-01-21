@@ -54,8 +54,8 @@ namespace WB.UI.Headquarters.Controllers
             model.InterviewsUrl = Url.Action("Index", "Interviews");
             model.ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead");
             model.SelfUrl = Url.Action("SurveysAndStatuses");
-
-            return this.View(model);
+            throw new Exception("test");
+            // return this.View(model);
         }
 
         [Authorize(Roles = "Supervisor")]
@@ -129,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers
             var devicesInterviewersModel = new DevicesInterviewersModel
             {
                 DataUrl = Url.Action("DeviceInterviewers", "ReportDataApi"),
-                InterviewersBaseUrl = Url.Action("Index", "Interviewers"),
+                InterviewersBaseUrl = Url.Action("Interviewers", "Users"),
                 InterviewerProfileUrl = Url.Action("Profile", "Interviewer")
             };
             return this.View("InterviewersAndDevices", devicesInterviewersModel);
