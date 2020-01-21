@@ -252,6 +252,16 @@ class ExportSettings {
 
 // var $webInterviewSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "WebInterviewSettings" })';
 
+class ControlPanel {
+    constructor(http) {
+        this.http = http
+        this.base = "api/ControlPanelApi"
+    }
+
+    getConfiguration() {
+         return this.http.get(`${this.base}/Configuration`)
+    }
+}
 
 class AdminSettings {
     constructor(http) {
@@ -331,8 +341,12 @@ class HqApiClient {
         return new ExportSettings(this.http)
     }
 
-    get AdminSettings(){
+    get AdminSettings() {
         return new AdminSettings(this.http)
+    }
+
+    get ControlPanel() {
+        return new ControlPanel(this.http)
     }
 
     get Util() {
