@@ -96,21 +96,23 @@
                         <p v-html="$t('BatchUpload.SimpleDescription')"></p>
                     </div>
                     <div>
-                        <a v-bind:href="api.simpleTemplateDownloadUrl">{{$t('BatchUpload.DownloadTabTemplate')}}</a>
-                        <!-- @using (Html.BeginForm("AssignmentsBatchUploadAndVerify", "SurveySetup", new { questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.HiddenFor(x => x.QuestionnaireId)
-                            @Html.HiddenFor(x => x.QuestionnaireVersion)
-                            @Html.HiddenFor(x => x.ResponsibleId, new { data_bind= "value: selectedResponsibleId" })
-                            
-                            @Html.Partial("ClientTimezoneOffset")
-                        <label class="btn btn-success btn-file">
-                            @BatchUpload.UploadTabFile
-                            @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab, .txt, .zip", @class = "file" })
-                        </label>
-                            @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
-                        } -->
+                        <a
+                            v-bind:href="api.simpleTemplateDownloadUrl"
+                        >{{$t('BatchUpload.DownloadTabTemplate')}}</a>
+                        <input
+                            name="file"
+                            ref="uploader"
+                            v-show="false"
+                            accept=".tab, .txt, .zip"
+                            type="file"
+                            @change="onSimpleFileUpload"
+                            class="btn btn-default btn-lg btn-action-questionnaire"
+                        />
+                        <button
+                            type="button"
+                            class="btn btn-success"
+                            @click="$refs.uploader.click()"
+                        >{{$t('BatchUpload.UploadTabFile')}}</button>
                     </div>
                 </div>
             </div>
@@ -121,21 +123,23 @@
                         <p v-html="$t('BatchUpload.BatchDescription')"></p>
                     </div>
                     <div>
-                        <a v-bind:href="api.templateDownloadUrl">{{$t('BatchUpload.DownloadTemplateArchive')}}</a>
-                        <!-- @using (Html.BeginForm("PanelBatchUploadAndVerify", "SurveySetup", routeValues: new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.HiddenFor(x => x.QuestionnaireId)
-                            @Html.HiddenFor(x => x.QuestionnaireVersion)
-                            @Html.HiddenFor(x => x.ResponsibleId, new { data_bind= "value: selectedResponsibleId" })
-
-                            @Html.Partial("ClientTimezoneOffset")
-                        <label class="btn btn-success btn-file">
-                            @BatchUpload.UploadZipFile
-                            @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".zip", @class = "file" })
-                        </label>
-                            @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
-                        } -->
+                        <a
+                            v-bind:href="api.templateDownloadUrl"
+                        >{{$t('BatchUpload.DownloadTemplateArchive')}}</a>
+                        <input
+                            name="file"
+                            ref="uploaderAdvanced"
+                            v-show="false"
+                            accept=".zip"
+                            type="file"
+                            @change="onAdvancedFileUpload"
+                            class="btn btn-default btn-lg btn-action-questionnaire"
+                        />
+                        <button
+                            type="button"
+                            class="btn btn-success"
+                            @click="$refs.uploaderAdvanced.click()"
+                        >{{$t('BatchUpload.UploadZipFile')}}</button>
                     </div>
                 </div>
             </div>
@@ -148,11 +152,14 @@
     </HqLayout>
 </template>
 <script>
+import * as toastr from 'toastr'
+
 export default {
     data() {
         return {
             showQuestions: false,
             responsible: null,
+            timerId: 0,
         }
     },
     computed: {
@@ -166,7 +173,7 @@ export default {
             return this.model.api
         },
         responsibleId() {
-            return this.newResponsibleId != null ? this.newResponsibleId.key : null
+            return this.responsible != null ? this.responsible.key : null
         },
         manualModeDescription() {
             return this.$t('BatchUpload.ManualModeDescription', {
@@ -178,11 +185,73 @@ export default {
                     '</a>',
             })
         },
+        requestVerificationToken() {
+            return this.$hq.Util.getCsrfCookie()
+        },
+        questionnaireId() {
+            return this.$route.params.questionnaireId
+        },
     },
     methods: {
         responsibleSelected(newValue) {
             this.responsible = newValue
         },
+        onSimpleFileUpload(e) {
+            this.upload(e, 1 /* simple */)
+        },
+        onAdvancedFileUpload(e) {
+            this.upload(e, 2 /* advanced */)
+        },
+        upload(e, type) {
+            const files = e.target.files || e.dataTransfer.files
+
+            if (!files.length) {
+                return
+            }
+
+            var file = files[0]
+
+            var formData = new FormData()
+            formData.append('File', file)
+            formData.append('QuestionnaireId', this.questionnaireId)
+            formData.append('ResponsibleId', this.responsibleId)
+            formData.append('Type', type)
+
+            var self = this
+
+            this.$http
+                .post(this.api.uploadUrl, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                    },
+                })
+                .then(response => {
+                    window.clearInterval(this.timerId)
+                    self.$store.dispatch('setUploadFileName', file.name)
+                    const errors = response.data
+                    if (errors.length == 0) self.$router.push({name: 'uploadprogress'})
+                    else {
+                        self.$store.dispatch('setUploadVerificationErrors', errors)
+                        self.$router.push({name: 'uploadverification'})
+                    }
+                })
+                .catch(e => {
+                    if (e.response.data.message) toastr.error(e.response.data.message)
+                    else if (e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage)
+                    else toastr.error(window.input.settings.messages.unhandledExceptionMessage)
+                })
+        },
+        updateStatus() {
+            this.$http.get(this.api.importStatusUrl).then(response => {
+                if (responsible.data != null) this.$store.dispatch('setUploadStatus', response.data)
+            })
+        },
+    },
+    mounted() {
+        this.timerId = window.setInterval(() => {
+            this.updateStatus()
+        }, 500)
     },
 }
 </script>
