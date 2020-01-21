@@ -4,10 +4,18 @@
             <div class="options-group">
                 <div class="form-group" v-for="(row, index) in $me.rows" :key="row.value">
                     <div class="field answered"   v-bind:class="{ 'unavailable-option locked-option': row.isProtected }">
-                        <input autocomplete="off" type="text" class="field-to-fill" 
+                        <textarea-autosize 
+                            autocomplete="off" 
+                            type="text" 
+                            class="field-to-fill"
+                            rows="1" 
+                            :min-height="41"
+                            :maxlength="$me.maxLength"
+                            :important="true"
                             :value="row.text"
                             :disabled="!$me.acceptAnswer || row.isProtected"
                             v-blurOnEnterKey 
+                            @blur.native="updateRow($event, row)"
                             @blur="updateRow($event, row)"/>
                         <button type="submit" class="btn btn-link btn-clear" 
                             v-if="$me.acceptAnswer && !row.isProtected"
@@ -18,9 +26,18 @@
                 </div>
                 <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill"
+                        <textarea-autosize
+                            ref="inputTextArea" 
+                            autocomplete="off" 
+                            type="text" 
+                            rows="1"
+                            class="field-to-fill"
                             :disabled="!canAnswer"
-                            :placeholder="noAnswerWatermark" v-blurOnEnterKey @blur="addRow"/>
+                            :placeholder="noAnswerWatermark" 
+                            v-blurOnEnterKey
+                            :maxlength="$me.maxLength"
+                            @blur.native="addRow"
+                            @blur="addRow"/>
                     </div>
                 </div>
                 <wb-lock />
@@ -100,6 +117,7 @@
                 if (!text || !text.trim() || text.trim() === item.text) {
                     return
                 }
+
                 item.text = text;
                 this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
             },
@@ -118,8 +136,13 @@
                 this.$me.rows.push(new TextListAnswerRow(newRowValue, text))
 
                 this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
+                
+                this.$refs.inputTextArea.val = undefined
                 target.val(undefined)
-                target.focus()
+                                
+                setTimeout(() => {
+                    target.focus()
+                })
             }
         }
     }
