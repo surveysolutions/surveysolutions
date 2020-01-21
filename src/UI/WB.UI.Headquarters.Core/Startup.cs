@@ -169,33 +169,8 @@ namespace WB.UI.Headquarters
 
             if (Configuration.GetSection("ExternalStorages").Exists())
             {
-                var externalStoragesSection = Configuration.GetSection("ExternalStorages").Get<ExternalStoragesConfig>();
-                externalStoragesSettings = new ExternalStoragesSettings
-                {
-                    OAuth2 = new ExternalStoragesSettings.OAuth2Settings
-                    {
-                        RedirectUri = externalStoragesSection.OAuth2.RedirectUri,
-                        ResponseType = externalStoragesSection.OAuth2.ResponseType,
-                        OneDrive = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
-                        {
-                            ClientId = externalStoragesSection.OAuth2.OneDrive.ClientId,
-                            AuthorizationUri = externalStoragesSection.OAuth2.OneDrive.AuthorizationUri,
-                            Scope = externalStoragesSection.OAuth2.OneDrive.Scope
-                        },
-                        Dropbox = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
-                        {
-                            ClientId = externalStoragesSection.OAuth2.Dropbox.ClientId,
-                            AuthorizationUri = externalStoragesSection.OAuth2.Dropbox.AuthorizationUri,
-                            Scope = externalStoragesSection.OAuth2.Dropbox.Scope
-                        },
-                        GoogleDrive = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
-                        {
-                            ClientId = externalStoragesSection.OAuth2.GoogleDrive.ClientId,
-                            AuthorizationUri = externalStoragesSection.OAuth2.GoogleDrive.AuthorizationUri,
-                            Scope = externalStoragesSection.OAuth2.GoogleDrive.Scope
-                        },
-                    }
-                };
+                externalStoragesSettings = new ExternalStoragesSettings();
+                Configuration.GetSection("ExternalStorages").Bind(externalStoragesSettings);
             }
 
             return new HeadquartersBoundedContextModule(userPreloadingSettings,
