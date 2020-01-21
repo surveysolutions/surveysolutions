@@ -19,7 +19,7 @@ using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Observer")]
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
