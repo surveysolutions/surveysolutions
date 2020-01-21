@@ -6,7 +6,6 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Models;
 
@@ -40,13 +39,13 @@ namespace WB.UI.Headquarters.Controllers
                     return this.RedirectToAction("SurveysAndStatuses", "Reports");
 
                 case UserRoles.Observer:
-                    return this.RedirectToAction("Index", "Headquarters");
+                    return this.RedirectToAction("Headquarters", "Users");
 
                 case UserRoles.Interviewer:
                     return this.RedirectToAction("CreateNew", "InterviewerHq");
 
                 default:
-                    return this.RedirectToAction("NotFound", "Error");
+                    return NotFound();
             }
         }
 
