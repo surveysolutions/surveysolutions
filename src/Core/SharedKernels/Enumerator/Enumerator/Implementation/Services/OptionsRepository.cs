@@ -311,7 +311,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
 
-        private void StoreOptionsImpl(QuestionnaireIdentity questionnaireIdentity, Guid? questionId, Guid? categoryId, List<Answer> options, List<TranslationDto> translations)
+        private void StoreOptionsImpl(QuestionnaireIdentity questionnaireIdentity, Guid? questionId, 
+            Guid? categoryId, List<Answer> options, List<TranslationDto> translations)
         {
             if (!categoryId.HasValue && !questionId.HasValue)
                 throw new ArgumentException("Should specify questionId or categoryId");
@@ -347,10 +348,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 };
 
                 optionsToSave.Add(optionView);
-
-                var translatedOptions = translations.Where(x => ((x.QuestionnaireEntityId == questionId && x.Type == TranslationType.OptionTitle)|| 
-                                                                (x.QuestionnaireEntityId == categoryId && x.Type == TranslationType.Categories))
-                                                                && x.TranslationIndex == $"{option.AnswerValue}${option.ParentValue}")
+                //now includes fallback to default value
+                var translatedOptions =  translations.Where(x => 
+                    ((x.QuestionnaireEntityId == questionId && x.Type == TranslationType.OptionTitle)
+                    ||(x.QuestionnaireEntityId == categoryId && x.Type == TranslationType.Categories))
+                      && (x.TranslationIndex == $"{option.AnswerValue}${option.ParentValue}" 
+                          || x.TranslationIndex == option.AnswerValue))
                     .Select(y => new OptionView
                     {
                         QuestionnaireId = questionnaireIdAsString,
