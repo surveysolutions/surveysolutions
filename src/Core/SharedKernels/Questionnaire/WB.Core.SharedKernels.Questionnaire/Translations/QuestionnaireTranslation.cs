@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             //fallback for questionnaires imported before version 20.01
             //to support old cascading questions
             //checking translations without parent
-            return translation ?? this.GetTranslationByTypeAndIndex(categoriesId, $"{id}", TranslationType.Categories);
+            return translation ?? this.GetTranslationByTypeAndIndex(categoriesId, id.ToString(), TranslationType.Categories);
         }
 
         private string GetTranslationByTypeAndIndex(Guid questionOrCategoriesId, string answerOptionValue, TranslationType translationType) =>
