@@ -209,6 +209,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         }
 
         [TestCase(21699, "18.03.0.0 (build 21689)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(26963, "20.01.0.3 (build 26963)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(26876, "20.01.0.0 (build 26876)", HttpStatusCode.UpgradeRequired)]
         [TestCase(23689, "18.06.0.0 (build 23689)", HttpStatusCode.OK)]
         [TestCase(25689, "18.06.0.4 (build 25689)", HttpStatusCode.OK)]
         [TestCase(26688, "19.08.2 (build 26689)", HttpStatusCode.NotAcceptable)]
@@ -228,6 +230,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 authorizedUser: authorizedUser,
+                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
                 interviewerSettings: interviewerSettingsStorage,
                 interviewerVersionReader: interviewerVersionReader);
 
