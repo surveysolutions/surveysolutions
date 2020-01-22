@@ -24,7 +24,7 @@
                                     </a>
                                     <img v-if="supportQRCodeGeneration" id="download-qr" alt="QR Code" width="250" height="250" :src="qrApkUrl"/>
                                     <p>
-                                        <b class="error-text">Caution:</b>
+                                        <b class="error-text">{{ $t('Pages.CautionTitle') }}</b>
                                         {{ $t('Pages.GetEsriExtraDescription') }}
                                     </p>
                                 </div>
