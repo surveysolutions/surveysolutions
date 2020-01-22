@@ -299,7 +299,7 @@
       <div class="action-container">
         <p>
           <a class="interview-id title-row" @click="viewInterview" href="#">{{interviewKey}}</a> by
-          <span :class="getResponsibleClass" v-html="responsibleLink"></span>
+          <span :class="responsibleClass" v-html="responsibleLink"></span>
         </p>
       </div>
       <div class="table-with-scroll">
@@ -334,7 +334,7 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
-import lowerCase from 'lodash'
+import { lowerCase } from 'lodash'
 
 export default {
     data() {
@@ -382,10 +382,11 @@ export default {
                       '</a>'
                 : this.selectedRowWithMenu.responsibleName
         },
-        getResponsibleClass() {
-            return this.selectedRowWithMenu != undefined
+        responsibleClass() {
+            const result = this.selectedRowWithMenu != null
                 ? lowerCase(this.selectedRowWithMenu.responsibleRole)
                 : ''
+            return result
         },
         tableColumns() {
             const self = this
@@ -905,64 +906,59 @@ export default {
             this.newResponsibleId = newValue
         },
 
-        showStatusHistory() {
+        async showStatusHistory() {
             var self = this
+            const statusHistoryList = await this.$http.post(this.config.api.interviewStatuses,
+                {interviewId: this.selectedRowWithMenu.interviewId})
 
-            $.ajax({
-                type: 'POST',
-                url: this.config.api.interviewStatuses,
-                data: {interviewId: this.selectedRowWithMenu.interviewId},
-                success: function(statusHistoryList) {
-                    if (statusHistoryList.length != 0) {
-                        $('#statustable').dataTable({
-                            paging: false,
-                            ordering: false,
-                            info: false,
-                            searching: false,
-                            retrieve: true,
-                            columns: [
-                                {data: 'StatusHumanized'},
-                                {
-                                    data: 'Date',
-                                    render: function(data, type, row) {
-                                        return moment
-                                            .utc(data)
-                                            .local()
-                                            .format('MMM DD, YYYY HH:mm')
-                                    },
-                                },
-                                {
-                                    data: 'Responsible',
-                                    render: function(data, type, row) {
-                                        var resultString = '<span class="' + lowerCase(row.ResponsibleRole) + '">'
-                                        resultString += data
-                                        resultString += '</span>'
-                                        return resultString
-                                    },
-                                },
-                                {
-                                    data: 'Assignee',
-                                    render: function(data, type, row) {
-                                        var resultString = '<span class="' + lowerCase(row.AssigneeRole) + '">'
-                                        resultString += data
-                                        resultString += '</span>'
-                                        return resultString
-                                    },
-                                },
-                                {data: 'Comment'},
-                            ],
-                        })
+            if (statusHistoryList.data.length != 0) {
+                $('#statustable').dataTable({
+                    paging: false,
+                    ordering: false,
+                    info: false,
+                    searching: false,
+                    retrieve: true,
+                    columns: [
+                        {data: 'statusHumanized'},
+                        {
+                            data: 'date',
+                            render: function(data, type, row) {
+                                return moment
+                                    .utc(data)
+                                    .local()
+                                    .format('MMM DD, YYYY HH:mm')
+                            },
+                        },
+                        {
+                            data: 'responsible',
+                            render: function(data, type, row) {
+                                var resultString = '<span class="' + lowerCase(row.responsibleRole) + '">'
+                                resultString += data
+                                resultString += '</span>'
+                                return resultString
+                            },
+                        },
+                        {
+                            data: 'assignee',
+                            render: function(data, type, row) {
+                                var resultString = '<span class="' + lowerCase(row.assigneeRole) + '">'
+                                resultString += data
+                                resultString += '</span>'
+                                return resultString
+                            },
+                        },
+                        {data: 'comment'},
+                    ],
+                })
 
-                        var table = $('#statustable').dataTable()
+                var table = $('#statustable').dataTable()
 
-                        table.fnClearTable()
-                        table.fnAddData(statusHistoryList)
-                        table.fnDraw()
+                table.fnClearTable()
+                table.fnAddData(statusHistoryList.data)
+                table.fnDraw()
 
-                        self.$refs.statusHistory.modal({keyboard: false})
-                    }
-                },
-            })
+                self.$refs.statusHistory.modal({keyboard: false})
+            }
         },
 
         contextMenuItems({rowData, rowIndex}) {
