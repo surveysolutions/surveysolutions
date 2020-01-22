@@ -343,15 +343,7 @@ namespace WB.UI.Headquarters
         private void InitModules(IWebHostEnvironment env)
         {
             var initTask = autofacKernel.InitAsync(true);
-
-            if (!env.IsDevelopment())
-            {
-                initTask.Wait();
-            }
-            else
-            {
-                initTask.Wait(TimeSpan.FromSeconds(3));
-            }
+            initTask.Wait(TimeSpan.FromSeconds(5));
         }
     }
 }
