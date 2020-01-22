@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IPlainKeyValueStorage<TenantSettings> tenantSettings,
             IInterviewerVersionReader interviewerVersionReader,
             IUserToDeviceService userToDeviceService)
-            : base(interviewerSettingsStorage, tenantSettings)
+            : base(interviewerSettingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.tabletInformationService = tabletInformationService;
             this.userViewFactory = userViewFactory;
@@ -145,39 +145,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpPost]
         [Route("v2/tabletInfo")]
-        public virtual async Task<IActionResult> PostTabletInformation()
+        public override Task<IActionResult> PostTabletInformation()
         {
-            if (!Request.HasFormContentType)
-            {
-                return StatusCode(StatusCodes.Status415UnsupportedMediaType);
-            }
-
-            var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType),
-                new FormOptions().MultipartBoundaryLengthLimit);
-            var reader = new MultipartReader(boundary.ToString(), HttpContext.Request.Body);
-
-            var section = await reader.ReadNextSectionAsync();
-
-            if (section != null)
-            {
-                var formData = new MemoryStream();
-                await  section.Body.CopyToAsync(formData);
-
-                var deviceId = this.Request.Headers["DeviceId"].Single();
-
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                var user = userId != null
-                    ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
-                    : null;
-
-                this.tabletInformationService.SaveTabletInformation(
-                    content: formData.ToArray(),
-                    androidId: deviceId,
-                    user: user);
-            }
-
-            return Ok();
+            return base.PostTabletInformation();
         }
 
         [Authorize(Roles = "Interviewer")]
