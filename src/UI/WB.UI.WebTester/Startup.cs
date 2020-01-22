@@ -79,7 +79,7 @@ namespace WB.UI.WebTester
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var initTask = autofacKernel.InitAsync(false);
+            var initTask = autofacKernel.InitAsync(true);
 
             if (!env.IsDevelopment())
             {

@@ -65,16 +65,20 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             if (Container == null)
                 throw new ArgumentException("Container should be build before init");
-            
+
+            if (restartOnInitializationError && !Container.IsRegistered<IApplicationRestarter>())
+                throw new ArgumentException("For restart application need implement and register IApplicationRestarter");
+
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            var initTask = Task.Run(() => InitModules(Container.Resolve<UnderConstructionInfo>(), Container, restartOnInitializationError));
+            var initTask = Task.Run(() => InitModules(Container, restartOnInitializationError));
             return initTask;
         }
 
-        private async Task InitModules(UnderConstructionInfo status, ILifetimeScope container,
-            bool restartOnInitializationError)
+        private async Task InitModules(ILifetimeScope container, bool restartOnInitializationError)
         {
+            var status = Container.Resolve<UnderConstructionInfo>();
+
             status.Run();
 
             try
@@ -117,7 +121,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                     Task.Run(async () =>
                     {
                         await Task.Delay(TimeSpan.FromSeconds(10));
-                        AppDomain.Unload(AppDomain.CurrentDomain);
+                        container.Resolve<IApplicationRestarter>().Restart();
                     });
                 }
             }
