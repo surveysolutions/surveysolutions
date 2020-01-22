@@ -1,9 +1,17 @@
 <template>
-    <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
+    <div class="row">
+        <form method="post" ref="frm" class="topic-with-button" enctype="multipart/form-data">
+            <label class="btn btn-success btn-file" >
+                {{$t('Pages.Upload_Upload')}}
+                <input ref="uploader" name="file" @change="onFileChange" type="file" value="" />
+            </label>
+        </form>
+        <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
+    </div>
 </template>
 
 <script>
-import {DateFormats} from '~/shared/helpers'
+import {DateFormats, humanFileSize} from '~/shared/helpers'
 import moment from 'moment'
 
 export default {
@@ -16,33 +24,36 @@ export default {
             let columns = [
                 {
                     data: 'androidId',
-                    title: this.$t('ControlPanel.DeviceId')
+                    title: this.$t('Pages.PackagesInfo_DeviceId')
                 },
                 {
                     data: 'creationDate',
-                    title: this.$t('ControlPanel.UploadDate'),
+                    title: this.$t('Pages.PackagesInfo_UploadDate'),
                      render: function(data, type, row) {
                         return new moment(data).format(DateFormats.dateTime)
                     },
                 },
                 {
                     data: 'userName',
-                    title: this.$t('Users.UserName')
+                    title: this.$t('Pages.PackagesInfo_UserName')
                 },
                 {
                     data: 'userId',
-                    title: 'Id'
+                    title: this.$t('Pages.PackagesInfo_UserId')
                 },
                 {
                     data: 'size',
-                    title: 'Size'
+                    title: this.$t('Pages.PackagesInfo_Size'),
+                    render: function(data, _, row) {
+                        return `<a href=${row.downloadUrl}>${humanFileSize(data)} <span class="glyphicon glyphicon-download"></span></a>`
+                    }
                 }
             ]
 
             return {
                 columns: columns,
                 ajax: {
-                    url: this.$config.model.dataUrl,
+                    url: `${this.$hq.basePath}api/ControlPanelApi/TabletInfos`,
                     type: 'GET',
                     contentType: 'application/json',
                 },
@@ -51,5 +62,10 @@ export default {
             }
         },
     },
+    methods: {
+        onFileChange() {
+            this.$refs.frm.submit()
+        }
+    }
 }
 </script>
