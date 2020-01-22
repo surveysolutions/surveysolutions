@@ -120,7 +120,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents
                 .Select(IntegrationCreate.AggregateRootEvent).ToArray());
 
-            interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
+            interviewPackagesService.ProcessPackage(new InterviewPackage
             {
                 InterviewId = expectedCommand.InterviewId,
                 QuestionnaireId = expectedCommand.QuestionnaireId,
@@ -131,7 +131,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 Events = expectedEventsString
             });
 
-            interviewPackagesService.ProcessPackage("1");
 
             UnitOfWork.Session.Flush();
         }
