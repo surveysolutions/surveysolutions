@@ -76,6 +76,12 @@ const pages = {
         entry: "src/pages/under_construction.js",
         filename: path.join(hqDist, "Views", "UnderConstruction", "Index.cshtml"),
         template: path.join(hqFolder, "Views", "UnderConstruction", "Index.Template.cshtml")
+    },
+
+    empty_layout: {
+        entry: "src/hqapp/main.js",
+        filename: path.join(hqDist, "Views", "Shared", "_EmptyLayout.cshtml"),
+        template: path.join(hqFolder, "Views", "Shared", "_EmptyLayout.Template.cshtml")
     }
 };
 
