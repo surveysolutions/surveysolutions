@@ -23,6 +23,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             this.containerBuilder = containerBuilder;
 
+            containerBuilder.RegisterBuildCallback(container => Container = container);
+
             this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
 
             var status = new UnderConstructionInfo();
@@ -59,31 +61,24 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
 
 
-        public async Task InitAsync(bool restartOnInitializationError)
+        public Task InitAsync(bool restartOnInitializationError)
         {
-            this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
-            Container = containerBuilder.Build();
-            await InitModules(restartOnInitializationError);
-        }
+            if (Container == null)
+                throw new ArgumentException("Container should be build before init");
 
-        public Task InitCoreAsync(ILifetimeScope container, bool restartOnInitializationError)
-        {
-            Container = container;
+            if (restartOnInitializationError && !Container.IsRegistered<IApplicationRestarter>())
+                throw new ArgumentException("For restart application need implement and register IApplicationRestarter");
 
-            return InitModules(restartOnInitializationError);
-        }
-
-        private Task InitModules(bool restartOnInitializationError)
-        {
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            var initTask = Task.Run(() => InitModules(Container.Resolve<UnderConstructionInfo>(), Container, restartOnInitializationError));
+            var initTask = Task.Run(() => InitModules(Container, restartOnInitializationError));
             return initTask;
         }
 
-        private async Task InitModules(UnderConstructionInfo status, ILifetimeScope container,
-            bool restartOnInitializationError)
+        private async Task InitModules(ILifetimeScope container, bool restartOnInitializationError)
         {
+            var status = Container.Resolve<UnderConstructionInfo>();
+
             status.Run();
 
             try
@@ -126,7 +121,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                     Task.Run(async () =>
                     {
                         await Task.Delay(TimeSpan.FromSeconds(10));
-                        AppDomain.Unload(AppDomain.CurrentDomain);
+                        container.Resolve<IApplicationRestarter>().Restart();
                     });
                 }
             }
