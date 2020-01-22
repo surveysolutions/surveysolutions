@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                     interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object,
                     syncSettings: syncSettings);
 
-            interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
+            interviewPackagesService.ProcessPackage(new InterviewPackage
                 {
                     InterviewId = Guid.Parse("11111111111111111111111111111111"),
                     QuestionnaireId = Guid.Parse("22222222222222222222222222222222"),
@@ -98,9 +98,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                     IsCensusInterview = false,
                     Events = "compressed serialized events"
                 });
-
-            interviewPackagesService.ProcessPackage("1");
-            
         }
         
         [Test]

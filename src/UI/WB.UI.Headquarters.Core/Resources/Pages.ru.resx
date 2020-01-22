@@ -737,7 +737,7 @@
     <value>Длительность синхронизации</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-      <value>Соединение: тип: {{networkType}} {1}, мобильный оператор: {{operator}}</value>
+      <value>Соединение: тип: {{networkType}} {{networkSubType}}, мобильный оператор: {{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
       <value>Соединение: {{networkType}}</value>
