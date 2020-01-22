@@ -305,9 +305,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         private TranslationRow AdjustIndexValue(TranslationRow row)
         {
-            if (!string.IsNullOrEmpty(row.OptionValueOrValidationIndexOrFixedRosterId) && row.OptionValueOrValidationIndexOrFixedRosterId.EndsWith("$"))
-                row.OptionValueOrValidationIndexOrFixedRosterId = 
-                    row.OptionValueOrValidationIndexOrFixedRosterId.Substring(0, row.OptionValueOrValidationIndexOrFixedRosterId.Length - 1);
+            row.OptionValueOrValidationIndexOrFixedRosterId =
+                row.OptionValueOrValidationIndexOrFixedRosterId?.TrimEnd('$');
             return row;
         }
 
