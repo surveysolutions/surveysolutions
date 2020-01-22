@@ -80,19 +80,14 @@ namespace WB.UI.WebTester
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var initTask = autofacKernel.InitAsync(true);
+            initTask.Wait(TimeSpan.FromSeconds(5));
 
             if (!env.IsDevelopment())
             {
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
                 app.UseHttpsRedirection();
-                initTask.Wait();
+            }
 
-            }
-            else
-            {
-                initTask.Wait(TimeSpan.FromSeconds(10));
-            }
-            
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
             {
