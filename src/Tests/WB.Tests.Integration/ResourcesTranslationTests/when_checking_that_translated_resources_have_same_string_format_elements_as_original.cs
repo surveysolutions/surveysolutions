@@ -17,9 +17,12 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         [OneTimeSetUp]
         public void Context()
         {
-            var csproj = TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.csproj");
-            translatedResourceFiles = GetAllLinkedResourceFiles(csproj).Where(file => Path.GetFileNameWithoutExtension(file).Contains("."))
-                .Where(file => !fileNamesToExculde.Any(x => Path.GetFileName(file).Contains(x)));
+            var projects = TestEnvironment.GetAllProjectsInSolution();
+
+            translatedResourceFiles = GetAllLinkedResourceFiles(projects)
+                .Where(file => Path.GetFileNameWithoutExtension(file).Contains("."))
+                .Where(file => !fileNamesToExculde.Any(x => Path.GetFileName(file).Contains(x)))
+                .ToList();
 
             this.Because();
         }
