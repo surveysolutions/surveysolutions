@@ -35,7 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             get;
             private set;
         }
-        public IEnumerable<IInterviewTreeNode> Parents { get; private set; } = Enumerable.Empty<IInterviewTreeNode>();
+
+        public IEnumerable<IInterviewTreeNode> Parents { get; private set; } = Array.Empty<IInterviewTreeNode>();
 
         public IReadOnlyCollection<IInterviewTreeNode> Children => this.children;
 
