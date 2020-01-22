@@ -229,11 +229,16 @@ export default {
                 .then(response => {
                     window.clearInterval(this.timerId)
                     self.$store.dispatch('setUploadFileName', file.name)
+                    self.$store.dispatch('setUploadQuestionnaireInfo', {
+                        id: self.questionnaireId,
+                        version: self.questionnaire.version,
+                        title: self.questionnaire.title,
+                    })
                     const errors = response.data
-                    if (errors.length == 0) self.$router.push({name: 'uploadprogress'})
+                    if (errors.length == 0) self.$router.push({name: 'assignments-upload-verification'})
                     else {
                         self.$store.dispatch('setUploadVerificationErrors', errors)
-                        self.$router.push({name: 'uploadverification'})
+                        self.$router.push({name: 'assignments-upload-errors'})
                     }
                 })
                 .catch(e => {
@@ -248,10 +253,10 @@ export default {
             })
         },
     },
-    mounted() {
-        this.timerId = window.setInterval(() => {
-            this.updateStatus()
-        }, 500)
-    },
+    // mounted() {
+    //     this.timerId = window.setInterval(() => {
+    //         this.updateStatus()
+    //     }, 500)
+    // },
 }
 </script>
