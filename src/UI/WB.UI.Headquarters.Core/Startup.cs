@@ -115,7 +115,6 @@ namespace WB.UI.Headquarters
             autofacKernel.Load(
                 new NcqrsModule(),
                 eventStoreModule,
-                GetQuartzModule(),
                 new InfrastructureModule(),
                 new DataCollectionSharedKernelModule(),
                 new WebInterviewModule(),
@@ -127,7 +126,8 @@ namespace WB.UI.Headquarters
                 new DataExportModule(),
                 GetHqBoundedContextModule(),
                 new HeadquartersUiModule(Configuration),
-                new ProductVersionModule(typeof(Startup).Assembly)
+                new ProductVersionModule(typeof(Startup).Assembly),
+                GetQuartzModule()
                 );
         }
 
@@ -342,7 +342,7 @@ namespace WB.UI.Headquarters
 
         private void InitModules(IWebHostEnvironment env)
         {
-            var initTask = autofacKernel.InitAsync(false);
+            var initTask = autofacKernel.InitAsync(true);
 
             if (!env.IsDevelopment())
             {
@@ -350,7 +350,7 @@ namespace WB.UI.Headquarters
             }
             else
             {
-                initTask.Wait(TimeSpan.FromSeconds(10));
+                initTask.Wait(TimeSpan.FromSeconds(3));
             }
         }
     }
