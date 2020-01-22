@@ -9,7 +9,8 @@
 
 <script lang="js">
     import { DateFormats } from "~/shared/helpers"
-
+    import moment from "moment"
+    
     export default {
         props: {
             userRole: {
