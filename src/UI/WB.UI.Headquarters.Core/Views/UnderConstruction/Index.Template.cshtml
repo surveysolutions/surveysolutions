@@ -58,7 +58,21 @@
     <partial name="Footer" />
 
 <script type='text/javascript'>
-    setTimeout(function () { document.location.reload(true); }, 1000 * 30);
+    function checkStatus() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                if (xhr.responseText == 'Finished')
+                    document.location.reload(true);
+                else
+                    setTimeout(function() { checkStatus() }, 5 * 1000);
+            }
+        }
+        xhr.open('GET', '@Url.Action("Status", "UnderConstruction")', true);
+        xhr.send(null);
+    }
+
+    checkStatus();
 </script>
 </body>
 </html>
