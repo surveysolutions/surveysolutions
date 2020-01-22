@@ -1,6 +1,11 @@
 export default {
     state: {
         fileName: "",
+        questionnaire: {
+            id: "",
+            version: 0,
+            title: ""
+        },
         verificationErrors: [],
         complete: {},
         progress: {}
@@ -9,6 +14,9 @@ export default {
     actions: {
         setUploadFileName({ commit }, fileName) {
             commit("SET_FILE_NAME", fileName)
+        },
+        setUploadQuestionnaireInfo({ commit }, { id, version, title }) {
+            commit("SET_QUESTIONNAIRE_INFO", { id, version, title })
         },
         setUploadVerificationErrors({ commit }, errors) {
             commit("SET_VERIFICATION_ERRORS", errors)
@@ -25,6 +33,11 @@ export default {
     mutations: {
         SET_FILE_NAME(state, fileName) {
             state.fileName = fileName
+        },
+        SET_QUESTIONNAIRE_INFO(state, { id, version, title }) {
+            state.questionnaire.id = id
+            state.questionnaire.version = version
+            state.questionnaire.title = title
         },
         SET_VERIFICATION_ERRORS(state, errors) {
             state.verificationErrors = errors
