@@ -274,22 +274,22 @@
     <value>1 შეცდომა</value>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>{0} დავალებები წარმატებით დადასტურდა</value>
+      <value>{{count}} დავალებები წარმატებით დადასტურდა</value>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>{0} შეცდომები</value>
+      <value>{{count}} შეცდომები</value>
   </data>
   <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
     <value>დავალების მონაცემთა გადამოწმება</value>
   </data>
   <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
-    <value>კითხვარების {0} დავალებების გადამოწმება</value>
+      <value>კითხვარების {{title}} დავალებების გადამოწმება</value>
   </data>
   <data name="Import_VerificationOfDataFile" xml:space="preserve">
     <value>მონაცემთა ფაილის გადამოწმება</value>
   </data>
   <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-    <value>ნაბიჯი {0} {1}-დან</value>
+      <value>ნაბიჯი {{verifiedCount}} {{totalCount}}-დან</value>
   </data>
   <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
     <value>მონაცემთა გადამოწმება წარმატებით დასრულდა</value>
@@ -301,7 +301,7 @@
     <value>{0}-სთვის დავალებების იმპორტი</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
-    <value>ინფორმაციის იმპორტი {0}-დან {1}-სთვის</value>
+      <value>ინფორმაციის იმპორტი {{fileName}}-დან {{title}}-სთვის</value>
   </data>
   <data name="Importing" xml:space="preserve">
     <value>იმპორტი</value>
@@ -367,7 +367,7 @@
     <value>{0} დავალებები შეიქმნა</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>ნაპოვნია {0} შეცდომა</value>
+      <value>ნაპოვნია {{count}} შეცდომა</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
     <value>{0} ინტერვიუს შექმნა არ შესრულდა</value>
