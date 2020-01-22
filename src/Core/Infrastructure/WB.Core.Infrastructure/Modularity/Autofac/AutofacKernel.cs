@@ -23,6 +23,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             this.containerBuilder = containerBuilder;
 
+            containerBuilder.RegisterBuildCallback(container => Container = container);
+
             this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
 
             var status = new UnderConstructionInfo();
@@ -59,22 +61,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
 
 
-        public async Task InitAsync(bool restartOnInitializationError)
+        public Task InitAsync(bool restartOnInitializationError)
         {
-            this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
-            Container = containerBuilder.Build();
-            await InitModules(restartOnInitializationError);
-        }
-
-        public Task InitCoreAsync(ILifetimeScope container, bool restartOnInitializationError)
-        {
-            Container = container;
-
-            return InitModules(restartOnInitializationError);
-        }
-
-        private Task InitModules(bool restartOnInitializationError)
-        {
+            if (Container == null)
+                throw new ArgumentException("Container should be build before init");
+            
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
             var initTask = Task.Run(() => InitModules(Container.Resolve<UnderConstructionInfo>(), Container, restartOnInitializationError));

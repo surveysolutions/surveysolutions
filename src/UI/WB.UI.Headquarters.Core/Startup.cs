@@ -169,8 +169,7 @@ namespace WB.UI.Headquarters
 
             if (Configuration.GetSection("ExternalStorages").Exists())
             {
-                externalStoragesSettings = new ExternalStoragesSettings();
-                Configuration.GetSection("ExternalStorages").Bind(externalStoragesSettings);
+                externalStoragesSettings = Configuration.GetSection("ExternalStorages").Get<ExternalStoragesSettings>();
             }
 
             return new HeadquartersBoundedContextModule(userPreloadingSettings,
@@ -294,7 +293,7 @@ namespace WB.UI.Headquarters
                 app.UseHsts();
             }
             
-            InitModules(app);
+            InitModules(env);
 
             app.UseStaticFiles();
             app.UseSerilogRequestLogging();
@@ -341,10 +340,18 @@ namespace WB.UI.Headquarters
             });
         }
 
-        private void InitModules(IApplicationBuilder app)
+        private void InitModules(IWebHostEnvironment env)
         {
-            var lifetimeScope = app.ApplicationServices.GetAutofacRoot();
-            autofacKernel.InitCoreAsync(lifetimeScope, false).Wait(TimeSpan.FromSeconds(3));
+            var initTask = autofacKernel.InitAsync(false);
+
+            if (!env.IsDevelopment())
+            {
+                initTask.Wait();
+            }
+            else
+            {
+                initTask.Wait(TimeSpan.FromSeconds(10));
+            }
         }
     }
 }
