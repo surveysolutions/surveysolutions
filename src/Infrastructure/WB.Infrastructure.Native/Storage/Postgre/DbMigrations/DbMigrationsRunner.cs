@@ -21,6 +21,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             {
                 serviceCollection.AddSingleton<ILoggerProvider>(loggerProvider);
             }
+            else
+            {
+                serviceCollection.AddLogging(l => { l.AddFluentMigratorConsole(); });
+            }
 
             var serviceProvider = serviceCollection
                 // Logging is the replacement for the old IAnnouncer
@@ -42,6 +46,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                         .For.Migrations()
                         .For.EmbeddedResources())
                 .BuildServiceProvider();
+
+            var proc = serviceProvider.GetService<ILoggerProvider>();
 
             // Put the database update into a scope to ensure
             // that all resources will be disposed.
