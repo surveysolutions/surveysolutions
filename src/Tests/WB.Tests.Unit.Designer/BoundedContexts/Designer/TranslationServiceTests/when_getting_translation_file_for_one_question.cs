@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var questionInstuctionsRow = 6;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionInstuctionsRow, translationTypeColumn].Text)).Should().Be(TranslationType.OptionTitle);
-            cells[questionInstuctionsRow, translationIndexColumn].Value?.ToString().Should().Be("2$");
+            cells[questionInstuctionsRow, translationIndexColumn].Value?.ToString().Should().Be("2");
             cells[questionInstuctionsRow, questionnaireEntityIdColumn].Value?.ToString().Should().Be(questionId.FormatGuid());
             cells[questionInstuctionsRow, originalTextColumn].Value?.ToString().Should().Be("non translated option");
             cells[questionInstuctionsRow, translactionColumn].Value?.ToString().Should().Be("translated option");
@@ -161,7 +161,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var questionTitleRow = 10;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).Should().Be(TranslationType.OptionTitle);
-            cells[questionTitleRow, translationIndexColumn].Value?.ToString().Should().Be("1$");
+            cells[questionTitleRow, translationIndexColumn].Value?.ToString().Should().Be("1");
             cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().Should().Be(questionId1.FormatGuid());
             cells[questionTitleRow, originalTextColumn].Value?.ToString().Should().Be("non translated option 1");
             cells[questionTitleRow, translactionColumn].Value?.ToString().Should().BeNull();
