@@ -261,6 +261,10 @@ class ControlPanel {
     getConfiguration() {
          return this.http.get(`${this.base}/Configuration`)
     }
+
+    getApkInfos() {
+        return this.http.get(`${this.base}/AppUpdates`)
+    }
 }
 
 class AdminSettings {
