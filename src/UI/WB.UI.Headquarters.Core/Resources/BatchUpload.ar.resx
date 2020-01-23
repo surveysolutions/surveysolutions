@@ -298,7 +298,7 @@
     <value>انشاء مهام متعددة مع تحميل دفعة واحدة</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>استيراد المهام ل {0}</value>
+      <value>استيراد المهام ل {{title}}</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
       <value>ل {{fileName}} استاد المعلومات من {{title}}</value>
@@ -331,7 +331,7 @@
     <value>استيراد المقابلات ل {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{1} من {0}</value>
+      <value>{{totalCount}} من {{createdCount}}</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>استيراد عينة</value>
@@ -364,10 +364,10 @@
     <value>رسالة</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>فشل انشاء مهام {0}</value>
+      <value>فشل انشاء مهام {{count}}</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>انشاء مهام {0}</value>
+      <value>انشاء مهام {{count}}</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
       <value>{{coun}t} وجد أخطاء</value>

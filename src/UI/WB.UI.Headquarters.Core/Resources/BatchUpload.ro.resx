@@ -304,7 +304,7 @@
     <value>Crearea alocării multiple cu încărcare automată</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Importarea interviurilor alocate pentru {0}</value>
+      <value>Importarea interviurilor alocate pentru {{title}}</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
       <value>Importarea informației din fișierul {{fileName}} pentru chestionarul {{title}}</value>
@@ -337,7 +337,7 @@
     <value>Importarea interviurilor pentru {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} din {1}</value>
+      <value>{{createdCount}} din {{totalCount}}</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Importarea eșantionului</value>
@@ -370,10 +370,10 @@
     <value>Mesaj</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0} interviuri alocate eșuate</value>
+      <value>{{count}} interviuri alocate eșuate</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} interviuri alocate create</value>
+      <value>{{count}} interviuri alocate create</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
       <value>{{count}} erori găsite</value>

@@ -298,7 +298,7 @@
     <value>Creando múltiples asignaciones a partir de archivo por lotes</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Importando asignaciones para {0}</value>
+      <value>Importando asignaciones para {{title}}</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
       <value>Importando información de {{fileName}} para {{title}}</value>
@@ -331,7 +331,7 @@
     <value>Importando entrevistas para {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} de {1}</value>
+      <value>{{createdCount}} de {{totalCount}}</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Importar muestra</value>
@@ -361,10 +361,10 @@
     <value>Mensaje</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0} asignaciones no se pudieron crear </value>
+      <value>{{count}} asignaciones no se pudieron crear </value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} asignaciones creados</value>
+      <value>{{count}} asignaciones creados</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
       <value>{{coun}t} errores encontrados</value>

@@ -298,7 +298,7 @@
     <value>ბევრი დავალების შექმნა პაკეტური ატვირთვისთვის</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>{0}-სთვის დავალებების იმპორტი</value>
+      <value>{{title}}-სთვის დავალებების იმპორტი</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
       <value>ინფორმაციის იმპორტი {{fileName}}-დან {{title}}-სთვის</value>
@@ -331,7 +331,7 @@
     <value>{0}-სთვის ინტერვიუების იმპორტი</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{1}-დან {0}</value>
+      <value>{{totalCount}}-დან {{createdCount}}</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>ნიმუშის იმპორტი</value>
@@ -361,10 +361,10 @@
     <value>შეტყობინება</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0} დავალებების შექმნა არ შესრულდა</value>
+      <value>{{count}} დავალებების შექმნა არ შესრულდა</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} დავალებები შეიქმნა</value>
+      <value>{{count}} დავალებები შეიქმნა</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
       <value>ნაპოვნია {{count}} შეცდომა</value>
