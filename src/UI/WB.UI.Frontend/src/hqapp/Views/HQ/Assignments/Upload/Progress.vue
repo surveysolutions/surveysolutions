@@ -105,10 +105,10 @@ export default {
             return this.model.questionnaire
         },
         assignmentsUploadUrl() {
-            return '../../Assignments/Upload/' + this.status.questionnaireIdentity.id
+            return '../' + this.status.questionnaireIdentity.id
         },
         isInProgress() {
-            return this.status.processStatus != 4 /*ImportCompleted*/
+            return this.status.processStatus != 'ImportCompleted'
         },
         processedWithoutErrorsCount() {
             return this.status.processedCount - this.status.withErrorsCount
@@ -126,7 +126,11 @@ export default {
                 this.$store.dispatch('setUploadStatus', response.data)
 
                 if (!self.isInProgress) window.clearInterval(self.timerId)
-                if (response.data == null) self.$router.push({name: 'assignments-upload'})
+                if (response.data == null)
+                    self.$router.push({
+                        name: 'assignments-upload',
+                        params: {questionnaireId: this.status.questionnaireIdentity.id},
+                    })
             })
         },
     },

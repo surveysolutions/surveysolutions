@@ -7,7 +7,7 @@
                 </li>
                 <li>
                     <a
-                        href="../../Assignments/Upload"
+                        :href="assignmentsUploadUrl"
                     >{{$t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews')}}</a>
                 </li>
             </ol>
@@ -84,7 +84,7 @@ import {isEmpty} from 'lodash'
 
 export default {
     computed: {
-        config() {
+        model() {
             return this.$config.model
         },
         uploadInfo() {
@@ -97,10 +97,10 @@ export default {
             return this.uploadInfo.verificationErrors
         },
         questionnaire() {
-            return this.uploadInfo.questionnaire
+            return this.model.questionnaire
         },
         assignmentsUploadUrl() {
-            return '../../Assignments/Upload/' + this.questionnaire.id
+            return '../' + this.$route.params.questionnaireId
         },
     },
     methods: {
