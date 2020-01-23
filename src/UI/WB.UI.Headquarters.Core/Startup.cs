@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters
         // Don't build the container; that gets done for you by the factory.
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            autofacKernel = new AutofacKernel(builder);
+            autofacKernel = new AutofacKernel(builder, c => InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(c)));
 
             var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
@@ -115,7 +115,6 @@ namespace WB.UI.Headquarters
             autofacKernel.Load(
                 new NcqrsModule(),
                 eventStoreModule,
-                GetQuartzModule(),
                 new InfrastructureModule(),
                 new DataCollectionSharedKernelModule(),
                 new WebInterviewModule(),
@@ -127,7 +126,8 @@ namespace WB.UI.Headquarters
                 new DataExportModule(),
                 GetHqBoundedContextModule(),
                 new HeadquartersUiModule(Configuration),
-                new ProductVersionModule(typeof(Startup).Assembly)
+                new ProductVersionModule(typeof(Startup).Assembly),
+                GetQuartzModule()
                 );
         }
 
@@ -169,8 +169,7 @@ namespace WB.UI.Headquarters
 
             if (Configuration.GetSection("ExternalStorages").Exists())
             {
-                externalStoragesSettings = new ExternalStoragesSettings();
-                Configuration.GetSection("ExternalStorages").Bind(externalStoragesSettings);
+                externalStoragesSettings = Configuration.GetSection("ExternalStorages").Get<ExternalStoragesSettings>();
             }
 
             return new HeadquartersBoundedContextModule(userPreloadingSettings,
@@ -294,7 +293,7 @@ namespace WB.UI.Headquarters
                 app.UseHsts();
             }
             
-            InitModules(app);
+            InitModules(env);
 
             app.UseStaticFiles();
             app.UseSerilogRequestLogging();
@@ -341,11 +340,10 @@ namespace WB.UI.Headquarters
             });
         }
 
-        private void InitModules(IApplicationBuilder app)
+        private void InitModules(IWebHostEnvironment env)
         {
-            var lifetimeScope = app.ApplicationServices.GetAutofacRoot();
-            InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(lifetimeScope));
-            autofacKernel.InitCoreAsync(lifetimeScope, false).Wait(TimeSpan.FromSeconds(3));
+            var initTask = autofacKernel.InitAsync(true);
+            initTask.Wait(TimeSpan.FromSeconds(5));
         }
     }
 }

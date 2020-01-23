@@ -14,8 +14,7 @@ import moment from "moment";
 
 import "./components";
 import "./compatibility.js";
-import "~/webinterview/componentsRegistry";
-import "@/assets/css/markup-web-interview.scss"
+import "~/webinterview/componentsRegistry"
 
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);

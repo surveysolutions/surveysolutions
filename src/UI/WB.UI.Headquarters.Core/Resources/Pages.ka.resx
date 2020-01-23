@@ -493,7 +493,7 @@
     <value>კავშირის ტიპი</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>ტიპი: {0}</value>
+    <value>ტიპი: {{networkType}}</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
       <value>{{uploaded}} ატვირთულია, {{downloaded}} გადმოწერილია</value>
