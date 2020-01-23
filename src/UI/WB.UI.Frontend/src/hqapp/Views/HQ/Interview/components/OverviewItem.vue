@@ -33,13 +33,11 @@
                 <div v-else>
                       {{item.answer}}
                 </div>
-              
-              
             </div>
             <div class="btn-link" v-if="item.state == 'Unanswered'">{{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}</div>
         </div>
 
-        <AdditionalInfo ref="additionalInfo" :item="item" />
+        <AdditionalInfo ref="additionalInfo" :item="item" :addCommentsAllowed="$store.getters.addCommentsAllowed" />
     </div>
 </template>
 
