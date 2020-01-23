@@ -5,14 +5,14 @@
             <h5>{{$t("WebInterviewUI.Interview_Overview_AdditionalInformation")}}</h5>
         </div>
         <div class="popover-content">
-            <div v-if="errors.length > 0">
+            <div v-if="additionalInfo.errors && additionalInfo.errors.length > 0">
                 <div class="information-block text-danger">
                     <h6>{{ $t("WebInterviewUI.AnswerIsInvalid") }}</h6>
-                    <p v-for="(error, index) in errors" :key="index"><span v-html="error"></span></p>
+                    <p v-for="(error, index) in additionalInfo.errors" :key="index"><span v-html="error"></span></p>
                 </div>
                 <hr />
             </div>
-            <div v-if="warnings.length > 0">
+            <div v-if="additionalInfo.warnings && additionalInfo.warnings.length > 0">
                 <div class="information-block text-warning">
                     <h6>{{ $t("WebInterviewUI.WarningsHeader") }}</h6>
                     <p v-for="(warning, index) in warnings" :key="index"><span v-html="warning"></span></p>
@@ -20,8 +20,13 @@
                 <hr />
             </div>
             <div class="information-block comments-block">
-                <template v-for="comment in comments">
-                    <wb-comment-item :userRole="comment.userRole" :text="comment.text" :isOwnComment="comment.isOwnComment" :key="comment.commentTimeUtc" />
+                <template v-for="comment in additionalInfo.comments">
+                    <wb-comment-item 
+                        :userRole="comment.userRole" 
+                        :text="comment.text"
+                        :isOwnComment="comment.isOwnComment" 
+                        :resolved="comment.resolved"
+                        :key="comment.commentTimeUtc" />
                 </template>
                 <div class="comment" v-if="isCommentFormIsVisible">
                     <form class="form-inline" onsubmit="return false;">
@@ -34,13 +39,13 @@
                                     v-on:keyup.enter="postComment" 
                                     v-model="comment"
                                     :placeholder='$t("WebInterviewUI.CommentEnter")' 
-                                    :disabled="!$store.getters.addCommentsAllowed"
+                                    :disabled="!addCommentsAllowed"
                                     class="form-control"
                                     :title="inputTitle"/>
                                 <div class="input-group-btn">
                                     <button 
                                         @click="postComment($event)" 
-                                        :disabled="!$store.getters.addCommentsAllowed" 
+                                        :disabled="!addCommentsAllowed" 
                                         type="button" 
                                         class="btn btn-default  btn-post-comment">
                                         {{postBtnText}}</button>
@@ -52,7 +57,7 @@
             </div>
         </div>
         <div class="popover-footer clearftix">
-            <button type="button" v-if="item.supportsComments" @click="showAddCommentForm" class="btn btn-link gray-action-unit pull-left add-comment">{{$t("WebInterviewUI.CommentAdd")}}</button>
+            <button type="button" v-if="item.supportsComments && addCommentsAllowed" @click="showAddCommentForm" class="btn btn-link gray-action-unit pull-left add-comment">{{$t("WebInterviewUI.CommentAdd")}}</button>
             <button type="button" @click="close" class="btn btn-link gray-action-unit pull-right close-popover">{{$t("Pages.CloseLabel")}}</button>
         </div>
     </div>
@@ -64,6 +69,9 @@ export default {
         item: {
             required: true,
             type: Object
+        },
+        addCommentsAllowed: {
+            required: true,  type: Boolean
         }
     },
     data() {
@@ -110,15 +118,6 @@ export default {
     computed: {
         additionalInfo() {
             return this.$store.state.review.overview.additionalInfo[this.item.id] || {};
-        },
-        errors() {
-            return this.additionalInfo.errors || [];
-        },
-        warnings() {
-            return this.additionalInfo.warnings || [];
-        },
-        comments() {
-            return this.additionalInfo.comments || [];
         },
         postBtnText() {
             return this.postingComment ? this.$t("WebInterviewUI.CommentPosting") : this.$t("WebInterviewUI.CommentPost")
