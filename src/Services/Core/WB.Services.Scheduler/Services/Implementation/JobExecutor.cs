@@ -54,8 +54,6 @@ namespace WB.Services.Scheduler.Services.Implementation
                     {
                         await using var tr = await db.Database.BeginTransactionAsync(token);
 
-                        await db.AcquireXactLockAsync(job.Id);
-
                         var exportJob = serviceProvider.GetService(runner) as IJob;
 
                         if (exportJob == null)
