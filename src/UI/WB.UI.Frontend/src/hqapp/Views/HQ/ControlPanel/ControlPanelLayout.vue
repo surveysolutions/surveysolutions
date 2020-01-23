@@ -14,6 +14,9 @@
                     <li>
                         <router-link to="/ControlPanel/TabletInfos">{{$t('Pages.PackagesInfo_Header')}}</router-link>
                     </li>
+                    <li>
+                        <router-link to="/ControlPanel/AppUpdates">{{$t('Pages.AppUpdates')}}</router-link>
+                    </li>
                 </ol>
             </div>
         </aside>
