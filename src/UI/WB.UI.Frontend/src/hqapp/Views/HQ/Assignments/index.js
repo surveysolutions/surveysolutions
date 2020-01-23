@@ -41,59 +41,71 @@ export default class AssignmentsComponent {
                                 component: Upload,
                                 name: "assignments-upload",
                                 beforeEnter: (to, from, next) => {
-                                    if (config.model.status != null && config.model.status.isOwnerOfRunningProcess) {
-                                        if (config.model.status.processStatus == 2 /*Verification*/)
-                                            next({ name: "assignments-upload-verification" });
-                                        else if (config.model.status.processStatus == 3 /*Import*/ ||
-                                            config.model.status.processStatus == 4 /*ImportCompleted*/)
-                                            next({ name: "assignments-upload-progress" });
-                                        else next()
-                                    }
-                                    else next()
+                                    Vue.$http
+                                        .get(config.model.api.importStatusUrl)
+                                        .then(response => {
+                                            self.rootStore.dispatch('setUploadStatus', response.data)
+                                            if (response.data != null && response.data.isOwnerOfRunningProcess) {
+                                                if (response.data.processStatus == 'Verification')
+                                                    next({ name: "assignments-upload-verification", params: { questionnaireId: response.data.questionnaireIdentity.id } });
+                                                else if (response.data.processStatus == 'Import')
+                                                    next({ name: "assignments-upload-progress", params: { questionnaireId: response.data.questionnaireIdentity.id } });
+                                                else next()
+                                            }
+                                        })
+                                        .catch(() => next());
                                 }
                             },
                             {
-                                path: 'Errors',
+                                path: ':questionnaireId/Errors',
                                 component: UploadErrors,
                                 name: 'assignments-upload-errors',
                                 beforeEnter: (to, from, next) => {
                                     if (self.rootStore.getters.upload.fileName == "")
-                                        next({ name: "assignments-upload" })
+                                        next({ name: "assignments-upload", params: { questionnaireId: to.params.questionnaireId } })
                                     else next()
                                 }
                             },
                             {
-                                path: 'Verification',
+                                path: ':questionnaireId/Verification',
                                 component: UploadVerification,
                                 name: 'assignments-upload-verification',
                                 beforeEnter: (to, from, next) => {
-                                    var status = self.rootStore.getters.upload.progress ?? config.model.status
-                                    if (status != null && status.isOwnerOfRunningProcess) {
-                                        if (status.processStatus == 3 /*Import*/ || status.processStatus == 4 /*ImportCompleted*/)
-                                            next({ name: "assignments-upload-progress" });
-                                        else {
-                                            self.rootStore.dispatch('setUploadStatus', status)
-                                            next()
-                                        }
-                                    }
-                                    else next({ name: "assignments-upload" })
+                                    Vue.$http
+                                        .get(config.model.api.importStatusUrl)
+                                        .then(response => {
+                                            self.rootStore.dispatch('setUploadStatus', response.data)
+                                            if (response.data != null && response.data.isOwnerOfRunningProcess) {
+                                                if (response.data.processStatus == 'Import' || response.data.processStatus == 'ImportCompleted')
+                                                    next({ name: "assignments-upload-progress", params: { questionnaireId: response.data.questionnaireIdentity.id } });
+                                                else next()
+                                            } else
+                                                next({ name: "assignments-upload", params: { questionnaireId: to.params.questionnaireId } })
+                                        })
+                                        .catch(() => next({
+                                            name: "assignments-upload", params: { questionnaireId: to.params.questionnaireId }
+                                        }));
                                 }
                             },
                             {
-                                path: 'Progress',
+                                path: ':questionnaireId/Progress',
                                 component: UploadProgress,
                                 name: 'assignments-upload-progress',
                                 beforeEnter: (to, from, next) => {
-                                    var status = self.rootStore.getters.upload.progress ?? config.model.status
-                                    if (status != null && status.isOwnerOfRunningProcess) {
-                                        if (status.processStatus == 2 /*Verification*/)
-                                            next({ name: "assignments-upload-verification" });
-                                        else {
-                                            self.rootStore.dispatch('setUploadStatus', status)
-                                            next()
-                                        }
-                                    }
-                                    else next({ name: "assignments-upload" })
+                                    Vue.$http
+                                        .get(config.model.api.importStatusUrl)
+                                        .then(response => {
+                                            self.rootStore.dispatch('setUploadStatus', response.data)
+                                            if (response.data != null && response.data.isOwnerOfRunningProcess) {
+                                                if (response.data.processStatus == 'Verification')
+                                                    next({ name: "assignments-upload-verification", params: { questionnaireId: response.data.questionnaireIdentity.id } });
+                                                else next()
+                                            } else
+                                                next({ name: "assignments-upload", params: { questionnaireId: to.params.questionnaireId } })
+                                        })
+                                        .catch(() => next({
+                                            name: "assignments-upload", params: { questionnaireId: to.params.questionnaireId }
+                                        }));
                                 }
                             }
                         ]

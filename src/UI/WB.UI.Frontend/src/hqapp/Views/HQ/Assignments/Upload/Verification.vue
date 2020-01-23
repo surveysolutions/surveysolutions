@@ -101,9 +101,16 @@ export default {
             this.$http.get(this.model.api.importStatusUrl).then(response => {
                 this.$store.dispatch('setUploadStatus', response.data)
 
-                if (response.data == null) self.$router.push({name: 'assignments-upload'})
-                if (response.data.processStatus == 3 /*Import*/ || response.data.processStatus == 4 /*ImportCompleted*/)
-                    self.$router.push({name: 'assignments-upload-progress'})
+                if (response.data == null)
+                    self.$router.push({
+                        name: 'assignments-upload',
+                        params: {questionnaireId: this.status.questionnaireIdentity.id},
+                    })
+                if (response.data.processStatus == 'Import' || response.data.processStatus == 'ImportCompleted')
+                    self.$router.push({
+                        name: 'assignments-upload-progress',
+                        params: {questionnaireId: this.status.questionnaireIdentity.id},
+                    })
             })
         },
     },

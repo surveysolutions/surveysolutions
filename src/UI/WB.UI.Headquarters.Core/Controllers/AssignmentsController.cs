@@ -176,15 +176,11 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [ActivePage(MenuItem.Questionnaires)]
         [AntiForgeryFilter]
-        public ActionResult Upload(string id)
+        [Route("{controller}/{action}/{id}")]
+        [Route("{controller}/{action}/{id}/{step}")]
+        public ActionResult Upload(string id, string step)
         {
-            QuestionnaireIdentity questionnaireIdentity;
-
-            var importStatus = this.assignmentsImportService.GetImportStatus();
-
-            if (importStatus != null)
-                questionnaireIdentity = importStatus.QuestionnaireIdentity;
-            else if(!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
+            if(!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
                 return BadRequest("Questionnaire identity has wrong format");
 
             SampleUploadView sampleUploadView = this.sampleUploadViewFactory.Load(
@@ -210,8 +206,7 @@ namespace WB.UI.Headquarters.Controllers
                     UploadUrl = Url.Action("Upload"),
                     ImportStatusUrl =  Url.Action("ImportStatus"),
                     InvalidAssignmentsUrl = Url.Action("GetInvalidAssignmentsByLastImport")
-                },
-                Status = importStatus
+                }
             });
         }
 
