@@ -3,7 +3,7 @@
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
-                    <a href="../../SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
+                    <a href="../../../SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
                 </li>
                 <li>
                     <a
@@ -68,11 +68,11 @@
                 <div class="action-buttons" v-else>
                     <a
                         class="btn btn-primary"
-                        href="../../Assignments"
+                        href="../../../Assignments"
                     >{{$t('MainMenu.Assignments')}}</a>
                     <a
                         class="btn btn-primary"
-                        href="../../SurveySetup"
+                        href="../../../SurveySetup"
                     >{{$t('MainMenu.SurveySetup')}}</a>
 
                     <a
@@ -104,8 +104,11 @@ export default {
         questionnaire() {
             return this.model.questionnaire
         },
+        questionnaireId() {
+            return this.$route.params.questionnaireId
+        },
         assignmentsUploadUrl() {
-            return '../' + this.status.questionnaireIdentity.id
+            return '../../../Assignments/Upload/' + this.questionnaireId
         },
         isInProgress() {
             return this.status.processStatus != 'ImportCompleted'
@@ -123,13 +126,13 @@ export default {
         updateStatus() {
             var self = this
             this.$http.get(this.model.api.importStatusUrl).then(response => {
-                this.$store.dispatch('setUploadStatus', response.data)
+                self.$store.dispatch('setUploadStatus', response.data)
 
                 if (!self.isInProgress) window.clearInterval(self.timerId)
                 if (response.data == null)
                     self.$router.push({
                         name: 'assignments-upload',
-                        params: {questionnaireId: this.status.questionnaireIdentity.id},
+                        params: {questionnaireId: self.questionnaireId},
                     })
             })
         },

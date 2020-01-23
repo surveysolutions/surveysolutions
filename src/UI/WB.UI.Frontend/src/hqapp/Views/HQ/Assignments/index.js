@@ -46,12 +46,15 @@ export default class AssignmentsComponent {
                                         .then(response => {
                                             self.rootStore.dispatch('setUploadStatus', response.data)
                                             if (response.data != null && response.data.isOwnerOfRunningProcess) {
-                                                if (response.data.processStatus == 'Verification')
+                                                if (to.params.questionnaireId != response.data.questionnaireIdentity.id)
+                                                    window.location.href = '/Assignments/Upload/' + response.data.questionnaireIdentity.id
+                                                else if (response.data.processStatus == 'Verification')
                                                     next({ name: "assignments-upload-verification", params: { questionnaireId: response.data.questionnaireIdentity.id } });
                                                 else if (response.data.processStatus == 'Import')
                                                     next({ name: "assignments-upload-progress", params: { questionnaireId: response.data.questionnaireIdentity.id } });
                                                 else next()
                                             }
+                                            else next()
                                         })
                                         .catch(() => next());
                                 }

@@ -3,7 +3,7 @@
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
-                    <a href="../../SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
+                    <a href="../../../SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
                 </li>
                 <li>
                     <a
@@ -99,8 +99,11 @@ export default {
         questionnaire() {
             return this.model.questionnaire
         },
+        questionnaireId() {
+            return this.$route.params.questionnaireId
+        },
         assignmentsUploadUrl() {
-            return '../' + this.$route.params.questionnaireId
+            return '../../../Assignments/Upload/' + this.questionnaireId
         },
     },
     methods: {
