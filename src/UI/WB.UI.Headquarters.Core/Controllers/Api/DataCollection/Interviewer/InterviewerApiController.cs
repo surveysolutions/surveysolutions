@@ -6,8 +6,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -23,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
@@ -60,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IPlainKeyValueStorage<TenantSettings> tenantSettings,
             IInterviewerVersionReader interviewerVersionReader,
             IUserToDeviceService userToDeviceService)
-            : base(interviewerSettingsStorage, tenantSettings)
+            : base(interviewerSettingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.tabletInformationService = tabletInformationService;
             this.userViewFactory = userViewFactory;
@@ -142,30 +145,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpPost]
         [Route("v2/tabletInfo")]
-        public virtual async Task<IActionResult> PostTabletInformation(IFormFile formFile)
+        public override Task<IActionResult> PostTabletInformation()
         {
-            if (formFile == null)
-            {
-                return StatusCode(StatusCodes.Status415UnsupportedMediaType);
-            }
-
-            var formData = new MemoryStream();
-            await formFile.CopyToAsync(formData);
-
-            var deviceId = this.Request.Headers["DeviceId"].Single();
-
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var user = userId != null
-                ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
-                : null;
-
-            this.tabletInformationService.SaveTabletInformation(
-                content: formData.ToArray(),
-                androidId: deviceId,
-                user: user);
-
-            return Ok();
+            return base.PostTabletInformation();
         }
 
         [Authorize(Roles = "Interviewer")]

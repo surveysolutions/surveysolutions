@@ -843,8 +843,8 @@
     <value>Password</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-      <value>{{name}} (ver. {{version}})</value>
-      <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+    <value>{{name}} (ver. {{version}})</value>
+    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
     <value>Download latest interviewer app</value>
@@ -1202,22 +1202,22 @@
     <value>Move to another team</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-      <value>Interviewer(s) {{interviewers}} will be moved to a team of supervisor {{supervisor}}.</value>
+    <value>Interviewer(s) {{interviewers}} will be moved to a team of supervisor {{supervisor}}.</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-      <value>Interviewer(s) {{interviewers}} are in the team of supervisor {{supervisor}} and no actions will be performed.</value>
+    <value>Interviewer(s) {{interviewers}} are in the team of supervisor {{supervisor}} and no actions will be performed.</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-      <value>Move interviewer(s) with their assignments and interviews to the team of supervisor {{supervisor}}.</value>
+    <value>Move interviewer(s) with their assignments and interviews to the team of supervisor {{supervisor}}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
-      <value>Select a team where to move {{names}}</value>
+    <value>Select a team where to move {{names}}</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
     <value>{0} and {1}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
-      <value>{{names}} and {{more}} more</value>
+    <value>{{names}} and {{more}} more</value>
   </data>
   <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>Make original supervisor responsible for the existing assignments and interviews of the moved interviewer(s).</value>
@@ -1297,5 +1297,8 @@
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuration</value>
   </data>
 </root>

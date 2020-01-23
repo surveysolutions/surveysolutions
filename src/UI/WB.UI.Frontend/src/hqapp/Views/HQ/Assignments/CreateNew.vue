@@ -255,6 +255,8 @@ import { Validator } from "vee-validate";
 import * as toastr from "toastr";
 import http from "~/webinterview/api/http";
 
+import "@/assets/css/markup-web-interview.scss"
+
 const emailOrPasswordRequired = {
     getMessage() {
         return Vue.$t("Assignments.SizeForWebMode");
