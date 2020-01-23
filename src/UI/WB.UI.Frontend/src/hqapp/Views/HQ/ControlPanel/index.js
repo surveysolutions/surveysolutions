@@ -1,6 +1,7 @@
 import Configuration from "./Configuration"
 import ControlPanelLayout from "./ControlPanelLayout"
 import TabletInfos from "./TabletInfos"
+import AppUpdates from "./AppUpdates"
 
 
 export default class MapComponent {
@@ -15,6 +16,10 @@ export default class MapComponent {
             {
                 path: 'TabletInfos',
                 component: TabletInfos
+            },
+            {
+                path: 'AppUpdates',
+                component: AppUpdates
             }]
         }]
     }
