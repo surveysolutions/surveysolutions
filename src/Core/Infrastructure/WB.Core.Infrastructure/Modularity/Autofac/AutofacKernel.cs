@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Core;
 using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -19,11 +20,15 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
         }
 
-        public AutofacKernel(ContainerBuilder containerBuilder)
+        public AutofacKernel(ContainerBuilder containerBuilder, Action<IContainer> onBuildAction = null)
         {
             this.containerBuilder = containerBuilder;
 
-            containerBuilder.RegisterBuildCallback(container => Container = container);
+            containerBuilder.RegisterBuildCallback(container =>
+            {
+                Container = container;
+                onBuildAction?.Invoke(container);
+            });
 
             this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
 
