@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
 {
@@ -19,11 +20,11 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     {
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly IEmailSender emailSender;
-        private readonly IViewRenderingService viewRenderingService;
+        private readonly IViewRenderService viewRenderingService;
 
         public ForgotPasswordModel(UserManager<DesignerIdentityUser> userManager, 
             IEmailSender emailSender, 
-            IViewRenderingService viewRenderingService)
+            IViewRenderService viewRenderingService)
         {
             this.userManager = userManager;
             this.emailSender = emailSender;
