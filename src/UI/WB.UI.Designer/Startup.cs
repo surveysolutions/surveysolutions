@@ -273,6 +273,11 @@ namespace WB.UI.Designer
             app.UseEndpoints(routes =>
             {
                 routes.MapControllerRoute(
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller}/{action}/{id?}",
+                    defaults: new { action = "Index" });
+
+                routes.MapControllerRoute(
                     name: "default", 
                     pattern: "{controller=Questionnaire}/{action=Index}/{id?}");
                 routes.MapRazorPages();

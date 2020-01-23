@@ -41,7 +41,7 @@ namespace WB.Core.Infrastructure.DependencyInjection
         private async Task InitModules(IServiceProvider serviceProvider)
         {
             var status = serviceProvider.GetService<UnderConstructionInfo>();
-            status.Run();
+            status?.Run();
 
             try
             {
@@ -50,21 +50,21 @@ namespace WB.Core.Infrastructure.DependencyInjection
                     var serviceLocatorLocal = scope.ServiceProvider.GetService<IServiceLocator>();
                     foreach (var module in initModules)
                     {
-                        status.ClearMessage();
+                        status?.ClearMessage();
                         await module.InitAsync(serviceLocatorLocal, status);
                     }
                 }
 
-                status.Finish();
+                status?.Finish();
             }
             catch (InitializationException ie)  when(ie.Subsystem == Subsystem.Database)
             {
-                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringRunningMigrations, ie);
+                status?.Error(Core.Infrastructure.Resources.Modules.ErrorDuringRunningMigrations, ie);
                 serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(ie, "Exception during running migrations");
             }
             catch(Exception e)
             {
-                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringSiteInitialization, e);
+                status?.Error(Core.Infrastructure.Resources.Modules.ErrorDuringSiteInitialization, e);
                 serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(e, "Exception during site initialization");
             }
         }
