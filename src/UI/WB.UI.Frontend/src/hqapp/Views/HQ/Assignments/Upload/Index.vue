@@ -99,7 +99,28 @@
                         <a
                             v-bind:href="api.simpleTemplateDownloadUrl"
                         >{{$t('BatchUpload.DownloadTabTemplate')}}</a>
+                        <div class="progress-wrapper-block" v-if="hasUploadProcess">
+                            <p class="warning-message">
+                                {{$t('UploadUsers.UploadInProgress', {userName: ownerOfCurrentUploadProcess})}}
+                                <br />
+                                {{$t('UploadUsers.UploadInProgressDescription')}}
+                            </p>
+                            <div class="progress">
+                                <div
+                                    class="progress-bar progress-bar-info"
+                                    role="progressbar"
+                                    aria-valuenow="5"
+                                    aria-valuemin="0"
+                                    aria-valuemax="11"
+                                    v-bind:style="{ width: importedAssignmentsInPercents + '%' }"
+                                >
+                                    <span class="sr-only">{{importedAssignmentsInPercents}}%</span>
+                                </div>
+                            </div>
+                            <span>{{$t('UploadUsers.EstimatedTime', {estimatedTime: estimatedTimeToFinishCurrentProcess })}}</span>
+                        </div>
                         <input
+                            v-if="!hasUploadProcess"
                             name="file"
                             ref="uploader"
                             v-show="false"
@@ -109,6 +130,7 @@
                             class="btn btn-default btn-lg btn-action-questionnaire"
                         />
                         <button
+                            v-if="!hasUploadProcess"
                             type="button"
                             class="btn btn-success"
                             @click="$refs.uploader.click()"
@@ -130,12 +152,14 @@
                             name="file"
                             ref="uploaderAdvanced"
                             v-show="false"
+                            v-if="!hasUploadProcess"
                             accept=".zip"
                             type="file"
                             @change="onAdvancedFileUpload"
                             class="btn btn-default btn-lg btn-action-questionnaire"
                         />
                         <button
+                            v-if="!hasUploadProcess"
                             type="button"
                             class="btn btn-success"
                             @click="$refs.uploaderAdvanced.click()"
@@ -153,6 +177,7 @@
 </template>
 <script>
 import * as toastr from 'toastr'
+import moment from 'moment'
 
 export default {
     data() {
@@ -160,6 +185,7 @@ export default {
             showQuestions: false,
             responsible: null,
             timerId: 0,
+            currentUploadProcess: null,
         }
     },
     computed: {
@@ -185,11 +211,37 @@ export default {
                     '</a>',
             })
         },
-        requestVerificationToken() {
-            return this.$hq.Util.getCsrfCookie()
-        },
         questionnaireId() {
             return this.$route.params.questionnaireId
+        },
+        hasUploadProcess() {
+            return this.currentUploadProcess != null && this.currentUploadProcess.processStatus != 'ImportCompleted'
+        },
+        ownerOfCurrentUploadProcess() {
+            return this.currentUploadProcess.responsibleName
+        },
+        estimatedTimeToFinishCurrentProcess() {
+            let now = moment()
+            let timeDiff = now - moment.utc(this.currentUploadProcess.startedDate)
+            let timeRemaining = (timeDiff / this.importedAssignmentsCount) * this.assignmentsInQueue
+
+            return moment.duration(timeRemaining).humanize()
+        },
+        assignmentsInQueue() {
+            return this.totalAssignmentsToImportCount - this.importedAssignmentsCount
+        },
+        importedAssignmentsCount() {
+            return (
+                this.currentUploadProcess.verifiedCount +
+                this.currentUploadProcess.processedCount +
+                this.currentUploadProcess.withErrorsCount * 2 /* because verification and import */
+            )
+        },
+        totalAssignmentsToImportCount() {
+            return this.currentUploadProcess.totalCount * 2 /* because verification and import */
+        },
+        importedAssignmentsInPercents() {
+            return (this.importedAssignmentsCount / this.totalAssignmentsToImportCount) * 100
         },
     },
     methods: {
@@ -229,7 +281,7 @@ export default {
                 .then(response => {
                     window.clearInterval(this.timerId)
                     self.$store.dispatch('setUploadFileName', file.name)
-                    
+
                     const errors = response.data
                     if (errors.length == 0) self.$router.push({name: 'assignments-upload-verification'})
                     else {
@@ -244,12 +296,14 @@ export default {
                 })
         },
         updateStatus() {
+            var self = this
             this.$http.get(this.api.importStatusUrl).then(response => {
-                if (responsible.data != null) this.$store.dispatch('setUploadStatus', response.data)
+                this.currentUploadProcess = response.data
             })
         },
     },
     mounted() {
+        this.currentUploadProcess = this.$store.getters.upload.progress
         this.timerId = window.setInterval(() => {
             this.updateStatus()
         }, 500)
