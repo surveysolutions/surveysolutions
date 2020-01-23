@@ -8,7 +8,8 @@ import Cover from "../components/Cover"
 import Section from "../components/Section"
 import SideBar from "../components/Sidebar"
 import Splash from "../components/Splash"
-import Interview from "../components/Interview"
+
+const Interview = () => import(/* webpackChunkName: "interview" */'~/webinterview/components/Interview.vue')
 
 function NewRouter(store) {
 
