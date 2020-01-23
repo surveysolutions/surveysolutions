@@ -51,7 +51,7 @@
         @if (questionnaire.StaticTextHasAttachedImage(staticText))
         {
             <figure>
-                <img src="@Url.HttpRouteUrlAbsolute("AttachmentThumbnailWithSize", new {id = questionnaire.GetAttachmentId(staticText), size = questionnaire.Settings.AttachmentSize})" alt="" />
+                <img src="@Html.ContentAbsolute($"~/attachments/thumbnail/{questionnaire.GetAttachmentId(staticText)}/{questionnaire.Settings.AttachmentSize}")" alt="" />
             </figure>
         }
     </div>
