@@ -488,8 +488,7 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <comment>{0} - questionnaire name and version</comment>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Importing assignments for {0}</value>
-    <comment>{0} - questionnaire name and version</comment>
+      <value>Importing assignments for {{title}}</value>
   </data>
   <data name="ImportInterviews_Done" xml:space="preserve">
     <value>Done:</value>
@@ -498,8 +497,7 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <value>None failed</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} of {1}</value>
-    <comment>{0} - count of created entities; {1} - total number to be created</comment>
+      <value>{{createdCount}} of {{totalCount}}</value>
   </data>
   <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
     <value>Importing assignments</value>
@@ -509,16 +507,14 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <comment>{0} - count of created interviews (always &gt; 1)</comment>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0} assignments failed to be created</value>
-    <comment>{0} - count of created assignments (always &gt; 1)</comment>
+      <value>{{count}} assignments failed to be created</value>
   </data>
   <data name="MultipleInterviewsCreated" xml:space="preserve">
     <value>{0} interviews created</value>
     <comment>{0} - count of created interviews (always &gt; 1)</comment>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} assignments created</value>
-    <comment>{0} - count of created assignments (always &gt; 1)</comment>
+      <value>{{count}} assignments created</value>
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
     <value>Select the responsible for this batch</value>

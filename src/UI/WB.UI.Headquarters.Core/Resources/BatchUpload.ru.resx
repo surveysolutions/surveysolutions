@@ -467,19 +467,19 @@ _comment - комментарии к заданию</value>
     <value>Создать множество заданий используя файл</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Импорт заданий для {0}</value>
+      <value>Импорт заданий для {{title}}</value>
   </data>
   <data name="SingleAssignmentCreated" xml:space="preserve">
     <value>1 задание создано</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} заданий создано</value>
+      <value>{{count}} заданий создано</value>
   </data>
   <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
     <value>1 задание не было создано</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0} заданий не было создано</value>
+      <value>{{count}} заданий не было создано</value>
   </data>
   <data name="DownloadInvalidAssignments" xml:space="preserve">
     <value>Загрузить задания с ошибками</value>
@@ -498,7 +498,7 @@ _comment - комментарии к заданию</value>
     <value>Импорт интервью для {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} из {1}</value>
+      <value>{{createdCount}} из {{totalCount}}</value>
   </data>
   <data name="AssignedToMultipleEnumerators" xml:space="preserve">
     <value>Назначено на {0} интервьюеров</value>
