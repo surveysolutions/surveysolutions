@@ -641,7 +641,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Importing assignments for {0}.
+        ///   Looks up a localized string similar to Importing assignments for {{title}}.
         /// </summary>
         public static string ImportAssignmentsFor {
             get {
@@ -740,7 +740,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} of {1}.
+        ///   Looks up a localized string similar to {{createdCount}} of {{totalCount}}.
         /// </summary>
         public static string ImportProgressFormat {
             get {
@@ -839,7 +839,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} assignments failed to be created.
+        ///   Looks up a localized string similar to {{count}} assignments failed to be created.
         /// </summary>
         public static string MultipleAssignmentFailedToBeCreated {
             get {
@@ -848,7 +848,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} assignments created.
+        ///   Looks up a localized string similar to {{count}} assignments created.
         /// </summary>
         public static string MultipleAssignmentsCreated {
             get {

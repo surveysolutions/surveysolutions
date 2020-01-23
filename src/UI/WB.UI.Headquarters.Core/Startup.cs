@@ -344,6 +344,7 @@ namespace WB.UI.Headquarters
         private void InitModules(IApplicationBuilder app)
         {
             var lifetimeScope = app.ApplicationServices.GetAutofacRoot();
+            InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(lifetimeScope));
             autofacKernel.InitCoreAsync(lifetimeScope, false).Wait(TimeSpan.FromSeconds(3));
         }
     }

@@ -430,7 +430,7 @@
     <value>Création de plusieurs affectations avec téléchargement groupé</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Importation d'affectations pour {0}</value>
+      <value>Importation d'affectations pour {{title}}</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
       <value>Importation d'informations de {{fileName}} pour {{title}}</value>
@@ -454,7 +454,7 @@
     <value>Importation d'entretiens pour {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} sur {1}</value>
+      <value>{{createdCount}} sur {{totalCount}}</value>
   </data>
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>Aucun entretien n'a été créé</value>
@@ -466,10 +466,10 @@
     <value>mode manuel</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>Les affectations {0} n'ont pas pu être créées</value>
+      <value>Les affectations {{count}} n'ont pas pu être créées</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} affectations créées</value>
+      <value>{{count}} affectations créées</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
       <value>{{count}} erreurs trouvées</value>
