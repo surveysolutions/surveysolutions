@@ -3,7 +3,7 @@
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
-                    <a href="../../SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
+                    <a href="../../../SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
                 </li>
                 <li>
                     <a
@@ -83,11 +83,14 @@ export default {
         questionnaire() {
             return this.model.questionnaire
         },
+        questionnaireId() {
+            return this.$route.params.questionnaireId
+        },
         status() {
             return this.$store.getters.upload.progress
         },
         assignmentsUploadUrl() {
-            return '../../Assignments/Upload/' + this.status.questionnaireIdentity.id
+            return '../../../Assignments/Upload/' + this.questionnaireId
         },
     },
     mounted() {
@@ -99,17 +102,17 @@ export default {
         updateStatus() {
             var self = this
             this.$http.get(this.model.api.importStatusUrl).then(response => {
-                this.$store.dispatch('setUploadStatus', response.data)
+                self.$store.dispatch('setUploadStatus', response.data)
 
                 if (response.data == null)
                     self.$router.push({
                         name: 'assignments-upload',
-                        params: {questionnaireId: this.status.questionnaireIdentity.id},
+                        params: {questionnaireId: self.questionnaireId},
                     })
                 if (response.data.processStatus == 'Import' || response.data.processStatus == 'ImportCompleted')
                     self.$router.push({
                         name: 'assignments-upload-progress',
-                        params: {questionnaireId: this.status.questionnaireIdentity.id},
+                        params: {questionnaireId: response.data.questionnaireIdentity.id},
                     })
             })
         },
