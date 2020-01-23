@@ -48,7 +48,7 @@ export default {
         CLEAR_OVERVIEW(state) {
             state.total = 0
             state.entities = []
-            state.additionalInfo = []
+            state.additionalInfo = {}
             state.loaded = 0
             state.isLoaded = false
         },
