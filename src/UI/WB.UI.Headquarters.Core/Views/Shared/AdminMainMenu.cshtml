@@ -63,7 +63,7 @@
             @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
             @Html.MainMenuItem("Logs", "Diagnostics", TabletLogs.PageTitle, MenuItem.TabletLogs)
             @Html.MainMenuItem("EmailProviders", "Settings", Common.EmailProviders, MenuItem.EmailProviders)
-            @Html.MainMenuItem("Index", "AuditLog", Common.AuditLog, MenuItem.AuditLog)
+            @Html.MainMenuItem("AuditLog", "Diagnostics", Common.AuditLog, MenuItem.AuditLog)
             @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new { area = string.Empty }, null)</li>
         </ul>

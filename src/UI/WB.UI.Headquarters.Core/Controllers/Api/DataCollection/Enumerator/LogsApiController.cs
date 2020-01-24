@@ -1,16 +1,21 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.UI.Shared.Web.Controllers;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
 {
@@ -31,25 +36,31 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
 
         [HttpPost]
         [Route("api/enumerator/logs")]
-        public async Task<IActionResult> Post(IFormFile formFile)
+        public async Task<IActionResult> Post()
         {
-            var request = Request;
-            if (formFile == null)
+            var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType),
+                new FormOptions().MultipartBoundaryLengthLimit);
+            var reader = new MultipartReader(boundary.ToString(), HttpContext.Request.Body);
+
+            var section = await reader.ReadNextSectionAsync();
+
+            if (section != null)
             {
-                return StatusCode(StatusCodes.Status415UnsupportedMediaType);
+                var formData = new MemoryStream();
+                await  section.Body.CopyToAsync(formData);
+
+                var deviceId = this.Request.Headers["DeviceId"].Single();
+
+                var tabletLog = new TabletLog();
+                
+                tabletLog.Content = formData.ToArray();
+                tabletLog.DeviceId = deviceId;
+                tabletLog.UserName = User.FindFirstValue(ClaimTypes.Name);
+                tabletLog.ReceiveDateUtc = DateTime.UtcNow;
+                this.logs.Store(tabletLog, null);
+                
             }
-
-            var deviceId = this.Request.Headers["DeviceId"][0];
-            var tabletLog = new TabletLog();
-            await using var memoryStream = new MemoryStream();
-            await formFile.CopyToAsync(memoryStream);
-
-            tabletLog.Content = memoryStream.ToArray();
-            tabletLog.DeviceId = deviceId;
-            tabletLog.UserName = User.FindFirstValue(ClaimTypes.Name);
-            tabletLog.ReceiveDateUtc = DateTime.UtcNow;
-            this.logs.Store(tabletLog, null);
-
+            
             return Ok(HttpStatusCode.OK);
         }
     }
