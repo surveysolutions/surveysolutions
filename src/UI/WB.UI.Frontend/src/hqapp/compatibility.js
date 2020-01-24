@@ -1,4 +1,5 @@
 window.jQuery = require("jquery")
+const $ = window.jQuery;
 
 $.fn.preventDoubleSubmission = function () {
     $(this).on('submit', function (e) {
