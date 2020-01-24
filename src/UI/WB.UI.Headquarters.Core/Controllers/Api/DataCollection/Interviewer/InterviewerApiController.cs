@@ -176,7 +176,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
             if (clientApkBuildNumber != null && this.syncVersionProvider.GetBlackListedBuildNumbers().Contains(clientApkBuildNumber.Value))
             {
-                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
 
             if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
