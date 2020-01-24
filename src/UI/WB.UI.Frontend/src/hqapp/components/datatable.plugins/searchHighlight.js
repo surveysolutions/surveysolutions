@@ -53,7 +53,7 @@
 
 
     // Listen for DataTables initialisations
-    $(document).on('init.dt.dth', function (e, settings, json) {
+    $(document).on('init.dt.dth', function (e, settings) {
         if (e.namespace !== 'dt') {
             return;
         }
@@ -83,4 +83,4 @@
     });
 
 
-})(window, document, jQuery);
+})(window, document, window.jQuery);

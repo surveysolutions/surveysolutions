@@ -124,15 +124,9 @@
 
 <script>
 import Vue from 'vue'
-import {DateFormats} from '~/shared/helpers'
+
 import modal from "@/shared/modal"
 import {mixin as VueTimers} from 'vue-timers'
-
-const ProcessStatus = {
-    Compressing: 'Compressing',
-    Finished: 'Finished',
-    Canceled: 'Canceled',
-}
 
 export default {
     mixins: [VueTimers],
@@ -173,7 +167,7 @@ export default {
                         id: this.data.id,
                     },
                 })
-                .then(response => {})
+                .then(() => {})
                 .catch(error => {
                     Vue.config.errorHandler(error, this)
                 })

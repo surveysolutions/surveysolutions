@@ -82,13 +82,18 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/recommended",
-      "@vue/prettier"
+      "plugin:vue/essential",
+      "eslint:recommended"
     ],
     "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    }
+    },
+    "ignorePatterns": [
+      "dist/**",
+      "js/**",
+      "**/*.test.js"
+    ]
   },
   "postcss": {
     "plugins": {
