@@ -55,7 +55,7 @@
                         />
                     </form-group>
                     <p v-if="lockMessage != null">{{lockMessage}}</p>
-                    <form-group v-if="!userInfo.isOwnProfile">
+                    <form-group v-if="!isOwnProfile">
                         <input
                             class="checkbox-filter single-checkbox"
                             id="IsLocked"
@@ -68,7 +68,7 @@
                             {{$t('FieldsAndValidations.IsLockedFieldName')}}
                         </label>
                     </form-group>
-                    <form-group v-if="!userInfo.isOwnProfile && canLockBySupervisor">
+                    <form-group v-if="!isOwnProfile && canLockBySupervisor">
                         <input
                             class="checkbox-filter single-checkbox"
                             data-val="true"
@@ -102,7 +102,7 @@
                 </div>
                 <div class="col-sm-12">
                     <form-group
-                        v-if="userInfo.isOwnProfile"
+                        v-if="isOwnProfile"
                         :label="$t('FieldsAndValidations.OldPasswordFieldName')"
                         :error="modelState['OldPassword']"
                     >
@@ -194,6 +194,9 @@ export default {
         isApiUser() {
             return this.userInfo.role == 'ApiUser'
         },
+        isOwnProfile() {
+            return this.userInfo.isOwnProfile
+        },
         canLockBySupervisor() {
             return this.isInterviewer
         },
@@ -204,21 +207,25 @@ export default {
             return null
         },
         referrerTitle() {
-            if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
-            if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
-            if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
-            if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
-            if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
+            if (!this.isOwnProfile) {
+                if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
+                if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
+                if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
+                if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
+                if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
+            }
 
             return this.$t('Pages.Home')
         },
         referrerUrl() {
-            if (this.isHeadquarters) return '../../Headquarters'
-            if (this.isSupervisor) return '../../Supervisors'
-            if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
-            if (this.isObserver) return '../../Observers'
-            if (this.isApiUser) return '../../ApiUsers'
-            
+            if (!this.isOwnProfile) {
+                if (this.isHeadquarters) return '../../Headquarters'
+                if (this.isSupervisor) return '../../Supervisors'
+                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
+                if (this.isObserver) return '../../Observers'
+                if (this.isApiUser) return '../../ApiUsers'
+            }
+
             return '/'
         },
     },
