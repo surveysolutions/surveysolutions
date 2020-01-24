@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -9,9 +10,11 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
@@ -229,7 +232,24 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
         }
 
-        [HttpPost]
-        public SystemLog GetSystemLog(SystemLogFilter filter) => this.systemLogViewFactory.GetLog(filter);
+        [HttpGet]
+        public DataTableResponse<SystemLogItem> GetSystemLog(DataTableRequest request)
+        {
+            var systemLogFilter = new SystemLogFilter
+            {
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                SortOrder = request.GetSortOrderRequestItems()
+            };
+            var systemLog = this.systemLogViewFactory.GetLog(systemLogFilter);
+            
+            return new DataTableResponse<SystemLogItem>
+            {
+                Data = systemLog.Items,
+                Draw = request.Draw + 1,
+                RecordsFiltered = systemLog.TotalCount,
+                RecordsTotal = systemLog.TotalCount
+            };
+        }
     }
 }
