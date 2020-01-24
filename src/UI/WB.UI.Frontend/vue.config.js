@@ -132,6 +132,9 @@ module.exports = {
             path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
         ]
         
+        Object.keys(pages).forEach(page => {
+            resxFiles.push(path.join(uiFolder, pages[page].template))
+        })
 
         config.plugin('extraWatch')
             .use(extraWatch, [{ files: resxFiles }])
