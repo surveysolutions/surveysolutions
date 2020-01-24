@@ -423,7 +423,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, quantity));
             this.auditLog.AssignmentSizeChanged(id, quantity);
 
-            return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetAssignment(id));
+            var changedAssignment = assignmentsStorage.GetAssignment(id);
+            return this.mapper.Map<AssignmentDetails>(changedAssignment);
         }
 
         /// <summary>
