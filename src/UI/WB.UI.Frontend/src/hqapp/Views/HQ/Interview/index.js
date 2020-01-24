@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 import localStore from "./store"
 
 const Review = () => import(/* webpackChunkName: "review" */"./Review")
@@ -13,8 +11,6 @@ export default class ReviewComponent {
     }
 
     get routes() {
-        var self = this;
-
         return [{
             path: '/Interview/Review/:interviewId',
             component: Review,
