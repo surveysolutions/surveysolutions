@@ -75,8 +75,8 @@
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info">
                 <h3>{{$t('BatchUpload.Select_Responsible')}}</h3>
                 <p>{{$t('BatchUpload.Select_Responsible_Description')}}</p>
-                <form-group>
-                    <div class="field" :class="{answered: responsible != null}">
+                <form-group :error="errorByResponsible">
+                    <div class="field form-control" :class="{answered: responsible != null}" style="padding:0">
                         <Typeahead
                             control-id="responsible"
                             :value="responsible"
@@ -126,14 +126,14 @@
                             v-show="false"
                             accept=".tab, .txt, .zip"
                             type="file"
-                            @change="onSimpleFileUpload"
+                            @change="onSimpleFileSelected"
                             class="btn btn-default btn-lg btn-action-questionnaire"
                         />
                         <button
                             v-if="!hasUploadProcess"
                             type="button"
                             class="btn btn-success"
-                            @click="$refs.uploader.click()"
+                            @click="uploadSimple"
                         >{{$t('BatchUpload.UploadTabFile')}}</button>
                     </div>
                 </div>
@@ -155,14 +155,14 @@
                             v-if="!hasUploadProcess"
                             accept=".zip"
                             type="file"
-                            @change="onAdvancedFileUpload"
+                            @change="onAdvancedFileSelected"
                             class="btn btn-default btn-lg btn-action-questionnaire"
                         />
                         <button
                             v-if="!hasUploadProcess"
                             type="button"
                             class="btn btn-success"
-                            @click="$refs.uploaderAdvanced.click()"
+                            @click="uploadAdvanced"
                         >{{$t('BatchUpload.UploadZipFile')}}</button>
                     </div>
                 </div>
@@ -186,6 +186,7 @@ export default {
             responsible: null,
             timerId: 0,
             currentUploadProcess: null,
+            errorByResponsible: undefined,
         }
     },
     computed: {
@@ -245,16 +246,29 @@ export default {
         },
     },
     methods: {
+        setErrorByResponsible() {
+            if (this.responsible == null) this.errorByResponsible = this.$t('BatchUpload.RequiredField')
+            else this.errorByResponsible = undefined
+        },
         responsibleSelected(newValue) {
             this.responsible = newValue
+            this.setErrorByResponsible()
         },
-        onSimpleFileUpload(e) {
-            this.upload(e, 1 /* simple */)
+        uploadSimple() {
+            this.setErrorByResponsible()
+            if (!this.errorByResponsible) this.$refs.uploader.click()
         },
-        onAdvancedFileUpload(e) {
-            this.upload(e, 2 /* advanced */)
+        uploadAdvanced() {
+            this.setErrorByResponsible()
+            if (!this.errorByResponsible) this.$refs.uploaderAdvanced.click()
         },
-        upload(e, type) {
+        onSimpleFileSelected(e) {
+            this.uploadFileToServer(e, 1 /* simple */)
+        },
+        onAdvancedFileSelected(e) {
+            this.uploadFileToServer(e, 2 /* advanced */)
+        },
+        uploadFileToServer(e, type) {
             const files = e.target.files || e.dataTransfer.files
 
             if (!files.length) {
