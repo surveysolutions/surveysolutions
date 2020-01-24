@@ -128,3 +128,4 @@ src/UI/WB.UI.Designer/wwwroot
 /src/.idea/.idea.WB without Xamarin/.idea
 /src/.idea
 /src/UI/WB.UI.Headquarters.Core/Views/Shared/_EmptyLayout.cshtml
+/src/UI/WB.UI.Headquarters.Core/App_Data/
