@@ -60,7 +60,7 @@ const inject = () =>
     transform(filepath, file) {
       
       if (filepath.endsWith(".css") && filepath.indexOf("pdf") > 0) {
-        const href= filepath = '@Url.ContentAbsolute("' + filepath + '")'
+        const href= filepath = '@Html.ContentAbsolute("' + filepath + '")'
         return "<link rel='stylesheet' href='" + href + "'>"
       }
 
