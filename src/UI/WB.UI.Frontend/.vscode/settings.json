@@ -2,5 +2,10 @@
     "search.exclude": {
         "**/dist": true,
         "**/locale": true
-    }
+    },
+    
+    "eslint.alwaysShowStatus": true,
+    "eslint.lintTask.enable": true,
+    "vetur.format.enable": true,
+    "editor.formatOnSave": true
 }

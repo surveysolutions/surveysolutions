@@ -329,9 +329,6 @@
 import Vue from 'vue'
 import ExportProcessCard from './ExportProcessCard'
 import {mixin as VueTimers} from 'vue-timers'
-import queryString from 'query-string'
-import {last} from 'lodash'
-import moment from 'moment'
 
 const dataFormatNum = {Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6}
 const ExternalStorageType = {dropbox: 1, oneDrive: 2, googleDrive: 3}
@@ -391,7 +388,6 @@ export default {
     },
 
     mounted() {
-        var self = this
         this.updateExportStatus()
     },
 
@@ -401,7 +397,8 @@ export default {
         },
 
         resetForm() {
-            ;(this.dataType = 'surveyData'), (this.dataFormat = 'Tabular')
+            this.dataType = 'surveyData'
+            this.dataFormat = 'Tabular'
             this.dataDestination = 'zip'
             this.questionnaireId = null
             this.questionnaireVersion = null
@@ -432,7 +429,7 @@ export default {
 
                 this.$http
                     .post(this.$config.model.api.updateSurveyDataUrl, null, {params: exportParams})
-                    .then(function(response) {
+                    .then(function() {
                         self.$validator.reset()
                         self.updateExportStatus()
                     })
