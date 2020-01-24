@@ -287,10 +287,25 @@ export default {
             const webInterviewSettings = await this.$hq.AdminSettings.getWebInterviewSettings()
             this.isEmailAllowed = webInterviewSettings.data.allowEmails
         },
-        async regenPassword() {
-            const response = await this.$hq.ExportSettings.regenPassword()
-            this.encryptionPassword = response.data.password
-            this.encryptionEnabled = response.data.isEnabled
+        regenPassword() {
+            const self = this
+            modal.dialog({
+                closeButton: false,
+                message: self.$t('Settings.RegeneratePasswordConfirm'),
+                buttons: {
+                    cancel: {
+                        label: self.$t('Common.No')
+                    },
+                    success: {
+                        label: self.$t('Common.Yes'),
+                        callback: async () => {
+                            const response = await this.$hq.ExportSettings.regenPassword()
+                            this.encryptionPassword = response.data.password
+                            this.encryptionEnabled = response.data.isEnabled
+                        }
+                    }
+                }
+            })
         },
         async updateMessage(){
             const response = await this.$hq.AdminSettings.setGlobalNotice(this.globalNotice)
