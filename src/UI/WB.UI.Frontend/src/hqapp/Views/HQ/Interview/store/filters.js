@@ -11,18 +11,18 @@ function getSelectedFlags(state) {
 export default {
     state: {
         filter: {
-            flagged: false,
-            notFlagged: false,
-            withComments: false,
+            Flagged: false,
+            NotFlagged: false,
+            WithComments: false,
 
-            invalid: false,
-            valid: false,
+            Invalid: false,
+            Valid: false,
 
-            answered: false,
-            notAnswered: false,
+            Answered: false,
+            NotAnswered: false,
 
-            forSupervisor: false,
-            forInterviewer: false
+            ForSupervisor: false,
+            ForInterviewer: false
         },
 
         stats: {
