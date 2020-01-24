@@ -1,9 +1,10 @@
 import Vue from "vue"
+import { capitalize, unionBy, } from "lodash"
 
 function getSelectedFlags(state) {
     const flags = Object.keys(state.filter)
         .filter((flag) => state.filter[flag])
-        .map(_.capitalize);
+        .map(capitalize);
     return flags;
 }
 
@@ -63,7 +64,7 @@ export default {
                 dispatch("hideSearchResults");
         },
 
-        getStatusesHistory({ rootState }) {
+        getStatusesHistory() {
             return Vue.$api.interview('getStatusesHistory')
         },
 

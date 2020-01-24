@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { find, findIndex, remove } from 'lodash'
+import { find, findIndex } from 'lodash'
 import moment from 'moment'
 import { DateFormats } from "~/shared/helpers";
 
@@ -99,8 +99,6 @@ export default {
                 state.jobs.push(job)
             else
                 state.jobs.splice(idx, 0, job)
-
-            state.jobs = state.jobs
         },
 
         UPDATE_JOB(state, job) {
