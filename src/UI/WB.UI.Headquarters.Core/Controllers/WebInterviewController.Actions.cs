@@ -50,9 +50,9 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Audio([FromForm] Guid interviewId, [FromForm] string questionId, [FromForm] IFormFile file)
+        public async Task<ActionResult> Audio(Guid id, [FromForm] string questionId, [FromForm] IFormFile file)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(id.FormatGuid());
 
             var questionIdentity = Identity.Parse(questionId);
             InterviewTreeQuestion question = interview.GetQuestion(questionIdentity);
@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
 
-                audioFileStorage.StoreInterviewBinaryData(interviewId, fileName, audioInfo.Binary, audioInfo.MimeType);
+                audioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType);
 
                 var command = new AnswerAudioQuestionCommand(interview.Id,
                     interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
@@ -83,16 +83,16 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (Exception e)
             {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionIdentity, e);
+                webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
                 throw;
             }
             return this.Json("ok");
         }
 
         [HttpPost]
-        public async Task<ActionResult> Image([FromForm] Guid interviewId, [FromForm] string questionId, [FromForm] IFormFile file)
+        public async Task<ActionResult> Image(Guid id, [FromForm] string questionId, [FromForm] IFormFile file)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(id.FormatGuid());
 
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
@@ -125,7 +125,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (filename != null)
                     await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
 
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionIdentity, e);
+                webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
                 throw;
             }
             return this.Json("ok");
