@@ -413,7 +413,7 @@ _comment - комментарии к заданию</value>
     <value>Вернуться на страницу импорта опросника</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-      <value>Обнаружено {{countЇ} ошибок</value>
+      <value>Обнаружено {{count}} ошибок</value>
   </data>
   <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
     <value>создание многих интервью</value>
