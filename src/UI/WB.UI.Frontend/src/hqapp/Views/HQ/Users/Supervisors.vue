@@ -22,7 +22,7 @@
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"
             :supportContextMenu="user.isObserver"
-            :selectable="!this.user.isObserver && !this.user.isObserving"
+            :selectable="user.isAdministrator"
             selectableId="userId"
             @selectedRowsChanged="rows => selectedSupervisors = rows"
             @totalRows="(rows) => usersCount = rows"
