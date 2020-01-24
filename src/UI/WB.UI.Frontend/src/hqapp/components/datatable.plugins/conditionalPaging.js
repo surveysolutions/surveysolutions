@@ -79,4 +79,4 @@
             api.on('draw.dt', conditionalPaging);
         }
     });
-})(window, document, jQuery);
+})(window, document, window.jQuery);
