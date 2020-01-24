@@ -56,7 +56,7 @@ const pages = {
     },
 
     webinterview: {
-        entry: "src/webinterview/main.js",
+        entry: "src/hqapp/main.js",
         filename: path.join(hqDist, "Views", "WebInterview", "_WebInterviewLayout.cshtml"),
         template: path.join(hqFolder, "Views", "WebInterview", "_WebInterviewLayout.Template.cshtml")
     },

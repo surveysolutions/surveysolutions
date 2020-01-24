@@ -21,6 +21,8 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
@@ -33,13 +35,14 @@ using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.WebInterview;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [BrowsersRestriction]
     [WebInterviewErrorFilter]
-    [Route("WebInterview/{id:Guid}")]
+    [Route("WebInterview/{id}")]
     public partial class WebInterviewController : Controller
     {
         private readonly ICommandService commandService;
@@ -63,6 +66,8 @@ namespace WB.UI.Headquarters.Controllers
 
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
+        private readonly IOptions<RecaptchaSettings> recaptchaSettings;
+        private readonly ITokenVerifier tokenVerifier;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -122,7 +127,9 @@ namespace WB.UI.Headquarters.Controllers
             INativeReadSideStorage<InterviewSummary> interviewSummary,
             IInvitationMailingService invitationMailingService,
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
-            IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage)
+            IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage,
+            IOptions<RecaptchaSettings> recaptchaSettings,
+            ITokenVerifier tokenVerifier)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
@@ -144,6 +151,8 @@ namespace WB.UI.Headquarters.Controllers
             this.invitationMailingService = invitationMailingService;
             this.emailProviderSettingsStorage = emailProviderSettingsStorage;
             this.webInterviewSettingsStorage = webInterviewSettingsStorage;
+            this.recaptchaSettings = recaptchaSettings;
+            this.tokenVerifier = tokenVerifier;
         }
 
         [WebInterviewAuthorize]
@@ -199,7 +208,9 @@ namespace WB.UI.Headquarters.Controllers
                    (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
         }
 
+        [HttpGet]
         [Route("Start")]
+        [AntiForgeryFilter]
         public ActionResult Start(string id)
         {
             var invitation = this.invitationService.GetInvitationByToken(id);
@@ -457,13 +468,13 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var finishWebInterview = this.GetFinishModel(interview, webInterviewConfig);
-            finishWebInterview.CustomMessages = webInterviewConfig.CustomMessages;
 
             return View(finishWebInterview);
         }
 
         [WebInterviewAuthorize]
-        public ActionResult Resume(string id, string returnUrl)
+        [AntiForgeryFilter]
+         public ActionResult Resume(string id, string returnUrl)
         {
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null)
@@ -647,8 +658,17 @@ namespace WB.UI.Headquarters.Controllers
                 StartedDate = interview.StartedDate,
                 QuestionnaireTitle = model.QuestionnaireTitle,
                 UseCaptcha = model.UseCaptcha,
-                CustomMessages = model.CustomMessages,
-                HasPassword = model.HasPassword
+                RecaptchaSiteKey = model.RecaptchaSiteKey,
+                HasPassword = model.HasPassword,
+                CaptchaErrors = model.CaptchaErrors,
+                IsPasswordInvalid = model.IsPasswordInvalid,
+                ResumeWelcome = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeWelcome).ToString(),
+                    questionnaireBrowseItem.Title),
+                ResumeInvitation = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(),
+                    questionnaireBrowseItem.Title),
+                SubmitUrl = Url.Action("Resume", "WebInterview"),
             };
         }
 
@@ -669,8 +689,16 @@ namespace WB.UI.Headquarters.Controllers
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 UseCaptcha = webInterviewConfig.UseCaptcha,
-                CustomMessages = webInterviewConfig.CustomMessages,
-                HasPassword = !string.IsNullOrWhiteSpace(assignment?.Password ?? String.Empty)
+                RecaptchaSiteKey = recaptchaSettings.Value.SiteKey,
+                HasPassword = !string.IsNullOrWhiteSpace(assignment?.Password ?? String.Empty),
+                WelcomeText = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(),
+                    questionnaireBrowseItem.Title),
+                CaptchaErrors = ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any()
+                                ? ViewData.ModelState["InvalidCaptcha"].Errors.Select(e => e.ErrorMessage).ToList()
+                                : new List<string>(),
+                IsPasswordInvalid = ViewData.ModelState.ContainsKey("InvalidPassword") && ViewData.ModelState["InvalidPassword"].Errors.Any(),
+                SubmitUrl = Url.Action("Start", "WebInterview"),
             };
 
             var interviewIdCookie = Request.Cookies[$"InterviewId-{assignment.Id}"];
@@ -679,11 +707,19 @@ namespace WB.UI.Headquarters.Controllers
                 var interview = statefulInterviewRepository.Get(pendingInterviewId.FormatGuid());
                 if (interview.Status == InterviewStatus.InterviewerAssigned)
                 {
-                    view.PendingInterviewId = pendingInterviewId;
+                    view.HasPendingInterviewId = pendingInterviewId != Guid.Empty;
                 }
             }
 
+
             return view;
+        }
+
+        public static string SubstituteQuestionnaireName(string template, string questionnaireName)
+        {
+            if (string.IsNullOrWhiteSpace(template)) return string.Empty;
+
+            return template.Replace("%QUESTIONNAIRE%", questionnaireName).Replace("%SURVEYNAME%", questionnaireName);
         }
 
         private FinishWebInterview GetFinishModel(IStatefulInterview interview, WebInterviewConfig webInterviewConfig)
@@ -701,7 +737,15 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 StartedDate = interview.StartedDate,
                 CompletedDate = interview.CompletedDate,
-                CustomMessages = webInterviewConfig.CustomMessages
+                WebSurveyHeader = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.WebSurveyHeader).ToString(),
+                    questionnaireBrowseItem.Title),
+                FinishInterview = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.FinishInterview).ToString(),
+                    questionnaireBrowseItem.Title),
+                SurveyName = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.SurveyName).ToString(),
+                    questionnaireBrowseItem.Title),
             };
         }
 
