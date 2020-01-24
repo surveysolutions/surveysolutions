@@ -6,7 +6,7 @@
             <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
         </div>
         <div class="filters-container">
-            <h4>{{$t('Pages.FilterTitle')}}</h4>
+            <h4>{{title}}</h4>
             <slot></slot>
         </div>
     </aside>
@@ -14,6 +14,12 @@
 
 <script>
 export default {
+    props: {
+        title: {
+            type: String,
+            default() { return this.$t('Pages.FilterTitle'); }
+        }
+    }
 
 }
 </script>

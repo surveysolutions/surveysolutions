@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using NHibernate.Criterion;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -51,6 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             var options = new List<Answer>();
             options.Add(Create.Entity.Answer(1.ToString(), 1));
             options.Add(Create.Entity.Answer(2.ToString(), 2));
+            options.Add(Create.Entity.Answer(3.ToString(), 3));
 
 
             SingleQuestion question = Create.Entity.SingleQuestion(
@@ -61,18 +63,25 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
 
             var translationId = Guid.Parse("1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            var optionTranslationValue = "test";
-
             var translations = new List<TranslationDto>()
             {
-                new TranslationDto()
+                // KP-13585 both scenarios should be supported with $ and without $ at the end
+                new TranslationDto
                 {
                     TranslationId = translationId,
                     QuestionnaireEntityId = questionId,
                     TranslationIndex = "1$",
-                    Value = optionTranslationValue,
+                    Value = "test",
                     Type = TranslationType.OptionTitle
-                }
+                },
+                new TranslationDto
+                {
+                    TranslationId = translationId,
+                    QuestionnaireEntityId = questionId,
+                    TranslationIndex = "3",
+                    Value = "Перевод 3й опции",
+                    Type = TranslationType.OptionTitle
+                },
             };
 
             var storage = Create.Storage.OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
@@ -83,8 +92,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
 
             var actual = filteredQuestionOptions.ToList();
             Assert.That(actual, Is.Not.Empty);
-            Assert.That(actual.Count, Is.EqualTo(2));
-            Assert.That(actual.First().Title, Is.EqualTo(optionTranslationValue));
+            Assert.That(actual.Count, Is.EqualTo(3));
+            Assert.That(actual.First().Title, Is.EqualTo("test"));
+
+            Assert.That(actual[2].Value, Is.EqualTo(3));
+            Assert.That(actual[2].Title, Is.EqualTo("Перевод 3й опции"));
         }
 
         [Test]

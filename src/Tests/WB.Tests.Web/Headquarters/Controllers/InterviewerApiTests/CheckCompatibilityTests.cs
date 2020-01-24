@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using FluentAssertions.Common;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -18,10 +17,9 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 
-namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
+namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 {
     [TestOf(nameof(InterviewerApiController.CheckCompatibility))]
     public class CheckCompatibilityTests
@@ -34,10 +32,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var tenantSettings = new TestInMemoryKeyValueStorage<TenantSettings>();
             tenantSettings.Store(new TenantSettings{ TenantPublicId = "server id"}, AppSetting.TenantSettingsKey);
 
-            var controller = Web.Create.Controller.InterviewerApiController(tenantSettings: tenantSettings);
+            var controller = Create.Controller.InterviewerApiController(tenantSettings: tenantSettings);
 
             // Act 
-            var response  = controller.CheckCompatibility("device", 1, "client id");
+            var response  = controller.CheckCompatibility("device", 7100, "client id");
 
             // Assert
             Assert.That(response, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.Conflict));
@@ -104,7 +102,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [Test]
         public void when_assignment_has_audio_recording_enabled_should_force_client_upgrade()
         {
-            var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
             var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == 0);
 
             var synchronizedUserId = Id.gA;
@@ -183,10 +180,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [TestCase(24699, "19.07.0.0 (build 24689)", HttpStatusCode.UpgradeRequired)]
         [TestCase(25689, "19.08.0.0 (build 25689)", HttpStatusCode.OK)]
         [TestCase(25679, "20.09.2 (build 25689)", HttpStatusCode.NotAcceptable)]
+        [TestCase(26876, "20.01.0 (build 26876)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(26886, "20.01.1 (build 26886)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(26948, "20.01.2 (build 26948)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(26963, "20.01.3 (build 26963)", HttpStatusCode.UpgradeRequired)]
         public void when_set_setting_to_autoUpdateEnabled_to_false_should_return_correct_upgrade_result(
-            int hqApkBuildNumber, string appVersion, HttpStatusCode result)
+            int hqApkBuildNumber, string interviewerVersionFromClient, HttpStatusCode result)
         {
-            var interviewerUserAgent = string.Format(InterviewerUserAgent, appVersion);
+            var interviewerUserAgent = string.Format(InterviewerUserAgent, interviewerVersionFromClient);
             var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == hqApkBuildNumber);
 
             var deviceId = "device";
@@ -212,6 +213,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [TestCase(23689, "18.06.0.0 (build 23689)", HttpStatusCode.OK)]
         [TestCase(25689, "18.06.0.4 (build 25689)", HttpStatusCode.OK)]
         [TestCase(26688, "19.08.2 (build 26689)", HttpStatusCode.NotAcceptable)]
+        [TestCase(26876, "20.01.0 (build 26876)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(26886, "20.01.1 (build 26886)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(26948, "20.01.2 (build 26948)", HttpStatusCode.UpgradeRequired)]
+        [TestCase(26963, "20.01.3 (build 26963)", HttpStatusCode.UpgradeRequired)]
         public void when_set_setting_autoUpdateEnabled_to_true_should_return_correct_upgrade_result(
             int hqApkBuildNumber, string appVersion, HttpStatusCode result)
         {
@@ -228,6 +233,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 authorizedUser: authorizedUser,
+                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
                 interviewerSettings: interviewerSettingsStorage,
                 interviewerVersionReader: interviewerVersionReader);
 
