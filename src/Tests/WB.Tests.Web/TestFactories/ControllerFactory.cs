@@ -71,7 +71,7 @@ namespace WB.Tests.Web.TestFactories
         {
             var result = new InterviewerApiController(tabletInformationService ?? Mock.Of<ITabletInformationService>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                syncVersionProvider ?? Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
+                syncVersionProvider ?? new InterviewerSyncProtocolVersionProvider(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 signInManager ?? new HqSignInManager(Abc.Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(),
                 Mock.Of<IHashCompatibilityProvider>()),
