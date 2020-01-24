@@ -370,7 +370,7 @@
       <value>انشاء مهام {{count}}</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-      <value>{{coun}t} وجد أخطاء</value>
+      <value>{{count}} وجد أخطاء</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
     <value>{0} مقابلات فشل انشاءها</value>
