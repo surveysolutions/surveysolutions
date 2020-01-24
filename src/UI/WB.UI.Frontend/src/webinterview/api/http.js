@@ -93,12 +93,11 @@ const httpPlugin = {
                 const interviewId = state.route.params.interviewId
 
                 const fd = new FormData()
-                fd.append("interviewId", interviewId)
                 fd.append("questionId", id)
                 fd.append("file", file)
                 dispatch("uploadProgress", { id, now: 0, total: 100 })
 
-                await axios.post(url, fd, {
+                await axios.post(url + "/" + interviewId, fd, {
                     onUploadProgress(ev) {
                         var entity = state.webinterview.entityDetails[id];
                         if (entity != undefined) {

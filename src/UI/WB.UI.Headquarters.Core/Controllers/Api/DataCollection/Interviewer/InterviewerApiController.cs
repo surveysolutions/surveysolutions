@@ -174,6 +174,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
                 return StatusCode((int) HttpStatusCode.NotAcceptable);
             }
 
+            if (clientApkBuildNumber != null && this.syncVersionProvider.GetBlackListedBuildNumbers().Contains(clientApkBuildNumber.Value))
+            {
+                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+            }
+
             if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
             {
                 return StatusCode((int) HttpStatusCode.UpgradeRequired);
