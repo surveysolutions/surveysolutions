@@ -6,19 +6,29 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
-    public class ResumeWebInterview: StartWebInterview
+    public class StartWebInterview : StartOrResumeWebInterview
     {
-        public DateTime? StartedDate { get; set; }
+        public string WelcomeText { get; set; }
     }
 
-    public class StartWebInterview
+    public class ResumeWebInterview: StartOrResumeWebInterview
     {
+        public DateTime? StartedDate { get; set; }
+        public string ResumeWelcome { get; set; }
+        public string ResumeInvitation { get; set; }
+    }
+
+    public class StartOrResumeWebInterview
+    {
+        public string RecaptchaSiteKey { get; set; }
         public string QuestionnaireTitle { get; set; }
         public bool UseCaptcha { get; set; }
         public bool ServerUnderLoad { get; set; } = false;
-        public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
         public bool HasPassword { get; set; }
-        public Guid PendingInterviewId { get; set; }
+        public bool HasPendingInterviewId { get; set; }
+        public List<string> CaptchaErrors { get; set; }
+        public bool IsPasswordInvalid { get; set; }
+        public string SubmitUrl { get; set; }
     }
 
     public class FinishWebInterview
@@ -26,7 +36,9 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string QuestionnaireTitle { get; set; }
         public DateTime? StartedDate { get; set; }
         public DateTime? CompletedDate { get; set; }
-        public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
+        public string WebSurveyHeader { get; set; }
+        public string FinishInterview { get; set; }
+        public string SurveyName { get; set; }
     }
 
     public class WebInterviewError
