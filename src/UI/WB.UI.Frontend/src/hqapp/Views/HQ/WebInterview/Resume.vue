@@ -13,7 +13,11 @@
         </div>
         <div class="additional-info-block">
             <ul class="list-unstyled">
-                <li v-if="model.startedDate">{{ $t('WebInterview.InterviewStartDateFormatText') }} <time :datetime="startedDateString"></time></li>
+                <li v-if="model.startedDate"
+                    v-dateTimeFormatting>
+                    {{ $t('WebInterview.InterviewStartDateFormatText') }} 
+                    <time :datetime="$config.model.startedDate"></time>
+                </li>
             </ul>
         </div>
 
@@ -29,11 +33,6 @@ import StartOrResumeForm from './_StartOrResumeForm'
 export default {
     components: {
         StartOrResumeForm,
-    },
-    computed: {
-        startedDateString() {
-            return this.$config.model.startedDate.toISOString()
-        },
     },
 }
 
