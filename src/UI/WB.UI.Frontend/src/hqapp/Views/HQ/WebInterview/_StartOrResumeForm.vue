@@ -61,7 +61,7 @@
                 name="resume"
                 class="btn btn-success btn-lg"
                 type="submit"
-                value="$t('WebInterview.ResumeInterview')"/>
+                :value="$t('WebInterview.ResumeInterview')"/>
         </form>
     </div>
 </template>
