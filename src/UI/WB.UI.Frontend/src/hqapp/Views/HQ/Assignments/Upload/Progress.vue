@@ -7,8 +7,7 @@
                 </li>
                 <li>
                     <a
-                        :href="assignmentsUploadUrl"
-                    >{{$t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews')}}</a>
+                        :href="assignmentsUploadUrl">{{$t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews')}}</a>
                 </li>
             </ol>
             <h1>{{$t('BatchUpload.CreatingMultipleAssignments')}}</h1>
@@ -28,30 +27,25 @@
                     <p v-if="!isInProgress">{{$t('BatchUpload.ImportInterviews_Done')}}</p>
                     <p
                         class="success-text"
-                        v-if="processedWithoutErrorsCount == 1"
-                    >{{$t('BatchUpload.SingleAssignmentCreated')}}</p>
+                        v-if="processedWithoutErrorsCount == 1">{{$t('BatchUpload.SingleAssignmentCreated')}}</p>
                     <p
                         class="success-text"
-                        v-if="processedWithoutErrorsCount > 1"
-                    >{{$t('BatchUpload.MultipleAssignmentsCreated', {count:processedWithoutErrorsCount})}}</p>
+                        v-if="processedWithoutErrorsCount > 1">{{$t('BatchUpload.MultipleAssignmentsCreated', {count:processedWithoutErrorsCount})}}</p>
                     <p
                         class="default-text"
-                        v-if="status.withErrorsCount == 0"
-                    >{{$t('BatchUpload.ImportInterviews_NoneFailed')}}</p>
+                        v-if="status.withErrorsCount == 0">{{$t('BatchUpload.ImportInterviews_NoneFailed')}}</p>
                     <p
                         class="error-text"
-                        v-if="status.withErrorsCount == 1"
-                    >{{$t('BatchUpload.SingleAssignmentFailedToBeCreated')}}</p>
+                        v-if="status.withErrorsCount == 1">{{$t('BatchUpload.SingleAssignmentFailedToBeCreated')}}</p>
                     <p
                         class="error-text"
-                        v-if="status.withErrorsCount > 1"
-                    >{{$t('BatchUpload.MultipleAssignmentFailedToBeCreated', {count:status.withErrorsCount})}}</p>
+                        v-if="status.withErrorsCount > 1">{{$t('BatchUpload.MultipleAssignmentFailedToBeCreated', {count:status.withErrorsCount})}}</p>
                 </div>
                 <a
                     v-if="!isInProgress && status.withErrorsCount > 0"
-                    :href="model.api.invalidAssignmentsUrl"
-                >{{$t('BatchUpload.DownloadInvalidAssignments')}}</a>
-                <div class="cancelable-progress" v-if="isInProgress">
+                    :href="model.api.invalidAssignmentsUrl">{{$t('BatchUpload.DownloadInvalidAssignments')}}</a>
+                <div class="cancelable-progress"
+                    v-if="isInProgress">
                     <div class="progress">
                         <div
                             class="progress-bar progress-bar-success"
@@ -59,26 +53,23 @@
                             role="progressbar"
                             :aria-valuenow="status.processedCount"
                             aria-valuemin="0"
-                            :aria-valuemax="status.totalCount"
-                        >
+                            :aria-valuemax="status.totalCount">
                             <span class="sr-only"></span>
                         </div>
                     </div>
                 </div>
-                <div class="action-buttons" v-else>
+                <div class="action-buttons"
+                    v-else>
                     <a
                         class="btn btn-primary"
-                        href="../../../Assignments"
-                    >{{$t('MainMenu.Assignments')}}</a>
+                        href="../../../Assignments">{{$t('MainMenu.Assignments')}}</a>
                     <a
                         class="btn btn-primary"
-                        href="../../../SurveySetup"
-                    >{{$t('MainMenu.SurveySetup')}}</a>
+                        href="../../../SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
 
                     <a
                         class="back-link"
-                        :href="assignmentsUploadUrl"
-                    >{{$t('BatchUpload.BackToImport')}}</a>
+                        :href="assignmentsUploadUrl">{{$t('BatchUpload.BackToImport')}}</a>
                 </div>
             </div>
         </div>
