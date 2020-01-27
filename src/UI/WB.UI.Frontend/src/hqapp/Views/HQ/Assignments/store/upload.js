@@ -2,8 +2,7 @@ export default {
     state: {
         fileName: '',
         verificationErrors: [],
-        complete: {},
-        progress: {},
+        progress: null,
     },
 
     actions: {
@@ -31,9 +30,6 @@ export default {
         },
         SET_STATUS(state, status) {
             state.progress = status
-        },
-        SET_COMPLETE_STATUS(state, status) {
-            state.complete = status
         },
     },
 

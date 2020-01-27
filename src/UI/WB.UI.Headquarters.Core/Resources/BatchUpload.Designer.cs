@@ -569,7 +569,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} assignments verified successfully.
+        ///   Looks up a localized string similar to {{count}} assignments verified successfully.
         /// </summary>
         public static string Import_Verification_AssignmentsVerified {
             get {
@@ -578,7 +578,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} errors.
+        ///   Looks up a localized string similar to {{count}} errors.
         /// </summary>
         public static string Import_Verification_Errors {
             get {
@@ -596,7 +596,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verification of assignments for questionnaire {0}.
+        ///   Looks up a localized string similar to Verification of assignments for questionnaire {{title}}.
         /// </summary>
         public static string Import_VerificationOfAssignments_ForQuestionnaire {
             get {
@@ -614,7 +614,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to step {0} of {1}.
+        ///   Looks up a localized string similar to step {{verifiedCount}} of {{totalCount}}.
         /// </summary>
         public static string Import_VerificationOfDataFile_Progress {
             get {
@@ -641,7 +641,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Importing assignments for {0}.
+        ///   Looks up a localized string similar to Importing assignments for {{title}}.
         /// </summary>
         public static string ImportAssignmentsFor {
             get {
@@ -650,7 +650,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Importing information from {0} for {1}.
+        ///   Looks up a localized string similar to Importing information from {{fileName}} for {{title}}.
         /// </summary>
         public static string ImportFrom {
             get {
@@ -740,7 +740,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} of {1}.
+        ///   Looks up a localized string similar to {{createdCount}} of {{totalCount}}.
         /// </summary>
         public static string ImportProgressFormat {
             get {
@@ -839,7 +839,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} assignments failed to be created.
+        ///   Looks up a localized string similar to {{count}} assignments failed to be created.
         /// </summary>
         public static string MultipleAssignmentFailedToBeCreated {
             get {
@@ -848,7 +848,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} assignments created.
+        ///   Looks up a localized string similar to {{count}} assignments created.
         /// </summary>
         public static string MultipleAssignmentsCreated {
             get {
@@ -857,7 +857,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} errors found.
+        ///   Looks up a localized string similar to {{count}} errors found.
         /// </summary>
         public static string MultipleErrorsWereFound {
             get {
