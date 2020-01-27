@@ -1,14 +1,14 @@
-import Layout from "./Layout"
-import Assignments from "./HqAssignments"
-import CreateNew from "./CreateNew"
-import Details from "./Details"
-import Upload from "./Upload"
-import localStore from "./store"
+import Layout from './Layout'
+import Assignments from './HqAssignments'
+import CreateNew from './CreateNew'
+import Details from './Details'
+import Upload from './Upload'
+import localStore from './store'
 
-import Vue from "vue"
+import Vue from 'vue'
 export default class AssignmentsComponent {
     constructor(rootStore) {
-        this.rootStore = rootStore;
+        this.rootStore = rootStore
     }
 
     get routes() {
@@ -29,15 +29,15 @@ export default class AssignmentsComponent {
                     {
                         path: 'Upload/:questionnaireId', component: Upload
                     }]
-            }];
+            }]
     }
 
     initialize() {
-        const VeeValidate = require('vee-validate');
-        Vue.use(VeeValidate);
+        const VeeValidate = require('vee-validate')
+        Vue.use(VeeValidate)
     }
 
     get modules() {
-        return localStore;
+        return localStore
     }
 }

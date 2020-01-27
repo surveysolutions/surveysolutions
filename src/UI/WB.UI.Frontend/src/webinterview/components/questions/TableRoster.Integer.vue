@@ -17,9 +17,9 @@
 
 <script lang="js">
     import Vue from 'vue'
-    import { entityDetails, tableCellEditor } from "../mixins"
-    import { getGroupSeparator, getDecimalSeparator } from "./question_helpers"
-    import modal from "@/shared/modal"
+    import { entityDetails, tableCellEditor } from '../mixins'
+    import { getGroupSeparator, getDecimalSeparator } from './question_helpers'
+    import modal from '@/shared/modal'
 
     export default {
         name: 'TableRoster_Integer',
@@ -46,12 +46,12 @@
             },
 
             answerIntegerQuestion() {
-                const answerString = this.autoNumericElement.getNumericString();
+                const answerString = this.autoNumericElement.getNumericString()
                 const answer = answerString != undefined && answerString != ''
                     ? parseInt(answerString)
-                    : null;
+                    : null
 
-                this.saveIntegerAnswer(answer);
+                this.saveIntegerAnswer(answer)
             },
 
             saveIntegerAnswer(answer){
@@ -63,12 +63,12 @@
                     const previousAnswer = this.$me.answer
                     
                     if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotParse"))
+                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse'))
                         return
                     }
 
                     if (this.$me.isProtected && this.$me.protectedAnswer > answer) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotBeLessThanProtected"))
+                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotBeLessThanProtected'))
                         return
                     }
 
@@ -78,13 +78,13 @@
                     }
 
                     if (answer < 0) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterError", { answer }))
-                        return;
+                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterError', { answer }))
+                        return
                     }
 
                     if (answer > this.$me.answerMaxValue) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterUpperBound", { answer, answerMaxValue: this.$me.answerMaxValue }))
-                        return;
+                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterUpperBound', { answer, answerMaxValue: this.$me.answerMaxValue }))
+                        return
                     }
 
                     const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer
@@ -94,8 +94,8 @@
                         return
                     }
 
-                    const amountOfRostersToRemove = previousAnswer -  Math.max(answer, 0);
-                    const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
+                    const amountOfRostersToRemove = previousAnswer -  Math.max(answer, 0)
+                    const confirmMessage = this.$t('WebInterviewUI.NumberRosterRemoveConfirm', { amountOfRostersToRemove })
 
                     if(amountOfRostersToRemove > 0){
                         modal.confirm(confirmMessage, result => {
@@ -106,18 +106,18 @@
                                 this.fetch()
                                 return
                             }
-                        });
+                        })
                     }
                     else
                     {
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                        
                         return
                     }
-                });
+                })
             },
 
             isCancelBeforeStart() {
-                return this.cancelBeforeStart;
+                return this.cancelBeforeStart
             },
 
             destroy() {
@@ -128,15 +128,15 @@
         },
         created() {
             // only start edit if key pressed is a number, not a letter
-            this.cancelBeforeStart = this.editorParams.charPress && ('1234567890'.indexOf(this.editorParams.charPress) < 0);
+            this.cancelBeforeStart = this.editorParams.charPress && ('1234567890'.indexOf(this.editorParams.charPress) < 0)
         },
         mounted() {
             Vue.nextTick(() => {
                 if (this.$refs.input) {
-                    this.$refs.input.focus();
-                    this.$refs.input.select();
+                    this.$refs.input.focus()
+                    this.$refs.input.select()
                 }
-            });
+            })
         },
         beforeDestroy () {
             this.destroy()

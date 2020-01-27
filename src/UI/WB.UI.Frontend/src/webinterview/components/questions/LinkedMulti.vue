@@ -28,10 +28,10 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from "../mixins"
+    import { entityDetails } from '../mixins'
 
-    import { map, find, isEqual, filter } from "lodash";
-    import { shouldShowAnsweredOptionsOnlyForMulti } from "./question_helpers"
+    import { map, find, isEqual, filter } from 'lodash'
+    import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
     
     export default {
         name: 'LinkedMulti',
@@ -42,33 +42,33 @@
         },
         computed: {
             shouldShowAnsweredOptionsOnly(){
-                 return shouldShowAnsweredOptionsOnlyForMulti(this);
+                 return shouldShowAnsweredOptionsOnlyForMulti(this)
             },
             answeredOrAllOptions(){
                 if(!this.shouldShowAnsweredOptionsOnly)
-                    return this.$me.options;
+                    return this.$me.options
                 
-                var self = this;
+                var self = this
                 return filter(this.$me.options, function(o) {
                         return find(self.$me.answer, (a) => {
                             return isEqual(a, o.rosterVector)
-                            });               
-                     });
+                            })               
+                     })
             },
             answer: {
                 get() {
-                    return map(this.$me.answer, (x) => { return find(this.$me.options, (a) => { return isEqual(a.rosterVector, x) }).value; })
+                    return map(this.$me.answer, (x) => { return find(this.$me.options, (a) => { return isEqual(a.rosterVector, x) }).value })
                 },
                 set(value) {
                     this.sendAnswer(() => {
-                        const selectedOptions = map(value, (x) => { return find(this.$me.options, { 'value': x }).rosterVector; });
-                        this.$store.dispatch("answerLinkedMultiOptionQuestion", { answer: selectedOptions, identity: this.$me.id })
+                        const selectedOptions = map(value, (x) => { return find(this.$me.options, { 'value': x }).rosterVector })
+                        this.$store.dispatch('answerLinkedMultiOptionQuestion', { answer: selectedOptions, identity: this.$me.id })
                     })
                 }
             },
             allAnswersGiven() {
-                const maxReached = this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount;
-                return maxReached;               
+                const maxReached = this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
+                return maxReached               
             },
             noOptions() {
                 return this.$me.options == null || this.$me.options.length == 0
@@ -77,10 +77,10 @@
         methods: {
             getAnswerOrder(answerValue) {
                 var answerIndex = this.answer.indexOf(answerValue)
-                return answerIndex > -1 ? answerIndex + 1 : ""
+                return answerIndex > -1 ? answerIndex + 1 : ''
             },
             toggleOptions(){
-                this.showAllOptions = !this.showAllOptions;
+                this.showAllOptions = !this.showAllOptions
             },
         },
         mixins: [entityDetails]

@@ -25,7 +25,7 @@
         }, 
         computed: {
             getOptions(){                
-                return this.question.options;                
+                return this.question.options                
             }
         },
         methods: {            

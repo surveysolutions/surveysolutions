@@ -1,7 +1,7 @@
-import LoginToDesigner from "./LoginToDesigner"
-import Import from "./Import"
-import ImportMode from "./ImportMode"
-import Vue from "vue"
+import LoginToDesigner from './LoginToDesigner'
+import Import from './Import'
+import ImportMode from './ImportMode'
+import Vue from 'vue'
 
 export default class Template{
     get routes() {

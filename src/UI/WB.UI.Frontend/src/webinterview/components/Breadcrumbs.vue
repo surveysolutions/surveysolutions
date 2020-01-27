@@ -25,7 +25,7 @@
         },
 
         watch: {
-            "$store.state.route.params.sectionId"() {
+            '$store.state.route.params.sectionId'() {
                 this.fetchBreadcrumbs()
             }
         },
@@ -52,21 +52,21 @@
         methods: {
             navigate(breadcrumb) {
                 if (breadcrumb.scrollTo) {
-                    this.$store.dispatch("sectionRequireScroll", { id: breadcrumb.scrollTo })
+                    this.$store.dispatch('sectionRequireScroll', { id: breadcrumb.scrollTo })
                 }
 
                 this.$router.push({
-                    name: "section",
+                    name: 'section',
                     params: {
                         sectionId: breadcrumb.target
                     }
                 })
             },
             fetchBreadcrumbs() {
-                this.$store.dispatch("fetchBreadcrumbs")
+                this.$store.dispatch('fetchBreadcrumbs')
             },
             getRosterTitle(title) {
-                return title ? title : "[...]"
+                return title ? title : '[...]'
             }
         }
     }

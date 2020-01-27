@@ -6,12 +6,12 @@
     </div>
 </template>
 <script lang="js">
-    import { entityDetails } from "../mixins"
-    import { GroupStatus, ButtonType } from "../questions"
+    import { entityDetails } from '../mixins'
+    import { GroupStatus, ButtonType } from '../questions'
 
     export default {
         mixins: [entityDetails],
-        name: "NavigationButton",
+        name: 'NavigationButton',
         computed: {
             visible(){
                 return !(this.$store.getters.isReviewMode === true) || this.$me.type != ButtonType.Complete
@@ -42,31 +42,31 @@
             },
             buttonTitle() {
                 if(this.$me == null || this.$me.title == null)
-                    return "";
+                    return ''
 
-                var title = this.$me.title;
+                var title = this.$me.title
 
                 if(this.$me.rosterTitle != null)
-                    title +=" - <i>" +  this.$me.rosterTitle + "</i>";
+                    title +=' - <i>' +  this.$me.rosterTitle + '</i>'
 
-                return title;
+                return title
             }
         },
 
         watch: {
-            ["$route.params.sectionId"]() {
-                this.fetch();
+            ['$route.params.sectionId']() {
+                this.fetch()
             }
         },
 
         methods: {
             navigate() {
                 if (this.$me.type == ButtonType.Complete) {
-                    this.$router.push({ name: "complete" })
+                    this.$router.push({ name: 'complete' })
                 }
                 else {
                     if (this.isParentButton) {
-                        this.$store.dispatch("sectionRequireScroll", { id: this.$route.params.sectionId })
+                        this.$store.dispatch('sectionRequireScroll', { id: this.$route.params.sectionId })
                     }
                     this.$router.push(this.to)
                 }

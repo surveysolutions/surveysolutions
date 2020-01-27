@@ -1,12 +1,12 @@
 export function shouldShowAnsweredOptionsOnlyForMulti(question) {
-    var isSupervisorOnsupervisorQuestion = question.$me.isForSupervisor && !question.$me.isDisabled;
+    var isSupervisorOnsupervisorQuestion = question.$me.isForSupervisor && !question.$me.isDisabled
     return !isSupervisorOnsupervisorQuestion && !question.showAllOptions && question.$store.getters.isReviewMode && !question.noOptions && question.$me.answer.length > 0 &&
-        question.$me.answer.length < question.$me.options.length;
+        question.$me.answer.length < question.$me.options.length
 }
 
 export function shouldShowAnsweredOptionsOnlyForSingle(question) {
-    var isSupervisorOnsupervisorQuestion = question.$me.isForSupervisor && !question.$me.isDisabled;
-    return !isSupervisorOnsupervisorQuestion && !question.showAllOptions && question.$store.getters.isReviewMode && !question.noOptions && question.$me.answer;
+    var isSupervisorOnsupervisorQuestion = question.$me.isForSupervisor && !question.$me.isDisabled
+    return !isSupervisorOnsupervisorQuestion && !question.showAllOptions && question.$store.getters.isReviewMode && !question.noOptions && question.$me.answer
 }
 
 
@@ -37,7 +37,7 @@ export function getDecimalSeparator() {
 
 export function getDecimalPlacesCount(question) {
     if (question.countOfDecimalPlaces == null || question.countOfDecimalPlaces == undefined)
-        return 15;
+        return 15
 
     return question.countOfDecimalPlaces
 }

@@ -27,59 +27,59 @@ export default {
   data: function() {
     return {
       timerId: 0
-    };
+    }
   },
   computed: {
     config() {
-      return this.$config.model;
+      return this.$config.model
     },
     fileName() {
-      return this.$store.getters.upload.fileName;
+      return this.$store.getters.upload.fileName
     },
     progress() {
-      return this.$store.getters.upload.progress;
+      return this.$store.getters.upload.progress
     },
     importedUsersCount() {
-      return this.totalUsersToImportCount - this.progress.usersInQueue;
+      return this.totalUsersToImportCount - this.progress.usersInQueue
     },
     totalUsersToImportCount() {
-      return this.progress.totalUsersToImport;
+      return this.progress.totalUsersToImport
     },
     importedUsersInPercents() {
-      return this.importedUsersCount / this.progress.totalUsersToImport * 100;
+      return this.importedUsersCount / this.progress.totalUsersToImport * 100
     }
   },
   mounted() {
-    this.updateStatus();
+    this.updateStatus()
     this.timerId = window.setInterval(() => {
-      this.updateStatus();
-    }, 500);
+      this.updateStatus()
+    }, 500)
   },
   methods: {
     cancelUpload() {
-      window.clearInterval(this.timerId);
+      window.clearInterval(this.timerId)
 
-      var self = this;
+      var self = this
       this.$http.post(this.config.api.importUsersCancelUrl).then(response => {
-        self.$router.push({ name: "upload" });
-      });
+        self.$router.push({ name: 'upload' })
+      })
     },
     updateStatus() {
-      var self = this;
+      var self = this
       this.$http.get(this.config.api.importUsersStatusUrl).then(response => {
-        this.$store.dispatch("setUploadStatus", response.data);
+        this.$store.dispatch('setUploadStatus', response.data)
 
         if (response.data.usersInQueue == 0) {
-          window.clearInterval(self.timerId);
+          window.clearInterval(self.timerId)
           self.$http
             .get(this.config.api.importUsersCompleteStatusUrl)
             .then(response => {
-              self.$store.dispatch("setUploadCompleteStatus", response.data);
-              self.$router.push({ name: "uploadcomplete" });
-            });
+              self.$store.dispatch('setUploadCompleteStatus', response.data)
+              self.$router.push({ name: 'uploadcomplete' })
+            })
         }
-      });
+      })
     }
   }
-};
+}
 </script>

@@ -11,5 +11,5 @@ export default {
             type: Boolean
         }
     }
-};
+}
 </script>

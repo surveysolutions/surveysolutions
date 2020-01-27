@@ -38,33 +38,33 @@
 </template>
 <script lang="js">
 
-    import { entityDetails } from "../mixins"
+    import { entityDetails } from '../mixins'
     import flatPickr from './ui/vue-flatpickr'
-    import { DateFormats } from "~/shared/helpers"
-    import moment from "moment"
+    import { DateFormats } from '~/shared/helpers'
+    import moment from 'moment'
     export default {
-        name: "DateTime",
+        name: 'DateTime',
         mixins: [entityDetails],
         props: ['noComments'],
         data() {
-            var self = this;
+            var self = this
 
             return {
                 pickerOpts: {
-                    dateFormat: "Y-m-d",
+                    dateFormat: 'Y-m-d',
                     onChange: (selectedDate) => {
                         this.answerDate(selectedDate[0])
                     },
                     onOpen: [
                         function(selectedDates, dateStr, instance){
-                            if(self.$me.isAnswered) return;
-                            if(self.$me.defaultDate == null) return;
+                            if(self.$me.isAnswered) return
+                            if(self.$me.defaultDate == null) return
 
-                            var defaultDate = moment(self.$me.defaultDate).toDate();
+                            var defaultDate = moment(self.$me.defaultDate).toDate()
 
-                            instance.jumpToDate(defaultDate);
-                            instance.now = defaultDate;
-                            instance.redraw();
+                            instance.jumpToDate(defaultDate)
+                            instance.now = defaultDate
+                            instance.redraw()
                         }
                     ],
                 }
@@ -73,7 +73,7 @@
         computed: {
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
-                    (this.$me.isTimestamp ? this.$t("WebInterviewUI.RecordCurrentTime") : this.$t('WebInterviewUI.EnterDate'))
+                    (this.$me.isTimestamp ? this.$t('WebInterviewUI.RecordCurrentTime') : this.$t('WebInterviewUI.EnterDate'))
             },
             answer() {
                 if (this.$me && this.$me.answer) {
@@ -82,10 +82,10 @@
                     }
                     else {
                         const result = moment(this.$me.answer).format(DateFormats.date)
-                        return result;
+                        return result
                     }
                 }
-                return ""
+                return ''
             }
         },
         methods: {
@@ -103,10 +103,10 @@
                             this.$store.dispatch('answerDateQuestion', { 
                                 identity: this.$me.id,
                                 date: moment().format().substring(0, 19) // remove timezone information from date to prevent server conversion to server timezone
-                            });
+                            })
                         }
                     }
-                });
+                })
             }
         },
         components: {

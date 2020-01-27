@@ -1,7 +1,7 @@
 function FormData() {
-    this.fake = true;
-    this.boundary = "--------FormData" + Math.random();
-    this._fields = [];
+    this.fake = true
+    this.boundary = '--------FormData' + Math.random()
+    this._fields = []
 }
 
 /**
@@ -12,27 +12,27 @@ function FormData() {
 if (!window.FormData) {
 
     FormData.prototype.append = function (key, value) {
-        this._fields.push([key, value]);
+        this._fields.push([key, value])
     }
     FormData.prototype.toString = function () {
-        var boundary = this.boundary;
-        var body = "";
+        var boundary = this.boundary
+        var body = ''
         this._fields.forEach(function (field) {
-            body += "--" + boundary + "\r\n";
+            body += '--' + boundary + '\r\n'
             // file upload
             if (field[1].name) {
-                var file = field[1];
-                body += "Content-Disposition: form-data; name=\"" + field[0] + "\"; filename=\"" + file.name + "\"\r\n";
-                body += "Content-Type: " + file.type + "\r\n\r\n";
-                body += file.getAsBinary() + "\r\n";
+                var file = field[1]
+                body += 'Content-Disposition: form-data; name="' + field[0] + '"; filename="' + file.name + '"\r\n'
+                body += 'Content-Type: ' + file.type + '\r\n\r\n'
+                body += file.getAsBinary() + '\r\n'
             } else {
-                body += "Content-Disposition: form-data; name=\"" + field[0] + "\";\r\n\r\n";
-                body += field[1] + "\r\n";
+                body += 'Content-Disposition: form-data; name="' + field[0] + '";\r\n\r\n'
+                body += field[1] + '\r\n'
             }
-        });
-        body += "--" + boundary + "--";
-        return body;
+        })
+        body += '--' + boundary + '--'
+        return body
     }
 
-    window.FormData = FormData;
+    window.FormData = FormData
 }

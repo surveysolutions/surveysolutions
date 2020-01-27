@@ -181,9 +181,9 @@ export default {
         manualModeDescription() {
             return this.$t('BatchUpload.ManualModeDescription', {
                 url:
-                    "<a href='" +
+                    '<a href=\'' +
                     this.api.createAssignmentUrl +
-                    "'>" +
+                    '\'>' +
                     this.$t('BatchUpload.ManualModeLinkTitle') +
                     '</a>',
             })

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import SearchBreabcrumbs from "./SearchBreabcrumbs";
+import SearchBreabcrumbs from './SearchBreabcrumbs'
 
 export default {
   props: {
@@ -22,5 +22,5 @@ export default {
     }
   },
   components: { SearchBreabcrumbs }
-};
+}
 </script>

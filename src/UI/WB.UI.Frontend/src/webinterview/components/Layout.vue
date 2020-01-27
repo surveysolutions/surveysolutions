@@ -15,7 +15,7 @@
     </div>
 </template>
 <script lang="js">
-    import modal from "@/shared/modal"
+    import modal from '@/shared/modal'
     export default {
         name: 'wb-layout',
         computed: {
@@ -23,12 +23,12 @@
                 return this.$store.state.webinterview.sidebar.sidebarHidden
             },
             isLoading() {
-                return this.$store.getters.loadingProgress === true ? "true" : "false"
+                return this.$store.getters.loadingProgress === true ? 'true' : 'false'
             }
         },
         mounted() {
             if(this.$config.loadedMessage) {
-                modal.alert(this.$config.loadedMessage);
+                modal.alert(this.$config.loadedMessage)
             }
         }
     }

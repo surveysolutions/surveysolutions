@@ -4,10 +4,10 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from "../mixins"
+    import { entityDetails } from '../mixins'
 
     export default {
-        name: "UNSUPPORTED",
+        name: 'UNSUPPORTED',
         mixins: [entityDetails]
     }
 </script>

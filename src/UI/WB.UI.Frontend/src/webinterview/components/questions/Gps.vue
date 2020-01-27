@@ -22,8 +22,8 @@
 
 <script lang="js">
 
-    import { entityDetails } from "../mixins"
-    import Vue from "vue"
+    import { entityDetails } from '../mixins'
+    import Vue from 'vue'
 
     class GpsAnswer {
         constructor(latitude,
@@ -39,7 +39,7 @@
         }
     }
     export default {
-        name: "Gps",
+        name: 'Gps',
         mixins: [entityDetails],
         props: ['noComments'],
         data() {
@@ -59,19 +59,19 @@
         },
         methods: {
             removeAnswer() {
-                this.$store.dispatch("removeAnswer", this.id)
+                this.$store.dispatch('removeAnswer', this.id)
             },
             answerGpsQuestion() {
                 this.sendAnswer(() => {
                     if (!('geolocation' in navigator)) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.GPSNotAvailable"))
+                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.GPSNotAvailable'))
                         return
                     }
 
                     if (this.isInProgress) return
 
                     this.isInProgress = true
-                    this.$store.dispatch("fetchProgress", 1)
+                    this.$store.dispatch('fetchProgress', 1)
 
                     navigator.geolocation.getCurrentPosition(
                         (position) => { this.onPositionDetermined(position, this.id) },
@@ -81,7 +81,7 @@
                             timeout: 30000,
                             maximumAge: 60000
                         })
-                });
+                })
             },
             onPositionDetermined(position, questionId) {
                 console.log('onPositionDetermined')
@@ -90,33 +90,33 @@
                     answer: new GpsAnswer(position.coords.latitude, position.coords.longitude, position.coords.accuracy, position.coords.altitude, position.timestamp)
                 }).then(() => {
                     this.isInProgress = false
-                    this.$store.dispatch("fetchProgress", -1)
+                    this.$store.dispatch('fetchProgress', -1)
                 })
             },
             onPositionDeterminationFailed(error) {
-                var message = "";
+                var message = ''
                 // Check for known errors
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        message = this.$t("WebInterviewUI.GPSPermissionDenied")//"This website does not have permission to use the Geolocation API"
-                        break;
+                        message = this.$t('WebInterviewUI.GPSPermissionDenied')//"This website does not have permission to use the Geolocation API"
+                        break
                     case error.POSITION_UNAVAILABLE:
-                        message = this.$t("WebInterviewUI.GPSPositionUnavailable") //"The current position could not be determined.";
+                        message = this.$t('WebInterviewUI.GPSPositionUnavailable') //"The current position could not be determined.";
                         break
                     case error.TIMEOUT:
-                        message = this.$t("WebInterviewUI.GPSTimeout") //"The current position could not be determined within the specified timeout period."
+                        message = this.$t('WebInterviewUI.GPSTimeout') //"The current position could not be determined within the specified timeout period."
                         break
                 }
                 // If it is an unknown error, build a message that includes
                 // information that helps identify the situation so that
                 // the error handler can be updated.
-                if (message == "") {
-                    var strErrorCode = error.code.toString();
-                    message = this.$t("WebInterviewUI.GPSError", { strErrorCode })  //"The position could not be determined due to an unknown error (Code: " + strErrorCode + ")."
+                if (message == '') {
+                    var strErrorCode = error.code.toString()
+                    message = this.$t('WebInterviewUI.GPSError', { strErrorCode })  //"The position could not be determined due to an unknown error (Code: " + strErrorCode + ")."
                 }
 
                 this.markAnswerAsNotSavedWithMessage(message)
-                this.$store.dispatch("fetchProgress", -1)
+                this.$store.dispatch('fetchProgress', -1)
                 this.isInProgress = false
             }
         }

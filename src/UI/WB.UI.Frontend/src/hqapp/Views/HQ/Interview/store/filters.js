@@ -1,11 +1,11 @@
-import Vue from "vue"
-import { capitalize, sum, unionBy, find } from "lodash"
+import Vue from 'vue'
+import { capitalize, sum, unionBy, find } from 'lodash'
 
 function getSelectedFlags(state) {
     const flags = Object.keys(state.filter)
         .filter((flag) => state.filter[flag])
-        .map(capitalize);
-    return flags;
+        .map(capitalize)
+    return flags
 }
 
 export default {
@@ -40,28 +40,28 @@ export default {
 
     actions: {
         async fetchSearchResults({ commit, state }) {
-            const flags = getSelectedFlags(state);
-            const skip = state.search.needToClear ? 0 : state.search.skip;
+            const flags = getSelectedFlags(state)
+            const skip = state.search.needToClear ? 0 : state.search.skip
             const limit = state.search.pageSize
             const res = await Vue.$api.interview.get('search', { flags, skip, limit })
-            commit("LOG_LAST_ACTIVITY")
-            commit("SET_SEARCH_RESULT", res)
+            commit('LOG_LAST_ACTIVITY')
+            commit('SET_SEARCH_RESULT', res)
         },
 
         applyFiltering({ commit, state, dispatch }, filter) {
-            commit("CHANGE_FILTERS", filter);
+            commit('CHANGE_FILTERS', filter)
 
-            var hasFilter = false;
+            var hasFilter = false
             Object.keys(state.filter).forEach(key => {
                 if (state.filter[key] != false) {
-                    hasFilter = true;
+                    hasFilter = true
                 }
-            });
+            })
 
             if (hasFilter)
-                dispatch("showSearchResults");
+                dispatch('showSearchResults')
             else
-                dispatch("hideSearchResults");
+                dispatch('hideSearchResults')
         },
 
         getStatusesHistory() {
@@ -69,36 +69,36 @@ export default {
         },
 
         resetAllFilters({ commit, state, dispatch }) {
-            commit("RESET_FILTERS");
+            commit('RESET_FILTERS')
 
             if (state.search.needToClear)
-                dispatch("fetchSearchResults");
+                dispatch('fetchSearchResults')
         },
 
         refreshSearchResults({ dispatch, commit }) {
-            commit("SEARCH_NEED_TO_CLEAR")
-            dispatch("fetchSearchResults")
+            commit('SEARCH_NEED_TO_CLEAR')
+            dispatch('fetchSearchResults')
         }
     },
 
     mutations: {
         SET_SEARCH_RESULT(state, results) {
             if (state.search.needToClear) {
-                state.search.results = [];
-                state.search.count = 0;
-                state.search.skip = 0;
-                state.search.needToClear = false;
+                state.search.results = []
+                state.search.count = 0
+                state.search.skip = 0
+                state.search.needToClear = false
             }
 
             results.results.forEach((res) => {
-                const section = find(state.search.results, { sectionId: res.sectionId });
+                const section = find(state.search.results, { sectionId: res.sectionId })
 
                 if (section == null) {
-                    state.search.results.push(res);
+                    state.search.results.push(res)
                 } else {
-                    section.questions = unionBy(section.questions, res.questions, "target")
+                    section.questions = unionBy(section.questions, res.questions, 'target')
                 }
-            });
+            })
 
             state.search.count = results.totalCount
             state.stats = results.stats
@@ -108,29 +108,29 @@ export default {
         },
 
         CHANGE_FILTERS(state, { filter, value }) {
-            state.filter[filter] = value;
-            state.search.needToClear = true;
+            state.filter[filter] = value
+            state.search.needToClear = true
         },
 
         SEARCH_NEED_TO_CLEAR(state) {
-            state.search.needToClear = true;
+            state.search.needToClear = true
         },
 
         RESET_FILTERS(state) {
             Object.keys(state.filter).forEach(key => {
                 if (state.filter[key] != false)
-                    state.search.needToClear = true;
+                    state.search.needToClear = true
                 Vue.set(state.filter, key, false)
             })
         }
     },
     getters: {
         filteringState(state) {
-            return state.filter;
+            return state.filter
         },
 
         searchResult(state) {
-            return state.search;
+            return state.search
         }
     }
 }

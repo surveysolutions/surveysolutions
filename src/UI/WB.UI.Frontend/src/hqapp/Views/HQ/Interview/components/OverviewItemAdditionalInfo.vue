@@ -80,53 +80,53 @@ export default {
             isCommentFormIsVisible: false,
             comment: null,
             postingComment: false
-        };
+        }
     },
     methods: 
     {
         show(){
-            this.$store.dispatch("loadAdditionalInfo", { id: this.item.id });
-            this.isAdditionalInfoVisible = true;
+            this.$store.dispatch('loadAdditionalInfo', { id: this.item.id })
+            this.isAdditionalInfoVisible = true
         },
         close(){
-            this.isAdditionalInfoVisible = false;
+            this.isAdditionalInfoVisible = false
         },
         showAddCommentForm(){
-            this.isCommentFormIsVisible = true;
+            this.isCommentFormIsVisible = true
         },
         async postComment(evnt){
-            this.postingComment = true;
+            this.postingComment = true
             const com = this.comment
 
             if (!com || !com.trim())
                 return
 
-            await this.$store.dispatch("sendNewComment", { identity: this.item.id, comment: com.trim() })
+            await this.$store.dispatch('sendNewComment', { identity: this.item.id, comment: com.trim() })
 
-            this.$store.dispatch("loadAdditionalInfo", { id: this.item.id });
+            this.$store.dispatch('loadAdditionalInfo', { id: this.item.id })
 
             this.comment = ''
             if(evnt && evnt.target) {
                 evnt.target.blur()
             }
 
-            this.item.hasComment = true;
-            this.isCommentFormIsVisible = false;
-            this.postingComment = false;
+            this.item.hasComment = true
+            this.isCommentFormIsVisible = false
+            this.postingComment = false
         }
     },
     computed: {
         additionalInfo() {
-            return this.$store.state.review.overview.additionalInfo[this.item.id] || {};
+            return this.$store.state.review.overview.additionalInfo[this.item.id] || {}
         },
         postBtnText() {
-            return this.postingComment ? this.$t("WebInterviewUI.CommentPosting") : this.$t("WebInterviewUI.CommentPost")
+            return this.postingComment ? this.$t('WebInterviewUI.CommentPosting') : this.$t('WebInterviewUI.CommentPost')
         },
         inputTitle() {
             if (this.$store.state.webinterview.receivedByInterviewer === true) {
                 return this.$t('WebInterviewUI.InterviewReceivedCantModify')
             }
-            return "";
+            return ''
         },
     },
 }

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import i18next from 'i18next';
+import i18next from 'i18next'
 
 export default {
     initialize(browserLanguage) {
@@ -16,11 +16,11 @@ export default {
             interpolation: { escapeValue: false },
             saveMissing: true,
             missingKeyHandler(lng, ns, key, fallbackValue) {
-                console.warn("Missing translation for language", lng, "key",ns + "." + fallbackValue)
+                console.warn('Missing translation for language', lng, 'key',ns + '.' + fallbackValue)
             },
             appendNamespaceToMissingKey: true,
             parseMissingKeyHandler(key) {
-                return "[" + key + "]"
+                return '[' + key + ']'
             }
         }
         i18next.init(options)

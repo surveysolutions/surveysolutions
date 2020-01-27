@@ -7,10 +7,10 @@
     </div>
 </template>
 <script lang="js">
-    import { entityPartial } from "~/webinterview/components/mixins"
+    import { entityPartial } from '~/webinterview/components/mixins'
 
     export default {
-        name: "wb-instructions",
+        name: 'wb-instructions',
         mixins: [entityPartial],
         data: () => {
             return {

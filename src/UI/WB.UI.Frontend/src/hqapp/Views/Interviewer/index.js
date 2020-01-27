@@ -1,7 +1,7 @@
-import Assignments from "./Assignments"
-import Interviews from "./Interviews"
-import Vue from "vue"
-import PNotify from "pnotify"
+import Assignments from './Assignments'
+import Interviews from './Interviews'
+import Vue from 'vue'
+import PNotify from 'pnotify'
 
 
 const store = {
@@ -10,32 +10,32 @@ const store = {
     },
     actions: {
         createInterview({ dispatch }, assignmentId) {
-            dispatch("showProgress", true);
+            dispatch('showProgress', true)
 
 
-            $.post(Vue.$config.model.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
-                dispatch("showProgress", true);
-                window.location = response;
+            $.post(Vue.$config.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId, response => {
+                dispatch('showProgress', true)
+                window.location = response
             })
                 .catch(data => {
                     new PNotify({
                         title: 'Unhandled error occurred',
                         text: data.responseStatus,
                         type: 'error'
-                    });
-                    dispatch("hideProgress")
+                    })
+                    dispatch('hideProgress')
                 })
-                .then(() => dispatch("hideProgress"))
+                .then(() => dispatch('hideProgress'))
 
         },
         openInterview(context, interviewId) {
-            context.dispatch("showProgress", true);
-            window.location = Vue.$config.model.interviewerHqEndpoint + "/OpenInterview/" + interviewId
+            context.dispatch('showProgress', true)
+            window.location = Vue.$config.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
         },
 
         discardInterview(context, { callback, interviewId }) {
             $.ajax({
-                url: Vue.$config.model.interviewerHqEndpoint + "/DiscardInterview/" + interviewId,
+                url: Vue.$config.model.interviewerHqEndpoint + '/DiscardInterview/' + interviewId,
                 type: 'DELETE',
                 success: callback
             })
@@ -45,7 +45,7 @@ const store = {
 
 export default class InterviewerHqComponent {
     constructor(rootStore) {
-        this.rootStore = rootStore;
+        this.rootStore = rootStore
     }
 
     get routes() {
@@ -57,7 +57,7 @@ export default class InterviewerHqComponent {
             path: '/InterviewerHq/Completed', component: Interviews
         }, {
             path: '/InterviewerHq/Started', component: Interviews
-        }];
+        }]
     }
 
     get modules() { return { hqinterviewer: store } }

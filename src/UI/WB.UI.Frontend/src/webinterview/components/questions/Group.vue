@@ -9,22 +9,22 @@
 </template>
 
 <script lang="js">
-    import { entityDetails } from "../mixins"
-    import { GroupStatus } from "./index"
-    import { debounce } from "lodash"
+    import { entityDetails } from '../mixins'
+    import { GroupStatus } from './index'
+    import { debounce } from 'lodash'
 
     export default {
         name: 'Group',
         mixins: [entityDetails],
         
         watch: {
-            ["$store.getters.scrollState"]() {
-                 this.scroll();
+            ['$store.getters.scrollState']() {
+                 this.scroll()
             }
         },
 
         mounted() {
-            this.scroll();
+            this.scroll()
         },
 
         computed: {
@@ -37,7 +37,7 @@
                 }
             },
             rosterTitle(){
-                return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : "[...]"
+                return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : '[...]'
             },
             isNotStarted() {
                 return this.$me.status === GroupStatus.NotStarted
@@ -73,14 +73,14 @@
         methods : {
             doScroll: debounce(function() {
                 if(this.$store.getters.scrollState ==  this.id){
-                    window.scroll({ top: this.$el.offsetTop, behavior: "smooth" })
-                    this.$store.dispatch("resetScroll")
+                    window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                    this.$store.dispatch('resetScroll')
                 }
             }, 200),
 
             scroll() {
-                if(this.$store && this.$store.state.route.hash === "#" + this.id) {
-                    this.doScroll(); 
+                if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+                    this.doScroll() 
                 }
             }
         }

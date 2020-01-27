@@ -59,10 +59,10 @@
 </template>
 
 <script lang="js">
-import isEmpty from "lodash/isEmpty"
+import isEmpty from 'lodash/isEmpty'
 
 export default {
-    name: "cover-readonly-view",
+    name: 'cover-readonly-view',
     props: {
         navigateToPrefilled: {
             type: Boolean,
@@ -80,7 +80,7 @@ export default {
     },
 
     mounted() {
-        window.scroll({ top: 0, behavior: "smooth" })
+        window.scroll({ top: 0, behavior: 'smooth' })
     },
 
     computed: {
@@ -89,8 +89,8 @@ export default {
         },
         commentsTitle() {
             return this.$store.state.webinterview.coverInfo.entitiesWithComments.length < this.$store.state.webinterview.coverInfo.commentedQuestionsCount
-                ? this.$t("WebInterviewUI.CoverFirstComments", { count: this.$store.state.webinterview.coverInfo.entitiesWithComments.length})
-                : this.$t("WebInterviewUI.CoverComments");
+                ? this.$t('WebInterviewUI.CoverFirstComments', { count: this.$store.state.webinterview.coverInfo.entitiesWithComments.length})
+                : this.$t('WebInterviewUI.CoverComments')
         },
         questions() {
             return this.$store.state.webinterview.coverInfo.identifyingQuestions
@@ -110,7 +110,7 @@ export default {
         hasBrokenPackage() {
             return this.$store.state.webinterview.doesBrokenPackageExist == undefined 
                 ? false
-                : this.$store.state.webinterview.doesBrokenPackageExist;
+                : this.$store.state.webinterview.doesBrokenPackageExist
         },
         coverStatusClass() {
             return [
@@ -128,15 +128,15 @@ export default {
                 + `&key=${this.$config.googleApiKey}`
         },
         fetch() {
-            this.$store.dispatch("fetchCoverInfo")
+            this.$store.dispatch('fetchCoverInfo')
         },
         getGpsUrl(question) {
             return `http://maps.google.com/maps?q=${question.answer}`
         },
         navigateTo(commentedQuestion) {
             if (commentedQuestion.isPrefilled && !this.navigateToPrefilled) {
-                this.$router.push({ name: "prefilled" })
-                return;
+                this.$router.push({ name: 'prefilled' })
+                return
             }
 
             const navigateToEntity = {

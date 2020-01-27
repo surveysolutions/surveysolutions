@@ -26,23 +26,23 @@ export default {
         title: String,
         canClose: {
             type: Boolean,
-            default() { return true ;}
+            default() { return true }
         }
     },
 
     computed: {
         titleId(){
-            return this.id + "lbl";
+            return this.id + 'lbl'
         }
     },
 
     methods:{
         hide() {
-            $(this.$refs.modal).modal("hide");
+            $(this.$refs.modal).modal('hide')
         },
 
         modal(params){
-            $(this.$refs.modal).appendTo("body").modal(params || {});
+            $(this.$refs.modal).appendTo('body').modal(params || {})
         }
     }
     

@@ -234,7 +234,7 @@ export default {
     },
     methods: {
         supervisorSelected(newValue) {
-            this.supervisor = newValue;
+            this.supervisor = newValue
         },
         createAccount: function(event) {
             this.successMessage = null

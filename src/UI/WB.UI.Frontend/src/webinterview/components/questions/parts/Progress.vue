@@ -6,10 +6,10 @@
     </div>
 </template>
 <script lang="js">
-    import { delay } from "lodash"
+    import { delay } from 'lodash'
     
     export default {
-        name: "wb-progress",
+        name: 'wb-progress',
         props: {
             valuenow: { type: Number, default: 100 },
             valuemax: { type: Number, default: 100 },
@@ -46,7 +46,7 @@
 
             style() {
                 return {
-                    width: this.progress + "%"
+                    width: this.progress + '%'
                 }
             }
         }

@@ -170,7 +170,7 @@ export default {
                         title: this.$t('Users.SupervisorEmail'),
                         orderable: true,
                         render: function(data, type, row) {
-                            return data ? "<a href='mailto:" + data + "'>" + data + '</a>' : ''
+                            return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                         },
                     },
                     {

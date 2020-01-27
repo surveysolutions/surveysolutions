@@ -38,11 +38,11 @@ export default {
 
     methods: {
         checkedChange(ev) {
-            this.$emit("input", {
+            this.$emit('input', {
                 checked: ev.target.checked,
                 selected: this.radioGroup,
                 name: this.name
-            });
+            })
         }
     },
 

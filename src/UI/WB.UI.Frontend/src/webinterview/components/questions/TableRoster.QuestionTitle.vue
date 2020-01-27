@@ -14,7 +14,7 @@
 </template>
 
 <script lang="js">
-    import { find } from "lodash"
+    import { find } from 'lodash'
     export default {
         name: 'TableRoster_QuestionTitle',
 
@@ -39,11 +39,11 @@
             this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
         },
         watch: {
-            ["params.context.componentParent.$me.questions"]() {
-                var self = this;
-                var question = find(self.params.context.componentParent.$me.questions, function(o) { return o.id == self.questionId; });
+            ['params.context.componentParent.$me.questions']() {
+                var self = this
+                var question = find(self.params.context.componentParent.$me.questions, function(o) { return o.id == self.questionId })
                 if(question !== undefined)
-                    this.instruction = question.instruction;
+                    this.instruction = question.instruction
             }
         }
     }

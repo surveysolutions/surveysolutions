@@ -1,6 +1,6 @@
-import UpgradeAssignments from "./UpgradeAssignments"
-import UpgradeProgress from "./UpgradeProgress"
-import Questionnaires from "./Questionnaires"
+import UpgradeAssignments from './UpgradeAssignments'
+import UpgradeProgress from './UpgradeProgress'
+import Questionnaires from './Questionnaires'
 
 export default class MapComponent {
     get routes() {

@@ -46,8 +46,8 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from "../mixins"
-    import modal from "@/shared/modal"
+    import { entityDetails } from '../mixins'
+    import modal from '@/shared/modal'
 
     class TextListAnswerRow {
        constructor(value, text) {
@@ -62,13 +62,13 @@
         computed:{
             canAddNewItem() {
                 if(this.$store.getters.isReviewMode) {
-                    return !this.$me.isAnswered;
+                    return !this.$me.isAnswered
                 }
 
                 return this.$me.rows == undefined || this.$me.maxAnswersCount == null || this.$me.maxAnswersCount > this.$me.rows.length
             },
             canAnswer() {
-                return this.$me.acceptAnswer;
+                return this.$me.acceptAnswer
             },
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.TextEnterNewItem')
@@ -76,7 +76,7 @@
         },
         methods: {
             confirmAndRemoveRow(index) {
-                if(!this.canAnswer) return;
+                if(!this.canAnswer) return
 
                 if (!this.$me.isRosterSize) {
                     this.removeRow(index)
@@ -88,7 +88,7 @@
                 }), result => {
                     if (result) {
                         this.removeRow(index)
-                        return;
+                        return
                     } else {
                         this.fetch()
                         return
@@ -97,7 +97,7 @@
             },
 
             removeRow(index) {
-                if(!this.canAnswer) return;
+                if(!this.canAnswer) return
 
                 this.$me.rows.splice(index, 1)
                 if (this.$me.rows.length == 0)
@@ -107,7 +107,7 @@
             },
 
             updateRow(evnt, item) {
-                if(!this.canAnswer) return;
+                if(!this.canAnswer) return
 
                 const target = $(evnt.target)
                 let text = target.val()
@@ -118,11 +118,11 @@
                     return
                 }
 
-                item.text = text;
+                item.text = text
                 this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
             },
             addRow(evnt) {
-                if(!this.canAnswer) return;
+                if(!this.canAnswer) return
 
                 const target = $(evnt.target)
                 let text = target.val()

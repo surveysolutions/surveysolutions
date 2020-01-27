@@ -58,7 +58,7 @@ export default {
     },
     computed: {
         model() {
-            return this.$config.model;
+            return this.$config.model
         },
         supportQRCodeGeneration() {
             return this.model.supportQRCodeGeneration
