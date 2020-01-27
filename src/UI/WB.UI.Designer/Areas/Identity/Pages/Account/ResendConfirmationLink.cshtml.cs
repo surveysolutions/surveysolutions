@@ -10,17 +10,18 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
 {
     public class ResendConfirmationLinkModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> users;
-        private readonly IViewRenderingService viewRenderingService;
+        private readonly IViewRenderService viewRenderingService;
         private readonly IEmailSender emailSender;
 
         public ResendConfirmationLinkModel(UserManager<DesignerIdentityUser> users,
-            IViewRenderingService viewRenderingService, 
+            IViewRenderService viewRenderingService, 
             IEmailSender emailSender)
         {
             this.users = users ?? throw new ArgumentNullException(nameof(users));

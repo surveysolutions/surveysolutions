@@ -12,29 +12,29 @@
 
 <script lang="js">
         
-    export default {
-        name: 'MatrixRoster_QuestionTitle',
+export default {
+    name: 'MatrixRoster_QuestionTitle',
 
-        data() {
-            return {
-                title: null,
-                instruction: null,
-                hasInstructions: false,
-                question: null
-            }
-        }, 
-        computed: {
-            getOptions(){                
-                return this.question.options;                
-            }
-        },
-        methods: {            
-        },
-        created() {
-            this.title = this.params.title
-            this.instruction = this.params.instruction
-            //this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
-            this.question = this.params.question
+    data() {
+        return {
+            title: null,
+            instruction: null,
+            hasInstructions: false,
+            question: null,
         }
-    }
+    }, 
+    computed: {
+        getOptions(){                
+            return this.question.options                
+        },
+    },
+    methods: {            
+    },
+    created() {
+        this.title = this.params.title
+        this.instruction = this.params.instruction
+        //this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
+        this.question = this.params.question
+    },
+}
 </script>

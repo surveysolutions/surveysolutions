@@ -1,8 +1,18 @@
 <template>
     <div>
-        <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
+        <OverviewItem
+            v-for="item in items"
+            :key="item.id"
+            :item="item"
+            @mount="registerItemToStick"
+        />
 
-        <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler" :distance="1000">
+        <infinite-loading
+            ref="loader"
+            v-if="overview.total > 0 && items.length > 0"
+            @infinite="infiniteHandler"
+            :distance="1000"
+        >
             <span slot="no-more"></span>
             <span slot="no-results"></span>
         </infinite-loading>
@@ -10,94 +20,90 @@
 </template>
 
 <script>
-
-import InfiniteLoading from "vue-infinite-loading";
-import OverviewItem from "./components/OverviewItem";
+import InfiniteLoading from 'vue-infinite-loading'
+import OverviewItem from './components/OverviewItem'
+import {slice, sortedIndexBy} from 'lodash'
 
 export default {
-    components: { InfiniteLoading, OverviewItem },
+    components: {InfiniteLoading, OverviewItem},
 
     data() {
         return {
             loaded: 100,
             sticked: [],
             scroll: 0,
-            scrollable: null
-        };
+            scrollable: null,
+        }
     },
 
     mounted() {
-        this.$store.dispatch("loadOverviewData");
-        document.addEventListener("scroll", this.handleScroll);
+        this.$store.dispatch('loadOverviewData')
+        document.addEventListener('scroll', this.handleScroll)
     },
 
     destroyed() {
-        document.removeEventListener("scroll", this.handleScroll);
+        document.removeEventListener('scroll', this.handleScroll)
     },
 
     computed: {
         overview() {
-            return this.$store.state.review.overview;
+            return this.$store.state.review.overview
         },
 
         items() {
-            return _.slice(this.overview.entities, 0, this.loaded);
+            return slice(this.overview.entities, 0, this.loaded)
         },
 
         currentSection() {
-            if (this.sticked.length == 0) return null;
+            if (this.sticked.length == 0) return null
 
-            const index = _.sortedIndexBy(
-                this.sticked,
-                { top: this.scroll + this.breadcrumbsOffset() },
-                it => it.top
-            );
+            const index = sortedIndexBy(this.sticked, {top: this.scroll + this.breadcrumbsOffset()}, it => it.top)
 
-            const item = this.sticked[index > 0 ? index - 1 : index];
-            return item.item;
-        }      
+            const item = this.sticked[index > 0 ? index - 1 : index]
+            return item.item
+        },
     },
 
     watch: {
-        "overview.isLoaded"(to, from) {
+        'overview.isLoaded'(to, from) {
             if (from == true && to == false) {
-                this.loaded = 100;
+                this.loaded = 100
             }
-        }
+        },
     },
 
     methods: {
         breadcrumbsOffset() {
-            const el = this.$refs.breadcrumb;
-            if (el == null) return 0;
+            const el = this.$refs.breadcrumb
+            if (el == null) return 0
 
-            return el.offsetTop + el.clientHeight;
+            return el.offsetTop + el.clientHeight
         },
 
         infiniteHandler($state) {
-            const self = this;
+            const self = this
 
-            self.loaded += 500;
+            self.loaded += 500
 
-            $state.loaded();
+            $state.loaded()
             if (self.overview.isLoaded && self.loaded >= self.overview.total) {
-                $state.complete();
+                $state.complete()
             }
         },
 
         handleScroll(args, a, b, c) {
-            this.scroll = window.scrollY;
+            this.scroll = window.scrollY
         },
 
         registerItemToStick(arg) {
-            const item = arg.item;
-            const top = arg.el.offsetTop;
+            const item = arg.item
+            const top = arg.el.offsetTop
 
-            const index = _.sortedIndexBy(this.sticked, { top }, it => it.top);
-            this.sticked.splice(index, 0, { top, item });
-        }
-    }
-};
+            const index = sortedIndexBy(this.sticked, {top}, it => it.top)
+            this.sticked.splice(index, 0, {top, item})
+        },
+    },
+}
 </script>
 
 

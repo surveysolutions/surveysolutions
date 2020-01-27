@@ -48,7 +48,10 @@
                     v-if="questionnaire.identifyingQuestions.length > 0"
                     class="list-unstyled prefilled-data"
                 >
-                    <li v-for="item in questionnaire.identifyingQuestions">{{ item.caption}}</li>
+                    <li
+                        v-for="item in questionnaire.identifyingQuestions"
+                        :key="item.caption"
+                    >{{ item.caption}}</li>
                 </ul>
                 <h3
                     v-if="questionnaire.hiddenQuestions.length > 0"
@@ -57,7 +60,7 @@
                     v-if="questionnaire.hiddenQuestions.length > 0"
                     class="list-unstyled prefilled-data"
                 >
-                    <li v-for="item in questionnaire.hiddenQuestions">{{item}}</li>
+                    <li v-for="item in questionnaire.hiddenQuestions" :key="item">{{item}}</li>
                 </ul>
 
                 <h3
@@ -67,7 +70,7 @@
                     v-if="questionnaire.rosterSizeQuestions.length > 0"
                     class="list-unstyled prefilled-data"
                 >
-                    <li v-for="item in questionnaire.rosterSizeQuestions">{{item}}</li>
+                    <li v-for="item in questionnaire.rosterSizeQuestions" :key="item">{{item}}</li>
                 </ul>
             </div>
         </div>
@@ -178,9 +181,9 @@ export default {
         manualModeDescription() {
             return this.$t('BatchUpload.ManualModeDescription', {
                 url:
-                    "<a href='" +
+                    '<a href=\'' +
                     this.api.createAssignmentUrl +
-                    "'>" +
+                    '\'>' +
                     this.$t('BatchUpload.ManualModeLinkTitle') +
                     '</a>',
             })
@@ -244,7 +247,7 @@ export default {
         },
         updateStatus() {
             this.$http.get(this.api.importStatusUrl).then(response => {
-                if (responsible.data != null) this.$store.dispatch('setUploadStatus', response.data)
+                if (this.responsible.data != null) this.$store.dispatch('setUploadStatus', response.data)
             })
         },
     },

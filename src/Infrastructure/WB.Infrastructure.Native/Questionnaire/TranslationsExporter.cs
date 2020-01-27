@@ -225,7 +225,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                     Type = question.QuestionType == QuestionType.Numeric ? TranslationType.SpecialValue.ToString("G") : TranslationType.OptionTitle.ToString("G"),
                     OriginalText = option.AnswerText,
                     Translation = question.QuestionType == QuestionType.Numeric ? translation.GetSpecialValue(question.PublicKey, option.AnswerValue) : translation.GetAnswerOption(question.PublicKey, option.AnswerValue, option.ParentValue),
-                    OptionValueOrValidationIndexOrFixedRosterId = $"{option.AnswerValue}${option.ParentValue}",
+                    OptionValueOrValidationIndexOrFixedRosterId = option.ParentValue == null ? option.AnswerValue : $"{option.AnswerValue}${option.ParentValue}",
                     Sheet = isLongOptionsList ? $"{TranslationExcelOptions.OptionsWorksheetPreffix}{question.StataExportCaption}" : TranslationExcelOptions.WorksheetName
                 };
         }
@@ -236,7 +236,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 {
                     OriginalText = x.Text,
                     Translation = translation.GetCategoriesText(categories.Id, x.Id, x.ParentId),
-                    OptionValueOrValidationIndexOrFixedRosterId = $"{x.Id}${x.ParentId}",
+                    OptionValueOrValidationIndexOrFixedRosterId = x.ParentId == null ? $"{x.Id}" : $"{x.Id}${x.ParentId}",
                     Sheet = $"{TranslationExcelOptions.CategoriesWorksheetPreffix}{categories.Name}"
                 });
 

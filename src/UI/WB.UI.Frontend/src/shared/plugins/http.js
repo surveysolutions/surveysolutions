@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from 'axios'
 
 /*  the Plugin */
 export default {
@@ -11,15 +11,15 @@ export default {
         Object.defineProperty(vue, '$http', {
             get() {
                 return axios
-            }
+            },
         })
 
         /*  expose a local API method  */
         Object.defineProperty(vue.prototype, '$http', {
             get() {
                 return axios
-            }
+            },
         })
-    }
+    },
 }
 

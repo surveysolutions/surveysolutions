@@ -23,13 +23,13 @@
 
 <script>
 
-import moment from "moment";
-import { formatNumber } from "./formatNumber"
+import moment from 'moment'
+import { formatNumber } from './formatNumber'
 
 export default {
     data() {
         return {
-            usersCount : ''
+            usersCount : '',
         }
     },
     mounted() {
@@ -38,16 +38,16 @@ export default {
     methods: {
         loadData() {
             if (this.$refs.table){
-                this.$refs.table.reload();
+                this.$refs.table.reload()
             }
         },
         onTableReload(data) {
             this.usersCount = formatNumber(data.recordsTotal)
-        }
+        },
     },
     computed: {
         model() {
-            return this.$config.model;
+            return this.$config.model
         },
         title() {
             return this.$t('Users.ObserversCountDescription', {count: this.usersCount})
@@ -58,44 +58,44 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: "userName",
+                        data: 'userName',
                         name: 'UserName',
-                        title: this.$t("Users.UserName"),
-                        className: "nowrap",
+                        title: this.$t('Users.UserName'),
+                        className: 'nowrap',
                         render: function(data, type, row) {
-                            return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`;
-                        }
+                            return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`
+                        },
                     },
                     {
-                        data: "creationDate",
-                        name: "CreationDate",
-                        className: "date",
-                        title: this.$t("Users.CreationDate"),
+                        data: 'creationDate',
+                        name: 'CreationDate',
+                        className: 'date',
+                        title: this.$t('Users.CreationDate'),
                         render: function(data, type, row) {
-                            var localDate = moment.utc(data).local();
-                            return localDate.format(window.CONFIG.dateFormat);
-                        }
+                            var localDate = moment.utc(data).local()
+                            return localDate.format(window.CONFIG.dateFormat)
+                        },
                     },
                     {
-                        data: "email",
-                        name: "Email",
-                        className: "date",
-                        title: this.$t("Users.ObserversEmail"),
+                        data: 'email',
+                        name: 'Email',
+                        className: 'date',
+                        title: this.$t('Users.ObserversEmail'),
                         render: function(data, type, row) {
-                            return data ? "<a href='mailto:" + data + "'>" + data + "</a>" : "";
-                        }
-                    }
+                            return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
+                        },
+                    },
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
-                    type: "GET",
-                    contentType: 'application/json'
+                    type: 'GET',
+                    contentType: 'application/json',
                 },
                 responsive: false,
                 order: [[0, 'asc']],
-                sDom: 'rf<"table-with-scroll"t>ip'
+                sDom: 'rf<"table-with-scroll"t>ip',
             }
-        }
-    }
+        },
+    },
 }
 </script>

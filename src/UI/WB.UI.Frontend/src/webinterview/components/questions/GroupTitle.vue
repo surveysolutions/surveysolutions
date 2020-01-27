@@ -5,72 +5,72 @@
 </template>
 
 <script lang="js">
-    import { entityDetails } from "../mixins"
-    import { GroupStatus } from "./index"
-    import { debounce } from "lodash"
+import { entityDetails } from '../mixins'
+import { GroupStatus } from './index'
+import { debounce } from 'lodash'
 
-    export default {
-        name: 'GroupTitle',
-        mixins: [entityDetails],
+export default {
+    name: 'GroupTitle',
+    mixins: [entityDetails],
         
-        watch: {
-            ["$store.getters.scrollState"]() {
-                 this.scroll();
-            }
+    watch: {
+        ['$store.getters.scrollState']() {
+            this.scroll()
         },
+    },
 
-        mounted() {
-            this.scroll();
-        },
+    mounted() {
+        this.scroll()
+    },
 
-        computed: {
-            navigateTo() {
-                return {
-                    name: 'section', params: {
-                        sectionId: this.id,
-                        interviewId: this.$route.params.interviewId
-                    }
-                }
-            },
-            rosterTitle(){
-                return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : "[...]"
-            },
-            isNotStarted() {
-                return this.$me.status === GroupStatus.NotStarted
-            },
-            isStarted() {
-                return this.$me.status === GroupStatus.Started
-            },
-            isCompleted() {
-                return this.$me.status === GroupStatus.Completed
-            },
-            titleClass() {
-                return ['roster-title']
-            },
-            statusClass() {
-                return ['roster-section-block', {
-                    'started': this.$me.validity.isValid && this.isStarted,
-                    'has-error': !this.$me.validity.isValid,
-                    '': this.$me.validity.isValid && !this.isCompleted
+    computed: {
+        navigateTo() {
+            return {
+                name: 'section', params: {
+                    sectionId: this.id,
+                    interviewId: this.$route.params.interviewId,
                 },
-                {
-                    'answered': this.isCompleted
-                }]
-            }           
-        },
-        methods : {
-            doScroll: debounce(function() {
-                if(this.$store.getters.scrollState ==  this.id){
-                    window.scroll({ top: this.$el.offsetTop, behavior: "smooth" })
-                    this.$store.dispatch("resetScroll")
-                }
-            }, 200),
-
-            scroll() {
-                if(this.$store && this.$store.state.route.hash === "#" + this.id) {
-                    this.doScroll(); 
-                }
             }
-        }
-    }
+        },
+        rosterTitle(){
+            return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : '[...]'
+        },
+        isNotStarted() {
+            return this.$me.status === GroupStatus.NotStarted
+        },
+        isStarted() {
+            return this.$me.status === GroupStatus.Started
+        },
+        isCompleted() {
+            return this.$me.status === GroupStatus.Completed
+        },
+        titleClass() {
+            return ['roster-title']
+        },
+        statusClass() {
+            return ['roster-section-block', {
+                'started': this.$me.validity.isValid && this.isStarted,
+                'has-error': !this.$me.validity.isValid,
+                '': this.$me.validity.isValid && !this.isCompleted,
+            },
+            {
+                'answered': this.isCompleted,
+            }]
+        },           
+    },
+    methods : {
+        doScroll: debounce(function() {
+            if(this.$store.getters.scrollState ==  this.id){
+                window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                this.$store.dispatch('resetScroll')
+            }
+        }, 200),
+
+        scroll() {
+            if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+                this.doScroll() 
+            }
+        },
+    },
+}
 </script>

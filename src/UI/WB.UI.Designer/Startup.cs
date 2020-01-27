@@ -176,7 +176,7 @@ namespace WB.UI.Designer
             });
             services.Configure<MailSettings>(Configuration.GetSection("Mail"));
             services.AddTransient<IEmailSender, MailSender>();
-            services.AddTransient<IViewRenderingService, ViewRenderingService>();
+            services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IQuestionnaireHelper, QuestionnaireHelper>();
             services.AddTransient<IDomainRepository, DomainRepository>();
             services.AddScoped<ILoggedInUser, LoggedInUser>();
