@@ -340,7 +340,7 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
-import {lowerCase, map, join, assign} from 'lodash'
+import {lowerCase, map, join, assign, isNaN} from 'lodash'
 
 export default {
     data() {
