@@ -22,8 +22,6 @@ import './init'
 import './errors'
 import box from '@/shared/modal'
 
-import '@/assets/css/markup-web-interview.scss'
-
 require('./componentsRegistry')
 
 const createRouter = require('./router').default
