@@ -1,17 +1,31 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('Pages.MapList_Title')">        
+    <HqLayout :hasFilter="false"
+        :title="$t('Pages.MapList_Title')">        
         <div slot="headers">
             <div class="topic-with-button" >
                 <h1>{{$t('Pages.MapList_Title')}}</h1>                
-                    <label class="btn btn-success btn-file" v-if="actionsAlowed">
-                        {{$t('Pages.MapList_Upload')}}
-                        <input accept=".zip" ref="uploader" id="File" name="File" @change="onFileChange" type="file" value="" />
-                    </label>
+                <label class="btn btn-success btn-file"
+                    v-if="actionsAlowed">
+                    {{$t('Pages.MapList_Upload')}}
+                    <input accept=".zip"
+                        ref="uploader"
+                        id="File"
+                        name="File"
+                        @change="onFileChange"
+                        type="file"
+                        value="" />
+                </label>
+            </div>
+            <div ref="status" >
+                <p>{{statusMessage}}</p>
+            </div>
+            <div ref="errors"
+                class="alert alert-danger">
+                <div v-for="error in errorList"
+                    :key="error">
+                    {{error}}
                 </div>
-                <div ref="status" ><p>{{statusMessage}}</p></div>
-                <div ref="errors" class="alert alert-danger">
-                    <div v-for="error in errorList" :key="error">{{error}}</div>
-                </div>
+            </div>
             <ol class="list-unstyled">
                 <li>{{$t('Pages.MapList_UploadDescription')}} </li>
                 <li>{{$t('Pages.MapList_UploadDescriptionExtra')}}</li>
@@ -29,8 +43,8 @@
         </DataTables>
 
         <Confirm ref="confirmDiscard"
-                 id="discardConfirm"
-                 slot="modals">
+            id="discardConfirm"
+            slot="modals">
             {{ $t("Pages.Map_DiscardConfirm") }}
         </Confirm>
     </HqLayout>

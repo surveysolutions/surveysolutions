@@ -3,27 +3,23 @@
         :title="title"
         :hasFilter="true"
         :topicButton="$t('Assignments.NewAssignment')"
-        :topicButtonRef="config.isSupervisor ? null : config.api.surveySetup"
-    >
+        :topicButtonRef="config.isSupervisor ? null : config.api.surveySetup">
         <Filters slot="filters">
             <FilterBlock
                 :title="$t('Common.Questionnaire')"
-                :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')"
-            >
+                :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
                 <Typeahead
                     control-id="questionnaireId"
                     fuzzy
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="questionnaireId"
                     :values="config.questionnaires"
-                    v-on:selected="questionnaireSelected"
-                />
+                    v-on:selected="questionnaireSelected"/>
             </FilterBlock>
 
             <FilterBlock
                 :title="$t('Common.QuestionnaireVersion')"
-                :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')"
-            >
+                :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
                 <Typeahead
                     control-id="questionnaireVersion"
                     fuzzy
@@ -31,50 +27,43 @@
                     :values="questionnaireId == null ? null : questionnaireId.versions"
                     :value="questionnaireVersion"
                     :disabled="questionnaireId == null"
-                    v-on:selected="questionnaireVersionSelected"
-                />
+                    v-on:selected="questionnaireVersionSelected"/>
             </FilterBlock>
 
             <FilterBlock
                 :title="$t('Common.Responsible')"
-                :tooltip="$t('Assignments.Tooltip_Filter_Responsible')"
-            >
+                :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
                 <Typeahead
                     control-id="responsibleId"
                     :placeholder="$t('Common.AllResponsible')"
                     :value="responsibleId"
                     :ajax-params="responsibleParams"
                     v-on:selected="userSelected"
-                    :fetch-url="config.api.responsible"
-                ></Typeahead>
+                    :fetch-url="config.api.responsible"></Typeahead>
             </FilterBlock>
 
             <FilterBlock
                 :title="$t('Assignments.ReceivedByTablet')"
-                :tooltip="$t('Assignments.Tooltip_Filter_Received')"
-            >
+                :tooltip="$t('Assignments.Tooltip_Filter_Received')">
                 <Typeahead
                     control-id="recieved-by-tablet"
                     noSearch
                     noClear
                     :values="ddlReceivedByTablet"
                     :value="receivedByTablet"
-                    v-on:selected="receivedByTabletSelected"
-                />
+                    v-on:selected="receivedByTabletSelected"/>
             </FilterBlock>
 
             <FilterBlock
                 :title="$t('Assignments.ShowArchived')"
-                :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')"
-            >
+                :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
                 <Typeahead
                     control-id="show_archived"
                     noSearch
                     noClear
                     :values="ddlShowArchive"
                     :value="showArchive"
-                    v-on:selected="showArchiveSelected"
-                />
+                    v-on:selected="showArchiveSelected"/>
             </FilterBlock>
         </Filters>
 
@@ -88,15 +77,16 @@
             @totalRows="(rows) => totalRows = rows"
             @ajaxComlpete="isLoading = false"
             @page="resetSelection"
-            :selectable="showSelectors"
-        >
+            :selectable="showSelectors">
             <div
                 class="panel panel-table"
                 id="pnlAssignmentsContextActions"
-                v-if="selectedRows.length"
-            >
+                v-if="selectedRows.length">
                 <div class="panel-body">
-                    <input class="double-checkbox-white" type="checkbox" checked disabled />
+                    <input class="double-checkbox-white"
+                        type="checkbox"
+                        checked
+                        disabled />
                     <label>
                         <span class="tick"></span>
                         {{ $t("Assignments.AssignmentsSelected", {count: selectedRows.length}) }}
@@ -106,52 +96,50 @@
                         class="btn btn-lg btn-primary"
                         id="btnUnarchiveSelected"
                         v-if="showArchive.key && config.isHeadquarter"
-                        @click="unarchiveSelected"
-                    >{{ $t("Assignments.Unarchive") }}</button>
+                        @click="unarchiveSelected">{{ $t("Assignments.Unarchive") }}</button>
 
                     <button
                         class="btn btn-lg btn-primary"
                         id="btnAssignSelected"
                         v-if="!showArchive.key"
-                        @click="assignSelected"
-                    >{{ $t("Common.Assign") }}</button>
+                        @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
                     <button
                         class="btn btn-lg btn-warning"
                         id="btnCloseSelected"
                         v-if="config.isHeadquarter && !showArchive.key"
-                        @click="closeSelected"
-                    >{{ $t("Assignments.Close") }}</button>
+                        @click="closeSelected">{{ $t("Assignments.Close") }}</button>
 
                     <button
                         class="btn btn-lg btn-danger"
                         id="btnArchiveSelected"
                         v-if="!showArchive.key && config.isHeadquarter"
-                        @click="archiveSelected"
-                    >{{ $t("Assignments.Archive") }}</button>
+                        @click="archiveSelected">{{ $t("Assignments.Archive") }}</button>
                 </div>
             </div>
         </DataTables>
 
-        <ModalFrame ref="assignModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="assignModal"
+            :title="$t('Pages.ConfirmationNeededTitle')">
             <p>{{ $t("Assignments.NumberOfAssignmentsAffected", {count: selectedRows.length} )}}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label
                         class="control-label"
-                        for="newResponsibleId"
-                    >{{ $t("Assignments.SelectResponsible") }}</label>
+                        for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
                     <Typeahead
                         control-id="newResponsibleId"
                         :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId"
                         :ajax-params="{ }"
                         @selected="newResponsibleSelected"
-                        :fetch-url="config.api.responsible"
-                    ></Typeahead>
+                        :fetch-url="config.api.responsible"></Typeahead>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="commentsId">{{ $t("Assignments.Comments") }}</label>
+                    <label class="control-label"
+                        for="commentsId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
                     <textarea
                         control-id="commentsId"
                         v-model="reassignComment"
@@ -159,8 +147,7 @@
                         name="comments"
                         rows="6"
                         maxlength="500"
-                        class="form-control"
-                    />
+                        class="form-control"/>
                 </div>
             </form>
             <div slot="actions">
@@ -168,17 +155,16 @@
                     type="button"
                     class="btn btn-primary"
                     @click="assign"
-                    :disabled="!newResponsibleId"
-                >{{ $t("Common.Assign") }}</button>
+                    :disabled="!newResponsibleId">{{ $t("Common.Assign") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
-                    data-dismiss="modal"
-                >{{ $t("Common.Cancel") }}</button>
+                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
 
-        <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="closeModal"
+            :title="$t('Pages.ConfirmationNeededTitle')">
             <p v-if="selectedRows.length === 1">{{singleCloseMessage}}</p>
             <p v-else>{{ $t("Assignments.MultipleAssignmentsClose", {count: selectedRows.length} )}}</p>
 
@@ -187,28 +173,24 @@
                     type="button"
                     class="btn btn-primary"
                     :disabled="isWebModeAssignmentSelected"
-                    @click="close"
-                >{{ $t("Assignments.Close") }}</button>
+                    @click="close">{{ $t("Assignments.Close") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
-                    data-dismiss="modal"
-                >{{ $t("Common.Cancel") }}</button>
+                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
 
         <ModalFrame
             ref="editAudioEnabledModal"
-            :title="$t('Assignments.ChangeAudioRecordingModalTitle', {id: editedRowId} )"
-        >
+            :title="$t('Assignments.ChangeAudioRecordingModalTitle', {id: editedRowId} )">
             <p>{{ $t("Assignments.AudioRecordingExplanation")}}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
                     <Checkbox
                         :label="$t('Assignments.AudioRecordingEnable')"
                         name="audioRecordingEnabled"
-                        v-model="editedAudioRecordingEnabled"
-                    />
+                        v-model="editedAudioRecordingEnabled"/>
                 </div>
             </form>
             <div slot="actions">
@@ -216,27 +198,28 @@
                     type="button"
                     class="btn btn-primary"
                     @click="upateAudioRecording"
-                    :disabled="!showSelectors"
-                >{{ $t("Common.Save") }}</button>
+                    :disabled="!showSelectors">{{ $t("Common.Save") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
-                    data-dismiss="modal"
-                >{{ $t("Common.Cancel") }}</button>
+                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
 
         <ModalFrame
             ref="editQuantityModal"
-            :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )"
-        >
+            :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )">
             <p>{{ $t("Assignments.SizeExplanation")}}</p>
             <p v-if="!canEditQuantity">
                 <b>{{ $t("Assignments.AssignmentSizeInWebMode")}}</b>
             </p>
             <form onsubmit="return false;">
-                <div class="form-group" v-bind:class="{'has-error': errors.has('editedQuantity')}">
-                    <label class="control-label" for="newQuantity">{{$t("Assignments.Size")}}</label>
+                <div class="form-group"
+                    v-bind:class="{'has-error': errors.has('editedQuantity')}">
+                    <label class="control-label"
+                        for="newQuantity">
+                        {{$t("Assignments.Size")}}
+                    </label>
 
                     <input
                         type="text"
@@ -250,14 +233,12 @@
                         @keyup.enter="updateQuantity"
                         id="newQuantity"
                         placeholder="1"
-                        :disabled="!canEditQuantity"
-                    />
+                        :disabled="!canEditQuantity"/>
 
                     <p
                         v-for="error in errors.collect('editedQuantity')"
                         :key="error"
-                        class="text-danger"
-                    >{{error}}</p>
+                        class="text-danger">{{error}}</p>
                 </div>
             </form>
             <div class="modal-footer">
@@ -265,13 +246,11 @@
                     type="button"
                     class="btn btn-primary"
                     :disabled="!showSelectors || !canEditQuantity"
-                    @click="updateQuantity"
-                >{{$t("Common.Save")}}</button>
+                    @click="updateQuantity">{{$t("Common.Save")}}</button>
                 <button
                     type="button"
                     class="btn btn-link"
-                    data-dismiss="modal"
-                >{{$t("Common.Cancel")}}</button>
+                    data-dismiss="modal">{{$t("Common.Cancel")}}</button>
             </div>
         </ModalFrame>
     </HqLayout>

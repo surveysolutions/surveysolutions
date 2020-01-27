@@ -1,12 +1,20 @@
 <template>
     <div class="row">
-        <form method="post" ref="frm" class="topic-with-button" enctype="multipart/form-data">
+        <form method="post"
+            ref="frm"
+            class="topic-with-button"
+            enctype="multipart/form-data">
             <label class="btn btn-success btn-file" >
                 {{$t('Pages.Upload_Upload')}}
-                <input ref="uploader" name="file" @change="onFileChange" type="file" value="" />
+                <input ref="uploader"
+                    name="file"
+                    @change="onFileChange"
+                    type="file"
+                    value="" />
             </label>
         </form>
-        <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"></DataTables>
     </div>
 </template>
 

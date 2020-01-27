@@ -1,13 +1,19 @@
 <template>
-    <popover class="w-100 d-block" :enable="hasInstructions" trigger="hover-focus" append-to="body">
-        <div class="ag-cell-label-container" v-bind:class="{ 'has-instruction' : hasInstructions }">
+    <popover class="w-100 d-block"
+        :enable="hasInstructions"
+        trigger="hover-focus"
+        append-to="body">
+        <div class="ag-cell-label-container"
+            v-bind:class="{ 'has-instruction' : hasInstructions }">
             <div class="ag-header-cell-label">
-                <span class="ag-header-cell-text" v-html="title"></span>
+                <span class="ag-header-cell-text"
+                    v-html="title"></span>
             </div>
         </div>
         <template slot="popover">
             <div class="instruction-tooltip">
-                <span v-dateTimeFormatting v-html="instruction"></span>
+                <span v-dateTimeFormatting
+                    v-html="instruction"></span>
             </div>
         </template>
     </popover>

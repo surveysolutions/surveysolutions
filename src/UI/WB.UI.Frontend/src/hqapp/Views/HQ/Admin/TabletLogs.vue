@@ -1,6 +1,11 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('TabletLogs.PageTitle')" :subtitle="$t('TabletLogs.PageSubTitle')">
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems" noSearch></DataTables>
+    <HqLayout :hasFilter="false"
+        :title="$t('TabletLogs.PageTitle')"
+        :subtitle="$t('TabletLogs.PageSubTitle')">
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"
+            noSearch></DataTables>
     </HqLayout>
 </template>
 

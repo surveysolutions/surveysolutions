@@ -24,53 +24,44 @@
         </div>
         <div
             class="row"
-            v-if="questionnaire.identifyingQuestions.length > 0 || questionnaire.hiddenQuestions > 0 || questionnaire.rosterSizeQuestions > 0"
-        >
+            v-if="questionnaire.identifyingQuestions.length > 0 || questionnaire.hiddenQuestions > 0 || questionnaire.rosterSizeQuestions > 0">
             <div
                 v-if="!showQuestions"
-                class="col-sm-6 col-xs-10 prefilled-data-info info-block short-prefilled-data-info"
-            >
+                class="col-sm-6 col-xs-10 prefilled-data-info info-block short-prefilled-data-info">
                 <a
                     class="list-required-prefilled-data"
                     href="javascript:void(0);"
-                    @click="showQuestions = true"
-                >{{$t('BatchUpload.ViewListPreloadedData')}}</a>
+                    @click="showQuestions = true">{{$t('BatchUpload.ViewListPreloadedData')}}</a>
             </div>
             <div
                 v-if="showQuestions"
-                class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info"
-            >
+                class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info">
                 <h3
-                    v-if="questionnaire.identifyingQuestions.length > 0"
-                >{{$t('BatchUpload.IdentifyingQuestions')}}</h3>
+                    v-if="questionnaire.identifyingQuestions.length > 0">{{$t('BatchUpload.IdentifyingQuestions')}}</h3>
 
                 <ul
                     v-if="questionnaire.identifyingQuestions.length > 0"
-                    class="list-unstyled prefilled-data"
-                >
+                    class="list-unstyled prefilled-data">
                     <li
                         v-for="item in questionnaire.identifyingQuestions"
-                        :key="item.caption"
-                    >{{ item.caption}}</li>
+                        :key="item.caption">{{ item.caption}}</li>
                 </ul>
                 <h3
-                    v-if="questionnaire.hiddenQuestions.length > 0"
-                >{{$t('BatchUpload.HiddenQuestions')}}</h3>
+                    v-if="questionnaire.hiddenQuestions.length > 0">{{$t('BatchUpload.HiddenQuestions')}}</h3>
                 <ul
                     v-if="questionnaire.hiddenQuestions.length > 0"
-                    class="list-unstyled prefilled-data"
-                >
-                    <li v-for="item in questionnaire.hiddenQuestions" :key="item">{{item}}</li>
+                    class="list-unstyled prefilled-data">
+                    <li v-for="item in questionnaire.hiddenQuestions"
+                        :key="item">{{item}}</li>
                 </ul>
 
                 <h3
-                    v-if="questionnaire.rosterSizeQuestions.length > 0"
-                >{{$t('BatchUpload.RosterSizeQuestions')}}</h3>
+                    v-if="questionnaire.rosterSizeQuestions.length > 0">{{$t('BatchUpload.RosterSizeQuestions')}}</h3>
                 <ul
                     v-if="questionnaire.rosterSizeQuestions.length > 0"
-                    class="list-unstyled prefilled-data"
-                >
-                    <li v-for="item in questionnaire.rosterSizeQuestions" :key="item">{{item}}</li>
+                    class="list-unstyled prefilled-data">
+                    <li v-for="item in questionnaire.rosterSizeQuestions"
+                        :key="item">{{item}}</li>
                 </ul>
             </div>
         </div>
@@ -79,14 +70,14 @@
                 <h3>{{$t('BatchUpload.Select_Responsible')}}</h3>
                 <p>{{$t('BatchUpload.Select_Responsible_Description')}}</p>
                 <form-group>
-                    <div class="field" :class="{answered: responsible != null}">
+                    <div class="field"
+                        :class="{answered: responsible != null}">
                         <Typeahead
                             control-id="responsible"
                             :value="responsible"
                             :ajax-params="{ }"
                             :fetch-url="api.responsiblesUrl"
-                            @selected="responsibleSelected"
-                        ></Typeahead>
+                            @selected="responsibleSelected"></Typeahead>
                     </div>
                 </form-group>
             </div>
@@ -100,8 +91,7 @@
                     </div>
                     <div>
                         <a
-                            v-bind:href="api.simpleTemplateDownloadUrl"
-                        >{{$t('BatchUpload.DownloadTabTemplate')}}</a>
+                            v-bind:href="api.simpleTemplateDownloadUrl">{{$t('BatchUpload.DownloadTabTemplate')}}</a>
                         <input
                             name="file"
                             ref="uploader"
@@ -109,13 +99,11 @@
                             accept=".tab, .txt, .zip"
                             type="file"
                             @change="onSimpleFileUpload"
-                            class="btn btn-default btn-lg btn-action-questionnaire"
-                        />
+                            class="btn btn-default btn-lg btn-action-questionnaire"/>
                         <button
                             type="button"
                             class="btn btn-success"
-                            @click="$refs.uploader.click()"
-                        >{{$t('BatchUpload.UploadTabFile')}}</button>
+                            @click="$refs.uploader.click()">{{$t('BatchUpload.UploadTabFile')}}</button>
                     </div>
                 </div>
             </div>
@@ -127,8 +115,7 @@
                     </div>
                     <div>
                         <a
-                            v-bind:href="api.templateDownloadUrl"
-                        >{{$t('BatchUpload.DownloadTemplateArchive')}}</a>
+                            v-bind:href="api.templateDownloadUrl">{{$t('BatchUpload.DownloadTemplateArchive')}}</a>
                         <input
                             name="file"
                             ref="uploaderAdvanced"
@@ -136,13 +123,11 @@
                             accept=".zip"
                             type="file"
                             @change="onAdvancedFileUpload"
-                            class="btn btn-default btn-lg btn-action-questionnaire"
-                        />
+                            class="btn btn-default btn-lg btn-action-questionnaire"/>
                         <button
                             type="button"
                             class="btn btn-success"
-                            @click="$refs.uploaderAdvanced.click()"
-                        >{{$t('BatchUpload.UploadZipFile')}}</button>
+                            @click="$refs.uploaderAdvanced.click()">{{$t('BatchUpload.UploadZipFile')}}</button>
                     </div>
                 </div>
             </div>

@@ -1,25 +1,32 @@
 <template>
-    <div :class="questionStyle" :id="`mr_view_${questionId}`">
+    <div :class="questionStyle"
+        :id="`mr_view_${questionId}`">
         <popover
             class="tooltip-wrapper"
             trigger="hover-focus"
             append-to="body"
-            :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)"
-        >
-            <a class="cell-content has-tooltip" type="primary" data-role="trigger"></a>
+            :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)">
+            <a class="cell-content has-tooltip"
+                type="primary"
+                data-role="trigger"></a>
             <template slot="popover">
-                <div class="error-tooltip" v-if="!question.validity.isValid">
+                <div class="error-tooltip"
+                    v-if="!question.validity.isValid">
                     <h6
                         style="text-transform:uppercase;"
-                        v-if="question.validity.errorMessage"
-                    >{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
+                        v-if="question.validity.errorMessage">{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
                     <template v-for="message in question.validity.messages">
-                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                        <span v-dateTimeFormatting
+                            v-html="message"
+                            :key="message"></span>
                     </template>
                 </div>
-                <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">
+                <div class="warning-tooltip"
+                    v-else-if="question.validity.warnings.length > 0">
                     <template v-for="message in question.validity.warnings">
-                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                        <span v-dateTimeFormatting
+                            v-html="message"
+                            :key="message"></span>
                     </template>
                 </div>
             </template>
@@ -29,9 +36,9 @@
             style="align-items:center;width:180px !important;max-width:180px;"
             v-for="option in editorParams.question.options"
             :key="$me.id + '_' + option.value"
-            v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }"
-        >
-            <div class="field" style="width:180px;">
+            v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
+            <div class="field"
+                style="width:180px;">
                 <input
                     v-if="!disabled && answeredOrAllOptions.some(e => e.value === option.value)"
                     class="wb-checkbox"
@@ -42,10 +49,9 @@
                     v-model="answer"
                     @change="change"
                     v-disabledWhenUnchecked="{
-                                maxAnswerReached: allAnswersGiven,
-                                answerNotAllowed: disabled,
-                                forceDisabled: isProtected(option.value) }"
-                />
+                        maxAnswerReached: allAnswersGiven,
+                        answerNotAllowed: disabled,
+                        forceDisabled: isProtected(option.value) }"/>
                 <label :for="$me.id + '_' + option.value">
                     <span class="tick"></span>
                 </label>

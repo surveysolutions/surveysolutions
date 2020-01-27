@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-      <table class="table table-striped table-condensed">
+    <div class="row">
+        <table class="table table-striped table-condensed">
             <thead>
                 <tr>
                     <th>file name</th>
@@ -11,7 +11,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="file in files" v-bind:key="file.fileName">
+                <tr v-for="file in files"
+                    v-bind:key="file.fileName">
                     <td>{{file.fileName}}</td>
                     <td>{{file.build}}</td>
                     <td>{{file.hash}}</td>
@@ -20,7 +21,7 @@
                 </tr>
             </tbody>
         </table>
-  </div>
+    </div>
 </template>
 
 <script>

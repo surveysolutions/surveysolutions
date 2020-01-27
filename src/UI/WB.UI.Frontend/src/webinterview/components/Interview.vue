@@ -1,6 +1,7 @@
 <template>
     <div>
-        <signalr @connected="connected" :interviewId="interviewId" />
+        <signalr @connected="connected"
+            :interviewId="interviewId" />
         <router-view />
     </div>
 </template>

@@ -11,8 +11,14 @@
                     {{$t('UploadUsers.CompleteDescription')}}
                 </div>
                 <div class="action-buttons">
-                    <a class="btn btn-primary" v-bind:href="config.api.questionnairesUrl">{{$t('UploadUsers.Questionnaires')}}</a>
-                    <router-link class="btn btn-link" :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
+                    <a class="btn btn-primary"
+                        v-bind:href="config.api.questionnairesUrl">
+                        {{$t('UploadUsers.Questionnaires')}}
+                    </a>
+                    <router-link class="btn btn-link"
+                        :to="{ name: 'upload'}">
+                        {{$t('UploadUsers.BackToImport')}}
+                    </router-link>
                 </div>
             </div>
         </div>

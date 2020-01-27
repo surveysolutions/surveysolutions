@@ -1,6 +1,7 @@
 <template>
     <HqLayout :hasFilter="true">
-        <Filters slot="filters" :title="''">
+        <Filters slot="filters"
+            :title="''">
             <ol class="list-unstyled">
                 <li>
                     <router-link to="/ControlPanel/Configuration">{{$t('Pages.Configuration')}}</router-link>

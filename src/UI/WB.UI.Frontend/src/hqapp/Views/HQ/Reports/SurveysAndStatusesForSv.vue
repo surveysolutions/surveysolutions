@@ -1,9 +1,8 @@
 <template>
-      <HqLayout
+    <HqLayout
         :title="$t('Pages.SurveysAndStatuses_Overview')"
         :subtitle="$t('Pages.SurveysAndStatuses_SupervisorDescription')"
-        :hasFilter="true"
-    >
+        :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.SurveysAndStatuses_InterviewerTitle')">
                 <Typeahead
@@ -14,8 +13,7 @@
                     :placeholder="$t('Strings.AllInterviewers')"
                     :value="responsible" 
                     v-on:selected="selectResponsible"
-                    :fetch-url="$config.model.responsiblesUrl"
-                />
+                    :fetch-url="$config.model.responsiblesUrl"/>
             </FilterBlock>
         </Filters>
 
@@ -29,8 +27,7 @@
             :addParamsToRequest="addFilteringParams"
             :no-search="true"
             exportable
-            :hasTotalRow="questionnaireId != null"
-        ></DataTables>
+            :hasTotalRow="questionnaireId != null"></DataTables>
     </HqLayout>
 </template>
 <script>
