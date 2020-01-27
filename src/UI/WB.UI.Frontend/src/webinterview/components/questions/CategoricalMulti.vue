@@ -2,17 +2,18 @@
     <wb-question
         :question="$me"
         :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'"
-        :noAnswer="noOptions"
-    >
-        <button class="section-blocker" disabled="disabled" v-if="inFetchState"></button>
+        :noAnswer="noOptions">
+        <button class="section-blocker"
+            disabled="disabled"
+            v-if="inFetchState"></button>
         <div class="question-unit">
-            <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
+            <div class="options-group"
+                v-bind:class="{ 'dotted': noOptions }">
                 <div
                     class="form-group"
                     v-for="option in answeredOrAllOptions"
                     :key="$me.id + '_' + option.value"
-                    v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }"
-                >
+                    v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
                     <input
                         class="wb-checkbox"
                         type="checkbox"
@@ -23,15 +24,17 @@
                         v-model="answer"
                         @change="change"
                         v-disabledWhenUnchecked="{
-                                maxAnswerReached: allAnswersGiven,
-                                answerNotAllowed: !$me.acceptAnswer,
-                                forceDisabled: isProtected(option.value) }"
-                    />
+                            maxAnswerReached: allAnswersGiven,
+                            answerNotAllowed: !$me.acceptAnswer,
+                            forceDisabled: isProtected(option.value) }"/>
                     <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span>
                         {{option.title}}
                     </label>
-                    <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
+                    <div class="badge"
+                        v-if="$me.ordered">
+                        {{ getAnswerOrder(option.value) }}
+                    </div>
                     <div class="lock"></div>
                 </div>
                 <button
@@ -39,14 +42,12 @@
                     class="btn btn-link btn-horizontal-hamburger"
                     @click="toggleOptions"
                     :id="`btn_${$me.id}_ShowAllOptions`"
-                    v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
-                >
+                    v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
                     <span></span>
                 </button>
                 <div
                     v-if="noOptions"
-                    class="options-not-available"
-                >{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
+                    class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
                 <wb-lock />
             </div>
         </div>

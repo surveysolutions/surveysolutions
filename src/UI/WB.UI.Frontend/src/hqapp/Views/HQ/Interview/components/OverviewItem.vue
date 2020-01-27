@@ -1,43 +1,67 @@
 <template>
-    <div :class="itemClass" class="overview-item">
+    <div :class="itemClass"
+        class="overview-item">
         <div class="date">
-            <div v-if="hasDate">{{answerDate}}</div>
-            <div v-if="hasDate">{{answerTime}}</div>
+            <div v-if="hasDate">
+                {{answerDate}}
+            </div>
+            <div v-if="hasDate">
+                {{answerTime}}
+            </div>
         </div>
-        <div ref="itemContent" class="item-content" @click="showAdditionalDetails">
+        <div ref="itemContent"
+            class="item-content"
+            @click="showAdditionalDetails">
             <h4>
                 <span v-html="item.title"></span>
                 <template v-if="item.rosterTitle != null"><span> - </span>
-                <i v-if="item.rosterTitle != null" v-html="item.rosterTitle"></i>
+                    <i v-if="item.rosterTitle != null"
+                        v-html="item.rosterTitle"></i>
                 </template>
             </h4>
-            <div class="answer" v-if="hasAttachment">
-                <wb-attachment :contentId="attachmentContentId" :interviewId="interviewId" :previewOnly="true" customCssClass="static-text-image"></wb-attachment>
+            <div class="answer"
+                v-if="hasAttachment">
+                <wb-attachment :contentId="attachmentContentId"
+                    :interviewId="interviewId"
+                    :previewOnly="true"
+                    customCssClass="static-text-image"></wb-attachment>
             </div>
-            <div class="answer" v-if="item.state != 'Unanswered'">
+            <div class="answer"
+                v-if="item.state != 'Unanswered'">
                 <div v-if="item.controlType === 'image'">
-                    <wb-attachment :filename="item.answer" :previewOnly="true"></wb-attachment>
+                    <wb-attachment :filename="item.answer"
+                        :previewOnly="true"></wb-attachment>
                 </div>
                 <div v-else-if="item.controlType === 'audio'">
-                    <audio controls preload="auto" 
+                    <audio controls
+                        preload="auto" 
                         style="width:300px" 
                         :src="audioRecordPath">
                     </audio>
                 </div>
                 <div v-else-if="item.controlType === 'area'">
-                    <iframe width="100%" height="250px" frameBorder="0" :src="areaAnswerUrl"></iframe>
+                    <iframe width="100%"
+                        height="250px"
+                        frameBorder="0"
+                        :src="areaAnswerUrl"></iframe>
                 </div>
                 <div v-else-if="item.controlType === 'map'">
-                    <img v-bind:src="googleMapPosition" draggable="false" />
+                    <img v-bind:src="googleMapPosition"
+                        draggable="false" />
                 </div>
                 <div v-else>
-                      {{item.answer}}
+                    {{item.answer}}
                 </div>
             </div>
-            <div class="btn-link" v-if="item.state == 'Unanswered'">{{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}</div>
+            <div class="btn-link"
+                v-if="item.state == 'Unanswered'">
+                {{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}
+            </div>
         </div>
 
-        <AdditionalInfo ref="additionalInfo" :item="item" :addCommentsAllowed="$store.getters.addCommentsAllowed" />
+        <AdditionalInfo ref="additionalInfo"
+            :item="item"
+            :addCommentsAllowed="$store.getters.addCommentsAllowed" />
     </div>
 </template>
 

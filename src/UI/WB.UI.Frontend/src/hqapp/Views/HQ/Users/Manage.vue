@@ -1,9 +1,15 @@
 <template>
     <HqLayout :hasFilter="false">
         <div slot="filters">
-            <div v-if="successMessage != null" id="alerts" class="alerts">
+            <div v-if="successMessage != null"
+                id="alerts"
+                class="alerts">
                 <div class="alert alert-success">
-                    <button class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <button class="close"
+                        data-dismiss="alert"
+                        aria-hidden="true">
+                        ×
+                    </button>
                     {{successMessage}}
                 </div>
             </div>
@@ -20,39 +26,35 @@
             <div class="profile">
                 <div class="col-sm-12">
                     <form-group :label="$t('Pages.AccountManage_Login')">
-                        <TextInput :value="userInfo.userName" disabled />
+                        <TextInput :value="userInfo.userName"
+                            disabled />
                     </form-group>
 
                     <form-group :label="$t('Pages.AccountManage_Role')">
-                        <TextInput :value="userInfo.role" disabled />
+                        <TextInput :value="userInfo.role"
+                            disabled />
                     </form-group>
 
                     <form-group
                         :label="$t('FieldsAndValidations.PersonNameFieldName')"
-                        :error="modelState['PersonName']"
-                    >
+                        :error="modelState['PersonName']">
                         <TextInput
                             v-model.trim="personName"
-                            :haserror="modelState['PersonName'] !== undefined"
-                        />
+                            :haserror="modelState['PersonName'] !== undefined"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.EmailFieldName')"
-                        :error="modelState['Email']"
-                    >
+                        :error="modelState['Email']">
                         <TextInput
                             v-model.trim="email"
-                            :haserror="modelState['Email'] !== undefined"
-                        />
+                            :haserror="modelState['Email'] !== undefined"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
-                        :error="modelState['PhoneNumber']"
-                    >
+                        :error="modelState['PhoneNumber']">
                         <TextInput
                             v-model.trim="phoneNumber"
-                            :haserror="modelState['PhoneNumber'] !== undefined"
-                        />
+                            :haserror="modelState['PhoneNumber'] !== undefined"/>
                     </form-group>
                     <p v-if="lockMessage != null">{{lockMessage}}</p>
                     <form-group v-if="!isOwnProfile">
@@ -61,9 +63,9 @@
                             id="IsLocked"
                             name="IsLocked"
                             type="checkbox"
-                            v-model="isLockedByHeadquarters"
-                        />
-                        <label for="IsLocked" style="font-weight: bold">
+                            v-model="isLockedByHeadquarters"/>
+                        <label for="IsLocked"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{$t('FieldsAndValidations.IsLockedFieldName')}}
                         </label>
@@ -75,9 +77,9 @@
                             id="IsLockedBySupervisor"
                             name="IsLockedBySupervisor"
                             type="checkbox"
-                            v-model="isLockedBySupervisor"
-                        />
-                        <label for="IsLockedBySupervisor" style="font-weight: bold">
+                            v-model="isLockedBySupervisor"/>
+                        <label for="IsLockedBySupervisor"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
                         </label>
@@ -90,9 +92,11 @@
                             type="submit"
                             class="btn btn-success"
                             style="margin-right:5px"
-                            @click="updateAccount"
-                        >{{$t('Pages.Update')}}</button>
-                        <a class="btn btn-default" v-bind:href="referrerUrl">{{$t('Common.Cancel')}}</a>
+                            @click="updateAccount">{{$t('Pages.Update')}}</button>
+                        <a class="btn btn-default"
+                            v-bind:href="referrerUrl">
+                            {{$t('Common.Cancel')}}
+                        </a>
                     </div>
                 </div>
             </div>
@@ -104,33 +108,27 @@
                     <form-group
                         v-if="isOwnProfile"
                         :label="$t('FieldsAndValidations.OldPasswordFieldName')"
-                        :error="modelState['OldPassword']"
-                    >
+                        :error="modelState['OldPassword']">
                         <TextInput
                             type="password"
                             v-model.trim="oldPassword"
-                            :haserror="modelState['OldPassword'] !== undefined"
-                        />
+                            :haserror="modelState['OldPassword'] !== undefined"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.NewPasswordFieldName')"
-                        :error="modelState['Password']"
-                    >
+                        :error="modelState['Password']">
                         <TextInput
                             type="password"
                             v-model.trim="password"
-                            :haserror="modelState['Password'] !== undefined"
-                        />
+                            :haserror="modelState['Password'] !== undefined"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
-                        :error="modelState['ConfirmPassword']"
-                    >
+                        :error="modelState['ConfirmPassword']">
                         <TextInput
                             type="password"
                             v-model.trim="confirmPassword"
-                            :haserror="modelState['ConfirmPassword'] !== undefined"
-                        />
+                            :haserror="modelState['ConfirmPassword'] !== undefined"/>
                     </form-group>
                 </div>
 
@@ -140,9 +138,11 @@
                             type="submit"
                             class="btn btn-success"
                             style="margin-right:5px"
-                            @click="updatePassword"
-                        >{{$t('Pages.Update')}}</button>
-                        <a class="btn btn-default" v-bind:href="referrerUrl">{{$t('Common.Cancel')}}</a>
+                            @click="updatePassword">{{$t('Pages.Update')}}</button>
+                        <a class="btn btn-default"
+                            v-bind:href="referrerUrl">
+                            {{$t('Common.Cancel')}}
+                        </a>
                     </div>
                 </div>
             </div>

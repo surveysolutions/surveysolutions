@@ -1,0 +1,92 @@
+{
+    "root": true,
+    "env": {
+        "node": true
+    },
+    "extends": [
+        "plugin:vue/essential",
+        "eslint:recommended"
+    ],
+    "rules": {
+        "comma-dangle": [
+            "error",
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline",
+                "imports": "never",
+                "exports": "never",
+                "functions": "never"
+            }
+        ],
+        "indent": [
+            "error",
+            4
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ],
+        "no-unused-vars": "off",
+        "vue/no-unused-vars": "off",
+        "vue/require-v-for-key": "off",
+        "vue/html-indent": [
+            "error",
+            4,
+            {
+                "attribute": 1,
+                "alignAttributesVertically": false,
+                "closeBracket": 0,
+            }
+        ],
+        "vue/html-closing-bracket-newline": [
+            "error",
+            {
+                "singleline": "never",
+                "multiline": "never"
+            }
+        ],
+        "vue/singleline-html-element-content-newline": [
+            "error",
+            {
+                "ignoreWhenNoAttributes": true,
+                "ignoreWhenEmpty": true,
+                "ignores": [
+                    "pre",
+                    "textarea",
+                    "p",
+                    "span",
+                    "li"
+                ]
+            }
+        ],
+        "vue/max-attributes-per-line": [
+            "error",
+            {
+                "singleline": 1,
+                "multiline": {
+                    "max": 1,
+                    "allowFirstLine": true
+                }
+            }
+        ]
+    },
+    "parserOptions": {
+        "parser": "babel-eslint"
+    },
+    "globals": {
+        "$": "readonly",
+        "google": "readonly"
+    },
+    "ignorePatterns": [
+        "dist/**",
+        "js/**",
+        "**/*.test.js",
+        "vendor/**",
+        "vue.config.js",
+        "tools/**"
+    ]
+}

@@ -1,6 +1,7 @@
 <template>
-   <HqLayout :title="$config.model.title" :hasFilter="false">
-       <template slot="headers">
+    <HqLayout :title="$config.model.title"
+        :hasFilter="false">
+        <template slot="headers">
             <ol class="breadcrumb">
                 <li>
                     <a :href="this.$config.model.surveySetup">
@@ -25,8 +26,7 @@
         <DataTables
             ref="table"
             :tableOptions="tableOptions"
-            tableClass='import-interview'
-        ></DataTables>
+            tableClass='import-interview'></DataTables>
     </HqLayout>
 </template>
 

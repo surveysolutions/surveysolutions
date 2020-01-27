@@ -1,7 +1,8 @@
 <template>
-<div class="cell-unit">
-    <span class="cell-content" v-html="roster.rosterTitle"></span>
-</div>
+    <div class="cell-unit">
+        <span class="cell-content"
+            v-html="roster.rosterTitle"></span>
+    </div>
 </template>
 
 <script lang="js">
