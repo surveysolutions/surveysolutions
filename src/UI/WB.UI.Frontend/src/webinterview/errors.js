@@ -1,5 +1,5 @@
-import * as toastr from "toastr"
-import Vue from "vue"
+import * as toastr from 'toastr'
+import Vue from 'vue'
 
 /* eslint:disable:no-console */
 Vue.config.errorHandler = (error, vm) => {
@@ -12,8 +12,8 @@ function toastErr(err, message) {
         console.error(message, err)
     }
 
-    toastr.error(message, "Error", {
-        preventDuplicates: true
+    toastr.error(message, 'Error', {
+        preventDuplicates: true,
     })
 }
 
@@ -23,10 +23,10 @@ function wrap(name, method, section) {
         try {
             if (window.CONFIG.verboseMode) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
-                if (argument && argument.hasOwnProperty("source"))
-                    console.debug("call", section, "from", argument.source, name, argument)
+                if (argument && Object.prototype.hasOwnProperty.call(argument, 'source'))
+                    console.debug('call', section, 'from', argument.source, name, argument)
                 else
-                    console.debug("call", section, name, argument)
+                    console.debug('call', section, name, argument)
             }
 
             const result = method.apply(this, arguments)
@@ -38,7 +38,7 @@ function wrap(name, method, section) {
                 if (isPromise) {
                     result.catch(err => {
                         console.error(name, err)
-                        toastErr(err, name + ": " + err.message)
+                        toastErr(err, name + ': ' + err.message)
                     })
                 }
             }
@@ -55,31 +55,31 @@ function handleErrors(object, section) {
     let method
 
     for (const name in object) {
-        if (typeof object[name] === "function") {
+        if (typeof object[name] === 'function') {
             method = object[name]
-            if(method.name != "__action_wrapper")
-            object[name] = wrap(name, method, section)
+            if (method.name != '__action_wrapper')
+                object[name] = wrap(name, method, section)
         }
     }
 
     return object
 }
 
-export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations"]) {
+export function safeStore(storeConfig, fieldToSafe = ['actions', 'mutations']) {
 
     function wrapFields(config) {
         for (const field in fieldToSafe) {
             const item = fieldToSafe[field]
 
-            if (config.hasOwnProperty(item)) {
+            if (Object.prototype.hasOwnProperty.call(config, item)) {
                 config[item] = handleErrors(config[item], item)
             }
         }
     }
 
-    wrapFields(storeConfig);
+    wrapFields(storeConfig)
 
-    if (storeConfig.hasOwnProperty("modules")) {
+    if (Object.prototype.hasOwnProperty.call(storeConfig, 'modules')) {
         Object.keys(storeConfig.modules).forEach((module) => wrapFields(storeConfig.modules[module]))
     }
 

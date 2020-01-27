@@ -301,7 +301,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : new InterviewDeclaredInvalid(originDate) as IEvent);
             }
         }
-
+        //Obsolete. Is used only in tests. Remove
         public void Synchronize(SynchronizeInterviewCommand command)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(command.SynchronizedInterview.QuestionnaireId, command.SynchronizedInterview.QuestionnaireVersion);

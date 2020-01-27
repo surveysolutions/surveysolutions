@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -59,5 +60,10 @@ namespace WB.UI.Headquarters.Controllers
         }
         
         public async Task Exceptions() => await ExceptionalMiddleware.HandleRequestAsync(HttpContext);
+
+        public IActionResult AppUpdates()
+        {
+            return View("Index");
+        }
     }
 }

@@ -62,8 +62,8 @@ export default {
             userName: null,
             password: null,
             errorMessage: null,
-            invalidCredentials: false
-        };
+            invalidCredentials: false,
+        }
     },
     methods: {
         async trySignIn() {
@@ -74,29 +74,29 @@ export default {
                     url: this.$config.model.loginAction, 
                     data: {
                         userName: this.userName,
-                        password: this.password
+                        password: this.password,
                     },
                     headers: {
-                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie()
-                    }
+                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                    },
                 })
-                .then(
-                    (loginResponse) => {
-                    if (loginResponse.status == 200) {
-                        window.location = this.$config.model.listUrl
-                    }
-                }, (error) => {
-                    if (error.response.status == 401) {
-                        this.invalidCredentials = true
-                    }
-                    else {
-                        this.invalidCredentials = false
-                        this.errorMessage = error.response.data.message
-                    }
-                })
+                    .then(
+                        (loginResponse) => {
+                            if (loginResponse.status == 200) {
+                                window.location = this.$config.model.listUrl
+                            }
+                        }, (error) => {
+                            if (error.response.status == 401) {
+                                this.invalidCredentials = true
+                            }
+                            else {
+                                this.invalidCredentials = false
+                                this.errorMessage = error.response.data.message
+                            }
+                        })
             }
-        }
-    }
+        },
+    },
 }
 </script>
 

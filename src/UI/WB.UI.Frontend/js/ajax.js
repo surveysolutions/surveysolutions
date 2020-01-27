@@ -83,11 +83,11 @@
                 buttons: [{
                     text: 'Ok',
                     addClass: 'ui-pnotify-action-button btn btn-default',
-                    click: function(notice) {
+                    click: function (notice) {
                         notice.remove();
                     }
                 },
-                null]
+                    null]
             },
             buttons: {
                 closer: false,
@@ -103,22 +103,21 @@
     };
 
     var openPnotifyIfExists = function (pnotify) {
-        if (!_.isNull(loadingIndicator)) {
+        if (!isNull(loadingIndicator)) {
             pnotify.open();
         }
     };
 
     self.showLoadingIndicator = function () {
-        if (_.isNull(loadingIndicator))
-        {
+        if (isNull(loadingIndicator)) {
             loadingIndicator = new PNotify(loadingIndicatorOptions);
-            _.delay(openPnotifyIfExists, 500, loadingIndicator);
+            delay(openPnotifyIfExists, 500, loadingIndicator);
         }
     };
-    
+
 
     self.hideLoadingIndicator = function () {
-        if (!_.isNull(loadingIndicator)) {
+        if (!isNull(loadingIndicator)) {
             loadingIndicator.remove();
             loadingIndicator = null;
         }
@@ -159,7 +158,7 @@ var Ajax = function (notifier) {
             headers: requestHeaders,
             dataType: 'json'
         }).done(function (data) {
-            if (!_.isUndefined(onSuccess)) {
+            if (!isUndefined(onSuccess)) {
                 onSuccess(data);
             }
         }).fail(function (jqXhr, textStatus, errorThrown) {
@@ -174,14 +173,14 @@ var Ajax = function (notifier) {
                 notifier.showError(input.settings.messages.unhandledExceptionMessage);
             }
 
-            if (!_.isUndefined(onError)) {
+            if (!isUndefined(onError)) {
                 onError(jqXhr, textStatus, errorThrown);
             }
         }).always(function () {
             self.isAjaxComplete(true);
             notifier.hideLoadingIndicator();
 
-            if (!_.isUndefined(onDone)) {
+            if (!isUndefined(onDone)) {
                 onDone();
             }
         });

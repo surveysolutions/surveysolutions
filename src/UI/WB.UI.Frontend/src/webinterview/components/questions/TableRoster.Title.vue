@@ -7,23 +7,23 @@
 </template>
 
 <script lang="js">
-    export default {
-        name: 'TableRoster_Title',
+export default {
+    name: 'TableRoster_Title',
 
-        data() {
-            return {
-                title: null
-            }
-        }, 
-        created() {
-            this.title = this.params.title
-        },
-        watch: {
-            ["params.context.componentParent.$me.title"]() {
-                this.title = this.params.context.componentParent.$me.title
-            }
+    data() {
+        return {
+            title: null,
         }
-    }
+    }, 
+    created() {
+        this.title = this.params.title
+    },
+    watch: {
+        ['params.context.componentParent.$me.title']() {
+            this.title = this.params.context.componentParent.$me.title
+        },
+    },
+}
 </script>
 
 

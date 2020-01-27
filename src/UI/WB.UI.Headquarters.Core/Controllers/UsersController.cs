@@ -79,12 +79,14 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [AntiForgeryFilter]
         public async Task<ActionResult> Manage(Guid? id)
         {
             var user = await this.userRepository.FindByIdAsync(id ?? this.authorizedUser.Id);
             if (user == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(user)) return this.Forbid();
 
             return View(new
             {
@@ -212,13 +214,15 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
 
             var currentUser = await this.userRepository.FindByIdAsync(model.UserId);
             if (currentUser == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
 
             if (currentUser.IsArchived)
                 return BadRequest(FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
@@ -246,13 +250,15 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public async Task<ActionResult> UpdateUser([FromBody] EditUserModel editModel)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
 
             var currentUser = await this.userRepository.FindByIdAsync(editModel.UserId);
             if (currentUser == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
 
             currentUser.Email = editModel.Email;
             currentUser.FullName = editModel.PersonName;
@@ -340,6 +346,20 @@ namespace WB.UI.Headquarters.Controllers
                     new ComboboxViewItem() { Key = "true",  Value = Pages.Interviewers_ArchivedUsers },
                 }
             });
+        }
+
+        private bool HasPermissionsToManageUser(HqUser user)
+        {
+            if (this.authorizedUser.IsAdministrator)
+                return true;
+
+            if (this.authorizedUser.IsHeadquarter && (user.Id == this.authorizedUser.Id  || user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer)))
+                return true;
+
+            if (this.authorizedUser.IsSupervisor && user.IsInRole(UserRoles.Interviewer) && user.Profile?.SupervisorId == this.authorizedUser.Id)
+                return true;
+
+            return false;
         }
     }
 }
