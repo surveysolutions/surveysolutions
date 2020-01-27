@@ -96,7 +96,7 @@ export default {
                         orderable: true,
                         title: this.$t('DevicesInterviewers.NeverUploaded'),
                         render: function(data, type, row) {
-                             return self.renderCell(data, row, 'NeverUploaded')
+                            return self.renderCell(data, row, 'NeverUploaded')
                         }
                     },
                     {

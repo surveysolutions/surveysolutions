@@ -55,128 +55,128 @@
 </template>
 
 <script lang="js">
-    import Vue from 'vue'
-    import { filter, difference , join} from 'lodash'
-    import { entityDetails, tableCellEditor } from '../mixins'
-    import modal from '@/shared/modal'
+import Vue from 'vue'
+import { filter, difference , join} from 'lodash'
+import { entityDetails, tableCellEditor } from '../mixins'
+import modal from '@/shared/modal'
 
-    export default {
-        name: 'MatrixRoster_CategoricalMulti',
-        mixins: [entityDetails, tableCellEditor],
+export default {
+    name: 'MatrixRoster_CategoricalMulti',
+    mixins: [entityDetails, tableCellEditor],
         
-        data() {
-            return {
-                showAllOptions: false,
-                question: null,
-                answer: [],
-                lastUpdate: null,
-                questionId: null
-            }
-        }, 
-        watch: {
-            ['$watchedQuestion'](watchedQuestion) {
-                if (watchedQuestion.updatedAt != this.lastUpdate) {
-                    this.question = watchedQuestion
-                    this.cacheQuestionData()
-                }
-            }
-        },
-        computed: {
-            $watchedQuestion() {
-                return this.$store.state.webinterview.entityDetails[this.questionId] 
-            },
-            
-            disabled() {
-                if (this.$me.isDisabled || this.$me.isLocked || !this.$me.acceptAnswer)
-                    return true
-                return false
-            },
-            noOptions() {
-                return this.$me.options == null || this.$me.options.length == 0
-            },
-            answeredOrAllOptions() {
-                return this.$me.options
-            },
-            allAnswersGiven() {
-                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-            },
-            questionStyle() {
-                return [{
-                    'disabled-element' : this.question.isDisabled,
-                    'has-error' : !this.question.isDisabled && !this.question.validity.isValid,
-                    'has-warnings' : !this.question.isDisabled && this.question.validity.warnings.length > 0,
-                    'not-applicable' : this.question.isLocked,
-                    'syncing': this.isFetchInProgress
-                }, 'cell-unit', 'options-group', ' h-100',' d-flex']
-            } 
-        },
-        methods: {
-            cacheQuestionData() {
-                this.lastUpdate = this.question.updatedAt
-            },
-            change() {
-                this.sendAnswer(() => {
-                    this.answerMulti(this.answer)
-                })
-            },
-            //questionId()  {
-            //    return this.params.value.identity
-            //},
-            answerMulti(value) {
-                if (!this.$me.isRosterSize) {
-                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
-                    return
-                }
-
-                const currentAnswerCount = value.length
-                const previousAnswersCount = this.$me.answer.length
-                const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount
-
-                if (!isNeedRemoveRosters) {
-                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
-                    return
-                }
-
-                const diff = difference(this.$me.answer, value)
-                const rosterTitle = join(diff.map(v => {
-                    return find(this.answeredOrAllOptions, { value: v }).title
-                }), ', ')
-
-                const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
-                    rosterTitle
-                } )
-
-                modal.confirm(confirmMessage, result => {
-                    if (result) {
-                        this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
-                        return
-                    } else {
-                        this.fetch()
-                        return
-                    }
-                })
-            },
-            toggleOptions(){
-                this.showAllOptions = !this.showAllOptions
-            },
-            isProtected(answerValue) {
-                if (!this.$me.protectedAnswer) return false
-                
-                var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
-                return answerIndex > -1
-            },
-            getAnswerOrder(answerValue) {
-                var answerIndex = this.$me.answer.indexOf(answerValue)
-                return answerIndex > -1 ? answerIndex + 1 : ''
-            },
-        },
-        created() {
-            this.questionId = this.editorParams.value.identity
-            this.question = this.$watchedQuestion
-            this.cacheQuestionData()
-        },
-        mounted() {
-            this.answer = this.$me.answer
+    data() {
+        return {
+            showAllOptions: false,
+            question: null,
+            answer: [],
+            lastUpdate: null,
+            questionId: null
         }
+    }, 
+    watch: {
+        ['$watchedQuestion'](watchedQuestion) {
+            if (watchedQuestion.updatedAt != this.lastUpdate) {
+                this.question = watchedQuestion
+                this.cacheQuestionData()
+            }
+        }
+    },
+    computed: {
+        $watchedQuestion() {
+            return this.$store.state.webinterview.entityDetails[this.questionId] 
+        },
+            
+        disabled() {
+            if (this.$me.isDisabled || this.$me.isLocked || !this.$me.acceptAnswer)
+                return true
+            return false
+        },
+        noOptions() {
+            return this.$me.options == null || this.$me.options.length == 0
+        },
+        answeredOrAllOptions() {
+            return this.$me.options
+        },
+        allAnswersGiven() {
+            return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
+        },
+        questionStyle() {
+            return [{
+                'disabled-element' : this.question.isDisabled,
+                'has-error' : !this.question.isDisabled && !this.question.validity.isValid,
+                'has-warnings' : !this.question.isDisabled && this.question.validity.warnings.length > 0,
+                'not-applicable' : this.question.isLocked,
+                'syncing': this.isFetchInProgress
+            }, 'cell-unit', 'options-group', ' h-100',' d-flex']
+        } 
+    },
+    methods: {
+        cacheQuestionData() {
+            this.lastUpdate = this.question.updatedAt
+        },
+        change() {
+            this.sendAnswer(() => {
+                this.answerMulti(this.answer)
+            })
+        },
+        //questionId()  {
+        //    return this.params.value.identity
+        //},
+        answerMulti(value) {
+            if (!this.$me.isRosterSize) {
+                this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
+                return
+            }
+
+            const currentAnswerCount = value.length
+            const previousAnswersCount = this.$me.answer.length
+            const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount
+
+            if (!isNeedRemoveRosters) {
+                this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
+                return
+            }
+
+            const diff = difference(this.$me.answer, value)
+            const rosterTitle = join(diff.map(v => {
+                return find(this.answeredOrAllOptions, { value: v }).title
+            }), ', ')
+
+            const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
+                rosterTitle
+            } )
+
+            modal.confirm(confirmMessage, result => {
+                if (result) {
+                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
+                    return
+                } else {
+                    this.fetch()
+                    return
+                }
+            })
+        },
+        toggleOptions(){
+            this.showAllOptions = !this.showAllOptions
+        },
+        isProtected(answerValue) {
+            if (!this.$me.protectedAnswer) return false
+                
+            var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
+            return answerIndex > -1
+        },
+        getAnswerOrder(answerValue) {
+            var answerIndex = this.$me.answer.indexOf(answerValue)
+            return answerIndex > -1 ? answerIndex + 1 : ''
+        },
+    },
+    created() {
+        this.questionId = this.editorParams.value.identity
+        this.question = this.$watchedQuestion
+        this.cacheQuestionData()
+    },
+    mounted() {
+        this.answer = this.$me.answer
     }
+}
 </script>

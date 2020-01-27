@@ -71,7 +71,7 @@ export default {
     },
 
     beforeMount() {
-      Vue.use(http, { store: this.$store })
+        Vue.use(http, { store: this.$store })
     },
 
     mounted() {

@@ -79,7 +79,7 @@ export default class ReportComponent {
                     max: parseInt(route.query.max),
                     questionId: route.query.question,
                     detailedView: String(route.query.detailedView).toLowerCase() === 'true'
-                 })
+                })
             }
         ]
     }

@@ -346,7 +346,7 @@ export default {
                 validity: {
                     isValid: true
                 }
-                },
+            },
         }
     },
     computed: {
@@ -389,7 +389,7 @@ export default {
         },
 
         interviewId() {
-          return this.config.id
+            return this.config.id
         }
     },
 
@@ -445,12 +445,12 @@ export default {
                 this.passwordQuestion.validity.isValid = true
                 this.emailQuestion.validity.isValid = true
             } else if (this.webMode.answer == true) {
-              this.isAudioRecordingEnabled.answer = null
+                this.isAudioRecordingEnabled.answer = null
             }
         },
 
         connected() {
-           this.$store.dispatch('loadTakeNew', { interviewId: this.interviewId })
+            this.$store.dispatch('loadTakeNew', { interviewId: this.interviewId })
         }
     },
 
@@ -475,7 +475,7 @@ export default {
     },
 
     beforeMount() {
-      Vue.use(http, { store: this.$store })
+        Vue.use(http, { store: this.$store })
     },
 
     beforeDestroy() {

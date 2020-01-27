@@ -29,9 +29,9 @@ require('./componentsRegistry')
 const createRouter = require('./router').default
 
 const store = new Vuex.Store({
-  modules: {
-    webinterview: require('./store').default
-  }
+    modules: {
+        webinterview: require('./store').default
+    }
 })
 
 const router = createRouter(store)
@@ -44,16 +44,16 @@ const App = require('./App').default
 box.init(i18n, browserLanguage)
 
 window._api = {
-  store,
-  router
+    store,
+    router
 }
 
 export default new Vue({
-  el: '#app',
-  render: h => h(App),
-  components: {
-    App
-  },
-  store,
-  router
+    el: '#app',
+    render: h => h(App),
+    components: {
+        App
+    },
+    store,
+    router
 })

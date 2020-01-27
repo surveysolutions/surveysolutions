@@ -16,89 +16,89 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from '../mixins'
+import { entityDetails } from '../mixins'
 
-    const imageFileSizeLimit = 30 * 1024 * 1024 // mb
+const imageFileSizeLimit = 30 * 1024 * 1024 // mb
 
-    export default {
-        name: 'picture-question',
-        mixins: [entityDetails],
-        data() {
-            return {
-                uploadingImage: null
-            }
+export default {
+    name: 'picture-question',
+    mixins: [entityDetails],
+    data() {
+        return {
+            uploadingImage: null
+        }
+    },
+    computed: {
+        cache() {
+            return this.$me.answerTimeUtc == null ? null : new Date(this.$me.answerTimeUtc).getTime()
         },
-        computed: {
-            cache() {
-                return this.$me.answerTimeUtc == null ? null : new Date(this.$me.answerTimeUtc).getTime()
-            },
-            answerVisible() {
-                if(this.$me.answer){
-                    return true
-                }
-
-                if(this.$me.validity.isValid) return this.uploadingImage != null
-
-                return false
+        answerVisible() {
+            if(this.$me.answer){
+                return true
             }
+
+            if(this.$me.validity.isValid) return this.uploadingImage != null
+
+            return false
+        }
+    },
+
+    watch:{
+        '$me.answer'() {
+            this.uploadingImage = null
+        }
+    },
+
+    methods: {
+        answerRemoved() {
+            this.$refs.uploader.type = ''
+            this.$refs.uploader.type = 'file'
         },
+        onFileChange(e) {
+            this.sendAnswer(() => {
+                const files = e.target.files || e.dataTransfer.files
 
-        watch:{
-            '$me.answer'() {
-                this.uploadingImage = null
-            }
-        },
-
-        methods: {
-            answerRemoved() {
-                this.$refs.uploader.type = ''
-                this.$refs.uploader.type = 'file'
-            },
-            onFileChange(e) {
-                this.sendAnswer(() => {
-                    const files = e.target.files || e.dataTransfer.files
-
-                    if (!files.length) {
-                        return
-                    }
-
-                    this.createImage(files[0])
-                })
-            },
-            createImage(file) {
-                if (file.size > imageFileSizeLimit) {
-                    // Image is too big to upload. Please, choose an image less than 30 Mb
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoTooBig'))
+                if (!files.length) {
                     return
                 }
 
-                const image = new Image()
-                const self = this
-                image.onload = () => {
-                    if (image.width) {
-                        self.cleanValidity()
-
-                        self.$store.dispatch('answerMultimediaQuestion', {
-                            identity: self.id,
-                            file: self.$refs.uploader.files[0]
-                        })
-
-                        const reader = new FileReader()
-                        reader.onload = (e) => {
-                            const imageUri = (e.target ).result
-                            self.uploadingImage = imageUri
-                        }
-
-                        reader.readAsDataURL(file)
-                    } else {
-                        // Only image files are allowed to upload
-                        self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
-                    }
-                }
-
-                image.src = URL.createObjectURL(file)
+                this.createImage(files[0])
+            })
+        },
+        createImage(file) {
+            if (file.size > imageFileSizeLimit) {
+                // Image is too big to upload. Please, choose an image less than 30 Mb
+                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoTooBig'))
+                return
             }
+
+            const image = new Image()
+            const self = this
+            image.onload = () => {
+                if (image.width) {
+                    self.cleanValidity()
+
+                    self.$store.dispatch('answerMultimediaQuestion', {
+                        identity: self.id,
+                        file: self.$refs.uploader.files[0]
+                    })
+
+                    const reader = new FileReader()
+                    reader.onload = (e) => {
+                        const imageUri = (e.target ).result
+                        self.uploadingImage = imageUri
+                    }
+
+                    reader.readAsDataURL(file)
+                } else {
+                    // Only image files are allowed to upload
+                    self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
+                }
+            }
+
+            image.src = URL.createObjectURL(file)
         }
     }
+}
 
 </script>

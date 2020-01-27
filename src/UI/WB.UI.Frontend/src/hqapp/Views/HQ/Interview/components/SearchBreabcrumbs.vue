@@ -10,11 +10,11 @@
 
 <script>
 export default {
-  props: {
-    sections: {
-      type: Array,
-      required: true
+    props: {
+        sections: {
+            type: Array,
+            required: true
+        }
     }
-  }
 }
 </script>

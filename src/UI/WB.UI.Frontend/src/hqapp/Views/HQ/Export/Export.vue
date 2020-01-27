@@ -487,18 +487,18 @@ export default {
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
-                case 'surveyData':
-                    format = dataFormatNum[dataFormat]
-                    break
-                case 'binaryData':
-                    format = dataFormatNum.Binary
-                    break
-                case 'ddiData':
-                    format = dataFormatNum.Ddi
-                    break
-                case 'paraData':
-                    format = dataFormatNum.Paradata
-                    break
+            case 'surveyData':
+                format = dataFormatNum[dataFormat]
+                break
+            case 'binaryData':
+                format = dataFormatNum.Binary
+                break
+            case 'ddiData':
+                format = dataFormatNum.Ddi
+                break
+            case 'paraData':
+                format = dataFormatNum.Paradata
+                break
             }
 
             const status = (statusOption || {key: null}).key

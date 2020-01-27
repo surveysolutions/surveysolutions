@@ -9,28 +9,28 @@
     </div>
 </template>
 <script lang="js">
-    export default {
-        name: 'wb-humburger',
-        props: {
-            showFoldbackButtonAsHamburger: {
-                type: Boolean,
-                default: true
-            },
-            visible: {
-                type: Boolean, default: true
-            }
+export default {
+    name: 'wb-humburger',
+    props: {
+        showFoldbackButtonAsHamburger: {
+            type: Boolean,
+            default: true
         },
-        computed: {
-            cssClass() {
-                if (this.showFoldbackButtonAsHamburger)
-                    return 'humburger-foldback-button'
-                return 'foldback-button'
-            }
-        },
-        methods: {
-            toggleSidebarPanel() {
-                this.$store.dispatch('toggleSidebarPanel')
-            }
+        visible: {
+            type: Boolean, default: true
+        }
+    },
+    computed: {
+        cssClass() {
+            if (this.showFoldbackButtonAsHamburger)
+                return 'humburger-foldback-button'
+            return 'foldback-button'
+        }
+    },
+    methods: {
+        toggleSidebarPanel() {
+            this.$store.dispatch('toggleSidebarPanel')
         }
     }
+}
 </script>

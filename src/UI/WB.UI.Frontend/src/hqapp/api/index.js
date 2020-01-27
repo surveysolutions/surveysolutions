@@ -74,9 +74,9 @@ class MapsReport {
 
     async InteriewSummaryUrl(interviewId) {
         var response = await this.http.post('api/InterviewApi/InterviewSummaryForMapPoint', 
-        {
-            interviewId
-        })
+            {
+                interviewId
+            })
 
         return response
     }
@@ -208,8 +208,8 @@ class WebInterviewSettingsApi {
     updateAdditionalSettings(questionnaireId, 
         isEnabledSpamProtection, 
         reminderAfterDaysIfNoResponse,
-         reminderAfterDaysIfPartialResponse,
-         singleResponse) {
+        reminderAfterDaysIfPartialResponse,
+        singleResponse) {
         var url = `${this.base}/${questionnaireId}/additionalSettings`
         return this.http.post(url, { 
             spamProtection: isEnabledSpamProtection, 
@@ -259,7 +259,7 @@ class ControlPanel {
     }
 
     getConfiguration() {
-         return this.http.get(`${this.base}/Configuration`)
+        return this.http.get(`${this.base}/Configuration`)
     }
 
     getApkInfos() {
@@ -288,7 +288,7 @@ class AdminSettings {
     setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled){
         return this.http.post(`${this.base}/InterviewerSettings`, 
             { interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled, 
-              notificationsEnabled: isDeviceNotificationsEnabled
+                notificationsEnabled: isDeviceNotificationsEnabled
             })
     }
     getInterviewerSettings() {

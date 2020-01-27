@@ -25,11 +25,11 @@
 <script>
 import Vue from 'vue'
 export default {
-   mounted() {
-    Vue.nextTick(() => {
-      window.ajustNoticeHeight()
-      window.ajustDetailsPanelHeight()
-    })
-  }
+    mounted() {
+        Vue.nextTick(() => {
+            window.ajustNoticeHeight()
+            window.ajustDetailsPanelHeight()
+        })
+    }
 }
 </script>

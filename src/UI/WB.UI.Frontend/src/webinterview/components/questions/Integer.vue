@@ -75,167 +75,167 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from '../mixins'
-    import * as $ from 'jquery'
-    import modal from '@/shared/modal'
-    import { getGroupSeparator, getDecimalSeparator } from './question_helpers'
+import { entityDetails } from '../mixins'
+import * as $ from 'jquery'
+import modal from '@/shared/modal'
+import { getGroupSeparator, getDecimalSeparator } from './question_helpers'
 
-    export default {
-        data() {
-            return {
-                autoNumericElement: null}
-            },
-        name: 'Integer',
-        mixins: [entityDetails],
-        props: ['noComments'],
-        computed: { 
-            isSpecialValueSelected(){
-                if (this.$me.answer == null || this.$me.answer == undefined)
-                    return undefined
-                return this.isSpecialValue(this.$me.answer)
-            },
-            noAnswerWatermark() {
-                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.NumberEnter')
-            },
-            groupSeparator() {
-                return getGroupSeparator(this.$me)
-            },
-            decimalSeparator() {
-                return getDecimalSeparator(this.$me)
-            },
-            specialValue: {
-                get() {
-                    return this.$me.answer
-                },
-                set(value) {
-                    this.saveAnswer(value, true)
-                }
-            }
+export default {
+    data() {
+        return {
+            autoNumericElement: null}
+    },
+    name: 'Integer',
+    mixins: [entityDetails],
+    props: ['noComments'],
+    computed: { 
+        isSpecialValueSelected(){
+            if (this.$me.answer == null || this.$me.answer == undefined)
+                return undefined
+            return this.isSpecialValue(this.$me.answer)
         },
-        methods: {
-            answerIntegerQuestion(evnt) {
-                const answerString = this.autoNumericElement.getNumericString()
-                const answer = answerString != undefined && answerString != ''
-                    ? parseInt(answerString)
-                    : null
-
-                const isSpecialValue = this.isSpecialValue(answer)
-                this.saveAnswer(answer, isSpecialValue)
+        noAnswerWatermark() {
+            return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.NumberEnter')
+        },
+        groupSeparator() {
+            return getGroupSeparator(this.$me)
+        },
+        decimalSeparator() {
+            return getDecimalSeparator(this.$me)
+        },
+        specialValue: {
+            get() {
+                return this.$me.answer
             },
+            set(value) {
+                this.saveAnswer(value, true)
+            }
+        }
+    },
+    methods: {
+        answerIntegerQuestion(evnt) {
+            const answerString = this.autoNumericElement.getNumericString()
+            const answer = answerString != undefined && answerString != ''
+                ? parseInt(answerString)
+                : null
 
-            saveAnswer(answer, isSpecialValue){
-                this.sendAnswer(() => {
-                    if(this.handleEmptyAnswer(answer)) {
-                        return
-                    }
+            const isSpecialValue = this.isSpecialValue(answer)
+            this.saveAnswer(answer, isSpecialValue)
+        },
 
-                    if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse'))
-                        return
-                    }
-
-                    if (this.$me.isProtected && this.$me.protectedAnswer > answer) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotBeLessThanProtected'))
-                        return
-                    }
-
-                    if (!this.$me.isRosterSize) {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                        return
-                    }
-
-                    if (!isSpecialValue && answer < 0) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterError', { answer }))
-                        return
-                    }
-
-                    if (answer > this.$me.answerMaxValue) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterUpperBound', { answer, answerMaxValue: this.$me.answerMaxValue }))
-                        return
-                    }
-
-                    const previousAnswer = this.$me.answer
-                    const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer
-
-                    if (!isNeedRemoveRosters) {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                        return
-                    }
-
-                    const amountOfRostersToRemove = previousAnswer -  Math.max(answer, 0)
-                    const confirmMessage = this.$t('WebInterviewUI.NumberRosterRemoveConfirm', { amountOfRostersToRemove })
-
-                    if(amountOfRostersToRemove > 0){
-                        modal.confirm(confirmMessage, result => {
-                            if (result) {
-                                this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                                return
-                            } else {
-                                this.fetch()
-                                if(this.autoNumericElement)
-                                    this.autoNumericElement.set(this.$me.answer)
-                                
-                                return
-                            }
-                        })
-                    }
-                    else
-                    {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                        return
-                    }
-                })
-            },
-
-            removeAnswer() {
-                if (!this.$me.isAnswered) {
+        saveAnswer(answer, isSpecialValue){
+            this.sendAnswer(() => {
+                if(this.handleEmptyAnswer(answer)) {
                     return
                 }
-                
-                if(this.autoNumericElement)
-                    this.autoNumericElement.clear()
-                
+
+                if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse'))
+                    return
+                }
+
+                if (this.$me.isProtected && this.$me.protectedAnswer > answer) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotBeLessThanProtected'))
+                    return
+                }
+
                 if (!this.$me.isRosterSize) {
-                    this.$store.dispatch('removeAnswer', this.id)
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                     return
                 }
 
-                const amountOfRostersToRemove = this.$me.answer
-                if(amountOfRostersToRemove > 0){
-                    const confirmMessage = this.$t('WebInterviewUI.NumberRosterRemoveConfirm', { amountOfRostersToRemove })
+                if (!isSpecialValue && answer < 0) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterError', { answer }))
+                    return
+                }
 
+                if (answer > this.$me.answerMaxValue) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterUpperBound', { answer, answerMaxValue: this.$me.answerMaxValue }))
+                    return
+                }
+
+                const previousAnswer = this.$me.answer
+                const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer
+
+                if (!isNeedRemoveRosters) {
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                    return
+                }
+
+                const amountOfRostersToRemove = previousAnswer -  Math.max(answer, 0)
+                const confirmMessage = this.$t('WebInterviewUI.NumberRosterRemoveConfirm', { amountOfRostersToRemove })
+
+                if(amountOfRostersToRemove > 0){
                     modal.confirm(confirmMessage, result => {
                         if (result) {
-                            this.$store.dispatch('removeAnswer', this.id)
+                            this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                            return
                         } else {
-                            this.fetch() 
-                            
+                            this.fetch()
                             if(this.autoNumericElement)
                                 this.autoNumericElement.set(this.$me.answer)
+                                
+                            return
                         }
                     })
                 }
                 else
                 {
-                    this.$store.dispatch('removeAnswer', this.id)
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                    return
                 }
-            },
-            isSpecialValue(value){
-                const options = this.$me.options || []
-                if (options.length == 0)
-                    return false
-                for(let i=0;i<options.length;i++)
-                {
-                    if (options[i].value === value)
-                        return true
-                }
-                return false
+            })
+        },
+
+        removeAnswer() {
+            if (!this.$me.isAnswered) {
+                return
+            }
+                
+            if(this.autoNumericElement)
+                this.autoNumericElement.clear()
+                
+            if (!this.$me.isRosterSize) {
+                this.$store.dispatch('removeAnswer', this.id)
+                return
+            }
+
+            const amountOfRostersToRemove = this.$me.answer
+            if(amountOfRostersToRemove > 0){
+                const confirmMessage = this.$t('WebInterviewUI.NumberRosterRemoveConfirm', { amountOfRostersToRemove })
+
+                modal.confirm(confirmMessage, result => {
+                    if (result) {
+                        this.$store.dispatch('removeAnswer', this.id)
+                    } else {
+                        this.fetch() 
+                            
+                        if(this.autoNumericElement)
+                            this.autoNumericElement.set(this.$me.answer)
+                    }
+                })
+            }
+            else
+            {
+                this.$store.dispatch('removeAnswer', this.id)
             }
         },
-        beforeDestroy () {
-            if (this.autoNumericElement) {
-                this.autoNumericElement.remove()
+        isSpecialValue(value){
+            const options = this.$me.options || []
+            if (options.length == 0)
+                return false
+            for(let i=0;i<options.length;i++)
+            {
+                if (options[i].value === value)
+                    return true
             }
+            return false
+        }
+    },
+    beforeDestroy () {
+        if (this.autoNumericElement) {
+            this.autoNumericElement.remove()
         }
     }
+}
 </script>

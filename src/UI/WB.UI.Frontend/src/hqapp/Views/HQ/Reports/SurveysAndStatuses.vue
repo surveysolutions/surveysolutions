@@ -109,9 +109,9 @@ export default {
                     title: this.$t('Reports.SupervisorAssigned'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                'SupervisorAssigned')
+                            data,
+                            row,
+                            'SupervisorAssigned')
                     }
                 },
                 {
@@ -121,9 +121,9 @@ export default {
                     title: this.$t('Reports.InterviewerAssigned'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                'InterviewerAssigned')
+                            data,
+                            row,
+                            'InterviewerAssigned')
                     }
                 },
                 {
@@ -133,9 +133,9 @@ export default {
                     title: this.$t('Reports.Completed'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                'Completed')
+                            data,
+                            row,
+                            'Completed')
                     }
                 },
                 {
@@ -145,9 +145,9 @@ export default {
                     title: this.$t('Reports.RejectedBySupervisor'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                'RejectedBySupervisor')
+                            data,
+                            row,
+                            'RejectedBySupervisor')
                     }
                 },
                 {
@@ -157,9 +157,9 @@ export default {
                     title: this.$t('Reports.ApprovedBySupervisor'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                'ApprovedBySupervisor')
+                            data,
+                            row,
+                            'ApprovedBySupervisor')
                     }
                 },
                 {
@@ -169,9 +169,9 @@ export default {
                     title: this.$t('Reports.RejectedByHQ'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                'RejectedByHeadquarters')
+                            data,
+                            row,
+                            'RejectedByHeadquarters')
                     }
                 },
                 {
@@ -181,9 +181,9 @@ export default {
                     title: this.$t('Reports.ApprovedByHQ'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                'ApprovedByHeadquarters')
+                            data,
+                            row,
+                            'ApprovedByHeadquarters')
                     }
                 },
                 {
@@ -193,20 +193,20 @@ export default {
                     title: this.$t('Common.Total'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                '')
+                            data,
+                            row,
+                            '')
                     }
                 }
             ]
 
             if(self.questionnaireId) {
                 columns.splice(1, 0, 
-                {
-                    data: 'questionnaireVersion',
-                    className: 'type-numeric version centered-italic',
-                    title: this.$t('Reports.TemplateVersion')
-                })
+                    {
+                        data: 'questionnaireVersion',
+                        className: 'type-numeric version centered-italic',
+                        title: this.$t('Reports.TemplateVersion')
+                    })
             }
 
             return {

@@ -64,109 +64,109 @@
 </template>
 
 <script lang="js">
-    import modal from '@/shared/modal'
+import modal from '@/shared/modal'
 
-    export default {
-        name: 'complete-view',
-        beforeMount() {
+export default {
+    name: 'complete-view',
+    beforeMount() {
+        this.fetchCompleteInfo()
+    },
+    watch: {
+        $route(to, from) {
             this.fetchCompleteInfo()
         },
-        watch: {
-            $route(to, from) {
-                this.fetchCompleteInfo()
-            },
-            shouldCloseWindow(to){
-                if(to === true) {
-                    this.completeInterview()
-                }
-            }
-        },
-        computed: {
-            completeInfo() {
-                return this.$store.state.webinterview.completeInfo
-            },
-            shouldCloseWindow() {
-                return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
-            },
-            competeButtonTitle() {
-                return this.$config.customTexts.completeButton
-            },
-            noteToSupervisor() {
-                return this.$config.customTexts.noteToSupervisor
-            },
-            hasCompleteInfo() {
-                return this.completeInfo != undefined
-            },
-            hasAnsweredQuestions() {
-                return this.completeInfo.answeredCount > 0
-            },
-            isAllAnswered() {
-                return this.completeInfo.unansweredCount == 0 && this.completeInfo.errorsCount == 0
-            },
-            answeredQuestionsCountString() {
-                return this.hasAnsweredQuestions ? this.completeInfo.answeredCount : this.$t('WebInterviewUI.No')
-            },
-            hasUnansweredQuestions() {
-                return this.completeInfo.unansweredCount > 0
-            },
-            unansweredQuestionsCountString() {
-                return this.hasUnansweredQuestions ? this.completeInfo.unansweredCount : this.$t('WebInterviewUI.No')
-            },
-            hasInvalidQuestions() {
-                return this.completeInfo.errorsCount > 0
-            },
-            invalidQuestionsCountString() {
-                return this.hasInvalidQuestions ? this.completeInfo.errorsCount : this.$t('WebInterviewUI.No')
-            },
-            doesShowErrorsCommentWithCount() {
-                return this.completeInfo.entitiesWithError.length < this.completeInfo.errorsCount
-            }
-        },
-        data () {
-            return {
-                comment: ''
-            }
-        },
-        methods: {
-            fetchCompleteInfo() {
-                this.$store.dispatch('fetchCompleteInfo')
-            },
-
-            completeInterview() {
-                if(this.shouldCloseWindow) {
-                     modal.dialog({
-                        title: '<p style="text-align: center">' + this.$t('WebInterviewUI.WebTesterSessionOver') + '</p>',
-                        message: `<p style="text-align: center">${this.$t('WebInterviewUI.WebTesterSessionOverMessage')}</p>`,
-                        callback: () => {},
-                        onEscape: false,
-                        closeButton: false,
-                        buttons: {}
-                    })
-
-                    return
-                }
-
-                this.$store.dispatch('completeInterview', this.comment)
-            },
-
-            navigateTo(entityWithError) {
-                if(entityWithError.isPrefilled){
-                    this.$router.push({ name: 'prefilled' })
-                    return
-                }
-
-                const navigateToEntity = {
-                    name: 'section',
-                    params: {
-                        sectionId: entityWithError.parentId,
-                        interviewId: this.$route.params.interviewId
-                    },
-                    hash: '#' + entityWithError.id
-                }
-
-                this.$router.push(navigateToEntity)
+        shouldCloseWindow(to){
+            if(to === true) {
+                this.completeInterview()
             }
         }
+    },
+    computed: {
+        completeInfo() {
+            return this.$store.state.webinterview.completeInfo
+        },
+        shouldCloseWindow() {
+            return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
+        },
+        competeButtonTitle() {
+            return this.$config.customTexts.completeButton
+        },
+        noteToSupervisor() {
+            return this.$config.customTexts.noteToSupervisor
+        },
+        hasCompleteInfo() {
+            return this.completeInfo != undefined
+        },
+        hasAnsweredQuestions() {
+            return this.completeInfo.answeredCount > 0
+        },
+        isAllAnswered() {
+            return this.completeInfo.unansweredCount == 0 && this.completeInfo.errorsCount == 0
+        },
+        answeredQuestionsCountString() {
+            return this.hasAnsweredQuestions ? this.completeInfo.answeredCount : this.$t('WebInterviewUI.No')
+        },
+        hasUnansweredQuestions() {
+            return this.completeInfo.unansweredCount > 0
+        },
+        unansweredQuestionsCountString() {
+            return this.hasUnansweredQuestions ? this.completeInfo.unansweredCount : this.$t('WebInterviewUI.No')
+        },
+        hasInvalidQuestions() {
+            return this.completeInfo.errorsCount > 0
+        },
+        invalidQuestionsCountString() {
+            return this.hasInvalidQuestions ? this.completeInfo.errorsCount : this.$t('WebInterviewUI.No')
+        },
+        doesShowErrorsCommentWithCount() {
+            return this.completeInfo.entitiesWithError.length < this.completeInfo.errorsCount
+        }
+    },
+    data () {
+        return {
+            comment: ''
+        }
+    },
+    methods: {
+        fetchCompleteInfo() {
+            this.$store.dispatch('fetchCompleteInfo')
+        },
+
+        completeInterview() {
+            if(this.shouldCloseWindow) {
+                modal.dialog({
+                    title: '<p style="text-align: center">' + this.$t('WebInterviewUI.WebTesterSessionOver') + '</p>',
+                    message: `<p style="text-align: center">${this.$t('WebInterviewUI.WebTesterSessionOverMessage')}</p>`,
+                    callback: () => {},
+                    onEscape: false,
+                    closeButton: false,
+                    buttons: {}
+                })
+
+                return
+            }
+
+            this.$store.dispatch('completeInterview', this.comment)
+        },
+
+        navigateTo(entityWithError) {
+            if(entityWithError.isPrefilled){
+                this.$router.push({ name: 'prefilled' })
+                return
+            }
+
+            const navigateToEntity = {
+                name: 'section',
+                params: {
+                    sectionId: entityWithError.parentId,
+                    interviewId: this.$route.params.interviewId
+                },
+                hash: '#' + entityWithError.id
+            }
+
+            this.$router.push(navigateToEntity)
+        }
     }
+}
 
 </script>

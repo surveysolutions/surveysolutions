@@ -26,52 +26,52 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from '../mixins'
-    import { find, isEqual } from 'lodash'
-    import { shouldShowAnsweredOptionsOnlyForSingle } from './question_helpers'
+import { entityDetails } from '../mixins'
+import { find, isEqual } from 'lodash'
+import { shouldShowAnsweredOptionsOnlyForSingle } from './question_helpers'
 
-    export default {
-        name: 'LinkedSingle',
-        data(){
-            return {
-                showAllOptions: false
-            }
+export default {
+    name: 'LinkedSingle',
+    data(){
+        return {
+            showAllOptions: false
+        }
+    },
+    computed: {
+        shouldShowAnsweredOptionsOnly(){
+            return shouldShowAnsweredOptionsOnlyForSingle(this)
         },
-        computed: {
-            shouldShowAnsweredOptionsOnly(){
-                return shouldShowAnsweredOptionsOnlyForSingle(this)
-            },
-            answeredOrAllOptions(){
-                if(!this.shouldShowAnsweredOptionsOnly)
-                    return this.$me.options
+        answeredOrAllOptions(){
+            if(!this.shouldShowAnsweredOptionsOnly)
+                return this.$me.options
                 
-                var self = this
-                return [find(this.$me.options, function(o) { return o.value == self.answer })]
+            var self = this
+            return [find(this.$me.options, function(o) { return o.value == self.answer })]
+        },
+        answer: {
+            get() {
+                if (this.$me.options == null || this.$me.answer == null)
+                    return
+                return find(this.$me.options, (a) => { return isEqual(a.rosterVector, this.$me.answer) }).value
             },
-            answer: {
-                get() {
-                    if (this.$me.options == null || this.$me.answer == null)
-                        return
-                    return find(this.$me.options, (a) => { return isEqual(a.rosterVector, this.$me.answer) }).value
-                },
-                set(value) {
-                    this.sendAnswer(() => {
-                        const selectedOption = find(this.$me.options, { 'value': value })
-                        this.$store.dispatch('answerLinkedSingleOptionQuestion', { 
-                            answer: selectedOption.rosterVector,
-                            identity: this.$me.id })
-                    })
-                }
-            },
-            noOptions() {
-                return this.$me.options == null || this.$me.options.length == 0
+            set(value) {
+                this.sendAnswer(() => {
+                    const selectedOption = find(this.$me.options, { 'value': value })
+                    this.$store.dispatch('answerLinkedSingleOptionQuestion', { 
+                        answer: selectedOption.rosterVector,
+                        identity: this.$me.id })
+                })
             }
         },
-        mixins: [entityDetails],
-        methods: {
-            toggleOptions(){
-                this.showAllOptions = !this.showAllOptions
-            }
+        noOptions() {
+            return this.$me.options == null || this.$me.options.length == 0
+        }
+    },
+    mixins: [entityDetails],
+    methods: {
+        toggleOptions(){
+            this.showAllOptions = !this.showAllOptions
         }
     }
+}
 </script>

@@ -6,11 +6,11 @@
     </div>
 </template>
 <script lang="js">
-    import { entityPartial } from '~/webinterview/components/mixins'
+import { entityPartial } from '~/webinterview/components/mixins'
 
-    export default {
-        mixins: [entityPartial],
-        name: 'wb-validation'
-    }
+export default {
+    mixins: [entityPartial],
+    name: 'wb-validation'
+}
 </script>
 

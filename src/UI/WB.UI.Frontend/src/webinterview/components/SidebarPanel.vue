@@ -18,94 +18,94 @@
     </div>
 </template>
 <script lang="js">
-    import { GroupStatus } from './questions'
+import { GroupStatus } from './questions'
 
-    export default {
-        name: 'sidebar-panel',
-        props: {
-            panel: { required: true },
-            currentPanel: {}
-        },
-        computed: {
-            loading() {
-                return {
-                    collapsed: true,
-                    title: '...',
-                    id: this.panel.id,
-                    validity: {
-                        isValid: true
-                    }
+export default {
+    name: 'sidebar-panel',
+    props: {
+        panel: { required: true },
+        currentPanel: {}
+    },
+    computed: {
+        loading() {
+            return {
+                collapsed: true,
+                title: '...',
+                id: this.panel.id,
+                validity: {
+                    isValid: true
                 }
-            },
-            title() {
-                return this.panel.title + (this.panel.isRoster ? (this.panel.rosterTitle ? ` - ${this.panel.rosterTitle}` :' - [...]') : '')
-            },
-            to() {
-                if (this.panel.to) {
-                    return this.panel.to
-                }
-
-                return { name: 'section', params: { sectionId: this.panel.id } }
-            },
-            isCollapsed() {
-                return this.panel.collapsed
-            },
-            hasChild() {
-                return this.panel.hasChildren
-            },
-            childPanels() {
-                return this.$store.state.webinterview.sidebar.panels[this.panel.id] || []
-            },
-            isActive() {
-                if (this.panel.to) {
-                    return this.$route.name === this.panel.to.name
-                }
-
-                return this.currentPanel == this.panel.id
-            },
-            titleCss() {
-                return [{
-                    current: this.panel.current,
-                    active: this.isActive,
-                    complete: this.panel.status === GroupStatus.Completed && !this.hasError ,
-                    'has-error': this.hasError
-                }]
-            },
-            hasError() {
-                return this.panel.validity.isValid == false
-            }
-
-        },
-        watch: {
-             ['$route.params.sectionId']() {
-                this.update()
-               
-            },
-            'panel'() {
-                this.update()
             }
         },
-        mounted() {
+        title() {
+            return this.panel.title + (this.panel.isRoster ? (this.panel.rosterTitle ? ` - ${this.panel.rosterTitle}` :' - [...]') : '')
+        },
+        to() {
+            if (this.panel.to) {
+                return this.panel.to
+            }
+
+            return { name: 'section', params: { sectionId: this.panel.id } }
+        },
+        isCollapsed() {
+            return this.panel.collapsed
+        },
+        hasChild() {
+            return this.panel.hasChildren
+        },
+        childPanels() {
+            return this.$store.state.webinterview.sidebar.panels[this.panel.id] || []
+        },
+        isActive() {
+            if (this.panel.to) {
+                return this.$route.name === this.panel.to.name
+            }
+
+            return this.currentPanel == this.panel.id
+        },
+        titleCss() {
+            return [{
+                current: this.panel.current,
+                active: this.isActive,
+                complete: this.panel.status === GroupStatus.Completed && !this.hasError ,
+                'has-error': this.hasError
+            }]
+        },
+        hasError() {
+            return this.panel.validity.isValid == false
+        }
+
+    },
+    watch: {
+        ['$route.params.sectionId']() {
             this.update()
-            if(this.isActive)
-                this.$el.scrollIntoView({ behavior: 'smooth' })
+               
         },
-        methods: {
-            fetchChild() {
-                this.$store.dispatch('fetchSidebar', this.panel.id)
-            },
-            update() {
-                if (this.panel.hasChildren && !this.panel.collapsed) {
-                    this.fetchChild()
-                }
-            },
-            toggle() {
-                this.$store.dispatch('toggleSidebar', {
-                    panel: this.panel,
-                    collapsed: !this.panel.collapsed
-                })
+        'panel'() {
+            this.update()
+        }
+    },
+    mounted() {
+        this.update()
+        if(this.isActive)
+            this.$el.scrollIntoView({ behavior: 'smooth' })
+    },
+    methods: {
+        fetchChild() {
+            this.$store.dispatch('fetchSidebar', this.panel.id)
+        },
+        update() {
+            if (this.panel.hasChildren && !this.panel.collapsed) {
+                this.fetchChild()
             }
+        },
+        toggle() {
+            this.$store.dispatch('toggleSidebar', {
+                panel: this.panel,
+                collapsed: !this.panel.collapsed
+            })
         }
     }
+}
 
 </script>

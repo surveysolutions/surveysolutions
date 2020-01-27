@@ -14,14 +14,14 @@
 import FacetFilters from './FacetFilters'
 
 export default {
-  methods: {
-    hideFacets() {
-      this.$store.dispatch('hideFacets')
-    }
-  },
+    methods: {
+        hideFacets() {
+            this.$store.dispatch('hideFacets')
+        }
+    },
 
-  components: {
-    FacetFilters
-  }
+    components: {
+        FacetFilters
+    }
 }
 </script>
