@@ -2,7 +2,7 @@ export default {
     state: {
         fileName: '',
         verificationErrors: [],
-        progress: null
+        progress: null,
     },
 
     actions: {
