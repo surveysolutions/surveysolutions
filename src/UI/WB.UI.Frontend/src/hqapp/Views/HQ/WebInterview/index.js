@@ -11,10 +11,10 @@ export default class ProfileComponent {
                 path: '/WebInterview/:invitationId/Start', component: Start,
             },
             {
-                path: '/WebInterview/:interviewId/Resume', component: Resume,
+                path: '/WebInterview/Resume/:interviewId', component: Resume,
             },
             {
-                path: '/WebInterview/:interviewId/Finish', component: Finish,
+                path: '/WebInterview/Finish/:interviewId', component: Finish,
             },
             {
                 path: '/WebInterview/OutdatedBrowser', component: OutdatedBrowser,

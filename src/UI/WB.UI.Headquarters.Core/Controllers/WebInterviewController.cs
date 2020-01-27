@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
 {
     [BrowsersRestriction]
     [WebInterviewErrorFilter]
-    [Route("WebInterview/{id}")]
+    [Route("WebInterview")]
     public class WebInterviewController : Controller
     {
         private readonly ICommandService commandService;
@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [WebInterviewAuthorize]
-        [Route("Section/{sectionId}")]
+        [Route("{id}/Section/{sectionId}")]
         public ActionResult Section(string id, string sectionId)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -192,7 +192,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Route("Start")]
+        [Route("{id}/Start")]
         [AntiForgeryFilter]
         public IActionResult Start(string id)
         {
@@ -319,7 +319,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [Route("Start")]
+        [Route("{id}/Start")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StartPost(string id, [FromForm] string password)
         {
@@ -427,7 +427,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [WebInterviewAuthorize]
-        [Route("Cover")]
+        [Route("{id}/Cover")]
         public IActionResult Cover(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -454,7 +454,7 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        [Route("Finish")]
+        [Route("Finish/{id}")]
         public ActionResult Finish(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -481,7 +481,8 @@ namespace WB.UI.Headquarters.Controllers
 
         [WebInterviewAuthorize]
         [AntiForgeryFilter]
-         public ActionResult Resume(string id, string returnUrl)
+        [Route("Resume/{id}")]
+        public ActionResult Resume(string id, string returnUrl)
         {
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null)
@@ -518,7 +519,7 @@ namespace WB.UI.Headquarters.Controllers
             return Redirect(returnUrl);
         }
 
-        [Route("Complete")]
+        [Route("{id}/Complete")]
         public ActionResult Complete(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -553,8 +554,9 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [Route("Resume")]
+        [Route("Resume/{id}")]
         [WebInterviewAuthorize]
+        [AntiForgeryFilter]
         public async Task<ActionResult> ResumePost(string id, string password, string returnUrl)
         {
             var interview = this.statefulInterviewRepository.Get(id);
