@@ -159,13 +159,13 @@
     </HqLayout>
 </template>
 <script>
-import { DateFormats } from "~/shared/helpers"
-import moment from "moment"
+import { DateFormats } from '~/shared/helpers'
+import moment from 'moment'
 export default {
     methods: {
         formatDate(date){
             return new moment(date).format(DateFormats.dateTime)
-        }
-    }
+        },
+    },
 }
 </script>

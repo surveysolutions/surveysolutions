@@ -38,28 +38,28 @@
 
 <script>
 
-import FiltersBlock from "./components/FiltersBlock";
-import FilterItem from "./components/FilterItem";
+import FiltersBlock from './components/FiltersBlock'
+import FilterItem from './components/FilterItem'
 
 export default {
     computed: {
         state() {
-            return this.$store.getters.filteringState;
-        }
+            return this.$store.getters.filteringState
+        },
     },
     methods: {
         change({ id, value }) {
-            this.$store.dispatch("applyFiltering", { filter: id, value });
-            this.$store.dispatch("fetchSearchResults");
+            this.$store.dispatch('applyFiltering', { filter: id, value })
+            this.$store.dispatch('fetchSearchResults')
         },
 
         resetFilters() {
-            this.$store.dispatch("resetAllFilters");
-            this.$store.dispatch("hideSearchResults");
-        }
+            this.$store.dispatch('resetAllFilters')
+            this.$store.dispatch('hideSearchResults')
+        },
     },
     components: {
-        FilterItem, FiltersBlock
-    }
-};
+        FilterItem, FiltersBlock,
+    },
+}
 </script>

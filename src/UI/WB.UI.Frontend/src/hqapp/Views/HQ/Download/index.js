@@ -1,19 +1,19 @@
-import Supervisor from "./Supervisor"
-import Interviewer from "./Interviewer"
+import Supervisor from './Supervisor'
+import Interviewer from './Interviewer'
 
 export default class UsersComponent {
     constructor(rootStore) {
-        this.rootStore = rootStore;
+        this.rootStore = rootStore
     }
 
     get routes() {
         return [
             {
-                path: '/Download', component: Interviewer
+                path: '/Download', component: Interviewer,
             },
             {
-                path: '/Download/Supervisor', component: Supervisor
-            }
+                path: '/Download/Supervisor', component: Supervisor,
+            },
         ]
     }
 }

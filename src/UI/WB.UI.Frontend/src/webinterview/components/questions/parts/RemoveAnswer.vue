@@ -8,33 +8,33 @@
         <span></span>
     </button>
 </template>
- <script lang="js">
+<script lang="js">
 
-    import { entityPartial } from "~/webinterview/components/mixins"
+import { entityPartial } from '~/webinterview/components/mixins'
 
-    export default {
-        mixins: [entityPartial],
-        props: {
-            onRemove: {
-                default: null
-            },
-            idSuffix: {
-                type: String,
-                default: ""
+export default {
+    mixins: [entityPartial],
+    props: {
+        onRemove: {
+            default: null,
+        },
+        idSuffix: {
+            type: String,
+            default: '',
+        },
+    },
+    name: 'wb-remove-answer',
+    methods: {
+        removeAnswer() {
+            if(this.onRemove) {
+                this.onRemove()
+            }
+            else {
+                this.$store.dispatch('removeAnswer', this.$me.id)
+                this.$emit('answerRemoved', this.$me.id)
             }
         },
-        name: "wb-remove-answer",
-        methods: {
-            removeAnswer() {
-                if(this.onRemove) {
-                    this.onRemove()
-                }
-                else {
-                    this.$store.dispatch("removeAnswer", this.$me.id)
-                    this.$emit('answerRemoved', this.$me.id)
-                }
-            }
-        }
-    }
+    },
+}
 
 </script>

@@ -36,76 +36,76 @@
 
 <script lang="js">
 
-    import { entityDetails } from "../mixins"
-    import Vue from 'vue'
-    import modal from "@/shared/modal"
-    import {find, map, includes, without, filter as loFilter} from "lodash"
+import { entityDetails } from '../mixins'
+import Vue from 'vue'
+import modal from '@/shared/modal'
+import {find, map, includes, without, filter as loFilter} from 'lodash'
     
-    export default {
-        name: 'MultiComboboxQuestion',
-        mixins: [entityDetails],
-        props: ['noComments'],
-        data() {
-            return {
-                selectedOption: null
-            }
-        },
-        computed: {
-            selectedOptions() {
-                var self = this;
-                return map(self.$me.answer, (val) => {
-                    return {
-                        title: find(self.$me.options, (opt) => { return opt.value === val }).title,
-                        value: val
-                    }
-                })
-            },
-            allAnswersGiven() {
-                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-            }
-        },
-        methods: {
-            isProtected(val){
-                return includes(this.$me.protectedAnswer, val)
-            },
-            appendCompboboxItem(newValue) {
-                if(includes(this.$me.answer, newValue)) return
-
-                let newAnswer = this.$me.answer.slice()
-                newAnswer.push(newValue)
-                this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, identity: this.$me.id })
-            },
-            optionsSource(filter) {
-                const self = this;
-                const interviewId = this.$route.params.interviewId
-                const excludedOptionIds = self.$me.answer
-                const optionsPromise = Vue.$api.interview.get('getTopFilteredOptionsForQuestionWithExclude', {interviewId, id:this.$me.id, filter, count:20, excludedOptionIds})
-                return optionsPromise
-                    .then(options => {
-                        return loFilter(options, (o) => {
-                            return !includes(self.$me.answer, o.value)
-                        })
-                    })
-            },
-            confirmAndRemoveRow(valueToRemove){
-                if(!includes(this.$me.answer, valueToRemove)) return
-
-                const newAnswer = without(this.$me.answer, valueToRemove)
-                
-                if (this.$me.isRosterSize) {
-                    const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
-                    modal.confirm(confirmMessage, result => {
-                        if (result) {
-                            this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, identity: this.$me.id })
-                            return
-                        } 
-                    })
-                }
-                else {
-                    this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, identity: this.$me.id })
-                }
-            }
+export default {
+    name: 'MultiComboboxQuestion',
+    mixins: [entityDetails],
+    props: ['noComments'],
+    data() {
+        return {
+            selectedOption: null,
         }
-    }
+    },
+    computed: {
+        selectedOptions() {
+            var self = this
+            return map(self.$me.answer, (val) => {
+                return {
+                    title: find(self.$me.options, (opt) => { return opt.value === val }).title,
+                    value: val,
+                }
+            })
+        },
+        allAnswersGiven() {
+            return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
+        },
+    },
+    methods: {
+        isProtected(val){
+            return includes(this.$me.protectedAnswer, val)
+        },
+        appendCompboboxItem(newValue) {
+            if(includes(this.$me.answer, newValue)) return
+
+            let newAnswer = this.$me.answer.slice()
+            newAnswer.push(newValue)
+            this.$store.dispatch('answerMultiOptionQuestion', { answer: newAnswer, identity: this.$me.id })
+        },
+        optionsSource(filter) {
+            const self = this
+            const interviewId = this.$route.params.interviewId
+            const excludedOptionIds = self.$me.answer
+            const optionsPromise = Vue.$api.interview.get('getTopFilteredOptionsForQuestionWithExclude', {interviewId, id:this.$me.id, filter, count:20, excludedOptionIds})
+            return optionsPromise
+                .then(options => {
+                    return loFilter(options, (o) => {
+                        return !includes(self.$me.answer, o.value)
+                    })
+                })
+        },
+        confirmAndRemoveRow(valueToRemove){
+            if(!includes(this.$me.answer, valueToRemove)) return
+
+            const newAnswer = without(this.$me.answer, valueToRemove)
+                
+            if (this.$me.isRosterSize) {
+                const confirmMessage = this.$t('WebInterviewUI.ConfirmRosterRemove')
+                modal.confirm(confirmMessage, result => {
+                    if (result) {
+                        this.$store.dispatch('answerMultiOptionQuestion', { answer: newAnswer, identity: this.$me.id })
+                        return
+                    } 
+                })
+            }
+            else {
+                this.$store.dispatch('answerMultiOptionQuestion', { answer: newAnswer, identity: this.$me.id })
+            }
+        },
+    },
+}
 
 </script>

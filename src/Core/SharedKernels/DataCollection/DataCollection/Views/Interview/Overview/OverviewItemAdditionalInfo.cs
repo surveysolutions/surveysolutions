@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
                 IsOwnComment = x.UserId == currentUserId,
                 UserRole = x.UserRole,
                 CommentTimeUtc = x.CommentTime,
+                Resolved = x.Resolved,
                 EntityId = x.QuestionIdentity.ToString()
             });
         }

@@ -665,276 +665,276 @@
     </HqLayout>    
 </template>
 <script>
-import Vue from "vue"
-import {map, isNil} from "lodash"
+import Vue from 'vue'
+import {map, isNil} from 'lodash'
 export default {
-  data() {
-    return {
-      emailTemplates: [],
-      webInterviewPageMessages: [],
-      spamProtectionIsEnabled: false,
-      singleResponseIsEnabled: true,
-      started: false,
-      reminderAfterDaysIfNoResponse: 3,
-      reminderAfterDaysIfPartialResponse: 3,
-      logoUrl: '',
-      hasLogo: false
-    };
-  },
-
-  beforeMount() {
-
-    var self = this;
-    self.questionnaireId = this.$config.model.questionnaireIdentity.id;
-    self.questionnaireTitle = this.$config.model.questionnaireTitle;
-    self.started = this.$config.model.started;
-    self.spamProtectionIsEnabled = this.$config.model.useCaptcha;
-    self.singleResponseIsEnabled = this.$config.model.singleResponse;
-    self.reminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse;
-    self.reminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse;
-    self.cancelSpamProtectionIsEnabled = this.$config.model.useCaptcha;
-    self.cancelReminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse;
-    self.cancelReminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse;
-    self.cancelSingleResponseIsEnabled = this.$config.model.singleResponse;
-    self.logoUrl = this.$config.model.logoUrl;
-    self.hasLogo = this.$config.model.hasLogo;
-
-    this.emailTemplates = map(
-      this.$config.model.defaultEmailTemplates,
-      (value, key) => {
-        var defaultEmailTemplate = value;
-        var custom = self.$config.model.emailTemplates[key];
-        var subject = custom == undefined || isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
-        var message = custom == undefined || isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message
-        var passwordDescription = custom == undefined || isNil(custom.passwordDescription) || custom.passwordDescription === "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription
-        var linkText = custom == undefined || isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText
+    data() {
         return {
-          value: key,
-          buttonTitle: defaultEmailTemplate.shortTitle,
-          subject: subject,
-          message: message,
-          passwordDescription: passwordDescription,
-          linkText: linkText,
-          isActive: key === "invitationTemplate"
-        };
-      }
-    );
-
-    map(this.emailTemplates, emailTemplate => {
-        self.$validator.reset('emailTemplateData' + emailTemplate.value);
-    });
-
-    this.webInterviewPageMessages = map(
-      this.$config.model.defaultTexts,
-      (value, key) => {
-        var customText = self.$config.model.definedTexts[key];
-        var defaultText = value;
-        var message = customText == undefined || isNil(customText) || customText === "" ? defaultText : customText
-        return {
-          value: key,
-          text: message,
-          defaultText: defaultText,
-          cancelText: message
-        };
-      }
-    ).reduce(function(maped, obj) {
-        maped[obj.value] = obj;
-        return maped;
-    }, {});
-
-    self.$validator.reset('$welcomePage');
-    self.$validator.reset('$resumePage');
-    self.$validator.reset('$finishPage');
-    self.$validator.reset('$completePage');
-  },
-  methods: {
-    setActive(emailTemplate) {
-      map(this.emailTemplates, option => {
-        option.isActive = false;
-      });
-      emailTemplate.isActive = true;
-
-      var self = this;
-      this.$nextTick(function() { self.$refs['message' + emailTemplate.value][0].resize() });
+            emailTemplates: [],
+            webInterviewPageMessages: [],
+            spamProtectionIsEnabled: false,
+            singleResponseIsEnabled: true,
+            started: false,
+            reminderAfterDaysIfNoResponse: 3,
+            reminderAfterDaysIfPartialResponse: 3,
+            logoUrl: '',
+            hasLogo: false,
+        }
     },
-    setPageActive(titleType, messageType) {
-      var self = this;
-      this.$nextTick(function() { 
-          if(titleType)
-            self.$refs[titleType].resize() 
-          if(messageType)
-            self.$refs[messageType].resize()
-      });
-    },
-    cancelEditEmailTemplate(emailTemplate) {
-        var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value];
-        var custom = this.$config.model.emailTemplates[emailTemplate.value];
-        emailTemplate.message = custom == undefined || isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message;
-        emailTemplate.subject = custom == undefined || isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
-        emailTemplate.passwordDescription = custom == undefined || isNil(custom.passwordDescription) || custom.passwordDescription === "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription;
-        emailTemplate.linkText = custom == undefined || isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText;
-        this.$validator.reset('emailTemplateData' + emailTemplate.value);
-    },
-    async saveEmailTemplate(emailTemplate) {
-        var self = this;
-        var validationResult = await this.$validator.validateAll('emailTemplateData'+ emailTemplate.value);
-        if (validationResult)
-        {
-            self.$store.dispatch("showProgress");
-            await this.$hq.WebInterviewSettings.updateEmailTemplate(this.questionnaireId, emailTemplate.value, emailTemplate.subject, emailTemplate.message, emailTemplate.passwordDescription, emailTemplate.linkText)
-            .then(function (response) {
-                if (!self.$config.model.emailTemplates[emailTemplate.value]) {
-                    self.$config.model.emailTemplates[emailTemplate.value] = [];
+
+    beforeMount() {
+
+        var self = this
+        self.questionnaireId = this.$config.model.questionnaireIdentity.id
+        self.questionnaireTitle = this.$config.model.questionnaireTitle
+        self.started = this.$config.model.started
+        self.spamProtectionIsEnabled = this.$config.model.useCaptcha
+        self.singleResponseIsEnabled = this.$config.model.singleResponse
+        self.reminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse
+        self.reminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse
+        self.cancelSpamProtectionIsEnabled = this.$config.model.useCaptcha
+        self.cancelReminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse
+        self.cancelReminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse
+        self.cancelSingleResponseIsEnabled = this.$config.model.singleResponse
+        self.logoUrl = this.$config.model.logoUrl
+        self.hasLogo = this.$config.model.hasLogo
+
+        this.emailTemplates = map(
+            this.$config.model.defaultEmailTemplates,
+            (value, key) => {
+                var defaultEmailTemplate = value
+                var custom = self.$config.model.emailTemplates[key]
+                var subject = custom == undefined || isNil(custom.subject) || custom.subject === '' ? defaultEmailTemplate.subject : custom.subject
+                var message = custom == undefined || isNil(custom.message) || custom.message === '' ? defaultEmailTemplate.message : custom.message
+                var passwordDescription = custom == undefined || isNil(custom.passwordDescription) || custom.passwordDescription === '' ? defaultEmailTemplate.passwordDescription : custom.passwordDescription
+                var linkText = custom == undefined || isNil(custom.linkText) || custom.linkText === '' ? defaultEmailTemplate.linkText : custom.linkText
+                return {
+                    value: key,
+                    buttonTitle: defaultEmailTemplate.shortTitle,
+                    subject: subject,
+                    message: message,
+                    passwordDescription: passwordDescription,
+                    linkText: linkText,
+                    isActive: key === 'invitationTemplate',
                 }
-                var userTemplate = self.$config.model.emailTemplates[emailTemplate.value]
-                userTemplate.subject = emailTemplate.subject
-                userTemplate.message = emailTemplate.message
-                userTemplate.passwordDescription = emailTemplate.passwordDescription
-                userTemplate.linkText = emailTemplate.linkText;
+            }
+        )
 
-                self.$validator.reset('emailTemplateData' + emailTemplate.value);
-            })
-            .catch(function (error) {
-                Vue.config.errorHandler(error, self);
-            })
-            .then(function () {
-                self.$store.dispatch("hideProgress");
-            });
-        }
-    },
-    webInterviewPageText(type) {
-        return this.webInterviewPageMessages[type].text;
-    },
-    enablePageTextEditMode(type) {
-        this.webInterviewPageMessages[type].isEditMode = true;
-    },
-    isEditModePageTextEditMode(type) {
-        return this.webInterviewPageMessages[type].isEditMode;
-    },
-    async savePageTextEditMode(scope, titleType, messageType) {
-        var self = this;
-        var validationResult = await this.$validator.validateAll(scope);
-        if (validationResult)
-        {
-            var editTitleText = this.webInterviewPageMessages[titleType];
-            var editDescriptionText = this.webInterviewPageMessages[messageType];
-            self.$store.dispatch("showProgress");
-            await this.$hq.WebInterviewSettings.updatePageMessage(self.questionnaireId, titleType, editTitleText.text, messageType, editDescriptionText.text)
-            .then(function (response) {
-                editTitleText.cancelText = editTitleText.text;
-                editDescriptionText.cancelText = editDescriptionText.text;
-                self.$validator.reset(scope);
-            })
-            .catch(function (error) {
-                Vue.config.errorHandler(error, self);
-            })
-            .then(function () {
-                self.$store.dispatch("hideProgress");
-            });
-        }
-    },
-    cancelPageTextEditMode(scope, titleType, messageType) {
-        var editTitleText = this.webInterviewPageMessages[titleType];
-        var editDescriptionText = this.webInterviewPageMessages[messageType];
-        editTitleText.text = editTitleText.cancelText;
-        editDescriptionText.text = editDescriptionText.cancelText;
-        this.$validator.reset(scope);
-    },
-    async startWebInterview() {
-        var self = this;
-        self.$store.dispatch("showProgress");
-        await this.$hq.WebInterviewSettings.startWebInterview(this.questionnaireId)
-        .then(function (response) {
-            self.started = true;
+        map(this.emailTemplates, emailTemplate => {
+            self.$validator.reset('emailTemplateData' + emailTemplate.value)
         })
-        .catch(function (error) {
-            Vue.config.errorHandler(error, self);
-        })
-        .then(function () {
-            self.$store.dispatch("hideProgress");
-        });
-    },
-    async stopWebInterview() {
-        var self = this;
-        self.$store.dispatch("showProgress");
-        await this.$hq.WebInterviewSettings.stopWebInterview(this.questionnaireId)
-        .then(function (response) {
-            self.started = false;
-        })
-        .catch(function (error) {
-            Vue.config.errorHandler(error, self);
-        })
-        .then(function () {
-            self.$store.dispatch("hideProgress");
-        });
-    },
-    async saveAdditionalSettings() {
-        var self = this;
-        self.$store.dispatch("showProgress");
-        await this.$hq.WebInterviewSettings.updateAdditionalSettings(this.questionnaireId,
-             this.spamProtectionIsEnabled,
-             this.reminderAfterDaysIfNoResponse,
-             this.reminderAfterDaysIfPartialResponse,
-             this.singleResponseIsEnabled)
-        .then(function (response) {
-            self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled;
-            self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse;
-            self.cancelReminderAfterDaysIfPartialResponse = self.reminderAfterDaysIfPartialResponse;
-            self.cancelSingleResponseIsEnabled = self.singleResponseIsEnabled;
-            self.$validator.reset('additionalSettings');
-        })
-        .catch(function (error) {
-            Vue.config.errorHandler(error, self);
-        })
-        .then(function () {
-            self.$store.dispatch("hideProgress");
-        });
-    },
-    cancelAdditionalSettings() {
-        this.spamProtectionIsEnabled = this.cancelSpamProtectionIsEnabled;
-        this.reminderAfterDaysIfNoResponse = this.cancelReminderAfterDaysIfNoResponse;
-        this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse;
-        this.singleResponseIsEnabled = this.cancelSingleResponseIsEnabled;
-        this.$validator.reset('additionalSettings');
-    }, 
-    previewText(text) {
-        if (text == null)
-            return ''
-        return text
-            .replace(/%SURVEYNAME%/g, this.questionnaireTitle)
-            .replace(/%QUESTIONNAIRE%/g, this.questionnaireTitle);
-    },
-    dummy() {
-        return false;
-    },
-    isDirty(formName) {
-        const form = this.fields[formName];
-        const keys = Object.keys((this.fields || {})[formName] || {});
-        return keys.some(key => form[key].dirty || form[key].changed);
-    },
-    async clearField(emailTemplate, fieldName) {
-        emailTemplate[fieldName] = null
-        await this.$nextTick()
-        await this.$validator.validate('emailTemplateData'+ emailTemplate.value + '.' + fieldName);
-    }
-  },
-  watch: {
-    reminderAfterDaysIfNoResponse: function (val) {
-        if (this.$refs.reminderAfterDaysIfNoResponse.value != val ) {
-            this.$refs.reminderAfterDaysIfNoResponse.value = val;
-            $(this.$refs.reminderAfterDaysIfNoResponse).selectpicker("refresh");
-        }
-    },
-    reminderAfterDaysIfPartialResponse: function (val) {
-        if (this.$refs.reminderAfterDaysIfPartialResponse.value != val ) {
-            this.$refs.reminderAfterDaysIfPartialResponse.value = val;
-            $(this.$refs.reminderAfterDaysIfPartialResponse).selectpicker("refresh");
-        }
-    }
-  },
-  computed: {
 
-  }
-};
+        this.webInterviewPageMessages = map(
+            this.$config.model.defaultTexts,
+            (value, key) => {
+                var customText = self.$config.model.definedTexts[key]
+                var defaultText = value
+                var message = customText == undefined || isNil(customText) || customText === '' ? defaultText : customText
+                return {
+                    value: key,
+                    text: message,
+                    defaultText: defaultText,
+                    cancelText: message,
+                }
+            }
+        ).reduce(function(maped, obj) {
+            maped[obj.value] = obj
+            return maped
+        }, {})
+
+        self.$validator.reset('$welcomePage')
+        self.$validator.reset('$resumePage')
+        self.$validator.reset('$finishPage')
+        self.$validator.reset('$completePage')
+    },
+    methods: {
+        setActive(emailTemplate) {
+            map(this.emailTemplates, option => {
+                option.isActive = false
+            })
+            emailTemplate.isActive = true
+
+            var self = this
+            this.$nextTick(function() { self.$refs['message' + emailTemplate.value][0].resize() })
+        },
+        setPageActive(titleType, messageType) {
+            var self = this
+            this.$nextTick(function() { 
+                if(titleType)
+                    self.$refs[titleType].resize() 
+                if(messageType)
+                    self.$refs[messageType].resize()
+            })
+        },
+        cancelEditEmailTemplate(emailTemplate) {
+            var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value]
+            var custom = this.$config.model.emailTemplates[emailTemplate.value]
+            emailTemplate.message = custom == undefined || isNil(custom.message) || custom.message === '' ? defaultEmailTemplate.message : custom.message
+            emailTemplate.subject = custom == undefined || isNil(custom.subject) || custom.subject === '' ? defaultEmailTemplate.subject : custom.subject
+            emailTemplate.passwordDescription = custom == undefined || isNil(custom.passwordDescription) || custom.passwordDescription === '' ? defaultEmailTemplate.passwordDescription : custom.passwordDescription
+            emailTemplate.linkText = custom == undefined || isNil(custom.linkText) || custom.linkText === '' ? defaultEmailTemplate.linkText : custom.linkText
+            this.$validator.reset('emailTemplateData' + emailTemplate.value)
+        },
+        async saveEmailTemplate(emailTemplate) {
+            var self = this
+            var validationResult = await this.$validator.validateAll('emailTemplateData'+ emailTemplate.value)
+            if (validationResult)
+            {
+                self.$store.dispatch('showProgress')
+                await this.$hq.WebInterviewSettings.updateEmailTemplate(this.questionnaireId, emailTemplate.value, emailTemplate.subject, emailTemplate.message, emailTemplate.passwordDescription, emailTemplate.linkText)
+                    .then(function (response) {
+                        if (!self.$config.model.emailTemplates[emailTemplate.value]) {
+                            self.$config.model.emailTemplates[emailTemplate.value] = []
+                        }
+                        var userTemplate = self.$config.model.emailTemplates[emailTemplate.value]
+                        userTemplate.subject = emailTemplate.subject
+                        userTemplate.message = emailTemplate.message
+                        userTemplate.passwordDescription = emailTemplate.passwordDescription
+                        userTemplate.linkText = emailTemplate.linkText
+
+                        self.$validator.reset('emailTemplateData' + emailTemplate.value)
+                    })
+                    .catch(function (error) {
+                        Vue.config.errorHandler(error, self)
+                    })
+                    .then(function () {
+                        self.$store.dispatch('hideProgress')
+                    })
+            }
+        },
+        webInterviewPageText(type) {
+            return this.webInterviewPageMessages[type].text
+        },
+        enablePageTextEditMode(type) {
+            this.webInterviewPageMessages[type].isEditMode = true
+        },
+        isEditModePageTextEditMode(type) {
+            return this.webInterviewPageMessages[type].isEditMode
+        },
+        async savePageTextEditMode(scope, titleType, messageType) {
+            var self = this
+            var validationResult = await this.$validator.validateAll(scope)
+            if (validationResult)
+            {
+                var editTitleText = this.webInterviewPageMessages[titleType]
+                var editDescriptionText = this.webInterviewPageMessages[messageType]
+                self.$store.dispatch('showProgress')
+                await this.$hq.WebInterviewSettings.updatePageMessage(self.questionnaireId, titleType, editTitleText.text, messageType, editDescriptionText.text)
+                    .then(function (response) {
+                        editTitleText.cancelText = editTitleText.text
+                        editDescriptionText.cancelText = editDescriptionText.text
+                        self.$validator.reset(scope)
+                    })
+                    .catch(function (error) {
+                        Vue.config.errorHandler(error, self)
+                    })
+                    .then(function () {
+                        self.$store.dispatch('hideProgress')
+                    })
+            }
+        },
+        cancelPageTextEditMode(scope, titleType, messageType) {
+            var editTitleText = this.webInterviewPageMessages[titleType]
+            var editDescriptionText = this.webInterviewPageMessages[messageType]
+            editTitleText.text = editTitleText.cancelText
+            editDescriptionText.text = editDescriptionText.cancelText
+            this.$validator.reset(scope)
+        },
+        async startWebInterview() {
+            var self = this
+            self.$store.dispatch('showProgress')
+            await this.$hq.WebInterviewSettings.startWebInterview(this.questionnaireId)
+                .then(function (response) {
+                    self.started = true
+                })
+                .catch(function (error) {
+                    Vue.config.errorHandler(error, self)
+                })
+                .then(function () {
+                    self.$store.dispatch('hideProgress')
+                })
+        },
+        async stopWebInterview() {
+            var self = this
+            self.$store.dispatch('showProgress')
+            await this.$hq.WebInterviewSettings.stopWebInterview(this.questionnaireId)
+                .then(function (response) {
+                    self.started = false
+                })
+                .catch(function (error) {
+                    Vue.config.errorHandler(error, self)
+                })
+                .then(function () {
+                    self.$store.dispatch('hideProgress')
+                })
+        },
+        async saveAdditionalSettings() {
+            var self = this
+            self.$store.dispatch('showProgress')
+            await this.$hq.WebInterviewSettings.updateAdditionalSettings(this.questionnaireId,
+                this.spamProtectionIsEnabled,
+                this.reminderAfterDaysIfNoResponse,
+                this.reminderAfterDaysIfPartialResponse,
+                this.singleResponseIsEnabled)
+                .then(function (response) {
+                    self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled
+                    self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse
+                    self.cancelReminderAfterDaysIfPartialResponse = self.reminderAfterDaysIfPartialResponse
+                    self.cancelSingleResponseIsEnabled = self.singleResponseIsEnabled
+                    self.$validator.reset('additionalSettings')
+                })
+                .catch(function (error) {
+                    Vue.config.errorHandler(error, self)
+                })
+                .then(function () {
+                    self.$store.dispatch('hideProgress')
+                })
+        },
+        cancelAdditionalSettings() {
+            this.spamProtectionIsEnabled = this.cancelSpamProtectionIsEnabled
+            this.reminderAfterDaysIfNoResponse = this.cancelReminderAfterDaysIfNoResponse
+            this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse
+            this.singleResponseIsEnabled = this.cancelSingleResponseIsEnabled
+            this.$validator.reset('additionalSettings')
+        }, 
+        previewText(text) {
+            if (text == null)
+                return ''
+            return text
+                .replace(/%SURVEYNAME%/g, this.questionnaireTitle)
+                .replace(/%QUESTIONNAIRE%/g, this.questionnaireTitle)
+        },
+        dummy() {
+            return false
+        },
+        isDirty(formName) {
+            const form = this.fields[formName]
+            const keys = Object.keys((this.fields || {})[formName] || {})
+            return keys.some(key => form[key].dirty || form[key].changed)
+        },
+        async clearField(emailTemplate, fieldName) {
+            emailTemplate[fieldName] = null
+            await this.$nextTick()
+            await this.$validator.validate('emailTemplateData'+ emailTemplate.value + '.' + fieldName)
+        },
+    },
+    watch: {
+        reminderAfterDaysIfNoResponse: function (val) {
+            if (this.$refs.reminderAfterDaysIfNoResponse.value != val ) {
+                this.$refs.reminderAfterDaysIfNoResponse.value = val
+                $(this.$refs.reminderAfterDaysIfNoResponse).selectpicker('refresh')
+            }
+        },
+        reminderAfterDaysIfPartialResponse: function (val) {
+            if (this.$refs.reminderAfterDaysIfPartialResponse.value != val ) {
+                this.$refs.reminderAfterDaysIfPartialResponse.value = val
+                $(this.$refs.reminderAfterDaysIfPartialResponse).selectpicker('refresh')
+            }
+        },
+    },
+    computed: {
+
+    },
+}
 </script>
 
