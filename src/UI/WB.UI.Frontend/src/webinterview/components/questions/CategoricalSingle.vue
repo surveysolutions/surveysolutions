@@ -24,48 +24,48 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from "../mixins"
-    import { find } from "lodash"
-    import { shouldShowAnsweredOptionsOnlyForSingle } from "./question_helpers"
+import { entityDetails } from '../mixins'
+import { find } from 'lodash'
+import { shouldShowAnsweredOptionsOnlyForSingle } from './question_helpers'
 
-    export default {
-        name: 'CategoricalSingle',
-        props: ['noComments'],
-        data(){
-            return {
-                showAllOptions: false
-            }
-        },
-        computed: {
-            shouldShowAnsweredOptionsOnly(){
-                return shouldShowAnsweredOptionsOnlyForSingle(this);
-            },
-            answeredOrAllOptions(){
-                if(!this.shouldShowAnsweredOptionsOnly)
-                    return this.$me.options;
-                
-                var self = this;
-                return [find(this.$me.options, function(o) { return o.value == self.answer; })];
-            },
-            answer: {
-                get() {
-                    return this.$me.answer
-                },
-                set(value) {
-                    this.sendAnswer(() => {
-                        this.$store.dispatch("answerSingleOptionQuestion", { answer: value, identity: this.$me.id })
-                    })
-                }
-            },
-            noOptions() {
-                return this.$me.options == null || this.$me.options.length == 0
-            }
-        },
-        mixins: [entityDetails],
-        methods: {
-            toggleOptions(){
-                this.showAllOptions = !this.showAllOptions;
-            }
+export default {
+    name: 'CategoricalSingle',
+    props: ['noComments'],
+    data(){
+        return {
+            showAllOptions: false,
         }
-    }
+    },
+    computed: {
+        shouldShowAnsweredOptionsOnly(){
+            return shouldShowAnsweredOptionsOnlyForSingle(this)
+        },
+        answeredOrAllOptions(){
+            if(!this.shouldShowAnsweredOptionsOnly)
+                return this.$me.options
+                
+            var self = this
+            return [find(this.$me.options, function(o) { return o.value == self.answer })]
+        },
+        answer: {
+            get() {
+                return this.$me.answer
+            },
+            set(value) {
+                this.sendAnswer(() => {
+                    this.$store.dispatch('answerSingleOptionQuestion', { answer: value, identity: this.$me.id })
+                })
+            },
+        },
+        noOptions() {
+            return this.$me.options == null || this.$me.options.length == 0
+        },
+    },
+    mixins: [entityDetails],
+    methods: {
+        toggleOptions(){
+            this.showAllOptions = !this.showAllOptions
+        },
+    },
+}
 </script>

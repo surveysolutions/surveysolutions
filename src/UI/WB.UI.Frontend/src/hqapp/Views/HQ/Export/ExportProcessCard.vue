@@ -125,7 +125,7 @@
 <script>
 import Vue from 'vue'
 
-import modal from "@/shared/modal"
+import modal from '@/shared/modal'
 import {mixin as VueTimers} from 'vue-timers'
 
 export default {
@@ -196,7 +196,7 @@ export default {
                     this.$http
                         .post(this.$config.model.api.cancelExportProcessUrl, null, {
                             params: {
-                                id: this.data.id
+                                id: this.data.id,
                             },
                         })
                         .catch(error => {

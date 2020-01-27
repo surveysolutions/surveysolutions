@@ -25,27 +25,27 @@
         </ul>
 </template>
 <script>
-import moment from "moment"
+import moment from 'moment'
 import {DateFormats, humanFileSize} from '~/shared/helpers'
 export default {
     props: {
         syncInfo: {
-            type: Object
+            type: Object,
         },
         prefix: {
-            type: String
-        }
+            type: String,
+        },
     },
     methods: {
         ouputBytes(val){
-            return humanFileSize(val, false);
+            return humanFileSize(val, false)
         },
         formatLastCommunication(date){
             return moment.utc(date).fromNow()
         },
         formatDate(date){
             return moment.utc(date).format(DateFormats.dateTime)
-        }
-    }
+        },
+    },
 }
 </script>

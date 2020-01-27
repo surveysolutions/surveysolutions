@@ -14,39 +14,39 @@
 </template>
 
 <script lang="js">
-    import { find } from "lodash"
-    export default {
-        name: 'TableRoster_QuestionTitle',
+import { find } from 'lodash'
+export default {
+    name: 'TableRoster_QuestionTitle',
 
-        data() {
-            return {
-                title: null,
-                instruction: null,
-                hasInstructions: false,
-                questionId: null
-            }
-        }, 
-        computed: {
-
-        },
-        methods: {
-
-        },
-        created() {
-            this.questionId = this.params.questionId
-            this.title = this.params.title
-            this.instruction = this.params.instruction
-            this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
-        },
-        watch: {
-            ["params.context.componentParent.$me.questions"]() {
-                var self = this;
-                var question = _.find(self.params.context.componentParent.$me.questions, function(o) { return o.id == self.questionId; });
-                if(question !== undefined)
-                    this.instruction = question.instruction;
-            }
+    data() {
+        return {
+            title: null,
+            instruction: null,
+            hasInstructions: false,
+            questionId: null,
         }
-    }
+    }, 
+    computed: {
+
+    },
+    methods: {
+
+    },
+    created() {
+        this.questionId = this.params.questionId
+        this.title = this.params.title
+        this.instruction = this.params.instruction
+        this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
+    },
+    watch: {
+        ['params.context.componentParent.$me.questions']() {
+            var self = this
+            var question = find(self.params.context.componentParent.$me.questions, function(o) { return o.id == self.questionId })
+            if(question !== undefined)
+                this.instruction = question.instruction
+        },
+    },
+}
 </script>
 
 

@@ -21,7 +21,7 @@
 export default {
     data() {
         return {
-            settings: []
+            settings: [],
         }
     },
     mounted() {
@@ -30,7 +30,7 @@ export default {
             .then((response) => {
                 self.settings = response.data
             })
-    }
+    },
 }
 </script>
 
