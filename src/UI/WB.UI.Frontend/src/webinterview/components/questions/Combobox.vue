@@ -24,37 +24,37 @@
 
 <script lang="js">
 
-    import { entityDetails } from "../mixins"
-    import Vue from 'vue'
+import { entityDetails } from '../mixins'
+import Vue from 'vue'
 
-    export default {
-        name: 'ComboboxQuestion',
-        mixins: [entityDetails],
-        props: ['noComments'],
-        data() {
-            return {
-                answer: null
-            }
-        },
-
-        watch: {
-            answer(newValue) {
-                this.answerComboboxQuestion(newValue)
-            }
-        },
-        
-        methods: {
-            answerComboboxQuestion(newValue) {
-                this.sendAnswer(() => {
-                    this.$store.dispatch("answerSingleOptionQuestion", { answer: newValue, identity: this.$me.id })
-                })
-            },
-
-            optionsSource(filter) {
-                const interviewId = this.$route.params.interviewId
-                return Vue.$api.interview.get('getTopFilteredOptionsForQuestion', {interviewId, id:this.$me.id, filter, count:50})
-            }
+export default {
+    name: 'ComboboxQuestion',
+    mixins: [entityDetails],
+    props: ['noComments'],
+    data() {
+        return {
+            answer: null,
         }
-    }
+    },
+
+    watch: {
+        answer(newValue) {
+            this.answerComboboxQuestion(newValue)
+        },
+    },
+        
+    methods: {
+        answerComboboxQuestion(newValue) {
+            this.sendAnswer(() => {
+                this.$store.dispatch('answerSingleOptionQuestion', { answer: newValue, identity: this.$me.id })
+            })
+        },
+
+        optionsSource(filter) {
+            const interviewId = this.$route.params.interviewId
+            return Vue.$api.interview.get('getTopFilteredOptionsForQuestion', {interviewId, id:this.$me.id, filter, count:50})
+        },
+    },
+}
 
 </script>

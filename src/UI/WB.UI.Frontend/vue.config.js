@@ -19,14 +19,14 @@ const locales = {
         "Pages", "Report", "Reports", "Settings", "Strings", "TabletLogs", "UploadUsers",
         "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI",
         "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport",
-    "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel"],
+        "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel"],
     webtester: ["WebInterviewUI", "WebInterview", "Common"],
     webinterview: ["WebInterviewUI", "WebInterview", "Common", "Details"]
 }
 
 const isPack = process.argv.indexOf("--package") >= 0;
 
-const hqDist = !isPack ? hqFolder :  join("dist", "package", "hq")
+const hqDist = !isPack ? hqFolder : join("dist", "package", "hq")
 const webTesterDist = !isPack ? webTesterFolder : join("dist", "package", "webtester")
 
 const pages = {
@@ -131,7 +131,10 @@ module.exports = {
             path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
             path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
         ]
-        
+
+        Object.keys(pages).forEach(page => {
+            resxFiles.push(path.join(uiFolder, pages[page].template))
+        })
 
         config.plugin('extraWatch')
             .use(extraWatch, [{ files: resxFiles }])
@@ -173,7 +176,7 @@ module.exports = {
             jQuery: "jquery",
         }]);
 
-        config.module.rules.delete("eslint");
+        // config.module.rules.delete("eslint");
 
         config.resolve.alias
             .set("moment$", "moment/moment.js")

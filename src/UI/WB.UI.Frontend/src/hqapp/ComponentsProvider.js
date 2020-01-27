@@ -1,4 +1,4 @@
-import { safeStore } from "~/webinterview/errors"
+import { safeStore } from '~/webinterview/errors'
 /**
  * Components provider combine all view components and expose routes for router
  * Each component expect to have following interface
@@ -18,29 +18,29 @@ export default class ComponentsProvider {
         this.rootStore = rootStore
         this.components = []
 
-        this.initialize(initialComponents);
+        this.initialize(initialComponents)
     }
 
     initialize(initialComponents) {
-        const queue = initialComponents;
+        const queue = initialComponents
 
         while (queue.length > 0) {
-            const Component = queue.pop();
+            const Component = queue.pop()
 
             if (Array.isArray(Component)) {
-                Component.forEach((c) => queue.push(c));
+                Component.forEach((c) => queue.push(c))
             } else {
-                const component = new Component(this.rootStore);
-                this.components.push(component);
+                const component = new Component(this.rootStore)
+                this.components.push(component)
             }
         }
     }
 
     get routes() {
         return flatten(this.components.map((component) => {
-            const init = component.initialize ? () => component.initialize() : null;
-            const beforeEnter = component.beforeEnter ? (to, from, next) => component.beforeEnter(to, from, next) : null;
-            const routes = component.routes || [];
+            const init = component.initialize ? () => component.initialize() : null
+            const beforeEnter = component.beforeEnter ? (to, from, next) => component.beforeEnter(to, from, next) : null
+            const routes = component.routes || []
 
             if(init || beforeEnter || component.modules) {
                 routes.forEach((route) => {
@@ -49,30 +49,30 @@ export default class ComponentsProvider {
 
                             if(component.modules != null) {
                                 Object.keys(component.modules).forEach((module) => {
-                                    this.rootStore.registerModule(module, safeStore(component.modules[module]));
-                                });
+                                    this.rootStore.registerModule(module, safeStore(component.modules[module]))
+                                })
                             }
 
-                            init && init();
+                            init && init()
 
-                            component._isInitialized = true;
+                            component._isInitialized = true
                         }
 
                         if(beforeEnter != null){ 
-                            beforeEnter(to, from, next); 
+                            beforeEnter(to, from, next) 
                         }
-                        else next();
-                    };
+                        else next()
+                    }
                 })
             }
 
-            return routes;
-        }));
+            return routes
+        }))
     }
 }
 
 function flatten(arr) {
     return arr.reduce(function (flat, toFlatten) {
-        return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
-    }, []);
+        return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten)
+    }, [])
 }

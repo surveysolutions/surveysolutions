@@ -156,7 +156,7 @@ export default {
             isLockedByHeadquarters: false,
             isLockedBySupervisor: false,
             successMessage: null,
-            supervisor: null
+            supervisor: null,
         }
     },
     computed: {
@@ -234,7 +234,7 @@ export default {
     },
     methods: {
         supervisorSelected(newValue) {
-            this.supervisor = newValue;
+            this.supervisor = newValue
         },
         createAccount: function(event) {
             this.successMessage = null

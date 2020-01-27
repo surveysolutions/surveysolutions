@@ -4,6 +4,8 @@
     {
         int GetProtocolVersion();
         int GetLastNonUpdatableVersion();
+
+        int[] GetBlackListedBuildNumbers();
     }
 
     public interface IInterviewerSyncProtocolVersionProvider : ISyncProtocolVersionProvider

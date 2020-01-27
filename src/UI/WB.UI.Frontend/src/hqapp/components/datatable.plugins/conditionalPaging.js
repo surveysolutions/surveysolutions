@@ -29,10 +29,10 @@
 (function(window, document, $) {
     $(document).on('init.dt', function(e, dtSettings) {
         if ( e.namespace !== 'dt' ) {
-            return;
+            return
         }
 
-        var options = dtSettings.oInit.conditionalPaging || $.fn.dataTable.defaults.conditionalPaging;
+        var options = dtSettings.oInit.conditionalPaging || $.fn.dataTable.defaults.conditionalPaging
 
         if ($.isPlainObject(options) || options === true) {
             var config = $.isPlainObject(options) ? options : {},
@@ -40,43 +40,43 @@
                 speed = 'slow',
                 conditionalPaging = function(e) {
                     var $paging = $(api.table().container()).find('div.dataTables_paginate'),
-                        pages = api.page.info().pages;
+                        pages = api.page.info().pages
 
                     if (e instanceof $.Event) {
                         if (pages <= 1) {
                             if (config.style === 'fade') {
-                                $paging.stop().fadeTo(speed, 0);
+                                $paging.stop().fadeTo(speed, 0)
                             }
                             else {
-                                $paging.css('visibility', 'hidden');
+                                $paging.css('visibility', 'hidden')
                             }
                         }
                         else {
                             if (config.style === 'fade') {
-                                $paging.stop().fadeTo(speed, 1);
+                                $paging.stop().fadeTo(speed, 1)
                             }
                             else {
-                                $paging.css('visibility', '');
+                                $paging.css('visibility', '')
                             }
                         }
                     }
                     else if (pages <= 1) {
                         if (config.style === 'fade') {
-                            $paging.css('opacity', 0);
+                            $paging.css('opacity', 0)
                         }
                         else {
-                            $paging.css('visibility', 'hidden');
+                            $paging.css('visibility', 'hidden')
                         }
                     }
-                };
+                }
 
             if ($.isNumeric(config.speed) || $.type(config.speed) === 'string') {
-                speed = config.speed;
+                speed = config.speed
             }
 
-            conditionalPaging();
+            conditionalPaging()
 
-            api.on('draw.dt', conditionalPaging);
+            api.on('draw.dt', conditionalPaging)
         }
-    });
-})(window, document, jQuery);
+    })
+})(window, document, window.jQuery)

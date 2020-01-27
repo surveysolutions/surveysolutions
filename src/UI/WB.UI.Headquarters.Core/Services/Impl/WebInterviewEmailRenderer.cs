@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Services.Impl
 {

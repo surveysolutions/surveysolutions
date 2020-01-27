@@ -2,7 +2,6 @@ import Layout from "./Layout"
 import Assignments from "./HqAssignments"
 import CreateNew from "./CreateNew"
 import Details from "./Details"
-import Upload from "./Upload/Index"
 import UploadErrors from "./Upload/Errors"
 import UploadVerification from "./Upload/Verification"
 import UploadProgress from "./Upload/Progress"
@@ -13,7 +12,7 @@ import config from "~/shared/config"
 import Vue from "vue"
 export default class AssignmentsComponent {
     constructor(rootStore) {
-        this.rootStore = rootStore;
+        this.rootStore = rootStore
     }
 
     get routes() {
@@ -21,16 +20,16 @@ export default class AssignmentsComponent {
         return [
             {
                 path: '/HQ/TakeNewAssignment/:interviewId',
-                component: CreateNew
+                component: CreateNew,
             },
             {
                 path: '/Assignments', component: Layout,
                 children: [
                     {
-                        path: '', component: Assignments
+                        path: '', component: Assignments,
                     },
                     {
-                        path: ':assignmentId', component: Details
+                        path: ':assignmentId', component: Details,
                     },
                     {
                         path: 'Upload', component: Layout,
@@ -119,11 +118,11 @@ export default class AssignmentsComponent {
     }
 
     initialize() {
-        const VeeValidate = require('vee-validate');
-        Vue.use(VeeValidate);
+        const VeeValidate = require('vee-validate')
+        Vue.use(VeeValidate)
     }
 
     get modules() {
-        return localStore;
+        return localStore
     }
 }
