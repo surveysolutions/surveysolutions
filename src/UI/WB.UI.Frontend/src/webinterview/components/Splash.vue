@@ -5,7 +5,7 @@
 </template>
 
 <script lang="js">
-    export default {
-        name: 'splash'
-   }
+export default {
+    name: 'splash',
+}
 </script>

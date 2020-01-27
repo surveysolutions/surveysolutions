@@ -17,9 +17,9 @@ export default {
     props: {
         title: {
             type: String,
-            default() { return this.$t('Pages.FilterTitle'); }
-        }
-    }
+            default() { return this.$t('Pages.FilterTitle') },
+        },
+    },
 
 }
 </script>

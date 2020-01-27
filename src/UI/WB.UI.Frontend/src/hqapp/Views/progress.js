@@ -1,7 +1,7 @@
 const store = {
     state: {
         pendingHandle: null,
-        pendingProgress: false
+        pendingProgress: false,
     },
     actions: {
         showProgress(context) {
@@ -12,7 +12,7 @@ const store = {
         hideProgress(context) {
             clearTimeout(context.state.pendingHandle)
             context.commit('SET_PROGRESS', false)
-        }
+        },
     },
 
     mutations: {
@@ -21,14 +21,14 @@ const store = {
         },
         SET_PROGRESS_TIMEOUT(state, handle) {
             state.pendingHandle = handle
-        }
-    }
+        },
+    },
 }
 
 export default class {
     constructor(rootStore) {
-        this.rootStore = rootStore;
+        this.rootStore = rootStore
 
-        this.rootStore.registerModule("progress", store)
+        this.rootStore.registerModule('progress', store)
     }
 }

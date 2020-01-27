@@ -36,7 +36,8 @@
             slot="modals"
         >{{$t('Pages.Supervisors_ArchiveSupervisorsConfirmMessage')}}</Confirm>
         <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
-            {{$t('Archived.UnarchiveSupervisorWarning')}} <br/>
+            {{$t('Archived.UnarchiveSupervisorWarning')}}
+            <br />
             {{$t('Pages.Supervisors_UnarchiveSupervisorsConfirm')}}
         </Confirm>
 
@@ -78,7 +79,6 @@ export default {
             selectedSupervisors: [],
         }
     },
-    computed: {},
     mounted() {
         this.loadData()
     },
@@ -170,7 +170,7 @@ export default {
                         title: this.$t('Users.SupervisorEmail'),
                         orderable: true,
                         render: function(data, type, row) {
-                            return data ? "<a href='mailto:" + data + "'>" + data + '</a>' : ''
+                            return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                         },
                     },
                     {

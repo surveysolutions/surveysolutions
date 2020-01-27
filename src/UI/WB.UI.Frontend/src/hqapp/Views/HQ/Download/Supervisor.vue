@@ -38,14 +38,14 @@
 export default {
     data() {
         return {
-            smallApkSelected: true
+            smallApkSelected: true,
         }
     },
     methods: {
     },
     computed: {
         model() {
-            return this.$config.model;
+            return this.$config.model
         },
         supportQRCodeGeneration() {
             return this.model.supportQRCodeGeneration
@@ -70,7 +70,7 @@ export default {
             } else {
                 return this.model.fullApkVersion
             }
-        }
-    }
+        },
+    },
 }
 </script>

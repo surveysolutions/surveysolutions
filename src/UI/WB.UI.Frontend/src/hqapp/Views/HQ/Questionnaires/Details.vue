@@ -147,7 +147,7 @@ export default {
     computed: {
         model() {
             return this.$config.model
-        }
+        },
     },
     mounted() {
         this.audioAudit = this.$config.model.audioAudit
@@ -170,7 +170,7 @@ export default {
             if(response.status !== 204) 
                 this.audioAudit = !this.audioAudit
             this.$refs.audioAuditModal.modal('hide')
-        }
-    }
+        },
+    },
 }
 </script>
