@@ -1,8 +1,13 @@
 <template>
-    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
-        <h5 v-dateTimeFormatting v-html="title"></h5>
-        <div class="information-block instruction" v-if="instructions">
-            <p v-dateTimeFormatting v-html="instructions"></p>
+    <div class="question table-view scroller"
+        :id="hash"
+        v-if="rowData.length > 0">
+        <h5 v-dateTimeFormatting
+            v-html="title"></h5>
+        <div class="information-block instruction"
+            v-if="instructions">
+            <p v-dateTimeFormatting
+                v-html="instructions"></p>
         </div>
         <ag-grid-vue
             ref="matrixRoster"
@@ -15,8 +20,7 @@
             :rowData="rowData"
             :grid-options="gridOptions"
             @grid-ready="onGridReady"
-            @column-resized="autosizeHeaders"
-        ></ag-grid-vue>
+            @column-resized="autosizeHeaders"></ag-grid-vue>
     </div>
 </template>
 

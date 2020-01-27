@@ -1,5 +1,12 @@
 <template>
-    <wb-question :question="$me" :questionDivCssClassName="titleClass" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true" noComments="true" noFlag="true">
+    <wb-question :question="$me"
+        :questionDivCssClassName="titleClass"
+        :questionCssClassName="statusClass"
+        noTitle="true"
+        noValidation="true"
+        noInstructions="true"
+        noComments="true"
+        noFlag="true">
         <span v-html="$me.title"></span><span v-if="this.$me.isRoster"> - <i>{{rosterTitle}}</i></span>
     </wb-question>
 </template>

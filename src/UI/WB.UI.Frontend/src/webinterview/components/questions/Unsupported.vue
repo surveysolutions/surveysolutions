@@ -1,5 +1,6 @@
 <template>
-    <wb-question :question="$me" :isDisabled="true">
+    <wb-question :question="$me"
+        :isDisabled="true">
         <h1><span>{{ $t("WebInterviewUI.QuestionUnsupported") }}</span></h1>
     </wb-question>
 </template>

@@ -1,21 +1,30 @@
 <template>
-    <div ref="additionalInfo" :class="{visible : isAdditionalInfoVisible}" v-if="isAdditionalInfoVisible" class="custom-popover overview-additional-information">
+    <div ref="additionalInfo"
+        :class="{visible : isAdditionalInfoVisible}"
+        v-if="isAdditionalInfoVisible"
+        class="custom-popover overview-additional-information">
         <div class="popover-header">
-            <button @click="close" type="button" class="close close-popover" ><span></span></button>
+            <button @click="close"
+                type="button"
+                class="close close-popover" >
+                <span></span>
+            </button>
             <h5>{{$t("WebInterviewUI.Interview_Overview_AdditionalInformation")}}</h5>
         </div>
         <div class="popover-content">
             <div v-if="additionalInfo.errors && additionalInfo.errors.length > 0">
                 <div class="information-block text-danger">
                     <h6>{{ $t("WebInterviewUI.AnswerIsInvalid") }}</h6>
-                    <p v-for="(error, index) in additionalInfo.errors" :key="index"><span v-html="error"></span></p>
+                    <p v-for="(error, index) in additionalInfo.errors"
+                        :key="index"><span v-html="error"></span></p>
                 </div>
                 <hr />
             </div>
             <div v-if="additionalInfo.warnings && additionalInfo.warnings.length > 0">
                 <div class="information-block text-warning">
                     <h6>{{ $t("WebInterviewUI.WarningsHeader") }}</h6>
-                    <p v-for="(warning, index) in warnings" :key="index"><span v-html="warning"></span></p>
+                    <p v-for="(warning, index) in warnings"
+                        :key="index"><span v-html="warning"></span></p>
                 </div>
                 <hr />
             </div>
@@ -28,8 +37,10 @@
                         :resolved="comment.resolved"
                         :key="comment.commentTimeUtc" />
                 </template>
-                <div class="comment" v-if="isCommentFormIsVisible">
-                    <form class="form-inline" onsubmit="return false;">
+                <div class="comment"
+                    v-if="isCommentFormIsVisible">
+                    <form class="form-inline"
+                        onsubmit="return false;">
                         <label>{{ $t("WebInterviewUI.CommentYours") }}</label>
                         <div class="form-group">
                             <div class="input-group comment-field">
@@ -57,8 +68,17 @@
             </div>
         </div>
         <div class="popover-footer clearftix">
-            <button type="button" v-if="item.supportsComments && addCommentsAllowed" @click="showAddCommentForm" class="btn btn-link gray-action-unit pull-left add-comment">{{$t("WebInterviewUI.CommentAdd")}}</button>
-            <button type="button" @click="close" class="btn btn-link gray-action-unit pull-right close-popover">{{$t("Pages.CloseLabel")}}</button>
+            <button type="button"
+                v-if="item.supportsComments && addCommentsAllowed"
+                @click="showAddCommentForm"
+                class="btn btn-link gray-action-unit pull-left add-comment">
+                {{$t("WebInterviewUI.CommentAdd")}}
+            </button>
+            <button type="button"
+                @click="close"
+                class="btn btn-link gray-action-unit pull-right close-popover">
+                {{$t("Pages.CloseLabel")}}
+            </button>
         </div>
     </div>
 </template>

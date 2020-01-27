@@ -1,5 +1,7 @@
 <template>
-    <div class="unit-section first-last-chapter" v-if="hasCompleteInfo" v-bind:class="{'section-with-error' : hasInvalidQuestions, 'complete-section' : isAllAnswered  }" >
+    <div class="unit-section first-last-chapter"
+        v-if="hasCompleteInfo"
+        v-bind:class="{'section-with-error' : hasInvalidQuestions, 'complete-section' : isAllAnswered  }" >
         <div class="unit-title">
             <wb-humburger></wb-humburger>
             <h3>{{ $t('WebInterviewUI.Complete') }}</h3>
@@ -11,40 +13,55 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <h4 class="gray-uppercase">{{ $t('WebInterviewUI.CompleteQuestionsStatus') }}</h4>
+                <h4 class="gray-uppercase">
+                    {{ $t('WebInterviewUI.CompleteQuestionsStatus') }}
+                </h4>
                 <div class="question-status">
                     <ul class="list-inline clearfix">
-                        <li class="answered" v-bind:class="{'has-value' : hasAnsweredQuestions }">{{ answeredQuestionsCountString }}
+                        <li class="answered"
+                            v-bind:class="{'has-value' : hasAnsweredQuestions }">{{ answeredQuestionsCountString }}
                             <span>{{$t('WebInterviewUI.CompleteQuestionsAnswered')}}</span>
                         </li>
-                        <li class="unanswered" v-bind:class="{'has-value' : hasUnansweredQuestions }">{{ unansweredQuestionsCountString }}
+                        <li class="unanswered"
+                            v-bind:class="{'has-value' : hasUnansweredQuestions }">{{ unansweredQuestionsCountString }}
                             <span>{{$t('WebInterviewUI.CompleteQuestionsUnanswered')}}</span>
                         </li>
-                        <li class="errors" v-bind:class="{'has-value' : hasInvalidQuestions }">{{ invalidQuestionsCountString }}
+                        <li class="errors"
+                            v-bind:class="{'has-value' : hasInvalidQuestions }">{{ invalidQuestionsCountString }}
                             <span>{{$t('WebInterviewUI.Error', { count: completeInfo.errorsCount })}}</span>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
+        <div class="wrapper-info"
+            v-if="completeInfo.entitiesWithError.length > 0">
             <div class="container-info">
                 <h4 class="gray-uppercase">{{ doesShowErrorsCommentWithCount
                     ? $t('WebInterviewUI.CompleteFirstErrors', { count: completeInfo.entitiesWithError.length })
                     : $t('WebInterviewUI.CompleteErrors') }}</h4>
                 <ul class="list-unstyled marked-questions">
-                    <li v-for="entity in completeInfo.entitiesWithError" :key="entity.id">
-                        <a href="javascript:void(0);" @click="navigateTo(entity)">{{ entity.title }}</a>
+                    <li v-for="entity in completeInfo.entitiesWithError"
+                        :key="entity.id">
+                        <a href="javascript:void(0);"
+                            @click="navigateTo(entity)">{{ entity.title }}</a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <label class="gray-uppercase" for="comment-for-supervisor">{{ noteToSupervisor }}</label>
+                <label class="gray-uppercase"
+                    for="comment-for-supervisor">
+                    {{ noteToSupervisor }}
+                </label>
                 <div class="field">
-                    <textarea class="field-to-fill" id="comment-for-supervisor" :placeholder="$t('WebInterviewUI.TextEnter')" v-model="comment"></textarea>
-                    <button type="submit" class="btn btn-link btn-clear">
+                    <textarea class="field-to-fill"
+                        id="comment-for-supervisor"
+                        :placeholder="$t('WebInterviewUI.TextEnter')"
+                        v-model="comment"></textarea>
+                    <button type="submit"
+                        class="btn btn-link btn-clear">
                         <span></span>
                     </button>
                 </div>
@@ -54,10 +71,12 @@
             <div class="container-info">
                 <a href="javascript:void(0);" 
                     id="btnComplete"
-                    class="btn btn-lg" v-bind:class="{
-                    'btn-success': isAllAnswered,
-                    'btn-primary' : hasUnansweredQuestions,
-                    'btn-danger' : hasInvalidQuestions }" @click="completeInterview">{{ competeButtonTitle }}</a>
+                    class="btn btn-lg"
+                    v-bind:class="{
+                        'btn-success': isAllAnswered,
+                        'btn-primary' : hasUnansweredQuestions,
+                        'btn-danger' : hasInvalidQuestions }"
+                    @click="completeInterview">{{ competeButtonTitle }}</a>
             </div>
         </div>
     </div>

@@ -1,8 +1,12 @@
 <template>
     <div :class="{'resolved-comment': resolved, 'enumerators-comment': isInterviewersComment }">
-        <h6>{{ commentTitle }} <span class="publication-date" :title="this.commentedAtDate">({{this.commentedAt}})</span></h6> 
+        <h6>{{ commentTitle }} <span class="publication-date"
+            :title="this.commentedAtDate">({{this.commentedAt}})</span></h6> 
         <p :class="{'overloaded': isCollapsed}"> <span v-html="text"></span>
-            <button v-if="isCollapsed" type="button" v-on:click="toggle()" class="btn btn-link btn-horizontal-hamburger"><span></span></button>
+            <button v-if="isCollapsed"
+                type="button"
+                v-on:click="toggle()"
+                class="btn btn-link btn-horizontal-hamburger"><span></span></button>
         </p>
     </div>
 </template>

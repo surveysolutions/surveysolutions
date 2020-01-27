@@ -6,13 +6,12 @@
         class="ag-cell-edit-input" 
         :value="$me.answer" 
         v-numericFormatting="{
-                digitGroupSeparator: groupSeparator, 
-                decimalCharacter: decimalSeparator,
-                decimalPlaces: 0, 
-                minimumValue: '-2147483648', 
-                maximumValue: '2147483647'
-            }"
-        />
+            digitGroupSeparator: groupSeparator, 
+            decimalCharacter: decimalSeparator,
+            decimalPlaces: 0, 
+            minimumValue: '-2147483648', 
+            maximumValue: '2147483647'
+        }"/>
 </template>
 
 <script lang="js">

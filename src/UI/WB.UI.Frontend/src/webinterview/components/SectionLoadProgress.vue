@@ -1,5 +1,6 @@
 <template>
-    <div v-if="visible" class="loading">
+    <div v-if="visible"
+        class="loading">
         <div>{{ $t("WebInterviewUI.LoadingWait") }}</div>
     </div>
 </template>

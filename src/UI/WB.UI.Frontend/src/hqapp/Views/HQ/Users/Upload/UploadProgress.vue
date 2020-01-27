@@ -10,11 +10,20 @@
                 </div>
                 <div class="cancelable-progress">
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" v-bind:style="{ width: importedUsersInPercents + '%' }">
+                        <div class="progress-bar"
+                            role="progressbar"
+                            aria-valuenow="60"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            v-bind:style="{ width: importedUsersInPercents + '%' }">
                             <span class="sr-only">{{importedUsersInPercents}}%</span>
                         </div>
                     </div>
-                    <button class="btn  btn-link" type="button" @click="cancelUpload">{{$t('UploadUsers.Cancel')}}</button>
+                    <button class="btn  btn-link"
+                        type="button"
+                        @click="cancelUpload">
+                        {{$t('UploadUsers.Cancel')}}
+                    </button>
                 </div>
             </div>
         </div>

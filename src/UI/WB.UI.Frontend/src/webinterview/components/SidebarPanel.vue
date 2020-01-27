@@ -1,17 +1,37 @@
 <template>
-    <div class="panel panel-default" :data-id="this.panel.id">
-        <div class="panel-heading" role="tab">
-            <h3 class="panel-title" :class="titleCss">
-                <button class="btn btn-link btn-plus" v-if="hasChild" :class="{collapsed: isCollapsed}" type="button" @click="toggle"><span></span></button>
-                <router-link :to="to" v-if="this.panel" v-html="title"></router-link>
+    <div class="panel panel-default"
+        :data-id="this.panel.id">
+        <div class="panel-heading"
+            role="tab">
+            <h3 class="panel-title"
+                :class="titleCss">
+                <button class="btn btn-link btn-plus"
+                    v-if="hasChild"
+                    :class="{collapsed: isCollapsed}"
+                    type="button"
+                    @click="toggle">
+                    <span></span>
+                </button>
+                <router-link :to="to"
+                    v-if="this.panel"
+                    v-html="title"></router-link>
             </h3>
         </div>
-        <div class="panel-collapse collapse" :class="{in: !isCollapsed}" role="tabpanel" v-if="hasChild && !isCollapsed">
+        <div class="panel-collapse collapse"
+            :class="{in: !isCollapsed}"
+            role="tabpanel"
+            v-if="hasChild && !isCollapsed">
             <div class="panel-body">
-                <div class="panel-group" role="tablist">
-                    <sidebar-panel v-for="childPanel in childPanels" :key="childPanel.id" :panel="childPanel" :currentPanel="currentPanel">
+                <div class="panel-group"
+                    role="tablist">
+                    <sidebar-panel v-for="childPanel in childPanels"
+                        :key="childPanel.id"
+                        :panel="childPanel"
+                        :currentPanel="currentPanel">
                     </sidebar-panel>
-                    <sidebar-panel :panel="loading" :currentPanel="currentPanel" v-if="childPanels.length === 0"></sidebar-panel>
+                    <sidebar-panel :panel="loading"
+                        :currentPanel="currentPanel"
+                        v-if="childPanels.length === 0"></sidebar-panel>
                 </div>
             </div>
         </div>

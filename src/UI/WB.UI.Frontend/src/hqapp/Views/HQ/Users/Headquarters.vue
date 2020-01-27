@@ -1,26 +1,29 @@
 <template>
-  <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl" :topicButton="$t('Users.AddHeadquarters')">
-    <div slot='subtitle'>
-        <div class="neighbor-block-to-search">
-            <ol v-if="this.model.showInstruction" class="list-unstyled">
-                <li>{{ $t('Pages.Users_Headquarters_Instruction1') }}</li>
-                <li>{{ $t('Pages.Users_Headquarters_Instruction2') }}</li>
-            </ol>
+    <HqLayout :hasFilter="false"
+        :title="title"
+        :topicButtonRef="this.model.createUrl"
+        :topicButton="$t('Users.AddHeadquarters')">
+        <div slot='subtitle'>
+            <div class="neighbor-block-to-search">
+                <ol v-if="this.model.showInstruction"
+                    class="list-unstyled">
+                    <li>{{ $t('Pages.Users_Headquarters_Instruction1') }}</li>
+                    <li>{{ $t('Pages.Users_Headquarters_Instruction2') }}</li>
+                </ol>
+            </div>
         </div>
-    </div>
 
-    <DataTables
-      ref="table"
-      :tableOptions="tableOptions"
-      @ajaxComplete="onTableReload"
-      :contextMenuItems="contextMenuItems"
-      :supportContextMenu="model.showContextMenu"
-      noSelect
-      :noPaging="false"
-    >
-    </DataTables>
+        <DataTables
+            ref="table"
+            :tableOptions="tableOptions"
+            @ajaxComplete="onTableReload"
+            :contextMenuItems="contextMenuItems"
+            :supportContextMenu="model.showContextMenu"
+            noSelect
+            :noPaging="false">
+        </DataTables>
 
-  </HqLayout>
+    </HqLayout>
 </template>
 
 <script>
