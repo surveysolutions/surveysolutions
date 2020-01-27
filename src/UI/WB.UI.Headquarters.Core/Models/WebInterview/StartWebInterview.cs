@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
     public class ResumeWebInterview: StartOrResumeWebInterview
     {
-        public DateTime? StartedDate { get; set; }
+        public string StartedDate { get; set; }
         public string ResumeWelcome { get; set; }
         public string ResumeInvitation { get; set; }
     }
@@ -35,8 +35,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class FinishWebInterview
     {
         public string QuestionnaireTitle { get; set; }
-        public DateTime? StartedDate { get; set; }
-        public DateTime? CompletedDate { get; set; }
+        public string StartedDate { get; set; }
+        public string CompletedDate { get; set; }
         public string WebSurveyHeader { get; set; }
         public string FinishInterview { get; set; }
         public string SurveyName { get; set; }
