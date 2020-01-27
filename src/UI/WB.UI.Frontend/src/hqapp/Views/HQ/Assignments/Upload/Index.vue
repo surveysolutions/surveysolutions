@@ -1,16 +1,21 @@
 <template>
-    <HqLayout :hasFilter="false">
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a href="../../SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
-                </li>
-            </ol>
-            <h1>{{$t('BatchUpload.CreatingMultipleAssignments')}}</h1>
-        </div>
-        <div class="row">
-            <div class="col-sm-8">
-                <h2>{{$t('Pages.QuestionnaireNameFormat', { name : questionnaire.title, version : questionnaire.version})}}</h2>
+    <HqLayout :fixedWidth="true"
+        :hasHeader="false">
+        <div slot="filters">
+            <div class="row">
+                <div class="page-header">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="/SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
+                        </li>
+                    </ol>
+                    <h1>{{$t('BatchUpload.CreatingMultipleAssignments')}}</h1>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2>{{$t('Pages.QuestionnaireNameFormat', { name : questionnaire.title, version : questionnaire.version})}}</h2>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -46,10 +51,10 @@
                         v-for="item in questionnaire.identifyingQuestions"
                         :key="item.caption">{{ item.caption}}</li>
                 </ul>
-                <h3
-                    v-if="questionnaire.hiddenQuestions.length > 0">{{$t('BatchUpload.HiddenQuestions')}}</h3>
-                <ul
-                    v-if="questionnaire.hiddenQuestions.length > 0"
+                <h3 v-if="questionnaire.hiddenQuestions.length > 0">
+                    {{$t('BatchUpload.HiddenQuestions')}}
+                </h3>
+                <ul v-if="questionnaire.hiddenQuestions.length > 0"
                     class="list-unstyled prefilled-data">
                     <li v-for="item in questionnaire.hiddenQuestions"
                         :key="item">{{item}}</li>
@@ -69,9 +74,11 @@
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info">
                 <h3>{{$t('BatchUpload.Select_Responsible')}}</h3>
                 <p>{{$t('BatchUpload.Select_Responsible_Description')}}</p>
-                <form-group>
-                    <div class="field"
-                        :class="{answered: responsible != null}">
+                <form-group :error="errorByResponsible">
+                    <div
+                        class="field form-control"
+                        :class="{answered: responsible != null}"
+                        style="padding:0">
                         <Typeahead
                             control-id="responsible"
                             :value="responsible"
@@ -90,20 +97,43 @@
                         <p v-html="$t('BatchUpload.SimpleDescription')"></p>
                     </div>
                     <div>
-                        <a
-                            v-bind:href="api.simpleTemplateDownloadUrl">{{$t('BatchUpload.DownloadTabTemplate')}}</a>
+                        <a v-bind:href="api.simpleTemplateDownloadUrl">
+                            {{$t('BatchUpload.DownloadTabTemplate')}}
+                        </a>
+                        <div class="progress-wrapper-block"
+                            v-if="hasUploadProcess">
+                            <p class="warning-message">
+                                {{$t('UploadUsers.UploadInProgress', {userName: ownerOfCurrentUploadProcess})}}
+                                <br />
+                                {{$t('UploadUsers.UploadInProgressDescription')}}
+                            </p>
+                            <div class="progress">
+                                <div
+                                    class="progress-bar progress-bar-info"
+                                    role="progressbar"
+                                    aria-valuenow="5"
+                                    aria-valuemin="0"
+                                    aria-valuemax="11"
+                                    v-bind:style="{ width: importedAssignmentsInPercents + '%' }">
+                                    <span class="sr-only">{{importedAssignmentsInPercents}}%</span>
+                                </div>
+                            </div>
+                            <span>{{$t('UploadUsers.EstimatedTime', {estimatedTime: estimatedTimeToFinishCurrentProcess })}}</span>
+                        </div>
                         <input
+                            v-if="!hasUploadProcess"
                             name="file"
                             ref="uploader"
                             v-show="false"
                             accept=".tab, .txt, .zip"
                             type="file"
-                            @change="onSimpleFileUpload"
+                            @change="onSimpleFileSelected"
                             class="btn btn-default btn-lg btn-action-questionnaire"/>
                         <button
+                            v-if="!hasUploadProcess"
                             type="button"
                             class="btn btn-success"
-                            @click="$refs.uploader.click()">{{$t('BatchUpload.UploadTabFile')}}</button>
+                            @click="uploadSimple">{{$t('BatchUpload.UploadTabFile')}}</button>
                     </div>
                 </div>
             </div>
@@ -114,20 +144,23 @@
                         <p v-html="$t('BatchUpload.BatchDescription')"></p>
                     </div>
                     <div>
-                        <a
-                            v-bind:href="api.templateDownloadUrl">{{$t('BatchUpload.DownloadTemplateArchive')}}</a>
+                        <a v-bind:href="api.templateDownloadUrl">
+                            {{$t('BatchUpload.DownloadTemplateArchive')}}
+                        </a>
                         <input
                             name="file"
                             ref="uploaderAdvanced"
                             v-show="false"
+                            v-if="!hasUploadProcess"
                             accept=".zip"
                             type="file"
-                            @change="onAdvancedFileUpload"
+                            @change="onAdvancedFileSelected"
                             class="btn btn-default btn-lg btn-action-questionnaire"/>
                         <button
+                            v-if="!hasUploadProcess"
                             type="button"
                             class="btn btn-success"
-                            @click="$refs.uploaderAdvanced.click()">{{$t('BatchUpload.UploadZipFile')}}</button>
+                            @click="uploadAdvanced">{{$t('BatchUpload.UploadZipFile')}}</button>
                     </div>
                 </div>
             </div>
@@ -141,6 +174,7 @@
 </template>
 <script>
 import * as toastr from 'toastr'
+import moment from 'moment'
 
 export default {
     data() {
@@ -148,6 +182,8 @@ export default {
             showQuestions: false,
             responsible: null,
             timerId: 0,
+            currentUploadProcess: null,
+            errorByResponsible: undefined,
         }
     },
     computed: {
@@ -166,31 +202,81 @@ export default {
         manualModeDescription() {
             return this.$t('BatchUpload.ManualModeDescription', {
                 url:
-                    '<a href=\'' +
-                    this.api.createAssignmentUrl +
-                    '\'>' +
-                    this.$t('BatchUpload.ManualModeLinkTitle') +
-                    '</a>',
+          '<a href=\'' +
+          this.api.createAssignmentUrl +
+          '\'>' +
+          this.$t('BatchUpload.ManualModeLinkTitle') +
+          '</a>',
             })
-        },
-        requestVerificationToken() {
-            return this.$hq.Util.getCsrfCookie()
         },
         questionnaireId() {
             return this.$route.params.questionnaireId
         },
+        hasUploadProcess() {
+            return (
+                this.currentUploadProcess != null &&
+        this.currentUploadProcess.processStatus != 'ImportCompleted'
+            )
+        },
+        ownerOfCurrentUploadProcess() {
+            return this.currentUploadProcess.responsibleName
+        },
+        estimatedTimeToFinishCurrentProcess() {
+            let now = moment()
+            let timeDiff = now - moment.utc(this.currentUploadProcess.startedDate)
+            let timeRemaining =
+        (timeDiff / this.importedAssignmentsCount) * this.assignmentsInQueue
+
+            return moment.duration(timeRemaining).humanize()
+        },
+        assignmentsInQueue() {
+            return this.totalAssignmentsToImportCount - this.importedAssignmentsCount
+        },
+        importedAssignmentsCount() {
+            return (
+                this.currentUploadProcess.verifiedCount +
+        this.currentUploadProcess.processedCount +
+        this.currentUploadProcess.withErrorsCount *
+          2 /* because verification and import */
+            )
+        },
+        totalAssignmentsToImportCount() {
+            return (
+                this.currentUploadProcess.totalCount * 2
+            ) /* because verification and import */
+        },
+        importedAssignmentsInPercents() {
+            return (
+                (this.importedAssignmentsCount / this.totalAssignmentsToImportCount) *
+        100
+            )
+        },
     },
     methods: {
+        setErrorByResponsible() {
+            if (this.responsible == null)
+                this.errorByResponsible = this.$t('BatchUpload.RequiredField')
+            else this.errorByResponsible = undefined
+        },
         responsibleSelected(newValue) {
             this.responsible = newValue
+            this.setErrorByResponsible()
         },
-        onSimpleFileUpload(e) {
-            this.upload(e, 1 /* simple */)
+        uploadSimple() {
+            this.setErrorByResponsible()
+            if (!this.errorByResponsible) this.$refs.uploader.click()
         },
-        onAdvancedFileUpload(e) {
-            this.upload(e, 2 /* advanced */)
+        uploadAdvanced() {
+            this.setErrorByResponsible()
+            if (!this.errorByResponsible) this.$refs.uploaderAdvanced.click()
         },
-        upload(e, type) {
+        onSimpleFileSelected(e) {
+            this.uploadFileToServer(e, 1 /* simple */)
+        },
+        onAdvancedFileSelected(e) {
+            this.uploadFileToServer(e, 2 /* advanced */)
+        },
+        uploadFileToServer(e, type) {
             const files = e.target.files || e.dataTransfer.files
 
             if (!files.length) {
@@ -217,26 +303,34 @@ export default {
                 .then(response => {
                     window.clearInterval(this.timerId)
                     self.$store.dispatch('setUploadFileName', file.name)
+
                     const errors = response.data
-                    if (errors.length == 0) self.$router.push({name: 'uploadprogress'})
+                    if (errors.length == 0)
+                        self.$router.push({ name: 'assignments-upload-verification' })
                     else {
                         self.$store.dispatch('setUploadVerificationErrors', errors)
-                        self.$router.push({name: 'uploadverification'})
+                        self.$router.push({ name: 'assignments-upload-errors' })
                     }
                 })
                 .catch(e => {
                     if (e.response.data.message) toastr.error(e.response.data.message)
-                    else if (e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage)
-                    else toastr.error(window.input.settings.messages.unhandledExceptionMessage)
+                    else if (e.response.data.ExceptionMessage)
+                        toastr.error(e.response.data.ExceptionMessage)
+                    else
+                        toastr.error(
+                            window.input.settings.messages.unhandledExceptionMessage
+                        )
                 })
         },
         updateStatus() {
+            var self = this
             this.$http.get(this.api.importStatusUrl).then(response => {
-                if (this.responsible.data != null) this.$store.dispatch('setUploadStatus', response.data)
+                this.currentUploadProcess = response.data
             })
         },
     },
     mounted() {
+        this.currentUploadProcess = this.$store.getters.upload.progress
         this.timerId = window.setInterval(() => {
             this.updateStatus()
         }, 500)

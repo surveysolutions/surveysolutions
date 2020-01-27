@@ -133,6 +133,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.UserBatchUpload)]
+        [Authorize(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
         public ActionResult Upload() => View(new
         {

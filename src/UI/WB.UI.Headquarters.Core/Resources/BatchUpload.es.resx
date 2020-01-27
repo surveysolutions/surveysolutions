@@ -274,22 +274,22 @@
     <value>1 error</value>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>{0} asignaciones verificadas satisfactoriamente</value>
+      <value>{{count}} asignaciones verificadas satisfactoriamente</value>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>{0} errores</value>
+      <value>{{count}} errores</value>
   </data>
   <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
     <value>Verificación de datos de asignación</value>
   </data>
   <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
-    <value>Verificación de asignaciones para el cuestionario {0}</value>
+      <value>Verificación de asignaciones para el cuestionario {{title}}</value>
   </data>
   <data name="Import_VerificationOfDataFile" xml:space="preserve">
     <value>Verificación del archivo de datos</value>
   </data>
   <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-    <value>paso {0} de {1}</value>
+      <value>paso {{verifiedCount}} de {{totalCount}}</value>
   </data>
   <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
     <value>Verificación de datos satisfactoria</value>
@@ -298,10 +298,10 @@
     <value>Creando múltiples asignaciones a partir de archivo por lotes</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Importando asignaciones para {0}</value>
+      <value>Importando asignaciones para {{title}}</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
-    <value>Importando información de {0} para {1}</value>
+      <value>Importando información de {{fileName}} para {{title}}</value>
   </data>
   <data name="Importing" xml:space="preserve">
     <value>Importando</value>
@@ -331,7 +331,7 @@
     <value>Importando entrevistas para {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} de {1}</value>
+      <value>{{createdCount}} de {{totalCount}}</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Importar muestra</value>
@@ -361,13 +361,13 @@
     <value>Mensaje</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0} asignaciones no se pudieron crear </value>
+      <value>{{count}} asignaciones no se pudieron crear </value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} asignaciones creados</value>
+      <value>{{count}} asignaciones creados</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>{0} errores encontrados</value>
+      <value>{{coun}t} errores encontrados</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
     <value>{0} entrevistas no se pudieron crear</value>
