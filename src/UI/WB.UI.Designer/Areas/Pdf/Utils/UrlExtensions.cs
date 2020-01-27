@@ -1,44 +1,38 @@
-﻿using System;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.DependencyInjection;
+using NHibernate.Event.Default;
 
 namespace WB.UI.Designer.Code
 {
     public static class UrlExtensions
     {
-        public static string ContentAbsolute(this IUrlHelper urlHelper, string contentPath)
+        public static string ContentAbsolute(this IHtmlHelper htmlHelper, string contentPath)
         {
-            var path = urlHelper.Content(contentPath);
-            return ConvertToAbsoluteUrl(urlHelper, path);
-        }
-
-        public static string HttpRouteUrlAbsolute(this IUrlHelper urlHelper, string routeName, object routeValues)
-        {
-            var path = urlHelper.RouteUrl(new UrlRouteContext()
+            string root = "";
+            if (htmlHelper.ViewData.ContainsKey("webRoot"))
             {
-                RouteName = routeName,
-                Values = routeValues
-            });
-            return ConvertToAbsoluteUrl(urlHelper, path);
+                root = htmlHelper.ViewData["webRoot"].ToString();
+            }
+            else
+            {
+                var urlHelperFactory = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
+                var actionContextAccessor = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IActionContextAccessor>();
+                var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+                root = urlHelper.Content("~");
+            }
+            return ConvertToAbsoluteUrl(root, contentPath);
         }
 
-        private static string ConvertToAbsoluteUrl(this IUrlHelper urlHelper, string path)
+        private static string ConvertToAbsoluteUrl(string webRoot, string path)
         {
-            HttpRequest request = urlHelper.ActionContext.HttpContext.Request;
-            var uri = new Uri(new Uri(request.Scheme + "://" + request.Host.Value), urlHelper.Content(path));
-            return uri.ToString();
-        }
+            if (path.StartsWith("~"))
+            {
+                return path.Replace("~", webRoot);
+            }
 
-        public static string AbsoluteAction(
-            this IUrlHelper url,
-            string actionName, 
-            string controllerName, 
-            object routeValues = null)
-        {
-            string scheme = url.ActionContext.HttpContext.Request.Scheme;
-            return url.Action(actionName, controllerName, routeValues, scheme);
+            return webRoot + path;
         }
     }
 }

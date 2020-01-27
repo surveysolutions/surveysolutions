@@ -12,15 +12,15 @@
 </template>
 
 <script>
-import SearchBreabcrumbs from "./SearchBreabcrumbs";
+import SearchBreabcrumbs from './SearchBreabcrumbs'
 
 export default {
-  props: {
-    search: {
-      type: Object,
-      required: true
-    }
-  },
-  components: { SearchBreabcrumbs }
-};
+    props: {
+        search: {
+            type: Object,
+            required: true,
+        },
+    },
+    components: { SearchBreabcrumbs },
+}
 </script>

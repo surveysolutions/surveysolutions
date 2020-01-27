@@ -39,102 +39,102 @@
     </div>
 </template>
 <script lang="js">
-    import { escape, escapeRegExp } from "lodash"
+import { escape, escapeRegExp } from 'lodash'
     
-    export default {
-        name: 'wb-typeahead',
-        props: {
-            value: {
-                type: Object,
-                default: null
-            },
-            questionId: {
-                type: String,
-                default: null
-            },
-            optionsSource: {
-                type: Function,
-                required: true
-            },
-            disabled: {
-                required: false,
-                type: Boolean
-            },
-            watermark: {
-                required: false,
-                type: String,
-                default: null
-            }
+export default {
+    name: 'wb-typeahead',
+    props: {
+        value: {
+            type: Object,
+            default: null,
         },
-        computed: {
-            watermarkText() {
-                return this.watermark || this.$t("WebInterviewUI.ClickToAnswer")
-            },
-            searchBoxId() {
-                return `sb_${this.questionId}`
-            }
+        questionId: {
+            type: String,
+            default: null,
         },
-        data() {
-            return {
-                searchTerm: '',
-                options: [],
-                isLoading: false
-            }
+        optionsSource: {
+            type: Function,
+            required: true,
         },
-        methods: {
-            onSearchBoxDownKey() {
-                const $firstOptionAnchor = $(this.$refs.dropdownMenu).find('a').first();
-                $firstOptionAnchor.focus()
-            },
-            onOptionUpKey(event) {
-                const isFirstOption = $(event.target).parent().index() === 1;
-
-                if (isFirstOption) {
-                    this.$refs.searchBox.focus()
-                    event.stopPropagation()
-                }
-            },
-            updateOptionsList(e) {
-                this.loadOptions(e.target.value)
-            },
-            loadOptions(filter) {
-                this.isLoading = true
-
-                return this.optionsSource(filter).then((options) => {
-                    this.isLoading = false
-                    this.options = options || []
-                });
-            },
-            selectOption(value) {
-                this.$emit('input', value)
-            },
-            highlight(title, searchTerm) {
-                const encodedTitle = escape(title)
-                if (searchTerm) {
-                    const safeSearchTerm = escape(escapeRegExp(searchTerm))
-
-                    var iQuery = new RegExp(safeSearchTerm, "ig")
-
-                    return encodedTitle.replace(iQuery, (matchedTxt) => {
-                        return `<strong>${matchedTxt}</strong>`
-                    })
-                }
-
-                return encodedTitle
-            }
+        disabled: {
+            required: false,
+            type: Boolean,
         },
-        mounted() {
-            const jqEl = $(this.$el)
-            const focusTo = jqEl.find(`#${this.searchBoxId}`)
-            
-            jqEl.on('shown.bs.dropdown', () => {
-                focusTo.focus()
-                this.loadOptions(this.searchTerm)
-            })
-
-            jqEl.on('hidden.bs.dropdown', () => {
-                this.searchTerm = ""
-            })
+        watermark: {
+            required: false,
+            type: String,
+            default: null,
+        },
+    },
+    computed: {
+        watermarkText() {
+            return this.watermark || this.$t('WebInterviewUI.ClickToAnswer')
+        },
+        searchBoxId() {
+            return `sb_${this.questionId}`
+        },
+    },
+    data() {
+        return {
+            searchTerm: '',
+            options: [],
+            isLoading: false,
         }
-    }
+    },
+    methods: {
+        onSearchBoxDownKey() {
+            const $firstOptionAnchor = $(this.$refs.dropdownMenu).find('a').first()
+            $firstOptionAnchor.focus()
+        },
+        onOptionUpKey(event) {
+            const isFirstOption = $(event.target).parent().index() === 1
+
+            if (isFirstOption) {
+                this.$refs.searchBox.focus()
+                event.stopPropagation()
+            }
+        },
+        updateOptionsList(e) {
+            this.loadOptions(e.target.value)
+        },
+        loadOptions(filter) {
+            this.isLoading = true
+
+            return this.optionsSource(filter).then((options) => {
+                this.isLoading = false
+                this.options = options || []
+            })
+        },
+        selectOption(value) {
+            this.$emit('input', value)
+        },
+        highlight(title, searchTerm) {
+            const encodedTitle = escape(title)
+            if (searchTerm) {
+                const safeSearchTerm = escape(escapeRegExp(searchTerm))
+
+                var iQuery = new RegExp(safeSearchTerm, 'ig')
+
+                return encodedTitle.replace(iQuery, (matchedTxt) => {
+                    return `<strong>${matchedTxt}</strong>`
+                })
+            }
+
+            return encodedTitle
+        },
+    },
+    mounted() {
+        const jqEl = $(this.$el)
+        const focusTo = jqEl.find(`#${this.searchBoxId}`)
+            
+        jqEl.on('shown.bs.dropdown', () => {
+            focusTo.focus()
+            this.loadOptions(this.searchTerm)
+        })
+
+        jqEl.on('hidden.bs.dropdown', () => {
+            this.searchTerm = ''
+        })
+    },
+}
 </script>

@@ -2,5 +2,15 @@
     "search.exclude": {
         "**/dist": true,
         "**/locale": true
-    }
+    },
+    "eslint.alwaysShowStatus": true,
+    "eslint.lintTask.enable": true,
+    "vetur.format.enable": true,
+    "editor.formatOnSave": true,
+    "typescript.preferences.quoteStyle": "single",
+    "javascript.preferences.quoteStyle": "single",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "editor.detectIndentation": false
 }

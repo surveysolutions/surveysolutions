@@ -12,10 +12,8 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using WB.Core.BoundedContexts.Headquarters;
 
-namespace WB.UI.Headquarters.Services.Impl
+namespace WB.UI.Shared.Web.Services
 {
     /// <summary>
     /// https://github.com/aspnet/Entropy/blob/master/samples/Mvc.RenderViewToString/RazorViewToStringRenderer.cs
@@ -34,8 +32,9 @@ namespace WB.UI.Headquarters.Services.Impl
             this.tempDataProvider = tempDataProvider;
             this.serviceProvider = serviceProvider;
         }
- 
-        public async Task<string> RenderToStringAsync(string viewName, object model, string webRoot = null)
+
+        public async Task<string> RenderToStringAsync(string viewName, object model, string webRoot = null,
+            RouteData routeData = null)
         {
             using var scope = serviceProvider.CreateScope();
             var httpContext = new DefaultHttpContext
@@ -43,13 +42,13 @@ namespace WB.UI.Headquarters.Services.Impl
                 RequestServices = scope.ServiceProvider
             };
 
-            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+            var actionContext = new ActionContext(httpContext, routeData ?? new RouteData(), new ActionDescriptor());
 
             var view = FindView(actionContext, viewName);
 
             if (view == null)
             {
-                throw new ArgumentNullException($"{viewName} does not match any available view");
+                throw new ArgumentNullException($"{viewName} does not match any  available view");
             }
 
             var viewDictionary =
@@ -78,7 +77,7 @@ namespace WB.UI.Headquarters.Services.Impl
             return sw.ToString();
         }
 
-        
+
         private IView FindView(ActionContext actionContext, string viewName)
         {
             var getViewResult = razorViewEngine.GetView(executingFilePath: null, viewPath: viewName, isMainPage: true);
@@ -96,7 +95,9 @@ namespace WB.UI.Headquarters.Services.Impl
             var searchedLocations = getViewResult.SearchedLocations.Concat(findViewResult.SearchedLocations);
             var errorMessage = string.Join(
                 Environment.NewLine,
-                new[] { $"Unable to find view '{viewName}'. The following locations were searched:" }.Concat(searchedLocations)); ;
+                new[] {$"Unable to find view '{viewName}'. The following locations were searched:"}.Concat(
+                    searchedLocations));
+            ;
 
             throw new InvalidOperationException(errorMessage);
         }

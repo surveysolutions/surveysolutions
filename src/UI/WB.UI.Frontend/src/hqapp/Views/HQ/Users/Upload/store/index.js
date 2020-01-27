@@ -1,25 +1,25 @@
 export default {
     state: {
-        fileName: "",
+        fileName: '',
         verificationErrors: [],
         complete: {},
-        progress: {}
+        progress: {},
     },
 
     actions: {
         setUploadFileName({ commit }, fileName) {
-            commit("SET_FILE_NAME", fileName)
+            commit('SET_FILE_NAME', fileName)
         },
         setUploadVerificationErrors({ commit }, errors) {
-            commit("SET_VERIFICATION_ERRORS", errors)
+            commit('SET_VERIFICATION_ERRORS', errors)
         },
         setUploadStatus({ commit, dispatch }, status) {
-            dispatch("setUploadFileName", status.fileName)
-            commit("SET_STATUS", status)
+            dispatch('setUploadFileName', status.fileName)
+            commit('SET_STATUS', status)
         },
         setUploadCompleteStatus({ commit }, status) {
-            commit("SET_COMPLETE_STATUS", status)
-        }
+            commit('SET_COMPLETE_STATUS', status)
+        },
     },
 
     mutations: {
@@ -34,12 +34,12 @@ export default {
         },
         SET_COMPLETE_STATUS(state, status) {
             state.complete = status
-        }
+        },
     },
 
     getters: {
         upload(state) {
             return state
-        }
-    }
+        },
+    },
 }

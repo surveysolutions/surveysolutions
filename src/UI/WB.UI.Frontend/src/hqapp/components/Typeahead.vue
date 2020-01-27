@@ -55,24 +55,24 @@
 </template>
 
 <script>
-import Fuse from "fuse.js";
+import Fuse from 'fuse.js'
 import { assign, chain, find, escape, escapeRegExp } from 'lodash'
 
 export default {
-    name: "Typeahead",
+    name: 'Typeahead',
 
     props: {
         fetchUrl: String,
         controlId: {
             type: String,
-            required: true
+            required: true,
         },
         value: Object,
         placeholder: String,
         ajaxParams: Object,
         forceLoadingState: {
             type: Boolean,
-            default: false
+            default: false,
         },
         values: Array,
         noSearch: Boolean,
@@ -80,60 +80,60 @@ export default {
         disabled: Boolean,
         fuzzy: {
             type: Boolean,
-            default: false
+            default: false,
         },
         selectFirst: {
             type: Boolean,
-            default: false
+            default: false,
         },
         selectedKey: {
             type: String,
-            default: null
-        }
+            default: null,
+        },
     },
     watch: {
         fetchUrl (val) {
-            this.clear();
+            this.clear()
             if(val) {
-                this.fetchOptions();
+                this.fetchOptions()
             }
             else {
-                this.options.splice(0, this.options.length);
+                this.options.splice(0, this.options.length)
             }
-        }
+        },
     },
     data() {
         return {
             options: [],
             isLoading: false,
-            searchTerm: ""
-        };
+            searchTerm: '',
+        }
     },
 
     computed: {
         inputId() {
-            return `sb_${this.controlId}`;
+            return `sb_${this.controlId}`
         },
         buttonId() {
-            return `btn_trigger_${this.controlId}`;
+            return `btn_trigger_${this.controlId}`
         },
         placeholderText() {
-            return this.placeholder || "Select";
-        }
+            return this.placeholder || 'Select'
+        },
     },
 
     mounted() {
-        const jqEl = $(this.$el);
-        const focusTo = jqEl.find(`#${this.inputId}`);
+        const jqEl = $(this.$el)
+        const focusTo = jqEl.find(`#${this.inputId}`)
 
-        jqEl.on("shown.bs.dropdown", () => {
-            focusTo.focus();
-            this.fetchOptions(this.searchTerm);
-        });
+        jqEl.on('shown.bs.dropdown', () => {
+            focusTo.focus()
+            this.fetchOptions(this.searchTerm)
+        })
 
-        jqEl.on("hidden.bs.dropdown", () => {
-            this.searchTerm = "";
-        });
+        jqEl.on('hidden.bs.dropdown', () => {
+            this.searchTerm = ''
+        })
 
         this.fuseOptions = {
             shouldSort: true,
@@ -143,92 +143,92 @@ export default {
             distance: 100,
             maxPatternLength: 32,
             minMatchCharLength: 1,
-            keys: ["value"]
-        };
+            keys: ['value'],
+        }
 
         if(this.selectedKey != null) {
-            this.fetchOptions(this.searchTerm, this.selectedKey);
+            this.fetchOptions(this.searchTerm, this.selectedKey)
         }
     },
 
     methods: {
         onSearchBoxDownKey() {
             const $firstOptionAnchor = $(this.$refs.dropdownMenu)
-                .find("a")
-                .first();
-            $firstOptionAnchor.focus();
+                .find('a')
+                .first()
+            $firstOptionAnchor.focus()
         },
         onOptionUpKey(event) {
             const isFirstOption =
                 $(event.target)
                     .parent()
-                    .index() === 1;
+                    .index() === 1
 
             if (isFirstOption) {
-                this.$refs.searchBox.focus();
-                event.stopPropagation();
+                this.$refs.searchBox.focus()
+                event.stopPropagation()
             }
         },
 
-        fetchOptions(filter = "", selectedKey = null) {
+        fetchOptions(filter = '', selectedKey = null) {
             if (this.values) {
-                if (filter != "") {
-                    const fuse = new Fuse(this.values, this.fuseOptions);
-                    this.options = this.setOptions(fuse.search(filter), false);
+                if (filter != '') {
+                    const fuse = new Fuse(this.values, this.fuseOptions)
+                    this.options = this.setOptions(fuse.search(filter), false)
                 } else {
-                    this.options = this.setOptions(this.values);
+                    this.options = this.setOptions(this.values)
                 }
 
                 if(selectedKey != null) {
-                    this.selectByKey(selectedKey);
+                    this.selectByKey(selectedKey)
                 }
 
-                return;
+                return
             }
 
-            this.isLoading = true;
+            this.isLoading = true
             const requestParams = assign(
                 { query: filter, cache: false},
                 this.ajaxParams
-            );
+            )
 
             return this.$http
                 .get(this.fetchUrl, { params: requestParams })
                 .then(response => {
                     if(response != null && response.data != null) {
-                        this.options = this.setOptions(response.data.options || []);
+                        this.options = this.setOptions(response.data.options || [])
                         if (this.selectFirst && this.options.length > 0)
                         {
-                            this.selectOption(this.options[0].item);
+                            this.selectOption(this.options[0].item)
                         }
                     }
 
-                    this.isLoading = false;
+                    this.isLoading = false
                     
                     if(selectedKey != null) {
-                        this.selectByKey(selectedKey);
+                        this.selectByKey(selectedKey)
                     }
                 })
-                .catch(() => (this.isLoading = false));
+                .catch(() => (this.isLoading = false))
         },
 
         setOptions(values, wrap = true) {
-            if (wrap == false) return values;
+            if (wrap == false) return values
 
             return chain(values).filter(v => v != null).map(v => {
                 return {
                     item: v,
-                    matches: null
-                };
-            }).value();
+                    matches: null,
+                }
+            }).value()
         },
 
         clear() {
-            this.$emit("selected", null, this.controlId);
-            this.searchTerm = "";
+            this.$emit('selected', null, this.controlId)
+            this.searchTerm = ''
         },
         selectOption(value) {
-            this.$emit("selected", value, this.controlId);
+            this.$emit('selected', value, this.controlId)
         },
         selectByKey(key) {
             const itemToSelect = find(this.options, o => o.item.key == key)
@@ -237,61 +237,61 @@ export default {
             }
         },
         updateOptionsList(e) {
-            this.fetchOptions(e.target.value);
+            this.fetchOptions(e.target.value)
         },
         highlight(option, searchTerm) {
             if (option.matches == null) {
-                const encodedTitle = escape(option.item.value);
+                const encodedTitle = escape(option.item.value)
 
                 if (searchTerm) {
-                    const safeSearchTerm = escape(escapeRegExp(searchTerm));
-                    const iQuery = new RegExp(safeSearchTerm, "ig");
+                    const safeSearchTerm = escape(escapeRegExp(searchTerm))
+                    const iQuery = new RegExp(safeSearchTerm, 'ig')
 
                     return encodedTitle.replace(iQuery, matchedTxt => {
-                        return `<strong>${matchedTxt}</strong>`;
-                    });
+                        return `<strong>${matchedTxt}</strong>`
+                    })
                 }
 
-                return encodedTitle;
+                return encodedTitle
             } else {
                 return generateHighlightedText(
                     option.item.value,
                     option.matches[0].indices
-                );
+                )
             }
         },
         keyFunc(item) {
-            return item == null ? 'null' : item.key + "$" + item.value 
-        }
-    }
-};
+            return item == null ? 'null' : item.key + '$' + item.value 
+        },
+    },
+}
 
 // Does not account for overlapping highlighted regions, if that exists at all O_o..
 function generateHighlightedText(
     text,
     regions,
-    start = "<strong>",
-    end = "</strong>"
+    start = '<strong>',
+    end = '</strong>'
 ) {
-    if (!regions) return text;
+    if (!regions) return text
 
-    var content = "",
-        nextUnhighlightedRegionStartingIndex = 0;
+    var content = '',
+        nextUnhighlightedRegionStartingIndex = 0
 
     regions.forEach(region => {
         content +=
-            "" +
+            '' +
             text.substring(nextUnhighlightedRegionStartingIndex, region[0]) +
             start +
             text.substring(region[0], region[1] + 1) +
             end +
-            "";
+            ''
 
-        nextUnhighlightedRegionStartingIndex = region[1] + 1;
-    });
+        nextUnhighlightedRegionStartingIndex = region[1] + 1
+    })
 
-    content += text.substring(nextUnhighlightedRegionStartingIndex);
+    content += text.substring(nextUnhighlightedRegionStartingIndex)
 
-    return content;
+    return content
 }
 </script>

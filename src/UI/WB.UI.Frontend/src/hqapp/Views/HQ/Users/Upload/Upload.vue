@@ -53,93 +53,93 @@
 </template>
 
 <script>
-import * as toastr from "toastr";
-import moment from "moment";
+import * as toastr from 'toastr'
+import moment from 'moment'
 
 export default {
-  data: function() {
-    return {
-      timerId: 0
-    };
-  },
-  computed: {
-    config() {
-      return this.$config.model;
+    data: function() {
+        return {
+            timerId: 0,
+        }
     },
-    allowedFileExtensions(){
-        return this.config.config.allowedUploadFileExtensions.join(', ');
-    },
-    progress() {
-      return this.$store.getters.upload.progress;
-    },
-    isInProgress() {
-      return this.progress.isInProgress;
-    },
-    responsible() {
-      return this.progress.responsible;
-    },
-    estimatedTime() {
-      let now = moment();
-      let timeDiff = now - moment.utc(this.progress.startedDate);
-      let timeRemaining =
-        timeDiff / this.importedUsersCount * this.progress.usersInQueue;
+    computed: {
+        config() {
+            return this.$config.model
+        },
+        allowedFileExtensions(){
+            return this.config.config.allowedUploadFileExtensions.join(', ')
+        },
+        progress() {
+            return this.$store.getters.upload.progress
+        },
+        isInProgress() {
+            return this.progress.isInProgress
+        },
+        responsible() {
+            return this.progress.responsible
+        },
+        estimatedTime() {
+            let now = moment()
+            let timeDiff = now - moment.utc(this.progress.startedDate)
+            let timeRemaining =
+        timeDiff / this.importedUsersCount * this.progress.usersInQueue
 
-      return moment.duration(timeRemaining).humanize();
+            return moment.duration(timeRemaining).humanize()
+        },
+        importedUsersCount() {
+            return this.totalUsersToImportCount - this.progress.usersInQueue
+        },
+        totalUsersToImportCount() {
+            return this.progress.totalUsersToImport
+        },
+        importedUsersInPercents() {
+            return this.importedUsersCount / this.progress.totalUsersToImport * 100
+        },
     },
-    importedUsersCount() {
-      return this.totalUsersToImportCount - this.progress.usersInQueue;
+    methods: {
+        onFileChange(e) {
+            const files = e.target.files || e.dataTransfer.files
+
+            if (!files.length) {
+                return
+            }
+
+            var file = files[0]
+            var formData = new FormData()
+            formData.append('file', file)
+
+            var self = this
+
+            this.$http
+                .post(this.config.api.importUsersUrl, formData)
+                .then(response => {
+                    window.clearInterval(this.timerId)
+
+                    self.$store.dispatch('setUploadFileName', file.name)
+
+                    const errors = response.data
+                    if (errors.length == 0) self.$router.push({ name: 'uploadprogress' })
+                    else {
+                        self.$store.dispatch('setUploadVerificationErrors', errors)
+                        self.$router.push({ name: 'uploadverification' })
+                    }
+                })
+                .catch(e => {
+                    if (e.response.data.message) toastr.error(e.response.data.message)
+                    else if(e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage)
+                    else toastr.error(window.input.settings.messages.unhandledExceptionMessage)
+                })
+        },
+        updateStatus() {
+            this.$http.get(this.config.api.importUsersStatusUrl).then(response => {
+                this.$store.dispatch('setUploadStatus', response.data)
+            })
+        },
     },
-    totalUsersToImportCount() {
-      return this.progress.totalUsersToImport;
+    mounted() {
+        this.timerId = window.setInterval(() => {
+            this.updateStatus()
+        }, 500)
     },
-    importedUsersInPercents() {
-      return this.importedUsersCount / this.progress.totalUsersToImport * 100;
-    }
-  },
-  methods: {
-    onFileChange(e) {
-      const files = e.target.files || e.dataTransfer.files;
-
-      if (!files.length) {
-        return;
-      }
-
-      var file = files[0];
-      var formData = new FormData();
-      formData.append("file", file);
-
-      var self = this;
-
-      this.$http
-        .post(this.config.api.importUsersUrl, formData)
-        .then(response => {
-          window.clearInterval(this.timerId);
-
-          self.$store.dispatch("setUploadFileName", file.name);
-
-          const errors = response.data;
-          if (errors.length == 0) self.$router.push({ name: "uploadprogress" });
-          else {
-            self.$store.dispatch("setUploadVerificationErrors", errors);
-            self.$router.push({ name: "uploadverification" });
-          }
-        })
-        .catch(e => {
-          if (e.response.data.message) toastr.error(e.response.data.message);
-          else if(e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage);
-          else toastr.error(window.input.settings.messages.unhandledExceptionMessage);
-        });
-    },
-    updateStatus() {
-      this.$http.get(this.config.api.importUsersStatusUrl).then(response => {
-        this.$store.dispatch("setUploadStatus", response.data);
-      });
-    }
-  },
-  mounted() {
-    this.timerId = window.setInterval(() => {
-      this.updateStatus();
-    }, 500);
-  }
-};
+}
 </script>

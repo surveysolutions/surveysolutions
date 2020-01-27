@@ -22,10 +22,10 @@ import SearchResults from './SearchResults'
 import Sidebar from '~/webinterview/components/Sidebar'
 import DetailsInfo from './DetailsInfo.vue'
 import Vue from 'vue'
-import http from "~/webinterview/api/http";
+import http from '~/webinterview/api/http'
 
-import "@/assets/css/markup-web-interview.scss"
-import "@/assets/css/markup-interview-review.scss"
+import '@/assets/css/markup-web-interview.scss'
+import '@/assets/css/markup-interview-review.scss'
 
 export default {
     watch: {
@@ -71,7 +71,7 @@ export default {
     },
 
     beforeMount() {
-      Vue.use(http, { store: this.$store });
+        Vue.use(http, { store: this.$store })
     },
 
     mounted() {
