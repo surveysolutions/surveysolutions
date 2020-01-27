@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using NLog.Web.LayoutRenderers;
+using UAParser;
 
 namespace WB.UI.Headquarters.Filters
 {
@@ -12,8 +13,10 @@ namespace WB.UI.Headquarters.Filters
         {
             if (filterContext.ActionDescriptor.DisplayName != "OutdatedBrowser" && filterContext.HttpContext.Request.Headers.ContainsKey("User-Agent"))
             {
-                string userAgent = filterContext.HttpContext.Request.Headers["User-Agent"].ToString();
-                if (IsInternetExplorer(userAgent) && GetMajorVersion(userAgent) < 10)
+                string userAgentString = filterContext.HttpContext.Request.Headers["User-Agent"].ToString();
+                var parser = Parser.GetDefault();
+                var userAgent = parser.ParseUserAgent(userAgentString);
+                if (IsInternetExplorer(userAgent) && IsAllowGetMajorVersion(userAgent))
                 {
                     var routeValueDictionary = new RouteValueDictionary(new
                     {
@@ -25,22 +28,20 @@ namespace WB.UI.Headquarters.Filters
             }
         }
 
-        private int GetMajorVersion(string userAgent)
+        private bool IsAllowGetMajorVersion(UserAgent userAgent)
         {
-            throw new ArgumentException("Need parse user-agent");
-            //return httpContextRequest.Browser.MajorVersion < 10
+            if (int.TryParse(userAgent.Major, out int version))
+                return version < 10;
+            return true;
         }
 
-        public static bool IsInternetExplorer(string userAgent)
+        public static bool IsInternetExplorer(UserAgent userAgent)
         {
-            if (userAgent.Contains("MSIE") || userAgent.Contains("Trident"))
+            if (userAgent.Family.Contains("MSIE") || userAgent.Family.Contains("Trident"))
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
 }
