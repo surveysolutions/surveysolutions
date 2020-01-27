@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (filterContext.ActionDescriptor.DisplayName != "OutdatedBrowser" && filterContext.HttpContext.Request.Headers.ContainsKey("User-Agent"))
+            if (!filterContext.ActionDescriptor.DisplayName.Contains("OutdatedBrowser") && filterContext.HttpContext.Request.Headers.ContainsKey("User-Agent"))
             {
                 string userAgentString = filterContext.HttpContext.Request.Headers["User-Agent"].ToString();
                 var parser = Parser.GetDefault();
