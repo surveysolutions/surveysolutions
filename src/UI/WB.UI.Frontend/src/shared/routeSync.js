@@ -4,12 +4,12 @@ import { isEqual, isNaN, clone, assign } from 'lodash'
 export default {
     data() {
         return {
-             changesQueue: [],
+            changesQueue: [],
         };
     },
 
     render() {
-       return this.$slots.default
+        return this.$slots.default
     },
 
     computed: {
@@ -56,12 +56,12 @@ export default {
                 }
             });
 
-            if(!isEqual(this.$route.query, query)) {
-                this.$router.push({ query }).catch(err => {});
+            if (!isEqual(this.$route.query, query)) {
+                this.$router.push({ query }).catch(() => { });
             }
         },
 
-        
+
         checkedChange(value, el) {
             this.onChange(q => {
                 q[el.name] = value;

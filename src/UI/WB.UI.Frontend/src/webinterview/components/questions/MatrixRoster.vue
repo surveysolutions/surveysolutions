@@ -1,25 +1,22 @@
-<template>    
-    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">        
+<template>
+    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
         <h5 v-dateTimeFormatting v-html="title"></h5>
-        <div class="information-block instruction" v-if="instructions">            
+        <div class="information-block instruction" v-if="instructions">
             <p v-dateTimeFormatting v-html="instructions"></p>
         </div>
-        <ag-grid-vue 
+        <ag-grid-vue
             ref="matrixRoster"
             class="ag-theme-customStyles roster-matrix"
-            
-            domLayout='autoHeight'
+            domLayout="autoHeight"
             rowHeight="40"
             headerHeight="50"
-
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
             :grid-options="gridOptions"
-
             @grid-ready="onGridReady"
-            @column-resized="autosizeHeaders">
-        </ag-grid-vue>
+            @column-resized="autosizeHeaders"
+        ></ag-grid-vue>
     </div>
 </template>
 
@@ -27,13 +24,13 @@
     import Vue from 'vue'
     import { entityDetails } from "../mixins"
     import { GroupStatus } from "./index"
-    import { debounce, every, some } from "lodash"
+    import { debounce, every, some, map } from "lodash"
     import { AgGridVue } from "ag-grid-vue";
 
-    import MatrixRoster_QuestionEditor from "./MatrixRoster.QuestionEditor";    
-    import MatrixRoster_RosterTitle from "./MatrixRoster.RosterTitle";
-    import MatrixRoster_QuestionTitle from "./MatrixRoster.QuestionTitle";
-    import MatrixRoster_CategoricalSingle from "./MatrixRoster.CategoricalSingle";
+    // import MatrixRoster_QuestionEditor from "./MatrixRoster.QuestionEditor";    
+    // import MatrixRoster_RosterTitle from "./MatrixRoster.RosterTitle";
+    // import MatrixRoster_QuestionTitle from "./MatrixRoster.QuestionTitle";
+    // import MatrixRoster_CategoricalSingle from "./MatrixRoster.CategoricalSingle";
 
     export default {
         name: 'MatrixRoster',
@@ -55,10 +52,10 @@
 
         components: {
             AgGridVue,            
-            MatrixRoster_QuestionEditor,
-            MatrixRoster_RosterTitle,
-            MatrixRoster_QuestionTitle,
-            MatrixRoster_CategoricalSingle
+            // MatrixRoster_QuestionEditor,
+            // MatrixRoster_RosterTitle,
+            // MatrixRoster_QuestionTitle,
+            // MatrixRoster_CategoricalSingle
         },
 
         beforeMount() {
@@ -116,7 +113,7 @@
         methods : {
             initQuestionAsColumns() {
                 var self = this;
-                var columnsFromQuestions = _.map(
+                var columnsFromQuestions = map(
                     this.$me.questions,
                     (question, key) => {
                         return {
@@ -160,7 +157,7 @@
             initQuestionsInRows() {
                 var self = this;
 
-                var rosterInstancesWithQuestionsAsRows = _.map(                                       
+                var rosterInstancesWithQuestionsAsRows = map(                                       
                     this.$me.instances,
                     (instance, key) => {
                         var instanceAsRow = {

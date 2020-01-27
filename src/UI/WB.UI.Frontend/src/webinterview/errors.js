@@ -23,7 +23,7 @@ function wrap(name, method, section) {
         try {
             if (window.CONFIG.verboseMode) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
-                if (argument && argument.hasOwnProperty("source"))
+                if (argument && Object.prototype.hasOwnProperty.call(argument, "source"))
                     console.debug("call", section, "from", argument.source, name, argument)
                 else
                     console.debug("call", section, name, argument)
@@ -57,8 +57,8 @@ function handleErrors(object, section) {
     for (const name in object) {
         if (typeof object[name] === "function") {
             method = object[name]
-            if(method.name != "__action_wrapper")
-            object[name] = wrap(name, method, section)
+            if (method.name != "__action_wrapper")
+                object[name] = wrap(name, method, section)
         }
     }
 
@@ -71,7 +71,7 @@ export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations"]) {
         for (const field in fieldToSafe) {
             const item = fieldToSafe[field]
 
-            if (config.hasOwnProperty(item)) {
+            if (Object.prototype.hasOwnProperty.call(config, item)) {
                 config[item] = handleErrors(config[item], item)
             }
         }
@@ -79,7 +79,7 @@ export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations"]) {
 
     wrapFields(storeConfig);
 
-    if (storeConfig.hasOwnProperty("modules")) {
+    if (Object.prototype.hasOwnProperty.call(storeConfig, "modules")) {
         Object.keys(storeConfig.modules).forEach((module) => wrapFields(storeConfig.modules[module]))
     }
 

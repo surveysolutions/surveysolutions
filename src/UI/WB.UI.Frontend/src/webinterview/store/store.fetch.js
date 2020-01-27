@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 function setFetchState(state, id, done) {
-    const $id = id.hasOwnProperty("id") ? id.id : id;
+    const $id = Object.prototype.hasOwnProperty.call(id, "id") ? id.id : id;
     const hasInState = state[$id] != null;
     if (done) {
         if (hasInState) Vue.delete(state, $id);

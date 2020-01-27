@@ -41,7 +41,7 @@
         watch: {
             ["params.context.componentParent.$me.questions"]() {
                 var self = this;
-                var question = _.find(self.params.context.componentParent.$me.questions, function(o) { return o.id == self.questionId; });
+                var question = find(self.params.context.componentParent.$me.questions, function(o) { return o.id == self.questionId; });
                 if(question !== undefined)
                     this.instruction = question.instruction;
             }

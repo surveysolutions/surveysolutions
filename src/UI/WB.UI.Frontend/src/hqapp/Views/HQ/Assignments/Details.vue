@@ -15,13 +15,14 @@
             <div class="row">
                 <div class="col-sm-6">
                     <h3>{{$t('Assignments.AssignmentHistory')}}</h3>
-                    <DataTables ref="table"
-                            :tableOptions="tableOptions"
-                            :noSearch="true"
-                            :wrapperClass=" { 'table-wrapper': true }">
-                    </DataTables>
-                </div>    
-               
+                    <DataTables
+                        ref="table"
+                        :tableOptions="tableOptions"
+                        :noSearch="true"
+                        :wrapperClass=" { 'table-wrapper': true }"
+                    ></DataTables>
+                </div>
+
                 <div class="col-sm-6">
                     <h3>{{$t('Assignments.AssignmentInfo')}}</h3>
                     <table class="table table-striped table-bordered">
@@ -124,139 +125,150 @@
 
 
 <script>
-import Vue from "vue";
-import { DateFormats } from "~/shared/helpers";
-import moment from "moment"
+import Vue from 'vue'
+import {DateFormats} from '~/shared/helpers'
+import moment from 'moment'
 
 export default {
     computed: {
         model() {
-            return this.$config.model;
+            return this.$config.model
         },
         updatedDate() {
-            var date = moment.utc(this.model.updatedAtUtc);
-            return date.local().format(global.input.settings.clientDateTimeFormat);
+            var date = moment.utc(this.model.updatedAtUtc)
+            return date.local().format(global.input.settings.clientDateTimeFormat)
         },
         createdDate() {
-            var date = moment.utc(this.model.createdAtUtc);
-            return date.local().format(global.input.settings.clientDateTimeFormat);
+            var date = moment.utc(this.model.createdAtUtc)
+            return date.local().format(global.input.settings.clientDateTimeFormat)
         },
         isAudioRecordingEnabled() {
-            return this.model.isAudioRecordingEnabled ? this.$t("Common.Yes") : this.$t("Common.No");
+            return this.model.isAudioRecordingEnabled ? this.$t('Common.Yes') : this.$t('Common.No')
         },
         isReceivedByTablet() {
-            return this.model.receivedByTabletAtUtc != null ? this.$t("Common.Yes") : this.$t("Common.No");
+            return this.model.receivedByTabletAtUtc != null ? this.$t('Common.Yes') : this.$t('Common.No')
         },
         isWebMode() {
-            return this.model.webMode ? this.$t("Common.Yes") : this.$t("Common.No");
+            return this.model.webMode ? this.$t('Common.Yes') : this.$t('Common.No')
         },
         interviewsCount() {
-            if (this.model.quantity == null || this.model.quantity < 0) return this.$t("Assignments.Unlimited");
+            if (this.model.quantity == null || this.model.quantity < 0) return this.$t('Assignments.Unlimited')
 
             return this.model.interviewsProvided > this.model.quantity
                 ? 0
-                : this.model.quantity - this.model.interviewsProvided;
+                : this.model.quantity - this.model.interviewsProvided
         },
         isInterviewerResponsible() {
-            return this.model.responsible.role === "interviewer";
+            return this.model.responsible.role === 'interviewer'
         },
         interviewerProfileUrl() {
-            return "../Interviewer/Profile/" + this.model.responsible.id;
+            return '../Interviewer/Profile/' + this.model.responsible.id
         },
         interviewsUrl() {
-            return "../Interviews?assignmentId=" + this.model.id;
+            return '../Interviews?assignmentId=' + this.model.id
         },
         quantity() {
-            return this.model.quantity == null ? this.$t("Assignments.Unlimited") : this.model.quantity;
+            return this.model.quantity == null ? this.$t('Assignments.Unlimited') : this.model.quantity
         },
-        
+
         tableOptions() {
-            var self = this;
+            var self = this
             const columns = [
                 {
-                    data: "action",
-                    title: self.$t("Assignments.Action"),
+                    data: 'action',
+                    title: self.$t('Assignments.Action'),
                     render(data) {
                         return self.$t('Assignments.Action_' + data)
-                    }
+                    },
                 },
                 {
-                    data: "actorName",
-                    title: self.$t("Assignments.Actor")
+                    data: 'actorName',
+                    title: self.$t('Assignments.Actor'),
                 },
                 {
-                    data: "utcDate",
-                    width: "180px",
-                    title: self.$t("Assignments.Date"),
+                    data: 'utcDate',
+                    width: '180px',
+                    title: self.$t('Assignments.Date'),
                     render(data) {
-                        return moment.utc(data).local().format(DateFormats.dateTimeInList)
-                    }
+                        return moment
+                            .utc(data)
+                            .local()
+                            .format(DateFormats.dateTimeInList)
+                    },
                 },
                 {
-                    data: "additionalData",
+                    data: 'additionalData',
                     title: self.$t('Assignments.Details_Column'),
                     width: '50%',
                     render(data, type, row) {
-                        switch(row.action) {
-                            case 'Created':
-                                let createdText = self.$t('Assignments.Action_Created_Responsible', {responsible: data.responsible})
+                        switch (row.action) {
+                            case 'Created': {
+                                let createdText = self.$t('Assignments.Action_Created_Responsible', {
+                                    responsible: data.responsible,
+                                })
                                 if (data.comment) {
-                                   createdText += "<br/>" + self.$t('Assignments.Action_Created_Comment', {comment: data.comment})
+                                    createdText +=
+                                        '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: data.comment})
                                 }
                                 return createdText
+                            }
                             case 'AudioRecordingChanged':
-                                if(data.audioRecording) {
+                                if (data.audioRecording) {
                                     return self.$t('Assignments.Action_AudioRecordingChanged_True')
+                                } else {
+                                    return self.$t('Assignments.Action_AudioRecordingChanged_False')
                                 }
-                                else {
-                                     return self.$t('Assignments.Action_AudioRecordingChanged_False')
-                                }
-                            case 'Reassigned':
-                                let result = self.$t('Assignments.Action_Reassigned_To', {newResponsible: data.newResponsible})
-                                if(data.comment){
-                                    result += "<br/>"
-                                    result += self.$t('Assignments.Action_Reassigned_To_Comment', {comment: data.comment})
+                            case 'Reassigned': {
+                                let result = self.$t('Assignments.Action_Reassigned_To', {
+                                    newResponsible: data.newResponsible,
+                                })
+                                if (data.comment) {
+                                    result += '<br/>'
+                                    result += self.$t('Assignments.Action_Reassigned_To_Comment', {
+                                        comment: data.comment,
+                                    })
                                 }
                                 return result
+                            }
                             case 'QuantityChanged':
-                                if(data.quantity == null) {
+                                if (data.quantity == null) {
                                     return self.$t('Assignments.Action_QuantityChanged_To_Unlimited')
                                 }
                                 return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.quantity})
                             case 'WebModeChanged':
-                                if(data.webMode) {
+                                if (data.webMode) {
                                     return self.$t('Assignments.Action_WebModeChanged_True')
                                 } else {
                                     return self.$t('Assignments.Action_WebModeChanged_False')
                                 }
                         }
                         return ''
-                    }
-                }
-            ];
+                    },
+                },
+            ]
 
             var tableOptions = {
-                rowId: function(row){
+                rowId: function(row) {
                     return `row_${row.id}`
                 },
                 deferLoading: 0,
                 columns,
                 ordering: false,
-                ajax: { 
+                ajax: {
                     url: `${this.$router.options.base}api/v1/assignments/${this.model.id}/history`,
-                    type: "GET",
-                    dataSrc: "history"
-                }
+                    type: 'GET',
+                    dataSrc: 'history',
+                },
             }
 
             return tableOptions
-        }
+        },
     },
     mounted() {
         Vue.nextTick(() => {
-            window.ajustNoticeHeight();
-            window.ajustDetailsPanelHeight();
-        });
-    }
-};
+            window.ajustNoticeHeight()
+            window.ajustDetailsPanelHeight()
+        })
+    },
+}
 </script>

@@ -1,95 +1,103 @@
 <script>
-import { Line } from "vue-chartjs";
-import Vue from "vue";
+import {Line} from 'vue-chartjs'
+import Vue from 'vue'
+import {assign} from 'lodash'
 
 const chartOptions = {
-    chartId: "interviewChart",
+    chartId: 'interviewChart',
     elements: {
-        point: { radius: 0 },
-        line: { fill: true, tension: 0 }
+        point: {radius: 0},
+        line: {fill: true, tension: 0},
     },
     responsive: true,
     maintainAspectRatio: false,
     tooltips: {
-        mode: "x",
-        intersect: false
+        mode: 'x',
+        intersect: false,
     },
     hover: {
-        mode: "index",
-        intersect: false
+        mode: 'index',
+        intersect: false,
     },
-    
+
     scales: {
         xAxes: [
             {
-                type: "time",
+                type: 'time',
 
                 gridLines: {
                     display: true,
-                    tickMarkLength: 10
+                    tickMarkLength: 10,
                 },
 
                 ticks: {
-                    source: "data",
+                    source: 'data',
                     autoSkipPadding: 10,
                     maxRotation: 0,
-                    autoSkip: true
+                    autoSkip: true,
                 },
                 time: {
-                    bounds: "ticks",
-                    minUnit: "week"
-                }
-            }
+                    bounds: 'ticks',
+                    minUnit: 'week',
+                },
+            },
         ],
         yAxes: [
             {
                 afterDataLimits: function(axis) {
-                    axis.max += 1; // add 1px to top
-                    axis.min = 0;
+                    axis.max += 1 // add 1px to top
+                    axis.min = 0
                 },
-                type: "linear",
+                type: 'linear',
                 stacked: true,
                 ticks: {
                     beginAtZero: true,
                     userCallback: function(label, index, labels) {
                         // when the floored value is the same as the value we have a whole number
                         if (Math.floor(label) === label) {
-                            return label;
+                            return label
                         }
-                    }
-                }
-            }
-        ]
-    }
-};
+                    },
+                },
+            },
+        ],
+    },
+}
 
 export default {
     extends: Line,
     props: {
-        options: { required: false },
-        height: 600
+        options: {required: false},
+        height: {default: 600},
     },
 
     mounted() {
-        this.$emit("mounted")
+        this.$emit('mounted')
     },
 
     methods: {
         render(chartData) {
-            this.renderChart(chartData, _.assign(chartOptions, {
-                animation: {
-                    onComplete: () => {
-                        this.$emit("ready");
-                    }
-                },
-            }, this.options));
+            this.renderChart(
+                chartData,
+                assign(
+                    chartOptions,
+                    {
+                        animation: {
+                            onComplete: () => {
+                                this.$emit('ready')
+                            },
+                        },
+                    },
+                    this.options
+                )
+            )
         },
 
-        getImage(){
-            if(this.$data._chart == null) return null;
+        getImage() {
+            if (this.$data._chart == null) return null
 
-            return this.$data._chart.canvas.toDataURL("image/png");
-        }
-    }
-};
+            return this.$data._chart.canvas.toDataURL('image/png')
+        },
+    },
+}
 </script>

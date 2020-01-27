@@ -21,7 +21,7 @@ export default {
             return Vue.$api.interview.get('getSidebarChildSectionsOf',
                 {
                     interviewId: rootState.route.params.interviewId,
-                    sectionId: rootState.route.params.sectionId || null, 
+                    sectionId: rootState.route.params.sectionId || null,
                     ids
                 })
                 .then((sideBar) => {
@@ -46,7 +46,7 @@ export default {
             }
             commit("SET_SIDEBAR_HIDDEN", sidebarPanelNewState)
         },
-        
+
         hideFacets({ commit, state }, newState = null) {
             const facetPanelNewState = newState == null ? !state.facetHidden : newState;
             let panelBeingClosed = !facetPanelNewState;
@@ -56,7 +56,7 @@ export default {
             }
             commit("SET_FACET_HIDDEN", facetPanelNewState)
         },
-        hideSearchResults({ commit, dispatch, state }, newState = null) {
+        hideSearchResults({ commit, state }, newState = null) {
             if (state.screenWidth >= state.mediumScreenThreshold) {
                 commit("SET_FACET_HIDDEN", false)
             }

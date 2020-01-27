@@ -1,41 +1,43 @@
 <template>
-    <wb-question :question="$me"
-                 questionCssClassName="text-question" :no-comments="noComments">
+    <wb-question :question="$me" questionCssClassName="text-question" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field"
-                         :class="{answered: $me.isAnswered}">
-                         <input v-if="hasMask"
-                                ref="input"
-                               autocomplete="off"
-                               type="text"
-                               class="field-to-fill"
-                               :placeholder="noAnswerWatermark"
-                               :value="$me.answer"
-                               :disabled="!$me.acceptAnswer"
-                               v-blurOnEnterKey
-                               @blur="answerTextQuestion"
-                               v-maskedText="$me.mask"
-                               :data-mask-completed="$me.isAnswered" />
-                        <textarea-autosize v-else ref="inputTextArea"
-                               autocomplete="off"
-                               rows="1"
-                               :min-height="41"
-                               :maxlength="$me.maxLength"
-                               class="field-to-fill"
-                               :placeholder="noAnswerWatermark"
-                               :value="$me.answer"
-                               :important="true"
-                               :disabled="!$me.acceptAnswer"
-                               v-blurOnEnterKey
-                               @blur.native="answerTextQuestion"
-                               @blur="answerTextQuestion">
-                        </textarea-autosize>
+                    <div class="field" :class="{answered: $me.isAnswered}">
+                        <input
+                            v-if="hasMask"
+                            ref="input"
+                            autocomplete="off"
+                            type="text"
+                            class="field-to-fill"
+                            :placeholder="noAnswerWatermark"
+                            :value="$me.answer"
+                            :disabled="!$me.acceptAnswer"
+                            v-blurOnEnterKey
+                            @blur="answerTextQuestion"
+                            v-maskedText="$me.mask"
+                            :data-mask-completed="$me.isAnswered"
+                        />
+                        <textarea-autosize
+                            v-else
+                            ref="inputTextArea"
+                            autocomplete="off"
+                            rows="1"
+                            :min-height="41"
+                            :maxlength="$me.maxLength"
+                            class="field-to-fill"
+                            :placeholder="noAnswerWatermark"
+                            :value="$me.answer"
+                            :important="true"
+                            :disabled="!$me.acceptAnswer"
+                            v-blurOnEnterKey
+                            @blur.native="answerTextQuestion"
+                            @blur="answerTextQuestion"
+                        ></textarea-autosize>
                         <wb-remove-answer />
-                    </div>                    
-                </div>    
-                <wb-lock />            
+                    </div>
+                </div>
+                <wb-lock />
             </div>
         </div>
     </wb-question>
@@ -58,7 +60,7 @@
             },
             userFriendlyMask() {
                 if (this.$me.mask) {
-                    const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/\#/g, "_").replace(/\~/g, "_")
+                    const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/#/g, "_").replace(/~/g, "_")
                     return ` (${resultMask})`
                 }
 

@@ -13,9 +13,9 @@ function getAnswer(state, identity) {
 
 export default {
     loadInterview({ commit }) {
-        const details = Vue.$api.interview.get('getInterviewDetails').then(info =>  commit("SET_INTERVIEW_INFO", info))
-        const cover =  Vue.$api.interview.get('hasCoverPage').then(flag => commit("SET_HAS_COVER_PAGE", flag))
-        return Promise.all([ details, cover ])
+        const details = Vue.$api.interview.get('getInterviewDetails').then(info => commit("SET_INTERVIEW_INFO", info))
+        const cover = Vue.$api.interview.get('hasCoverPage').then(flag => commit("SET_HAS_COVER_PAGE", flag))
+        return Promise.all([details, cover])
     },
 
     async getLanguageInfo({ commit }) {
@@ -45,12 +45,12 @@ export default {
         if (getAnswer(state, identity) == text) return; // skip same answer on same question
 
         commit("SET_ANSWER", { identity, answer: text }) // to prevent answer blinking in TableRoster
-        Vue.$api.interview.answer(identity, 'answerTextQuestion', {  answer: text })
+        Vue.$api.interview.answer(identity, 'answerTextQuestion', { answer: text })
     },
-    answerMultiOptionQuestion({ }, { answer, identity }) {
+    answerMultiOptionQuestion(_, { answer, identity }) {
         Vue.$api.interview.answer(identity, 'answerMultiOptionQuestion', { answer })
     },
-    answerYesNoQuestion({ }, { identity, answer }) {
+    answerYesNoQuestion(_, { identity, answer }) {
         Vue.$api.interview.answer(identity, 'answerYesNoQuestion', { answer })
     },
     answerIntegerQuestion({ commit }, { identity, answer }) {
@@ -61,46 +61,46 @@ export default {
         commit("SET_ANSWER", { identity, answer: answer }) // to prevent answer blinking in TableRoster
         return Vue.$api.interview.answer(identity, 'answerDoubleQuestion', { answer })
     },
-    answerGpsQuestion({ }, { identity, answer }) {
+    answerGpsQuestion(_, { identity, answer }) {
         return Vue.$api.interview.answer(identity, 'answerGpsQuestion', { answer })
     },
     answerDateQuestion({ state }, { identity, date }) {
         if (getAnswer(state, identity) == date) return; // skip answer on same question
         return Vue.$api.interview.answer(identity, 'answerDateQuestion', { answer: date })
     },
-    answerTextListQuestion({ }, { identity, rows }) {
+    answerTextListQuestion(_, { identity, rows }) {
         return Vue.$api.interview.answer(identity, 'answerTextListQuestion', { answer: rows })
     },
-    answerLinkedSingleOptionQuestion({ }, { identity, answer }) {
+    answerLinkedSingleOptionQuestion(_, { identity, answer }) {
         return Vue.$api.interview.answer(identity, 'answerLinkedSingleOptionQuestion', { answer })
     },
-    answerLinkedMultiOptionQuestion({ }, { identity, answer }) {
+    answerLinkedMultiOptionQuestion(_, { identity, answer }) {
         return Vue.$api.interview.answer(identity, 'answerLinkedMultiOptionQuestion', { answer })
     },
 
     // TODO: there is no usages, check
-    answerLinkedToListMultiQuestion({ }, { identity, answer }) {
-        return Vue.$api.interview.answer(identity, 'answerLinkedToListMultiQuestion', {  answer })
+    answerLinkedToListMultiQuestion(_, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerLinkedToListMultiQuestion', { answer })
     },
 
     // TODO: there is no usages, check
-    answerLinkedToListSingleQuestion({ }, { identity, answer }) {
+    answerLinkedToListSingleQuestion(_, { identity, answer }) {
         return Vue.$api.interview.answer(identity, 'answerLinkedToListSingleQuestion', { answer })
     },
 
-    answerMultimediaQuestion({ }, { identity, file }) {
+    answerMultimediaQuestion(_, { identity, file }) {
         return Vue.$api.interview.upload(Vue.$config.imageUploadUri, identity, file)
     },
 
-    answerAudioQuestion({ }, { identity, file }) {
+    answerAudioQuestion(_, { identity, file }) {
         return Vue.$api.interview.upload(Vue.$config.audioUploadUri, identity, file)
     },
 
-    answerQRBarcodeQuestion({ }, { identity, text }) {
+    answerQRBarcodeQuestion(_, { identity, text }) {
         return Vue.$api.interview.answer(identity, 'answerQRBarcodeQuestion', { answer: text })
     },
 
-    removeAnswer({ }, identity) {
+    removeAnswer(_, identity) {
         return Vue.$api.interview.answer(identity, 'removeAnswer')
     },
 
@@ -109,7 +109,7 @@ export default {
         return Vue.$api.interview.answer(identity, 'sendNewComment', { comment })
     },
 
-    resolveComment({ }, { identity }) {
+    resolveComment(_, { identity }) {
         return Vue.$api.interview.answer(identity, 'resolveComment')
     },
 
@@ -287,15 +287,15 @@ export default {
         commit("CLEAR_ENTITIES", { ids })
     }, null, /* limit */ 100),
 
-    changeLanguage({ }, language) {
+    changeLanguage(_, language) {
         return Vue.$api.interview.answer(null, 'changeLanguage', { language: language.language })
     },
 
     stop() {
-        Vue.$api.hub.stop() 
+        Vue.$api.hub.stop()
     },
 
-    changeSection({ }, { to, from }) {
+    changeSection(_, { to, from }) {
         return Vue.$api.hub.changeSection(to, from)
     }
 }

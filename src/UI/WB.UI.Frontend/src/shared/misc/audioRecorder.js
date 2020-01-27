@@ -171,7 +171,7 @@
 
         this.configure = function (cfg) {
             for (var prop in cfg) {
-                if (cfg.hasOwnProperty(prop)) {
+                if (Object.prototype.hasOwnProperty.call(cfg, prop)) {
                     config[prop] = cfg[prop];
                 }
             }
@@ -221,7 +221,6 @@ if (!window.AudioRecorder) {
     var AudioRecorder = function () {
         var self = {};
         var recorder = null;
-        var rafID = null;
         var analyserSettings = {
             сontext: null,
             node: null,
@@ -260,7 +259,7 @@ if (!window.AudioRecorder) {
             analyserSettings.node.fftSize = 2048;
             inputPoint.connect(analyserSettings.node);
 
-            recorder = new Recorder(inputPoint);
+            recorder = new window.Recorder(inputPoint);
 
             var zeroGain = audioContext.createGain();
             zeroGain.gain.value = 0.0;
@@ -274,7 +273,7 @@ if (!window.AudioRecorder) {
             self.start();
         };
 
-        function gotBuffers(buffers) {
+        function gotBuffers() {
             recorder.exportWAV(doneEncoding);
         }
 
@@ -285,7 +284,7 @@ if (!window.AudioRecorder) {
         function cancelAnalyserUpdates() {
             window.cancelAnimationFrame(analyserSettings.animationFrameId);
             analyserSettings.animationFrameId = null;
-            if(audioContext) audioContext.close();
+            if (audioContext) audioContext.close();
         }
 
         function updateAnalysers() {
@@ -307,11 +306,11 @@ if (!window.AudioRecorder) {
             magnitude = Math.max(magnitude, 6);
 
             var color = "";
-            if (magnitude < 10){
+            if (magnitude < 10) {
                 color = "#cbcbcb";
-            }else if (magnitude > 42){
+            } else if (magnitude > 42) {
                 color = "#ed2c39";
-            }else{
+            } else {
                 color = "#2a81cb";
             }
             analyserSettings.context.strokeStyle = color;
@@ -339,7 +338,7 @@ if (!window.AudioRecorder) {
             config.startRecordingCallback();
         };
 
-        self.stop = function (doneEncoding) {
+        self.stop = function () {
             if (!recorder)
                 return;
 
@@ -364,7 +363,7 @@ if (!window.AudioRecorder) {
             if (!navigator.requestAnimationFrame)
                 navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
-            if(!navigator.getUserMedia) {
+            if (!navigator.getUserMedia) {
                 config.errorCallback();
             }
             else {
