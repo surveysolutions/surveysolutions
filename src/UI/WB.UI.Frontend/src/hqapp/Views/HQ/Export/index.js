@@ -10,8 +10,8 @@ export default class ExportComponent {
     get routes() {
         return [{
             path: '/DataExport/New',
-            component: Export
-        }
+            component: Export,
+        },
         ]
     }
     
@@ -22,7 +22,7 @@ export default class ExportComponent {
 
     get modules() {
         return {
-            export: store
+            export: store,
         }
     }
 }

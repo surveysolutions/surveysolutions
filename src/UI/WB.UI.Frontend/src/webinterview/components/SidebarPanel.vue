@@ -24,7 +24,7 @@ export default {
     name: 'sidebar-panel',
     props: {
         panel: { required: true },
-        currentPanel: {}
+        currentPanel: {},
     },
     computed: {
         loading() {
@@ -33,8 +33,8 @@ export default {
                 title: '...',
                 id: this.panel.id,
                 validity: {
-                    isValid: true
-                }
+                    isValid: true,
+                },
             }
         },
         title() {
@@ -68,12 +68,12 @@ export default {
                 current: this.panel.current,
                 active: this.isActive,
                 complete: this.panel.status === GroupStatus.Completed && !this.hasError ,
-                'has-error': this.hasError
+                'has-error': this.hasError,
             }]
         },
         hasError() {
             return this.panel.validity.isValid == false
-        }
+        },
 
     },
     watch: {
@@ -83,7 +83,7 @@ export default {
         },
         'panel'() {
             this.update()
-        }
+        },
     },
     mounted() {
         this.update()
@@ -102,10 +102,10 @@ export default {
         toggle() {
             this.$store.dispatch('toggleSidebar', {
                 panel: this.panel,
-                collapsed: !this.panel.collapsed
+                collapsed: !this.panel.collapsed,
             })
-        }
-    }
+        },
+    },
 }
 
 </script>

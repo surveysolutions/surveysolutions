@@ -30,8 +30,8 @@ const createRouter = require('./router').default
 
 const store = new Vuex.Store({
     modules: {
-        webinterview: require('./store').default
-    }
+        webinterview: require('./store').default,
+    },
 })
 
 const router = createRouter(store)
@@ -45,15 +45,15 @@ box.init(i18n, browserLanguage)
 
 window._api = {
     store,
-    router
+    router,
 }
 
 export default new Vue({
     el: '#app',
     render: h => h(App),
     components: {
-        App
+        App,
     },
     store,
-    router
+    router,
 })

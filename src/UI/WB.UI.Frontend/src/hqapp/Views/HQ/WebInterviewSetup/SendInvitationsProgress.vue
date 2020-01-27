@@ -88,7 +88,7 @@ export default {
         },
         exportErrorsLink(){
             return this.$config.model.api.exportErrors
-        }
+        },
     },
     methods: {
         updateStatus(){
@@ -115,8 +115,8 @@ export default {
             this.$http.post(this.$config.model.api.cancelUrl).then(function (response) {
                 self.$store.dispatch('hideProgress')
             })
-        }
-    }
+        },
+    },
 
 }
 </script>

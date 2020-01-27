@@ -46,7 +46,7 @@ class SurveyStatistics {
 
     async Questions(questionnaireId, version) {
         return (await this.http.get(`${this.reportPath}/questions`, {
-            params: { questionnaireId, version }
+            params: { questionnaireId, version },
         })).data
     }
 
@@ -75,7 +75,7 @@ class MapsReport {
     async InteriewSummaryUrl(interviewId) {
         var response = await this.http.post('api/InterviewApi/InterviewSummaryForMapPoint', 
             {
-                interviewId
+                interviewId,
             })
 
         return response
@@ -93,7 +93,7 @@ class Users {
 
     async Supervisors(filter) {
         return (await this.http.get('api/v1/users/supervisors', {
-            params: { filter }
+            params: { filter },
         })).data
     }
 
@@ -121,7 +121,7 @@ class Reports {
             templateId: questionnaireId,
             templateVersion: version,
             from,
-            to
+            to,
         })
     }
 }
@@ -164,8 +164,8 @@ class AssignmentsApi {
             data: targetQuantity,
             headers: {
                 accept: 'text/plain',
-                'content-type': 'application/json'
-            }
+                'content-type': 'application/json',
+            },
         })
     }
 }
@@ -215,7 +215,7 @@ class WebInterviewSettingsApi {
             spamProtection: isEnabledSpamProtection, 
             reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse,
             reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse,
-            singleResponse: singleResponse
+            singleResponse: singleResponse,
         })
     }
 
@@ -288,7 +288,7 @@ class AdminSettings {
     setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled){
         return this.http.post(`${this.base}/InterviewerSettings`, 
             { interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled, 
-                notificationsEnabled: isDeviceNotificationsEnabled
+                notificationsEnabled: isDeviceNotificationsEnabled,
             })
     }
     getInterviewerSettings() {
@@ -325,7 +325,7 @@ class HqApiClient {
         this.basePath = basePath
 
         this.http = axios.create({
-            baseURL: basePath
+            baseURL: basePath,
         })
     }
 
@@ -367,14 +367,14 @@ export default {
         Object.defineProperty(vue, '$hq', {
             get() {
                 return instance
-            }
+            },
         })
 
         /*  expose a local API method  */
         Object.defineProperty(vue.prototype, '$hq', {
             get() {
                 return instance
-            }
+            },
         })
-    }
+    },
 }

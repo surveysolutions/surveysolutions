@@ -75,12 +75,12 @@ export default {
             const responsibleName = (this.responsible || {}).value
             const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
             return `<a href=${url}>${escape(data)}</a>`
-        }
+        },
     },
     watch: {
         responsible() {
             this.reloadTable()
-        }
+        },
     },
     computed: {
         tableOptions() {
@@ -100,7 +100,7 @@ export default {
                         }
                         
                         return `<a href=${window.location}?questionnaireId=${row.questionnaireId}>${escape(data)}</a>`
-                    }
+                    },
                 },
                 {
                     data: 'supervisorAssignedCount',
@@ -112,7 +112,7 @@ export default {
                             data,
                             row,
                             'SupervisorAssigned')
-                    }
+                    },
                 },
                 {
                     data: 'interviewerAssignedCount',
@@ -124,7 +124,7 @@ export default {
                             data,
                             row,
                             'InterviewerAssigned')
-                    }
+                    },
                 },
                 {
                     data: 'completedCount',
@@ -136,7 +136,7 @@ export default {
                             data,
                             row,
                             'Completed')
-                    }
+                    },
                 },
                 {
                     data: 'rejectedBySupervisorCount',
@@ -148,7 +148,7 @@ export default {
                             data,
                             row,
                             'RejectedBySupervisor')
-                    }
+                    },
                 },
                 {
                     data: 'approvedBySupervisorCount',
@@ -157,7 +157,7 @@ export default {
                     title: this.$t('Reports.ApprovedBySupervisor'),
                     render(data, type, row) {
                         return '<span>' + formatNumber(data) + '</span>'
-                    }
+                    },
                 },
                 {
                     data: 'rejectedByHeadquartersCount',
@@ -169,7 +169,7 @@ export default {
                             data,
                             row,
                             'RejectedByHeadquarters')
-                    }
+                    },
                 },
                 {
                     data: 'approvedByHeadquartersCount',
@@ -178,7 +178,7 @@ export default {
                     title: this.$t('Reports.ApprovedByHQ'),
                     render(data, type, row) {
                         return '<span>' + formatNumber(data) + '</span>'
-                    }
+                    },
                 },
                 {
                     data: 'totalCount',
@@ -190,8 +190,8 @@ export default {
                             data,
                             row,
                             '')
-                    }
-                }
+                    },
+                },
             ]
 
             if(self.questionnaireId) {
@@ -199,7 +199,7 @@ export default {
                     {
                         data: 'questionnaireVersion',
                         className: 'type-numeric version centered-italic',
-                        title: this.$t('Reports.TemplateVersion')
+                        title: this.$t('Reports.TemplateVersion'),
                     })
             }
 
@@ -225,7 +225,7 @@ export default {
         },
         questionnaireId() {
             return this.$route.query.questionnaireId
-        }
-    }
+        },
+    },
 }
 </script>

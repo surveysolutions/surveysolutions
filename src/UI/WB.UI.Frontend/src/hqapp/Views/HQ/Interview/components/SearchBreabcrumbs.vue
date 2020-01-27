@@ -13,8 +13,8 @@ export default {
     props: {
         sections: {
             type: Array,
-            required: true
-        }
-    }
+            required: true,
+        },
+    },
 }
 </script>

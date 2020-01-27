@@ -16,12 +16,12 @@ export default {
     mixins: [entityPartial],
     props: {
         onRemove: {
-            default: null
+            default: null,
         },
         idSuffix: {
             type: String,
-            default: ''
-        }
+            default: '',
+        },
     },
     name: 'wb-remove-answer',
     methods: {
@@ -33,8 +33,8 @@ export default {
                 this.$store.dispatch('removeAnswer', this.$me.id)
                 this.$emit('answerRemoved', this.$me.id)
             }
-        }
-    }
+        },
+    },
 }
 
 </script>

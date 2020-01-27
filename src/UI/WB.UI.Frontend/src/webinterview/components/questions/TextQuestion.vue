@@ -65,7 +65,7 @@ export default {
             }
 
             return ''
-        }
+        },
     },
     methods: {
         answerTextQuestion() {
@@ -84,8 +84,8 @@ export default {
                     this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
                 }
             })
-        }
-    }
+        },
+    },
 }
 
 </script>

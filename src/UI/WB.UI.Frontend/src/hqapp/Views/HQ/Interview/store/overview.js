@@ -14,7 +14,7 @@ export default {
         },
         total: 0,
         pageSize: 100,
-        isLoaded: false
+        isLoaded: false,
     },
 
     actions: {
@@ -22,7 +22,7 @@ export default {
             const data = await Vue.$api.interview.get('overviewItemAdditionalInfo', { id })
             commit('SET_ADDITIONAL_INFO', {
                 id,
-                data
+                data,
             })
         },
 
@@ -39,10 +39,10 @@ export default {
             if (!data.isLastPage) {
                 dispatch('loadOverview', {
                     skip: skip + data.count,
-                    take: state.pageSize
+                    take: state.pageSize,
                 })
             }
-        }
+        },
     },
 
     mutations: {
@@ -63,10 +63,10 @@ export default {
 
         SET_ADDITIONAL_INFO(state, additionalInfo) {
             Vue.set(state.additionalInfo, additionalInfo.id, additionalInfo.data)
-        }
+        },
     },
 
     getters: {
 
-    }
+    },
 }

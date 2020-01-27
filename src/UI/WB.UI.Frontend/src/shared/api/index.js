@@ -46,6 +46,6 @@ export default {
 
         audioRecordUri(interviewId, filename) {
             return config.audioGet + `?interviewId=${interviewId}&filename=${filename}`
-        }
-    }
+        },
+    },
 }

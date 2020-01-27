@@ -80,7 +80,7 @@ export default {
                 this.initQuestionsInRows()
                 this.setTableRosterHeight()
             }
-        }
+        },
     },
 
     mounted() {
@@ -93,10 +93,10 @@ export default {
                 stopEditingWhenGridLosesFocus: true,
                 suppressMovableColumns:true,
                 context: {
-                    componentParent: this
-                }
+                    componentParent: this,
+                },
             }
-        }
+        },
     },
     methods : {
         initQuestionAsColumns() {
@@ -110,13 +110,13 @@ export default {
                         headerComponentParams: {
                             title: question.title,
                             instruction: question.instruction,
-                            questionId: question.id
+                            questionId: question.id,
                         },
                         field: question.id, 
                         cellRendererFramework: 'TableRoster_ViewAnswer',
                         cellRendererParams: {
                             id: question.id,
-                            question: question
+                            question: question,
                         },
                         cellEditorFramework: 'TableRoster_QuestionEditor', 
                         cellEditorParams: {
@@ -130,7 +130,7 @@ export default {
                 headerName: this.$me.title, 
                 headerComponentFramework: 'TableRoster_Title',
                 headerComponentParams: {
-                    title: this.$me.title
+                    title: this.$me.title,
                 },
                 field: 'rosterTitle', 
                 autoHeight: true, 
@@ -138,7 +138,7 @@ export default {
                 editable: false,                     
                 cellStyle: {minHeight: '40px'}, 
                 cellRendererFramework: 'TableRoster_RosterTitle',
-                cellRendererParams: { }
+                cellRendererParams: { },
             })
             this.columnDefs = columnsFromQuestions
         },
@@ -160,7 +160,7 @@ export default {
                         var questionIdentity = question.id + instance.rosterVector
                         instanceAsRow[question.id] = {
                             identity : questionIdentity,
-                            type     : question.entityType
+                            type     : question.entityType,
                         }
                     })
                         
@@ -226,7 +226,7 @@ export default {
 
         endCellEditting(event) {
             event.api.resetRowHeights()
-        }
-    }
+        },
+    },
 }
 </script>

@@ -59,7 +59,7 @@ import {
 
 function appendSearchParam(uri, name, value) {
     const args = {
-        [name]: value
+        [name]: value,
     } // keep in separate line to make IE happy
     return appendquery(uri, args)
 }
@@ -68,40 +68,40 @@ export default {
     data() {
         return {
             modal: false,
-            contentType: ''
+            contentType: '',
         }
     },
     props: {
         filename: {
-            type: String
+            type: String,
         },
         contentId: {
             type: String,
-            required: false
+            required: false,
         },
         interviewId: {
             type: String,
-            required: false
+            required: false,
         },
         cache: {
-            type: Number
+            type: Number,
         },
         thumb: {
             type: String,
-            required: false
+            required: false,
         },
         image: {
-            type: String
+            type: String,
         },
         customCssClass: {
             type: String,
-            required: false
+            required: false,
         },
         previewOnly: {
             type: Boolean,
             required: false,
-            default: false
-        }
+            default: false,
+        },
     },
     mounted() {
         return this.fetchContentType()
@@ -135,7 +135,7 @@ export default {
         previewStyle() {
             if (this.isPreview) {
                 return {
-                    cursor: 'auto'
+                    cursor: 'auto',
                 }
             }
 
@@ -154,9 +154,9 @@ export default {
         },
         modalView() {
             return {
-                display: this.modal ? 'block' : 'none'
+                display: this.modal ? 'block' : 'none',
             }
-        }
+        },
     },
     methods: {
         async fetchContentType() {
@@ -175,9 +175,9 @@ export default {
             if (this.previewOnly)
                 return
             this.modal = show
-        }
+        },
     },
-    name: 'wb-attachment'
+    name: 'wb-attachment',
 }
 
 </script>

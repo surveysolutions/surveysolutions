@@ -14,23 +14,23 @@ export default {
     props: {
         showFoldbackButtonAsHamburger: {
             type: Boolean,
-            default: true
+            default: true,
         },
         visible: {
-            type: Boolean, default: true
-        }
+            type: Boolean, default: true,
+        },
     },
     computed: {
         cssClass() {
             if (this.showFoldbackButtonAsHamburger)
                 return 'humburger-foldback-button'
             return 'foldback-button'
-        }
+        },
     },
     methods: {
         toggleSidebarPanel() {
             this.$store.dispatch('toggleSidebarPanel')
-        }
-    }
+        },
+    },
 }
 </script>

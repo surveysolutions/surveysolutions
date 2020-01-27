@@ -8,8 +8,8 @@
 export default {
     props: {
         separate: {
-            type: Boolean
-        }
-    }
+            type: Boolean,
+        },
+    },
 }
 </script>

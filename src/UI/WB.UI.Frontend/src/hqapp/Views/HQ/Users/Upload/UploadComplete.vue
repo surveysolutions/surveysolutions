@@ -40,7 +40,7 @@ export default {
         interviewersCount() {
             if (!this.$store.getters.upload.complete) return 0
             return this.$store.getters.upload.complete.interviewersCount
-        }
-    }
+        },
+    },
 }
 </script>

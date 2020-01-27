@@ -12,7 +12,7 @@ export default {
     methods: {
         changeLanguage(language) {
             this.$store.dispatch('changeLanguage', { language })
-        }
+        },
     },
     updated() {
         $(this.$refs.select).selectpicker('refresh')
@@ -20,6 +20,6 @@ export default {
     mounted() {
         this.currentLanguage = this.$store.state.webinterview.currentLanguage
         this.$watch('currentLanguage', this.changeLanguage)
-    }
+    },
 }
 </script>

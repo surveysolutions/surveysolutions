@@ -73,7 +73,7 @@ export default {
             stopwatchInterval: null,
             maxDuration: 3 * 60 * 1000,
             maxDurationInterval: null,
-            formattedTimer: '00:00:00'
+            formattedTimer: '00:00:00',
         }
     },
     computed: {
@@ -101,7 +101,7 @@ export default {
         },
         isRecorded() {
             return this.isRecording == false && this.$me.isAnswered
-        }
+        },
     },
     methods: {
         showModal() {
@@ -152,9 +152,9 @@ export default {
                     doneCallback: (blob) => {
                         self.$store.dispatch('answerAudioQuestion', {
                             identity: self.id,
-                            file: blob
+                            file: blob,
                         })
-                    }
+                    },
                 })
             })
         },
@@ -164,7 +164,7 @@ export default {
         updateTimer() {
             var diff = moment.utc(this.currentTime() - this.startRecordingTime)
             this.formattedTimer = diff.format('mm:ss:SS')
-        }
-    }   
+        },
+    },   
 }
 </script>

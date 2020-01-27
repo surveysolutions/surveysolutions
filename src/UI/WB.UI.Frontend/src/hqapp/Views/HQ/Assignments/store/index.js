@@ -4,7 +4,7 @@ import upload from './upload'
 
 const store = {
     modules:{
-        takeNew
+        takeNew,
     },
 
     actions: {
@@ -13,12 +13,12 @@ const store = {
     getters: {
         isReviewMode() {
             return false
-        }
-    }
+        },
+    },
 }
 
 export default {
     webinterview,
     takeNew: store,
-    upload
+    upload,
 }

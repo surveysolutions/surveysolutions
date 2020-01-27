@@ -46,7 +46,7 @@ const State = {
     Answered: 'Answered',
     Commented: 'Commented',
     Invalid: 'Invalid',
-    Unanswered: 'Unanswered'
+    Unanswered: 'Unanswered',
 }
 import Vue from 'vue'
 import AdditionalInfo from './OverviewItemAdditionalInfo'
@@ -57,13 +57,13 @@ export default {
     props: {
         item: {
             required: true,
-            type: Object
-        }
+            type: Object,
+        },
     },
 
     data() {
         return {
-            watcher: null
+            watcher: null,
         }
     },
 
@@ -71,7 +71,7 @@ export default {
         if (this.item.isGroup || this.item.isSection) {
             this.$emit('mount', {
                 el: this.$el,
-                item: this.item
+                item: this.item,
             })
         }
     },
@@ -103,7 +103,7 @@ export default {
         parseGps(str)
         {
             return JSON.parse(str || '{ latitude: 0, longitude: 0 }')
-        }
+        },
     },
     computed: {
         interviewId(){
@@ -127,7 +127,7 @@ export default {
                 section: this.item.isSection,
                 unanswered: this.item.state == State.Unanswered,
                 invalid: this.item.state == State.Invalid,
-                hasComment: this.item.hasComment
+                hasComment: this.item.hasComment,
             }
         },
         hasDate(){
@@ -152,10 +152,10 @@ export default {
         },
         hasAttachment(){
             return this.attachmentContentId != null
-        }
+        },
     },
     components: {
-        AdditionalInfo
-    }
+        AdditionalInfo,
+    },
 }
 </script>

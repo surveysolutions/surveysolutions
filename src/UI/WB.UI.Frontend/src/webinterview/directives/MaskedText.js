@@ -19,11 +19,11 @@ Vue.directive('maskedText', {
                     '*': { pattern: /[a-zA-Z0-9]/ },
                     '9': { pattern: /9/, fallback: '9' },
                     'A': { pattern: /A/, fallback: 'A' },
-                    'S': { pattern: /S/, fallback: 'S' }
-                }
+                    'S': { pattern: /S/, fallback: 'S' },
+                },
             })
         }
-    }
+    },
 })
 
 

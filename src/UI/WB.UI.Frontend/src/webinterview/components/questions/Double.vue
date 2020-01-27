@@ -93,8 +93,8 @@ export default {
             },
             set(value) {
                 this.saveAnswer(value, true)
-            }
-        }
+            },
+        },
     },        
     methods: {
         answerDoubleQuestion(evnt) {
@@ -141,13 +141,13 @@ export default {
                 
             this.$store.dispatch('removeAnswer', this.id)
             return
-        }
+        },
     },
     beforeDestroy () {
         if (this.autoNumericElement) {
             this.autoNumericElement.remove()
         }
-    }
+    },
 }
 
 </script>

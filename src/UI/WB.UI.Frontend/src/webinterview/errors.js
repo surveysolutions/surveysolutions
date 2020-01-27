@@ -13,7 +13,7 @@ function toastErr(err, message) {
     }
 
     toastr.error(message, 'Error', {
-        preventDuplicates: true
+        preventDuplicates: true,
     })
 }
 

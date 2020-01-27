@@ -65,9 +65,9 @@ export default {
                         instance.jumpToDate(defaultDate)
                         instance.now = defaultDate
                         instance.redraw()
-                    }
+                    },
                 ],
-            }
+            },
         }
     },
     computed: {
@@ -86,7 +86,7 @@ export default {
                 }
             }
             return ''
-        }
+        },
     },
     methods: {
         answerDate(selectedDate) {
@@ -102,16 +102,16 @@ export default {
                     else {
                         this.$store.dispatch('answerDateQuestion', { 
                             identity: this.$me.id,
-                            date: moment().format().substring(0, 19) // remove timezone information from date to prevent server conversion to server timezone
+                            date: moment().format().substring(0, 19), // remove timezone information from date to prevent server conversion to server timezone
                         })
                     }
                 }
             })
-        }
+        },
     },
     components: {
-        flatPickr
-    }
+        flatPickr,
+    },
 }
 
 </script>

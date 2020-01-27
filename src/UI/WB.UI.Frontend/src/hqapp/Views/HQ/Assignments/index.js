@@ -15,20 +15,20 @@ export default class AssignmentsComponent {
         return [
             {
                 path: '/HQ/TakeNewAssignment/:interviewId',
-                component: CreateNew
+                component: CreateNew,
             },
             {
                 path: '/Assignments', component: Layout,
                 children: [
                     {
-                        path: '', component: Assignments
+                        path: '', component: Assignments,
                     },
                     {
-                        path: ':assignmentId', component: Details
+                        path: ':assignmentId', component: Details,
                     }, 
                     {
-                        path: 'Upload/:questionnaireId', component: Upload
-                    }]
+                        path: 'Upload/:questionnaireId', component: Upload,
+                    }],
             }]
     }
 

@@ -31,7 +31,7 @@ export default {
 
         commit('SET_ENTITIES_DETAILS', {
             entities: details,
-            lastActivityTimestamp: new Date()
+            lastActivityTimestamp: new Date(),
         })
     }, 'fetch', /* limit */ 20),
 
@@ -143,9 +143,9 @@ export default {
             buttons: {
                 ok: {
                     label: Vue.$t('WebInterviewUI.Reload'),
-                    className: 'btn-success'
-                }
-            }
+                    className: 'btn-success',
+                },
+            },
         })
     },
 
@@ -206,8 +206,8 @@ export default {
                     name: 'section',
                     params: {
                         //interviewId: interviewId,
-                        sectionId: prefilledPageData.firstSectionId
-                    }
+                        sectionId: prefilledPageData.firstSectionId,
+                    },
                 }
 
                 dispatch('navigeToRoute', loc)
@@ -223,7 +223,7 @@ export default {
                 commit('SET_SECTION_DATA', section.entities)
                 commit('SET_ENTITIES_DETAILS', {
                     entities: section.details,
-                    lastActivityTimestamp: new Date()
+                    lastActivityTimestamp: new Date(),
                 })
             } finally {
                 commit('SET_LOADING_PROGRESS', false)
@@ -245,8 +245,8 @@ export default {
                     name: 'section',
                     params: {
                         interviewId: interviewId,
-                        sectionId: firstSectionId
-                    }
+                        sectionId: firstSectionId,
+                    },
                 }
 
                 dispatch('navigeToRoute', firstSectionLocation)
@@ -297,5 +297,5 @@ export default {
 
     changeSection(_, { to, from }) {
         return Vue.$api.hub.changeSection(to, from)
-    }
+    },
 }

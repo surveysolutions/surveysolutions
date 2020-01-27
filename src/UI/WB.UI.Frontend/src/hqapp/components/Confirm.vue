@@ -12,25 +12,25 @@ export default {
         id: String,
         title: {
             type: String,
-            required: false
+            required: false,
         },
         disableOk: {
             type: Boolean,
             required: false,
-            default: false
-        }
+            default: false,
+        },
     },
 
     data() {
         return {
-            callback: null
+            callback: null,
         }
     },
 
     computed: {
         confirm_title() {
             return this.title || this.$t('Pages.ConfirmationNeededTitle')
-        }
+        },
     },
 
     methods: {
@@ -47,7 +47,7 @@ export default {
         promt(callback) {
             this.callback = callback
             $(this.$el).appendTo('body').modal()
-        }
-    }
+        },
+    },
 }
 </script>

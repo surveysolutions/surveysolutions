@@ -9,13 +9,13 @@ export const entityPartial = {
             return this.$store.state.webinterview.entityDetails[id] || {
                 isAnswered: false,
                 validity: {
-                    isValid: true
+                    isValid: true,
                 },
-                isLoading: true
+                isLoading: true,
             }
-        }
+        },
     },
-    props: ['id']
+    props: ['id'],
 }
 
 // Questions
@@ -31,9 +31,9 @@ export const entityDetails = {
             return result || {
                 isAnswered: false,
                 validity: {
-                    isValid: true
+                    isValid: true,
                 },
-                isLoading: true
+                isLoading: true,
             }
         },
         hash() {
@@ -49,20 +49,20 @@ export const entityDetails = {
 
         acceptAnswer() {
             return this.$me.acceptAnswer
-        }
+        },
     },
 
     props:
     {
         id: {
             type: String,
-            required: true
+            required: true,
         },
 
         fetchOnMount: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
 
     mounted() {
@@ -74,7 +74,7 @@ export const entityDetails = {
     watch: {
         id(to, from) {
             this.$store.dispatch('cleanUpEntity', from)
-        }
+        },
     },
 
     destroyed() {
@@ -102,7 +102,7 @@ export const entityDetails = {
             this.$store.dispatch({
                 type: 'fetchEntity',
                 id: id || this.id,
-                source: 'client'
+                source: 'client',
             })
         },
 
@@ -119,8 +119,8 @@ export const entityDetails = {
             }
 
             return false
-        }
-    }
+        },
+    },
 }
 
 // Table Roster cell parameters
@@ -128,7 +128,7 @@ export const tableCellEditor = {
     props: {
         editorParams: {
             type: Object,
-            default: {}
-        }
-    }
+            default: {},
+        },
+    },
 }

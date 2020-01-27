@@ -15,27 +15,27 @@ export default {
     props: {
         userRole: {
             required: true,
-            type: String
+            type: String,
         },
         text: {
             required: true,
-            type: String
+            type: String,
         },
         isOwnComment: {
             required: true,
-            type: Boolean
+            type: Boolean,
         },
         resolved: {
             required: true,
-            type: Boolean
+            type: Boolean,
         },
         date: {
-            type: String
-        }
+            type: String,
+        },
     },
     data() {
         return {
-            isCollapsed: this.text.length > 200
+            isCollapsed: this.text.length > 200,
         }
     },
     computed: {
@@ -66,13 +66,13 @@ export default {
         },
         commentedAtDate() {
             return moment.utc(this.date).format(DateFormats.dateTime)
-        }
+        },
     },
     methods: {
         toggle() {
             this.isCollapsed = !this.isCollapsed
-        }
-    }
+        },
+    },
 }
 
 </script>

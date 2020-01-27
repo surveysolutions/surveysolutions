@@ -6,6 +6,6 @@
 
 <script lang="js">
 export default {
-    name: 'splash'
+    name: 'splash',
 }
 </script>

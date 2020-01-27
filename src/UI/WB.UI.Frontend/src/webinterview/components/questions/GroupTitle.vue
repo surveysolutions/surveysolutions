@@ -16,7 +16,7 @@ export default {
     watch: {
         ['$store.getters.scrollState']() {
             this.scroll()
-        }
+        },
     },
 
     mounted() {
@@ -28,8 +28,8 @@ export default {
             return {
                 name: 'section', params: {
                     sectionId: this.id,
-                    interviewId: this.$route.params.interviewId
-                }
+                    interviewId: this.$route.params.interviewId,
+                },
             }
         },
         rosterTitle(){
@@ -51,12 +51,12 @@ export default {
             return ['roster-section-block', {
                 'started': this.$me.validity.isValid && this.isStarted,
                 'has-error': !this.$me.validity.isValid,
-                '': this.$me.validity.isValid && !this.isCompleted
+                '': this.$me.validity.isValid && !this.isCompleted,
             },
             {
-                'answered': this.isCompleted
+                'answered': this.isCompleted,
             }]
-        }           
+        },           
     },
     methods : {
         doScroll: debounce(function() {
@@ -70,7 +70,7 @@ export default {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll() 
             }
-        }
-    }
+        },
+    },
 }
 </script>

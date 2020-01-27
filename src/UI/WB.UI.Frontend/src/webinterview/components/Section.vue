@@ -30,8 +30,8 @@ export default {
     props:{
         showHumburger: {
             type: Boolean,
-            default: true
-        }
+            default: true,
+        },
     },
 
     beforeMount() {
@@ -47,7 +47,7 @@ export default {
     watch: {
         ['$route.params.sectionId']() {
             this.loadSection()
-        }
+        },
     },
 
     computed: {
@@ -68,20 +68,20 @@ export default {
                 return [
                     {
                         'complete-section': this.info.status == GroupStatus.Completed && !this.hasError,
-                        'section-with-error': this.hasError
-                    }
+                        'section-with-error': this.hasError,
+                    },
                 ]
             }
             return []
-        }
+        },
     },
     methods: {
         loadSection() {
             this.$store.dispatch('fetchSectionEntities')
-        }
+        },
     },
     components: {
-        SectionLoadingProgress: SectionProgress
-    }
+        SectionLoadingProgress: SectionProgress,
+    },
 }
 </script>

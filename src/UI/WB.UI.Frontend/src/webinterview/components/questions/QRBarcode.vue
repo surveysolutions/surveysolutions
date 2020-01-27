@@ -26,7 +26,7 @@ export default {
     computed: {
         noAnswerWatermark() {
             return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.TextEnter')
-        }
+        },
     },
     methods: {
         answerQRBarcodeQuestion(evnt) {
@@ -42,7 +42,7 @@ export default {
                     this.$store.dispatch('answerQRBarcodeQuestion', { identity: this.id, text: answer })
                 }
             })
-        }
-    }
+        },
+    },
 }
 </script>

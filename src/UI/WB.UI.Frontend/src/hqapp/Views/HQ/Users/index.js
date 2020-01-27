@@ -13,28 +13,28 @@ export default class UsersComponent {
 
     get routes() {
         return [{
-            path: '/Headquarters', component: Headquarters
+            path: '/Headquarters', component: Headquarters,
         },
         {
-            path: '/Observers', component: Observers
+            path: '/Observers', component: Observers,
         },
         {
-            path: '/Interviewers', component: Interviewers
+            path: '/Interviewers', component: Interviewers,
         },
         {
-            path: '/ApiUsers', component: ApiUsers
+            path: '/ApiUsers', component: ApiUsers,
         },
         {
-            path: '/Supervisors', component: Supervisors
+            path: '/Supervisors', component: Supervisors,
         },
         {
-            path: '/Users/Manage/:userId', component: Manage
+            path: '/Users/Manage/:userId', component: Manage,
         },
         {
-            path: '/Users/Manage/', component: Manage
+            path: '/Users/Manage/', component: Manage,
         },
         {
-            path: '/Users/Create/:role', component: Create
+            path: '/Users/Create/:role', component: Create,
         }]
     }
 }

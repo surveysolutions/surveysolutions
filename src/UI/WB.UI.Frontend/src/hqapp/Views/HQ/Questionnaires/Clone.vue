@@ -85,7 +85,7 @@ export default {
             if (validation) {
                 this.$refs.frmClone.submit()
             }
-        }
-    }
+        },
+    },
 }
 </script>

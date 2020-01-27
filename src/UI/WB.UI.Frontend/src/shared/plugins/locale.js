@@ -11,7 +11,7 @@ export default {
             keySeparator: ':',
             fallbackLocale: 'en',
             resources: {
-                [locale]: window.CONFIG.locale.data
+                [locale]: window.CONFIG.locale.data,
             },
             interpolation: { escapeValue: false },
             saveMissing: true,
@@ -21,7 +21,7 @@ export default {
             appendNamespaceToMissingKey: true,
             parseMissingKeyHandler(key) {
                 return '[' + key + ']'
-            }
+            },
         }
         i18next.init(options)
 
@@ -34,5 +34,5 @@ export default {
         }
 
         return i18next
-    }
+    },
 }

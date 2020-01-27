@@ -87,5 +87,5 @@ export default {
     },
     COMPLETE_INTERVIEW(state) {
         state.interviewCompleted = true
-    }
+    },
 }

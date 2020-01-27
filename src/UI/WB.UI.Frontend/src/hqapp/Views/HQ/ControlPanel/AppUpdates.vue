@@ -30,7 +30,7 @@ import moment from 'moment'
 export default {
     data() {
         return {
-            files:[]
+            files:[],
         }
     },
     mounted() { 
@@ -45,7 +45,7 @@ export default {
         humanFileSize(size){
             if (size == null) return ''
             return humanFileSize(size)
-        }
-    }
+        },
+    },
 }
 </script>

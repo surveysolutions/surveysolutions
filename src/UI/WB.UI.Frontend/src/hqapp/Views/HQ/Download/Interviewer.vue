@@ -51,7 +51,7 @@
 export default {
     data() {
         return {
-            smallApkSelected: true
+            smallApkSelected: true,
         }
     },
     methods: {
@@ -83,7 +83,7 @@ export default {
             } else {
                 return this.model.fullApkVersion
             }
-        }
-    }
+        },
+    },
 }
 </script>

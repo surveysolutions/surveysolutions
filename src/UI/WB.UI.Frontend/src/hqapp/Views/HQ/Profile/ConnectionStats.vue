@@ -30,11 +30,11 @@ import {DateFormats, humanFileSize} from '~/shared/helpers'
 export default {
     props: {
         syncInfo: {
-            type: Object
+            type: Object,
         },
         prefix: {
-            type: String
-        }
+            type: String,
+        },
     },
     methods: {
         ouputBytes(val){
@@ -45,7 +45,7 @@ export default {
         },
         formatDate(date){
             return moment.utc(date).format(DateFormats.dateTime)
-        }
-    }
+        },
+    },
 }
 </script>

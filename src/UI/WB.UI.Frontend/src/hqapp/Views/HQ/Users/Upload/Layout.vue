@@ -30,6 +30,6 @@ export default {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         })
-    }
+    },
 }
 </script>

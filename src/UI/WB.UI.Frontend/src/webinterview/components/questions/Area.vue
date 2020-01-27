@@ -57,7 +57,7 @@ export default {
     mixins: [entityDetails],
     data: function() {
         return {
-            coordinatesShown: false
+            coordinatesShown: false,
         }
     },
     computed: {
@@ -72,12 +72,12 @@ export default {
         },
         isMultiPoints() {
             return this.$me.type == 'Multipoint'
-        }
+        },
     },
     methods: {
         showCoordinates(){
             this.coordinatesShown = true
-        }
-    }
+        },
+    },
 }
 </script>

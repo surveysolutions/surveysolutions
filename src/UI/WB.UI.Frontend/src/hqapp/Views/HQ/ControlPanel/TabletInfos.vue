@@ -24,7 +24,7 @@ export default {
             let columns = [
                 {
                     data: 'androidId',
-                    title: this.$t('Pages.PackagesInfo_DeviceId')
+                    title: this.$t('Pages.PackagesInfo_DeviceId'),
                 },
                 {
                     data: 'creationDate',
@@ -35,19 +35,19 @@ export default {
                 },
                 {
                     data: 'userName',
-                    title: this.$t('Pages.PackagesInfo_UserName')
+                    title: this.$t('Pages.PackagesInfo_UserName'),
                 },
                 {
                     data: 'userId',
-                    title: this.$t('Pages.PackagesInfo_UserId')
+                    title: this.$t('Pages.PackagesInfo_UserId'),
                 },
                 {
                     data: 'size',
                     title: this.$t('Pages.PackagesInfo_Size'),
                     render: function(data, _, row) {
                         return `<a href=${row.downloadUrl}>${humanFileSize(data)} <span class="glyphicon glyphicon-download"></span></a>`
-                    }
-                }
+                    },
+                },
             ]
 
             return {
@@ -58,14 +58,14 @@ export default {
                     contentType: 'application/json',
                 },
                 bInfo: false,
-                responsive: false
+                responsive: false,
             }
         },
     },
     methods: {
         onFileChange() {
             this.$refs.frm.submit()
-        }
-    }
+        },
+    },
 }
 </script>

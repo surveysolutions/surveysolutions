@@ -6,12 +6,12 @@ import modal from '@/shared/modal'
 const connectionStore = {
     state: {
         isReconnecting: false,
-        isDisconnected: false
+        isDisconnected: false,
     },
     actions: {
         connectionSlow() {
             toastr.warning(Vue.$t('WebInterviewUI.SlowConnection'), Vue.$t('WebInterviewUI.Network'), {
-                preventDuplicates: true
+                preventDuplicates: true,
             })
         },
         tryingToReconnect({commit}, isReconnecting) {
@@ -33,12 +33,12 @@ const connectionStore = {
                     buttons: {
                         ok: {
                             label: Vue.$t('WebInterviewUI.Reload'),
-                            className: 'btn-success'
-                        }
-                    }
+                            className: 'btn-success',
+                        },
+                    },
                 })
             }
-        }
+        },
     },
     mutations: {
         IS_RECONNECTING(state, isReconnecting) {
@@ -46,7 +46,7 @@ const connectionStore = {
         },
         IS_DISCONNECTED(state, isDisconnected) {
             state.isDisconnected = isDisconnected
-        }
-    }
+        },
+    },
 }
 export default connectionStore

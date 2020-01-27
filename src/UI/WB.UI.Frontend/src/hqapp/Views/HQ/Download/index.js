@@ -9,11 +9,11 @@ export default class UsersComponent {
     get routes() {
         return [
             {
-                path: '/Download', component: Interviewer
+                path: '/Download', component: Interviewer,
             },
             {
-                path: '/Download/Supervisor', component: Supervisor
-            }
+                path: '/Download/Supervisor', component: Supervisor,
+            },
         ]
     }
 }

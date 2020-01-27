@@ -14,7 +14,7 @@ export default {
         valuenow: { type: Number, default: 100 },
         valuemax: { type: Number, default: 100 },
         visible: { type: Boolean, default: false },
-        delay: { type: Number, default: 150 }
+        delay: { type: Number, default: 150 },
     },
     watch: {
         visible(to, from) {
@@ -28,12 +28,12 @@ export default {
 
                 this.isVisible = this.to
             }
-        }
+        },
     },
     data() {
         return {
             isVisible: false,
-            timerId: null
+            timerId: null,
         }
     },
     created() {
@@ -46,9 +46,9 @@ export default {
 
         style() {
             return {
-                width: this.progress + '%'
+                width: this.progress + '%',
             }
-        }
-    }
+        },
+    },
 }
 </script>

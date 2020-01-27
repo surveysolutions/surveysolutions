@@ -62,7 +62,7 @@ export default {
             userName: null,
             password: null,
             errorMessage: null,
-            invalidCredentials: false
+            invalidCredentials: false,
         }
     },
     methods: {
@@ -74,11 +74,11 @@ export default {
                     url: this.$config.model.loginAction, 
                     data: {
                         userName: this.userName,
-                        password: this.password
+                        password: this.password,
                     },
                     headers: {
-                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie()
-                    }
+                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                    },
                 })
                     .then(
                         (loginResponse) => {
@@ -95,8 +95,8 @@ export default {
                             }
                         })
             }
-        }
-    }
+        },
+    },
 }
 </script>
 

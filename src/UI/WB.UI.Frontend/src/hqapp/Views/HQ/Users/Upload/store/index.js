@@ -3,7 +3,7 @@ export default {
         fileName: '',
         verificationErrors: [],
         complete: {},
-        progress: {}
+        progress: {},
     },
 
     actions: {
@@ -19,7 +19,7 @@ export default {
         },
         setUploadCompleteStatus({ commit }, status) {
             commit('SET_COMPLETE_STATUS', status)
-        }
+        },
     },
 
     mutations: {
@@ -34,12 +34,12 @@ export default {
         },
         SET_COMPLETE_STATUS(state, status) {
             state.complete = status
-        }
+        },
     },
 
     getters: {
         upload(state) {
             return state
-        }
-    }
+        },
+    },
 }

@@ -17,11 +17,11 @@ export default {
     methods: {
         hideFacets() {
             this.$store.dispatch('hideFacets')
-        }
+        },
     },
 
     components: {
-        FacetFilters
-    }
+        FacetFilters,
+    },
 }
 </script>

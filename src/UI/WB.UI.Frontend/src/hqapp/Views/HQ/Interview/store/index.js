@@ -9,7 +9,7 @@ const store = {
     modules:{
         filters,
         flags,
-        overview
+        overview,
     },
 
     actions: {
@@ -21,16 +21,16 @@ const store = {
         reject(_, rejection) {
             const interviewId = this.state.route.params.interviewId
             return Vue.$api.interview.answer(null, 'reject', {interviewId, comment:rejection.comment, assignTo:rejection.assignTo })
-        }
+        },
     },
     getters: {
         isReviewMode() {
             return true
-        }
-    }
+        },
+    },
 }
 
 export default {
     webinterview,
-    review: store
+    review: store,
 }

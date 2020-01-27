@@ -12,7 +12,7 @@ export default {
 
     data() {
         return {
-            title: null
+            title: null,
         }
     }, 
     created() {
@@ -21,8 +21,8 @@ export default {
     watch: {
         ['params.context.componentParent.$me.title']() {
             this.title = this.params.context.componentParent.$me.title
-        }
-    }
+        },
+    },
 }
 </script>
 

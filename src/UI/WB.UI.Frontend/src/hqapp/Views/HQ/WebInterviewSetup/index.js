@@ -10,24 +10,24 @@ export default class WebInterviewSetupComponent {
         return [
             {
                 path: '/WebInterviewSetup/Start/:id', 
-                component: Start
+                component: Start,
             },
             {
                 path: '/WebInterviewSetup/Started/:id', 
-                component: Started
+                component: Started,
             },
             {
                 path: '/WebInterviewSetup/Settings/:id', 
-                component: Settings
+                component: Settings,
             },
             {
                 path: '/WebInterviewSetup/SendInvitations/:id', 
-                component: SendInvitations
+                component: SendInvitations,
             },
             {
                 path: '/WebInterviewSetup/EmailDistributionProgress', 
-                component: SendInvitationsProgress
-            }
+                component: SendInvitationsProgress,
+            },
         ]
     }
 
