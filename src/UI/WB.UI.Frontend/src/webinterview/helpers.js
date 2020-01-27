@@ -27,9 +27,9 @@ export function batchedAction(callback, fetchAction = 'fetch', limit = null) {
         forEachIfNeeded(data, item => queue.push(item))
 
         tick(() => {
-                const ids = queue
-                queue = []
-                return callback(ctx, ids)
+            const ids = queue
+            queue = []
+            return callback(ctx, ids)
         })
 
         if (limit && queue.length > limit) {

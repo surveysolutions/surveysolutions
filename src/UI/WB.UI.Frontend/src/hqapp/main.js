@@ -45,15 +45,15 @@ const Router = require('./router').default
 const views = viewsProvider(store)
 
 const router = new Router({
-  routes: views.routes
+    routes: views.routes
 }).router
 
 sync(store, router)
 
 box.init(i18n, browserLanguage)
 export default new Vue({
-  el: '#vueApp',
-  render: h => h('router-view'),
-  store,
-  router
+    el: '#vueApp',
+    render: h => h('router-view'),
+    store,
+    router
 })

@@ -77,139 +77,139 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from '../mixins'
-    import Vue from 'vue'
-    import * as $ from 'jquery'
-    import modal from '@/shared/modal'
-    import { find, findIndex, filter } from 'lodash'
-    import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
+import { entityDetails } from '../mixins'
+import Vue from 'vue'
+import * as $ from 'jquery'
+import modal from '@/shared/modal'
+import { find, findIndex, filter } from 'lodash'
+import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
     
-    export default {
-        name: 'CategoricalYesNo',
-        data(){
-            return {
-                showAllOptions: false,
-                answer: []
-            }
+export default {
+    name: 'CategoricalYesNo',
+    data(){
+        return {
+            showAllOptions: false,
+            answer: []
+        }
+    },
+    props: ['noComments'],
+    watch: {
+        '$me.answer'(to) {
+            Vue.set(this, 'answer', to)
+        }
+    },
+    computed: {
+        allAnswersGiven() {
+            const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes })
+            const isMaxLimitReached = this.$me.maxSelectedAnswersCount && yesAnswers.length >= this.$me.maxSelectedAnswersCount
+            return isMaxLimitReached
         },
-        props: ['noComments'],
-        watch: {
-            '$me.answer'(to) {
-                Vue.set(this, 'answer', to)
-            }
+        shouldShowAnsweredOptionsOnly(){
+            return shouldShowAnsweredOptionsOnlyForMulti(this)
         },
-        computed: {
-            allAnswersGiven() {
-                const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes })
-                const isMaxLimitReached = this.$me.maxSelectedAnswersCount && yesAnswers.length >= this.$me.maxSelectedAnswersCount
-                return isMaxLimitReached
-            },
-            shouldShowAnsweredOptionsOnly(){
-                 return shouldShowAnsweredOptionsOnlyForMulti(this)
-            },
-            answeredOrAllOptions(){
-                if(!this.shouldShowAnsweredOptionsOnly)
-                    return this.$me.options
+        answeredOrAllOptions(){
+            if(!this.shouldShowAnsweredOptionsOnly)
+                return this.$me.options
                 
-                var self = this
-                return filter(this.$me.options, function(option) {
-                    return $.grep(self.answer, (e) => { return e.value == option.value }).length != 0 
-                })
-            },
-            noOptions() {
-                return this.$me.options == null || this.$me.options.length == 0
-            }
+            var self = this
+            return filter(this.$me.options, function(option) {
+                return $.grep(self.answer, (e) => { return e.value == option.value }).length != 0 
+            })
         },
-        methods: {
-            toggleOptions(){
-                this.showAllOptions = !this.showAllOptions
-            },
-            answerYes(optionValue){
-                 this.sendAnswer(optionValue, true)
-                 return true
-            },
-            answerNo(optionValue){
-                 this.sendAnswer(optionValue, false)
-                 return true
-            },
-            clearAnswer(optionValue){
-                 this.sendAnswer(optionValue, null)
-                 return true
-            },
-            isCanBeenAnswered(){
-                if(!this.$me.acceptAnswer) return false
+        noOptions() {
+            return this.$me.options == null || this.$me.options.length == 0
+        }
+    },
+    methods: {
+        toggleOptions(){
+            this.showAllOptions = !this.showAllOptions
+        },
+        answerYes(optionValue){
+            this.sendAnswer(optionValue, true)
+            return true
+        },
+        answerNo(optionValue){
+            this.sendAnswer(optionValue, false)
+            return true
+        },
+        clearAnswer(optionValue){
+            this.sendAnswer(optionValue, null)
+            return true
+        },
+        isCanBeenAnswered(){
+            if(!this.$me.acceptAnswer) return false
 
-                const yesAnswers = $.grep(this.$me.answer, (e) => { return e.yes })
-                const isMaxLimitReached = this.$me.maxSelectedAnswersCount && yesAnswers.length >= this.$me.maxSelectedAnswersCount
-                return isMaxLimitReached
-            },
-            getAnswerOrder(optionValue){
-                const yesAnswers = $.grep(this.$me.answer, (e) => { return e.yes })
-                const answerIndex = findIndex(yesAnswers, (x) =>  { return x.value == optionValue })
-                return  answerIndex > -1 ? answerIndex + 1 : ''
-            },
-            isYesChecked(optionValue) {
-                const answerObj = $.grep(this.$me.answer, (e) => { return e.value == optionValue })
-                return answerObj.length == 0 ? false : answerObj[0].yes
-            },
-            isNoChecked(optionValue) {
-                const answerObj = $.grep(this.$me.answer, (e) => { return e.value == optionValue })
-                return answerObj.length == 0 ? false : !answerObj[0].yes
-            },
-            isProtected(optionValue) {
-                const answerObj = $.grep(this.$me.answer, (e) => { return e.value == optionValue })
-                return answerObj.length == 0 ? false : answerObj[0].isProtected
-            },
-            sendAnswer(optionValue, answerValue) {
-                const previousAnswer = this.$me.answer
-                const isChangedAnswerOnOption = findIndex(previousAnswer, (x) => { return x.value == optionValue && x.yes == answerValue}) < 0
-                if (!isChangedAnswerOnOption)
-                    return
+            const yesAnswers = $.grep(this.$me.answer, (e) => { return e.yes })
+            const isMaxLimitReached = this.$me.maxSelectedAnswersCount && yesAnswers.length >= this.$me.maxSelectedAnswersCount
+            return isMaxLimitReached
+        },
+        getAnswerOrder(optionValue){
+            const yesAnswers = $.grep(this.$me.answer, (e) => { return e.yes })
+            const answerIndex = findIndex(yesAnswers, (x) =>  { return x.value == optionValue })
+            return  answerIndex > -1 ? answerIndex + 1 : ''
+        },
+        isYesChecked(optionValue) {
+            const answerObj = $.grep(this.$me.answer, (e) => { return e.value == optionValue })
+            return answerObj.length == 0 ? false : answerObj[0].yes
+        },
+        isNoChecked(optionValue) {
+            const answerObj = $.grep(this.$me.answer, (e) => { return e.value == optionValue })
+            return answerObj.length == 0 ? false : !answerObj[0].yes
+        },
+        isProtected(optionValue) {
+            const answerObj = $.grep(this.$me.answer, (e) => { return e.value == optionValue })
+            return answerObj.length == 0 ? false : answerObj[0].isProtected
+        },
+        sendAnswer(optionValue, answerValue) {
+            const previousAnswer = this.$me.answer
+            const isChangedAnswerOnOption = findIndex(previousAnswer, (x) => { return x.value == optionValue && x.yes == answerValue}) < 0
+            if (!isChangedAnswerOnOption)
+                return
 
-                const previousAnswerWithoutCurrecntAnswered = $.grep(this.$me.answer, (e) =>{ return e.value != optionValue })
-                const newAnswer = answerValue == null
-                    ? previousAnswerWithoutCurrecntAnswered
-                    : previousAnswerWithoutCurrecntAnswered.concat([{ value: optionValue, yes: answerValue }])
+            const previousAnswerWithoutCurrecntAnswered = $.grep(this.$me.answer, (e) =>{ return e.value != optionValue })
+            const newAnswer = answerValue == null
+                ? previousAnswerWithoutCurrecntAnswered
+                : previousAnswerWithoutCurrecntAnswered.concat([{ value: optionValue, yes: answerValue }])
 
-                if (!this.$me.isRosterSize)
-                {
+            if (!this.$me.isRosterSize)
+            {
+                this.$store.dispatch('answerYesNoQuestion', { identity: this.$me.id, answer: newAnswer })
+                return
+            }
+
+            const currentYesAnswerCount = $.grep(newAnswer, function(e){ return e.yes }).length
+            const previousYesAnswersCount = $.grep(this.$me.answer, function(e){ return e.yes }).length
+            const isNeedRemoveRosters = currentYesAnswerCount < previousYesAnswersCount
+
+            if (!isNeedRemoveRosters)
+            {
+                this.$store.dispatch('answerYesNoQuestion', { identity: this.$me.id, answer: newAnswer })
+                return
+            }
+            const rosterTitle = find(this.answeredOrAllOptions, { value: optionValue}).title
+
+            const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
+                rosterTitle
+            } )
+
+            modal.confirm(confirmMessage,  result => {
+                if (result) {
                     this.$store.dispatch('answerYesNoQuestion', { identity: this.$me.id, answer: newAnswer })
                     return
-                }
-
-                const currentYesAnswerCount = $.grep(newAnswer, function(e){ return e.yes }).length
-                const previousYesAnswersCount = $.grep(this.$me.answer, function(e){ return e.yes }).length
-                const isNeedRemoveRosters = currentYesAnswerCount < previousYesAnswersCount
-
-                if (!isNeedRemoveRosters)
-                {
-                    this.$store.dispatch('answerYesNoQuestion', { identity: this.$me.id, answer: newAnswer })
-                    return
-                }
-                const rosterTitle = find(this.answeredOrAllOptions, { value: optionValue}).title
-
-                const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
-                    rosterTitle
-                } )
-
-                modal.confirm(confirmMessage,  result => {
-                    if (result) {
-                        this.$store.dispatch('answerYesNoQuestion', { identity: this.$me.id, answer: newAnswer })
-                        return
-                    } else {
-                        // trigger update for checkboxes to override some vue optimizations
-                        Vue.nextTick(() => {
-                            const opt = find(this.answer, { 'value': optionValue })
-                            opt.yes = answerValue
-                            Vue.nextTick( () => {
-                                opt.yes = !answerValue
-                            })
+                } else {
+                    // trigger update for checkboxes to override some vue optimizations
+                    Vue.nextTick(() => {
+                        const opt = find(this.answer, { 'value': optionValue })
+                        opt.yes = answerValue
+                        Vue.nextTick( () => {
+                            opt.yes = !answerValue
                         })
-                        return
-                    }
-                })
-            }
-        },
-        mixins: [entityDetails]
-    }
+                    })
+                    return
+                }
+            })
+        }
+    },
+    mixins: [entityDetails]
+}
 </script>

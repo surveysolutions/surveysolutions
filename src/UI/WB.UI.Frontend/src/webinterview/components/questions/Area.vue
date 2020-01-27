@@ -50,34 +50,34 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from '../mixins'
+import { entityDetails } from '../mixins'
 
-    export default {
-        name: 'Area',
-        mixins: [entityDetails],
-        data: function() {
-            return {
-                coordinatesShown: false
-            }
+export default {
+    name: 'Area',
+    mixins: [entityDetails],
+    data: function() {
+        return {
+            coordinatesShown: false
+        }
+    },
+    computed: {
+        answerUrl() {
+            return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.$me.id}`
         },
-        computed: {
-            answerUrl() {
-                return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.$me.id}`
-            },
-            isPolygon() {
-                return this.$me.type == 'Polygon'
-            },
-            isPolyline() {
-                return this.$me.type == 'Polyline'
-            },
-            isMultiPoints() {
-                return this.$me.type == 'Multipoint'
-            }
+        isPolygon() {
+            return this.$me.type == 'Polygon'
         },
-        methods: {
-            showCoordinates(){
-                this.coordinatesShown = true
-            }
+        isPolyline() {
+            return this.$me.type == 'Polyline'
+        },
+        isMultiPoints() {
+            return this.$me.type == 'Multipoint'
+        }
+    },
+    methods: {
+        showCoordinates(){
+            this.coordinatesShown = true
         }
     }
+}
 </script>

@@ -80,20 +80,20 @@ export default {
                         'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie()
                     }
                 })
-                .then(
-                    (loginResponse) => {
-                    if (loginResponse.status == 200) {
-                        window.location = this.$config.model.listUrl
-                    }
-                }, (error) => {
-                    if (error.response.status == 401) {
-                        this.invalidCredentials = true
-                    }
-                    else {
-                        this.invalidCredentials = false
-                        this.errorMessage = error.response.data.message
-                    }
-                })
+                    .then(
+                        (loginResponse) => {
+                            if (loginResponse.status == 200) {
+                                window.location = this.$config.model.listUrl
+                            }
+                        }, (error) => {
+                            if (error.response.status == 401) {
+                                this.invalidCredentials = true
+                            }
+                            else {
+                                this.invalidCredentials = false
+                                this.errorMessage = error.response.data.message
+                            }
+                        })
             }
         }
     }

@@ -45,25 +45,25 @@ import Vue from 'vue'
 import moment from 'moment'
 
 export default {
-  data: function() {
-    return {
-      items: null
-    }
-  },
-  methods: {
-    formatDate(d) {
-      return moment.utc(d).local().format(DateFormats.dateTimeInList)
+    data: function() {
+        return {
+            items: null
+        }
     },
-    hide() {
-      $(this.$refs.modal).modal('hide')
-    },
-    async show() {
-      if (this.items == null){
-        this.items = await Vue.$api.interview.get('getStatusesHistory')
-      }
+    methods: {
+        formatDate(d) {
+            return moment.utc(d).local().format(DateFormats.dateTimeInList)
+        },
+        hide() {
+            $(this.$refs.modal).modal('hide')
+        },
+        async show() {
+            if (this.items == null){
+                this.items = await Vue.$api.interview.get('getStatusesHistory')
+            }
 
-      this.$refs.modal.modal()
+            this.$refs.modal.modal()
+        }
     }
-  }
 }
 </script> 

@@ -60,8 +60,8 @@ export default {
     },
     methods:{
         updateStatus(newMessage){
-          this.statusMessage = this.$t('Pages.Map_Status') + ': ' + newMessage
-      },
+            this.statusMessage = this.$t('Pages.Map_Status') + ': ' + newMessage
+        },
         onFileChange(e){
             const statusupdater = this.updateStatus
             const uploadingMessage = this.$t('Pages.Map_Uploading')
@@ -90,7 +90,7 @@ export default {
                     statusupdater(uploadingErrorMessage)
                 }
             })  
-    },
+        },
 
     }
 }

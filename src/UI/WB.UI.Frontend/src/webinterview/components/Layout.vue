@@ -15,22 +15,22 @@
     </div>
 </template>
 <script lang="js">
-    import modal from '@/shared/modal'
-    export default {
-        name: 'wb-layout',
-        computed: {
-            sidebarHidden() {
-                return this.$store.state.webinterview.sidebar.sidebarHidden
-            },
-            isLoading() {
-                return this.$store.getters.loadingProgress === true ? 'true' : 'false'
-            }
+import modal from '@/shared/modal'
+export default {
+    name: 'wb-layout',
+    computed: {
+        sidebarHidden() {
+            return this.$store.state.webinterview.sidebar.sidebarHidden
         },
-        mounted() {
-            if(this.$config.loadedMessage) {
-                modal.alert(this.$config.loadedMessage)
-            }
+        isLoading() {
+            return this.$store.getters.loadingProgress === true ? 'true' : 'false'
+        }
+    },
+    mounted() {
+        if(this.$config.loadedMessage) {
+            modal.alert(this.$config.loadedMessage)
         }
     }
+}
 
 </script>

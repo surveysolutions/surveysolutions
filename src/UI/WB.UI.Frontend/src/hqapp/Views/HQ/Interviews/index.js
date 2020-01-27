@@ -7,10 +7,10 @@ export default class InterviewsComponent {
     }
     get routes() {
         return [{
-                name: 'interviews',
-                path: '/Interviews/',
-                component: Interviews
-            }
+            name: 'interviews',
+            path: '/Interviews/',
+            component: Interviews
+        }
         ]
     }
     initialize() {

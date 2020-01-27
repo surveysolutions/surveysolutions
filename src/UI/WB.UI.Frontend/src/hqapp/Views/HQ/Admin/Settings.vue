@@ -328,7 +328,7 @@ export default {
             return this.$hq.AdminSettings.setWebInterviewSettings(this.isEmailAllowed)
         },
         onLogoSubmit() {
-             if (window.File && window.FileReader && window.FileList && window.Blob) {
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
                 //get the file size and file type from file input field
                 var fsize = this.$refs.logoRef.files[0].size
 
