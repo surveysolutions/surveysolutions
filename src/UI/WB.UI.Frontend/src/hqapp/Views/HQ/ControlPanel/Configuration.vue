@@ -8,7 +8,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="setting in settings" v-bind:key="setting.key">
+                <tr v-for="setting in settings"
+                    v-bind:key="setting.key">
                     <td>{{setting.key}}</td>
                     <td>{{setting.value}}   </td>
                 </tr>

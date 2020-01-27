@@ -1,5 +1,6 @@
 <template>
-  <span style="display:none" :lastActivity="lastActivity" />
+    <span style="display:none"
+        :lastActivity="lastActivity" />
 </template>
 
 <script>

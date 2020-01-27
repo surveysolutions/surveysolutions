@@ -1,7 +1,10 @@
 <template>
-    <aside class="filters-results" :class="{'active' : searchResultsAreVisible}">
+    <aside class="filters-results"
+        :class="{'active' : searchResultsAreVisible}">
         <div>
-            <button class="btn btn-link close-btn" type="button" @click="hideSearchResults">
+            <button class="btn btn-link close-btn"
+                type="button"
+                @click="hideSearchResults">
                 <span class="cancel"></span>
             </button>
             
@@ -18,9 +21,12 @@
                 :search="search">
             </search-section-result>
 
-            <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
-                 <span slot="no-more"></span>
-                 <span slot="no-results"></span>
+            <infinite-loading ref="loader"
+                v-if="searchResultsAreVisible"
+                @infinite="infiniteHandler"
+                :distance="250">
+                <span slot="no-more"></span>
+                <span slot="no-results"></span>
             </infinite-loading>
         </div>
     </aside>

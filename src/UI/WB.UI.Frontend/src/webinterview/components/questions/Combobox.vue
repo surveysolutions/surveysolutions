@@ -1,18 +1,18 @@
 <template>
     <wb-question :question="$me"
-                 questionCssClassName="single-select-question"
-                 :no-comments="noComments">
+        questionCssClassName="single-select-question"
+        :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
                     <div class="field"
-                         :class="{answered: $me.isAnswered}">
+                        :class="{answered: $me.isAnswered}">
                         <wb-typeahead :questionId="$me.id"
-                                      :value="$me.answer"
-                                      :disabled="!$me.acceptAnswer"
-                                      :optionsSource="optionsSource"
-                                      @input="answerComboboxQuestion" 
-                                      :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
+                            :value="$me.answer"
+                            :disabled="!$me.acceptAnswer"
+                            :optionsSource="optionsSource"
+                            @input="answerComboboxQuestion" 
+                            :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
                         <wb-remove-answer />
                     </div>
                 </div>

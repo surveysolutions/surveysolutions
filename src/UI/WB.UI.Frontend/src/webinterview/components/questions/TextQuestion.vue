@@ -1,9 +1,12 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="text-question" :no-comments="noComments">
+    <wb-question :question="$me"
+        questionCssClassName="text-question"
+        :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field" :class="{answered: $me.isAnswered}">
+                    <div class="field"
+                        :class="{answered: $me.isAnswered}">
                         <input
                             v-if="hasMask"
                             ref="input"
@@ -16,8 +19,7 @@
                             v-blurOnEnterKey
                             @blur="answerTextQuestion"
                             v-maskedText="$me.mask"
-                            :data-mask-completed="$me.isAnswered"
-                        />
+                            :data-mask-completed="$me.isAnswered"/>
                         <textarea-autosize
                             v-else
                             ref="inputTextArea"
@@ -32,8 +34,7 @@
                             :disabled="!$me.acceptAnswer"
                             v-blurOnEnterKey
                             @blur.native="answerTextQuestion"
-                            @blur="answerTextQuestion"
-                        ></textarea-autosize>
+                            @blur="answerTextQuestion"></textarea-autosize>
                         <wb-remove-answer />
                     </div>
                 </div>

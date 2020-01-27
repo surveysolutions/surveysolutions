@@ -5,7 +5,9 @@
                 <div class="col-md-6 col-sm-6 col-xs-12 left-column">
                     <div class="centered-box-table">
                         <div class="centered-box-table-cell">
-                            <div class="retina headquarter">Survey Solutions Headquarters</div>
+                            <div class="retina headquarter">
+                                Survey Solutions Headquarters
+                            </div>
                             <p>
                                 {{ $t('Pages.DownloadPage_Title') }}
                             </p>
@@ -18,11 +20,17 @@
                             <div class="hq-apps-wrapper">
                                 <h2>{{ $t('Pages.DownloadSupervisorPage_Welcome') }}</h2>
                                 <div class="form-actions">
-                                    <a :href="model.apkUrl" class="get-supervisor-app">
+                                    <a :href="model.apkUrl"
+                                        class="get-supervisor-app">
                                         <span>{{ $t('Pages.GetLatestSupervisorApp') }}</span>
                                         <span class="version">{{ $t('Pages.DownloadPage_Version') + ' ' + model.supervisorVersion }}</span>
                                     </a>
-                                    <img v-if="model.supportQRCodeGeneration" id="download-qr" alt="QR Code" width="250" height="250" :src="model.apkQRUrl" />
+                                    <img v-if="model.supportQRCodeGeneration"
+                                        id="download-qr"
+                                        alt="QR Code"
+                                        width="250"
+                                        height="250"
+                                        :src="model.apkQRUrl" />
                                 </div>
                             </div>
                         </div>

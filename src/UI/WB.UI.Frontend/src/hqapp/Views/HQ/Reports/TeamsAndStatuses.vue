@@ -2,8 +2,7 @@
     <HqLayout
         :title="$config.model.reportName"
         :subtitle="$config.model.subtitle"
-        :hasFilter="true"
-    >
+        :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead
@@ -14,8 +13,7 @@
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="questionnaireId"
                     v-on:selected="questionnaireSelected"
-                    :fetch-url="$config.model.questionnairesUrl"
-                />
+                    :fetch-url="$config.model.questionnairesUrl"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -28,8 +26,7 @@
                     :value="questionnaireVersion"
                     v-on:selected="questionnaireVersionSelected"
                     :fetch-url="questionnaireVersionFetchUrl"
-                    :disabled="questionnaireVersionFetchUrl == null"
-                />
+                    :disabled="questionnaireVersionFetchUrl == null"/>
             </FilterBlock>
         </Filters>
         <div class="clearfix">
@@ -43,8 +40,7 @@
             :addParamsToRequest="addFilteringParams"
             :no-search="true"
             exportable
-            hasTotalRow
-        ></DataTables>
+            hasTotalRow></DataTables>
     </HqLayout>
 </template>
 <script>

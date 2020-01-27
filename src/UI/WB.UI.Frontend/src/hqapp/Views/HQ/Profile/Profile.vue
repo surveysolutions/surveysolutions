@@ -1,68 +1,62 @@
 /* eslint-disable vue/require-v-for-key */
 <template>
-    <HqLayout :hasFilter="false" :hasRow="false" :mainClass="'enumerators'">
+    <HqLayout :hasFilter="false"
+        :hasRow="false"
+        :mainClass="'enumerators'">
         <div slot="headers">
-            <ol class="breadcrumb" v-if="!this.$config.model.authorizedUser.isInterviewer">
+            <ol class="breadcrumb"
+                v-if="!this.$config.model.authorizedUser.isInterviewer">
                 <li>
                     <a
-                        :href="this.$config.model.api.listUrl"
-                    >{{$t('Pages.InterviewerProfile_Interviewers')}}</a>
+                        :href="this.$config.model.api.listUrl">{{$t('Pages.InterviewerProfile_Interviewers')}}</a>
                 </li>
             </ol>
             <h1>
                 <span
                     v-if="this.$config.model.fullModel.isArchived"
-                    class="badge"
-                >{{$t('Common.Archived')}}</span>
+                    class="badge">{{$t('Common.Archived')}}</span>
                 {{$t('Pages.InterviewerProfile_AssignedToFormat', { interviewer: this.$config.model.fullModel.interviewerName, supervisor: this.$config.model.fullModel.supervisorName}) }}
             </h1>
 
             <ul class="list-unstyled">
                 <li
-                    v-if="this.$config.model.fullModel.email"
-                >{{$t('Pages.InterviewerProfile_EmailFormat', {email: this.$config.model.fullModel.email})}}</li>
+                    v-if="this.$config.model.fullModel.email">{{$t('Pages.InterviewerProfile_EmailFormat', {email: this.$config.model.fullModel.email})}}</li>
                 <li
-                    v-if="this.$config.model.fullModel.fullName"
-                >{{$t('Pages.InterviewerProfile_FullNameFormat', {fullName: this.$config.model.fullModel.fullName})}}</li>
+                    v-if="this.$config.model.fullModel.fullName">{{$t('Pages.InterviewerProfile_FullNameFormat', {fullName: this.$config.model.fullModel.fullName})}}</li>
                 <li
-                    v-if="this.$config.model.fullModel.phone"
-                >{{$t('Pages.InterviewerProfile_PhoneFormat', {phone: this.$config.model.fullModel.phone})}}</li>
+                    v-if="this.$config.model.fullModel.phone">{{$t('Pages.InterviewerProfile_PhoneFormat', {phone: this.$config.model.fullModel.phone})}}</li>
 
                 <li v-if="this.$config.model.fullModel.isModifiable">
                     <a
                         v-if="!this.$config.model.fullModel.isArchived"
-                        :href="this.$config.model.api.manageUrl"
-                    >{{$t('Pages.InterviewerProfile_Info')}}</a>
+                        :href="this.$config.model.api.manageUrl">{{$t('Pages.InterviewerProfile_Info')}}</a>
                     <form
                         v-if="this.$config.model.fullModel.isArchived && $config.model.fullModel.isHeadquarters"
                         :action="this.$config.model.api.unarhiveUrl"
-                        method="post"
-                    >
-                        <input class="btn btn-success" type="submit" :value="$t('Pages.Unarchive')" />
+                        method="post">
+                        <input class="btn btn-success"
+                            type="submit"
+                            :value="$t('Pages.Unarchive')" />
                     </form>
                 </li>
                 <li v-if="!this.$config.model.authorizedUser.isInterviewer">
                     <a
-                        :href="this.$config.model.api.audioAuditLogUrl"
-                    >{{$t('Pages.InterviewerProfile_ShowAuditLog')}}</a>
+                        :href="this.$config.model.api.audioAuditLogUrl">{{$t('Pages.InterviewerProfile_ShowAuditLog')}}</a>
                 </li>
             </ul>
             <figure
                 class="qrcode-wrapper"
-                v-if="this.$config.model.fullModel.supportQRCodeGeneration"
-            >
+                v-if="this.$config.model.fullModel.supportQRCodeGeneration">
                 <a
                     target="_blank"
                     :title="$t('Pages.InterviewerProfile_QrCodeAlt')"
-                    href="https://support.mysurvey.solutions/interviewer/config/set-up-an-interviewer-tablet-by-scanning-a-barcode/"
-                >
+                    href="https://support.mysurvey.solutions/interviewer/config/set-up-an-interviewer-tablet-by-scanning-a-barcode/">
                     <img
                         id="download-qr"
                         :alt="$t('Pages.InterviewerProfile_QrCodeAlt')"
                         width="250"
                         height="250"
-                        :src="this.$config.model.fullModel.qrCodeAsBase64String"
-                    />
+                        :src="this.$config.model.fullModel.qrCodeAsBase64String"/>
                 </a>
             </figure>
         </div>
@@ -71,49 +65,50 @@
                 <div class="interviews-information clearfix">
                     <div class="number-information">
                         <div
-                            class="amount-of-questionnaires"
-                        >{{this.$config.model.fullModel.newInterviewsOnDevice}}</div>
-                        <div class="description">{{$t('Pages.InterviewerProfile_NewOnDevice')}}</div>
+                            class="amount-of-questionnaires">{{this.$config.model.fullModel.newInterviewsOnDevice}}</div>
+                        <div class="description">
+                            {{$t('Pages.InterviewerProfile_NewOnDevice')}}
+                        </div>
                     </div>
                     <div class="number-information">
                         <div
-                            class="amount-of-questionnaires"
-                        >{{this.$config.model.fullModel.rejectedInterviewsOnDevice}}</div>
-                        <div class="description">{{$t('Pages.InterviewerProfile_Rejected')}}</div>
+                            class="amount-of-questionnaires">{{this.$config.model.fullModel.rejectedInterviewsOnDevice}}</div>
+                        <div class="description">
+                            {{$t('Pages.InterviewerProfile_Rejected')}}
+                        </div>
                     </div>
                     <div class="number-information">
                         <div
-                            class="amount-of-questionnaires"
-                        >{{this.$config.model.fullModel.waitingInterviewsForApprovalCount}}</div>
+                            class="amount-of-questionnaires">{{this.$config.model.fullModel.waitingInterviewsForApprovalCount}}</div>
                         <div
-                            class="description"
-                        >{{$t('Pages.InterviewerProfile_WaitingForApproval')}}</div>
+                            class="description">{{$t('Pages.InterviewerProfile_WaitingForApproval')}}</div>
                     </div>
                     <div class="number-information">
                         <div
-                            class="amount-of-questionnaires"
-                        >{{this.$config.model.fullModel.approvedInterviewsByHqCount}}</div>
-                        <div class="description">{{$t('Pages.InterviewerProfile_Approved')}}</div>
+                            class="amount-of-questionnaires">{{this.$config.model.fullModel.approvedInterviewsByHqCount}}</div>
+                        <div class="description">
+                            {{$t('Pages.InterviewerProfile_Approved')}}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row" v-if="showMap">
-            <div class="col-sm-9 map" v-if="markerExist">
+        <div class="row"
+            v-if="showMap">
+            <div class="col-sm-9 map"
+                v-if="markerExist">
                 <div
                     ref="map"
                     id="map-canvas"
                     class="extra-margin-bottom"
-                    style="width:100%; height: 400px"
-                ></div>
+                    style="width:100%; height: 400px"></div>
                 <div style="display:none;">
                     <div ref="tooltip">
                         <div
                             class="map-tooltip-info"
                             v-for="selectedTooltip in selectedTooltips"
-                            :key="selectedTooltip.InterviewKey"
-                        >
+                            :key="selectedTooltip.InterviewKey">
                             <p>
                                 <span>#{{selectedTooltip.InterviewKey}}</span>
                                 <span>({{$t("MapReport.Assignment")}} {{selectedTooltip.AssignmentId}})</span>
@@ -137,8 +132,7 @@
                             <p>
                                 <a
                                     v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.InterviewId"
-                                    target="_blank"
-                                >{{$t("MapReport.ViewInterviewContent")}}</a>
+                                    target="_blank">{{$t("MapReport.ViewInterviewContent")}}</a>
                             </p>
                         </div>
                     </div>
@@ -146,44 +140,41 @@
             </div>
             <div
                 class="col-sm-9 map"
-                v-if="!markerExist"
-            >{{$t("Pages.InterviewerProfile_NoMarkers")}}</div>
+                v-if="!markerExist">{{$t("Pages.InterviewerProfile_NoMarkers")}}</div>
         </div>
-        <div class="row" v-if="totalTrafficUsed > 0">
+        <div class="row"
+            v-if="totalTrafficUsed > 0">
             <div class="col-sm-12 clearfix">
                 <h3>{{$t("Pages.InterviewerProfile_TrafficUsageHeader")}}</h3>
                 <div class="graphic-wrapper traffic-usage">
                     <div
                         class="t-monthly-usage"
                         v-for="monthlyUsage in trafficUsage"
-                        :key="monthlyUsage.month"
-                    >
-                        <div class="t-month">{{monthlyUsage.month}}</div>
+                        :key="monthlyUsage.month">
+                        <div class="t-month">
+                            {{monthlyUsage.month}}
+                        </div>
                         <div
                             class="t-daily-usage"
                             v-for="dailyUsage in monthlyUsage.dailyUsage"
-                            :key="dailyUsage.timestamp"
-                        >
+                            :key="dailyUsage.timestamp">
                             <div class="t-unit-wrapper">
                                 <div
                                     class="t-up"
                                     data-toggle="tooltip"
                                     data-placement="right"
                                     :title="formatKb(dailyUsage.up)"
-                                    :style="{ height: dailyUsage.upInPer + '%' }"
-                                ></div>
+                                    :style="{ height: dailyUsage.upInPer + '%' }"></div>
                                 <div
                                     class="t-down"
                                     data-toggle="tooltip"
                                     data-placement="right"
                                     :title="formatKb(dailyUsage.down)"
-                                    :style="{ height: dailyUsage.downInPer + '%' }"
-                                ></div>
+                                    :style="{ height: dailyUsage.downInPer + '%' }"></div>
                             </div>
                             <div
                                 class="t-day"
-                                :class="{'t-no-sync': dailyUsage.up + dailyUsage.down === 0 }"
-                            >{{dailyUsage.day}}</div>
+                                :class="{'t-no-sync': dailyUsage.up + dailyUsage.down === 0 }">{{dailyUsage.day}}</div>
                         </div>
                     </div>
                     <div class="graphic-explanation">
@@ -203,15 +194,15 @@
                             <p class="primary-text">
                                 {{$t("Pages.InterviewerProfile_TotalTrafficUsed")}}:
                                 <span
-                                    v-html="formatKb(totalTrafficUsed)"
-                                ></span>
+                                    v-html="formatKb(totalTrafficUsed)"></span>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row"
+            v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-12 clearfix">
                 <h3>{{$t('Pages.InterviewerProfile_Sync_Activity_Title')}}</h3>
                 <div class="graphic-wrapper clearfix">
@@ -219,38 +210,35 @@
                         <div
                             class="day-unit"
                             v-for="syncDay in this.$config.model.fullModel.synchronizationActivity.days"
-                            :key="syncDay.day"
-                        >
-                            <div class="day">{{syncDay.day}}</div>
+                            :key="syncDay.day">
+                            <div class="day">
+                                {{syncDay.day}}
+                            </div>
                             <div
                                 class="quarter-of-day"
                                 v-for="(syncDayQuarter, idx) in syncDay.quarters"
-                                :key="idx"
-                            >
-                                <div class="recent-activity" v-if="!syncDayQuarter.HasAnyActivity">
+                                :key="idx">
+                                <div class="recent-activity"
+                                    v-if="!syncDayQuarter.HasAnyActivity">
                                     <div
                                         v-if="syncDayQuarter.failedSynchronizationsCount > 0"
-                                        class="failed-connection"
-                                    ></div>
+                                        class="failed-connection"></div>
                                     <div
                                         v-else-if="syncDayQuarter.synchronizationsWithoutChangesCount > 0"
-                                        class="successful-connection"
-                                    ></div>
+                                        class="successful-connection"></div>
                                 </div>
-                                <div class="recent-activity" v-else>
+                                <div class="recent-activity"
+                                    v-else>
                                     <div
                                         v-repeat="syncDayQuarter.downloadedAssignmentsInProportionCount"
-                                        class="downloaded"
-                                    ></div>
+                                        class="downloaded"></div>
                                     <div
                                         v-for="item in syncDayQuarter.uploadedInterviewsInProportionCount"
                                         :key="item"
-                                        class="uploaded"
-                                    ></div>
+                                        class="uploaded"></div>
                                     <div
                                         v-if="syncDayQuarter.hasMoreThanMaxActionsCount"
-                                        class="over-limit"
-                                    >
+                                        class="over-limit">
                                         <span></span>
                                     </div>
                                 </div>
@@ -260,15 +248,13 @@
                                         <div
                                             v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount"
                                             :key="item"
-                                            class="unfinished-unit"
-                                        ></div>
+                                            class="unfinished-unit"></div>
                                     </div>
                                     <div class="half-of-quarter">
                                         <div
                                             v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount"
                                             :key="item"
-                                            class="unfinished-unit"
-                                        ></div>
+                                            class="unfinished-unit"></div>
                                     </div>
                                 </div>
                             </div>
@@ -307,14 +293,14 @@
                         </div>
                         <div class="unfinished-assignments">
                             <p
-                                class="primary-text"
-                            >{{$t('Pages.InterviewerProfile_Sync_Activity_All_Assignments_Desc')}}</p>
+                                class="primary-text">{{$t('Pages.InterviewerProfile_Sync_Activity_All_Assignments_Desc')}}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row"
+            v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-6 connection-statistics">
                 <h3>{{$t('Pages.InterviewerProfile_DeviceAndConnectionStatistics')}}</h3>
                 <ul class="list-unstyled">
@@ -326,12 +312,10 @@
                             {{$t('Pages.InterviewerProfile_InterviewerAppVersion')}}: {{this.fullModel.interviewerAppVersion}} —
                             <span
                                 v-if="!this.fullModel.hasUpdateForInterviewerApp"
-                                class="success-text"
-                            >{{$t('Pages.InterviewerProfile_InterviewerUpToDate')}}</span>
+                                class="success-text">{{$t('Pages.InterviewerProfile_InterviewerUpToDate')}}</span>
                             <span
                                 v-else
-                                class="error-text"
-                            >{{$t('Pages.InterviewerProfile_InterviewerCanBeUpdated')}}</span>
+                                class="error-text">{{$t('Pages.InterviewerProfile_InterviewerCanBeUpdated')}}</span>
                         </b>
                     </li>
                     <li v-if="this.fullModel.deviceAssignmentDate">
@@ -340,8 +324,7 @@
                             {{formatDate(this.fullModel.deviceAssignmentDate)}} (UTC)
                             <span
                                 v-if="this.fullModel.registredDevicesCount > 1"
-                                style="color: red;"
-                            >({{$t('Pages.InterviewerProfile_Relinked')}})</span>
+                                style="color: red;">({{$t('Pages.InterviewerProfile_Relinked')}})</span>
                         </b>
                     </li>
                 </ul>
@@ -351,26 +334,23 @@
                     <li v-if="this.fullModel.averageSyncSpeedBytesPerSecond">
                         {{$t('Pages.InterviewerProfile_AverageSyncSpeed')}}:
                         <span
-                            v-html="formatKb(this.fullModel.averageSyncSpeedBytesPerSecond)"
-                        ></span>/s
+                            v-html="formatKb(this.fullModel.averageSyncSpeedBytesPerSecond)"></span>/s
                     </li>
                     <li>
                         {{$t('Pages.InterviewerProfile_TotalTrafficUsed')}}:
                         <span
-                            v-html="formatKb(this.fullModel.trafficUsed)"
-                        ></span>
+                            v-html="formatKb(this.fullModel.trafficUsed)"></span>
                     </li>
                 </ul>
                 <ConnectionStats
                     :prefix="$t('Pages.InterviewerProfile_LastSuccessSync')"
-                    :syncInfo="this.fullModel.lastSuccessfulSync"
-                ></ConnectionStats>
+                    :syncInfo="this.fullModel.lastSuccessfulSync"></ConnectionStats>
                 <ConnectionStats
                     :prefix="$t('Pages.InterviewerProfile_LastFailedSync')"
-                    :syncInfo="this.fullModel.lastFailedSync"
-                ></ConnectionStats>
+                    :syncInfo="this.fullModel.lastFailedSync"></ConnectionStats>
 
-                <ul v-if="this.fullModel.lastCommunicationDate" class="list-unstyled">
+                <ul v-if="this.fullModel.lastCommunicationDate"
+                    class="list-unstyled">
                     <li>
                         {{$t('Pages.InterviewerProfile_LastSyncronizationDate')}}:
                         {{formatDate(this.fullModel.lastCommunicationDate)}} ({{formatLastCommunication()}})
@@ -378,7 +358,8 @@
                 </ul>
             </div>
         </div>
-        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row"
+            v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-8 detailed-statistics-block">
                 <h3>{{$t('Pages.InterviewerProfile_DeviceInfo')}}</h3>
                 <table class="table table-striped table-bordered">
@@ -417,8 +398,7 @@
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_DeviceLocation')}}</td>
                             <td
-                                id="device-address"
-                            >{{this.fullModel.deviceLocationOrLastKnownLocationLat}} {{this.fullModel.deviceLocationOrLastKnownLocationLon}}</td>
+                                id="device-address">{{this.fullModel.deviceLocationOrLastKnownLocationLat}} {{this.fullModel.deviceLocationOrLastKnownLocationLon}}</td>
                         </tr>
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_DeviceOrientation')}}</td>
@@ -428,28 +408,25 @@
                             <td>{{$t('Pages.InterviewerProfile_BatteryStatus')}}</td>
                             <td>
                                 {{
-                                $t('Pages.InterviewerProfile_BatteryStatusFormat',
-                                {
-                                percent: this.fullModel.batteryStatus,
-                                power: this.fullModel.batteryPowerSource,
-                                powerSaver: this.fullModel.isPowerSaveMode ? $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOn') : $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOff')
-                                })
+                                    $t('Pages.InterviewerProfile_BatteryStatusFormat',
+                                       {
+                                           percent: this.fullModel.batteryStatus,
+                                           power: this.fullModel.batteryPowerSource,
+                                           powerSaver: this.fullModel.isPowerSaveMode ? $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOn') : $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOff')
+                                       })
                                 }}
                             </td>
                         </tr>
                         <tr
-                            :class="{'text-danger': this.fullModel.storageFreeInBytes < 1024 * 1024 * 100}"
-                        >
+                            :class="{'text-danger': this.fullModel.storageFreeInBytes < 1024 * 1024 * 100}">
                             <td>{{$t('Pages.InterviewerProfile_StorageInfo')}}</td>
                             <td
-                                v-html="`${ouputBytes(this.fullModel.storageFreeInBytes)} / ${ouputBytes(this.fullModel.storageTotalInBytes)}`"
-                            ></td>
+                                v-html="`${ouputBytes(this.fullModel.storageFreeInBytes)} / ${ouputBytes(this.fullModel.storageTotalInBytes)}`"></td>
                         </tr>
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_MemoryInfo')}}</td>
                             <td
-                                v-html="`${ouputBytes(this.fullModel.ramFreeInBytes)} / ${ouputBytes(this.fullModel.ramTotalInBytes)}`"
-                            ></td>
+                                v-html="`${ouputBytes(this.fullModel.ramFreeInBytes)} / ${ouputBytes(this.fullModel.ramTotalInBytes)}`"></td>
                         </tr>
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_StorageSizeInfo')}}</td>
@@ -459,7 +436,8 @@
                 </table>
             </div>
         </div>
-        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row"
+            v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-8 detailed-statistics-block">
                 <h3>{{$t('Pages.InterviewerProfile_LastConnectionStatistics')}}</h3>
                 <table class="table table-striped table-bordered">

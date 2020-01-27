@@ -1,15 +1,19 @@
 <template>
     <wb-question :question="$me"
-                 questionCssClassName="multiselect-question"
-                 :no-comments="noComments">
+        questionCssClassName="multiselect-question"
+        :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
-                <div class="form-group" v-for="(row) in this.selectedOptions" :key="row.value">
-                    <div class="field answered" v-bind:class="{ 'unavailable-option locked-option': isProtected(row.value) }">
+                <div class="form-group"
+                    v-for="(row) in this.selectedOptions"
+                    :key="row.value">
+                    <div class="field answered"
+                        v-bind:class="{ 'unavailable-option locked-option': isProtected(row.value) }">
                         <div class="field-to-fill">
                             {{row.title}}
                         </div>
-                        <button type="submit" class="btn btn-link btn-clear" 
+                        <button type="submit"
+                            class="btn btn-link btn-clear" 
                             v-if="$me.acceptAnswer && !isProtected(row.value)"
                             tabindex="-1"
                             @click="confirmAndRemoveRow(row.value)"><span></span>
@@ -20,12 +24,12 @@
 
                 <div class="form-group">
                     <div class="field"
-                         :class="{answered: $me.isAnswered}">
+                        :class="{answered: $me.isAnswered}">
                         <wb-typeahead :questionId="$me.id"
-                                       @input="appendCompboboxItem" 
-                                      :disabled="!$me.acceptAnswer || allAnswersGiven"
-                                      :optionsSource="optionsSource"
-                                      :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
+                            @input="appendCompboboxItem" 
+                            :disabled="!$me.acceptAnswer || allAnswersGiven"
+                            :optionsSource="optionsSource"
+                            :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
                     </div>
                 </div>
                 <wb-lock />
