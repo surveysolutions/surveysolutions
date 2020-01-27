@@ -1,5 +1,5 @@
-import Details from "./Details"
-import Clone from "./Clone"
+import Details from './Details'
+import Clone from './Clone'
 
 export default class MapComponent {
     get routes() {

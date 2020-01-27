@@ -1,4 +1,4 @@
-import { getLocationHash } from "~/shared/helpers"
+import { getLocationHash } from '~/shared/helpers'
 
 // Validation, Title, RemoveAnswer, Instruction, Attachment, etc...
 export const entityPartial = {
@@ -15,7 +15,7 @@ export const entityPartial = {
             }
         }
     },
-    props: ["id"]
+    props: ['id']
 }
 
 // Questions
@@ -44,11 +44,11 @@ export const entityDetails = {
         },
         inFetchState() {
             const fetchState = this.$store.state.webinterview.fetch.state[this.id]
-            return fetchState != null && fetchState == true;
+            return fetchState != null && fetchState == true
         },
 
         acceptAnswer() {
-            return this.$me.acceptAnswer;
+            return this.$me.acceptAnswer
         }
     },
 
@@ -73,7 +73,7 @@ export const entityDetails = {
 
     watch: {
         id(to, from) {
-            this.$store.dispatch("cleanUpEntity", from)
+            this.$store.dispatch('cleanUpEntity', from)
         }
     },
 
@@ -84,36 +84,36 @@ export const entityDetails = {
     methods: {
         sendAnswer(callback) {
             if (this.acceptAnswer) {
-                callback();
+                callback()
             }
         },
         cleanValidity() {
-            this.$store.dispatch("clearAnswerValidity", { id: this.id })
+            this.$store.dispatch('clearAnswerValidity', { id: this.id })
         },
         markAnswerAsNotSavedWithMessage(message) {
-            this.$store.dispatch("setAnswerAsNotSaved", { id: this.id, message })
+            this.$store.dispatch('setAnswerAsNotSaved', { id: this.id, message })
         },
         removeAnswer() {
-            this.$store.dispatch("removeAnswer", this.$me.id)
-            this.$emit("answerRemoved", this.$me.id)
+            this.$store.dispatch('removeAnswer', this.$me.id)
+            this.$emit('answerRemoved', this.$me.id)
         },
 
         fetch(id) {
             this.$store.dispatch({
-                type: "fetchEntity",
+                type: 'fetchEntity',
                 id: id || this.id,
-                source: "client"
+                source: 'client'
             })
         },
 
         handleEmptyAnswer(answer) {
-            const answ = answer === undefined || answer === null || answer === "" ? null : answer
+            const answ = answer === undefined || answer === null || answer === '' ? null : answer
 
             if (answ === this.$me.answer) {
                 return true
             }
 
-            if ((answ === "" || answ === null) && this.$me.isAnswered) {
+            if ((answ === '' || answ === null) && this.$me.isAnswered) {
                 this.removeAnswer()
                 return true
             }

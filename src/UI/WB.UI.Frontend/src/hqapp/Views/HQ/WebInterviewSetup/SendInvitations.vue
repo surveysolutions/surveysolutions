@@ -61,7 +61,7 @@
     </HqLayout>
 </template>
 <script>
-import Vue from "vue"
+import Vue from 'vue'
 
 export default {
     data() {
@@ -74,46 +74,46 @@ export default {
             sentInvitationsCount : null,
             notSentInvitationsCount : null,
             emailProvider: null,
-        };
+        }
     },
     created() {
-        var self = this;
-        self.$store.dispatch("showProgress");
+        var self = this
+        self.$store.dispatch('showProgress')
 
         this.$http.get(this.$config.model.api.invitationsInfo)
             .then(function (response) {
-                const invitationsInfo = response.data || {};
+                const invitationsInfo = response.data || {}
                 self.title = invitationsInfo.fullName,
                 self.questionnaireIdentity = invitationsInfo.questionnaireIdentity,
                 self.started = invitationsInfo.started,
                 self.totalInvitationsCount = invitationsInfo.totalInvitationsCount || 0,
                 self.notSentInvitationsCount = invitationsInfo.notSentInvitationsCount || 0,
-                self.sentInvitationsCount =  invitationsInfo.sentInvitationsCount || 0;
-                self.emailProvider = ((invitationsInfo.emailProvider || "") + "").toLocaleLowerCase()
+                self.sentInvitationsCount =  invitationsInfo.sentInvitationsCount || 0
+                self.emailProvider = ((invitationsInfo.emailProvider || '') + '').toLocaleLowerCase()
             })
             .catch(function (error) { 
-                Vue.config.errorHandler(error, self);
+                Vue.config.errorHandler(error, self)
             })
             .then(function () {
-                self.$store.dispatch("hideProgress");
-            });
+                self.$store.dispatch('hideProgress')
+            })
     },
     computed:{
         emailProviderIsNotSetUp(){
-            return this.emailProvider === 'none' ;
+            return this.emailProvider === 'none' 
         },
         hasSetupError(){
-            return this.emailProviderIsNotSetUp || this.started == false;
+            return this.emailProviderIsNotSetUp || this.started == false
         },
         emailProviderUrl(){
-            return this.$config.model.api.emaiProvidersUrl;
+            return this.$config.model.api.emaiProvidersUrl
         },
         webSettingsUrl(){
-            return this.$config.model.api.webSettingsUrl;
+            return this.$config.model.api.webSettingsUrl
         }
     },
     methods: {
     }
 
-};
+}
 </script>

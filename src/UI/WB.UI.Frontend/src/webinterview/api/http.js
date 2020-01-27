@@ -1,36 +1,36 @@
-import axios from "axios"
-import config from "~/shared/config"
+import axios from 'axios'
+import config from '~/shared/config'
 
 const httpPlugin = {
     install(Vue, { store }) {
 
         const http = axios.create({
             baseURL: store.getters.basePath
-        });
+        })
 
         // Add a response interceptor
         http.interceptors.request.use(function (response) {
             store.dispatch('fetchProgress', 1)
-            return response;
+            return response
         }, function (error) {
             store.dispatch('fetchProgress', -1)
             // Any status codes that falls outside the range of 2xx cause this function to trigger
             // Do something with response error
-            return Promise.reject(error);
-        });
+            return Promise.reject(error)
+        })
 
         // Add a response interceptor
         http.interceptors.response.use(function (response) {
             store.dispatch('fetchProgress', -1)
-            return response;
+            return response
         }, function (error) {
             store.dispatch('fetchProgress', -1)
             // Any status codes that falls outside the range of 2xx cause this function to trigger
             // Do something with response error
-            return Promise.reject(error);
-        });
+            return Promise.reject(error)
+        })
 
-        if (!Object.prototype.hasOwnProperty.call(Vue, "$api")) {
+        if (!Object.prototype.hasOwnProperty.call(Vue, '$api')) {
             Vue.$api = {}
         }
 
@@ -42,7 +42,7 @@ const httpPlugin = {
             }
 
             if (id) {
-                store.dispatch("fetch", { id })
+                store.dispatch('fetch', { id })
                 params.identity = id
             }
 
@@ -53,11 +53,11 @@ const httpPlugin = {
                 return result
             } catch (err) {
                 if (id) {
-                    store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
-                    store.dispatch("fetch", { id, done: true })
+                    store.dispatch('setAnswerAsNotSaved', { id, message: err.statusText })
+                    store.dispatch('fetch', { id, done: true })
                 }
                 else {
-                    store.dispatch("UNHANDLED_ERROR", err)
+                    store.dispatch('UNHANDLED_ERROR', err)
                 }
             }
         }
@@ -93,15 +93,15 @@ const httpPlugin = {
                 const interviewId = state.route.params.interviewId
 
                 const fd = new FormData()
-                fd.append("questionId", id)
-                fd.append("file", file)
-                dispatch("uploadProgress", { id, now: 0, total: 100 })
+                fd.append('questionId', id)
+                fd.append('file', file)
+                dispatch('uploadProgress', { id, now: 0, total: 100 })
 
-                await axios.post(url + "/" + interviewId, fd, {
+                await axios.post(url + '/' + interviewId, fd, {
                     onUploadProgress(ev) {
-                        var entity = state.webinterview.entityDetails[id];
+                        var entity = state.webinterview.entityDetails[id]
                         if (entity != undefined) {
-                            dispatch("uploadProgress", {
+                            dispatch('uploadProgress', {
                                 id,
                                 now: ev.loaded,
                                 total: ev.total
@@ -112,7 +112,7 @@ const httpPlugin = {
             }
         }
 
-        Object.defineProperty(Vue.$api, "interview", {
+        Object.defineProperty(Vue.$api, 'interview', {
             get() { return api }
         })
     }

@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios'
 
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
         this.http = http
-        this.base = "api/v1/questionnaires/"
+        this.base = 'api/v1/questionnaires/'
         this.details = this.base + `${questionnaireId}/${version}`
         this.questionnaireId = questionnaireId
         this.version = version
@@ -28,7 +28,7 @@ class QuestionnaireApi {
 
     Delete() {
         var self = this
-        return this.http.post("api/QuestionnairesApi/DeleteQuestionnaire", 
+        return this.http.post('api/QuestionnairesApi/DeleteQuestionnaire', 
             { questionnaireId: self.questionnaireId, version: self.version })
     }
 
@@ -40,7 +40,7 @@ class QuestionnaireApi {
 
 class SurveyStatistics {
     constructor(http) {
-        this.reportPath = "api/v1/statistics"
+        this.reportPath = 'api/v1/statistics'
         this.http = http
     }
 
@@ -129,7 +129,7 @@ class Reports {
 class AssignmentsApi {
     constructor(http) {
         this.http = http
-        this.base = "api/v1/assignments"
+        this.base = 'api/v1/assignments'
     }
 
     async audioSettings(assignmentId) {
@@ -164,7 +164,7 @@ class AssignmentsApi {
             data: targetQuantity,
             headers: {
                 accept: 'text/plain',
-                'content-type': "application/json"
+                'content-type': 'application/json'
             }
         })
     }
@@ -173,7 +173,7 @@ class AssignmentsApi {
 class WebInterviewSettingsApi {
     constructor(http) {
         this.http = http
-        this.base = "api/v1/webInterviewSettings"
+        this.base = 'api/v1/webInterviewSettings'
     }
 
     /*async fetchEmailTemplates(questionnaireId) {
@@ -186,13 +186,13 @@ class WebInterviewSettingsApi {
     }*/
 
     updateEmailTemplate(questionnaireId, type, subject, message, passwordDescription, linkText) {
-        var url = `${this.base}/${questionnaireId}/emailTemplate`;
-        return this.http.post(url, { type: type, subject: subject, message: message, passwordDescription: passwordDescription, linkText:linkText });
+        var url = `${this.base}/${questionnaireId}/emailTemplate`
+        return this.http.post(url, { type: type, subject: subject, message: message, passwordDescription: passwordDescription, linkText:linkText })
     }
 
     updatePageMessage(questionnaireId, titleType, titleText, messageType, messageText) {
-        var url = `${this.base}/${questionnaireId}/pageTemplate`;
-        return this.http.post(url, { titleType: titleType, titleText: titleText, messageType: messageType, messageText: messageText });
+        var url = `${this.base}/${questionnaireId}/pageTemplate`
+        return this.http.post(url, { titleType: titleType, titleText: titleText, messageType: messageType, messageText: messageText })
     }
 
     /*updateReminderSettings(questionnaireId, reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse) {
@@ -210,30 +210,30 @@ class WebInterviewSettingsApi {
         reminderAfterDaysIfNoResponse,
          reminderAfterDaysIfPartialResponse,
          singleResponse) {
-        var url = `${this.base}/${questionnaireId}/additionalSettings`;
+        var url = `${this.base}/${questionnaireId}/additionalSettings`
         return this.http.post(url, { 
             spamProtection: isEnabledSpamProtection, 
             reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse,
             reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse,
             singleResponse: singleResponse
-        });
+        })
     }
 
     startWebInterview(questionnaireId) {
-        var url = `${this.base}/${questionnaireId}/start`;
-        return this.http.post(url, {});
+        var url = `${this.base}/${questionnaireId}/start`
+        return this.http.post(url, {})
     }
 
     stopWebInterview(questionnaireId) {
-        var url = `${this.base}/${questionnaireId}/stop`;
-        return this.http.post(url, {});
+        var url = `${this.base}/${questionnaireId}/stop`
+        return this.http.post(url, {})
     }
 }
 
 class ExportSettings {
     constructor(http) {
         this.http = http
-        this.base = "api/ExportSettingsApi"
+        this.base = 'api/ExportSettingsApi'
     }
 
     setEncryption(val) {
@@ -255,7 +255,7 @@ class ExportSettings {
 class ControlPanel {
     constructor(http) {
         this.http = http
-        this.base = "api/ControlPanelApi"
+        this.base = 'api/ControlPanelApi'
     }
 
     getConfiguration() {
@@ -270,7 +270,7 @@ class ControlPanel {
 class AdminSettings {
     constructor(http) {
         this.http = http
-        this.base = "api/AdminSettings"
+        this.base = 'api/AdminSettings'
     }
 
     getGlobalNotice() {
@@ -304,29 +304,29 @@ class AdminSettings {
 
 class HttpUtil {
     getCsrfCookie() {
-        var name = "CSRF-TOKEN="
+        var name = 'CSRF-TOKEN='
         var decodedCookie = decodeURIComponent(document.cookie)
         var ca = decodedCookie.split(';')
         for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
+            var c = ca[i]
             while (c.charAt(0) == ' ') {
-                c = c.substring(1);
+                c = c.substring(1)
             }
             if (c.indexOf(name) == 0) {
                 return c.substring(name.length, c.length)
             }
         }
-        return ""
+        return ''
     }
 }
 
 class HqApiClient {
     constructor(basePath) {
-        this.basePath = basePath;
+        this.basePath = basePath
 
         this.http = axios.create({
             baseURL: basePath
-        });
+        })
     }
 
     Questionnaire(questionnaireId, version) {
@@ -361,20 +361,20 @@ class HqApiClient {
 /*  the Plugin */
 export default {
     install: function(vue) {
-        const instance = new HqApiClient(vue.$config.basePath);
+        const instance = new HqApiClient(vue.$config.basePath)
 
         // /*  expose a global API method  */
-        Object.defineProperty(vue, "$hq", {
+        Object.defineProperty(vue, '$hq', {
             get() {
-                return instance;
+                return instance
             }
-        });
+        })
 
         /*  expose a local API method  */
-        Object.defineProperty(vue.prototype, "$hq", {
+        Object.defineProperty(vue.prototype, '$hq', {
             get() {
-                return instance;
+                return instance
             }
-        });
+        })
     }
-};
+}

@@ -64,7 +64,7 @@
 </template>
 
 <script lang="js">
-    import modal from "@/shared/modal";
+    import modal from '@/shared/modal'
 
     export default {
         name: 'complete-view',
@@ -77,13 +77,13 @@
             },
             shouldCloseWindow(to){
                 if(to === true) {
-                    this.completeInterview();
+                    this.completeInterview()
                 }
             }
         },
         computed: {
             completeInfo() {
-                return this.$store.state.webinterview.completeInfo;
+                return this.$store.state.webinterview.completeInfo
             },
             shouldCloseWindow() {
                 return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
@@ -104,19 +104,19 @@
                 return this.completeInfo.unansweredCount == 0 && this.completeInfo.errorsCount == 0
             },
             answeredQuestionsCountString() {
-                return this.hasAnsweredQuestions ? this.completeInfo.answeredCount : this.$t("WebInterviewUI.No");
+                return this.hasAnsweredQuestions ? this.completeInfo.answeredCount : this.$t('WebInterviewUI.No')
             },
             hasUnansweredQuestions() {
                 return this.completeInfo.unansweredCount > 0
             },
             unansweredQuestionsCountString() {
-                return this.hasUnansweredQuestions ? this.completeInfo.unansweredCount : this.$t("WebInterviewUI.No");
+                return this.hasUnansweredQuestions ? this.completeInfo.unansweredCount : this.$t('WebInterviewUI.No')
             },
             hasInvalidQuestions() {
                 return this.completeInfo.errorsCount > 0
             },
             invalidQuestionsCountString() {
-                return this.hasInvalidQuestions ? this.completeInfo.errorsCount : this.$t("WebInterviewUI.No");
+                return this.hasInvalidQuestions ? this.completeInfo.errorsCount : this.$t('WebInterviewUI.No')
             },
             doesShowErrorsCommentWithCount() {
                 return this.completeInfo.entitiesWithError.length < this.completeInfo.errorsCount
@@ -129,30 +129,30 @@
         },
         methods: {
             fetchCompleteInfo() {
-                this.$store.dispatch("fetchCompleteInfo")
+                this.$store.dispatch('fetchCompleteInfo')
             },
 
             completeInterview() {
                 if(this.shouldCloseWindow) {
                      modal.dialog({
-                        title: '<p style="text-align: center">' + this.$t("WebInterviewUI.WebTesterSessionOver") + "</p>",
-                        message: `<p style="text-align: center">${this.$t("WebInterviewUI.WebTesterSessionOverMessage")}</p>`,
+                        title: '<p style="text-align: center">' + this.$t('WebInterviewUI.WebTesterSessionOver') + '</p>',
+                        message: `<p style="text-align: center">${this.$t('WebInterviewUI.WebTesterSessionOverMessage')}</p>`,
                         callback: () => {},
                         onEscape: false,
                         closeButton: false,
                         buttons: {}
-                    });
+                    })
 
                     return
                 }
 
-                this.$store.dispatch('completeInterview', this.comment);
+                this.$store.dispatch('completeInterview', this.comment)
             },
 
             navigateTo(entityWithError) {
                 if(entityWithError.isPrefilled){
-                    this.$router.push({ name: "prefilled" })
-                    return;
+                    this.$router.push({ name: 'prefilled' })
+                    return
                 }
 
                 const navigateToEntity = {

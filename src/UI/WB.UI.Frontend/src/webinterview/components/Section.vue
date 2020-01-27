@@ -12,9 +12,9 @@
 </template>
 
 <script lang="js">
-    import SectionProgress from "./SectionLoadProgress"
+    import SectionProgress from './SectionLoadProgress'
     // import Vue from 'vue'
-    import { GroupStatus } from "./questions"
+    import { GroupStatus } from './questions'
     
     // async function checkSectionPermission(to) {
     //       if (to.name === "section") {
@@ -40,12 +40,12 @@
 
         mounted() {
             if(this.$route.hash){
-                this.$store.dispatch("sectionRequireScroll", { id: this.$route.hash })
+                this.$store.dispatch('sectionRequireScroll', { id: this.$route.hash })
             }
         },
 
         watch: {
-            ["$route.params.sectionId"]() {
+            ['$route.params.sectionId']() {
                  this.loadSection()
             }
         },
@@ -61,7 +61,7 @@
                 return this.$store.state.webinterview.breadcrumbs
             },
             hasError() {
-                return this.info.validity && this.info.validity.isValid === false;
+                return this.info.validity && this.info.validity.isValid === false
             },
             sectionClass() {
                 if (this.info) {
@@ -77,7 +77,7 @@
         },
         methods: {
             loadSection() {
-                this.$store.dispatch("fetchSectionEntities")
+                this.$store.dispatch('fetchSectionEntities')
             }
         },
         components: {

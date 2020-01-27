@@ -50,7 +50,7 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from "../mixins"
+    import { entityDetails } from '../mixins'
 
     export default {
         name: 'Area',
@@ -65,13 +65,13 @@
                 return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.$me.id}`
             },
             isPolygon() {
-                return this.$me.type == "Polygon"
+                return this.$me.type == 'Polygon'
             },
             isPolyline() {
-                return this.$me.type == "Polyline"
+                return this.$me.type == 'Polyline'
             },
             isMultiPoints() {
-                return this.$me.type == "Multipoint"
+                return this.$me.type == 'Multipoint'
             }
         },
         methods: {

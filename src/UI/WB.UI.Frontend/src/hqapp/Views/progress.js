@@ -27,8 +27,8 @@ const store = {
 
 export default class {
     constructor(rootStore) {
-        this.rootStore = rootStore;
+        this.rootStore = rootStore
 
-        this.rootStore.registerModule("progress", store)
+        this.rootStore.registerModule('progress', store)
     }
 }

@@ -10,7 +10,7 @@
 </template>
  <script lang="js">
 
-    import { entityPartial } from "~/webinterview/components/mixins"
+    import { entityPartial } from '~/webinterview/components/mixins'
 
     export default {
         mixins: [entityPartial],
@@ -20,17 +20,17 @@
             },
             idSuffix: {
                 type: String,
-                default: ""
+                default: ''
             }
         },
-        name: "wb-remove-answer",
+        name: 'wb-remove-answer',
         methods: {
             removeAnswer() {
                 if(this.onRemove) {
                     this.onRemove()
                 }
                 else {
-                    this.$store.dispatch("removeAnswer", this.$me.id)
+                    this.$store.dispatch('removeAnswer', this.$me.id)
                     this.$emit('answerRemoved', this.$me.id)
                 }
             }

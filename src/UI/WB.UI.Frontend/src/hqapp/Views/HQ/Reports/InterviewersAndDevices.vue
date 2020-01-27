@@ -9,127 +9,127 @@
 export default {
     mounted() {
         if (this.$refs.table){
-            this.$refs.table.reload();
+            this.$refs.table.reload()
         }
     },
     methods: {
         renderCell(data, row, facet) {
-            const formatedNumber = this.formatNumber(data);
-            if(data === 0 || row.DT_RowClass == "total-row") {
-                return `<span>${formatedNumber}</span>`;
+            const formatedNumber = this.formatNumber(data)
+            if(data === 0 || row.DT_RowClass == 'total-row') {
+                return `<span>${formatedNumber}</span>`
             }
 
             if (!this.supervisorId) {
-                return `<a href='${this.$config.model.interviewersBaseUrl}?Facet=${facet}&supervisor=${row.teamName}'>${formatedNumber}</a>`;
+                return `<a href='${this.$config.model.interviewersBaseUrl}?Facet=${facet}&supervisor=${row.teamName}'>${formatedNumber}</a>`
             }
          
-            return this.getLinkToInterviewerProfile(data, row);
+            return this.getLinkToInterviewerProfile(data, row)
         },
         formatNumber(value) {
             if (value == null || value == undefined)
-                return value;
+                return value
             var language = navigator.languages && navigator.languages[0] ||
                navigator.language ||  
-               navigator.userLanguage; 
-            return value.toLocaleString(language);
+               navigator.userLanguage 
+            return value.toLocaleString(language)
         },
         hasIssue(data) {
             return data.lowStorageCount || data.wrongDateOnTabletCount
         },
         getLinkToInterviewerProfile(data, row){
             const formatedNumber = this.formatNumber(data)
-            const linkClass = this.hasIssue(row) ? "text-danger" : ""
+            const linkClass = this.hasIssue(row) ? 'text-danger' : ''
 
-            return `<a href='${this.$config.model.interviewerProfileUrl}/${row.teamId}'><hi class='${linkClass}'>${formatedNumber}</hi></a>`;
+            return `<a href='${this.$config.model.interviewerProfileUrl}/${row.teamId}'><hi class='${linkClass}'>${formatedNumber}</hi></a>`
         }
     },
     computed: {
         config() {
-            return this.$config.model;
+            return this.$config.model
         },
         supervisorId() {
             return this.$route.params.supervisorId
         },
         tableOptions() {
-            var self = this;
+            var self = this
             return {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: "teamName",
-                        name: "TeamName",
-                        title: self.supervisorId ? this.$t('DevicesInterviewers.Interviewers') : this.$t("DevicesInterviewers.Teams"),
+                        data: 'teamName',
+                        name: 'TeamName',
+                        title: self.supervisorId ? this.$t('DevicesInterviewers.Interviewers') : this.$t('DevicesInterviewers.Teams'),
                         orderable: true,
                         render: function(data, type, row) {
                             if(self.supervisorId) {
                                 return self.getLinkToInterviewerProfile(data, row)
                             }
                             
-                            const linkClass = self.hasIssue(row) ? "text-danger" : ""
+                            const linkClass = self.hasIssue(row) ? 'text-danger' : ''
                             return `<a href='${window.location}/${row.teamId}'><hi class='${linkClass}'>${data}</hi></a>`
                         }
                     },
                     {
-                        data: "neverSynchedCount",
-                        name: "NeverSynchedCount",
-                        "class": "type-numeric",
-                        title: this.$t("DevicesInterviewers.NeverSynchronized"),
+                        data: 'neverSynchedCount',
+                        name: 'NeverSynchedCount',
+                        'class': 'type-numeric',
+                        title: this.$t('DevicesInterviewers.NeverSynchronized'),
                         orderable: true,
                         render: function (data, type, row) {
-                            return self.renderCell(data, row, 'NeverSynchonized');
+                            return self.renderCell(data, row, 'NeverSynchonized')
                         }
                     },
                     {
-                        data: "noQuestionnairesCount",
-                        name: "NoQuestionnairesCount",
-                        "class": "type-numeric",
+                        data: 'noQuestionnairesCount',
+                        name: 'NoQuestionnairesCount',
+                        'class': 'type-numeric',
                         orderable: true,
-                        title: this.$t("DevicesInterviewers.NoAssignments"),
+                        title: this.$t('DevicesInterviewers.NoAssignments'),
                         render: function(data, type, row) {
-                            return self.renderCell(data, row, 'NoAssignmentsReceived');
+                            return self.renderCell(data, row, 'NoAssignmentsReceived')
                         }
                     },
                     {
-                        data: "neverUploadedCount",
-                        name: "NeverUploadedCount",
-                        "class": "type-numeric",
+                        data: 'neverUploadedCount',
+                        name: 'NeverUploadedCount',
+                        'class': 'type-numeric',
                         orderable: true,
-                        title: this.$t("DevicesInterviewers.NeverUploaded"),
+                        title: this.$t('DevicesInterviewers.NeverUploaded'),
                         render: function(data, type, row) {
-                             return self.renderCell(data, row, 'NeverUploaded');
+                             return self.renderCell(data, row, 'NeverUploaded')
                         }
                     },
                     {
-                        data: "reassignedCount",
-                        name: "ReassignedCount",
-                        "class": "type-numeric",
+                        data: 'reassignedCount',
+                        name: 'ReassignedCount',
+                        'class': 'type-numeric',
                         orderable: true,
-                        title: this.$t("DevicesInterviewers.TabletReassigned"),
+                        title: this.$t('DevicesInterviewers.TabletReassigned'),
                         render: function(data, type, row) {
-                            return self.renderCell(data, row, 'TabletReassigned');
+                            return self.renderCell(data, row, 'TabletReassigned')
                         }
                     },
                     {
-                        data: "outdatedCount",
-                        name: "OutdatedCount",
-                        "class": "type-numeric",
+                        data: 'outdatedCount',
+                        name: 'OutdatedCount',
+                        'class': 'type-numeric',
                         orderable: true,
-                        title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
+                        title: this.$t('DevicesInterviewers.OldInterviewerVersion'),
                         render: function (data, type, row) {
-                            return self.renderCell(data, row, 'OutdatedApp');
+                            return self.renderCell(data, row, 'OutdatedApp')
                         }
                     },
                     {
-                        data: "teamSize",
-                        name: "TeamSize",
-                        "class": "type-numeric",
+                        data: 'teamSize',
+                        name: 'TeamSize',
+                        'class': 'type-numeric',
                         orderable: true,
-                        title: this.$t("DevicesInterviewers.TeamSize")
+                        title: this.$t('DevicesInterviewers.TeamSize')
                     }
                 ],
                 ajax: {
                     url: this.supervisorId ? this.$config.model.dataUrl + '/' + this.supervisorId : this.$config.model.dataUrl,
-                    type: "GET",
+                    type: 'GET',
                     contentType: 'application/json'
                 },
                 responsive: false,

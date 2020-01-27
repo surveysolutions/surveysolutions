@@ -38,16 +38,16 @@
 
     function highlight(body, table) {
         // Removing the old highlighting first
-        body.unhighlight();
+        body.unhighlight()
 
         // Don't highlight the "not found" row, so we get the rows using the api
         if (table.rows({ filter: 'applied' }).data().length) {
             table.columns().every(function () {
-                var column = this;
-                column.nodes().flatten().to$().unhighlight({ className: 'column_highlight' });
-                column.nodes().flatten().to$().highlight($.trim(column.search()).split(/\s+/), { className: 'column_highlight' });
-            });
-            body.highlight($.trim(table.search()).split(/\s+/));
+                var column = this
+                column.nodes().flatten().to$().unhighlight({ className: 'column_highlight' })
+                column.nodes().flatten().to$().highlight($.trim(column.search()).split(/\s+/), { className: 'column_highlight' })
+            })
+            body.highlight($.trim(table.search()).split(/\s+/))
         }
     }
 
@@ -55,11 +55,11 @@
     // Listen for DataTables initialisations
     $(document).on('init.dt.dth', function (e, settings) {
         if (e.namespace !== 'dt') {
-            return;
+            return
         }
 
-        var table = new $.fn.dataTable.Api(settings);
-        var body = $(table.table().body());
+        var table = new $.fn.dataTable.Api(settings)
+        var body = $(table.table().body())
 
         if (
             $(table.table().node()).hasClass('searchHighlight') || // table has class
@@ -68,19 +68,19 @@
         ) {
             table
                 .on('draw.dt.dth column-visibility.dt.dth column-reorder.dt.dth', function () {
-                    highlight(body, table);
+                    highlight(body, table)
                 })
                 .on('destroy', function () {
                     // Remove event handler
-                    table.off('draw.dt.dth column-visibility.dt.dth column-reorder.dt.dth');
-                });
+                    table.off('draw.dt.dth column-visibility.dt.dth column-reorder.dt.dth')
+                })
 
             // initial highlight for state saved conditions and initial states
             if (table.search()) {
-                highlight(body, table);
+                highlight(body, table)
             }
         }
-    });
+    })
 
 
-})(window, document, window.jQuery);
+})(window, document, window.jQuery)

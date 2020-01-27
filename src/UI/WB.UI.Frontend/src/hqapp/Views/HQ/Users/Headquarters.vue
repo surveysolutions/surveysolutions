@@ -25,8 +25,8 @@
 
 <script>
 
-import moment from "moment";
-import { formatNumber } from "./formatNumber"
+import moment from 'moment'
+import { formatNumber } from './formatNumber'
 
 export default {
     data() {
@@ -40,7 +40,7 @@ export default {
     methods: {
         loadData() {
             if (this.$refs.table){
-                this.$refs.table.reload();
+                this.$refs.table.reload()
             }
         },
         onTableReload(data) {
@@ -48,7 +48,7 @@ export default {
         },
         contextMenuItems({rowData, rowIndex}) {
             if (!this.model.showContextMenu)
-                return null;
+                return null
 
             const self = this
             const menu = []
@@ -56,7 +56,7 @@ export default {
                 name: self.$t('Users.ImpersonateAsUser'),
                 callback: () => {
                     const link = self.model.impersonateUrl + '?personName=' + rowData.userName
-                    window.open(link, "_blank")
+                    window.open(link, '_blank')
                 }
             })
             return menu
@@ -64,7 +64,7 @@ export default {
     },
     computed: {
         model() {
-            return this.$config.model;
+            return this.$config.model
         },
         title() {
             return this.$t('Users.HeadquartersCountDescription', {count: this.usersCount})
@@ -75,37 +75,37 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: "userName",
+                        data: 'userName',
                         name: 'UserName',
-                        title: this.$t("Users.UserName"),
-                        className: "nowrap",
+                        title: this.$t('Users.UserName'),
+                        className: 'nowrap',
                         render: function(data, type, row) {
-                            return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`;
+                            return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`
                         }
                     },
                     {
-                        data: "creationDate",
-                        name: "CreationDate",
-                        className: "date",
-                        title: this.$t("Users.CreationDate"),
+                        data: 'creationDate',
+                        name: 'CreationDate',
+                        className: 'date',
+                        title: this.$t('Users.CreationDate'),
                         render: function(data, type, row) {
-                            var localDate = moment.utc(data).local();
-                            return localDate.format(window.CONFIG.dateFormat);
+                            var localDate = moment.utc(data).local()
+                            return localDate.format(window.CONFIG.dateFormat)
                         }
                     },
                     {
-                        data: "email",
-                        name: "Email",
-                        className: "date",
-                        title: this.$t("Users.HeadquartersEmail"),
+                        data: 'email',
+                        name: 'Email',
+                        className: 'date',
+                        title: this.$t('Users.HeadquartersEmail'),
                         render: function(data, type, row) {
-                            return data ? "<a href='mailto:" + data + "'>" + data + "</a>" : "";
+                            return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                         }
                     }
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
-                    type: "GET",
+                    type: 'GET',
                     contentType: 'application/json'
                 },
                 responsive: false,

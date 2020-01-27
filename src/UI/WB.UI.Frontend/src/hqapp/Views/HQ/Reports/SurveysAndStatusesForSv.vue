@@ -34,9 +34,9 @@
     </HqLayout>
 </template>
 <script>
-import routeSync from "~/shared/routeSync"
-import escape from "lodash"
-import { formatNumber } from "./helpers"
+import routeSync from '~/shared/routeSync'
+import escape from 'lodash'
+import { formatNumber } from './helpers'
 
 export default {
     mixins: [routeSync],
@@ -111,7 +111,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "SupervisorAssigned")
+                                'SupervisorAssigned')
                     }
                 },
                 {
@@ -123,7 +123,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "InterviewerAssigned")
+                                'InterviewerAssigned')
                     }
                 },
                 {
@@ -135,7 +135,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "Completed")
+                                'Completed')
                     }
                 },
                 {
@@ -147,7 +147,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "RejectedBySupervisor")
+                                'RejectedBySupervisor')
                     }
                 },
                 {
@@ -156,7 +156,7 @@ export default {
                     className: 'type-numeric',
                     title: this.$t('Reports.ApprovedBySupervisor'),
                     render(data, type, row) {
-                        return "<span>" + formatNumber(data) + "</span>"
+                        return '<span>' + formatNumber(data) + '</span>'
                     }
                 },
                 {
@@ -168,7 +168,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "RejectedByHeadquarters")
+                                'RejectedByHeadquarters')
                     }
                 },
                 {
@@ -177,7 +177,7 @@ export default {
                     className: 'type-numeric',
                     title: this.$t('Reports.ApprovedByHQ'),
                     render(data, type, row) {
-                        return "<span>" + formatNumber(data) + "</span>";
+                        return '<span>' + formatNumber(data) + '</span>'
                     }
                 },
                 {
@@ -189,7 +189,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "")
+                                '')
                     }
                 }
             ]

@@ -3,27 +3,27 @@
 </template>
 
 <script>
-import modal from "@/shared/modal";
-import moment from'moment';
+import modal from '@/shared/modal'
+import moment from'moment'
 
 export default {
   computed: {
     lastActivity() {
-      return this.$store.state.webinterview.lastActivityTimestamp;
+      return this.$store.state.webinterview.lastActivityTimestamp
     }
   },
 
   beforeMount() {
-    var self = this;
+    var self = this
     setInterval(() => {
       if (!self.shown) {
-        const minutesAfterLastAction = moment().diff(self.lastActivity, 'minutes');
+        const minutesAfterLastAction = moment().diff(self.lastActivity, 'minutes')
 
         if (Math.abs(minutesAfterLastAction) >= self.minutes) {
-          self.show();
+          self.show()
         }
       }
-    }, 15 * 1000);
+    }, 15 * 1000)
   },
 
   props: {
@@ -36,34 +36,34 @@ export default {
   data() {
     return {
       shown: false
-    };
+    }
   },
 
   methods: {
     show() {
-      if (this.shown) return;
+      if (this.shown) return
 
-      this.shown = true;
-      this.$store.dispatch("stop");
+      this.shown = true
+      this.$store.dispatch('stop')
 
       modal.alert({
-        title: this.$t("WebInterviewUI.SessionTimeoutTitle"),
+        title: this.$t('WebInterviewUI.SessionTimeoutTitle'),
         message: `<p>${this.$t(
-          "WebInterviewUI.SessionTimeoutMessageTitle"
-        )}</p><p>${this.$t("WebInterviewUI.SessionTimeoutMessage")}</p>`,
+          'WebInterviewUI.SessionTimeoutMessageTitle'
+        )}</p><p>${this.$t('WebInterviewUI.SessionTimeoutMessage')}</p>`,
         callback: () => {
-          location.reload();
+          location.reload()
         },
         onEscape: false,
         closeButton: false,
         buttons: {
           ok: {
-            label: this.$t("WebInterviewUI.Reload"),
-            className: "btn-success"
+            label: this.$t('WebInterviewUI.Reload'),
+            className: 'btn-success'
           }
         }
-      });
+      })
     }
   }
-};
+}
 </script>

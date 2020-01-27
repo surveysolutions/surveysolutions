@@ -39,7 +39,7 @@
     </div>
 </template>
 <script lang="js">
-    import { escape, escapeRegExp } from "lodash"
+    import { escape, escapeRegExp } from 'lodash'
     
     export default {
         name: 'wb-typeahead',
@@ -68,7 +68,7 @@
         },
         computed: {
             watermarkText() {
-                return this.watermark || this.$t("WebInterviewUI.ClickToAnswer")
+                return this.watermark || this.$t('WebInterviewUI.ClickToAnswer')
             },
             searchBoxId() {
                 return `sb_${this.questionId}`
@@ -83,11 +83,11 @@
         },
         methods: {
             onSearchBoxDownKey() {
-                const $firstOptionAnchor = $(this.$refs.dropdownMenu).find('a').first();
+                const $firstOptionAnchor = $(this.$refs.dropdownMenu).find('a').first()
                 $firstOptionAnchor.focus()
             },
             onOptionUpKey(event) {
-                const isFirstOption = $(event.target).parent().index() === 1;
+                const isFirstOption = $(event.target).parent().index() === 1
 
                 if (isFirstOption) {
                     this.$refs.searchBox.focus()
@@ -103,7 +103,7 @@
                 return this.optionsSource(filter).then((options) => {
                     this.isLoading = false
                     this.options = options || []
-                });
+                })
             },
             selectOption(value) {
                 this.$emit('input', value)
@@ -113,7 +113,7 @@
                 if (searchTerm) {
                     const safeSearchTerm = escape(escapeRegExp(searchTerm))
 
-                    var iQuery = new RegExp(safeSearchTerm, "ig")
+                    var iQuery = new RegExp(safeSearchTerm, 'ig')
 
                     return encodedTitle.replace(iQuery, (matchedTxt) => {
                         return `<strong>${matchedTxt}</strong>`
@@ -133,7 +133,7 @@
             })
 
             jqEl.on('hidden.bs.dropdown', () => {
-                this.searchTerm = ""
+                this.searchTerm = ''
             })
         }
     }

@@ -24,7 +24,7 @@
 
 <script lang="js">
 
-    import { entityDetails } from "../mixins"
+    import { entityDetails } from '../mixins'
     import Vue from 'vue'
 
     export default {
@@ -46,7 +46,7 @@
         methods: {
             answerComboboxQuestion(newValue) {
                 this.sendAnswer(() => {
-                    this.$store.dispatch("answerSingleOptionQuestion", { answer: newValue, identity: this.$me.id })
+                    this.$store.dispatch('answerSingleOptionQuestion', { answer: newValue, identity: this.$me.id })
                 })
             },
 

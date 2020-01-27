@@ -1,4 +1,4 @@
-import * as signalR from "@microsoft/signalr";
+import * as signalR from '@microsoft/signalr'
 import Vue from 'vue'
 
 export default {
@@ -13,66 +13,66 @@ export default {
 
     beforeMount() {
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/interview?interviewId=" + this.interviewId)
-            .build();
+            .withUrl('/interview?interviewId=' + this.interviewId)
+            .build()
 
         const api = {
             changeSection(to, from) {
-                return connection.send("changeSection", to, from)
+                return connection.send('changeSection', to, from)
             },
             stop() {
                 return connection.stop()
             }
-        };
+        }
 
-        if (!Object.prototype.hasOwnProperty.call(Vue, "$api")) {
+        if (!Object.prototype.hasOwnProperty.call(Vue, '$api')) {
             Vue.$api = {}
         }
 
-        Object.defineProperty(Vue.$api, "hub", {
-            get() { return api; }
+        Object.defineProperty(Vue.$api, 'hub', {
+            get() { return api }
         })
 
-        connection.on("refreshEntities", (questions) => {
-            this.$store.dispatch("refreshEntities", questions)
+        connection.on('refreshEntities', (questions) => {
+            this.$store.dispatch('refreshEntities', questions)
         })
 
-        connection.on("refreshSection", () => {
-            this.$store.dispatch("fetchSectionEntities")          // fetching entities in section
-            this.$store.dispatch("refreshSectionState")           // fetching breadcrumbs/sidebar/buttons
+        connection.on('refreshSection', () => {
+            this.$store.dispatch('fetchSectionEntities')          // fetching entities in section
+            this.$store.dispatch('refreshSectionState')           // fetching breadcrumbs/sidebar/buttons
         })
 
-        connection.on("refreshSectionState", () => {
-            this.$store.dispatch("refreshSectionState")           // fetching breadcrumbs/sidebar/buttons
+        connection.on('refreshSectionState', () => {
+            this.$store.dispatch('refreshSectionState')           // fetching breadcrumbs/sidebar/buttons
         })
 
-        connection.on("markAnswerAsNotSaved", (id, message) => {
-            this.$store.dispatch("fetch", { id, done: true })
-            this.$store.dispatch("setAnswerAsNotSaved", { id, message })
+        connection.on('markAnswerAsNotSaved', (id, message) => {
+            this.$store.dispatch('fetch', { id, done: true })
+            this.$store.dispatch('setAnswerAsNotSaved', { id, message })
         })
 
-        connection.on("reloadInterview", () => {
-            this.$store.dispatch("reloadInterview")
+        connection.on('reloadInterview', () => {
+            this.$store.dispatch('reloadInterview')
         })
 
-        connection.on("closeInterview", () => {
+        connection.on('closeInterview', () => {
             if (this.$store.getters.isReviewMode === true)
                 return
-            this.$store.dispatch("closeInterview")
-            this.$store.dispatch("stop")
+            this.$store.dispatch('closeInterview')
+            this.$store.dispatch('stop')
         })
 
-        connection.on("shutDown", () => {
-            this.$store.dispatch("shutDownInterview")
+        connection.on('shutDown', () => {
+            this.$store.dispatch('shutDownInterview')
         })
 
-        connection.on("finishInterview", () => {
-            this.$store.dispatch("finishInterview")
+        connection.on('finishInterview', () => {
+            this.$store.dispatch('finishInterview')
         })
 
         connection.start()
-            .then(() => this.$emit("connected"))
-            .catch(err => document.write(err));
+            .then(() => this.$emit('connected'))
+            .catch(err => document.write(err))
     },
 
     render() { return null }

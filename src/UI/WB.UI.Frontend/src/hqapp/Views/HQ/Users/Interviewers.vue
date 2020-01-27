@@ -303,7 +303,7 @@ export default {
                     className: 'changed-recently',
                     title: this.$t('Pages.Interviewers_EmailTitle'),
                     render: function(data, type, row) {
-                        return data ? "<a href='mailto:" + data + "'>" + data + '</a>' : ''
+                        return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                     },
                 },
             ]

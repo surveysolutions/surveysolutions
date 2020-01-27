@@ -10,7 +10,7 @@
 </template>
 <script lang="js">
     export default {
-        name: "wb-humburger",
+        name: 'wb-humburger',
         props: {
             showFoldbackButtonAsHamburger: {
                 type: Boolean,
@@ -23,13 +23,13 @@
         computed: {
             cssClass() {
                 if (this.showFoldbackButtonAsHamburger)
-                    return "humburger-foldback-button";
-                return "foldback-button";
+                    return 'humburger-foldback-button'
+                return 'foldback-button'
             }
         },
         methods: {
             toggleSidebarPanel() {
-                this.$store.dispatch("toggleSidebarPanel")
+                this.$store.dispatch('toggleSidebarPanel')
             }
         }
     }

@@ -1,7 +1,7 @@
-import Configuration from "./Configuration"
-import ControlPanelLayout from "./ControlPanelLayout"
-import TabletInfos from "./TabletInfos"
-import AppUpdates from "./AppUpdates"
+import Configuration from './Configuration'
+import ControlPanelLayout from './ControlPanelLayout'
+import TabletInfos from './TabletInfos'
+import AppUpdates from './AppUpdates'
 
 
 export default class MapComponent {

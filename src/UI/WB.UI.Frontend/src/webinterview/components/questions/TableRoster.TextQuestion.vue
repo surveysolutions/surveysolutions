@@ -15,7 +15,7 @@
 
 <script lang="js">
     import Vue from 'vue'
-    import { entityDetails, tableCellEditor } from "../mixins"
+    import { entityDetails, tableCellEditor } from '../mixins'
 
     export default {
         name: 'TableRoster_TextQuestion',
@@ -36,11 +36,11 @@
             },
             userFriendlyMask() {
                 if (this.$me.mask) {
-                    const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/#/g, "_").replace(/~/g, "_")
+                    const resultMask = this.$me.mask.replace(/\*/g, '_').replace(/#/g, '_').replace(/~/g, '_')
                     return ` (${resultMask})`
                 }
 
-                return ""
+                return ''
             }
         },
         methods: {
@@ -56,8 +56,8 @@
                         return
                     }
 
-                    if (this.$me.mask && !target.data("maskCompleted")) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
+                    if (this.$me.mask && !target.data('maskCompleted')) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'))
                     }
                     else {
                         this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
@@ -69,10 +69,10 @@
             Vue.nextTick(() => {
                 const input = $(this.$refs.input)
                 if (input) {
-                    input.focus();
-                    input.select();
+                    input.focus()
+                    input.select()
                 }
-            });
+            })
         }
     }
 </script>

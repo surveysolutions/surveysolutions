@@ -1,7 +1,7 @@
-import MapDetails from "./MapDetails"
-import UserMapLinking from "./UserMapLinking"
-import MapList from "./MapList"
-import UserMaps from "./UserMaps"
+import MapDetails from './MapDetails'
+import UserMapLinking from './UserMapLinking'
+import MapList from './MapList'
+import UserMaps from './UserMaps'
 
 export default class MapComponent {
     get routes() {

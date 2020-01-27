@@ -44,7 +44,7 @@
 </template>
 
 <script lang="js">
-    import { entityDetails } from "../mixins"
+    import { entityDetails } from '../mixins'
 
     export default {
         name: 'TextQuestion',
@@ -52,7 +52,7 @@
         props: ['noComments'],
         computed: {
             hasMask(){
-                return this.$me.mask!=null;
+                return this.$me.mask!=null
             },
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
@@ -60,11 +60,11 @@
             },
             userFriendlyMask() {
                 if (this.$me.mask) {
-                    const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/#/g, "_").replace(/~/g, "_")
+                    const resultMask = this.$me.mask.replace(/\*/g, '_').replace(/#/g, '_').replace(/~/g, '_')
                     return ` (${resultMask})`
                 }
 
-                return ""
+                return ''
             }
         },
         methods: {
@@ -77,13 +77,13 @@
                         return
                     }
 
-                    if (this.$me.mask && !target.data("maskCompleted")) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
+                    if (this.$me.mask && !target.data('maskCompleted')) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'))
                     }
                     else {
                         this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
                     }
-                });
+                })
             }
         }
     }

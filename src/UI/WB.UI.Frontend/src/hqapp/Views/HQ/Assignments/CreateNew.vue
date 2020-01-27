@@ -250,41 +250,41 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { Validator } from "vee-validate";
-import * as toastr from "toastr";
-import http from "~/webinterview/api/http";
+import Vue from 'vue'
+import { Validator } from 'vee-validate'
+import * as toastr from 'toastr'
+import http from '~/webinterview/api/http'
 
-import "@/assets/css/markup-web-interview.scss"
+import '@/assets/css/markup-web-interview.scss'
 
 const emailOrPasswordRequired = {
     getMessage() {
-        return Vue.$t("Assignments.SizeForWebMode");
+        return Vue.$t('Assignments.SizeForWebMode')
     },
     validate(value, [email, password]) {
-        return (email !== null && email !== "") || (password !== null && password !== "");
+        return (email !== null && email !== '') || (password !== null && password !== '')
     },
     hasTarget: true
-};
+}
 
 const emailShouldBeEmpty = {
     getMessage() {
-        return Vue.$t("Assignments.InvalidSizeWithEmail");
+        return Vue.$t('Assignments.InvalidSizeWithEmail')
     },
     validate(value, [email]) {
-        return email === null || email === "";
+        return email === null || email === ''
     },
     hasTarget: true
-};
+}
 
-Validator.extend("emailOrPasswordRequired", emailOrPasswordRequired);
-Validator.extend("emailShouldBeEmpty", emailShouldBeEmpty);
+Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired)
+Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty)
 
 export default {
     data() {
         return {
             assignToQuestion: {
-                id: "assignTo",
+                id: 'assignTo',
                 acceptAnswer: true,
                 isAnswered: false,
                 validity: {
@@ -292,10 +292,10 @@ export default {
                 }
             },
             sizeQuestion: {
-                id: "size",
+                id: 'size',
                 acceptAnswer: true,
                 isAnswered: true,
-                answer: "1",
+                answer: '1',
                 validity: {
                     isValid: true
                 }
@@ -303,7 +303,7 @@ export default {
             newResponsibleId: null,
 
             emailQuestion: {
-                id: "email",
+                id: 'email',
                 acceptAnswer: true,
                 isAnswered: false,
                 answer: null,
@@ -312,7 +312,7 @@ export default {
                 }
             },
             passwordQuestion: {
-                id: "password",
+                id: 'password',
                 acceptAnswer: true,
                 isAnswered: false,
                 answer: null,
@@ -321,7 +321,7 @@ export default {
                 }
             },
             webMode: {
-                id: "webMode",
+                id: 'webMode',
                 acceptAnswer: true,
                 isAnswered: true,
                 answer: false,
@@ -330,7 +330,7 @@ export default {
                 }
             },
             isAudioRecordingEnabled: {
-                id: "isAudioRecordingEnabled",
+                id: 'isAudioRecordingEnabled',
                 acceptAnswer: true,
                 isAnswered: true,
                 answer: false,
@@ -339,7 +339,7 @@ export default {
                 }
             },
             commentsQuestion: {
-                id: "comments",
+                id: 'comments',
                 acceptAnswer: true,
                 isAnswered: true,
                 answer: null,
@@ -347,45 +347,45 @@ export default {
                     isValid: true
                 }
                 },
-        };
+        }
     },
     computed: {
         sizeValidations() {
             let validations = {
-                regex: "^-?([0-9]+)$",
+                regex: '^-?([0-9]+)$',
                 min_value: -1,
                 max_value: this.config.maxInterviewsByAssignment
-            };
+            }
 
             if (this.webMode.answer) {
-                if (this.sizeQuestion.answer === "1") {
-                    validations.emailOrPasswordRequired = [this.emailQuestion.answer, this.passwordQuestion.answer];
+                if (this.sizeQuestion.answer === '1') {
+                    validations.emailOrPasswordRequired = [this.emailQuestion.answer, this.passwordQuestion.answer]
                 } else {
-                    validations.emailShouldBeEmpty = [this.emailQuestion.answer];
+                    validations.emailShouldBeEmpty = [this.emailQuestion.answer]
                 }
             }
 
-            return validations;
+            return validations
         },
         passwordValidations() {
             return {
                 regex: /^([0-9A-Z]{6,})$|^(\?)$/
-            };
+            }
         },
         entities() {
-            return this.$store.state.takeNew.takeNew.entities;
+            return this.$store.state.takeNew.takeNew.entities
         },
         questionnaireTitle() {
-            return this.$store.state.takeNew.takeNew.interview.questionnaireTitle;
+            return this.$store.state.takeNew.takeNew.interview.questionnaireTitle
         },
         questionnaireVersion() {
-            return this.$store.state.takeNew.takeNew.interview.questionnaireVersion;
+            return this.$store.state.takeNew.takeNew.interview.questionnaireVersion
         },
         config() {
-            return this.$config.model;
+            return this.$config.model
         },
         responsibleId() {
-            return this.newResponsibleId != null ? this.newResponsibleId.key : null;
+            return this.newResponsibleId != null ? this.newResponsibleId.key : null
         },
 
         interviewId() {
@@ -395,27 +395,27 @@ export default {
 
     methods: {
         onResize() {
-            var screenWidth = document.documentElement.clientWidth;
-            this.$store.dispatch("screenWidthChanged", screenWidth);
+            var screenWidth = document.documentElement.clientWidth
+            this.$store.dispatch('screenWidthChanged', screenWidth)
         },
         newResponsibleSelected(newValue) {
-            this.newResponsibleId = newValue;
-            this.assignToQuestion.isAnswered = this.newResponsibleId != null;
-            this.assignToQuestion.validity.isValid = this.newResponsibleId != null;
+            this.newResponsibleId = newValue
+            this.assignToQuestion.isAnswered = this.newResponsibleId != null
+            this.assignToQuestion.validity.isValid = this.newResponsibleId != null
         },
         async create() {
-            var validationResult = await this.$validator.validateAll();
+            var validationResult = await this.$validator.validateAll()
 
-            this.sizeQuestion.validity.isValid = !this.errors.has("size");
-            this.emailQuestion.validity.isValid = !this.errors.has("email");
-            this.passwordQuestion.validity.isValid = !this.errors.has("password");
+            this.sizeQuestion.validity.isValid = !this.errors.has('size')
+            this.emailQuestion.validity.isValid = !this.errors.has('email')
+            this.passwordQuestion.validity.isValid = !this.errors.has('password')
             if (this.newResponsibleId == null) {
-                this.assignToQuestion.validity.isValid = false;
+                this.assignToQuestion.validity.isValid = false
             }
 
-            const submitAllowed = validationResult && this.newResponsibleId != null;
+            const submitAllowed = validationResult && this.newResponsibleId != null
             if (submitAllowed) {
-                var self = this;
+                var self = this
                 this.$http
                     .post(this.config.createNewAssignmentUrl, {
                         interviewId: this.interviewId,
@@ -431,43 +431,43 @@ export default {
                         window.location.href = self.config.assignmentsUrl
                     })
                     .catch(e => {
-                        if (e.response.data.message) toastr.error(e.response.data.message);
-                        else if (e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage);
-                        else toastr.error(window.input.settings.messages.unhandledExceptionMessage);
-                    });
+                        if (e.response.data.message) toastr.error(e.response.data.message)
+                        else if (e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage)
+                        else toastr.error(window.input.settings.messages.unhandledExceptionMessage)
+                    })
             }
         },
 
         webModeChange() {
             if (this.webMode.answer == false) {
-                this.passwordQuestion.answer = null;
-                this.emailQuestion.answer = null;
-                this.passwordQuestion.validity.isValid = true;
-                this.emailQuestion.validity.isValid = true;
+                this.passwordQuestion.answer = null
+                this.emailQuestion.answer = null
+                this.passwordQuestion.validity.isValid = true
+                this.emailQuestion.validity.isValid = true
             } else if (this.webMode.answer == true) {
-              this.isAudioRecordingEnabled.answer = null;
+              this.isAudioRecordingEnabled.answer = null
             }
         },
 
         connected() {
-           this.$store.dispatch('loadTakeNew', { interviewId: this.interviewId });
+           this.$store.dispatch('loadTakeNew', { interviewId: this.interviewId })
         }
     },
 
     mounted() {
-        const self = this;
+        const self = this
 
         this.$nextTick(function() {
-            window.addEventListener("resize", self.onResize);
-            self.onResize();
-        });
+            window.addEventListener('resize', self.onResize)
+            self.onResize()
+        })
     },
 
     updated() {
         Vue.nextTick(() => {
-            window.ajustNoticeHeight();
-            window.ajustDetailsPanelHeight();
-        });
+            window.ajustNoticeHeight()
+            window.ajustDetailsPanelHeight()
+        })
     },
 
     components: {
@@ -475,11 +475,11 @@ export default {
     },
 
     beforeMount() {
-      Vue.use(http, { store: this.$store });
+      Vue.use(http, { store: this.$store })
     },
 
     beforeDestroy() {
-        window.removeEventListener("resize", this.onResize);
+        window.removeEventListener('resize', this.onResize)
     }
-};
+}
 </script>

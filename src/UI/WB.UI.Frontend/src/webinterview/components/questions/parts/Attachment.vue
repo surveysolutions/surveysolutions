@@ -51,24 +51,24 @@
     </div>
 </template>
 <script lang="js">
-    import axios from "axios"
-    import appendquery from "append-query"
+    import axios from 'axios'
+    import appendquery from 'append-query'
     import {
         startsWith
-    } from "lodash"
+    } from 'lodash'
 
     function appendSearchParam(uri, name, value) {
         const args = {
             [name]: value
         } // keep in separate line to make IE happy
-        return appendquery(uri, args);
+        return appendquery(uri, args)
     }
 
     export default {
         data() {
             return {
                 modal: false,
-                contentType: ""
+                contentType: ''
             }
         },
         props: {
@@ -119,7 +119,7 @@
                 return this.appendCache(this.imageFull)
             },
             imageThumb() {
-                if (this.thumb) return this.thumb;
+                if (this.thumb) return this.thumb
                 if (this.filename) return `${this.$config.imageGetBase}/Image/${this.filename}`
                 if (this.contentId) return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
                 return null
@@ -135,8 +135,8 @@
             previewStyle() {
                 if (this.isPreview) {
                     return {
-                        cursor: "auto"
-                    };
+                        cursor: 'auto'
+                    }
                 }
 
                 return {}
@@ -161,11 +161,11 @@
         methods: {
             async fetchContentType() {
                 if(this.thumb || this.filename) {
-                    this.contentType = "image";
+                    this.contentType = 'image'
                 }
                 else {
                     const response = await axios.head(this.contentUrl)
-                    this.contentType = response.headers["content-type"]
+                    this.contentType = response.headers['content-type']
                 }
             },
             appendCache(uri) {
@@ -173,11 +173,11 @@
             },
             showModal(show) {
                 if (this.previewOnly)
-                    return;
+                    return
                 this.modal = show
             }
         },
-        name: "wb-attachment"
+        name: 'wb-attachment'
     }
 
 </script>

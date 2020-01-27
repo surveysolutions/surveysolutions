@@ -7,19 +7,19 @@
 <script>
 export default {
   data: function() {
-    return { currentLanguage: null };
+    return { currentLanguage: null }
   },
   methods: {
     changeLanguage(language) {
-      this.$store.dispatch("changeLanguage", { language });
+      this.$store.dispatch('changeLanguage', { language })
     }
   },
   updated() {
-    $(this.$refs.select).selectpicker("refresh");
+    $(this.$refs.select).selectpicker('refresh')
   },
   mounted() {
-    this.currentLanguage = this.$store.state.webinterview.currentLanguage;
-    this.$watch("currentLanguage", this.changeLanguage);
+    this.currentLanguage = this.$store.state.webinterview.currentLanguage
+    this.$watch('currentLanguage', this.changeLanguage)
   }
-};
+}
 </script>

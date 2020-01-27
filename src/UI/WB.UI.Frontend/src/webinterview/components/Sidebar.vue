@@ -9,9 +9,9 @@
     </aside>
 </template>
 <script lang="js">
-    import SidebarPanel from "./SidebarPanel"
-    import Vue from "vue"
-    import { GroupStatus } from "./questions"
+    import SidebarPanel from './SidebarPanel'
+    import Vue from 'vue'
+    import { GroupStatus } from './questions'
 
     export default {
         name: 'sidebar',
@@ -30,7 +30,7 @@
             return {
                 coverSection: {
                     collapsed: true,
-                    title: this.$t("WebInterviewUI.Cover"),
+                    title: this.$t('WebInterviewUI.Cover'),
                     to: {
                         name: 'prefilled'
                     },
@@ -55,9 +55,9 @@
             },
             completeSection() {
                 return {
-                    id: "SidebarCompleted",
+                    id: 'SidebarCompleted',
                     collapsed: true,
-                    title: this.$t("WebInterviewUI.Complete"),
+                    title: this.$t('WebInterviewUI.Complete'),
                     to: {
                         name: 'complete'
                     },
@@ -73,17 +73,17 @@
             this.fetchInterviewStatus()
         },
         watch: {
-            ["$route.params.sectionId"]() {
-                this.fetchSidebar();
+            ['$route.params.sectionId']() {
+                this.fetchSidebar()
                 this.fetchInterviewStatus()
             }
         },
         methods: {
             fetchSidebar() {
-                Vue.nextTick(() => this.$store.dispatch("fetchSidebar", null))
+                Vue.nextTick(() => this.$store.dispatch('fetchSidebar', null))
             },
             fetchInterviewStatus() {
-                this.$store.dispatch("fetchInterviewStatus")
+                this.$store.dispatch('fetchInterviewStatus')
             }
         }
     }

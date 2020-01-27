@@ -4,7 +4,7 @@
     </div>
 </template>
 <script lang="js">
-    import { delay } from "lodash"
+    import { delay } from 'lodash'
 
     export default {
         data() {
@@ -36,7 +36,7 @@
         },
         computed: {
             isLoading() {
-                return this.$store.state.webinterview.fetch.loadingProgress;
+                return this.$store.state.webinterview.fetch.loadingProgress
             }
         }
     }

@@ -437,7 +437,7 @@ export default {
                     className: 'interview-id title-row',
                     render(data, type, row) {
                         var result =
-                            "<a href='" + self.config.interviewReviewUrl + '/' + row.interviewId + "'>" + data + '</a>'
+                            '<a href=\'' + self.config.interviewReviewUrl + '/' + row.interviewId + '\'>' + data + '</a>'
                         return result
                     },
                     createdCell(td, cellData, rowData, row, col) {
@@ -491,7 +491,7 @@ export default {
                     title: this.$t('Interviews.Errors'),
                     orderable: true,
                     render(data) {
-                        return data > 0 ? "<span style='color:red;'>" + data + '</span>' : '0'
+                        return data > 0 ? '<span style=\'color:red;\'>' + data + '</span>' : '0'
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')

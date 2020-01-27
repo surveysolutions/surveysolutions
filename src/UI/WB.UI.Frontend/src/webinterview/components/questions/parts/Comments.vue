@@ -52,8 +52,8 @@
 
 <script lang="js">
 
-    import { entityPartial } from "~/webinterview/components/mixins"
-    import { filter, find } from "lodash"
+    import { entityPartial } from '~/webinterview/components/mixins'
+    import { filter, find } from 'lodash'
 
     export default {
         mixins: [entityPartial],
@@ -74,7 +74,7 @@
                 if (!com || !com.trim())
                     return
 
-                await this.$store.dispatch("sendNewComment", { identity: this.$me.id, comment: com.trim() })
+                await this.$store.dispatch('sendNewComment', { identity: this.$me.id, comment: com.trim() })
 
                 this.comment = ''
                 if(evnt && evnt.target) {
@@ -95,7 +95,7 @@
                 return `btn_${this.$me.id}_addComment`
             },
             visibleComments() {
-                const self = this;
+                const self = this
                 return filter(this.$me.comments, c => {
                     return self.showResolved || !c.resolved
                 })
@@ -107,7 +107,7 @@
                 return this.comment && 
                        this.comment.trim().length > 0 &&
                        !this.$me.postingComment 
-                       && this.$store.getters.addCommentsAllowed;
+                       && this.$store.getters.addCommentsAllowed
             },
             resolveAllowed() {
                 return this.$me.allowResolveComments
@@ -116,13 +116,13 @@
                 if (this.$store.state.webinterview.receivedByInterviewer === true) {
                     return this.$t('WebInterviewUI.InterviewReceivedCantModify')
                 }
-                return ""
+                return ''
             },
             buttonClass() {
                 return this.isActive ? 'comment-added' : null
             },
             postBtnText() {
-                return this.$me.postingComment ? this.$t("WebInterviewUI.CommentPosting") : this.$t("WebInterviewUI.CommentPost")
+                return this.$me.postingComment ? this.$t('WebInterviewUI.CommentPosting') : this.$t('WebInterviewUI.CommentPost')
             },
             questionId() {
                 return this.$me.id

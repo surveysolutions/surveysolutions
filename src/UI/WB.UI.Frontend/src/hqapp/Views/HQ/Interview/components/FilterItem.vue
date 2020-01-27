@@ -28,13 +28,13 @@ export default {
 
     watch: {
         state(value) {
-            this.value = value;
+            this.value = value
         }
     },
 
     methods: {
         change() {
-            this.$emit("change", { id: this.option, value: this.value });
+            this.$emit('change', { id: this.option, value: this.value })
         }
     },
 
@@ -43,8 +43,8 @@ export default {
             return this.$store.state.review.filters.stats[this.option] 
         },
         state() {
-            return  this.$store.getters.filteringState[this.option];
+            return  this.$store.getters.filteringState[this.option]
         }
     }
-};
+}
 </script>

@@ -43,7 +43,7 @@ export default {
             return new moment(date).format(DateFormats.dateTime)
         },
         humanFileSize(size){
-            if (size == null) return ""
+            if (size == null) return ''
             return humanFileSize(size)
         }
     }
