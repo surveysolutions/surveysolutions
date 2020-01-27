@@ -9,9 +9,9 @@ export default class ExportComponent {
 
     get routes() {
         return [{
-                path: '/DataExport/New',
-                component: Export
-            }
+            path: '/DataExport/New',
+            component: Export
+        }
         ]
     }
     

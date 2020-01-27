@@ -53,105 +53,105 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from '../mixins'
-    import modal from '@/shared/modal'
-    import { filter, difference, join } from 'lodash'
-    import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
+import { entityDetails } from '../mixins'
+import modal from '@/shared/modal'
+import { filter, difference, join } from 'lodash'
+import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
 
-    export default {
-        name: 'CategoricalMulti',
-        data(){
-            return {
-                showAllOptions: false,
-                answer: []
-            }
-        },
-        created(){
-            this.$watch('$me.answer', (to, from) => {
-                this.answer = to
-            }, { immediate: true })
-        },
+export default {
+    name: 'CategoricalMulti',
+    data(){
+        return {
+            showAllOptions: false,
+            answer: []
+        }
+    },
+    created(){
+        this.$watch('$me.answer', (to, from) => {
+            this.answer = to
+        }, { immediate: true })
+    },
         
-        computed: {
-            shouldShowAnsweredOptionsOnly(){
-                 return shouldShowAnsweredOptionsOnlyForMulti(this)
-            },
-            answeredOrAllOptions(){
-                if(!this.shouldShowAnsweredOptionsOnly){
-                    return this.$me.options
-                }
+    computed: {
+        shouldShowAnsweredOptionsOnly(){
+            return shouldShowAnsweredOptionsOnlyForMulti(this)
+        },
+        answeredOrAllOptions(){
+            if(!this.shouldShowAnsweredOptionsOnly){
+                return this.$me.options
+            }
                 
-                var self = this
-                return filter(this.$me.options, function(o) { 
-                    return self.$me.answer.indexOf(o.value) >= 0 
-                })
-            },
+            var self = this
+            return filter(this.$me.options, function(o) { 
+                return self.$me.answer.indexOf(o.value) >= 0 
+            })
+        },
             
-            noOptions() {
-                return this.$me.options == null || this.$me.options.length == 0
-            },
-            allAnswersGiven() {
-                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-            }
+        noOptions() {
+            return this.$me.options == null || this.$me.options.length == 0
         },
-        methods: {
-            change() {
-                this.sendAnswer(() => {
-                    this.answerMulti(this.answer)
-                })
-            },
-            toggleOptions(){
-                this.showAllOptions = !this.showAllOptions
-            },
-            isProtected(answerValue) {
-                if (!this.$me.protectedAnswer) return false
+        allAnswersGiven() {
+            return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
+        }
+    },
+    methods: {
+        change() {
+            this.sendAnswer(() => {
+                this.answerMulti(this.answer)
+            })
+        },
+        toggleOptions(){
+            this.showAllOptions = !this.showAllOptions
+        },
+        isProtected(answerValue) {
+            if (!this.$me.protectedAnswer) return false
                 
-                var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
-                return answerIndex > -1
-            },
-            getAnswerOrder(answerValue) {
-                var answerIndex = this.$me.answer.indexOf(answerValue)
-                return answerIndex > -1 ? answerIndex + 1 : ''
-            },
-            answerMulti(value) {
-                if (!this.$me.isRosterSize) {
-                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
-                    return
-                }
-
-                const currentAnswerCount = value.length
-                const previousAnswersCount = this.$me.answer.length
-                const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount
-
-                if (!isNeedRemoveRosters) {
-                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
-                    return
-                }
-
-                const diff = difference(this.$me.answer, value)
-                const rosterTitle = join(diff.map(v => {
-                    return find(this.answeredOrAllOptions, { value: v }).title
-                }), ', ')
-
-                const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
-                    rosterTitle
-                } )
-
-                modal.confirm(confirmMessage, result => {
-                    if (result) {
-                        this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
-                        return
-                    } else {
-                        this.fetch()
-                        return
-                    }
-                })
+            var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
+            return answerIndex > -1
+        },
+        getAnswerOrder(answerValue) {
+            var answerIndex = this.$me.answer.indexOf(answerValue)
+            return answerIndex > -1 ? answerIndex + 1 : ''
+        },
+        answerMulti(value) {
+            if (!this.$me.isRosterSize) {
+                this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
+                return
             }
-        },
-        mounted() {
-            this.answer = this.$me.answer
-        },
-        mixins: [entityDetails]
-    }
+
+            const currentAnswerCount = value.length
+            const previousAnswersCount = this.$me.answer.length
+            const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount
+
+            if (!isNeedRemoveRosters) {
+                this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
+                return
+            }
+
+            const diff = difference(this.$me.answer, value)
+            const rosterTitle = join(diff.map(v => {
+                return find(this.answeredOrAllOptions, { value: v }).title
+            }), ', ')
+
+            const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
+                rosterTitle
+            } )
+
+            modal.confirm(confirmMessage, result => {
+                if (result) {
+                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
+                    return
+                } else {
+                    this.fetch()
+                    return
+                }
+            })
+        }
+    },
+    mounted() {
+        this.answer = this.$me.answer
+    },
+    mixins: [entityDetails]
+}
 
 </script>

@@ -8,26 +8,26 @@ import Vue from 'vue'
 export default class WebInterviewSetupComponent {
     get routes() {
         return [
-        {
-            path: '/WebInterviewSetup/Start/:id', 
-            component: Start
-        },
-        {
-            path: '/WebInterviewSetup/Started/:id', 
-            component: Started
-        },
-        {
-            path: '/WebInterviewSetup/Settings/:id', 
-            component: Settings
-        },
-        {
-            path: '/WebInterviewSetup/SendInvitations/:id', 
-            component: SendInvitations
-        },
-        {
-            path: '/WebInterviewSetup/EmailDistributionProgress', 
-            component: SendInvitationsProgress
-        }
+            {
+                path: '/WebInterviewSetup/Start/:id', 
+                component: Start
+            },
+            {
+                path: '/WebInterviewSetup/Started/:id', 
+                component: Started
+            },
+            {
+                path: '/WebInterviewSetup/Settings/:id', 
+                component: Settings
+            },
+            {
+                path: '/WebInterviewSetup/SendInvitations/:id', 
+                component: SendInvitations
+            },
+            {
+                path: '/WebInterviewSetup/EmailDistributionProgress', 
+                component: SendInvitationsProgress
+            }
         ]
     }
 

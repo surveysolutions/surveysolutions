@@ -26,7 +26,7 @@ const connectionStore = {
                     title: Vue.$t('WebInterviewUI.Disconnected'),
                     message: '<p>' + Vue.$t('WebInterviewUI.ConnectionLostTitle') + '</p><p>' + Vue.$t('WebInterviewUI.ConnectionLostMessage') + '</p>',
                     callback: () => {
-                       location.reload()
+                        location.reload()
                     },
                     onEscape: false,
                     closeButton: false,

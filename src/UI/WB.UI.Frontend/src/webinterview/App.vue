@@ -16,10 +16,10 @@
 
 <script lang="js">
 
-    import '@/assets/css/markup.scss'
-    import '@/assets/css/markup-web-interview.scss'
+import '@/assets/css/markup.scss'
+import '@/assets/css/markup-web-interview.scss'
     
-    export default {
-        name: 'app'
-    }
+export default {
+    name: 'app'
+}
 </script>

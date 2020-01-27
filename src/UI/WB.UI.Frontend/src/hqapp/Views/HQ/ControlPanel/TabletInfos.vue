@@ -29,7 +29,7 @@ export default {
                 {
                     data: 'creationDate',
                     title: this.$t('Pages.PackagesInfo_UploadDate'),
-                     render: function(data, type, row) {
+                    render: function(data, type, row) {
                         return new moment(data).format(DateFormats.dateTime)
                     },
                 },

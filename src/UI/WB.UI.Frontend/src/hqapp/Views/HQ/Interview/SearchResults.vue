@@ -48,7 +48,7 @@ export default {
                     if(self.searchResult.skip >= self.searchResult.count) {
                         $state.complete()
                     }
-                 })
+                })
         }
     },
 
@@ -71,7 +71,7 @@ export default {
 
     mounted() {
         this.$nextTick(() => {
-           this.$store.dispatch('fetchSearchResults')
+            this.$store.dispatch('fetchSearchResults')
         })
     },
 

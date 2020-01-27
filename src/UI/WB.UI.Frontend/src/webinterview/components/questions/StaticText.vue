@@ -12,45 +12,45 @@
     </div>
 </template>
 <script lang="js">
-    import { entityDetails } from '../mixins'
-    import { getLocationHash } from '~/shared/helpers'
-    import { debounce } from 'lodash'
+import { entityDetails } from '../mixins'
+import { getLocationHash } from '~/shared/helpers'
+import { debounce } from 'lodash'
 
-    export default {
-        name: 'StaticText',
-        mixins: [entityDetails],
-        watch: {
-            ['$store.getters.scrollState']() {
-                 this.scroll()
-            }
-        },
-        data() {
-            return {
-                text: ''
-            }
-          },
-          
-        mounted() {
+export default {
+    name: 'StaticText',
+    mixins: [entityDetails],
+    watch: {
+        ['$store.getters.scrollState']() {
             this.scroll()
-        },
-        computed: {
-            hash() {
-                return getLocationHash(this.$me.id)
+        }
+    },
+    data() {
+        return {
+            text: ''
+        }
+    },
+          
+    mounted() {
+        this.scroll()
+    },
+    computed: {
+        hash() {
+            return getLocationHash(this.$me.id)
+        }
+    },
+    methods : {
+        doScroll: debounce(function() {
+            if(this.$store.getters.scrollState == '#' + this.id){
+                window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                this.$store.dispatch('resetScroll')
             }
-        },
-         methods : {
-            doScroll: debounce(function() {
-                if(this.$store.getters.scrollState == '#' + this.id){
-                    window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
-                    this.$store.dispatch('resetScroll')
-                }
-            }, 200),
+        }, 200),
 
-            scroll() {
-                if(this.$store && this.$store.state.route.hash === '#' + this.id) {
-                    this.doScroll() 
-                }
+        scroll() {
+            if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+                this.doScroll() 
             }
         }
     }
+}
 </script>

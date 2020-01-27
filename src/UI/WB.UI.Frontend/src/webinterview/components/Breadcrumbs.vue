@@ -10,65 +10,65 @@
     </div>
 </template>
 <script lang="js">
-    export default {
-        name: 'breadcrumbs-view',
+export default {
+    name: 'breadcrumbs-view',
 
-        props: {
-            showHumburger: {
-                type: Boolean,
-                default: false
-            }
-        },
+    props: {
+        showHumburger: {
+            type: Boolean,
+            default: false
+        }
+    },
 
-        mounted() {
+    mounted() {
+        this.fetchBreadcrumbs()
+    },
+
+    watch: {
+        '$store.state.route.params.sectionId'() {
             this.fetchBreadcrumbs()
+        }
+    },
+    computed: {
+        info() {
+            return this.$store.state.webinterview.breadcrumbs
         },
+        showBreadcrumbs() {
+            return this.$store.state.route.params.sectionId != null && this.info.title != null
+        },
+        entities() {
+            if (!this.info) return {}
+            return this.info.breadcrumbs
+        },
+        title(){
+            var title = this.info.title
 
-        watch: {
-            '$store.state.route.params.sectionId'() {
-                this.fetchBreadcrumbs()
+            if(this.info.isRoster)
+                title += '<span> - <i>' + this.getRosterTitle(this.info.rosterTitle) + '</i></span>'
+
+            return title
+        }
+    },
+    methods: {
+        navigate(breadcrumb) {
+            if (breadcrumb.scrollTo) {
+                this.$store.dispatch('sectionRequireScroll', { id: breadcrumb.scrollTo })
             }
-        },
-        computed: {
-            info() {
-                return this.$store.state.webinterview.breadcrumbs
-            },
-            showBreadcrumbs() {
-                return this.$store.state.route.params.sectionId != null && this.info.title != null
-            },
-            entities() {
-                if (!this.info) return {}
-                return this.info.breadcrumbs
-            },
-            title(){
-                var title = this.info.title
 
-                if(this.info.isRoster)
-                    title += '<span> - <i>' + this.getRosterTitle(this.info.rosterTitle) + '</i></span>'
-
-                return title
-            }
-        },
-        methods: {
-            navigate(breadcrumb) {
-                if (breadcrumb.scrollTo) {
-                    this.$store.dispatch('sectionRequireScroll', { id: breadcrumb.scrollTo })
+            this.$router.push({
+                name: 'section',
+                params: {
+                    sectionId: breadcrumb.target
                 }
-
-                this.$router.push({
-                    name: 'section',
-                    params: {
-                        sectionId: breadcrumb.target
-                    }
-                })
-            },
-            fetchBreadcrumbs() {
-                this.$store.dispatch('fetchBreadcrumbs')
-            },
-            getRosterTitle(title) {
-                return title ? title : '[...]'
-            }
+            })
+        },
+        fetchBreadcrumbs() {
+            this.$store.dispatch('fetchBreadcrumbs')
+        },
+        getRosterTitle(title) {
+            return title ? title : '[...]'
         }
     }
+}
 
 </script>

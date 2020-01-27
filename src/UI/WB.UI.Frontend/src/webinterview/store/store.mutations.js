@@ -25,7 +25,7 @@ export default {
     },
     CLEAR_ENTITIES(state, {ids}) {
         forEach(ids, id => {
-             Vue.delete(state.entityDetails, id)
+            Vue.delete(state.entityDetails, id)
         })
     },
     SET_ANSWER_NOT_SAVED(state, { id, message }) {

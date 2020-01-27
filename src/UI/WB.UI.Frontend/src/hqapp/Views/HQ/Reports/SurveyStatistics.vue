@@ -196,12 +196,12 @@ export default {
             return answers == null
                 ? []
                 : answers.map(a => ({
-                      class: 'type-numeric',
-                      title: a.text,
-                      data: a.column,
-                      name: a.column,
-                      orderable: true,
-                  }))
+                    class: 'type-numeric',
+                    title: a.text,
+                    data: a.column,
+                    name: a.column,
+                    orderable: true,
+                }))
         },
 
         identifyingColumns() {

@@ -51,133 +51,133 @@
     </div>
 </template>
 <script lang="js">
-    import axios from 'axios'
-    import appendquery from 'append-query'
-    import {
-        startsWith
-    } from 'lodash'
+import axios from 'axios'
+import appendquery from 'append-query'
+import {
+    startsWith
+} from 'lodash'
 
-    function appendSearchParam(uri, name, value) {
-        const args = {
-            [name]: value
-        } // keep in separate line to make IE happy
-        return appendquery(uri, args)
-    }
+function appendSearchParam(uri, name, value) {
+    const args = {
+        [name]: value
+    } // keep in separate line to make IE happy
+    return appendquery(uri, args)
+}
 
-    export default {
-        data() {
-            return {
-                modal: false,
-                contentType: ''
-            }
+export default {
+    data() {
+        return {
+            modal: false,
+            contentType: ''
+        }
+    },
+    props: {
+        filename: {
+            type: String
         },
-        props: {
-            filename: {
-                type: String
-            },
-            contentId: {
-                type: String,
-                required: false
-            },
-            interviewId: {
-                type: String,
-                required: false
-            },
-            cache: {
-                type: Number
-            },
-            thumb: {
-                type: String,
-                required: false
-            },
-            image: {
-                type: String
-            },
-            customCssClass: {
-                type: String,
-                required: false
-            },
-            previewOnly: {
-                type: Boolean,
-                required: false,
-                default: false
-            }
+        contentId: {
+            type: String,
+            required: false
         },
-        mounted() {
-            return this.fetchContentType()
+        interviewId: {
+            type: String,
+            required: false
         },
-        computed: {
-            contentUrl() {
-                return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
-            },
-            thumbPath() {
-                if (this.isPreview) return this.imageThumb
-                return this.appendCache(this.imageThumb)
-            },
-            fullPath() {
-                if (this.isPreview) return this.imageFull
-                return this.appendCache(this.imageFull)
-            },
-            imageThumb() {
-                if (this.thumb) return this.thumb
-                if (this.filename) return `${this.$config.imageGetBase}/Image/${this.filename}`
-                if (this.contentId) return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
-                return null
-            },
-            isPreview() {
-                return this.imageThumb != null && this.imageThumb.lastIndexOf('data:image/') == 0
-            },
-            imageFull() {
-                if (this.image) return this.image
-                if (!this.isPreview && this.imageThumb) return `${this.imageThumb}&fullSize`
-                return null
-            },
-            previewStyle() {
-                if (this.isPreview) {
-                    return {
-                        cursor: 'auto'
-                    }
-                }
-
-                return {}
-            },
-            localContentType() {
-                if (startsWith(this.contentType, 'image'))
-                    return 'image'
-                if (startsWith(this.contentType, 'application/pdf'))
-                    return 'pdf'
-                if (startsWith(this.contentType, 'audio'))
-                    return 'audio'
-                if (startsWith(this.contentType, 'video'))
-                    return 'video'
-                return ''
-            },
-            modalView() {
+        cache: {
+            type: Number
+        },
+        thumb: {
+            type: String,
+            required: false
+        },
+        image: {
+            type: String
+        },
+        customCssClass: {
+            type: String,
+            required: false
+        },
+        previewOnly: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
+    mounted() {
+        return this.fetchContentType()
+    },
+    computed: {
+        contentUrl() {
+            return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
+        },
+        thumbPath() {
+            if (this.isPreview) return this.imageThumb
+            return this.appendCache(this.imageThumb)
+        },
+        fullPath() {
+            if (this.isPreview) return this.imageFull
+            return this.appendCache(this.imageFull)
+        },
+        imageThumb() {
+            if (this.thumb) return this.thumb
+            if (this.filename) return `${this.$config.imageGetBase}/Image/${this.filename}`
+            if (this.contentId) return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
+            return null
+        },
+        isPreview() {
+            return this.imageThumb != null && this.imageThumb.lastIndexOf('data:image/') == 0
+        },
+        imageFull() {
+            if (this.image) return this.image
+            if (!this.isPreview && this.imageThumb) return `${this.imageThumb}&fullSize`
+            return null
+        },
+        previewStyle() {
+            if (this.isPreview) {
                 return {
-                    display: this.modal ? 'block' : 'none'
+                    cursor: 'auto'
                 }
             }
+
+            return {}
         },
-        methods: {
-            async fetchContentType() {
-                if(this.thumb || this.filename) {
-                    this.contentType = 'image'
-                }
-                else {
-                    const response = await axios.head(this.contentUrl)
-                    this.contentType = response.headers['content-type']
-                }
-            },
-            appendCache(uri) {
-                return appendSearchParam(uri, 'cache', this.cache)
-            },
-            showModal(show) {
-                if (this.previewOnly)
-                    return
-                this.modal = show
+        localContentType() {
+            if (startsWith(this.contentType, 'image'))
+                return 'image'
+            if (startsWith(this.contentType, 'application/pdf'))
+                return 'pdf'
+            if (startsWith(this.contentType, 'audio'))
+                return 'audio'
+            if (startsWith(this.contentType, 'video'))
+                return 'video'
+            return ''
+        },
+        modalView() {
+            return {
+                display: this.modal ? 'block' : 'none'
+            }
+        }
+    },
+    methods: {
+        async fetchContentType() {
+            if(this.thumb || this.filename) {
+                this.contentType = 'image'
+            }
+            else {
+                const response = await axios.head(this.contentUrl)
+                this.contentType = response.headers['content-type']
             }
         },
-        name: 'wb-attachment'
-    }
+        appendCache(uri) {
+            return appendSearchParam(uri, 'cache', this.cache)
+        },
+        showModal(show) {
+            if (this.previewOnly)
+                return
+            this.modal = show
+        }
+    },
+    name: 'wb-attachment'
+}
 
 </script>

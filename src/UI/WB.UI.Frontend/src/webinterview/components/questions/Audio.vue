@@ -77,32 +77,32 @@ export default {
         }
     },
     computed: {
-            answerHolderId(){
-                return `audio_answer_${this.$me.id}`
-            },
-            modalId(){
-                return `audio_dialog_${this.$me.id}`
-            },
-            audioRecordPath() {
-                return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + '#' + this.$me.updatedAt.getTime()
-            },
-            formattedLength() {
-                if (this.$me.isAnswered){
-                    var d = moment.utc(this.$me.answer)
-                    return d.format('mm:ss')
-                }
-                return ''
-            },
-            humanizedLength() {
-                if (this.$me.isAnswered){
-                    return moment.duration(this.$me.answer, 'milliseconds').humanize()
-                }
-                return ''
-            },
-            isRecorded() {
-                return this.isRecording == false && this.$me.isAnswered
-            }
+        answerHolderId(){
+            return `audio_answer_${this.$me.id}`
         },
+        modalId(){
+            return `audio_dialog_${this.$me.id}`
+        },
+        audioRecordPath() {
+            return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + '#' + this.$me.updatedAt.getTime()
+        },
+        formattedLength() {
+            if (this.$me.isAnswered){
+                var d = moment.utc(this.$me.answer)
+                return d.format('mm:ss')
+            }
+            return ''
+        },
+        humanizedLength() {
+            if (this.$me.isAnswered){
+                return moment.duration(this.$me.answer, 'milliseconds').humanize()
+            }
+            return ''
+        },
+        isRecorded() {
+            return this.isRecording == false && this.$me.isAnswered
+        }
+    },
     methods: {
         showModal() {
             var modal = $(this.$el).find('.modal')

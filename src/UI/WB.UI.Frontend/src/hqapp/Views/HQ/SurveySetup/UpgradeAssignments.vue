@@ -43,18 +43,18 @@
 
 <script>
 export default {
-  data() {
-    return { questionnaireId: null }
-  },
-  computed: {
-    questionnaires() {
-      return this.$config.model.questionnaires
+    data() {
+        return { questionnaireId: null }
+    },
+    computed: {
+        questionnaires() {
+            return this.$config.model.questionnaires
+        }
+    },
+    methods: {
+        selectQuestionnaire(value) {
+            this.questionnaireId = value
+        }
     }
-  },
-  methods: {
-    selectQuestionnaire(value) {
-        this.questionnaireId = value
-    }
-  }
 }
 </script>

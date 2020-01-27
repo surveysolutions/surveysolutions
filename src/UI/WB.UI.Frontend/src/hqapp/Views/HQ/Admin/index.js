@@ -10,17 +10,17 @@ export default class AdminComponent {
 
     get routes() {
         return [{
-                path: '/Settings/EmailProviders',
-                component: EmailProviders
-            },
-            {
-                path: '/Diagnostics/Logs',
-                component: TabletLogs
-            },
-            {
-                path: '/Settings',
-                component: Settings
-            }
+            path: '/Settings/EmailProviders',
+            component: EmailProviders
+        },
+        {
+            path: '/Diagnostics/Logs',
+            component: TabletLogs
+        },
+        {
+            path: '/Settings',
+            component: Settings
+        }
         ]
     }
 

@@ -246,226 +246,226 @@
     </nav>
 </template>
 <script lang="js">
-    import modal from '@/shared/modal'
-    import axios from 'axios'
-    import Vue from 'vue'
-    import { filter } from 'lodash'
+import modal from '@/shared/modal'
+import axios from 'axios'
+import Vue from 'vue'
+import { filter } from 'lodash'
 
-    export default {
-        name: 'navbar',
-        data() {
-            return {
-                showEmailPersonalLink: this.$config.askForEmail,
-                scenarioText: null,
-                designerScenarios: [],
-                selectedScenarioOption: -1,
-                scenarioSaving: false,
-                designerCredentialsExpired: false,
-                selectedSaveOption: 'saveNew',
-                newScenarioName: ''
+export default {
+    name: 'navbar',
+    data() {
+        return {
+            showEmailPersonalLink: this.$config.askForEmail,
+            scenarioText: null,
+            designerScenarios: [],
+            selectedScenarioOption: -1,
+            scenarioSaving: false,
+            designerCredentialsExpired: false,
+            selectedSaveOption: 'saveNew',
+            newScenarioName: ''
+        }
+    },
+    mounted(){
+        $(window).on('resize', function() {
+            if($(window).width() > 880) {
+                if ($('.navbar-collapse.collapse.in').length > 0) {
+                    $('main').addClass('display-block')
+                }
+            }else{
+                $('main').removeClass('display-block')
             }
-        },
-        mounted(){
-            $(window).on('resize', function() {
-                if($(window).width() > 880) {
-                    if ($('.navbar-collapse.collapse.in').length > 0) {
-                      $('main').addClass('display-block')
-                    }
+        })
+        $('.navbar-toggle').click(function () {
+            $('.navbar-collapse').fadeToggle()
+            $('.navbar-collapse').animate({height: '100%'}, 0)
+            $('.top-menu').toggleClass('top-animate')
+            $('.mid-menu').toggleClass('mid-animate')
+            $('.bottom-menu').toggleClass('bottom-animate')
+            if($(window).width() < 880) {
+                if ($('.navbar-collapse.collapse.in').length > 0) {
+                    $('main').removeClass('display-block')
+                    $('main').removeClass('hidden')
                 }else{
-                        $('main').removeClass('display-block')
-                    }
-            })
-            $('.navbar-toggle').click(function () {
-                $('.navbar-collapse').fadeToggle()
-                $('.navbar-collapse').animate({height: '100%'}, 0)
-                $('.top-menu').toggleClass('top-animate')
-                $('.mid-menu').toggleClass('mid-animate')
-                $('.bottom-menu').toggleClass('bottom-animate')
-                if($(window).width() < 880) {
-                    if ($('.navbar-collapse.collapse.in').length > 0) {
-                        $('main').removeClass('display-block')
-                        $('main').removeClass('hidden')
-                    }else{
-                        $('main').addClass('hidden')
-                    }
+                    $('main').addClass('hidden')
                 }
-            })
+            }
+        })
 
-            if (this.$config.askForEmail)
-            {
-                this.emailPersonalLink()
+        if (this.$config.askForEmail)
+        {
+            this.emailPersonalLink()
+        }
+    },
+    updated(){
+        document.title = this.$config.splashScreen ? this.$t('WebInterviewUI.LoadingQuestionnaire') : `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t('WebInterviewUI.WebInterview')}`
+    },
+    computed: {
+        scenarioValid() {
+            if(this.selectedSaveOption === 'saveNew') {
+                return this.newScenarioName !== ''
+            }
+            else {
+                return this.selectedScenarioOption !== -1
             }
         },
-        updated(){
-            document.title = this.$config.splashScreen ? this.$t('WebInterviewUI.LoadingQuestionnaire') : `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t('WebInterviewUI.WebInterview')}`
+        canChangeLanguage() {
+            return this.$store.state.webinterview.languages != undefined && this.$store.state.webinterview.languages.length > 0
         },
-        computed: {
-            scenarioValid() {
-                if(this.selectedSaveOption === 'saveNew') {
-                    return this.newScenarioName !== ''
-                }
-                else {
-                    return this.selectedScenarioOption !== -1
-                }
-            },
-            canChangeLanguage() {
-                return this.$store.state.webinterview.languages != undefined && this.$store.state.webinterview.languages.length > 0
-            },
-            currentLanguage(){
-                return this.$store.state.webinterview.currentLanguage || this.$store.state.webinterview.originalLanguageName
-            },
-            languages() {
-                const current = this.currentLanguage
-                return filter(this.$store.state.webinterview.languages, l => l != current)
-            },
-            questionnaireTitle(){
-                if(this.$config.splashScreen) return this.$t('WebInterviewUI.LoadingQuestionnaire')
-
-                return this.$store.state.webinterview.questionnaireTitle || ''
-            },
-            toFirstSection(){
-                return { name: 'section', params: { sectionId: this.$store.state.webinterview.firstSectionId } }
-            },
-            toCoverPage() {
-                return { name: 'prefilled' }
-            },
-            interviewKey() {
-                return this.$store.state.webinterview.interviewKey || this.$t('WebInterviewUI.WebInterview')
-            },
-            hqLink() {
-                return this.$config.hqLink
-            },
-            saveScenarioUrl() {
-                return this.$config.saveScenarioUrl
-            },
-            getScenarioUrl() {
-                return this.$config.getScenarioUrl
-            }
+        currentLanguage(){
+            return this.$store.state.webinterview.currentLanguage || this.$store.state.webinterview.originalLanguageName
         },
-        methods: {
-            hideScenarioSave() {
-                $(this.$refs.saveScenarioModalRef).modal('hide')
-                this.newScenarioName = ''
-                this.selectedSaveOption = 'saveNew'
-                this.selectedScenarioOption = -1
-            },
-            emailPersonalLink(){
-                var self = this
-                let prompt = modal.prompt({
-                    title: this.$t('WebInterviewUI.EmailLink_Header'),
+        languages() {
+            const current = this.currentLanguage
+            return filter(this.$store.state.webinterview.languages, l => l != current)
+        },
+        questionnaireTitle(){
+            if(this.$config.splashScreen) return this.$t('WebInterviewUI.LoadingQuestionnaire')
+
+            return this.$store.state.webinterview.questionnaireTitle || ''
+        },
+        toFirstSection(){
+            return { name: 'section', params: { sectionId: this.$store.state.webinterview.firstSectionId } }
+        },
+        toCoverPage() {
+            return { name: 'prefilled' }
+        },
+        interviewKey() {
+            return this.$store.state.webinterview.interviewKey || this.$t('WebInterviewUI.WebInterview')
+        },
+        hqLink() {
+            return this.$config.hqLink
+        },
+        saveScenarioUrl() {
+            return this.$config.saveScenarioUrl
+        },
+        getScenarioUrl() {
+            return this.$config.getScenarioUrl
+        }
+    },
+    methods: {
+        hideScenarioSave() {
+            $(this.$refs.saveScenarioModalRef).modal('hide')
+            this.newScenarioName = ''
+            this.selectedSaveOption = 'saveNew'
+            this.selectedScenarioOption = -1
+        },
+        emailPersonalLink(){
+            var self = this
+            let prompt = modal.prompt({
+                title: this.$t('WebInterviewUI.EmailLink_Header'),
                     
-                    inputType: 'email',
-                    callback: function(result) {
-                        if(result === null || result === undefined) return
+                inputType: 'email',
+                callback: function(result) {
+                    if(result === null || result === undefined) return
 
-                        if (!self.validateEmail(result))
-                        {
-                            var input = $(this).find('input')
-                            self.$nextTick(function() {
-                                input.next('span').remove()
-                                input.after('<span class=\'help-text text-danger\'>' + this.$t('WebInterviewUI.EmailLink_InvalidEmail', { email: result}) + '</span>')
-                            })
-                            return false
-                        }
-
-                        self.sendEmailWithPersonalLink(result)
-                    }
-                })
-
-                prompt.find('input').attr('placeholder', this.$t('WebInterviewUI.EmailLink_Placeholder'))
-                prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_Message') + '</p>')
-                prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_ResumeAnyTime') + '</p>')
-                //debugger;
-            },
-            sendEmailWithPersonalLink(email){
-                var self = this
-                axios.post(this.$config.sendLinkUri, { 
-                    interviewId:  this.$route.params.interviewId,
-                    email: email 
-                }).then(function(response){
-                    self.showEmailPersonalLink = false
-                }) .catch(function (error) {
-                    Vue.config.errorHandler(error, self)
-                })
-            },
-            validateEmail(email) {
-                var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                return re.test(String(email).toLowerCase())
-            },
-            changeLanguage(language) {
-
-                this.$store.dispatch('changeLanguage', { language: language })
-
-                modal.dialog({
-                    message: '<p>' + this.$t('WebInterviewUI.SwitchingLanguage') +'</p>',
-                    closeButton: false
-                })
-            },
-            reloadQuestionnaire() {
-                window.location = this.$config.reloadQuestionnaireUrl
-            },
-            async showSaveScenario() {
-                this.scenarioSaving = true
-                this.designerCredentialsExpired = false
-                $(this.$refs.saveScenarioModalRef).appendTo('body').modal('show')
-                try {
-                    this.designerScenarios = []
-                    var getScenarios = await axios.get(this.saveScenarioUrl, {
-                        crossDomain: true,
-                        withCredentials: true
-                    })
-
-                    this.designerScenarios = getScenarios.data
-                }
-                catch(error) {
-                    this.handleDesignerApiResponse(error)
-                }
-                finally{
-                    this.scenarioSaving = false
-                }
-            },
-            async saveScenario() {
-                this.scenarioSaving = true
-                try {
-                    const scenarioContentResponse = await axios.get(`${this.getScenarioUrl}/${this.$route.params.interviewId}`)
-                    const scenario = scenarioContentResponse.data
-                    
-                    await axios({
-                            method: 'POST',
-                            url: this.saveScenarioUrl,
-                            data: { 
-                                scenarioText: JSON.stringify(scenario),
-                                scenarioId: this.selectedSaveOption === 'updateExisting' ? this.selectedScenarioOption : '',
-                                scenarioTitle: this.newScenarioName
-                            },
-                            crossDomain: true,
-                            withCredentials: true
+                    if (!self.validateEmail(result))
+                    {
+                        var input = $(this).find('input')
+                        self.$nextTick(function() {
+                            input.next('span').remove()
+                            input.after('<span class=\'help-text text-danger\'>' + this.$t('WebInterviewUI.EmailLink_InvalidEmail', { email: result}) + '</span>')
                         })
+                        return false
+                    }
 
+                    self.sendEmailWithPersonalLink(result)
+                }
+            })
+
+            prompt.find('input').attr('placeholder', this.$t('WebInterviewUI.EmailLink_Placeholder'))
+            prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_Message') + '</p>')
+            prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_ResumeAnyTime') + '</p>')
+            //debugger;
+        },
+        sendEmailWithPersonalLink(email){
+            var self = this
+            axios.post(this.$config.sendLinkUri, { 
+                interviewId:  this.$route.params.interviewId,
+                email: email 
+            }).then(function(response){
+                self.showEmailPersonalLink = false
+            }) .catch(function (error) {
+                Vue.config.errorHandler(error, self)
+            })
+        },
+        validateEmail(email) {
+            var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return re.test(String(email).toLowerCase())
+        },
+        changeLanguage(language) {
+
+            this.$store.dispatch('changeLanguage', { language: language })
+
+            modal.dialog({
+                message: '<p>' + this.$t('WebInterviewUI.SwitchingLanguage') +'</p>',
+                closeButton: false
+            })
+        },
+        reloadQuestionnaire() {
+            window.location = this.$config.reloadQuestionnaireUrl
+        },
+        async showSaveScenario() {
+            this.scenarioSaving = true
+            this.designerCredentialsExpired = false
+            $(this.$refs.saveScenarioModalRef).appendTo('body').modal('show')
+            try {
+                this.designerScenarios = []
+                var getScenarios = await axios.get(this.saveScenarioUrl, {
+                    crossDomain: true,
+                    withCredentials: true
+                })
+
+                this.designerScenarios = getScenarios.data
+            }
+            catch(error) {
+                this.handleDesignerApiResponse(error)
+            }
+            finally{
+                this.scenarioSaving = false
+            }
+        },
+        async saveScenario() {
+            this.scenarioSaving = true
+            try {
+                const scenarioContentResponse = await axios.get(`${this.getScenarioUrl}/${this.$route.params.interviewId}`)
+                const scenario = scenarioContentResponse.data
+                    
+                await axios({
+                    method: 'POST',
+                    url: this.saveScenarioUrl,
+                    data: { 
+                        scenarioText: JSON.stringify(scenario),
+                        scenarioId: this.selectedSaveOption === 'updateExisting' ? this.selectedScenarioOption : '',
+                        scenarioTitle: this.newScenarioName
+                    },
+                    crossDomain: true,
+                    withCredentials: true
+                })
+
+                this.hideScenarioSave()
+            } catch (error) {
+                this.handleDesignerApiResponse(error)
+            }
+            finally {
+                this.scenarioSaving = false
+            }
+        },
+        handleDesignerApiResponse(error) {
+            if(error.isAxiosError)
+                if(error.response.status === 401) {
+                    this.designerCredentialsExpired = true
+                }
+                else if (error.response.status === 403) {
                     this.hideScenarioSave()
-                } catch (error) {
-                    this.handleDesignerApiResponse(error)
+                    throw this.$t('WebInterviewUI.NoQuestionnaireAccess')
                 }
-                finally {
-                    this.scenarioSaving = false
-                }
-            },
-            handleDesignerApiResponse(error) {
-                if(error.isAxiosError)
-                    if(error.response.status === 401) {
-                        this.designerCredentialsExpired = true
-                    }
-                    else if (error.response.status === 403) {
-                        this.hideScenarioSave()
-                        throw this.$t('WebInterviewUI.NoQuestionnaireAccess')
-                    }
-                    else {
-                        throw error
-                    }
                 else {
                     throw error
                 }
+            else {
+                throw error
             }
         }
     }
+}
 </script>
