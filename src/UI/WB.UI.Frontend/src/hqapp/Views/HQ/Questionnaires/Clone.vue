@@ -15,7 +15,7 @@
             <div class="col-sm-8">
                 <h2>
                     {{$t('QuestionnaireClonning.ToCloneQuestionnaire')}}
-                    {{this.$config.model.questionnaireFullName}}
+                    <b>{{$t('Pages.QuestionnaireNameFormat', {name: this.$config.model.originalTitle, version: this.$config.model.version}) }}</b>
                 </h2>
             </div>
         </div>
