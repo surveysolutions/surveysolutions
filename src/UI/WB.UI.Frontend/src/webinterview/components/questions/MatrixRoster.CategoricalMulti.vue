@@ -62,7 +62,7 @@
 
 <script lang="js">
 import Vue from 'vue'
-import { filter, difference , join} from 'lodash'
+import { filter, find, difference, join} from 'lodash'
 import { entityDetails, tableCellEditor } from '../mixins'
 import modal from '@/shared/modal'
 
