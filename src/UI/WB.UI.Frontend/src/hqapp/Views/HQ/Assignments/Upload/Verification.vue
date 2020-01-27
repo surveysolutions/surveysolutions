@@ -7,8 +7,7 @@
                 </li>
                 <li>
                     <a
-                        :href="assignmentsUploadUrl"
-                    >{{$t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews')}}</a>
+                        :href="assignmentsUploadUrl">{{$t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews')}}</a>
                 </li>
             </ol>
             <h1>{{$t('BatchUpload.CreatingMultipleAssignments')}}</h1>
@@ -22,8 +21,7 @@
             <div class="col-sm-7 col-xs-12 action-block">
                 <div class="import-progress">
                     <p
-                        class="success-text"
-                    >{{$t('BatchUpload.Import_VerificationOfDataFile_Succeeded')}}</p>
+                        class="success-text">{{$t('BatchUpload.Import_VerificationOfDataFile_Succeeded')}}</p>
                 </div>
                 <div class="import-progress">
                     <p>
@@ -32,24 +30,19 @@
                     </p>
                     <p
                         class="success-text"
-                        v-if="status.verifiedCount > 0 && ((status.verifiedCount - status.withErrorsCount) == 1)"
-                    >{{$t('BatchUpload.Import_Verification_1_AssignmentVerified')}}</p>
+                        v-if="status.verifiedCount > 0 && ((status.verifiedCount - status.withErrorsCount) == 1)">{{$t('BatchUpload.Import_Verification_1_AssignmentVerified')}}</p>
                     <p
                         class="success-text"
-                        v-if="status.verifiedCount > 0 && ((status.verifiedCount - status.withErrorsCount) > 1)"
-                    >{{$t('BatchUpload.Import_Verification_AssignmentsVerified', {count: status.verifiedCount - status.withErrorsCount})}}</p>
+                        v-if="status.verifiedCount > 0 && ((status.verifiedCount - status.withErrorsCount) > 1)">{{$t('BatchUpload.Import_Verification_AssignmentsVerified', {count: status.verifiedCount - status.withErrorsCount})}}</p>
                     <p
                         class="default-text"
-                        v-if="status.withErrorsCount == 0"
-                    >{{$t('BatchUpload.ImportInterviews_NoneFailed')}}</p>
+                        v-if="status.withErrorsCount == 0">{{$t('BatchUpload.ImportInterviews_NoneFailed')}}</p>
                     <p
                         class="error-text"
-                        v-if="status.withErrorsCount == 1"
-                    >{{$t('BatchUpload.Import_Verification_1_Error')}}</p>
+                        v-if="status.withErrorsCount == 1">{{$t('BatchUpload.Import_Verification_1_Error')}}</p>
                     <p
                         class="error-text"
-                        v-if="status.withErrorsCount > 1"
-                    >{{$t('BatchUpload.Import_Verification_Errors', {count: status.withErrorsCount})}}</p>
+                        v-if="status.withErrorsCount > 1">{{$t('BatchUpload.Import_Verification_Errors', {count: status.withErrorsCount})}}</p>
                 </div>
                 <div class="cancelable-progress">
                     <div class="progress">
@@ -59,8 +52,7 @@
                             role="progressbar"
                             :aria-valuenow="status.verifiedCount"
                             aria-valuemin="0"
-                            :aria-valuemax="status.totalCount"
-                        >
+                            :aria-valuemax="status.totalCount">
                             <span class="sr-only"></span>
                         </div>
                     </div>
