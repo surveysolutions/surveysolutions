@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('Pages.UpgradeAssignmentsTitle')">
+    <HqLayout :hasFilter="false"
+        :title="$t('Pages.UpgradeAssignmentsTitle')">
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -7,18 +8,17 @@
                 </li>
             </ol>
             <h1
-                v-if="isDone"
-            >{{$t('Assignments.UpgradeProgressDoneTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}</h1>
+                v-if="isDone">{{$t('Assignments.UpgradeProgressDoneTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}</h1>
             <h1
-                v-else
-            >{{$t('Assignments.UpgradeProgressTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}</h1>
+                v-else>{{$t('Assignments.UpgradeProgressTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}</h1>
         </div>
-        <div class="row-fluid" v-if="progress.progressDetails.status === 'Queued'">
+        <div class="row-fluid"
+            v-if="progress.progressDetails.status === 'Queued'">
             <div
-                class="col-sm-12 prefilled-data-info info-block"
-            >{{$t('Assignments.UpgradePreparation')}}</div>
+                class="col-sm-12 prefilled-data-info info-block">{{$t('Assignments.UpgradePreparation')}}</div>
         </div>
-        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'InProgress'">
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'InProgress'">
             <div class="col-sm-7 col-xs-12 action-block uploading-verifying active-preloading">
                 <div class="import-progress">
                     <p>{{ $t('Assignments.UpgradeProgressNumbers', { processed: totalProcessedCount, totalCount: progress.progressDetails.totalAssignmentsToMigrate }) }}</p>
@@ -31,25 +31,24 @@
                             aria-valuenow="60"
                             aria-valuemin="0"
                             aria-valuemax="100"
-                            v-bind:style="{ width: overallProgressPercent + '%' }"
-                        >
+                            v-bind:style="{ width: overallProgressPercent + '%' }">
                             <span class="sr-only">{{overallProgressPercent}}%</span>
                         </div>
                     </div>
                     <button
                         class="btn btn-link"
                         type="button"
-                        @click="stop"
-                    >{{$t('Assignments.Stop')}}</button>
+                        @click="stop">{{$t('Assignments.Stop')}}</button>
                 </div>
             </div>
         </div>
-        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'Cancelled'">
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'Cancelled'">
             <div
-                class="col-sm-12 prefilled-data-info info-block"
-            >{{$t('Assignments.UpgradeCancelled')}}</div>
+                class="col-sm-12 prefilled-data-info info-block">{{$t('Assignments.UpgradeCancelled')}}</div>
         </div>
-        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'Done'">
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'Done'">
             <div class="col-sm-7 col-xs-12 action-block preloading-done active-preloading">
                 <div class="import-progress">
                     <p>{{$t('Assignments.UpgradeProgressDoneCount', {processed: progress.progressDetails.assignmentsMigratedSuccessfully})}}</p>
@@ -57,15 +56,13 @@
                         {{$t('Assignments.UpgradeProgressErrorCount', {count: errorsCount})}}
                         <a
                             :href="errorsExportUrl"
-                            target="_blank"
-                        >({{$t('Assignments.UpgradeDownloadFailed')}})</a>
+                            target="_blank">({{$t('Assignments.UpgradeDownloadFailed')}})</a>
                     </p>
                 </div>
                 <div class="action-buttons">
                     <a
                         class="btn btn-primary"
-                        :href="$config.model.surveySetupUrl"
-                    >{{$t('MainMenu.SurveySetup')}}</a>
+                        :href="$config.model.surveySetupUrl">{{$t('MainMenu.SurveySetup')}}</a>
                 </div>
             </div>
         </div>

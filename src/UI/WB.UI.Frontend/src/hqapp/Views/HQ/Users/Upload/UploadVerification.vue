@@ -14,7 +14,9 @@
                     <p class="error-text">{{$t('UploadUsers.VerificationFailed')}}</p>
                     <p>{{$t('UploadUsers.NoCreatedUsers')}}</p>
                 </div>
-                <div class="error-block" v-for="(error, i) in verificationErrors" :key="i">
+                <div class="error-block"
+                    v-for="(error, i) in verificationErrors"
+                    :key="i">
                     <h5 class="error-text">
                         <span>[{{$t('UploadUsers.Line')}}: {{error.line}}, {{$t('UploadUsers.Column')}}: {{error.column}}]</span>
                         : {{error.message}}
@@ -30,17 +32,14 @@
                         :accept="allowedFileExtensions"
                         type="file"
                         @change="onFileChange"
-                        class="btn btn-default btn-lg btn-action-questionnaire"
-                    />
+                        class="btn btn-default btn-lg btn-action-questionnaire"/>
                     <button
                         type="button"
                         class="btn btn-success"
-                        @click="$refs.uploader.click()"
-                    >{{$t('UploadUsers.ReUploadTabFile')}}</button>
+                        @click="$refs.uploader.click()">{{$t('UploadUsers.ReUploadTabFile')}}</button>
                     <router-link
                         class="btn btn-link"
-                        :to="{ name: 'upload'}"
-                    >{{$t('UploadUsers.BackToImport')}}</router-link>
+                        :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
                 </div>
             </div>
         </div>

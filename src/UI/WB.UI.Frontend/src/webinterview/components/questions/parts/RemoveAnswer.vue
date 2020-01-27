@@ -1,10 +1,10 @@
 <template>
     <button v-if="$me.isAnswered && $me.acceptAnswer" 
-            tabindex="-1"
-             type="submit"
-              class="btn btn-link btn-clear"
-               @click="removeAnswer"
-               :id="`btn_${this.$me.id}_removeAnswer${idSuffix}`">
+        tabindex="-1"
+        type="submit"
+        class="btn btn-link btn-clear"
+        @click="removeAnswer"
+        :id="`btn_${this.$me.id}_removeAnswer${idSuffix}`">
         <span></span>
     </button>
 </template>

@@ -4,15 +4,13 @@
             v-for="item in items"
             :key="item.id"
             :item="item"
-            @mount="registerItemToStick"
-        />
+            @mount="registerItemToStick"/>
 
         <infinite-loading
             ref="loader"
             v-if="overview.total > 0 && items.length > 0"
             @infinite="infiniteHandler"
-            :distance="1000"
-        >
+            :distance="1000">
             <span slot="no-more"></span>
             <span slot="no-results"></span>
         </infinite-loading>

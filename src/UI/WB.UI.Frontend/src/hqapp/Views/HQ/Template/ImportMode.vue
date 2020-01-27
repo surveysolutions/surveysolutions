@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :hasFilter="false" :fixedWidth="true">
+    <HqLayout :hasFilter="false"
+        :fixedWidth="true">
         <template slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -7,8 +8,7 @@
                 </li>
                 <li>
                     <a
-                        :href="this.$config.model.listOfMyQuestionnaires"
-                    >{{this.$t('QuestionnaireImport.ListOfMyQuestionnaires')}}</a>
+                        :href="this.$config.model.listOfMyQuestionnaires">{{this.$t('QuestionnaireImport.ListOfMyQuestionnaires')}}</a>
                 </li>
             </ol>
             <h1>{{this.$t('QuestionnaireImport.ImportModePageTitle')}}</h1>
@@ -57,12 +57,12 @@
                 </ul>
             </div>
         </div>
-        <form method="post" class="import-questionnaire-form">
+        <form method="post"
+            class="import-questionnaire-form">
             <input
                 name="__RequestVerificationToken"
                 type="hidden"
-                :value="this.$hq.Util.getCsrfCookie()"
-            />
+                :value="this.$hq.Util.getCsrfCookie()"/>
             <div v-if="$config.model.newVersionNumber > 1">
                 <div class="row">
                     <div class="col-sm-8">
@@ -79,8 +79,7 @@
                                     name="optionsRadios"
                                     id="imortAsNewVersion"
                                     value="new-version"
-                                    checked
-                                />
+                                    checked/>
                                 <label for="imortAsNewVersion">
                                     <span class="tick"></span>
                                     {{$t('QuestionnaireImport.ImportAsNewVersion', {version: $config.model.newVersionNumber})}}
@@ -96,8 +95,7 @@
                                     id="ckbUpgradeAssignments"
                                     type="checkbox"
                                     value="True"
-                                    name="ShouldMigrateAssignments"
-                                />
+                                    name="ShouldMigrateAssignments"/>
                                 <label for="ckbUpgradeAssignments">
                                     <span class="tick"></span>
                                     {{$t('QuestionnaireImport.UpgradeAssignments')}}
@@ -105,19 +103,19 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-8" id="templateSelectorBlock" style="display: none">
+                        <div class="col-sm-8"
+                            id="templateSelectorBlock"
+                            style="display: none">
                             <div class="form-group">
                                 <select
                                     id="templateSelector"
                                     data-bind="value: SelectedTemplate"
                                     class="selectpicker"
-                                    name="migrateFrom"
-                                >
+                                    name="migrateFrom">
                                     <option
                                         v-for="item in $config.model.questionnairesToUpgradeFrom"
                                         :value="`{'templateId': '${item.templateId}', 'version': ${item.templateVersion}}`"
-                                        :key="`${item.templateId}_${item.templateVersion}`"
-                                    >({{$t('Assignments.QuestionnaireVersion', {version: item.TemplateVersion})}}) {{item.TemplateName}}</option>
+                                        :key="`${item.templateId}_${item.templateVersion}`">({{$t('Assignments.QuestionnaireVersion', {version: item.TemplateVersion})}}) {{item.TemplateName}}</option>
                                 </select>
                             </div>
                         </div>
@@ -139,22 +137,23 @@
                                     name="Comment"
                                     class="form-control"
                                     rows="5"
-                                    maxlength="500"
-                                ></textarea>
+                                    maxlength="500"></textarea>
                             </p>
                         </div>
                         <div>
                             <button
                                 type="submit"
-                                class="btn btn-primary"
-                            >{{$t('QuestionnaireImport.RegularImportTitle')}}</button>
+                                class="btn btn-primary">{{$t('QuestionnaireImport.RegularImportTitle')}}</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
-        <div class="row col-sm-12" v-if="$config.model.errorMessage">
-            <div class="alert alert-danger">{{$config.model.errorMessage}}</div>
+        <div class="row col-sm-12"
+            v-if="$config.model.errorMessage">
+            <div class="alert alert-danger">
+                {{$config.model.errorMessage}}
+            </div>
         </div>
     </HqLayout>
 </template>

@@ -1,18 +1,24 @@
 <template>
-    <main class="web-interview web-interview-for-supervisor" :class="classes">
+    <main class="web-interview web-interview-for-supervisor"
+        :class="classes">
         <div class="container-fluid">
             <div class="row">
                 <DetailsInfo />
                 <Facets />
                 <SearchResults />
-                <Sidebar :showComplete="false" :show-foldback-button-as-hamburger="false" />
+                <Sidebar :showComplete="false"
+                    :show-foldback-button-as-hamburger="false" />
                 <section class="questionnaire details-interview">
-                    <Interview :interviewId="interviewId" review @connected="connected" />
+                    <Interview :interviewId="interviewId"
+                        review
+                        @connected="connected" />
                 </section>
             </div>
         </div>
         <IdleTimeoutService />
-        <span id="loadingPixel" style="display:none" :data-loading="isLoading"></span>
+        <span id="loadingPixel"
+            style="display:none"
+            :data-loading="isLoading"></span>
     </main>
 </template>
 

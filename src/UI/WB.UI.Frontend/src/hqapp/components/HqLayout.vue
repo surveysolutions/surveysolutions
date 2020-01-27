@@ -4,14 +4,21 @@
             <div :class="{ 'row' : hasRow }">
                 <slot name="filters" />
                 <div :class="information">
-                    <div class="page-header clearfix" v-if="hasHeader">
+                    <div class="page-header clearfix"
+                        v-if="hasHeader">
                         <div :class="{'neighbor-block-to-search': hasSearch}">
                             <slot name="headers">
                                 <div :class="{'topic-with-button': topicButtonRef}">
                                     <h1 v-html='title'></h1>
-                                    <a v-if="topicButtonRef" class="btn btn-success" :href="topicButtonRef">{{ topicButton }} </a>
+                                    <a v-if="topicButtonRef"
+                                        class="btn btn-success"
+                                        :href="topicButtonRef">
+                                        {{ topicButton }}
+                                    </a>
                                 </div>
-                                <i v-if="subtitle">{{ subtitle }}</i>
+                                <i v-if="subtitle">
+                                    {{ subtitle }}
+                                </i>
                             </slot>
                             <slot name="subtitle" />
                         </div>
@@ -21,9 +28,14 @@
             </div>
            
             <slot name="modals" />
-            <ModalFrame id="pendingProgress" ref="pending" :title="$t('Common.Loading')" :canClose="false">
-                <div class="progress progress-striped active" style="margin-bottom:0;">
-                    <div class="progress-bar" style="width: 100%"></div>
+            <ModalFrame id="pendingProgress"
+                ref="pending"
+                :title="$t('Common.Loading')"
+                :canClose="false">
+                <div class="progress progress-striped active"
+                    style="margin-bottom:0;">
+                    <div class="progress-bar"
+                        style="width: 100%"></div>
                 </div>
             </ModalFrame>
         </div>

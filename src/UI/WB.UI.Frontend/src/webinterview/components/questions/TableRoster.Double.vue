@@ -10,14 +10,13 @@
         :value="$me.answer"
         :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
-                minimumValue:'-99999999999999.99999999999999',
-                maximumValue:'99999999999999.99999999999999',
-                digitGroupSeparator: groupSeparator,
-                decimalCharacter:decimalSeparator, 
-                decimalPlaces: decimalPlacesCount, 
-                allowDecimalPadding: false
-            }"
-    />
+            minimumValue:'-99999999999999.99999999999999',
+            maximumValue:'99999999999999.99999999999999',
+            digitGroupSeparator: groupSeparator,
+            decimalCharacter:decimalSeparator, 
+            decimalPlaces: decimalPlacesCount, 
+            allowDecimalPadding: false
+        }"/>
 </template>
 
 <script lang="js">

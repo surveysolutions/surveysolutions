@@ -1,24 +1,26 @@
 <template>
-  <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl" :topicButton="$t('Users.AddAPIUser')">
-    <div slot='subtitle'>
-        <div class="neighbor-block-to-search">
-            <ol class="list-unstyled">
-                <li>{{ $t('Pages.Users_API_Instruction1') }}</li>
-                <li>{{ $t('Pages.Users_API_Instruction2') }}</li>
-            </ol>
+    <HqLayout :hasFilter="false"
+        :title="title"
+        :topicButtonRef="this.model.createUrl"
+        :topicButton="$t('Users.AddAPIUser')">
+        <div slot='subtitle'>
+            <div class="neighbor-block-to-search">
+                <ol class="list-unstyled">
+                    <li>{{ $t('Pages.Users_API_Instruction1') }}</li>
+                    <li>{{ $t('Pages.Users_API_Instruction2') }}</li>
+                </ol>
+            </div>
         </div>
-    </div>
 
-    <DataTables
-      ref="table"
-      :tableOptions="tableOptions"
-      @ajaxComplete="onTableReload"
-      noSelect
-      :noPaging="false"
-    >
-    </DataTables>
+        <DataTables
+            ref="table"
+            :tableOptions="tableOptions"
+            @ajaxComplete="onTableReload"
+            noSelect
+            :noPaging="false">
+        </DataTables>
 
-  </HqLayout>
+    </HqLayout>
 </template>
 
 <script>

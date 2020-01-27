@@ -282,7 +282,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentsService, AssignmentsService>();
             registry.Bind<ISystemLog, SystemLog>();
             registry.Bind<IUserToDeviceService, UserToDeviceService>();
-            registry.Bind<IAuditLogReader, AuditLogReader>();
             registry.Bind<IEncryptionService, RsaEncryptionService>();
             registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();

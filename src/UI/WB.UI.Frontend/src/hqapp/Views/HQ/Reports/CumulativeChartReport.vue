@@ -2,8 +2,7 @@
     <HqLayout
         :hasFilter="true"
         :title="$t('Reports.CumulativeInterviewChart')"
-        :subtitle="$t('Reports.CumulativeInterviewChartSubtitle')"
-    >
+        :subtitle="$t('Reports.CumulativeInterviewChartSubtitle')">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead
@@ -11,8 +10,7 @@
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="selectedQuestionnaire"
                     :values="model.templates"
-                    v-on:selected="selectQuestionnaire"
-                />
+                    v-on:selected="selectQuestionnaire"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -22,12 +20,12 @@
                     :value="selectedVersion"
                     :values="selectedQuestionnaire == null ? null : selectedQuestionnaire.versions"
                     v-on:selected="selectQuestionnaireVersion"
-                    :disabled="selectedQuestionnaire == null"
-                />
+                    :disabled="selectedQuestionnaire == null"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Reports.DatesRange')">
-                <DatePicker :config="datePickerConfig" :value="selectedDateRange"></DatePicker>
+                <DatePicker :config="datePickerConfig"
+                    :value="selectedDateRange"></DatePicker>
             </FilterBlock>
 
             <FilterBlock :title="$t('Reports.QuickRanges')">
@@ -37,39 +35,37 @@
                         v-for="range in quickRanges"
                         :key="range.title"
                         :class="{ 'list-group-item-success': isSelectedRange(range)}"
-                        @click="quickRange(range)"
-                    >{{ range.title }}</li>
+                        @click="quickRange(range)">{{ range.title }}</li>
                 </ul>
                 <Checkbox
                     name="relativeRange"
                     :label="$t('Reports.RangeRelativeToData')"
-                    v-model="relativeToData"
-                ></Checkbox>
+                    v-model="relativeToData"></Checkbox>
             </FilterBlock>
         </Filters>
         <div class="clearfix">
             <div class="col-sm-8">
-                <h2 v-if="!hasData">{{ $t('Common.NoResultsFound') }}</h2>
+                <h2 v-if="!hasData">
+                    {{ $t('Common.NoResultsFound') }}
+                </h2>
             </div>
         </div>
         <LineChart
             ref="chart"
             id="interviewChart"
             :options="{
-           title: {
-             display: true,
-             text: this.chartTitle
-        }
-      }"
+                title: {
+                    display: true,
+                    text: this.chartTitle
+                }
+            }"
             @ready="chartUpdated"
-            @mounted="refreshData"
-        ></LineChart>
+            @mounted="refreshData"></LineChart>
         <div v-if="base64Encoded != null && hasData">
             <a
                 id="link"
                 :download="chartTitle  +'.png'"
-                @click="downloadAsImage()"
-            >{{$t("Reports.SaveAsImage")}}</a>
+                @click="downloadAsImage()">{{$t("Reports.SaveAsImage")}}</a>
         </div>
     </HqLayout>
 </template>

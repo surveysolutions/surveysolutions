@@ -1,9 +1,13 @@
 <template>
-    <div class="form-group" :title="tooltip">
+    <div class="form-group"
+        :title="tooltip">
         <input class="checkbox-filter" 
-            :id="name" type="checkbox"
+            :id="name"
+            type="checkbox"
             :disabled="!enabled ? 'disabled': null" 
-            :name="name" :checked="checked" @change="checkedChange" />
+            :name="name"
+            :checked="checked"
+            @change="checkedChange" />
         <label :for="name">
             <span class="tick"></span>{{ label }}</label>
     </div>
