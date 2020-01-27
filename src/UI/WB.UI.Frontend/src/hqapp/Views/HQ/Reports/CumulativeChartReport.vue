@@ -74,7 +74,7 @@
 import routeSync from '~/shared/routeSync'
 import Vue from 'vue'
 import moment from 'moment'
-import {forEach, findIndex, assign, sortBy} from 'lodash'
+import {forEach, findIndex, assign, sortBy, find} from 'lodash'
 
 const LineChart = () => import(/* webpackChunkName: "report" */ './CumulativeChart')
 

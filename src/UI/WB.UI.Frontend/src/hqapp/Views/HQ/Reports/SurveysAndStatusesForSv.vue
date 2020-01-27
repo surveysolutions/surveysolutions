@@ -32,7 +32,7 @@
 </template>
 <script>
 import routeSync from '~/shared/routeSync'
-import escape from 'lodash'
+import { escape } from 'lodash'
 import { formatNumber } from './helpers'
 
 export default {
