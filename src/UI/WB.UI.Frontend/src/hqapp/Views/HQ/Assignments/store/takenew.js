@@ -12,7 +12,7 @@ export default {
     },
 
     actions: {
-        loadTakeNew({ commit}, { interviewId }) {
+        loadTakeNew({ commit }, { interviewId }) {
             const details = Vue.$api.interview.get('getInterviewDetails', { interviewId })
                 .then(interviewDetails => {
                     commit('SET_INTERVIEW_DETAILS', interviewDetails)
