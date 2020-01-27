@@ -31,6 +31,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public string Comment { get; set; }
 
         public string Error { get; set; }
-        public string QuestionnaireFullName { get; set; }
     }
 }
