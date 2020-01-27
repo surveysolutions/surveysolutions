@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [WebInterviewAuthorize]
-        [Route("{id}/Section/{sectionId}")]
+        [Route("{id:Guid}/Section/{sectionId}")]
         public ActionResult Section(string id, string sectionId)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -192,11 +192,11 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/Start")]
+        [Route("{invitationId}/Start")]
         [AntiForgeryFilter]
-        public IActionResult Start(string id)
+        public IActionResult Start(string invitationId)
         {
-            var invitation = this.invitationService.GetInvitationByToken(id);
+            var invitation = this.invitationService.GetInvitationByToken(invitationId);
 
             if (invitation.Assignment == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
@@ -319,11 +319,11 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/Start")]
+        [Route("{invitationId}/Start")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> StartPost(string id, [FromForm] string password)
+        public async Task<ActionResult> StartPost(string invitationId, [FromForm] string password)
         {
-            var invitation = this.invitationService.GetInvitationByToken(id);
+            var invitation = this.invitationService.GetInvitationByToken(invitationId);
 
             var assignment = invitation.Assignment;
 
@@ -342,7 +342,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!string.IsNullOrWhiteSpace(assignment.Password))
             {
                 bool isValidPassword = invitation.IsWithAssignmentResolvedByPassword()
-                    ? invitationService.IsValidTokenAndPassword(id, password)
+                    ? invitationService.IsValidTokenAndPassword(invitationId, password)
                     : assignment.Password.Equals(password, StringComparison.InvariantCultureIgnoreCase);
 
                 if (!isValidPassword)
@@ -366,7 +366,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (invitation.IsWithAssignmentResolvedByPassword())
             {
-                invitation = invitationService.GetInvitationByTokenAndPassword(id, password);
+                invitation = invitationService.GetInvitationByTokenAndPassword(invitationId, password);
                 assignment = invitation.Assignment;
             }
 
@@ -427,7 +427,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [WebInterviewAuthorize]
-        [Route("{id}/Cover")]
+        [Route("{id:Guid}/Cover")]
         public IActionResult Cover(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -454,7 +454,7 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        [Route("Finish/{id}")]
+        [Route("Finish/{id:Guid}")]
         public ActionResult Finish(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -481,7 +481,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [WebInterviewAuthorize]
         [AntiForgeryFilter]
-        [Route("Resume/{id}")]
+        [Route("Resume/{id:Guid}")]
         public ActionResult Resume(string id, string returnUrl)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -519,7 +519,7 @@ namespace WB.UI.Headquarters.Controllers
             return Redirect(returnUrl);
         }
 
-        [Route("{id}/Complete")]
+        [Route("{id:Guid}/Complete")]
         public ActionResult Complete(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -554,7 +554,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [Route("Resume/{id}")]
+        [Route("Resume/{id:Guid}")]
         [WebInterviewAuthorize]
         [AntiForgeryFilter]
         public async Task<ActionResult> ResumePost(string id, string password, string returnUrl)
@@ -610,6 +610,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect(returnUrl);
         }
 
+        [Route("OutdatedBrowser")]
         public ActionResult OutdatedBrowser()
         {
             return View();
@@ -663,7 +664,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return new ResumeWebInterview
             {
-                StartedDate = interview.StartedDate,
+                StartedDate = interview.StartedDate?.ToString("o"),
                 QuestionnaireTitle = model.QuestionnaireTitle,
                 UseCaptcha = model.UseCaptcha,
                 CaptchaHtml = model.CaptchaHtml,
@@ -747,8 +748,8 @@ namespace WB.UI.Headquarters.Controllers
             return new FinishWebInterview
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
-                StartedDate = interview.StartedDate,
-                CompletedDate = interview.CompletedDate,
+                StartedDate = interview.StartedDate?.ToString("o"),
+                CompletedDate = interview.CompletedDate?.ToString("o"),
                 WebSurveyHeader = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.WebSurveyHeader).ToString(),
                     questionnaireBrowseItem.Title),

@@ -18,12 +18,7 @@ namespace WB.UI.Headquarters.Filters
                 var userAgent = parser.ParseUserAgent(userAgentString);
                 if (IsInternetExplorer(userAgent) && IsAllowGetMajorVersion(userAgent))
                 {
-                    var routeValueDictionary = new RouteValueDictionary(new
-                    {
-                        controller = "WebInterview",
-                        action = "OutdatedBrowser"
-                    });
-                    filterContext.Result = new RedirectToRouteResult(routeValueDictionary);
+                    filterContext.Result = new RedirectToActionResult("OutdatedBrowser", "WebInterview", new{});
                 }
             }
         }
