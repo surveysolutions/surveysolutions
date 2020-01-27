@@ -1,7 +1,7 @@
-import Configuration from "./Configuration"
-import ControlPanelLayout from "./ControlPanelLayout"
-import TabletInfos from "./TabletInfos"
-import AppUpdates from "./AppUpdates"
+import Configuration from './Configuration'
+import ControlPanelLayout from './ControlPanelLayout'
+import TabletInfos from './TabletInfos'
+import AppUpdates from './AppUpdates'
 
 
 export default class MapComponent {
@@ -11,16 +11,16 @@ export default class MapComponent {
             component: ControlPanelLayout,
             children: [{
                 path: 'Configuration',
-                component: Configuration
+                component: Configuration,
             },
             {
                 path: 'TabletInfos',
-                component: TabletInfos
+                component: TabletInfos,
             },
             {
                 path: 'AppUpdates',
-                component: AppUpdates
-            }]
+                component: AppUpdates,
+            }],
         }]
     }
 }

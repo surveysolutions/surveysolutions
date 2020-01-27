@@ -12,30 +12,30 @@ export default {
     props: {
         option: {
             type: String,
-            required: true
+            required: true,
         },
         title: {
             type: String,
-            required: true
-        }
+            required: true,
+        },
     },
 
     data() {
         return {
-            value: this.state
+            value: this.state,
         }
     },
 
     watch: {
         state(value) {
-            this.value = value;
-        }
+            this.value = value
+        },
     },
 
     methods: {
         change() {
-            this.$emit("change", { id: this.option, value: this.value });
-        }
+            this.$emit('change', { id: this.option, value: this.value })
+        },
     },
 
     computed: {
@@ -43,8 +43,8 @@ export default {
             return this.$store.state.review.filters.stats[this.option] 
         },
         state() {
-            return  this.$store.getters.filteringState[this.option];
-        }
-    }
-};
+            return  this.$store.getters.filteringState[this.option]
+        },
+    },
+}
 </script>

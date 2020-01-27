@@ -52,82 +52,82 @@
 
 <script lang="js">
 
-    import { entityPartial } from "~/webinterview/components/mixins"
-    import { filter, find } from "lodash"
+import { entityPartial } from '~/webinterview/components/mixins'
+import { filter, find } from 'lodash'
 
-    export default {
-        mixins: [entityPartial],
-        data() {
-            return {
-                comment: null,
-                showResolved: false,
-                isResolving: false
+export default {
+    mixins: [entityPartial],
+    data() {
+        return {
+            comment: null,
+            showResolved: false,
+            isResolving: false,
+        }
+    },
+    props: {
+        isShowingAddCommentDialog: { type: Boolean, default: false },
+    },
+    methods: {
+        async postComment(evnt) {
+            const com = this.comment
+
+            if (!com || !com.trim())
+                return
+
+            await this.$store.dispatch('sendNewComment', { identity: this.$me.id, comment: com.trim() })
+
+            this.comment = ''
+            if(evnt && evnt.target) {
+                evnt.target.blur()
             }
         },
-        props: {
-            isShowingAddCommentDialog: { type: Boolean, default: false }
+        async resolve() {
+            this.isResolving = true
+            await this.$store.dispatch('resolveComment', { identity: this.questionId })
+            this.isResolving = false
         },
-        methods: {
-            async postComment(evnt) {
-                const com = this.comment
-
-                if (!com || !com.trim())
-                    return
-
-                await this.$store.dispatch("sendNewComment", { identity: this.$me.id, comment: com.trim() })
-
-                this.comment = ''
-                if(evnt && evnt.target) {
-                    evnt.target.blur()
-                }
-            },
-            async resolve() {
-                this.isResolving = true
-                await this.$store.dispatch('resolveComment', { identity: this.questionId })
-                this.isResolving = false
-            }
+    },
+    computed: {
+        inpAddCommentId() {
+            return `inp_${this.$me.id}_addComment`
         },
-        computed: {
-            inpAddCommentId() {
-                return `inp_${this.$me.id}_addComment`
-            },
-            btnAddCommentId() {
-                return `btn_${this.$me.id}_addComment`
-            },
-            visibleComments() {
-                const self = this;
-                return filter(this.$me.comments, c => {
-                    return self.showResolved || !c.resolved
-                })
-            },
-            showResolvedVisible() {
-                return this.$me.comments.length > 0 && (find(this.$me.comments, cmt => cmt.resolved) != null)
-            },
-            allowPostComment() {
-                return this.comment && 
+        btnAddCommentId() {
+            return `btn_${this.$me.id}_addComment`
+        },
+        visibleComments() {
+            const self = this
+            return filter(this.$me.comments, c => {
+                return self.showResolved || !c.resolved
+            })
+        },
+        showResolvedVisible() {
+            return this.$me.comments.length > 0 && (find(this.$me.comments, cmt => cmt.resolved) != null)
+        },
+        allowPostComment() {
+            return this.comment && 
                        this.comment.trim().length > 0 &&
                        !this.$me.postingComment 
-                       && this.$store.getters.addCommentsAllowed;
-            },
-            resolveAllowed() {
-                return this.$me.allowResolveComments
-            },
-            inputTitle() {
-                if (this.$store.state.webinterview.receivedByInterviewer === true) {
-                    return this.$t('WebInterviewUI.InterviewReceivedCantModify')
-                }
-                return ""
-            },
-            buttonClass() {
-                return this.isActive ? 'comment-added' : null
-            },
-            postBtnText() {
-                return this.$me.postingComment ? this.$t("WebInterviewUI.CommentPosting") : this.$t("WebInterviewUI.CommentPost")
-            },
-            questionId() {
-                return this.$me.id
+                       && this.$store.getters.addCommentsAllowed
+        },
+        resolveAllowed() {
+            return this.$me.allowResolveComments
+        },
+        inputTitle() {
+            if (this.$store.state.webinterview.receivedByInterviewer === true) {
+                return this.$t('WebInterviewUI.InterviewReceivedCantModify')
             }
-        }
-    }
+            return ''
+        },
+        buttonClass() {
+            return this.isActive ? 'comment-added' : null
+        },
+        postBtnText() {
+            return this.$me.postingComment ? this.$t('WebInterviewUI.CommentPosting') : this.$t('WebInterviewUI.CommentPost')
+        },
+        questionId() {
+            return this.$me.id
+        },
+    },
+}
 
 </script>

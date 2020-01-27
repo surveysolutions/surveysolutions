@@ -52,7 +52,7 @@ module.exports = class LocalizationBuilder {
 
             this.ensureDirectoryExistence(resultPath);
 
-            
+
             require("fs").writeFileSync(resultPath, fileBody);
 
             response[language] = path
@@ -70,7 +70,7 @@ module.exports = class LocalizationBuilder {
         });
     }
 
-    parseResxFiles(compilation) {
+    parseResxFiles() {
 
         console.time("parseResxFiles");
         var files = this.getFiles()
@@ -175,17 +175,17 @@ module.exports = class LocalizationBuilder {
     }
 
     mergeNamespaces(namespace, initial, newone) {
-        Object.keys(initial).forEach(key => {
-            // if (newone[key] != null) {
-            //     console.error(
-            //         "Found conflicting resources with same resource name",
-            //         namespace,
-            //         key,
-            //         initial[key],
-            //         newone[key]
-            //     );
-            // }
-        });
+        // Object.keys(initial).forEach(key => {
+        //     // if (newone[key] != null) {
+        //     //     console.error(
+        //     //         "Found conflicting resources with same resource name",
+        //     //         namespace,
+        //     //         key,
+        //     //         initial[key],
+        //     //         newone[key]
+        //     //     );
+        //     // }
+        // });
 
         var result = Object.assign(initial, newone);
         return result;

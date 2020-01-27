@@ -9,83 +9,83 @@
     </aside>
 </template>
 <script lang="js">
-    import SidebarPanel from "./SidebarPanel"
-    import Vue from "vue"
-    import { GroupStatus } from "./questions"
+import SidebarPanel from './SidebarPanel'
+import Vue from 'vue'
+import { GroupStatus } from './questions'
 
-    export default {
-        name: 'sidebar',
-        props: {
-            showComplete: {
-                type: Boolean,
-                default: true
-            },
-            showFoldbackButtonAsHamburger: {
-                type: Boolean,
-                default: true
-            }
+export default {
+    name: 'sidebar',
+    props: {
+        showComplete: {
+            type: Boolean,
+            default: true,
         },
-        components: { SidebarPanel },
-        data() {
+        showFoldbackButtonAsHamburger: {
+            type: Boolean,
+            default: true,
+        },
+    },
+    components: { SidebarPanel },
+    data() {
+        return {
+            coverSection: {
+                collapsed: true,
+                title: this.$t('WebInterviewUI.Cover'),
+                to: {
+                    name: 'prefilled',
+                },
+                validity: {
+                    isValid: true,
+                },
+            },
+        }
+    },
+    computed: {
+        showCover() {
+            return this.$store.state.webinterview.hasCoverPage
+        },
+        sections() {
+            return this.$config.splashScreen ? [] : this.$store.getters.rootSections
+        },
+        currentPanel() {
+            return this.$route.params.sectionId
+        },
+        interviewState() {
+            return this.$store.state.webinterview.interviewState
+        },
+        completeSection() {
             return {
-                coverSection: {
-                    collapsed: true,
-                    title: this.$t("WebInterviewUI.Cover"),
-                    to: {
-                        name: 'prefilled'
-                    },
-                    validity: {
-                        isValid: true
-                    }
-                }
+                id: 'SidebarCompleted',
+                collapsed: true,
+                title: this.$t('WebInterviewUI.Complete'),
+                to: {
+                    name: 'complete',
+                },
+                status: this.interviewState,
+                validity: {
+                    isValid: !(this.interviewState == GroupStatus.StartedInvalid || this.interviewState == GroupStatus.CompletedInvalid),
+                },
             }
         },
-        computed: {
-            showCover() {
-                return this.$store.state.webinterview.hasCoverPage
-            },
-            sections() {
-                return this.$config.splashScreen ? [] : this.$store.getters.rootSections
-            },
-            currentPanel() {
-                return this.$route.params.sectionId
-            },
-            interviewState() {
-                return this.$store.state.webinterview.interviewState
-            },
-            completeSection() {
-                return {
-                    id: "SidebarCompleted",
-                    collapsed: true,
-                    title: this.$t("WebInterviewUI.Complete"),
-                    to: {
-                        name: 'complete'
-                    },
-                    status: this.interviewState,
-                    validity: {
-                        isValid: !(this.interviewState == GroupStatus.StartedInvalid || this.interviewState == GroupStatus.CompletedInvalid)
-                    }
-                }
-            }
-        },
-        beforeMount() {
+    },
+    beforeMount() {
+        this.fetchSidebar()
+        this.fetchInterviewStatus()
+    },
+    watch: {
+        ['$route.params.sectionId']() {
             this.fetchSidebar()
             this.fetchInterviewStatus()
         },
-        watch: {
-            ["$route.params.sectionId"]() {
-                this.fetchSidebar();
-                this.fetchInterviewStatus()
-            }
+    },
+    methods: {
+        fetchSidebar() {
+            Vue.nextTick(() => this.$store.dispatch('fetchSidebar', null))
         },
-        methods: {
-            fetchSidebar() {
-                Vue.nextTick(() => this.$store.dispatch("fetchSidebar", null))
-            },
-            fetchInterviewStatus() {
-                this.$store.dispatch("fetchInterviewStatus")
-            }
-        }
-    }
+        fetchInterviewStatus() {
+            this.$store.dispatch('fetchInterviewStatus')
+        },
+    },
+}
 
 </script>

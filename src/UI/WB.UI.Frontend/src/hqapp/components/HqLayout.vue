@@ -37,51 +37,51 @@ export default {
         subtitle: String,
         hasHeader: {
             type: Boolean,
-            default() { return true; }
+            default() { return true },
         },
         hasFilter: {
             type: Boolean,
-            default() { return false; }
+            default() { return false },
         },
         hasSearch: {
             type: Boolean,
-            default() { return false; }
+            default() { return false },
         },
         fixedWidth: {
             type: Boolean,
-            default() { return false; }
+            default() { return false },
         },
         hasRow: {
             type: Boolean,
-            default: true
+            default: true,
         },
         topicButton: String,
         topicButtonRef: String,
-        mainClass: String
+        mainClass: String,
     },
     watch: {
         showProgress: function (value) {
             if (value) {
                 $(this.$refs.pending.$el).modal({
                     backdrop: 'static',
-                    keyboard: false
-                });
+                    keyboard: false,
+                })
             }
             else {
-                $(this.$refs.pending.$el).modal("hide")
+                $(this.$refs.pending.$el).modal('hide')
             }
-        }
+        },
     },
     computed: {
         information() {
             return {
-                "main-information": this.hasFilter,
-                "main-information-no-filter": !this.hasFilter
+                'main-information': this.hasFilter,
+                'main-information-no-filter': !this.hasFilter,
             }
         },
         showProgress() {
-            return this.$store.state.progress.pendingProgress;
-        }
-    }
+            return this.$store.state.progress.pendingProgress
+        },
+    },
 }
 </script>

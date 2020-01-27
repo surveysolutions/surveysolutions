@@ -38,80 +38,80 @@
 </template>
 <script lang="js">
 
-    import { entityDetails } from "../mixins"
-    import flatPickr from './ui/vue-flatpickr'
-    import { DateFormats } from "~/shared/helpers"
-    import moment from "moment"
-    export default {
-        name: "DateTime",
-        mixins: [entityDetails],
-        props: ['noComments'],
-        data() {
-            var self = this;
+import { entityDetails } from '../mixins'
+import flatPickr from './ui/vue-flatpickr'
+import { DateFormats } from '~/shared/helpers'
+import moment from 'moment'
+export default {
+    name: 'DateTime',
+    mixins: [entityDetails],
+    props: ['noComments'],
+    data() {
+        var self = this
 
-            return {
-                pickerOpts: {
-                    dateFormat: "Y-m-d",
-                    onChange: (selectedDate) => {
-                        this.answerDate(selectedDate[0])
+        return {
+            pickerOpts: {
+                dateFormat: 'Y-m-d',
+                onChange: (selectedDate) => {
+                    this.answerDate(selectedDate[0])
+                },
+                onOpen: [
+                    function(selectedDates, dateStr, instance){
+                        if(self.$me.isAnswered) return
+                        if(self.$me.defaultDate == null) return
+
+                        var defaultDate = moment(self.$me.defaultDate).toDate()
+
+                        instance.jumpToDate(defaultDate)
+                        instance.now = defaultDate
+                        instance.redraw()
                     },
-                    onOpen: [
-                        function(selectedDates, dateStr, instance){
-                            if(self.$me.isAnswered) return;
-                            if(self.$me.defaultDate == null) return;
-
-                            var defaultDate = moment(self.$me.defaultDate).toDate();
-
-                            instance.jumpToDate(defaultDate);
-                            instance.now = defaultDate;
-                            instance.redraw();
-                        }
-                    ],
+                ],
+            },
+        }
+    },
+    computed: {
+        noAnswerWatermark() {
+            return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
+                (this.$me.isTimestamp ? this.$t('WebInterviewUI.RecordCurrentTime') : this.$t('WebInterviewUI.EnterDate'))
+        },
+        answer() {
+            if (this.$me && this.$me.answer) {
+                if (this.$me.isTimestamp){
+                    return moment(this.$me.answer).format(DateFormats.dateTime)
+                }
+                else {
+                    const result = moment(this.$me.answer).format(DateFormats.date)
+                    return result
                 }
             }
+            return ''
         },
-        computed: {
-            noAnswerWatermark() {
-                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
-                    (this.$me.isTimestamp ? this.$t("WebInterviewUI.RecordCurrentTime") : this.$t('WebInterviewUI.EnterDate'))
-            },
-            answer() {
-                if (this.$me && this.$me.answer) {
-                    if (this.$me.isTimestamp){
-                        return moment(this.$me.answer).format(DateFormats.dateTime)
+    },
+    methods: {
+        answerDate(selectedDate) {
+            this.sendAnswer(() => {
+                if(selectedDate) {
+                    if (!this.$me.isTimestamp) {
+                        if (!moment(this.$me.answer).isSame(selectedDate)) {
+                            const dateAnswer = moment(selectedDate).format(DateFormats.date)
+
+                            this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: dateAnswer })
+                        }
                     }
                     else {
-                        const result = moment(this.$me.answer).format(DateFormats.date)
-                        return result;
+                        this.$store.dispatch('answerDateQuestion', { 
+                            identity: this.$me.id,
+                            date: moment().format().substring(0, 19), // remove timezone information from date to prevent server conversion to server timezone
+                        })
                     }
                 }
-                return ""
-            }
+            })
         },
-        methods: {
-            answerDate(selectedDate) {
-                this.sendAnswer(() => {
-                    if(selectedDate) {
-                        if (!this.$me.isTimestamp) {
-                            if (!moment(this.$me.answer).isSame(selectedDate)) {
-                                const dateAnswer = moment(selectedDate).format(DateFormats.date)
-
-                                this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: dateAnswer })
-                            }
-                        }
-                        else {
-                            this.$store.dispatch('answerDateQuestion', { 
-                                identity: this.$me.id,
-                                date: moment().format().substring(0, 19) // remove timezone information from date to prevent server conversion to server timezone
-                            });
-                        }
-                    }
-                });
-            }
-        },
-        components: {
-            flatPickr
-        }
-    }
+    },
+    components: {
+        flatPickr,
+    },
+}
 
 </script>

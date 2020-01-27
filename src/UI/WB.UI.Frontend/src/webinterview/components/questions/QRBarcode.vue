@@ -17,32 +17,32 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from "../mixins"
+import { entityDetails } from '../mixins'
 
-    export default {
-        name: 'QRBarcode',
-        mixins: [entityDetails],
-        props: ['noComments'],
-        computed: {
-            noAnswerWatermark() {
-                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.TextEnter')
-            }
+export default {
+    name: 'QRBarcode',
+    mixins: [entityDetails],
+    props: ['noComments'],
+    computed: {
+        noAnswerWatermark() {
+            return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.TextEnter')
         },
-        methods: {
-            answerQRBarcodeQuestion(evnt) {
-                this.sendAnswer(() => {
-                    const target = $(evnt.target)
-                    const answer = target.val()
+    },
+    methods: {
+        answerQRBarcodeQuestion(evnt) {
+            this.sendAnswer(() => {
+                const target = $(evnt.target)
+                const answer = target.val()
 
-                    if(this.handleEmptyAnswer(answer)) {
-                        return
-                    }
+                if(this.handleEmptyAnswer(answer)) {
+                    return
+                }
 
-                    if (answer) {
-                        this.$store.dispatch('answerQRBarcodeQuestion', { identity: this.id, text: answer })
-                    }
-                })
-            }
-        }
-    }
+                if (answer) {
+                    this.$store.dispatch('answerQRBarcodeQuestion', { identity: this.id, text: answer })
+                }
+            })
+        },
+    },
+}
 </script>

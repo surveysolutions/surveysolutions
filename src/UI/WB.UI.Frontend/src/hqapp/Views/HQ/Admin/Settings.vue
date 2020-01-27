@@ -249,7 +249,7 @@
     </script>-->
 </template>
 <script>
-import Vue from "vue"
+import Vue from 'vue'
 import modal from '@/shared/modal'
 
 export default {
@@ -262,7 +262,7 @@ export default {
             isAllowInterviewerUpdateProfile: false,
             isInterviewerAutomaticUpdatesEnabled: false,
             isDeviceNotificationsEnabled: false,
-            isEmailAllowed: false
+            isEmailAllowed: false,
         }
     },
     mounted() {
@@ -294,7 +294,7 @@ export default {
                 message: self.$t('Settings.RegeneratePasswordConfirm'),
                 buttons: {
                     cancel: {
-                        label: self.$t('Common.No')
+                        label: self.$t('Common.No'),
                     },
                     success: {
                         label: self.$t('Common.Yes'),
@@ -302,9 +302,9 @@ export default {
                             const response = await this.$hq.ExportSettings.regenPassword()
                             this.encryptionPassword = response.data.password
                             this.encryptionEnabled = response.data.isEnabled
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             })
         },
         async updateMessage(){
@@ -315,7 +315,7 @@ export default {
             }
         },
         async clearMessage(){
-            this.globalNotice = ""
+            this.globalNotice = ''
             return this.updateMessage()
         },
         updateAllowInterviewerUpdateProfile() {
@@ -328,16 +328,16 @@ export default {
             return this.$hq.AdminSettings.setWebInterviewSettings(this.isEmailAllowed)
         },
         onLogoSubmit() {
-             if (window.File && window.FileReader && window.FileList && window.Blob) {
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
                 //get the file size and file type from file input field
-                var fsize = this.$refs.logoRef.files[0].size;
+                var fsize = this.$refs.logoRef.files[0].size
 
                 if (fsize > 1024*1024*10) 
                 {
-                    alert('Logo image size should be less than 10mb');
-                    return false;
+                    alert('Logo image size should be less than 10mb')
+                    return false
                 } else {
-                    return true;
+                    return true
                 }
             }
         },
@@ -363,12 +363,12 @@ export default {
                             const response = await self.$hq.ExportSettings.setEncryption(self.encryptionEnabled)
                             self.encryptionEnabled = response.data.isEnabled
                             self.encryptionPassword = response.data.password
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             })
-        }
-    }
+        },
+    },
 }
 </script>
 <style scoped>

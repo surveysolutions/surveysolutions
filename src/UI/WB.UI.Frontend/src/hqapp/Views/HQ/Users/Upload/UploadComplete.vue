@@ -22,25 +22,25 @@
 
 <script>
 export default {
-  computed: {
-    config() {
-      return this.$config.model;
+    computed: {
+        config() {
+            return this.$config.model
+        },
+        fileName() {
+            return this.$store.getters.upload.fileName
+        },
+        totalCount() {
+            if (!this.$store.getters.upload.complete) return 0
+            return this.supervisorsCount + this.interviewersCount
+        },
+        supervisorsCount() {
+            if (!this.$store.getters.upload.complete) return 0
+            return this.$store.getters.upload.complete.supervisorsCount
+        },
+        interviewersCount() {
+            if (!this.$store.getters.upload.complete) return 0
+            return this.$store.getters.upload.complete.interviewersCount
+        },
     },
-    fileName() {
-      return this.$store.getters.upload.fileName;
-    },
-    totalCount() {
-      if (!this.$store.getters.upload.complete) return 0;
-      return this.supervisorsCount + this.interviewersCount;
-    },
-    supervisorsCount() {
-      if (!this.$store.getters.upload.complete) return 0;
-      return this.$store.getters.upload.complete.supervisorsCount;
-    },
-    interviewersCount() {
-      if (!this.$store.getters.upload.complete) return 0;
-      return this.$store.getters.upload.complete.interviewersCount;
-    }
-  }
-};
+}
 </script>

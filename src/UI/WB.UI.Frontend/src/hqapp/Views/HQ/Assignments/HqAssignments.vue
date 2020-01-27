@@ -279,8 +279,8 @@
 
 <script>
 import * as toastr from 'toastr'
-import { map, join, assign, findIndex } from "lodash"
-import moment from "moment"
+import { map, join, assign, findIndex } from 'lodash'
+import moment from 'moment'
 
 export default {
     data() {
@@ -422,7 +422,7 @@ export default {
                     searchable: false,
                     render(data, type, row) {
                         var result =
-                            "<a href='" + self.config.api.interviews + '?assignmentId=' + row.id + "'>" + data + '</a>'
+                            '<a href=\'' + self.config.api.interviews + '?assignmentId=' + row.id + '\'>' + data + '</a>'
                         return result
                     },
                     defaultContent: '<span>' + this.$t('Assignments.Unlimited') + '</span>',
@@ -649,7 +649,7 @@ export default {
             await this.$http({
                 method: 'delete',
                 url: this.config.api.assignments,
-                data: this.selectedRows
+                data: this.selectedRows,
             })
 
             this.reloadTable()
