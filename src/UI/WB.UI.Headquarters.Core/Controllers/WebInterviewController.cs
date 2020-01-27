@@ -60,6 +60,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
         private readonly IOptions<RecaptchaSettings> recaptchaSettings;
+        private readonly IHostedCaptcha hostedCaptcha;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -115,7 +116,8 @@ namespace WB.UI.Headquarters.Controllers
             IInvitationMailingService invitationMailingService,
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
             IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage,
-            IOptions<RecaptchaSettings> recaptchaSettings)
+            IOptions<RecaptchaSettings> recaptchaSettings,
+            IHostedCaptcha hostedCaptcha)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
@@ -133,6 +135,7 @@ namespace WB.UI.Headquarters.Controllers
             this.emailProviderSettingsStorage = emailProviderSettingsStorage;
             this.webInterviewSettingsStorage = webInterviewSettingsStorage;
             this.recaptchaSettings = recaptchaSettings;
+            this.hostedCaptcha = hostedCaptcha;
         }
 
         [WebInterviewAuthorize]
@@ -661,6 +664,7 @@ namespace WB.UI.Headquarters.Controllers
                 StartedDate = interview.StartedDate,
                 QuestionnaireTitle = model.QuestionnaireTitle,
                 UseCaptcha = model.UseCaptcha,
+                CaptchaHtml = model.CaptchaHtml,
                 RecaptchaSiteKey = model.RecaptchaSiteKey,
                 HasPassword = model.HasPassword,
                 CaptchaErrors = model.CaptchaErrors,
@@ -702,6 +706,7 @@ namespace WB.UI.Headquarters.Controllers
                                 : new List<string>(),
                 IsPasswordInvalid = ViewData.ModelState.ContainsKey("InvalidPassword") && ViewData.ModelState["InvalidPassword"].Errors.Any(),
                 SubmitUrl = Url.Action("Start", "WebInterview"),
+                CaptchaHtml = webInterviewConfig.UseCaptcha ? hostedCaptcha.Render<string>(null).Value : null,
             };
 
             if (assignment != null)

@@ -1,21 +1,21 @@
 <template>
-<div>
-    <div class="row-element mb-20">
-        <h2>{{ $config.model.welcomeText }}</h2>
-    </div>
+    <div>
+        <div class="row-element mb-20">
+            <h2>{{ $config.model.welcomeText }}</h2>
+        </div>
 
-    <StartOrResumeForm :buttonTitle="$t('WebInterview.Start')" />
-</div>
+        <StartOrResumeForm :buttonTitle="$t('WebInterview.Start')" />
+    </div>
 </template>
 
 <script>
 
-import StartOrResumeForm from "./_StartOrResumeForm"
+import StartOrResumeForm from './_StartOrResumeForm'
 
 export default {
     components: {
-        StartOrResumeForm
-    }
+        StartOrResumeForm,
+    },
 }
 
 </script>
