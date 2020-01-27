@@ -3,6 +3,7 @@ import Interviews from "./Interviews"
 import Vue from "vue"
 import PNotify from "pnotify"
 
+
 const store = {
     state: {
         pendingHandle: null
@@ -10,6 +11,7 @@ const store = {
     actions: {
         createInterview({ dispatch }, assignmentId) {
             dispatch("showProgress", true);
+
 
             $.post(Vue.$config.model.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
                 dispatch("showProgress", true);
@@ -58,5 +60,5 @@ export default class InterviewerHqComponent {
         }];
     }
 
-    get modules() { return {hqinterviewer: store}}
+    get modules() { return { hqinterviewer: store } }
 }

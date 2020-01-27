@@ -1,5 +1,5 @@
 <template>
-    <input 
+    <input
         ref="input"
         autocomplete="off"
         type="text"
@@ -9,7 +9,8 @@
         :value="$me.answer"
         :disabled="!$me.acceptAnswer"
         v-maskedText="$me.mask"
-        :data-mask-completed="$me.isAnswered" />
+        :data-mask-completed="$me.isAnswered"
+    />
 </template>
 
 <script lang="js">
@@ -35,7 +36,7 @@
             },
             userFriendlyMask() {
                 if (this.$me.mask) {
-                    const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/\#/g, "_").replace(/\~/g, "_")
+                    const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/#/g, "_").replace(/~/g, "_")
                     return ` (${resultMask})`
                 }
 

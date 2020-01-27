@@ -1,5 +1,6 @@
 import Vue from "vue";
 import AutoNumeric from "autonumeric/src/main";
+import { assign } from "lodash";
 
 const defaults = {
   digitGroupSeparator: "",
@@ -12,7 +13,7 @@ const defaults = {
 
 Vue.directive("numericFormatting", {
   bind: (el, binding, vnode) => {
-    const settings = _.assign(defaults, binding.value);
+    const settings = assign(defaults, binding.value);
     vnode.context.autoNumericElement = new AutoNumeric(el, settings);
   }
 });

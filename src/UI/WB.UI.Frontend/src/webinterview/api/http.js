@@ -30,7 +30,7 @@ const httpPlugin = {
             return Promise.reject(error);
         });
 
-        if (!Vue.hasOwnProperty("$api")) {
+        if (!Object.prototype.hasOwnProperty.call(Vue, "$api")) {
             Vue.$api = {}
         }
 

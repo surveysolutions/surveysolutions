@@ -1,5 +1,5 @@
 import Vue from "vue"
-import { capitalize, unionBy, } from "lodash"
+import { capitalize, sum, unionBy, find } from "lodash"
 
 function getSelectedFlags(state) {
     const flags = Object.keys(state.filter)
@@ -91,12 +91,12 @@ export default {
             }
 
             results.results.forEach((res) => {
-                const section = _.find(state.search.results, { sectionId: res.sectionId });
+                const section = find(state.search.results, { sectionId: res.sectionId });
 
                 if (section == null) {
                     state.search.results.push(res);
                 } else {
-                    section.questions = _.unionBy(section.questions, res.questions, "target")
+                    section.questions = unionBy(section.questions, res.questions, "target")
                 }
             });
 
@@ -104,7 +104,7 @@ export default {
             state.stats = results.stats
 
             // amount of questions to skip next time
-            state.search.skip = _.sum(state.search.results.map(r => r.questions.length))
+            state.search.skip = sum(state.search.results.map(r => r.questions.length))
         },
 
         CHANGE_FILTERS(state, { filter, value }) {

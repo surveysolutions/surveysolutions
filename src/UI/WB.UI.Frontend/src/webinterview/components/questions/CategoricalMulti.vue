@@ -1,58 +1,61 @@
 <template>
-  <wb-question
-    :question="$me"
-    :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'"
-    :noAnswer="noOptions"
-  >
-    <button class="section-blocker" disabled="disabled" v-if="inFetchState"></button>
-    <div class="question-unit">
-      <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
-        <div
-          class="form-group"
-          v-for="option in answeredOrAllOptions"
-          :key="$me.id + '_' + option.value"
-          v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }"
-        >
-          <input
-            class="wb-checkbox"
-            type="checkbox"
-            :id="$me.id + '_' + option.value"
-            :name="$me.id"
-            :value="option.value"
-            :disabled="!$me.acceptAnswer"
-            v-model="answer"
-            @change="change"
-            v-disabledWhenUnchecked="{
+    <wb-question
+        :question="$me"
+        :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'"
+        :noAnswer="noOptions"
+    >
+        <button class="section-blocker" disabled="disabled" v-if="inFetchState"></button>
+        <div class="question-unit">
+            <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
+                <div
+                    class="form-group"
+                    v-for="option in answeredOrAllOptions"
+                    :key="$me.id + '_' + option.value"
+                    v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }"
+                >
+                    <input
+                        class="wb-checkbox"
+                        type="checkbox"
+                        :id="$me.id + '_' + option.value"
+                        :name="$me.id"
+                        :value="option.value"
+                        :disabled="!$me.acceptAnswer"
+                        v-model="answer"
+                        @change="change"
+                        v-disabledWhenUnchecked="{
                                 maxAnswerReached: allAnswersGiven,
                                 answerNotAllowed: !$me.acceptAnswer,
                                 forceDisabled: isProtected(option.value) }"
-          />
-          <label :for="$me.id + '_' + option.value">
-            <span class="tick"></span>
-            {{option.title}}
-          </label>
-          <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
-          <div class="lock"></div>
+                    />
+                    <label :for="$me.id + '_' + option.value">
+                        <span class="tick"></span>
+                        {{option.title}}
+                    </label>
+                    <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
+                    <div class="lock"></div>
+                </div>
+                <button
+                    type="button"
+                    class="btn btn-link btn-horizontal-hamburger"
+                    @click="toggleOptions"
+                    :id="`btn_${$me.id}_ShowAllOptions`"
+                    v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
+                >
+                    <span></span>
+                </button>
+                <div
+                    v-if="noOptions"
+                    class="options-not-available"
+                >{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
+                <wb-lock />
+            </div>
         </div>
-        <button
-          type="button"
-          class="btn btn-link btn-horizontal-hamburger"
-          @click="toggleOptions"
-          :id="`btn_${$me.id}_ShowAllOptions`"
-          v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
-        >
-          <span></span>
-        </button>
-        <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
-        <wb-lock />
-      </div>
-    </div>
-  </wb-question>
+    </wb-question>
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
     import modal from "@/shared/modal"
-    import { filter } from "lodash"
+    import { filter, difference, join } from "lodash"
     import { shouldShowAnsweredOptionsOnlyForMulti } from "./question_helpers"
 
     export default {
@@ -125,9 +128,9 @@
                     return;
                 }
 
-                const diff = _.difference(this.$me.answer, value)
-                const rosterTitle = _.join(diff.map(v => {
-                    return _.find(this.answeredOrAllOptions, { value: v }).title
+                const diff = difference(this.$me.answer, value)
+                const rosterTitle = join(diff.map(v => {
+                    return find(this.answeredOrAllOptions, { value: v }).title
                 }), ', ')
 
                 const confirmMessage = this.$t("WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage", {

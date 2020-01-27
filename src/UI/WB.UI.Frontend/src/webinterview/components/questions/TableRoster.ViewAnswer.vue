@@ -1,22 +1,29 @@
 <template>
-    <div :class="questionStyle" :id='`tr_view_${questionId}`'>
-        <popover trigger="hover-focus" append-to="body"
-                 :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)" v-if="!question.isDisabled">
+    <div :class="questionStyle" :id="`tr_view_${questionId}`">
+        <popover
+            trigger="hover-focus"
+            append-to="body"
+            :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)"
+            v-if="!question.isDisabled"
+        >
             <a class="cell-content has-tooltip" type="primary" data-role="trigger">
-                <span v-if="(questionType == 'Integer' || questionType == 'Double') && question.useFormatting">
-                    {{question.answer | formatNumber}}
-                </span>
+                <span
+                    v-if="(questionType == 'Integer' || questionType == 'Double') && question.useFormatting"
+                >{{question.answer | formatNumber}}</span>
                 <span v-else>{{question.answer}}</span>
             </a>
-            
+
             <template slot="popover">
                 <div class="error-tooltip" v-if="!question.validity.isValid">
-                    <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
+                    <h6
+                        style="text-transform:uppercase;"
+                        v-if="question.validity.errorMessage"
+                    >{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
                     <template v-for="message in question.validity.messages">
                         <span v-dateTimeFormatting v-html="message" :key="message"></span>
                     </template>
                 </div>
-                <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">        
+                <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">
                     <template v-for="message in question.validity.warnings">
                         <span v-dateTimeFormatting v-html="message" :key="message"></span>
                     </template>
@@ -86,7 +93,7 @@
         },
         filters: {
             formatNumber (value) {
-                if (value == null || value == undefined || value == NaN)
+                if (value == null || value == undefined || Number.isNan(value))
                     return ''
                 
                 return value.toLocaleString(undefined, {style: 'decimal', maximumFractionDigits : 15, minimumFractionDigits : 0})    

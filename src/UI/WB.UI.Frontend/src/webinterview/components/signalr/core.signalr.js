@@ -20,12 +20,12 @@ export default {
             changeSection(to, from) {
                 return connection.send("changeSection", to, from)
             },
-            stop(){
+            stop() {
                 return connection.stop()
             }
         };
 
-        if (!Vue.hasOwnProperty("$api")) {
+        if (!Object.prototype.hasOwnProperty.call(Vue, "$api")) {
             Vue.$api = {}
         }
 
