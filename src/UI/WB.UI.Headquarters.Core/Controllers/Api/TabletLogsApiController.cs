@@ -2,23 +2,18 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Utils;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Extensions;
-using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator")]
     [Localizable(false)]
-    public class TabletLogsApiController : ApiController
+    public class TabletLogsApiController : ControllerBase
     {
         private readonly IPlainStorageAccessor<TabletLog> logs;
 
@@ -28,8 +23,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [CamelCase]
-        public IHttpActionResult Table([FromUri]DataTableRequest request)
+        public IActionResult Table(DataTableRequest request)
         {
             var totalCount = logs.Query(_ => _.Count());
             var result = logs.Query(_ => _
@@ -43,10 +37,9 @@ namespace WB.UI.Headquarters.API
                     DeviceId = x.DeviceId,
                     ReceiveDateUtc = x.ReceiveDateUtc,
                     UserName = x.UserName,
-                    DownloadUrl = Url.Route("DefaultApiWithAction",
-                        new
+                    DownloadUrl = Url.Action("Download",
+                        values: new
                         {
-                            Action = "Download",
                             id = x.Id
                         })
                 }).ToList());
@@ -62,17 +55,14 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ApiNoCache]
-        public HttpResponseMessage Download(int id)
+        public IActionResult Download(int id)
         {
             var log = logs.GetById(id);
             if (log == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-
-            var result = Request.AsProgressiveDownload(new MemoryStream(log.Content), 
+                return NotFound();
+            return File(new MemoryStream(log.Content),
                 "application/zip",
-                $"Logs {log.UserName} {log.ReceiveDateUtc:s}.zip");
-            return result;
+                fileDownloadName: $"Logs {log.UserName} {log.ReceiveDateUtc:s}.zip");
         }
 
         public struct LogRow

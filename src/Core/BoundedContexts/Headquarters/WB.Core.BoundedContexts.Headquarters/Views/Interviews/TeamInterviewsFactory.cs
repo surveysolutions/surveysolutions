@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                         IsNeedInterviewerAssign = !x.IsAssignedToInterviewer,
                         AssignmentId = x.AssignmentId,
                         ReceivedByInterviewer = x.ReceivedByInterviewer
-                    }).ToList();;
+                    }).ToList();
             });
 
 
