@@ -19,7 +19,7 @@ const locales = {
         "Pages", "Report", "Reports", "Settings", "Strings", "TabletLogs", "UploadUsers",
         "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI",
         "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport",
-        "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel"],
+        "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel", "AuditLog"],
     webtester: ["WebInterviewUI", "WebInterview", "Common"],
     webinterview: ["WebInterviewUI", "WebInterview", "Common", "Details"]
 }
