@@ -1,14 +1,13 @@
 <template>
 <div>
-    <p v-if="model.serverUnderLoad"><strong>@Html.Raw(WebInterview.ServerUnderLoad)</strong></p>
+    <p v-if="model.serverUnderLoad"><strong>{{ $t('WebInterview.ServerUnderLoad') }}</strong></p>
 
-    <form :action="$config.model.submitUrl" method="post">
+    <form method="post">
         <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
 
-        <div v-if="model.useCaptcha && !model.serverUnderLoad && model.captchaErrors.length > 0" class="form-group has-error">
+        <div v-if="model.useCaptcha && !model.serverUnderLoad && model.captchaError" class="form-group has-error">
             <p>
-                <span class="help-block" v-for="captchaError in model.captchaErrors" v-bind:key="captchaError" v-text="captchaError">
-                </span>
+                <span class="help-block" v-text="model.captchaError"></span>
             </p>
         </div>
 
@@ -20,7 +19,7 @@
         <div v-if="model.hasPassword" class="form-group" :class="{ 'has-error' : model.isPasswordInvalid }">
             <label class="font-bold primary-text">{{ $t('WebInterview.EnterPasswordText') }}</label>
             <input class="form-control" type="password" name="password" placeholder="Enter the password" />
-            <span v-if="model.isPasswordInvalid" class="help-block">@Html.ValidationMessage("InvalidPassword")</span>
+            <span v-if="model.isPasswordInvalid" class="help-block">{{$t('WebInterview.InvalidPassword')}}</span>
         </div>
         <div v-if="model.serverUnderLoad" class="row-element">
             <button class="btn btn-success btn-lg" onClick="window.location.reload(); return false;">{{$t('WebInterview.RefreshPage')}}</button>
