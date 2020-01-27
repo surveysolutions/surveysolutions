@@ -69,6 +69,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [ActivePage(MenuItem.Docs)]
+        [Route("Interview/Review/{id}")]
+        [Route("Interview/Review/{id}/Section/{url}")]
+        [Route("Interview/Review/{id}/Cover")]
         public ActionResult Review(Guid id, string url)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
