@@ -118,13 +118,16 @@ namespace WB.UI.Headquarters.Controllers
                 return NotFound();
             }
 
-            return View(new EmailDistributionProgressModel { Api = new
+            return View(new EmailDistributionProgressModel
             {
-                StatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "EmailDistributionStatus" }),
-                CancelUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "CancelEmailDistribution" }),
-                ExportErrors = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "ExportInvitationErrors" }),
-                SurveySetupUrl = Url.Action("Index", "SurveySetup")
-            }});
+                Api = new
+                {
+                    StatusUrl = Url.Action("EmailDistributionStatus", "WebInterviewSetupApi"),
+                    CancelUrl = Url.Action("CancelEmailDistribution", "WebInterviewSetupApi"),
+                    ExportErrors = Url.Action("ExportInvitationErrors", "WebInterviewSetupApi"),
+                    SurveySetupUrl = Url.Action("Index", "SurveySetup")
+                }
+            });
         }
 
         [ActivePage(MenuItem.Questionnaires)]
@@ -143,7 +146,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var model = new SetupModel();
             model.QuestionnaireTitle = questionnaire.Title;
-            model.QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version);
+            model.QuestionnaireVersion = questionnaire.Version;
             model.QuestionnaireIdentity = questionnaireIdentity;
             model.HasLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
             model.LogoUrl = Url.Action("Thumbnail", "CompanyLogo", new { httproute = "DefaultApi" });
@@ -244,6 +247,7 @@ namespace WB.UI.Headquarters.Controllers
         public int? ReminderAfterDaysIfPartialResponse { get; set; }
         public bool Started { get; set; }
         public bool SingleResponse { get; set; }
+        public long QuestionnaireVersion { get; set; }
     }
 
     public class EmailTextTemplateViewModel
