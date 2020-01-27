@@ -19,8 +19,7 @@
                         ref="table"
                         :tableOptions="tableOptions"
                         :noSearch="true"
-                        :wrapperClass=" { 'table-wrapper': true }"
-                    ></DataTables>
+                        :wrapperClass=" { 'table-wrapper': true }"></DataTables>
                 </div>
 
                 <div class="col-sm-6">
@@ -28,20 +27,25 @@
                     <table class="table table-striped table-bordered">
                         <tbody>
                             <tr>
-                                <td class="text-nowrap">{{$t('Assignments.AssignmentId')}}</td>
+                                <td class="text-nowrap">
+                                    {{$t('Assignments.AssignmentId')}}
+                                </td>
                                 <td>{{model.id}}</td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{$t('Assignments.Questionnaire')}}</td>
+                                <td class="text-nowrap">
+                                    {{$t('Assignments.Questionnaire')}}
+                                </td>
                                 <td>{{model.questionnaire.title}} ({{$t('Assignments.QuestionnaireVersion', {version: model.questionnaire.version} )}})</td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{$t("Common.Responsible")}}</td>
+                                <td class="text-nowrap">
+                                    {{$t("Common.Responsible")}}
+                                </td>
                                 <td v-if="isInterviewerResponsible">
                                     <span class="interviewer">
                                         <a
-                                            v-bind:href="interviewerProfileUrl"
-                                        >{{model.responsible.name}}</a>
+                                            v-bind:href="interviewerProfileUrl">{{model.responsible.name}}</a>
                                     </span>
                                 </td>
                                 <td v-else>
@@ -49,27 +53,36 @@
                                 </td>
                             </tr>
                             <tr v-if="model.isHeadquarters">
-                                <td class="text-nowrap">{{$t("Assignments.Size")}}</td>
+                                <td class="text-nowrap">
+                                    {{$t("Assignments.Size")}}
+                                </td>
                                 <td>{{quantity}}</td>
                             </tr>
                             <tr v-if="model.isHeadquarters">
-                                <td class="text-nowrap">{{$t("Assignments.Count")}}</td>
+                                <td class="text-nowrap">
+                                    {{$t("Assignments.Count")}}
+                                </td>
                                 <td>
-                                    <a v-bind:href="interviewsUrl">{{model.interviewsProvided}}</a>
+                                    <a v-bind:href="interviewsUrl">
+                                        {{model.interviewsProvided}}
+                                    </a>
                                 </td>
                             </tr>
                             <tr v-if="!model.isHeadquarters">
-                                <td class="text-nowrap">{{$t("Assignments.InterviewsNeeded")}}</td>
+                                <td class="text-nowrap">
+                                    {{$t("Assignments.InterviewsNeeded")}}
+                                </td>
                                 <td>{{interviewsCount}}</td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{$t("Assignments.IdentifyingQuestions")}}</td>
+                                <td class="text-nowrap">
+                                    {{$t("Assignments.IdentifyingQuestions")}}
+                                </td>
                                 <td>
                                     <div
                                         v-bind:key="question.id"
                                         v-for="question in model.identifyingData"
-                                        class="overview-item"
-                                    >
+                                        class="overview-item">
                                         <div class="item-content">
                                             <h4>
                                                 <span>{{ question.title }}</span>
@@ -82,37 +95,50 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{$t("Assignments.UpdatedAt")}}</td>
+                                <td class="text-nowrap">
+                                    {{$t("Assignments.UpdatedAt")}}
+                                </td>
                                 <td>{{updatedDate}}</td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{$t("Assignments.CreatedAt")}}</td>
+                                <td class="text-nowrap">
+                                    {{$t("Assignments.CreatedAt")}}
+                                </td>
                                 <td>{{createdDate}}</td>
                             </tr>
                             <tr>
                                 <td
-                                    class="text-nowrap"
-                                >{{$t("Assignments.IsAudioRecordingEnabled")}}</td>
+                                    class="text-nowrap">{{$t("Assignments.IsAudioRecordingEnabled")}}</td>
                                 <td>{{isAudioRecordingEnabled}}</td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{$t("Assignments.Email")}}</td>
+                                <td class="text-nowrap">
+                                    {{$t("Assignments.Email")}}
+                                </td>
                                 <td>{{model.email}}</td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{this.$t("Assignments.Password")}}</td>
+                                <td class="text-nowrap">
+                                    {{this.$t("Assignments.Password")}}
+                                </td>
                                 <td>{{model.password}}</td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{$t("Assignments.ReceivedByTablet")}}</td>
+                                <td class="text-nowrap">
+                                    {{$t("Assignments.ReceivedByTablet")}}
+                                </td>
                                 <td>{{isReceivedByTablet}}</td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{this.$t("Assignments.WebMode")}}</td>
+                                <td class="text-nowrap">
+                                    {{this.$t("Assignments.WebMode")}}
+                                </td>
                                 <td>{{isWebMode}}</td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">{{this.$t("Assignments.DetailsComments")}}</td>
+                                <td class="text-nowrap">
+                                    {{this.$t("Assignments.DetailsComments")}}
+                                </td>
                                 <td>{{model.comments}}</td>
                             </tr>
                         </tbody>

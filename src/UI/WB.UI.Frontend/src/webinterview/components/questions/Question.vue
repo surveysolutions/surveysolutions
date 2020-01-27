@@ -1,25 +1,35 @@
 <template>
-    <div class="question" v-if="isVisible" :class="questionClass" :id="hash">
-        <button class="section-blocker" disabled="disabled" v-if="isFetchInProgress"></button>
-        <div class="dropdown aside-menu" v-if="showSideMenu">
-            <button type="button" data-toggle="dropdown" 
-                    aria-haspopup="true" 
-                    aria-expanded="false" 
-                    class="btn btn-link"
-                    :id="`btn_${this.question.id}_ContextMenuToggle`">
+    <div class="question"
+        v-if="isVisible"
+        :class="questionClass"
+        :id="hash">
+        <button class="section-blocker"
+            disabled="disabled"
+            v-if="isFetchInProgress"></button>
+        <div class="dropdown aside-menu"
+            v-if="showSideMenu">
+            <button type="button"
+                data-toggle="dropdown" 
+                aria-haspopup="true" 
+                aria-expanded="false" 
+                class="btn btn-link"
+                :id="`btn_${this.question.id}_ContextMenuToggle`">
                 <span></span>
             </button>
             <ul class="dropdown-menu">
                 <li v-if="!isShowingAddCommentDialog">
-                    <a href="javascript:void(0)" @click="showAddComment" 
-                       :disabled="!$store.getters.addCommentsAllowed"
-                       :id="`btn_${this.question.id}_ShowAddComment`">
+                    <a href="javascript:void(0)"
+                        @click="showAddComment" 
+                        :disabled="!$store.getters.addCommentsAllowed"
+                        :id="`btn_${this.question.id}_ShowAddComment`">
                         {{ $t("WebInterviewUI.CommentAdd") }}
                     </a>
                 </li>
                 <li v-else>
-                    <a href="javascript:void(0)" @click="hideAddComment" :disabled="!$store.getters.addCommentsAllowed"
-                            :id="`btn_${this.question.id}_HideAddComment`">
+                    <a href="javascript:void(0)"
+                        @click="hideAddComment"
+                        :disabled="!$store.getters.addCommentsAllowed"
+                        :id="`btn_${this.question.id}_HideAddComment`">
                         {{ $t("WebInterviewUI.CommentHide") }}
                     </a>
                 </li>
@@ -27,14 +37,16 @@
             </ul>
         </div>
 
-        <div class="question-editor" :class="questionEditorClass">
+        <div class="question-editor"
+            :class="questionEditorClass">
             <wb-flag v-if="$store.getters.isReviewMode === true && !noFlag" />
             <wb-title v-if="!noTitle" />
             <wb-instructions v-if="!noInstructions" />
             <slot />
             <wb-validation v-if="!noValidation"/>
             <wb-warnings v-if="!noValidation" />
-            <wb-comments v-if="!noComments" :isShowingAddCommentDialog="isShowingAddCommentDialog" />
+            <wb-comments v-if="!noComments"
+                :isShowingAddCommentDialog="isShowingAddCommentDialog" />
         </div>
         <wb-progress :visible="isFetchInProgress"  />
     </div>

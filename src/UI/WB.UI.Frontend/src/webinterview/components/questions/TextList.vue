@@ -1,9 +1,13 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="single-select-question">
+    <wb-question :question="$me"
+        questionCssClassName="single-select-question">
         <div class="question-unit">
             <div class="options-group">
-                <div class="form-group" v-for="(row, index) in $me.rows" :key="row.value">
-                    <div class="field answered"   v-bind:class="{ 'unavailable-option locked-option': row.isProtected }">
+                <div class="form-group"
+                    v-for="(row, index) in $me.rows"
+                    :key="row.value">
+                    <div class="field answered"
+                        v-bind:class="{ 'unavailable-option locked-option': row.isProtected }">
                         <textarea-autosize 
                             autocomplete="off" 
                             type="text" 
@@ -17,14 +21,16 @@
                             v-blurOnEnterKey 
                             @blur.native="updateRow($event, row)"
                             @blur="updateRow($event, row)"/>
-                        <button type="submit" class="btn btn-link btn-clear" 
+                        <button type="submit"
+                            class="btn btn-link btn-clear" 
                             v-if="$me.acceptAnswer && !row.isProtected"
                             tabindex="-1"
                             @click="confirmAndRemoveRow(index)"><span></span></button>
                         <div class="lock"></div>
                     </div>
                 </div>
-                <div class="form-group" v-if="canAddNewItem">
+                <div class="form-group"
+                    v-if="canAddNewItem">
                     <div class="field answered">
                         <textarea-autosize
                             ref="inputTextArea" 

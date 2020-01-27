@@ -1,40 +1,44 @@
 ﻿<template>
-    <div class="combo-box" :title="value == null ? '' : value.value" :id="controlId">
+    <div class="combo-box"
+        :title="value == null ? '' : value.value"
+        :id="controlId">
         <div class="btn-group btn-input clearfix">
-            <button type="button" :id="buttonId"
-                    class="btn dropdown-toggle"
-                    data-toggle="dropdown"
-                    :disabled="disabled">
+            <button type="button"
+                :id="buttonId"
+                class="btn dropdown-toggle"
+                data-toggle="dropdown"
+                :disabled="disabled">
                 <span data-bind="label"
-                      v-if="value == null"
-                      class="gray-text">{{placeholderText}}</span>
+                    v-if="value == null"
+                    class="gray-text">{{placeholderText}}</span>
                 <span data-bind="label"
-                      :class="[value.iconClass]"
-                      v-else>{{value.value}}</span>
+                    :class="[value.iconClass]"
+                    v-else>{{value.value}}</span>
             </button>
             <ul ref="dropdownMenu"
                 class="dropdown-menu"
                 role="menu">
                 <li v-if="!noSearch">
                     <input type="text"
-                    ref="searchBox" 
-                    :id="inputId" 
-                    :placeholder="$t('Common.Search')"
-                    @input="updateOptionsList" 
-                    @keyup.down="onSearchBoxDownKey" 
-                    v-model="searchTerm" />
+                        ref="searchBox" 
+                        :id="inputId" 
+                        :placeholder="$t('Common.Search')"
+                        @input="updateOptionsList" 
+                        @keyup.down="onSearchBoxDownKey" 
+                        v-model="searchTerm" />
                 </li>
                 <li v-if="forceLoadingState">
                     <a>{{ $t("Common.Loading") }}</a>
                 </li>
                 <template v-if="!forceLoadingState" >
-                    <li v-for="option in options" :key="keyFunc(option.item)">
+                    <li v-for="option in options"
+                        :key="keyFunc(option.item)">
                         <a 
-                        :class="[option.item.iconClass]"
-                        href="javascript:void(0);"
+                            :class="[option.item.iconClass]"
+                            href="javascript:void(0);"
                             @click="selectOption(option.item)" 
-                        v-html="highlight(option, searchTerm)"
-                        @keydown.up="onOptionUpKey"></a>
+                            v-html="highlight(option, searchTerm)"
+                            @keydown.up="onOptionUpKey"></a>
                     </li>
                 </template>
                 <li v-if="isLoading">
@@ -46,9 +50,9 @@
             </ul>
         </div>
         <button v-if="value != null && !noClear"
-                class="btn btn-link btn-clear"
-                type="button"
-                @click="clear">
+            class="btn btn-link btn-clear"
+            type="button"
+            @click="clear">
             <span></span>
         </button>
     </div>

@@ -1,37 +1,57 @@
 <template>
-    <div :class="questionStyle" :id='`mr_view_${questionId}`'>
-        <popover  class="tooltip-wrapper" trigger="hover-focus" append-to="body" 
-                  :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)">
-            <a class="has-tooltip" type="primary" data-role="trigger"></a>
+    <div :class="questionStyle"
+        :id='`mr_view_${questionId}`'>
+        <popover  class="tooltip-wrapper"
+            trigger="hover-focus"
+            append-to="body" 
+            :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)">
+            <a class="has-tooltip"
+                type="primary"
+                data-role="trigger"></a>
             <template slot="popover">
-                <div class="error-tooltip" v-if="!question.validity.isValid">
-                    <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
+                <div class="error-tooltip"
+                    v-if="!question.validity.isValid">
+                    <h6 style="text-transform:uppercase;"
+                        v-if="question.validity.errorMessage">
+                        {{ $t("WebInterviewUI.AnswerWasNotSaved") }}
+                    </h6>
                     <template v-for="message in question.validity.messages">
-                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                        <span v-dateTimeFormatting
+                            v-html="message"
+                            :key="message"></span>
                     </template>
                 </div>
-                <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">        
+                <div class="warning-tooltip"
+                    v-else-if="question.validity.warnings.length > 0">        
                     <template v-for="message in question.validity.warnings">
-                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                        <span v-dateTimeFormatting
+                            v-html="message"
+                            :key="message"></span>
                     </template>
                 </div>
             </template>
 
         </popover>        
-            <div class="radio cell-bordered" style="width:180px !important;max-width:180px;"  v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
-                    <div  class="field" style="width:180px;"> 
-                        <input v-if="!disabled && answeredOrAllOptions.some(e => e.value === option.value)" class="wb-radio" type="radio" 
-                          :id="`${$me.id}_${option.value}`" 
-                          :name="$me.id" 
-                          :value="option.value" 
-                          :disabled="disabled" 
-                          v-model="answer"
-                          @change="change">
-                        <label :for="$me.id + '_' + option.value">
-                            <span class="tick"></span> 
-                        </label>                        
-                    </div>
-            </div>            
+        <div class="radio cell-bordered"
+            style="width:180px !important;max-width:180px;"
+            v-for="option in editorParams.question.options"
+            :key="$me.id + '_' + option.value">
+            <div  class="field"
+                style="width:180px;"> 
+                <input v-if="!disabled && answeredOrAllOptions.some(e => e.value === option.value)"
+                    class="wb-radio"
+                    type="radio" 
+                    :id="`${$me.id}_${option.value}`" 
+                    :name="$me.id" 
+                    :value="option.value" 
+                    :disabled="disabled" 
+                    v-model="answer"
+                    @change="change">
+                <label :for="$me.id + '_' + option.value">
+                    <span class="tick"></span> 
+                </label>                        
+            </div>
+        </div>            
     </div>
 
 </template>

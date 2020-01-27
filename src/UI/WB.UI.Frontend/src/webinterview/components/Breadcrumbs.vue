@@ -1,9 +1,12 @@
 <template>
-    <div class="unit-title break-line" v-if="showBreadcrumbs">
+    <div class="unit-title break-line"
+        v-if="showBreadcrumbs">
         <wb-humburger :visible="showHumburger"></wb-humburger>
         <ol class="breadcrumb">
-            <li v-for="breadcrumb in entities" :key="breadcrumb.target">
-                <a href="javascript:void(0)" @click="navigate(breadcrumb)">{{ breadcrumb.title}} <span v-if="breadcrumb.isRoster"> - <i>{{getRosterTitle(breadcrumb.rosterTitle)}}</i></span> </a>
+            <li v-for="breadcrumb in entities"
+                :key="breadcrumb.target">
+                <a href="javascript:void(0)"
+                    @click="navigate(breadcrumb)">{{ breadcrumb.title}} <span v-if="breadcrumb.isRoster"> - <i>{{getRosterTitle(breadcrumb.rosterTitle)}}</i></span> </a>
             </li>
         </ol>
         <h3 v-html="title"></h3>

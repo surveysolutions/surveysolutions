@@ -1,16 +1,29 @@
 <template>
-    <wb-question :question="$me" questionCssClassName=" multimedia-question">
+    <wb-question :question="$me"
+        questionCssClassName=" multimedia-question">
         <div class="question-unit">
             <div class="options-group">
-                <div class="field" :class="{ answered: $me.isAnswered}" v-if="answerVisible">
-                    <wb-attachment :filename="$me.answer" :thumb="uploadingImage" :cache="cache"></wb-attachment>
+                <div class="field"
+                    :class="{ answered: $me.isAnswered}"
+                    v-if="answerVisible">
+                    <wb-attachment :filename="$me.answer"
+                        :thumb="uploadingImage"
+                        :cache="cache"></wb-attachment>
                     <wb-remove-answer @answerRemoved="answerRemoved" />
                 </div>
-                <input name="file" ref="uploader" v-show="false" accept="image/*" type="file" 
-                    @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
-                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" :disabled="!$me.acceptAnswer"
-                    v-if="!$me.isAnswered && !inFetchState" @click="$refs.uploader.click()">{{ $t("WebInterviewUI.PhotoUpload") }}</button>
-            <wb-lock />
+                <input name="file"
+                    ref="uploader"
+                    v-show="false"
+                    accept="image/*"
+                    type="file" 
+                    @change="onFileChange"
+                    class="btn btn-default btn-lg btn-action-questionnaire" />
+                <button type="button"
+                    class="btn btn-default btn-lg btn-action-questionnaire"
+                    :disabled="!$me.acceptAnswer"
+                    v-if="!$me.isAnswered && !inFetchState"
+                    @click="$refs.uploader.click()">{{ $t("WebInterviewUI.PhotoUpload") }}</button>
+                <wb-lock />
             </div>            
         </div>
     </wb-question>

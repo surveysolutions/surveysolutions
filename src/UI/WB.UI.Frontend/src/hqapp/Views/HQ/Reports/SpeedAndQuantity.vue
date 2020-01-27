@@ -1,11 +1,12 @@
 <template>
-    <HqLayout :title="title" :subtitle="reportDescription" :hasFilter="true">
+    <HqLayout :title="title"
+        :subtitle="reportDescription"
+        :hasFilter="true">
         <div slot="subtitle">
             <a
                 v-if="this.model.canNavigateToQuantityBySupervisors"
                 :href="getSupervisorsUrl"
-                class="btn btn-default"
-            >
+                class="btn btn-default">
                 <span class="glyphicon glyphicon-arrow-left"></span>
                 {{ $t('PeriodicStatusReport.BackToSupervisors') }}
             </a>
@@ -23,8 +24,7 @@
                     :placeholder="$t('PeriodicStatusReport.InterviewActions')"
                     :value="reportTypeId"
                     :values="this.$config.model.reportTypes"
-                    v-on:selected="reportTypeSelected"
-                />
+                    v-on:selected="reportTypeSelected"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.Questionnaire')">
@@ -37,8 +37,7 @@
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="questionnaireId"
                     :values="this.$config.model.questionnaires"
-                    v-on:selected="questionnaireSelected"
-                />
+                    v-on:selected="questionnaireSelected"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -52,8 +51,7 @@
                     :disabled="questionnaireId == null "
                     :value="questionnaireVersion"
                     :values="questionnaireId == null ? [] : questionnaireId.versions"
-                    v-on:selected="questionnaireVersionSelected"
-                />
+                    v-on:selected="questionnaireVersionSelected"/>
             </FilterBlock>
             <FilterBlock :title="$t('PeriodicStatusReport.OverTheLast')">
                 <Typeahead
@@ -66,8 +64,7 @@
                     :placeholder="$t('PeriodicStatusReport.OverTheLast')"
                     :value="overTheLast"
                     :values="this.$config.model.overTheLasts"
-                    v-on:selected="overTheLastSelected"
-                />
+                    v-on:selected="overTheLastSelected"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('PeriodicStatusReport.PeriodUnit')">
@@ -81,12 +78,12 @@
                     data-vv-as="period"
                     v-on:selected="periodSelected"
                     :value="period"
-                    :values="this.$config.model.periods"
-                ></Typeahead>
+                    :values="this.$config.model.periods"></Typeahead>
             </FilterBlock>
 
             <FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
-                <DatePicker :config="datePickerConfig" :value="selectedDate"></DatePicker>
+                <DatePicker :config="datePickerConfig"
+                    :value="selectedDate"></DatePicker>
             </FilterBlock>
         </Filters>
 
@@ -99,8 +96,7 @@
             noSearch
             exportable
             hasTotalRow
-            noSelect
-        ></DataTables>
+            noSelect></DataTables>
     </HqLayout>
 </template>
 

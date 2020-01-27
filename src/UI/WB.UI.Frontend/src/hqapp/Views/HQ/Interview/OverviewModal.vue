@@ -1,5 +1,6 @@
 <template>
-    <ModalFrame ref="modal" id="overview">
+    <ModalFrame ref="modal"
+        id="overview">
         <div slot="title">
             <h3>{{$t("Pages.InterviewOverview")}}</h3>
         </div>
@@ -8,21 +9,23 @@
             v-for="item in items"
             :key="item.id"
             :item="item"
-            @showAdditionalInfo="onShowAdditionalInfo"
-        />
+            @showAdditionalInfo="onShowAdditionalInfo"/>
 
         <infinite-loading
             ref="loader"
             v-if="overview.total > 0 && items.length > 0"
             @infinite="infiniteHandler"
-            :distance="1000"
-        >
+            :distance="1000">
             <span slot="no-more"></span>
             <span slot="no-results"></span>
         </infinite-loading>
 
         <div slot="actions">
-            <button type="button" class="btn btn-link" @click="hide">{{ $t("Pages.CloseLabel") }}</button>
+            <button type="button"
+                class="btn btn-link"
+                @click="hide">
+                {{ $t("Pages.CloseLabel") }}
+            </button>
         </div>
     </ModalFrame>
 </template>

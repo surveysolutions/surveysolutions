@@ -3,7 +3,8 @@
         <header>
             <slot name="header"></slot>
         </header>
-        <main class="web-interview" :class="{'fullscreen-hidden-content': sidebarHidden}">
+        <main class="web-interview"
+            :class="{'fullscreen-hidden-content': sidebarHidden}">
             <div class="container-fluid">
                 <slot></slot>
             </div>
@@ -11,7 +12,9 @@
         <footer :class="{'footer-adaptive-content': sidebarHidden}">
             <slot name="footer"></slot>
         </footer>
-        <span id="loadingPixel" style="display:none" :data-loading="isLoading"></span>
+        <span id="loadingPixel"
+            style="display:none"
+            :data-loading="isLoading"></span>
     </div>
 </template>
 <script lang="js">

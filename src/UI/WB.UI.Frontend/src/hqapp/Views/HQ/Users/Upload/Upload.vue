@@ -33,19 +33,40 @@
                     <li>{{$t('UploadUsers.Email')}}</li>
                     <li>{{$t('UploadUsers.Phone')}}</li>
                 </ul>
-                <a v-bind:href="config.api.importUsersTemplateUrl" target="_blank" class="btn btn-link">{{$t('UploadUsers.DownloadTemplateLink')}}</a>
-                <div class="progress-wrapper-block" v-if="isInProgress">
+                <a v-bind:href="config.api.importUsersTemplateUrl"
+                    target="_blank"
+                    class="btn btn-link">
+                    {{$t('UploadUsers.DownloadTemplateLink')}}
+                </a>
+                <div class="progress-wrapper-block"
+                    v-if="isInProgress">
                     <p class="warning-message">{{$t('UploadUsers.UploadInProgress', {userName: responsible})}} <br>{{$t('UploadUsers.UploadInProgressDescription')}}</p>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="11" v-bind:style="{ width: importedUsersInPercents + '%' }">
+                        <div class="progress-bar progress-bar-info"
+                            role="progressbar"
+                            aria-valuenow="5"
+                            aria-valuemin="0"
+                            aria-valuemax="11"
+                            v-bind:style="{ width: importedUsersInPercents + '%' }">
                             <span class="sr-only">{{importedUsersInPercents}}%</span>
                         </div>
                     </div>
                     <span>{{$t('UploadUsers.EstimatedTime', {estimatedTime: estimatedTime })}}</span>
                 </div>
-                <div class="action-buttons" v-else>
-                    <input name="file" ref="uploader" v-show="false" :accept="allowedFileExtensions" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
-                    <button type="button" class="btn btn-success" @click="$refs.uploader.click()">{{$t('UploadUsers.UploadBtn')}}</button>
+                <div class="action-buttons"
+                    v-else>
+                    <input name="file"
+                        ref="uploader"
+                        v-show="false"
+                        :accept="allowedFileExtensions"
+                        type="file"
+                        @change="onFileChange"
+                        class="btn btn-default btn-lg btn-action-questionnaire" />
+                    <button type="button"
+                        class="btn btn-success"
+                        @click="$refs.uploader.click()">
+                        {{$t('UploadUsers.UploadBtn')}}
+                    </button>
                 </div>
             </div>
         </div>

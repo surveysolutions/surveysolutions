@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :title="title" :hasFilter="true">
+    <HqLayout :title="title"
+        :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead
@@ -10,8 +11,7 @@
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="questionnaireId"
                     :values="this.$config.model.questionnaires"
-                    v-on:selected="questionnaireSelected"
-                />
+                    v-on:selected="questionnaireSelected"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -24,8 +24,7 @@
                     :disabled="questionnaireId == null "
                     :value="questionnaireVersion"
                     :values="questionnaireId == null ? [] : questionnaireId.versions"
-                    v-on:selected="questionnaireVersionSelected"
-                />
+                    v-on:selected="questionnaireVersionSelected"/>
             </FilterBlock>
             <FilterBlock :title="$t('Pages.Filters_Assignment')">
                 <div class="input-group">
@@ -33,11 +32,12 @@
                         class="form-control with-clear-btn"
                         :placeholder="$t('Common.AllAssignments')"
                         type="text"
-                        v-model="assignmentId"
-                    />
-                    <div class="input-group-btn" @click="clearAssignmentFilter">
+                        v-model="assignmentId"/>
+                    <div class="input-group-btn"
+                        @click="clearAssignmentFilter">
                         <div class="btn btn-default">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove"
+                                aria-hidden="true"></span>
                         </div>
                     </div>
                 </div>
@@ -48,10 +48,11 @@
             ref="table"
             :tableOptions="tableOptions"
             :addParamsToRequest="addFilteringParams"
-            :contextMenuItems="contextMenuItems"
-        ></DataTables>
+            :contextMenuItems="contextMenuItems"></DataTables>
 
-        <Confirm ref="confirmRestart" id="restartModal" slot="modals">
+        <Confirm ref="confirmRestart"
+            id="restartModal"
+            slot="modals">
             {{ $t("Pages.InterviewerHq_RestartConfirm") }}
             <FilterBlock>
                 <div class="form-group">
@@ -59,8 +60,7 @@
                         <input
                             class="form-control with-clear-btn"
                             type="text"
-                            v-model="restart_comment"
-                        />
+                            v-model="restart_comment"/>
                     </div>
                 </div>
             </FilterBlock>
@@ -69,8 +69,7 @@
         <Confirm
             ref="confirmDiscard"
             id="discardConfirm"
-            slot="modals"
-        >{{ $t("Pages.InterviewerHq_DiscardConfirm") }}</Confirm>
+            slot="modals">{{ $t("Pages.InterviewerHq_DiscardConfirm") }}</Confirm>
     </HqLayout>
 </template>
 

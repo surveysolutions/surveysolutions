@@ -1,7 +1,8 @@
 <template>
     <Layout>
         <Navbar slot="header" />
-        <div class="row" slot>
+        <div class="row"
+            slot>
             <router-view name="sideBar"></router-view>
             <section class="questionnaire details-interview">
                 <router-view></router-view>
