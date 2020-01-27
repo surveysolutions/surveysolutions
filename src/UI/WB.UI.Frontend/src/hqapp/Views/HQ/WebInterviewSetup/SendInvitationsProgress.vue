@@ -1,5 +1,7 @@
 <template>
-    <HqLayout :hasRow="false" :fixedWidth="true" :title="$t('WebInterviewSetup.WebInterviewSetup_Title')">
+    <HqLayout :hasRow="false"
+        :fixedWidth="true"
+        :title="$t('WebInterviewSetup.WebInterviewSetup_Title')">
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -25,30 +27,51 @@
         <div class="row">
             <div class="col-sm-7 col-xs-12">
                 <div class="import-progress">
-                    <p v-if="isQueued" class="default-text">Preparing</p>
+                    <p v-if="isQueued"
+                        class="default-text">Preparing</p>
                     <p v-if="isInProgress">Sending</p>
                     <p v-if="isDone">Finished</p>
-                    <p v-if="isFailed" class="error-text">Sending invitations has failed. Please contact your server administrator to check the email provider settings.</p>
-                    <p v-if="isCanceled" class="error-text">The process was cancelled</p>
+                    <p v-if="isFailed"
+                        class="error-text">Sending invitations has failed. Please contact your server administrator to check the email provider settings.</p>
+                    <p v-if="isCanceled"
+                        class="error-text">The process was cancelled</p>
                     <p v-if="isInProgress || isQueued">{{totalCount}} invitations to send.</p>
-                    <p v-if="processedCount == 0" class="default-text">Nothing was sent.</p>
-                    <p v-else class="success-text">{{processedCount}} sent successfully.</p>
-                    <p v-if="withErrorsCount == 0" class="default-text">No errors</p>
-                    <p v-else class="error-text">{{withErrorsCount}} not sent because of errors.</p>
+                    <p v-if="processedCount == 0"
+                        class="default-text">Nothing was sent.</p>
+                    <p v-else
+                        class="success-text">{{processedCount}} sent successfully.</p>
+                    <p v-if="withErrorsCount == 0"
+                        class="default-text">No errors</p>
+                    <p v-else
+                        class="error-text">{{withErrorsCount}} not sent because of errors.</p>
                     <p v-if="isStopped && withErrorsCount > 0">
-                        <a :href="exportErrorsLink" target="_blank">Download list of assignments with errors</a>
+                        <a :href="exportErrorsLink"
+                            target="_blank">Download list of assignments with errors</a>
                     </p>
                 </div>
-                <div class="cancelable-progress" v-if="isInProgress">
+                <div class="cancelable-progress"
+                    v-if="isInProgress">
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" v-bind:style="{ width: overallProgressPercent + '%' }">
+                        <div class="progress-bar"
+                            role="progressbar"
+                            aria-valuenow="60"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            v-bind:style="{ width: overallProgressPercent + '%' }">
                             <span class="sr-only">{{overallProgressPercent}}%</span>
                         </div>
                     </div>
-                    <button class="btn  btn-link" type="button" @click="cancel">Cancel</button>
+                    <button class="btn  btn-link"
+                        type="button"
+                        @click="cancel">
+                        Cancel
+                    </button>
                 </div>
                 <div class="action-buttons">
-                    <a :href="$config.model.api.surveySetupUrl" class="back-link">Back to survey setup</a>  
+                    <a :href="$config.model.api.surveySetupUrl"
+                        class="back-link">
+                        Back to survey setup
+                    </a>  
                 </div> 
             </div>
         </div>

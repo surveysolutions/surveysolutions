@@ -1,37 +1,40 @@
 ﻿<template>
     <wb-question :question="$me"
-                 :questionCssClassName="$me.isTimestamp ? 'current-time-question' : 'time-question'"
-                 :no-comments="noComments">
+        :questionCssClassName="$me.isTimestamp ? 'current-time-question' : 'time-question'"
+        :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div v-if="!$me.isTimestamp"
-                     class="form-group">
-                    <div class="field" :class="{answered: $me.isAnswered}">
+                    class="form-group">
+                    <div class="field"
+                        :class="{answered: $me.isAnswered}">
                         <flat-pickr :config="pickerOpts"
-                                    :value="$me.answer"
-                                    :disabled="!$me.acceptAnswer"
-                                    class="field-to-fill"
-                                    :placeholder="noAnswerWatermark"
-                                    :title="noAnswerWatermark" />
+                            :value="$me.answer"
+                            :disabled="!$me.acceptAnswer"
+                            class="field-to-fill"
+                            :placeholder="noAnswerWatermark"
+                            :title="noAnswerWatermark" />
                         <wb-remove-answer/>
                     </div>
                 </div>
                 <div v-else>
                     <div class="field"
-                         :class="{answered: $me.isAnswered}">
-                        <div class="block-with-data">{{ answer }}</div>
+                        :class="{answered: $me.isAnswered}">
+                        <div class="block-with-data">
+                            {{ answer }}
+                        </div>
                         <wb-remove-answer />
                     </div>
                     <div class="action-btn-holder time-question"
-                         @click="answerDate">
+                        @click="answerDate">
                         <button type="button"
-                                :disabled="!$me.acceptAnswer"
-                                class="btn btn-default btn-lg btn-action-questionnaire">
+                            :disabled="!$me.acceptAnswer"
+                            class="btn btn-default btn-lg btn-action-questionnaire">
                             {{ noAnswerWatermark }}
                         </button>
                     </div>
                 </div>
-            <wb-lock />
+                <wb-lock />
             </div>            
         </div>
     </wb-question>

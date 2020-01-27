@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :title="$t('WebInterviewSetup.Started_Title')" :hasFilter="false">
+    <HqLayout :title="$t('WebInterviewSetup.Started_Title')"
+        :hasFilter="false">
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -15,20 +16,21 @@
         <div class="col-sm-12">
             <form ref="messagesForm">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{{$t('WebInterviewSetup.TextCustomize')}}</div>
+                    <div class="panel-heading">
+                        {{$t('WebInterviewSetup.TextCustomize')}}
+                    </div>
                     <div class="panel-body">
-                        <ul class="nav nav-tabs" role="tablist">
+                        <ul class="nav nav-tabs"
+                            role="tablist">
                             <li
                                 v-for="opt in editableStrings"
                                 :key="opt.value"
-                                :class="{active:opt.isActive}"
-                            >
+                                :class="{active:opt.isActive}">
                                 <a
                                     href="javascript:void(0);"
                                     role="tab"
                                     data-toggle="tab"
-                                    @click.stop.prevent="setActive(opt)"
-                                >{{ opt.title }}</a>
+                                    @click.stop.prevent="setActive(opt)">{{ opt.title }}</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -37,8 +39,7 @@
                                 :key="opt.value"
                                 role="tabpanel"
                                 class="tab-pane well-sm"
-                                :class="{active:opt.isActive}"
-                            >
+                                :class="{active:opt.isActive}">
                                 <p>{{textDescription(opt)}}</p>
                                 <div class="options-group">
                                     <div class="radio">
@@ -48,8 +49,7 @@
                                                 type="radio"
                                                 :id="'rbOverrideDefault' + opt.value"
                                                 v-model.number="opt.overriden"
-                                                value="0"
-                                            />
+                                                value="0"/>
                                             <label :for="'rbOverrideDefault' + opt.value">
                                                 <span class="tick"></span>
                                                 {{defaultText(opt)}}
@@ -63,13 +63,13 @@
                                                 type="radio"
                                                 v-model.number="opt.overriden"
                                                 :id="'rbOverrideCustom' + opt.value"
-                                                value="1"
-                                            />
+                                                value="1"/>
                                             <label :for="'rbOverrideCustom' + opt.value">
                                                 <span class="tick"></span>
                                                 {{$t('WebInterviewSetup.CustomText')}}
                                             </label>
-                                            <button type="submit" class="btn btn-link btn-clear">
+                                            <button type="submit"
+                                                class="btn btn-link btn-clear">
                                                 <span></span>
                                             </button>
                                         </div>
@@ -79,14 +79,12 @@
                                     v-if="opt.overriden"
                                     :editorToolbar="customToolbar"
                                     v-model="opt.customText"
-                                    :id="'txt' + opt.value"
-                                ></vue-editor>
+                                    :id="'txt' + opt.value"></vue-editor>
                                 <input
                                     v-if="opt.overriden"
                                     type="hidden"
                                     :name="opt.value"
-                                    :value="opt.customText"
-                                />
+                                    :value="opt.customText"/>
                             </div>
                         </div>
                         <button
@@ -94,11 +92,9 @@
                             class="btn btn-success"
                             value="save all"
                             @click="updateMessages"
-                            :disabled="submitting"
-                        >{{$t('WebInterviewSetup.SaveAll')}}</button>
+                            :disabled="submitting">{{$t('WebInterviewSetup.SaveAll')}}</button>
                         <span
-                            :class="updateFailed ? 'text-danger' : 'text-success'"
-                        >{{updatedMessage}}</span>
+                            :class="updateFailed ? 'text-danger' : 'text-success'">{{updatedMessage}}</span>
                     </div>
                 </div>
             </form>
@@ -112,17 +108,14 @@
                 <input
                     type="submit"
                     class="btn btn-danger"
-                    :value="$t('WebInterviewSetup.StopWebInterview')"
-                />
+                    :value="$t('WebInterviewSetup.StopWebInterview')"/>
                 <a
                     class="btn btn-primary"
-                    :href="this.$config.model.downloadAssignmentsUrl"
-                >{{$t('WebInterviewSetup.DownloadTitle',{count: $config.model.assignmentsCount})}}</a>
+                    :href="this.$config.model.downloadAssignmentsUrl">{{$t('WebInterviewSetup.DownloadTitle',{count: $config.model.assignmentsCount})}}</a>
 
                 <a
                     :href="this.$config.model.surveySetupUrl"
-                    class="back-link"
-                >{{$t('WebInterviewSetup.BackToQuestionnaires')}}</a>
+                    class="back-link">{{$t('WebInterviewSetup.BackToQuestionnaires')}}</a>
             </div>
         </form>
     </HqLayout>

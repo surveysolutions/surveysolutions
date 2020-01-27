@@ -1,5 +1,6 @@
 <template>
-    <ModalFrame ref="modal" id="statusesHistoryModal">
+    <ModalFrame ref="modal"
+        id="statusesHistoryModal">
         <div slot="title">
             <h3>{{$t("Pages.HistoryOfStatuses_Interview")}} {{$config.model.key}}</h3>
             <p>
@@ -19,22 +20,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in items" :key="item.id">
+                    <tr v-for="item in items"
+                        :key="item.id">
                         <td>{{item.statusHumanized}}</td>
-                        <td class="date">{{formatDate(item.date)}}</td>
+                        <td class="date">
+                            {{formatDate(item.date)}}
+                        </td>
                         <td>
                             <span v-bind:class="[item.responsibleRole]">{{item.responsible}}</span>
                         </td>
                         <td>
                             <span v-bind:class="[item.assigneeRole]">{{item.assignee}}</span>
                         </td>
-                        <td data-bind="text: Comment">{{item.comment}}</td>
+                        <td data-bind="text: Comment">
+                            {{item.comment}}
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div slot="actions">
-            <button type="button" class="btn btn-link" @click="hide">{{ $t("Pages.CloseLabel") }}</button>
+            <button type="button"
+                class="btn btn-link"
+                @click="hide">
+                {{ $t("Pages.CloseLabel") }}
+            </button>
         </div>
     </ModalFrame>
 </template>

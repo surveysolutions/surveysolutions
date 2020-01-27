@@ -1,7 +1,8 @@
 <template>
     <div class="ag-cell-label-container">
         <div class="ag-header-cell-label">
-            <span class="ag-header-cell-text" v-html="title"></span>
+            <span class="ag-header-cell-text"
+                v-html="title"></span>
         </div>
     </div>
 </template>

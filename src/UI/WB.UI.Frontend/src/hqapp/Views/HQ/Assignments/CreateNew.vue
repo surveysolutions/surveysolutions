@@ -7,7 +7,7 @@
                         <div class="container-info">
                             <h2>
                                 {{ $t('Assignments.CreatingNewAssignment', {questionnaire: questionnaireTitle}) }}
-                <span :title="$t('Reports.Version')">({{ this.$t('Assignments.QuestionnaireVersion', { version: this.questionnaireVersion}) }})</span>
+                                <span :title="$t('Reports.Version')">({{ this.$t('Assignments.QuestionnaireVersion', { version: this.questionnaireVersion}) }})</span>
                             </h2>
                         </div>
                     </div>
@@ -17,29 +17,27 @@
                         :is="entity.entityType"
                         :id="entity.identity"
                         fetchOnMount
-                        noComments="true"
-                    ></component>
+                        noComments="true"></component>
 
                     <wb-question
                         :question="assignToQuestion"
                         noValidation="true"
                         :noComments="true"
                         :no-title="false"
-                        questionCssClassName="single-select-question"
-                    >
+                        questionCssClassName="single-select-question">
                         <h5>{{$t("Assignments.CreateAssignment_ResponsibleInstruction")}}</h5>
                         <div class="question-unit">
                             <div class="options-group">
                                 <div class="form-group">
-                  <div class="field" :class="{answered: newResponsibleId != null}">
+                                    <div class="field"
+                                        :class="{answered: newResponsibleId != null}">
                                         <Typeahead
                                             control-id="newResponsibleId"
                                             :placeholder="$t('Common.Responsible')"
                                             :value="newResponsibleId"
                                             :ajax-params="{ }"
                                             @selected="newResponsibleSelected"
-                                            :fetch-url="config.responsiblesUrl"
-                                        ></Typeahead>
+                                            :fetch-url="config.responsiblesUrl"></Typeahead>
                                     </div>
                                 </div>
                             </div>
@@ -50,8 +48,7 @@
                         :question="sizeQuestion"
                         noValidation="true"
                         noComments="true"
-                        questionCssClassName="numeric-question"
-                    >
+                        questionCssClassName="numeric-question">
                         <h5>{{ this.$t("Assignments.Size") }}</h5>
                         <div class="instructions-wrapper">
                             <div class="information-block instruction">
@@ -71,13 +68,13 @@
                                             type="text"
                                             autocomplete="off"
                                             inputmode="numeric"
-                                            class="field-to-fill"
-                    >
+                                            class="field-to-fill">
                                     </div>
                                 </div>
                             </div>
                         </div>
-            <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
+                        <div class="information-block text-danger"
+                            v-if="!sizeQuestion.validity.isValid">
                             <p>{{ this.$t("Assignments.InvalidSizeMessage") }}</p>
                             <p>{{ errors.first('size') }}</p>
                         </div>
@@ -87,9 +84,11 @@
                         :question="webMode"
                         noValidation="true"
                         noComments="true"
-                        questionCssClassName="multiselect-question"
-                    >
-            <h5>{{ this.$t("Assignments.WebMode") }} <a target="_blank" href="https://support.mysurvey.solutions/headquarters/cawi">(?)</a></h5>
+                        questionCssClassName="multiselect-question">
+                        <h5>{{ this.$t("Assignments.WebMode") }} <a target="_blank"
+                            href="https://support.mysurvey.solutions/headquarters/cawi">
+                            (?)
+                        </a></h5>
                         <div class="question-unit">
                             <div class="options-group">
                                 <div class="form-group">
@@ -101,8 +100,7 @@
                                             v-model="webMode.answer"
                                             data-val="true"
                                             type="checkbox"
-                                            class="wb-checkbox"
-                    >
+                                            class="wb-checkbox">
                                         <label for="webModeId">
                                             <span class="tick"></span>
                                             {{$t("Assignments.Activated")}}
@@ -118,8 +116,7 @@
                         noValidation="true"
                         noComments="true"
                         :isDisabled="!webMode.answer"
-                        questionCssClassName="text-question"
-                    >
+                        questionCssClassName="text-question">
                         <h5>{{ this.$t("Assignments.Email") }}</h5>
                         <div class="question-unit">
                             <div class="options-group">
@@ -133,13 +130,13 @@
                                             name="email"
                                             type="text"
                                             autocomplete="off"
-                                            class="field-to-fill"
-                    >
+                                            class="field-to-fill">
                                     </div>
                                 </div>
                             </div>
                         </div>
-            <div class="information-block text-danger" v-if="!emailQuestion.validity.isValid">
+                        <div class="information-block text-danger"
+                            v-if="!emailQuestion.validity.isValid">
                             <p>{{ this.$t("Assignments.InvalidEmail") }}</p>
                         </div>
                     </wb-question>
@@ -149,8 +146,7 @@
                         noValidation="true"
                         noComments="true"
                         :isDisabled="!webMode.answer"
-                        questionCssClassName="text-question"
-                    >
+                        questionCssClassName="text-question">
                         <h5>{{ this.$t("Assignments.Password") }}</h5>
                         <div class="instructions-wrapper">
                             <div class="information-block instruction">
@@ -169,13 +165,13 @@
                                             name="password"
                                             type="text"
                                             autocomplete="off"
-                                            class="field-to-fill"
-                    >
+                                            class="field-to-fill">
                                     </div>
                                 </div>
                             </div>
                         </div>
-            <div class="information-block text-danger" v-if="!passwordQuestion.validity.isValid">
+                        <div class="information-block text-danger"
+                            v-if="!passwordQuestion.validity.isValid">
                             <p>{{ this.$t("Assignments.InvalidPassword") }}</p>
                         </div>
                     </wb-question>
@@ -185,9 +181,11 @@
                         noValidation="true"
                         noComments="true"
                         :isDisabled="webMode.answer"
-                        questionCssClassName="multiselect-question"
-                    >
-            <h5>{{ this.$t("Assignments.IsAudioRecordingEnabled") }} <a target="_blank" href="https://support.mysurvey.solutions/headquarters/audio-audit/">(?)</a></h5>
+                        questionCssClassName="multiselect-question">
+                        <h5>{{ this.$t("Assignments.IsAudioRecordingEnabled") }} <a target="_blank"
+                            href="https://support.mysurvey.solutions/headquarters/audio-audit/">
+                            (?)
+                        </a></h5>
                         <div class="question-unit">
                             <div class="options-group">
                                 <div class="form-group">
@@ -198,8 +196,7 @@
                                             v-model="isAudioRecordingEnabled.answer"
                                             data-val="true"
                                             type="checkbox"
-                                            class="wb-checkbox"
-                    >
+                                            class="wb-checkbox">
                                         <label for="isAudioRecordingEnabledId">
                                             <span class="tick"></span>
                                             {{$t("Assignments.Activated")}}
@@ -214,8 +211,7 @@
                         :question="commentsQuestion"
                         noValidation="true"
                         noComments="true"
-                        questionCssClassName="text-question"
-                    >
+                        questionCssClassName="text-question">
                         <h5>{{ this.$t("Assignments.Comments") }}</h5>
                         <div class="question-unit">
                             <div class="options-group">
@@ -227,7 +223,7 @@
                                             name="comments"
                                             rows="6"
                                             maxlength="500"
-                      class="form-control" />
+                                            class="form-control" />
                                     </div>
                                 </div>
                             </div>
@@ -238,14 +234,14 @@
                         <button
                             type="button"
                             @click="create"
-                            class="btn btn-success btn-lg"
-                        >{{ $t('Common.Create') }}</button>
+                            class="btn btn-success btn-lg">{{ $t('Common.Create') }}</button>
                     </div>
                 </div>
             </div>
         </div>
         <IdleTimeoutService />
-        <signalr @connected="connected" :interviewId="interviewId" />
+        <signalr @connected="connected"
+            :interviewId="interviewId" />
     </main>
 </template>
 

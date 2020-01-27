@@ -1,5 +1,6 @@
 <template>
-  <span class="lock" v-if="!$me.acceptAnswers"></span>
+    <span class="lock"
+        v-if="!$me.acceptAnswers"></span>
 </template>
 
 <script>

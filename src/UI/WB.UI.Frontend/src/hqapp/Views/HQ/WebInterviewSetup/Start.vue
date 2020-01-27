@@ -20,7 +20,13 @@
         <form method="post">
             
             <div class="checkbox info-block">
-                <input checked="checked" class="checkbox-filter" data-val="true" id="useCaptcha" name="UseCaptcha" type="checkbox" value="true">
+                <input checked="checked"
+                    class="checkbox-filter"
+                    data-val="true"
+                    id="useCaptcha"
+                    name="UseCaptcha"
+                    type="checkbox"
+                    value="true">
                 <label for="useCaptcha">
                     <span class="tick"></span>
                     {{$t('WebInterviewSetup.UseCaptcha')}}
@@ -28,8 +34,12 @@
             </div>
             <div class="form-group">
                 <div class="action-buttons">
-                    <button type="submit" class="btn btn-success">{{$t('WebInterviewSetup.Start')}}</button>
-                    <a :href="this.$config.model.surveySetupUrl" class="back-link">
+                    <button type="submit"
+                        class="btn btn-success">
+                        {{$t('WebInterviewSetup.Start')}}
+                    </button>
+                    <a :href="this.$config.model.surveySetupUrl"
+                        class="back-link">
                         {{$t('WebInterviewSetup.BackToQuestionnaires')}}
                     </a>
                 </div>

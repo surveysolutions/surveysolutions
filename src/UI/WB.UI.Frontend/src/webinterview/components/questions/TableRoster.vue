@@ -1,5 +1,7 @@
 <template>
-    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
+    <div class="question table-view scroller"
+        :id="hash"
+        v-if="rowData.length > 0">
         <ag-grid-vue
             ref="tableRoster"
             class="ag-theme-customStyles"
@@ -12,8 +14,7 @@
             :grid-options="gridOptions"
             @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"
-            @cell-editing-stopped="endCellEditting"
-        ></ag-grid-vue>
+            @cell-editing-stopped="endCellEditting"></ag-grid-vue>
     </div>
 </template>
 

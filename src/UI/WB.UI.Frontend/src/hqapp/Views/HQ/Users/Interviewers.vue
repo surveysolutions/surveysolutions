@@ -3,14 +3,12 @@
         :hasFilter="true"
         :title="title"
         :topicButtonRef="this.model.createUrl"
-        :topicButton="$t('Users.AddInterviewer')"
-    >
+        :topicButton="$t('Users.AddInterviewer')">
         <div slot="subtitle">
             <div class="neighbor-block-to-search">
                 <ol class="list-unstyled">
                     <li
-                        v-if="model.showFirstInstructions"
-                    >{{ $t('Pages.Users_Interviewers_Instruction1') }}</li>
+                        v-if="model.showFirstInstructions">{{ $t('Pages.Users_Interviewers_Instruction1') }}</li>
                     <li>{{ $t('Pages.Users_Interviewers_Instruction2') }}</li>
                 </ol>
             </div>
@@ -19,8 +17,7 @@
         <Filters slot="filters">
             <FilterBlock
                 v-if="model.showSupervisorColumn"
-                :title="$t('Pages.Interviewers_SupervisorTitle')"
-            >
+                :title="$t('Pages.Interviewers_SupervisorTitle')">
                 <Typeahead
                     ref="supervisorControl"
                     control-id="supervisor"
@@ -30,8 +27,7 @@
                     :placeholder="$t('Common.AllSupervisors')"
                     :value="supervisor"
                     :fetch-url="$config.model.supervisorsUrl"
-                    v-on:selected="supervisorSelected"
-                />
+                    v-on:selected="supervisorSelected"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Users.InterviewerIssues')">
@@ -44,8 +40,7 @@
                     data-vv-as="facet"
                     :value="facet"
                     :values="this.$config.model.interviewerIssues"
-                    v-on:selected="facetSelected"
-                />
+                    v-on:selected="facetSelected"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
@@ -59,8 +54,7 @@
                     data-vv-as="archiveStatus"
                     :value="archiveStatus"
                     :values="this.$config.model.archiveStatuses"
-                    v-on:selected="archiveStatusSelected"
-                />
+                    v-on:selected="archiveStatusSelected"/>
             </FilterBlock>
         </Filters>
 
@@ -75,17 +69,16 @@
             @selectedRowsChanged="rows => selectedInterviewers = rows"
             :addParamsToRequest="addParamsToRequest"
             :contextMenuItems="contextMenuItems"
-            :supportContextMenu="model.showContextMenu"
-        >
-            <div class="panel panel-table" v-if="selectedInterviewers.length">
+            :supportContextMenu="model.showContextMenu">
+            <div class="panel panel-table"
+                v-if="selectedInterviewers.length">
                 <div class="panel-body">
                     <input
                         class="double-checkbox-white"
                         id="q1az"
                         type="checkbox"
                         checked
-                        disabled="disabled"
-                    />
+                        disabled="disabled"/>
                     <label for="q1az">
                         <span class="tick"></span>
                         {{ selectedInterviewers.length + " " + $t("Pages.Interviewers_Selected") }}
@@ -94,29 +87,27 @@
                         type="button"
                         v-if="isVisibleArchive"
                         class="btn btn-default btn-danger"
-                        @click="archiveInterviewers"
-                    >{{ $t("Pages.Interviewers_Archive") }}</button>
+                        @click="archiveInterviewers">{{ $t("Pages.Interviewers_Archive") }}</button>
                     <button
                         type="button"
                         v-if="isVisibleUnarchive"
                         class="btn btn-default btn-success"
-                        @click="unarchiveInterviewers"
-                    >{{ $t("Pages.Interviewers_Unarchive") }}</button>
+                        @click="unarchiveInterviewers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
                     <button
                         type="button"
                         class="btn btn-default btn-warning last-btn"
                         v-if="selectedInterviewers.length"
-                        @click="moveToAnotherTeam"
-                    >{{ $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
+                        @click="moveToAnotherTeam">{{ $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
                 </div>
             </div>
         </DataTables>
         <Confirm
             ref="confirmArchive"
             id="confirmArchive"
-            slot="modals"
-        >{{$t('Pages.Interviewers_ArchiveInterviewersConfirmMessage')}}</Confirm>
-        <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
+            slot="modals">{{$t('Pages.Interviewers_ArchiveInterviewersConfirmMessage')}}</Confirm>
+        <Confirm ref="confirmUnarchive"
+            id="confirmUnarchive"
+            slot="modals">
             {{$t('Archived.UnarchiveInterviewerWarning')}}
             <br />
             {{$t('Pages.Interviewers_ArchiveInterviewersConfirm')}}
@@ -125,8 +116,7 @@
         <InterviewersMoveToOtherTeam
             ref="interviewersMoveToOtherTeam"
             :interviewers="selectedInterviewersFullInfo"
-            :moveUserToAnotherTeamUrl="model.moveUserToAnotherTeamUrl"
-        ></InterviewersMoveToOtherTeam>
+            :moveUserToAnotherTeamUrl="model.moveUserToAnotherTeamUrl"></InterviewersMoveToOtherTeam>
     </HqLayout>
 </template>
 

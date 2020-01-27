@@ -2,8 +2,7 @@
     <HqLayout
         :hasFilter="true"
         :title="$t('Pages.StatusDuration')"
-        :subtitle="$t('Pages.StatusDurationDescription')"
-    >
+        :subtitle="$t('Pages.StatusDurationDescription')">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead
@@ -13,8 +12,7 @@
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="questionnaireId"
                     v-on:selected="selectQuestionnaire"
-                    :fetch-url="$config.model.questionnairesUrl"
-                />
+                    :fetch-url="$config.model.questionnairesUrl"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -27,10 +25,10 @@
                     :value="questionnaireVersion"
                     v-on:selected="questionnaireVersionSelected"
                     :fetch-url="questionnaireVersionFetchUrl"
-                    :disabled="questionnaireVersionFetchUrl == null"
-                />
+                    :disabled="questionnaireVersionFetchUrl == null"/>
             </FilterBlock>
-            <FilterBlock :title="$t('Strings.Teams')" v-if="!$config.model.isSupervisorMode">
+            <FilterBlock :title="$t('Strings.Teams')"
+                v-if="!$config.model.isSupervisorMode">
                 <Typeahead
                     control-id="teams"
                     :placeholder="$t('Strings.AllTeams')"
@@ -39,8 +37,7 @@
                     :ajax-params="supervisorsParams"
                     :fetch-url="supervisorsUrl"
                     data-vv-name="UserId"
-                    data-vv-as="UserName"
-                />
+                    data-vv-as="UserName"/>
             </FilterBlock>
         </Filters>
         <div class="clearfix">
@@ -54,18 +51,18 @@
             :addParamsToRequest="addFilteringParams"
             noPaging
             noSearch
-            exportable
-        >
+            exportable>
             <tr slot="header">
-                <th rowspan="2" class="vertical-align-middle text-center">{{$t("Strings.Days")}}</th>
+                <th rowspan="2"
+                    class="vertical-align-middle text-center">
+                    {{$t("Strings.Days")}}
+                </th>
                 <th
                     colspan="2"
-                    class="type-numeric sorting_disabled text-center"
-                >{{$t("Strings.Assignments")}}</th>
+                    class="type-numeric sorting_disabled text-center">{{$t("Strings.Assignments")}}</th>
                 <th
                     colspan="5"
-                    class="type-numeric sorting_disabled text-center"
-                >{{$t("Strings.Interviews")}}</th>
+                    class="type-numeric sorting_disabled text-center">{{$t("Strings.Interviews")}}</th>
             </tr>
             <tr slot="header">
                 <th></th>

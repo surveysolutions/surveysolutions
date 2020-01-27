@@ -1,13 +1,17 @@
 <template>
-    <div class="unit-section" :class="coverStatusClass">
+    <div class="unit-section"
+        :class="coverStatusClass">
         <div class="unit-title">
             <wb-humburger :showFoldbackButtonAsHamburger="showHumburger"></wb-humburger>
             <h3>{{ $t("WebInterviewUI.Cover")}}</h3>
         </div>
 
         <div class="wrapper-info error">
-            <div class="container-info" v-if="hasBrokenPackage">
-                <h4 class="error-text">{{ $t("WebInterviewUI.CoverBrokenPackegeTitle")}}</h4>
+            <div class="container-info"
+                v-if="hasBrokenPackage">
+                <h4 class="error-text">
+                    {{ $t("WebInterviewUI.CoverBrokenPackegeTitle")}}
+                </h4>
                 <p class="error-text"><i v-html="$t('WebInterviewUI.CoverBrokenPackegeText')"></i></p>
             </div>
             <div class="container-info">
@@ -15,46 +19,67 @@
             </div>
         </div>
 
-        <div class="wrapper-info" v-if="hasSupervisorComment">
+        <div class="wrapper-info"
+            v-if="hasSupervisorComment">
             <div class="container-info">
-                <h4 class="gray-uppercase">{{ $t("WebInterviewUI.CoverSupervisorNote")}}</h4>
+                <h4 class="gray-uppercase">
+                    {{ $t("WebInterviewUI.CoverSupervisorNote")}}
+                </h4>
                 <p>
                     <b>{{supervisorComment}}</b>
                 </p>
             </div>
         </div>
 
-        <div class="wrapper-info" v-if="commentedQuestions.length > 0">
+        <div class="wrapper-info"
+            v-if="commentedQuestions.length > 0">
             <div class="container-info">
-                <h4 class="gray-uppercase">{{commentsTitle}}</h4>
+                <h4 class="gray-uppercase">
+                    {{commentsTitle}}
+                </h4>
                 <ul class="list-unstyled marked-questions">
-                    <li v-for="commentedQuestion in commentedQuestions" :key="commentedQuestion.id">
-                        <a href="javascript:void(0);" @click="navigateTo(commentedQuestion)">{{ commentedQuestion.title }}</a>
+                    <li v-for="commentedQuestion in commentedQuestions"
+                        :key="commentedQuestion.id">
+                        <a href="javascript:void(0);"
+                            @click="navigateTo(commentedQuestion)">{{ commentedQuestion.title }}</a>
                     </li>
                 </ul>
             </div>
         </div>
 
         <template v-for="question in questions">
-            <div class="wrapper-info" v-if="question.isReadonly" :key="question.id">
-                <div class="container-info" :id="question.identity">
+            <div class="wrapper-info"
+                v-if="question.isReadonly"
+                :key="question.id">
+                <div class="container-info"
+                    :id="question.identity">
                     <h5 v-html="question.title"></h5>
                     <p>
                         <b v-if="question.type == 'Gps'">
-                            <a :href="getGpsUrl(question)" target="_blank">{{question.answer}}</a>
+                            <a :href="getGpsUrl(question)"
+                                target="_blank">{{question.answer}}</a>
                             <br/>
-                            <img v-bind:src="googleMapPosition(question.answer)" draggable="false" />
+                            <img v-bind:src="googleMapPosition(question.answer)"
+                                draggable="false" />
                         </b>
-                        <b v-else-if="question.type == 'DateTime'" v-dateTimeFormatting v-html="question.answer">
+                        <b v-else-if="question.type == 'DateTime'"
+                            v-dateTimeFormatting
+                            v-html="question.answer">
                         </b>
                         <b v-else>{{question.answer}}</b>
                     </p>
                 </div>
             </div>
-            <component v-else :key="question.identity" v-bind:is="question.type" v-bind:id="question.identity" fetchOnMount></component>
+            <component v-else
+                :key="question.identity"
+                v-bind:is="question.type"
+                v-bind:id="question.identity"
+                fetchOnMount></component>
         </template>
 
-        <NavigationButton id="NavigationButton" :target="firstSectionId" fetchOnMount></NavigationButton>
+        <NavigationButton id="NavigationButton"
+            :target="firstSectionId"
+            fetchOnMount></NavigationButton>
     </div>
 </template>
 

@@ -1,25 +1,36 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="single-select-question">
+    <wb-question :question="$me"
+        questionCssClassName="single-select-question">
         <div class="question-unit">
-            <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
-                <div class="radio" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
+            <div class="options-group"
+                v-bind:class="{ 'dotted': noOptions }">
+                <div class="radio"
+                    v-for="option in answeredOrAllOptions"
+                    :key="$me.id + '_' + option.value">
                     <div class="field">
-                        <input class="wb-radio" type="radio" 
+                        <input class="wb-radio"
+                            type="radio" 
                             :id="$me.id + '_' + option.value" 
                             :name="$me.id" 
                             :value="option.value"
                             :disabled="!$me.acceptAnswer"
                             v-model="answer">
                         <label :for="$me.id + '_' + option.value">
-                                <span class="tick"></span> {{option.title}}
+                            <span class="tick"></span> {{option.title}}
                         </label>
                         <wb-remove-answer :id-suffix="`_opt_${option.value}`"/>
                     </div>
                 </div>
-                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
+                <button type="button"
+                    class="btn btn-link btn-horizontal-hamburger"
+                    @click="toggleOptions"
+                    v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
                     <span></span>
                 </button>
-                <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
+                <div v-if="noOptions"
+                    class="options-not-available">
+                    {{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}
+                </div>
                 <wb-lock />
             </div>            
         </div>
