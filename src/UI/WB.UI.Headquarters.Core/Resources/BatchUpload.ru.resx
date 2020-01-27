@@ -413,7 +413,7 @@ _comment - комментарии к заданию</value>
     <value>Вернуться на страницу импорта опросника</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>Обнаружено {0} ошибок</value>
+      <value>Обнаружено {{count}} ошибок</value>
   </data>
   <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
     <value>создание многих интервью</value>
@@ -425,7 +425,7 @@ _comment - комментарии к заданию</value>
     <value>Файл</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
-    <value>Импортирование из {0} для {1}</value>
+      <value>Импортирование из {{fileName}} для {{title}}</value>
   </data>
   <data name="ImportInterviews_PageTitle" xml:space="preserve">
     <value>Создание многих интервью загрузкой файла</value>
@@ -467,19 +467,19 @@ _comment - комментарии к заданию</value>
     <value>Создать множество заданий используя файл</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Импорт заданий для {0}</value>
+      <value>Импорт заданий для {{title}}</value>
   </data>
   <data name="SingleAssignmentCreated" xml:space="preserve">
     <value>1 задание создано</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} заданий создано</value>
+      <value>{{count}} заданий создано</value>
   </data>
   <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
     <value>1 задание не было создано</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0} заданий не было создано</value>
+      <value>{{count}} заданий не было создано</value>
   </data>
   <data name="DownloadInvalidAssignments" xml:space="preserve">
     <value>Загрузить задания с ошибками</value>
@@ -498,7 +498,7 @@ _comment - комментарии к заданию</value>
     <value>Импорт интервью для {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} из {1}</value>
+      <value>{{createdCount}} из {{totalCount}}</value>
   </data>
   <data name="AssignedToMultipleEnumerators" xml:space="preserve">
     <value>Назначено на {0} интервьюеров</value>
@@ -543,28 +543,28 @@ _comment - комментарии к заданию</value>
     <comment>1 ошибка</comment>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>{0} заданий успешно проверено</value>
-    <comment>{0} заданий успешно проверено</comment>
+      <value>{{count}} заданий успешно проверено</value>
+      <comment>{0} заданий успешно проверено</comment>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>{0} ошибок</value>
-    <comment>{0} ошибок</comment>
+      <value>{{count}} ошибок</value>
+      <comment>{0} ошибок</comment>
   </data>
   <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
     <value>Проверка данных заданий</value>
     <comment>Проверка данных заданий</comment>
   </data>
   <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
-    <value>Проверка заданий для опросника {0}</value>
-    <comment>Проверка заданий для опросника {0}</comment>
+      <value>Проверка заданий для опросника {{title}}</value>
+      <comment>Проверка заданий для опросника {0}</comment>
   </data>
   <data name="Import_VerificationOfDataFile" xml:space="preserve">
     <value>Проверка файла данных</value>
     <comment>Проверка файла данных</comment>
   </data>
   <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-    <value>шаг {0} из {1}</value>
-    <comment>шаг {0} из {1}</comment>
+      <value>шаг {{verifiedCount}} из {{totalCount}}</value>
+      <comment>шаг {0} из {1}</comment>
   </data>
   <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
     <value>Проверка файла данных выполнена успешно</value>
