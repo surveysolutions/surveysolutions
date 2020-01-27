@@ -26,14 +26,14 @@ export default {
         title: String,
         canClose: {
             type: Boolean,
-            default() { return true }
-        }
+            default() { return true },
+        },
     },
 
     computed: {
         titleId(){
             return this.id + 'lbl'
-        }
+        },
     },
 
     methods:{
@@ -43,8 +43,8 @@ export default {
 
         modal(params){
             $(this.$refs.modal).appendTo('body').modal(params || {})
-        }
-    }
+        },
+    },
     
 }
 </script>

@@ -31,5 +31,5 @@ Vue.directive('disabledWhenUnchecked', {
             return
         }
         el.disabled = binding.value.maxAnswerReached && !el.checked
-    }
+    },
 })

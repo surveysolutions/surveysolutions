@@ -68,18 +68,18 @@ export default {
     props: {
         item: {
             required: true,
-            type: Object
+            type: Object,
         },
         addCommentsAllowed: {
-            required: true,  type: Boolean
-        }
+            required: true,  type: Boolean,
+        },
     },
     data() {
         return {
             isAdditionalInfoVisible: false,
             isCommentFormIsVisible: false,
             comment: null,
-            postingComment: false
+            postingComment: false,
         }
     },
     methods: 
@@ -113,7 +113,7 @@ export default {
             this.item.hasComment = true
             this.isCommentFormIsVisible = false
             this.postingComment = false
-        }
+        },
     },
     computed: {
         additionalInfo() {

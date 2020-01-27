@@ -49,7 +49,7 @@ export default {
     props: ['question', 'questionDivCssClassName', 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
     data() {
         return {
-            isShowingAddCommentDialogFlag: undefined
+            isShowingAddCommentDialogFlag: undefined,
         }
     },
 
@@ -60,7 +60,7 @@ export default {
 
         'question.updatedAt'() {
             this.scroll()
-        }
+        },
     },
 
     mounted() {
@@ -113,7 +113,7 @@ export default {
             return [{ 
                 'mark': this.highlight,
                 'disabled-question': this.disabled, 
-                'with-flag': this.hasFlag
+                'with-flag': this.hasFlag,
             }, this.questionDivCssClassName]
         },
         questionEditorClass() {
@@ -121,7 +121,7 @@ export default {
                 answered: this.question.isAnswered && !this.noAnswer,
                 readonly: !this.question.acceptAnswer,
                 'has-error': !this.question.validity.isValid,
-                'for-supervisor': this.question.isForSupervisor
+                'for-supervisor': this.question.isForSupervisor,
             }, this.questionCssClassName]
         },
         isShowingAddCommentDialog() {
@@ -132,7 +132,7 @@ export default {
         },
         showSideMenu() {
             return !this.disabled && !this.noComments
-        }
+        },
     },
     methods : {
         doScroll: debounce(function() {
@@ -154,8 +154,8 @@ export default {
         },
         hideAddComment(){
             this.isShowingAddCommentDialogFlag = false
-        }
-    }
+        },
+    },
 }
 
 </script>

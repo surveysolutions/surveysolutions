@@ -29,7 +29,7 @@ import { formatNumber } from './formatNumber'
 export default {
     data() {
         return {
-            usersCount : ''
+            usersCount : '',
         }
     },
     mounted() {
@@ -43,7 +43,7 @@ export default {
         },
         onTableReload(data) {
             this.usersCount = formatNumber(data.recordsTotal)
-        }
+        },
     },
     computed: {
         model() {
@@ -64,7 +64,7 @@ export default {
                         className: 'nowrap',
                         render: function(data, type, row) {
                             return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`
-                        }
+                        },
                     },
                     {
                         data: 'creationDate',
@@ -74,25 +74,25 @@ export default {
                         render: function(data, type, row) {
                             var localDate = moment.utc(data).local()
                             return localDate.format(window.CONFIG.dateFormat)
-                        }
+                        },
                     },
                     {
                         data: 'isLocked',
                         name: 'IsLockedByHQ',
                         className: 'date',
                         title: this.$t('Users.Locked'),
-                    }
+                    },
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
                     type: 'GET',
-                    contentType: 'application/json'
+                    contentType: 'application/json',
                 },
                 responsive: false,
                 order: [[0, 'asc']],
-                sDom: 'rf<"table-with-scroll"t>ip'
+                sDom: 'rf<"table-with-scroll"t>ip',
             }
-        }
-    }
+        },
+    },
 }
 </script>

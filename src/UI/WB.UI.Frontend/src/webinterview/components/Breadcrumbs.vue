@@ -16,8 +16,8 @@ export default {
     props: {
         showHumburger: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
 
     mounted() {
@@ -27,7 +27,7 @@ export default {
     watch: {
         '$store.state.route.params.sectionId'() {
             this.fetchBreadcrumbs()
-        }
+        },
     },
     computed: {
         info() {
@@ -47,7 +47,7 @@ export default {
                 title += '<span> - <i>' + this.getRosterTitle(this.info.rosterTitle) + '</i></span>'
 
             return title
-        }
+        },
     },
     methods: {
         navigate(breadcrumb) {
@@ -58,8 +58,8 @@ export default {
             this.$router.push({
                 name: 'section',
                 params: {
-                    sectionId: breadcrumb.target
-                }
+                    sectionId: breadcrumb.target,
+                },
             })
         },
         fetchBreadcrumbs() {
@@ -67,8 +67,8 @@ export default {
         },
         getRosterTitle(title) {
             return title ? title : '[...]'
-        }
-    }
+        },
+    },
 }
 
 </script>

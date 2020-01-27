@@ -16,14 +16,14 @@ const store = safeStore({
         entities: [], /* IInterviewEntity[] */
         entityDetails: { /* string: object */ },
         breadcrumbs: {
-            breadcrumbs: []
+            breadcrumbs: [],
         },
         coverInfo: {
             entitiesWithComments: [],
-            identifyingQuestions: []
+            identifyingQuestions: [],
         },
         interviewCompleted: false,
-        interviewShutdown: false
+        interviewShutdown: false,
     },
     actions,
     mutations,
@@ -54,8 +54,8 @@ const store = safeStore({
         },
         basePath() {
             return window.input ? window.input.settings.config.basePath : window.CONFIG.basePath
-        }
-    }
+        },
+    },
 })
 
 export default store

@@ -24,7 +24,7 @@ export default {
                 'btn-success': isValid && status == GroupStatus.Completed,
                 'btn-danger': isValid == false || status == GroupStatus.Invalid || status == GroupStatus.StartedInvalid || status == GroupStatus.CompletedInvalid,
                 'btn-primary': isValid && (status == GroupStatus.NotStarted || status == GroupStatus.Started), 
-                'btn-back': this.isParentButton
+                'btn-back': this.isParentButton,
             }]
         },
         to() {
@@ -32,9 +32,9 @@ export default {
                 name: 'section',
                 params: {
                     sectionId: this.$me.target,
-                    interviewId: this.$route.params.interviewId
+                    interviewId: this.$route.params.interviewId,
                 },
-                hash: this.isParentButton ? '#' + this.$route.params.sectionId : ''
+                hash: this.isParentButton ? '#' + this.$route.params.sectionId : '',
             }
         },
         isParentButton() {
@@ -50,13 +50,13 @@ export default {
                 title +=' - <i>' +  this.$me.rosterTitle + '</i>'
 
             return title
-        }
+        },
     },
 
     watch: {
         ['$route.params.sectionId']() {
             this.fetch()
-        }
+        },
     },
 
     methods: {
@@ -70,8 +70,8 @@ export default {
                 }
                 this.$router.push(this.to)
             }
-        }
-    }
+        },
+    },
 }
 
 </script>

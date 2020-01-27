@@ -22,11 +22,11 @@ export default {
     watch: {
         ['$store.getters.scrollState']() {
             this.scroll()
-        }
+        },
     },
     data() {
         return {
-            text: ''
+            text: '',
         }
     },
           
@@ -36,7 +36,7 @@ export default {
     computed: {
         hash() {
             return getLocationHash(this.$me.id)
-        }
+        },
     },
     methods : {
         doScroll: debounce(function() {
@@ -50,7 +50,7 @@ export default {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll() 
             }
-        }
-    }
+        },
+    },
 }
 </script>

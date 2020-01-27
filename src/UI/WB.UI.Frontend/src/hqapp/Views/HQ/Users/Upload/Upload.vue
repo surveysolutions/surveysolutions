@@ -59,7 +59,7 @@ import moment from 'moment'
 export default {
     data: function() {
         return {
-            timerId: 0
+            timerId: 0,
         }
     },
     computed: {
@@ -94,7 +94,7 @@ export default {
         },
         importedUsersInPercents() {
             return this.importedUsersCount / this.progress.totalUsersToImport * 100
-        }
+        },
     },
     methods: {
         onFileChange(e) {
@@ -134,12 +134,12 @@ export default {
             this.$http.get(this.config.api.importUsersStatusUrl).then(response => {
                 this.$store.dispatch('setUploadStatus', response.data)
             })
-        }
+        },
     },
     mounted() {
         this.timerId = window.setInterval(() => {
             this.updateStatus()
         }, 500)
-    }
+    },
 }
 </script>

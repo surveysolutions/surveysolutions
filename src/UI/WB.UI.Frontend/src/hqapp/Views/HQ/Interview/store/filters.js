@@ -22,7 +22,7 @@ export default {
             NotAnswered: false,
 
             ForSupervisor: false,
-            ForInterviewer: false
+            ForInterviewer: false,
         },
 
         stats: {
@@ -34,8 +34,8 @@ export default {
             count: 0,
             skip: 0,
             pageSize: 20,
-            needToClear: false
-        }
+            needToClear: false,
+        },
     },
 
     actions: {
@@ -78,7 +78,7 @@ export default {
         refreshSearchResults({ dispatch, commit }) {
             commit('SEARCH_NEED_TO_CLEAR')
             dispatch('fetchSearchResults')
-        }
+        },
     },
 
     mutations: {
@@ -122,7 +122,7 @@ export default {
                     state.search.needToClear = true
                 Vue.set(state.filter, key, false)
             })
-        }
+        },
     },
     getters: {
         filteringState(state) {
@@ -131,7 +131,7 @@ export default {
 
         searchResult(state) {
             return state.search
-        }
-    }
+        },
+    },
 }
 

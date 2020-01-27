@@ -31,7 +31,7 @@ export default class UploadComponent {
                                     else next()
                                 })
                                 .catch(() => next())
-                        }
+                        },
                     },
                     {
                         name: 'uploadverification', path: 'Verification',
@@ -40,7 +40,7 @@ export default class UploadComponent {
                             if (self.rootStore.getters.upload.fileName == '')
                                 next({ name: 'upload' })
                             else next()
-                        }
+                        },
                     },
                     {
                         name: 'uploadprogress', path: 'Progress', component: UploadProgress,
@@ -53,7 +53,7 @@ export default class UploadComponent {
                                     else next()
                                 })
                                 .catch(() => next({ name: 'upload' }))
-                        }
+                        },
                     },
                     {
                         name: 'uploadcomplete', path: 'Complete', component: UploadComplete,
@@ -61,10 +61,10 @@ export default class UploadComponent {
                             if (self.rootStore.getters.upload.fileName == '')
                                 next({ name: 'upload' })
                             else next()
-                        }
-                    }
-                ]
-            }
+                        },
+                    },
+                ],
+            },
         ]
     }
     get modules() { return { upload } }

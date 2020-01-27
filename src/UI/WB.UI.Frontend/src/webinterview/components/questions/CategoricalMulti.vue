@@ -63,7 +63,7 @@ export default {
     data(){
         return {
             showAllOptions: false,
-            answer: []
+            answer: [],
         }
     },
     created(){
@@ -92,7 +92,7 @@ export default {
         },
         allAnswersGiven() {
             return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-        }
+        },
     },
     methods: {
         change() {
@@ -134,7 +134,7 @@ export default {
             }), ', ')
 
             const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
-                rosterTitle
+                rosterTitle,
             } )
 
             modal.confirm(confirmMessage, result => {
@@ -146,12 +146,12 @@ export default {
                     return
                 }
             })
-        }
+        },
     },
     mounted() {
         this.answer = this.$me.answer
     },
-    mixins: [entityDetails]
+    mixins: [entityDetails],
 }
 
 </script>

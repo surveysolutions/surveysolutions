@@ -47,7 +47,7 @@ export default {
     props: ['noComments'],
     data() {
         return {
-            selectedOption: null
+            selectedOption: null,
         }
     },
     computed: {
@@ -56,13 +56,13 @@ export default {
             return map(self.$me.answer, (val) => {
                 return {
                     title: find(self.$me.options, (opt) => { return opt.value === val }).title,
-                    value: val
+                    value: val,
                 }
             })
         },
         allAnswersGiven() {
             return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-        }
+        },
     },
     methods: {
         isProtected(val){
@@ -104,8 +104,8 @@ export default {
             else {
                 this.$store.dispatch('answerMultiOptionQuestion', { answer: newAnswer, identity: this.$me.id })
             }
-        }
-    }
+        },
+    },
 }
 
 </script>

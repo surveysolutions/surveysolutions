@@ -46,25 +46,25 @@ export default {
     props: {
         value: {
             type: Object,
-            default: null
+            default: null,
         },
         questionId: {
             type: String,
-            default: null
+            default: null,
         },
         optionsSource: {
             type: Function,
-            required: true
+            required: true,
         },
         disabled: {
             required: false,
-            type: Boolean
+            type: Boolean,
         },
         watermark: {
             required: false,
             type: String,
-            default: null
-        }
+            default: null,
+        },
     },
     computed: {
         watermarkText() {
@@ -72,13 +72,13 @@ export default {
         },
         searchBoxId() {
             return `sb_${this.questionId}`
-        }
+        },
     },
     data() {
         return {
             searchTerm: '',
             options: [],
-            isLoading: false
+            isLoading: false,
         }
     },
     methods: {
@@ -121,7 +121,7 @@ export default {
             }
 
             return encodedTitle
-        }
+        },
     },
     mounted() {
         const jqEl = $(this.$el)
@@ -135,6 +135,6 @@ export default {
         jqEl.on('hidden.bs.dropdown', () => {
             this.searchTerm = ''
         })
-    }
+    },
 }
 </script>

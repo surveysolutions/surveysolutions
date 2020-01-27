@@ -46,13 +46,13 @@ export const GroupStatus = {
     Started: 'Started',
     StartedInvalid: 'StartedInvalid',
     Completed: 'Completed',
-    CompletedInvalid: 'CompletedInvalid'
+    CompletedInvalid: 'CompletedInvalid',
 }
 
 export const ButtonType = {
     Start: 'Start',
     Next: 'Next',
     Parent: 'Parent',
-    Complete: 'Complete'
+    Complete: 'Complete',
 }
 

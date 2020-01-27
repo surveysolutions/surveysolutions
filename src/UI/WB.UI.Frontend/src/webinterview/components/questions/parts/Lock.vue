@@ -7,6 +7,6 @@ import { entityPartial } from '~/webinterview/components/mixins'
 
 export default {
     mixins: [entityPartial],
-    name: 'wb-remove-answer'
+    name: 'wb-remove-answer',
 }
 </script>

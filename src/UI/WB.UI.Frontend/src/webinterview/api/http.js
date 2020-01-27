@@ -5,7 +5,7 @@ const httpPlugin = {
     install(Vue, { store }) {
 
         const http = axios.create({
-            baseURL: store.getters.basePath
+            baseURL: store.getters.basePath,
         })
 
         // Add a response interceptor
@@ -69,7 +69,7 @@ const httpPlugin = {
                     const response = await http.get(`api/webinterview/${actionName}`, {
                         params,
                         responseType: 'json',
-                        headers: headers
+                        headers: headers,
                     })
                     return response.data
                 })
@@ -81,7 +81,7 @@ const httpPlugin = {
                     delete params.interviewId
                     var headers = store.getters.isReviewMode === true ? { review: true } : {}
                     return http.post(`/api/webinterview/commands/${actionName}?interviewId=${interviewId}`, params, {
-                        headers: headers
+                        headers: headers,
                     })
                 })
             },
@@ -104,18 +104,18 @@ const httpPlugin = {
                             dispatch('uploadProgress', {
                                 id,
                                 now: ev.loaded,
-                                total: ev.total
+                                total: ev.total,
                             })
                         }
-                    }
+                    },
                 })
-            }
+            },
         }
 
         Object.defineProperty(Vue.$api, 'interview', {
-            get() { return api }
+            get() { return api },
         })
-    }
+    },
 }
 
 export default httpPlugin

@@ -41,7 +41,7 @@ export default {
     data: function(){
         return {        
             statusMessage: '',
-            errorList: []
+            errorList: [],
         }        
     },
     mounted() {
@@ -58,7 +58,7 @@ export default {
         },
         progressStyle() {
             return {
-                width: this.fileProgress + '%'
+                width: this.fileProgress + '%',
             }
         },
         reload() {
@@ -107,7 +107,7 @@ export default {
                 },
                 error : function(error){
                     statusupdater(uploadingErrorMessage)
-                }
+                },
             })  
             this.$refs.uploader.value = ''            
         },
@@ -116,12 +116,12 @@ export default {
             return [
                 {
                     name: this.$t('Common.Open'),
-                    callback: () => window.location = window.input.settings.config.basePath + 'Maps/Details?mapname=' + encodeURIComponent(rowData.fileName)           
+                    callback: () => window.location = window.input.settings.config.basePath + 'Maps/Details?mapname=' + encodeURIComponent(rowData.fileName),           
                 },
                 {
                     name: this.$t('Pages.MapList_DeleteMap'),
-                    callback: () => this.deleteMap(rowData.fileName)
-                }
+                    callback: () => this.deleteMap(rowData.fileName),
+                },
             ]
         },
         deleteMap(fileName) {
@@ -136,7 +136,7 @@ export default {
                     self.$refs.table.reload()
                 }
             })
-        }
+        },
     },
     computed: {
         config() {
@@ -154,30 +154,30 @@ export default {
                         data: 'fileName',
                         name: 'FileName',
                         class: 'title',
-                        title: this.$t('Pages.MapList_Name')
+                        title: this.$t('Pages.MapList_Name'),
                     },
                     {
                         data: 'size',
                         name: 'Size',
                         class: 'parameters',
-                        title: this.$t('Pages.MapList_Size')
+                        title: this.$t('Pages.MapList_Size'),
                     },
                     {
                         data: 'importDate',
                         name: 'ImportDate',
                         class: 'date',
-                        title: this.$t('Pages.MapList_Updated')
-                    }
+                        title: this.$t('Pages.MapList_Updated'),
+                    },
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
-                    type: 'GET'
+                    type: 'GET',
                 },
                 responsive: false,
                 order: [[0, 'asc']],
-                sDom: 'rf<"table-with-scroll"t>ip'
+                sDom: 'rf<"table-with-scroll"t>ip',
             }
-        }
-    }
+        },
+    },
 }
 </script>

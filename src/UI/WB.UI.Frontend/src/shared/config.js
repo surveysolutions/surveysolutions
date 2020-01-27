@@ -10,14 +10,14 @@ export default Object.assign(global.CONFIG || {}, {
         Object.defineProperty(Vue, '$config', {
             get() {
                 return config
-            }
+            },
         })
 
         /*  expose a local API method  */
         Object.defineProperty(Vue.prototype, '$config', {
             get() {
                 return config
-            }
+            },
         })
-    }
+    },
 })

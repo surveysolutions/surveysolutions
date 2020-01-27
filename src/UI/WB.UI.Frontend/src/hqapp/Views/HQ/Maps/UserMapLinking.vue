@@ -46,7 +46,7 @@
 export default {  
     data: function(){
         return {        
-            statusMessage: ''
+            statusMessage: '',
         }        
     }, 
     mounted() {},
@@ -56,7 +56,7 @@ export default {
         },
         actionsAlowed() {
             return !this.config.isObserver && !this.config.isObserving
-        }
+        },
     },
     methods:{
         updateStatus(newMessage){
@@ -88,10 +88,10 @@ export default {
                 },
                 error : function(error){
                     statusupdater(uploadingErrorMessage)
-                }
+                },
             })  
         },
 
-    }
+    },
 }
 </script>

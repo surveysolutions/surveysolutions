@@ -6,16 +6,16 @@ export default class MapComponent {
     get routes() {
         return [{
             path: '/SurveySetup/UpgradeAssignments/:questionnaireId',
-            component: UpgradeAssignments
+            component: UpgradeAssignments,
         },
         {
             path: '/SurveySetup/UpgradeProgress/:processId',
-            component: UpgradeProgress
+            component: UpgradeProgress,
         },
         {
             path: '/SurveySetup',
-            component: Questionnaires
-        }
+            component: Questionnaires,
+        },
         ]
     }
 }

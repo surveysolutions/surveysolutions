@@ -264,7 +264,7 @@ const emailOrPasswordRequired = {
     validate(value, [email, password]) {
         return (email !== null && email !== '') || (password !== null && password !== '')
     },
-    hasTarget: true
+    hasTarget: true,
 }
 
 const emailShouldBeEmpty = {
@@ -274,7 +274,7 @@ const emailShouldBeEmpty = {
     validate(value, [email]) {
         return email === null || email === ''
     },
-    hasTarget: true
+    hasTarget: true,
 }
 
 Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired)
@@ -288,8 +288,8 @@ export default {
                 acceptAnswer: true,
                 isAnswered: false,
                 validity: {
-                    isValid: true
-                }
+                    isValid: true,
+                },
             },
             sizeQuestion: {
                 id: 'size',
@@ -297,8 +297,8 @@ export default {
                 isAnswered: true,
                 answer: '1',
                 validity: {
-                    isValid: true
-                }
+                    isValid: true,
+                },
             },
             newResponsibleId: null,
 
@@ -308,8 +308,8 @@ export default {
                 isAnswered: false,
                 answer: null,
                 validity: {
-                    isValid: true
-                }
+                    isValid: true,
+                },
             },
             passwordQuestion: {
                 id: 'password',
@@ -317,8 +317,8 @@ export default {
                 isAnswered: false,
                 answer: null,
                 validity: {
-                    isValid: true
-                }
+                    isValid: true,
+                },
             },
             webMode: {
                 id: 'webMode',
@@ -326,8 +326,8 @@ export default {
                 isAnswered: true,
                 answer: false,
                 validity: {
-                    isValid: true
-                }
+                    isValid: true,
+                },
             },
             isAudioRecordingEnabled: {
                 id: 'isAudioRecordingEnabled',
@@ -335,8 +335,8 @@ export default {
                 isAnswered: true,
                 answer: false,
                 validity: {
-                    isValid: true
-                }
+                    isValid: true,
+                },
             },
             commentsQuestion: {
                 id: 'comments',
@@ -344,8 +344,8 @@ export default {
                 isAnswered: true,
                 answer: null,
                 validity: {
-                    isValid: true
-                }
+                    isValid: true,
+                },
             },
         }
     },
@@ -354,7 +354,7 @@ export default {
             let validations = {
                 regex: '^-?([0-9]+)$',
                 min_value: -1,
-                max_value: this.config.maxInterviewsByAssignment
+                max_value: this.config.maxInterviewsByAssignment,
             }
 
             if (this.webMode.answer) {
@@ -369,7 +369,7 @@ export default {
         },
         passwordValidations() {
             return {
-                regex: /^([0-9A-Z]{6,})$|^(\?)$/
+                regex: /^([0-9A-Z]{6,})$|^(\?)$/,
             }
         },
         entities() {
@@ -390,7 +390,7 @@ export default {
 
         interviewId() {
             return this.config.id
-        }
+        },
     },
 
     methods: {
@@ -425,7 +425,7 @@ export default {
                         password: this.passwordQuestion.answer,
                         webMode: this.webMode.answer,
                         isAudioRecordingEnabled: this.isAudioRecordingEnabled.answer,
-                        comments: this.commentsQuestion.answer
+                        comments: this.commentsQuestion.answer,
                     })
                     .then(response => {
                         window.location.href = self.config.assignmentsUrl
@@ -451,7 +451,7 @@ export default {
 
         connected() {
             this.$store.dispatch('loadTakeNew', { interviewId: this.interviewId })
-        }
+        },
     },
 
     mounted() {
@@ -480,6 +480,6 @@ export default {
 
     beforeDestroy() {
         window.removeEventListener('resize', this.onResize)
-    }
+    },
 }
 </script>

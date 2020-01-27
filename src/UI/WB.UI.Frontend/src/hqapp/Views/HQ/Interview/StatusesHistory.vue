@@ -47,7 +47,7 @@ import moment from 'moment'
 export default {
     data: function() {
         return {
-            items: null
+            items: null,
         }
     },
     methods: {
@@ -63,7 +63,7 @@ export default {
             }
 
             this.$refs.modal.modal()
-        }
-    }
+        },
+    },
 }
 </script> 

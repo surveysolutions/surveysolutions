@@ -7,7 +7,7 @@ export default {
         box.addLocale('ar', {
             OK: i18n.t('Common.Ok'),
             CANCEL: i18n.t('Common.Cancel'),
-            CONFIRM: i18n.t('Common.Confirm')
+            CONFIRM: i18n.t('Common.Confirm'),
         })
     },
     confirm(message, callback) {
@@ -21,5 +21,5 @@ export default {
     },
     prompt(options){
         return box.prompt(options)
-    }
+    },
 }

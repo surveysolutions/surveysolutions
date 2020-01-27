@@ -110,10 +110,10 @@ export default {
         },
         webSettingsUrl(){
             return this.$config.model.api.webSettingsUrl
-        }
+        },
     },
     methods: {
-    }
+    },
 
 }
 </script>

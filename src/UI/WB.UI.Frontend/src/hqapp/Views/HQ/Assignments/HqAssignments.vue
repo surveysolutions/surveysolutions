@@ -649,7 +649,7 @@ export default {
             await this.$http({
                 method: 'delete',
                 url: this.config.api.assignments,
-                data: this.selectedRows
+                data: this.selectedRows,
             })
 
             this.reloadTable()

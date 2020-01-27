@@ -44,7 +44,7 @@ export default {
     props: ['noComments'],
     data() {
         return {
-            isInProgress: false
+            isInProgress: false,
         }
     },
     computed: {
@@ -55,7 +55,7 @@ export default {
         },
         goolgeMapUrl(){
             return `${this.$config.googleMapsBaseUrl}/maps?q=${this.$me.answer.latitude},${this.$me.answer.longitude}`
-        }
+        },
     },
     methods: {
         removeAnswer() {
@@ -79,7 +79,7 @@ export default {
                     {
                         enableHighAccuracy: true,
                         timeout: 30000,
-                        maximumAge: 60000
+                        maximumAge: 60000,
                     })
             })
         },
@@ -87,7 +87,7 @@ export default {
             console.log('onPositionDetermined')
             this.$store.dispatch('answerGpsQuestion', {
                 identity: questionId,
-                answer: new GpsAnswer(position.coords.latitude, position.coords.longitude, position.coords.accuracy, position.coords.altitude, position.timestamp)
+                answer: new GpsAnswer(position.coords.latitude, position.coords.longitude, position.coords.accuracy, position.coords.altitude, position.timestamp),
             }).then(() => {
                 this.isInProgress = false
                 this.$store.dispatch('fetchProgress', -1)
@@ -118,8 +118,8 @@ export default {
             this.markAnswerAsNotSavedWithMessage(message)
             this.$store.dispatch('fetchProgress', -1)
             this.isInProgress = false
-        }
-    }
+        },
+    },
 }
 
 </script>

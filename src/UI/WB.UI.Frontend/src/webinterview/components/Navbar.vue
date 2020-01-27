@@ -262,7 +262,7 @@ export default {
             scenarioSaving: false,
             designerCredentialsExpired: false,
             selectedSaveOption: 'saveNew',
-            newScenarioName: ''
+            newScenarioName: '',
         }
     },
     mounted(){
@@ -340,7 +340,7 @@ export default {
         },
         getScenarioUrl() {
             return this.$config.getScenarioUrl
-        }
+        },
     },
     methods: {
         hideScenarioSave() {
@@ -369,7 +369,7 @@ export default {
                     }
 
                     self.sendEmailWithPersonalLink(result)
-                }
+                },
             })
 
             prompt.find('input').attr('placeholder', this.$t('WebInterviewUI.EmailLink_Placeholder'))
@@ -381,7 +381,7 @@ export default {
             var self = this
             axios.post(this.$config.sendLinkUri, { 
                 interviewId:  this.$route.params.interviewId,
-                email: email 
+                email: email, 
             }).then(function(response){
                 self.showEmailPersonalLink = false
             }) .catch(function (error) {
@@ -398,7 +398,7 @@ export default {
 
             modal.dialog({
                 message: '<p>' + this.$t('WebInterviewUI.SwitchingLanguage') +'</p>',
-                closeButton: false
+                closeButton: false,
             })
         },
         reloadQuestionnaire() {
@@ -412,7 +412,7 @@ export default {
                 this.designerScenarios = []
                 var getScenarios = await axios.get(this.saveScenarioUrl, {
                     crossDomain: true,
-                    withCredentials: true
+                    withCredentials: true,
                 })
 
                 this.designerScenarios = getScenarios.data
@@ -436,10 +436,10 @@ export default {
                     data: { 
                         scenarioText: JSON.stringify(scenario),
                         scenarioId: this.selectedSaveOption === 'updateExisting' ? this.selectedScenarioOption : '',
-                        scenarioTitle: this.newScenarioName
+                        scenarioTitle: this.newScenarioName,
                     },
                     crossDomain: true,
-                    withCredentials: true
+                    withCredentials: true,
                 })
 
                 this.hideScenarioSave()
@@ -465,7 +465,7 @@ export default {
             else {
                 throw error
             }
-        }
-    }
+        },
+    },
 }
 </script>

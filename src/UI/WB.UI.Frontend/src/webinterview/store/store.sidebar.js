@@ -13,7 +13,7 @@ export default {
         facetHidden: false,
         searchResultsHidden: true,
         screenWidth: 1400,
-        mediumScreenThreshold: 1210
+        mediumScreenThreshold: 1210,
     },
 
     actions: {
@@ -22,7 +22,7 @@ export default {
                 {
                     interviewId: rootState.route.params.interviewId,
                     sectionId: rootState.route.params.sectionId || null,
-                    ids
+                    ids,
                 })
                 .then((sideBar) => {
                     commit('SET_SIDEBAR_STATE', sideBar)
@@ -86,7 +86,7 @@ export default {
             if (state.screenWidth != newWidth) {
                 commit('SET_SCREEN_WIDTH', newWidth)
             }
-        }
+        },
     },
 
     mutations: {
@@ -112,7 +112,7 @@ export default {
         },
         SET_SCREEN_WIDTH(state, screenWidth) {
             state.screenWidth = screenWidth
-        }
+        },
     },
 
     getters: {
@@ -127,6 +127,6 @@ export default {
             /* tslint:enable:no-string-literal */
 
             return []
-        }
-    }
+        },
+    },
 }

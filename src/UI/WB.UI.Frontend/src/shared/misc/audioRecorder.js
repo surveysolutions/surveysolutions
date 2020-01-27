@@ -152,8 +152,8 @@
         worker.postMessage({
             command: 'init',
             config: {
-                sampleRate: this.context.sampleRate
-            }
+                sampleRate: this.context.sampleRate,
+            },
         })
         var recording = false,
             currCallback
@@ -164,8 +164,8 @@
                 command: 'record',
                 buffer: [
                     e.inputBuffer.getChannelData(0),
-                    e.inputBuffer.getChannelData(1)
-                ]
+                    e.inputBuffer.getChannelData(1),
+                ],
             })
         }
 
@@ -200,7 +200,7 @@
             if (!currCallback) throw new Error('Callback not set')
             worker.postMessage({
                 command: 'exportWAV',
-                type: type
+                type: type,
             })
         }
 
@@ -226,7 +226,7 @@ if (!window.AudioRecorder) {
             node: null,
             canvasWidth: 0,
             canvasHeight: 0,
-            animationFrameId: null
+            animationFrameId: null,
         }
 
         var config = {}
@@ -237,9 +237,9 @@ if (!window.AudioRecorder) {
                     'googEchoCancellation': 'false',
                     'googAutoGainControl': 'false',
                     'googNoiseSuppression': 'false',
-                    'googHighpassFilter': 'false'
+                    'googHighpassFilter': 'false',
                 },
-                'optional': []
+                'optional': [],
             },
         }
 

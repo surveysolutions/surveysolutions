@@ -19,22 +19,22 @@ function NewRouter(store) {
         routes: [
             {
                 name: 'finish',
-                path: '/Finish/:interviewId'
+                path: '/Finish/:interviewId',
             },
             {
                 name: 'splash',
                 path: '/run/:interviewId',
                 components: {
                     default: Splash,
-                    sideBar: SideBar
-                }
+                    sideBar: SideBar,
+                },
             },
             {
                 name: 'WebInterview',
                 path: '/:interviewId',
                 components: {
                     default: Interview,
-                    sideBar: SideBar
+                    sideBar: SideBar,
                 },
                 children: [
                     {
@@ -45,14 +45,14 @@ function NewRouter(store) {
                     {
                         name: 'section',
                         path: 'Section/:sectionId',
-                        component: Section
+                        component: Section,
                     },
                     {
                         name: 'complete',
                         path: 'Complete',
-                        component: Complete
+                        component: Complete,
                     },
-                ]
+                ],
             },
         ],
         scrollBehavior(to, from, savedPosition) {
@@ -61,7 +61,7 @@ function NewRouter(store) {
             } else {
                 return { x: 0, y: 0 }
             }
-        }
+        },
     })
 
     // tslint:disable:no-string-literal

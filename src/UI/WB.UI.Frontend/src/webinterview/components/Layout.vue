@@ -24,13 +24,13 @@ export default {
         },
         isLoading() {
             return this.$store.getters.loadingProgress === true ? 'true' : 'false'
-        }
+        },
     },
     mounted() {
         if(this.$config.loadedMessage) {
             modal.alert(this.$config.loadedMessage)
         }
-    }
+    },
 }
 
 </script>

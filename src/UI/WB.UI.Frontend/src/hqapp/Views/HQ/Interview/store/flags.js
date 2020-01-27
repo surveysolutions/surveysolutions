@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default {
     state: {
-        flagged: {}
+        flagged: {},
     },
 
     actions: {
@@ -20,7 +20,7 @@ export default {
         async fetchFlags({ commit }) {
             const flags = await Vue.$api.interview.get('getFlags')
             commit('SET_FLAGS', { flags })
-        }
+        },
     },
 
     mutations: {
@@ -34,12 +34,12 @@ export default {
         SET_FLAGS(state, { flags }) {
             state.flagged = {}
             flags.forEach(flag => state.flagged[flag] = true)
-        }
+        },
     },
 
     getters: {
         flags(state) {
             return state.flagged
-        }
-    }
+        },
+    },
 }

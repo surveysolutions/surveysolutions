@@ -47,7 +47,7 @@ export default {
                         title: this.$t('ImportQuestionnaire.Table_Title'),
                         render: function (data, type, row) {
                             return `<a href="${self.$config.model.importMode}/${row.id}">${escape(data)}</a>`
-                        }
+                        },
                     },
                     {
                         data: 'lastModified',
@@ -58,14 +58,14 @@ export default {
                             if (data === null || data === undefined || data === '') 
                                 return ''
                             return new moment(data).format(DateFormats.dateTime)
-                        }
+                        },
                     },
                     {
                         data: 'createdBy',
                         name: 'CreatorName',
                         title: this.$t('ImportQuestionnaire.Table_CreatedBy'),
-                        'class': 'created-by'
-                    }
+                        'class': 'created-by',
+                    },
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
@@ -76,9 +76,9 @@ export default {
                 order: [[1, 'desc']],
                 bInfo: false,
                 footer: true,
-                responsive: false
+                responsive: false,
             }
-        }
-    }
+        },
+    },
 }
 </script>

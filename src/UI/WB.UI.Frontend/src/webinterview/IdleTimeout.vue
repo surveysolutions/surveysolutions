@@ -10,7 +10,7 @@ export default {
     computed: {
         lastActivity() {
             return this.$store.state.webinterview.lastActivityTimestamp
-        }
+        },
     },
 
     beforeMount() {
@@ -29,13 +29,13 @@ export default {
     props: {
         minutes: {
             type: Number,
-            default: 15
-        }
+            default: 15,
+        },
     },
 
     data() {
         return {
-            shown: false
+            shown: false,
         }
     },
 
@@ -59,11 +59,11 @@ export default {
                 buttons: {
                     ok: {
                         label: this.$t('WebInterviewUI.Reload'),
-                        className: 'btn-success'
-                    }
-                }
+                        className: 'btn-success',
+                    },
+                },
             })
-        }
-    }
+        },
+    },
 }
 </script>

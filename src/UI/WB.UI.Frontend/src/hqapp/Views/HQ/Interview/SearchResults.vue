@@ -49,7 +49,7 @@ export default {
                         $state.complete()
                     }
                 })
-        }
+        },
     },
 
     computed: {
@@ -59,14 +59,14 @@ export default {
 
         searchResult() {
             return this.$store.getters.searchResult
-        }
+        },
     },
 
     watch:{
         'searchResult.count'() {
             if(this.$refs.loader != null)
                 this.$refs.loader.$emit('$InfiniteLoading:reset')
-        }
+        },
     },
 
     mounted() {
@@ -75,7 +75,7 @@ export default {
         })
     },
 
-    components: { SearchSectionResult,InfiniteLoading}
+    components: { SearchSectionResult,InfiniteLoading},
 }
 </script>
 

@@ -11,5 +11,6 @@
     "javascript.preferences.quoteStyle": "single",
     "editor.codeActionsOnSave": {
         "source.fixAll": true
-    }
+    },
+    "editor.detectIndentation": false
 }

@@ -17,13 +17,13 @@ export default {
         
     data() {
         return {
-            question: null
+            question: null,
         }
     }, 
     computed: {
         $me() {
             return this.$store.state.webinterview.entityDetails[this.question.identity] 
-        }
+        },
     },
     methods: {
         getValue() {
@@ -48,11 +48,11 @@ export default {
         destroy() {
             if (this.$refs.editQuestionComponent.destroy)
                 this.$refs.editQuestionComponent.destroy()
-        }
+        },
     },
     created() {
         this.question = this.params.value
-    }
+    },
 }
 </script>
 

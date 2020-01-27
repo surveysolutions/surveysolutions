@@ -30,12 +30,12 @@ export default {
         },
         hasFlag() {
             return this.$store.getters.flags[this.$me.id] === true
-        }
+        },
     },
     methods:{
         setFlag(){
             this.$store.dispatch('setFlag', { questionId: this.$me.id, hasFlag: !this.hasFlag})
-        }
-    }
+        },
+    },
 }
 </script>

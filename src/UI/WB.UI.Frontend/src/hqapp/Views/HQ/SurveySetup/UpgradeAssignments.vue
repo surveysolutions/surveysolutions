@@ -49,12 +49,12 @@ export default {
     computed: {
         questionnaires() {
             return this.$config.model.questionnaires
-        }
+        },
     },
     methods: {
         selectQuestionnaire(value) {
             this.questionnaireId = value
-        }
-    }
+        },
+    },
 }
 </script>

@@ -165,7 +165,7 @@ export default {
     methods: {
         formatDate(date){
             return new moment(date).format(DateFormats.dateTime)
-        }
-    }
+        },
+    },
 }
 </script>

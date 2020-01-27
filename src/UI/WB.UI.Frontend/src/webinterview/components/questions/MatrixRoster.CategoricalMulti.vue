@@ -70,7 +70,7 @@ export default {
             question: null,
             answer: [],
             lastUpdate: null,
-            questionId: null
+            questionId: null,
         }
     }, 
     watch: {
@@ -79,7 +79,7 @@ export default {
                 this.question = watchedQuestion
                 this.cacheQuestionData()
             }
-        }
+        },
     },
     computed: {
         $watchedQuestion() {
@@ -106,9 +106,9 @@ export default {
                 'has-error' : !this.question.isDisabled && !this.question.validity.isValid,
                 'has-warnings' : !this.question.isDisabled && this.question.validity.warnings.length > 0,
                 'not-applicable' : this.question.isLocked,
-                'syncing': this.isFetchInProgress
+                'syncing': this.isFetchInProgress,
             }, 'cell-unit', 'options-group', ' h-100',' d-flex']
-        } 
+        }, 
     },
     methods: {
         cacheQuestionData() {
@@ -143,7 +143,7 @@ export default {
             }), ', ')
 
             const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
-                rosterTitle
+                rosterTitle,
             } )
 
             modal.confirm(confirmMessage, result => {
@@ -177,6 +177,6 @@ export default {
     },
     mounted() {
         this.answer = this.$me.answer
-    }
+    },
 }
 </script>

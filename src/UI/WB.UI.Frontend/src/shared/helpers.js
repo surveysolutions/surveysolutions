@@ -7,7 +7,7 @@ export function getLocationHash(questionid) {
 export const DateFormats = {
     dateTime: 'YYYY-MM-DD HH:mm:ss',
     date: 'YYYY-MM-DD',
-    dateTimeInList: 'MMM DD, YYYY HH:mm'
+    dateTimeInList: 'MMM DD, YYYY HH:mm',
 }
 export function humanFileSize(bytes, si) {
     var thresh = si ? 1000 : 1024

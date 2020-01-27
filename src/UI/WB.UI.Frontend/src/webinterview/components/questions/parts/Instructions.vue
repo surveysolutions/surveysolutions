@@ -20,7 +20,7 @@ export default {
     methods: {
         show: function () {
             this.shown = true
-        }
-    }
+        },
+    },
 }
 </script>

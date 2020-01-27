@@ -15,5 +15,5 @@ Vue.directive('numericFormatting', {
     bind: (el, binding, vnode) => {
         const settings = assign(defaults, binding.value)
         vnode.context.autoNumericElement = new AutoNumeric(el, settings)
-    }
+    },
 })

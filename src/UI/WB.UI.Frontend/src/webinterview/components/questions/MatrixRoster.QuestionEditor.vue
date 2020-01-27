@@ -21,7 +21,7 @@ export default {
     data() {
         return {
             question: null,
-            id: ''
+            id: '',
         }
     }, 
     watch: {
@@ -42,7 +42,7 @@ export default {
         },
         hash() {
             return getLocationHash(this.question.identity)
-        }
+        },
     },
     methods: {
         getValue() {
@@ -79,11 +79,11 @@ export default {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll() 
             }
-        }
+        },
     },
     created() {
         this.question = this.params.value
         this.id = this.question.identity
-    }
+    },
 }
 </script>
