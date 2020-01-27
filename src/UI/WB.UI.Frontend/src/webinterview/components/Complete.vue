@@ -79,7 +79,7 @@ export default {
             if(to === true) {
                 this.completeInterview()
             }
-        }
+        },
     },
     computed: {
         completeInfo() {
@@ -120,11 +120,11 @@ export default {
         },
         doesShowErrorsCommentWithCount() {
             return this.completeInfo.entitiesWithError.length < this.completeInfo.errorsCount
-        }
+        },
     },
     data () {
         return {
-            comment: ''
+            comment: '',
         }
     },
     methods: {
@@ -140,7 +140,7 @@ export default {
                     callback: () => {},
                     onEscape: false,
                     closeButton: false,
-                    buttons: {}
+                    buttons: {},
                 })
 
                 return
@@ -159,14 +159,14 @@ export default {
                 name: 'section',
                 params: {
                     sectionId: entityWithError.parentId,
-                    interviewId: this.$route.params.interviewId
+                    interviewId: this.$route.params.interviewId,
                 },
-                hash: '#' + entityWithError.id
+                hash: '#' + entityWithError.id,
             }
 
             this.$router.push(navigateToEntity)
-        }
-    }
+        },
+    },
 }
 
 </script>

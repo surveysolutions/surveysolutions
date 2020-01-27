@@ -262,7 +262,7 @@ export default {
             isAllowInterviewerUpdateProfile: false,
             isInterviewerAutomaticUpdatesEnabled: false,
             isDeviceNotificationsEnabled: false,
-            isEmailAllowed: false
+            isEmailAllowed: false,
         }
     },
     mounted() {
@@ -294,7 +294,7 @@ export default {
                 message: self.$t('Settings.RegeneratePasswordConfirm'),
                 buttons: {
                     cancel: {
-                        label: self.$t('Common.No')
+                        label: self.$t('Common.No'),
                     },
                     success: {
                         label: self.$t('Common.Yes'),
@@ -302,9 +302,9 @@ export default {
                             const response = await this.$hq.ExportSettings.regenPassword()
                             this.encryptionPassword = response.data.password
                             this.encryptionEnabled = response.data.isEnabled
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             })
         },
         async updateMessage(){
@@ -363,12 +363,12 @@ export default {
                             const response = await self.$hq.ExportSettings.setEncryption(self.encryptionEnabled)
                             self.encryptionEnabled = response.data.isEnabled
                             self.encryptionPassword = response.data.password
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             })
-        }
-    }
+        },
+    },
 }
 </script>
 <style scoped>

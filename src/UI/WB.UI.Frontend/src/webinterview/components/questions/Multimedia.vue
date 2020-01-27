@@ -25,7 +25,7 @@ export default {
     mixins: [entityDetails],
     data() {
         return {
-            uploadingImage: null
+            uploadingImage: null,
         }
     },
     computed: {
@@ -40,13 +40,13 @@ export default {
             if(this.$me.validity.isValid) return this.uploadingImage != null
 
             return false
-        }
+        },
     },
 
     watch:{
         '$me.answer'() {
             this.uploadingImage = null
-        }
+        },
     },
 
     methods: {
@@ -80,7 +80,7 @@ export default {
 
                     self.$store.dispatch('answerMultimediaQuestion', {
                         identity: self.id,
-                        file: self.$refs.uploader.files[0]
+                        file: self.$refs.uploader.files[0],
                     })
 
                     const reader = new FileReader()
@@ -97,8 +97,8 @@ export default {
             }
 
             image.src = URL.createObjectURL(file)
-        }
-    }
+        },
+    },
 }
 
 </script>

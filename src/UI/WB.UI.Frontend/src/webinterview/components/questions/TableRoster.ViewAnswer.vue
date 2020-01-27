@@ -43,7 +43,7 @@ export default {
             questionId: null,
             questionType: null,
             question : null,
-            lastUpdate: null
+            lastUpdate: null,
         }
     }, 
     watch: {
@@ -52,7 +52,7 @@ export default {
                 this.question = watchedQuestion
                 this.cacheQuestionData()
             }
-        }
+        },
     },
     computed: {
         $watchedQuestion() {
@@ -64,7 +64,7 @@ export default {
                 'has-error' : ! this.question.isDisabled && !this.question.validity.isValid,
                 'has-warnings' : ! this.question.isDisabled && this.question.validity.warnings.length > 0,
                 'not-applicable' : this.question.isLocked,
-                'syncing': this.isFetchInProgress
+                'syncing': this.isFetchInProgress,
             }, 'cell-unit']
         },
         doesExistValidationMessage() {
@@ -78,12 +78,12 @@ export default {
         isFetchInProgress() {
             const result = this.$store.state.webinterview.fetch.state[this.questionId]
             return result
-        }
+        },
     },
     methods: {
         cacheQuestionData() {
             this.lastUpdate = this.question.updatedAt
-        }
+        },
     },
     created() {
         this.questionId = this.params.value.identity
@@ -97,8 +97,8 @@ export default {
                 return ''
                 
             return value.toLocaleString(undefined, {style: 'decimal', maximumFractionDigits : 15, minimumFractionDigits : 0})    
-        }
-    }
+        },
+    },
 }
 </script>
 

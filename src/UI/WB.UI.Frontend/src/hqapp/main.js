@@ -45,7 +45,7 @@ const Router = require('./router').default
 const views = viewsProvider(store)
 
 const router = new Router({
-    routes: views.routes
+    routes: views.routes,
 }).router
 
 sync(store, router)
@@ -55,5 +55,5 @@ export default new Vue({
     el: '#vueApp',
     render: h => h('router-view'),
     store,
-    router
+    router,
 })

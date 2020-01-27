@@ -18,9 +18,9 @@ export default {
     props: {
         search: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
-    components: { SearchBreabcrumbs }
+    components: { SearchBreabcrumbs },
 }
 </script>

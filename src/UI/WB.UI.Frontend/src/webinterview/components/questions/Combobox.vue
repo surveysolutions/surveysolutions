@@ -33,14 +33,14 @@ export default {
     props: ['noComments'],
     data() {
         return {
-            answer: null
+            answer: null,
         }
     },
 
     watch: {
         answer(newValue) {
             this.answerComboboxQuestion(newValue)
-        }
+        },
     },
         
     methods: {
@@ -53,8 +53,8 @@ export default {
         optionsSource(filter) {
             const interviewId = this.$route.params.interviewId
             return Vue.$api.interview.get('getTopFilteredOptionsForQuestion', {interviewId, id:this.$me.id, filter, count:50})
-        }
-    }
+        },
+    },
 }
 
 </script>

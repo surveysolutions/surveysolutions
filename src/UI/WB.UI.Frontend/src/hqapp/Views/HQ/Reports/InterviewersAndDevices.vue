@@ -41,7 +41,7 @@ export default {
             const linkClass = this.hasIssue(row) ? 'text-danger' : ''
 
             return `<a href='${this.$config.model.interviewerProfileUrl}/${row.teamId}'><hi class='${linkClass}'>${formatedNumber}</hi></a>`
-        }
+        },
     },
     computed: {
         config() {
@@ -67,7 +67,7 @@ export default {
                             
                             const linkClass = self.hasIssue(row) ? 'text-danger' : ''
                             return `<a href='${window.location}/${row.teamId}'><hi class='${linkClass}'>${data}</hi></a>`
-                        }
+                        },
                     },
                     {
                         data: 'neverSynchedCount',
@@ -77,7 +77,7 @@ export default {
                         orderable: true,
                         render: function (data, type, row) {
                             return self.renderCell(data, row, 'NeverSynchonized')
-                        }
+                        },
                     },
                     {
                         data: 'noQuestionnairesCount',
@@ -87,7 +87,7 @@ export default {
                         title: this.$t('DevicesInterviewers.NoAssignments'),
                         render: function(data, type, row) {
                             return self.renderCell(data, row, 'NoAssignmentsReceived')
-                        }
+                        },
                     },
                     {
                         data: 'neverUploadedCount',
@@ -97,7 +97,7 @@ export default {
                         title: this.$t('DevicesInterviewers.NeverUploaded'),
                         render: function(data, type, row) {
                             return self.renderCell(data, row, 'NeverUploaded')
-                        }
+                        },
                     },
                     {
                         data: 'reassignedCount',
@@ -107,7 +107,7 @@ export default {
                         title: this.$t('DevicesInterviewers.TabletReassigned'),
                         render: function(data, type, row) {
                             return self.renderCell(data, row, 'TabletReassigned')
-                        }
+                        },
                     },
                     {
                         data: 'outdatedCount',
@@ -117,26 +117,26 @@ export default {
                         title: this.$t('DevicesInterviewers.OldInterviewerVersion'),
                         render: function (data, type, row) {
                             return self.renderCell(data, row, 'OutdatedApp')
-                        }
+                        },
                     },
                     {
                         data: 'teamSize',
                         name: 'TeamSize',
                         'class': 'type-numeric',
                         orderable: true,
-                        title: this.$t('DevicesInterviewers.TeamSize')
-                    }
+                        title: this.$t('DevicesInterviewers.TeamSize'),
+                    },
                 ],
                 ajax: {
                     url: this.supervisorId ? this.$config.model.dataUrl + '/' + this.supervisorId : this.$config.model.dataUrl,
                     type: 'GET',
-                    contentType: 'application/json'
+                    contentType: 'application/json',
                 },
                 responsive: false,
                 order: [[0, 'asc']],
-                sDom: 'rf<"table-with-scroll"t>ip'
+                sDom: 'rf<"table-with-scroll"t>ip',
             }
-        }
-    }
+        },
+    },
 }
 </script>

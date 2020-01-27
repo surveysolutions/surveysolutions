@@ -65,14 +65,14 @@ export default {
         fetchUrl: String,
         controlId: {
             type: String,
-            required: true
+            required: true,
         },
         value: Object,
         placeholder: String,
         ajaxParams: Object,
         forceLoadingState: {
             type: Boolean,
-            default: false
+            default: false,
         },
         values: Array,
         noSearch: Boolean,
@@ -80,16 +80,16 @@ export default {
         disabled: Boolean,
         fuzzy: {
             type: Boolean,
-            default: false
+            default: false,
         },
         selectFirst: {
             type: Boolean,
-            default: false
+            default: false,
         },
         selectedKey: {
             type: String,
-            default: null
-        }
+            default: null,
+        },
     },
     watch: {
         fetchUrl (val) {
@@ -100,13 +100,13 @@ export default {
             else {
                 this.options.splice(0, this.options.length)
             }
-        }
+        },
     },
     data() {
         return {
             options: [],
             isLoading: false,
-            searchTerm: ''
+            searchTerm: '',
         }
     },
 
@@ -119,7 +119,7 @@ export default {
         },
         placeholderText() {
             return this.placeholder || 'Select'
-        }
+        },
     },
 
     mounted() {
@@ -143,7 +143,7 @@ export default {
             distance: 100,
             maxPatternLength: 32,
             minMatchCharLength: 1,
-            keys: ['value']
+            keys: ['value'],
         }
 
         if(this.selectedKey != null) {
@@ -218,7 +218,7 @@ export default {
             return chain(values).filter(v => v != null).map(v => {
                 return {
                     item: v,
-                    matches: null
+                    matches: null,
                 }
             }).value()
         },
@@ -262,8 +262,8 @@ export default {
         },
         keyFunc(item) {
             return item == null ? 'null' : item.key + '$' + item.value 
-        }
-    }
+        },
+    },
 }
 
 // Does not account for overlapping highlighted regions, if that exists at all O_o..

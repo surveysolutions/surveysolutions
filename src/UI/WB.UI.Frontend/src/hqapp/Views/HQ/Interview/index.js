@@ -19,8 +19,8 @@ export default class ReviewComponent {
                 component: Cover,
                 props: {
                     navigateToPrefilled: true,
-                    showHumburger: false
-                }
+                    showHumburger: false,
+                },
             },
             {
                 path: 'Overview',
@@ -28,8 +28,8 @@ export default class ReviewComponent {
                 component: Overview,
                 props: {
                     navigateToPrefilled: true,
-                    showHumburger: false
-                }
+                    showHumburger: false,
+                },
             },
             {
                 path: 'Cover',
@@ -37,15 +37,15 @@ export default class ReviewComponent {
                 component: Cover,
                 props: {
                     navigateToPrefilled: true,
-                    showHumburger: false
-                }
+                    showHumburger: false,
+                },
             },
             {
                 path: 'Section/:sectionId',
                 name: 'section',
-                component: ReviewSection
-            }
-            ]
+                component: ReviewSection,
+            },
+            ],
         }]
     }
 

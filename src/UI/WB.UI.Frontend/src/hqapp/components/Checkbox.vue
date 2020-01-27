@@ -16,16 +16,16 @@ export default {
 
         name: {
             type: String,
-            required: true
+            required: true,
         },
 
         value: {
-            required: true
+            required: true,
         },
 
         label: String,
 
-        tooltip: String
+        tooltip: String,
     },
 
     methods: {
@@ -33,9 +33,9 @@ export default {
             this.$emit('input', ev.target.checked, {
                 checked: ev.target.checked,
                 selected: this.radioGroup,
-                name: this.name
+                name: this.name,
             })
-        }
+        },
     },
 
     computed: {
@@ -49,7 +49,7 @@ export default {
 
         inputType() {
             return this.radioGroup == null ? 'checkbox' : 'radio'
-        }
-    }
+        },
+    },
 }
 </script>

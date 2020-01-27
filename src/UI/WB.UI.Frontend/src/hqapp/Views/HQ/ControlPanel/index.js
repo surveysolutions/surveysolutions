@@ -11,16 +11,16 @@ export default class MapComponent {
             component: ControlPanelLayout,
             children: [{
                 path: 'Configuration',
-                component: Configuration
+                component: Configuration,
             },
             {
                 path: 'TabletInfos',
-                component: TabletInfos
+                component: TabletInfos,
             },
             {
                 path: 'AppUpdates',
-                component: AppUpdates
-            }]
+                component: AppUpdates,
+            }],
         }]
     }
 }

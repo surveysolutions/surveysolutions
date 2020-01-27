@@ -6,6 +6,6 @@ import { entityPartial } from '~/webinterview/components/mixins'
 
 export default {
     mixins: [entityPartial],
-    name: 'wb-title'
+    name: 'wb-title',
 }
 </script>

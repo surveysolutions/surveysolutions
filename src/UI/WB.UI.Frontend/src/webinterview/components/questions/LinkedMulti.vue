@@ -37,7 +37,7 @@ export default {
     name: 'LinkedMulti',
     data(){
         return {
-            showAllOptions: false
+            showAllOptions: false,
         }
     },
     computed: {
@@ -64,7 +64,7 @@ export default {
                     const selectedOptions = map(value, (x) => { return find(this.$me.options, { 'value': x }).rosterVector })
                     this.$store.dispatch('answerLinkedMultiOptionQuestion', { answer: selectedOptions, identity: this.$me.id })
                 })
-            }
+            },
         },
         allAnswersGiven() {
             const maxReached = this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
@@ -72,7 +72,7 @@ export default {
         },
         noOptions() {
             return this.$me.options == null || this.$me.options.length == 0
-        }
+        },
     },
     methods: {
         getAnswerOrder(answerValue) {
@@ -83,7 +83,7 @@ export default {
             this.showAllOptions = !this.showAllOptions
         },
     },
-    mixins: [entityDetails]
+    mixins: [entityDetails],
 }
 
 </script>

@@ -11,7 +11,7 @@ export default {
         return {
             visible: false,
             timerId: null,
-            delay: 1000
+            delay: 1000,
         }
     },
     watch: {
@@ -32,13 +32,13 @@ export default {
             if (to) {
                 this.visible = false
             }
-        }
+        },
     },
     computed: {
         isLoading() {
             return this.$store.state.webinterview.fetch.loadingProgress
-        }
-    }
+        },
+    },
 }
 
 </script>

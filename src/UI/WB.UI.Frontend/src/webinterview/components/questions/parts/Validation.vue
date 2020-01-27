@@ -11,7 +11,7 @@ import { entityPartial } from '~/webinterview/components/mixins'
 
 export default {
     mixins: [entityPartial],
-    name: 'wb-validation'
+    name: 'wb-validation',
 }
 </script>
 

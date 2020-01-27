@@ -67,7 +67,7 @@ export default {
         contextMenuItems({ rowData }) {
             return [{
                 name: this.$t('Pages.MapDetails_DelinkUser'),
-                callback: () => { this.delinkUserFromMap(rowData.userName, this.$config.model.fileName)}                    
+                callback: () => { this.delinkUserFromMap(rowData.userName, this.$config.model.fileName)},                    
             }]
         },
 
@@ -102,19 +102,19 @@ export default {
                         name: 'UserName', // case-sensitive!
                         'class': 'title',
                         title: this.$t('Pages.MapDetails_InterviewerName'),
-                        orderable: true                       
-                    }                    
+                        orderable: true,                       
+                    },                    
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
-                    type: 'GET'
+                    type: 'GET',
                 },
                 responsive: false,
                 order: [[0, 'asc']],
-                sDom: 'rf<"table-with-scroll"t>ip'                
+                sDom: 'rf<"table-with-scroll"t>ip',                
             }
-        }
-    }
+        },
+    },
 
 }
 </script>

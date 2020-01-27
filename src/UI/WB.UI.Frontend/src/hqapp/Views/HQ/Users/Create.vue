@@ -156,7 +156,7 @@ export default {
             isLockedByHeadquarters: false,
             isLockedBySupervisor: false,
             successMessage: null,
-            supervisor: null
+            supervisor: null,
         }
     },
     computed: {

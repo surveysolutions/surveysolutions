@@ -15,7 +15,7 @@ export default {
     computed: {
         query() {
             return this.$store.state.route.query
-        }
+        },
     },
 
     methods: {
@@ -86,6 +86,6 @@ export default {
             return this.onChange(q => {
                 q[source.name] = value
             })
-        }
-    }
+        },
+    },
 }

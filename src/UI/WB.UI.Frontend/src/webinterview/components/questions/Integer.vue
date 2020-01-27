@@ -109,8 +109,8 @@ export default {
             },
             set(value) {
                 this.saveAnswer(value, true)
-            }
-        }
+            },
+        },
     },
     methods: {
         answerIntegerQuestion(evnt) {
@@ -230,12 +230,12 @@ export default {
                     return true
             }
             return false
-        }
+        },
     },
     beforeDestroy () {
         if (this.autoNumericElement) {
             this.autoNumericElement.remove()
         }
-    }
+    },
 }
 </script>

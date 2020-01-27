@@ -18,12 +18,12 @@ export default {
     props: {
         showComplete: {
             type: Boolean,
-            default: true
+            default: true,
         },
         showFoldbackButtonAsHamburger: {
             type: Boolean,
-            default: true
-        }
+            default: true,
+        },
     },
     components: { SidebarPanel },
     data() {
@@ -32,12 +32,12 @@ export default {
                 collapsed: true,
                 title: this.$t('WebInterviewUI.Cover'),
                 to: {
-                    name: 'prefilled'
+                    name: 'prefilled',
                 },
                 validity: {
-                    isValid: true
-                }
-            }
+                    isValid: true,
+                },
+            },
         }
     },
     computed: {
@@ -59,14 +59,14 @@ export default {
                 collapsed: true,
                 title: this.$t('WebInterviewUI.Complete'),
                 to: {
-                    name: 'complete'
+                    name: 'complete',
                 },
                 status: this.interviewState,
                 validity: {
-                    isValid: !(this.interviewState == GroupStatus.StartedInvalid || this.interviewState == GroupStatus.CompletedInvalid)
-                }
+                    isValid: !(this.interviewState == GroupStatus.StartedInvalid || this.interviewState == GroupStatus.CompletedInvalid),
+                },
             }
-        }
+        },
     },
     beforeMount() {
         this.fetchSidebar()
@@ -76,7 +76,7 @@ export default {
         ['$route.params.sectionId']() {
             this.fetchSidebar()
             this.fetchInterviewStatus()
-        }
+        },
     },
     methods: {
         fetchSidebar() {
@@ -84,8 +84,8 @@ export default {
         },
         fetchInterviewStatus() {
             this.$store.dispatch('fetchInterviewStatus')
-        }
-    }
+        },
+    },
 }
 
 </script>

@@ -14,7 +14,7 @@ export default {
     name: 'WebInterviwew',
 
     components: {
-        signalr: () => import(/* webpackChunkName: "core-signalr" */ './signalr/core.signalr') 
+        signalr: () => import(/* webpackChunkName: "core-signalr" */ './signalr/core.signalr'), 
                 
     },
 
@@ -29,12 +29,12 @@ export default {
     watch: {
         ['$route.params.sectionId'](to, from) {
             this.changeSection(to, from)
-        }
+        },
     },
     computed: {
         interviewId() {
             return this.$route.params.interviewId
-        }
+        },
     },
 
     methods: {
@@ -47,7 +47,7 @@ export default {
             this.$store.dispatch('getLanguageInfo')
             this.$store.dispatch('loadInterview')
             this.$emit('connected')
-        }
-    }
+        },
+    },
 }
 </script>

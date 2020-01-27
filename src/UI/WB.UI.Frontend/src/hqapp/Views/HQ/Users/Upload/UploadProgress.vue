@@ -26,7 +26,7 @@
 export default {
     data: function() {
         return {
-            timerId: 0
+            timerId: 0,
         }
     },
     computed: {
@@ -47,7 +47,7 @@ export default {
         },
         importedUsersInPercents() {
             return this.importedUsersCount / this.progress.totalUsersToImport * 100
-        }
+        },
     },
     mounted() {
         this.updateStatus()
@@ -79,7 +79,7 @@ export default {
                         })
                 }
             })
-        }
-    }
+        },
+    },
 }
 </script>

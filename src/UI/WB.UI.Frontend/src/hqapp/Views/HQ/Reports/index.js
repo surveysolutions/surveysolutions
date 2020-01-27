@@ -19,55 +19,55 @@ export default class ReportComponent {
         return [
             {
                 path: '/Reports/InterviewersAndDevices/:supervisorId',
-                component: InterviewersAndDevices
+                component: InterviewersAndDevices,
             },
             {
                 path: '/Reports/InterviewersAndDevices',
-                component: InterviewersAndDevices
+                component: InterviewersAndDevices,
             },
             {
                 path: '/Reports/StatusDuration',
-                component: StatusDuration
+                component: StatusDuration,
             },
             {
                 path: '/Reports/TeamStatusDuration',
-                component: StatusDuration
+                component: StatusDuration,
             },
             {
                 path: '/Reports/SupervisorsAndStatuses',
-                component: TeamsAndStatuses
+                component: TeamsAndStatuses,
             },
             {
                 path: '/Reports/SurveysAndStatuses',
-                component: SurveysAndStatuses
+                component: SurveysAndStatuses,
             },
             {
                 path: '/Reports/SurveysAndStatusesForSv',
-                component: SurveysAndStatusesForSv
+                component: SurveysAndStatusesForSv,
             },
             {
                 path: '/Reports/TeamMembersAndStatuses',
-                component: TeamsAndStatuses
+                component: TeamsAndStatuses,
             },
             {
                 path: '/Reports/InterviewsChart',
-                component: CumulativeChart
+                component: CumulativeChart,
             },
             {
                 path: '/Reports/MapReport',
-                component: MapReport
+                component: MapReport,
             },
             {
                 path: '/Reports/QuantityBySupervisors',
-                component: SpeedAndQuantity
+                component: SpeedAndQuantity,
             },
             {
                 path: '/Reports/SpeedBySupervisors',
-                component: SpeedAndQuantity
+                component: SpeedAndQuantity,
             },
             {
                 path: '/Reports/QuantityByInterviewers',
-                component: SpeedAndQuantity
+                component: SpeedAndQuantity,
             },
             {
                 name: 'surveyStatistics',
@@ -78,9 +78,9 @@ export default class ReportComponent {
                     min: parseInt(route.query.min),
                     max: parseInt(route.query.max),
                     questionId: route.query.question,
-                    detailedView: String(route.query.detailedView).toLowerCase() === 'true'
-                })
-            }
+                    detailedView: String(route.query.detailedView).toLowerCase() === 'true',
+                }),
+            },
         ]
     }
 

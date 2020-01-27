@@ -34,7 +34,7 @@ export default {
     name: 'LinkedSingle',
     data(){
         return {
-            showAllOptions: false
+            showAllOptions: false,
         }
     },
     computed: {
@@ -61,17 +61,17 @@ export default {
                         answer: selectedOption.rosterVector,
                         identity: this.$me.id })
                 })
-            }
+            },
         },
         noOptions() {
             return this.$me.options == null || this.$me.options.length == 0
-        }
+        },
     },
     mixins: [entityDetails],
     methods: {
         toggleOptions(){
             this.showAllOptions = !this.showAllOptions
-        }
-    }
+        },
+    },
 }
 </script>

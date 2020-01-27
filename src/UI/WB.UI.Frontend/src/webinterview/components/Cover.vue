@@ -67,12 +67,12 @@ export default {
         navigateToPrefilled: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
         },
         showHumburger: {
             type: Boolean,
-            default: true
-        }
+            default: true,
+        },
     },
     
     beforeMount() {
@@ -116,10 +116,10 @@ export default {
             return [
                 {
                     'complete-section'  : !this.hasBrokenPackage,
-                    'section-with-error': this.hasBrokenPackage
-                }
+                    'section-with-error': this.hasBrokenPackage,
+                },
             ]
-        }
+        },
     },
     methods: {
         googleMapPosition(answer) {
@@ -143,13 +143,13 @@ export default {
                 name: 'section',
                 params: {
                     sectionId: commentedQuestion.parentId,
-                    interviewId: this.$route.params.interviewId
+                    interviewId: this.$route.params.interviewId,
                 },
-                hash: '#' + commentedQuestion.id 
+                hash: '#' + commentedQuestion.id, 
             }
 
             this.$router.push(navigateToEntity)
-        }
-    }
+        },
+    },
 }
 </script>

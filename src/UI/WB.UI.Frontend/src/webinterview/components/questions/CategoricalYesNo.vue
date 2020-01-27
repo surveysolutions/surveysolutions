@@ -89,14 +89,14 @@ export default {
     data(){
         return {
             showAllOptions: false,
-            answer: []
+            answer: [],
         }
     },
     props: ['noComments'],
     watch: {
         '$me.answer'(to) {
             Vue.set(this, 'answer', to)
-        }
+        },
     },
     computed: {
         allAnswersGiven() {
@@ -118,7 +118,7 @@ export default {
         },
         noOptions() {
             return this.$me.options == null || this.$me.options.length == 0
-        }
+        },
     },
     methods: {
         toggleOptions(){
@@ -189,7 +189,7 @@ export default {
             const rosterTitle = find(this.answeredOrAllOptions, { value: optionValue}).title
 
             const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
-                rosterTitle
+                rosterTitle,
             } )
 
             modal.confirm(confirmMessage,  result => {
@@ -208,8 +208,8 @@ export default {
                     return
                 }
             })
-        }
+        },
     },
-    mixins: [entityDetails]
+    mixins: [entityDetails],
 }
 </script>

@@ -23,7 +23,7 @@ export default {
             title: null,
             instruction: null,
             hasInstructions: false,
-            questionId: null
+            questionId: null,
         }
     }, 
     computed: {
@@ -44,8 +44,8 @@ export default {
             var question = find(self.params.context.componentParent.$me.questions, function(o) { return o.id == self.questionId })
             if(question !== undefined)
                 this.instruction = question.instruction
-        }
-    }
+        },
+    },
 }
 </script>
 

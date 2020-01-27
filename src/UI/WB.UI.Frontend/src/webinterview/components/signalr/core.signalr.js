@@ -7,8 +7,8 @@ export default {
     props: {
         interviewId: {
             type: String,
-            required: true
-        }
+            required: true,
+        },
     },
 
     beforeMount() {
@@ -22,7 +22,7 @@ export default {
             },
             stop() {
                 return connection.stop()
-            }
+            },
         }
 
         if (!Object.prototype.hasOwnProperty.call(Vue, '$api')) {
@@ -30,7 +30,7 @@ export default {
         }
 
         Object.defineProperty(Vue.$api, 'hub', {
-            get() { return api }
+            get() { return api },
         })
 
         connection.on('refreshEntities', (questions) => {
@@ -75,5 +75,5 @@ export default {
             .catch(err => document.write(err))
     },
 
-    render() { return null }
+    render() { return null },
 }

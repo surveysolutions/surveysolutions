@@ -72,7 +72,7 @@ export default {
         },
         noAnswerWatermark() {
             return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.TextEnterNewItem')
-        }
+        },
     },
     methods: {
         confirmAndRemoveRow(index) {
@@ -84,7 +84,7 @@ export default {
             }
 
             modal.confirm(this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
-                rosterTitle: this.$me.rows[index].text
+                rosterTitle: this.$me.rows[index].text,
             }), result => {
                 if (result) {
                     this.removeRow(index)
@@ -143,7 +143,7 @@ export default {
             setTimeout(() => {
                 target.focus()
             })
-        }
-    }
+        },
+    },
 }
 </script>

@@ -41,7 +41,7 @@ export default {
             }
 
             return ''
-        }
+        },
     },
     methods: {
         saveAnswer() {
@@ -63,7 +63,7 @@ export default {
                     this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
                 }
             })
-        }
+        },
     },
     mounted() {
         Vue.nextTick(() => {
@@ -73,7 +73,7 @@ export default {
                 input.select()
             }
         })
-    }
+    },
 }
 </script>
 

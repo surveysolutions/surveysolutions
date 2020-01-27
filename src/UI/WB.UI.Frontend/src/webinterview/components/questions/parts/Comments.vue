@@ -61,11 +61,11 @@ export default {
         return {
             comment: null,
             showResolved: false,
-            isResolving: false
+            isResolving: false,
         }
     },
     props: {
-        isShowingAddCommentDialog: { type: Boolean, default: false }
+        isShowingAddCommentDialog: { type: Boolean, default: false },
     },
     methods: {
         async postComment(evnt) {
@@ -85,7 +85,7 @@ export default {
             this.isResolving = true
             await this.$store.dispatch('resolveComment', { identity: this.questionId })
             this.isResolving = false
-        }
+        },
     },
     computed: {
         inpAddCommentId() {
@@ -126,8 +126,8 @@ export default {
         },
         questionId() {
             return this.$me.id
-        }
-    }
+        },
+    },
 }
 
 </script>

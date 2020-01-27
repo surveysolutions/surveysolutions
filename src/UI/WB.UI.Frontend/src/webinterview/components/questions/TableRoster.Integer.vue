@@ -28,7 +28,7 @@ export default {
     data() {
         return {
             autoNumericElement: null,
-            cancelBeforeStart: true
+            cancelBeforeStart: true,
         }
     },
     computed: {
@@ -37,7 +37,7 @@ export default {
         },
         decimalSeparator() {
             return getDecimalSeparator(this.$me)
-        }
+        },
     },
     methods: {
 
@@ -124,7 +124,7 @@ export default {
             if (this.autoNumericElement) {
                 this.autoNumericElement.remove()
             }
-        }
+        },
     },
     created() {
         // only start edit if key pressed is a number, not a letter
@@ -140,6 +140,6 @@ export default {
     },
     beforeDestroy () {
         this.destroy()
-    }
+    },
 }
 </script>

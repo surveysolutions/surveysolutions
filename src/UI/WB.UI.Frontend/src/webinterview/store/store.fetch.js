@@ -18,28 +18,28 @@ function updateFetchProgress(state) {
 const fetch = {
     state: {
         scroll: {
-            id: null
+            id: null,
         },
         loadingProgress: false,
         fetchState: {
             uploaded: null,
-            total: null
+            total: null,
         },
         requestInProgress: 0,
         inProgress: false,
-        state: {}
+        state: {},
     },
     getters: {
         scrollState(state) {
             return state.scroll.id
-        }
+        },
     },
     actions: {
         fetch({ commit }, { id, ids, done }) {
             commit('SET_FETCH', {
                 id,
                 ids,
-                done: done || false
+                done: done || false,
             })
         },
 
@@ -54,12 +54,12 @@ const fetch = {
             commit('SET_UPLOAD_PROGRESS', {
                 entity: rootState.webinterview.entityDetails[id],
                 now,
-                total
+                total,
             })
         },
         resetScroll({ commit }) {
             commit('SET_SCROLL_TARGET', null)
-        }
+        },
     },
 
     mutations: {
@@ -90,8 +90,8 @@ const fetch = {
         },
         SET_LOADING_PROGRESS(state, value) {
             state.loadingProgress = value
-        }
-    }
+        },
+    },
 }
 
 export { fetch }

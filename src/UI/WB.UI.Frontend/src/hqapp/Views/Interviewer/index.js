@@ -6,7 +6,7 @@ import PNotify from 'pnotify'
 
 const store = {
     state: {
-        pendingHandle: null
+        pendingHandle: null,
     },
     actions: {
         createInterview({ dispatch }, assignmentId) {
@@ -21,7 +21,7 @@ const store = {
                     new PNotify({
                         title: 'Unhandled error occurred',
                         text: data.responseStatus,
-                        type: 'error'
+                        type: 'error',
                     })
                     dispatch('hideProgress')
                 })
@@ -37,10 +37,10 @@ const store = {
             $.ajax({
                 url: Vue.$config.model.interviewerHqEndpoint + '/DiscardInterview/' + interviewId,
                 type: 'DELETE',
-                success: callback
+                success: callback,
             })
-        }
-    }
+        },
+    },
 }
 
 export default class InterviewerHqComponent {
@@ -50,13 +50,13 @@ export default class InterviewerHqComponent {
 
     get routes() {
         return [{
-            path: '/InterviewerHq/CreateNew', component: Assignments
+            path: '/InterviewerHq/CreateNew', component: Assignments,
         }, {
-            path: '/InterviewerHq/Rejected', component: Interviews
+            path: '/InterviewerHq/Rejected', component: Interviews,
         }, {
-            path: '/InterviewerHq/Completed', component: Interviews
+            path: '/InterviewerHq/Completed', component: Interviews,
         }, {
-            path: '/InterviewerHq/Started', component: Interviews
+            path: '/InterviewerHq/Started', component: Interviews,
         }]
     }
 

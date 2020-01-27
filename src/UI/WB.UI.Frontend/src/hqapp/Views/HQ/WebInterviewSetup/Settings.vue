@@ -678,7 +678,7 @@ export default {
             reminderAfterDaysIfNoResponse: 3,
             reminderAfterDaysIfPartialResponse: 3,
             logoUrl: '',
-            hasLogo: false
+            hasLogo: false,
         }
     },
 
@@ -715,7 +715,7 @@ export default {
                     message: message,
                     passwordDescription: passwordDescription,
                     linkText: linkText,
-                    isActive: key === 'invitationTemplate'
+                    isActive: key === 'invitationTemplate',
                 }
             }
         )
@@ -734,7 +734,7 @@ export default {
                     value: key,
                     text: message,
                     defaultText: defaultText,
-                    cancelText: message
+                    cancelText: message,
                 }
             }
         ).reduce(function(maped, obj) {
@@ -916,7 +916,7 @@ export default {
             emailTemplate[fieldName] = null
             await this.$nextTick()
             await this.$validator.validate('emailTemplateData'+ emailTemplate.value + '.' + fieldName)
-        }
+        },
     },
     watch: {
         reminderAfterDaysIfNoResponse: function (val) {
@@ -930,11 +930,11 @@ export default {
                 this.$refs.reminderAfterDaysIfPartialResponse.value = val
                 $(this.$refs.reminderAfterDaysIfPartialResponse).selectpicker('refresh')
             }
-        }
+        },
     },
     computed: {
 
-    }
+    },
 }
 </script>
 

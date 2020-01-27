@@ -9,8 +9,8 @@ export default class InterviewsComponent {
         return [{
             name: 'interviews',
             path: '/Interviews/',
-            component: Interviews
-        }
+            component: Interviews,
+        },
         ]
     }
     initialize() {

@@ -20,13 +20,13 @@ export default {
             title: null,
             instruction: null,
             hasInstructions: false,
-            question: null
+            question: null,
         }
     }, 
     computed: {
         getOptions(){                
             return this.question.options                
-        }
+        },
     },
     methods: {            
     },
@@ -35,6 +35,6 @@ export default {
         this.instruction = this.params.instruction
         //this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
         this.question = this.params.question
-    }
+    },
 }
 </script>

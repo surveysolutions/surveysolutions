@@ -8,7 +8,7 @@ export default {
         entities: [
             // { id: id, ...}
         ],
-        interview: {}
+        interview: {},
     },
 
     actions: {
@@ -24,7 +24,7 @@ export default {
 
             Vue.$api.hub.changeSection(null)
             return Promise.all([details, question])
-        }
+        },
     },
 
     mutations: {
@@ -34,10 +34,10 @@ export default {
         },
         SET_INTERVIEW_DETAILS(state, data) {
             state.interview = data
-        }
+        },
     },
 
     getters: {
 
-    }
+    },
 }

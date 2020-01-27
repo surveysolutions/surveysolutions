@@ -45,7 +45,7 @@ export default {
     computed: {
         state() {
             return this.$store.getters.filteringState
-        }
+        },
     },
     methods: {
         change({ id, value }) {
@@ -56,10 +56,10 @@ export default {
         resetFilters() {
             this.$store.dispatch('resetAllFilters')
             this.$store.dispatch('hideSearchResults')
-        }
+        },
     },
     components: {
-        FilterItem, FiltersBlock
-    }
+        FilterItem, FiltersBlock,
+    },
 }
 </script>

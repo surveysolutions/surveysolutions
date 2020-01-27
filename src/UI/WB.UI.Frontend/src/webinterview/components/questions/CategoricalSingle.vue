@@ -33,7 +33,7 @@ export default {
     props: ['noComments'],
     data(){
         return {
-            showAllOptions: false
+            showAllOptions: false,
         }
     },
     computed: {
@@ -55,17 +55,17 @@ export default {
                 this.sendAnswer(() => {
                     this.$store.dispatch('answerSingleOptionQuestion', { answer: value, identity: this.$me.id })
                 })
-            }
+            },
         },
         noOptions() {
             return this.$me.options == null || this.$me.options.length == 0
-        }
+        },
     },
     mixins: [entityDetails],
     methods: {
         toggleOptions(){
             this.showAllOptions = !this.showAllOptions
-        }
-    }
+        },
+    },
 }
 </script>

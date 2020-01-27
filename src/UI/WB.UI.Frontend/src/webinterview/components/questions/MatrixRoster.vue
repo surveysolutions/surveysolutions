@@ -46,7 +46,7 @@ export default {
             columnApi: null,
             countOfInstances: 0,
             title: null,
-            instructions: null                
+            instructions: null,                
         }
     },
 
@@ -91,7 +91,7 @@ export default {
         },
         ['$me.title']() {
             this.title = this.$me.title
-        }
+        },
     },
 
     mounted() {
@@ -105,10 +105,10 @@ export default {
                 suppressCellSelection:true,
                 suppressMovableColumns:true,
                 context: {
-                    componentParent: this
-                }
+                    componentParent: this,
+                },
             }
-        }
+        },
     },
     methods : {
         initQuestionAsColumns() {
@@ -122,7 +122,7 @@ export default {
                         headerComponentParams: {
                             //title: question.title,
                             instruction: question.instruction,
-                            question: question
+                            question: question,
                         },
                         width:question.options.length * 180,
                             
@@ -131,7 +131,7 @@ export default {
                         cellRendererParams: {
                             id: question.id,
                             question: question,
-                            value: question
+                            value: question,
                         },
                         //cellEditorFramework: 'MatrixRoster_QuestionEditor', 
                         //cellEditorParams: {
@@ -149,7 +149,7 @@ export default {
                 editable: false,                     
                 cellStyle: {minHeight: '40px'}, 
                 cellRendererFramework: 'MatrixRoster_RosterTitle',
-                cellRendererParams: { }
+                cellRendererParams: { },
             })
             this.columnDefs = columnsFromQuestions
         },
@@ -171,7 +171,7 @@ export default {
                         var questionIdentity = question.id + instance.rosterVector
                         instanceAsRow[question.id] = {
                             identity : questionIdentity,
-                            type     : question.entityType
+                            type     : question.entityType,
                         }
                     })
                         
@@ -233,7 +233,7 @@ export default {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll() 
             }
-        }
-    }
+        },
+    },
 }
 </script>

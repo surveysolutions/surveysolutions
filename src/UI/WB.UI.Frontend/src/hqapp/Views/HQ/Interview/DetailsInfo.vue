@@ -95,7 +95,7 @@ export default {
             approveComment: '',
             rejectComment: '',
             commentMaxLength: 1500,
-            newResponsibleId: null
+            newResponsibleId: null,
         }
     },
     methods: {
@@ -114,7 +114,7 @@ export default {
                     var newId = (this.newResponsibleId || {}).key
                     var dispatchResult = this.$store.dispatch('reject', {
                         comment: this.rejectComment,
-                        assignTo: newId
+                        assignTo: newId,
                     })
                     dispatchResult.then(() => {
                         window.location = this.$config.model.interviewsUrl
@@ -131,7 +131,7 @@ export default {
         showOverview() {
         //this.$router.push({name: "Overview"})
             this.$refs.overview.show()
-        }
+        },
     },
   
     computed: {
@@ -179,14 +179,14 @@ export default {
         },
         isInterviewerResponsible() {
             return this.$config.model.responsibleRole == 'Interviewer'
-        }
+        },
     },
 
     components: {
         SwitchLanguage,
         StatusesHistory,
-        OverviewModal
-    }
+        OverviewModal,
+    },
 }
 </script>
 

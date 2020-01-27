@@ -11,7 +11,7 @@ export default {
     state: {
         jobs: [],
         exportServiceIsUnavailable: true,
-        _exportStatusUpdateInProgres: false
+        _exportStatusUpdateInProgres: false,
     },
 
     actions: {
@@ -81,7 +81,7 @@ export default {
             response.data.forEach(job => {
                 commit('UPDATE_JOB', job)
             })
-        }
+        },
     },
 
     mutations: {
@@ -123,6 +123,6 @@ export default {
 
         SET_UPDATE_IN_PROGRESS(state, value) {
             state._exportStatusUpdateInProgres = value
-        }
-    }
+        },
+    },
 }

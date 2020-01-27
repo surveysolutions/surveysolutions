@@ -196,7 +196,7 @@ export default {
                     this.$http
                         .post(this.$config.model.api.cancelExportProcessUrl, null, {
                             params: {
-                                id: this.data.id
+                                id: this.data.id,
                             },
                         })
                         .catch(error => {

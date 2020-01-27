@@ -11,12 +11,12 @@ export default {
         },
         answer() {
             return this.$me.answer
-        }
+        },
     },
     methods: {
         questionId()  {
             return this.params.value.identity
-        }
-    }
+        },
+    },
 }
 </script>
