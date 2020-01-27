@@ -41,12 +41,12 @@
 </template>
 
 <script lang="js">
-    import { getLocationHash } from "~/shared/helpers"
-    import { debounce } from "lodash"
+    import { getLocationHash } from '~/shared/helpers'
+    import { debounce } from 'lodash'
 
     export default {
         name: 'wb-question',
-        props: ["question", 'questionDivCssClassName', 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
+        props: ['question', 'questionDivCssClassName', 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
         data() {
             return {
                 isShowingAddCommentDialogFlag: undefined
@@ -54,17 +54,17 @@
         },
 
         watch: {
-            ["$store.getters.scrollState"]() {
-                 this.scroll();
+            ['$store.getters.scrollState']() {
+                 this.scroll()
             },
 
-            "question.updatedAt"() {
-                 this.scroll();
+            'question.updatedAt'() {
+                 this.scroll()
             }
         },
 
         mounted() {
-            this.scroll();
+            this.scroll()
         },
 
         computed: {
@@ -73,7 +73,7 @@
             },
 
             highlight() {
-                if(!this.$store.getters.isReviewMode) return false;
+                if(!this.$store.getters.isReviewMode) return false
                 
                 return !this.$store.state.webinterview.sidebar.searchResultsHidden && this.$store.state.route.hash === '#' + this.id
             },
@@ -101,7 +101,7 @@
                     !(this.question.isDisabled && this.question.hideIfDisabled && !this.$store.getters.isReviewMode)
             },
             disabled() {
-                return this.isDisabled || this.question.isDisabled;
+                return this.isDisabled || this.question.isDisabled
             },
             hasFlag(){
                 if(this.$store.getters.isReviewMode === true) 
@@ -131,29 +131,29 @@
                     return this.isShowingAddCommentDialogFlag
             },
             showSideMenu() {
-                return !this.disabled && !this.noComments;
+                return !this.disabled && !this.noComments
             }
         },
         methods : {
             doScroll: debounce(function() {
-                if(this.$store.getters.scrollState ==  "#" + this.id){
-                    window.scroll({ top: this.$el.offsetTop, behavior: "smooth" })
-                    this.$store.dispatch("resetScroll")
+                if(this.$store.getters.scrollState ==  '#' + this.id){
+                    window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                    this.$store.dispatch('resetScroll')
                 }
             }, 200),
 
             scroll() {
-                if(this.$store && this.$store.state.route.hash === "#" + this.id) {
-                    this.doScroll(); 
+                if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+                    this.doScroll() 
                 }
             },
 
             showAddComment() {
                 if (this.$store.getters.addCommentsAllowed)
-                    this.isShowingAddCommentDialogFlag = true;
+                    this.isShowingAddCommentDialogFlag = true
             },
             hideAddComment(){
-                this.isShowingAddCommentDialogFlag = false;
+                this.isShowingAddCommentDialogFlag = false
             }
         }
     }

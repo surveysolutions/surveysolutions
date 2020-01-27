@@ -125,7 +125,7 @@
 <script>
 import Vue from 'vue'
 
-import modal from "@/shared/modal"
+import modal from '@/shared/modal'
 import {mixin as VueTimers} from 'vue-timers'
 
 export default {

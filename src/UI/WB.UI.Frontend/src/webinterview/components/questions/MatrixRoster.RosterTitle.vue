@@ -16,7 +16,7 @@
         }, 
         computed: {
             roster(){
-                return this.matrixRoster.$me.instances[this.rowIndex];
+                return this.matrixRoster.$me.instances[this.rowIndex]
             },
         },
         created() {

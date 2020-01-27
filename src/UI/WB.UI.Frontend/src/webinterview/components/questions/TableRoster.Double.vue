@@ -22,8 +22,8 @@
 
 <script lang="js">
     import Vue from 'vue'
-    import { entityDetails, tableCellEditor } from "../mixins"
-    import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from "./question_helpers"
+    import { entityDetails, tableCellEditor } from '../mixins'
+    import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from './question_helpers'
         
     export default {
         name: 'TableRoster_Double',
@@ -55,17 +55,17 @@
             },
 
             answerDoubleQuestion(evnt) {
-                const answerString = this.autoNumericElement.getNumericString();
-                if (answerString.replace(/[^0-9]/g, "").length > 15) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
+                const answerString = this.autoNumericElement.getNumericString()
+                if (answerString.replace(/[^0-9]/g, '').length > 15) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig'))
                     return
                 }
 
                 const answer = answerString != undefined && answerString != ''
                     ? parseFloat(answerString)
-                    : null;
+                    : null
 
-                this.saveAnswerValue(answer);
+                this.saveAnswerValue(answer)
             },
             saveAnswerValue(answer){
                 this.sendAnswer(() => {
@@ -74,16 +74,16 @@
                     }
                     
                     if (answer > 999999999999999 || answer < -999999999999999) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalCannotParse"))
+                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse'))
                         return
                     }
 
                     this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
-                });
+                })
             },
 
             isCancelBeforeStart() {
-                return this.cancelBeforeStart;
+                return this.cancelBeforeStart
             },
 
             destroy() {
@@ -94,15 +94,15 @@
         },
         created() {
             // only start edit if key pressed is a number, not a letter
-            this.cancelBeforeStart = this.editorParams.charPress && ('1234567890'.indexOf(this.editorParams.charPress) < 0);
+            this.cancelBeforeStart = this.editorParams.charPress && ('1234567890'.indexOf(this.editorParams.charPress) < 0)
         },
         mounted() {
             Vue.nextTick(() => {
                 if (this.$refs.inputDouble) {
-                    this.$refs.inputDouble.select();
-                    this.$refs.inputDouble.focus();
+                    this.$refs.inputDouble.select()
+                    this.$refs.inputDouble.focus()
                 }
-            });
+            })
         },
         beforeDestroy () {
             this.destroy()

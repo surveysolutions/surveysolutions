@@ -11,17 +11,17 @@
     </aside>
 </template>
 <script>
-import FacetFilters from "./FacetFilters";
+import FacetFilters from './FacetFilters'
 
 export default {
   methods: {
     hideFacets() {
-      this.$store.dispatch("hideFacets");
+      this.$store.dispatch('hideFacets')
     }
   },
 
   components: {
     FacetFilters
   }
-};
+}
 </script>

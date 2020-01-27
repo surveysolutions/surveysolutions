@@ -38,7 +38,7 @@
 
 <script lang="js">
     import Vue from 'vue'
-    import { entityDetails, tableCellEditor } from "../mixins"
+    import { entityDetails, tableCellEditor } from '../mixins'
 
     export default {
         name: 'MatrixRoster_CategoricalSingle',
@@ -54,7 +54,7 @@
             }
         }, 
         watch: {
-            ["$watchedQuestion"](watchedQuestion) {
+            ['$watchedQuestion'](watchedQuestion) {
                 if (watchedQuestion.updatedAt != this.lastUpdate) {
                     this.question = watchedQuestion
                     this.cacheQuestionData()
@@ -75,7 +75,7 @@
                 return this.$me.options == null || this.$me.options.length == 0
             },
             answeredOrAllOptions(){
-                return this.$me.options;
+                return this.$me.options
             },
             questionStyle() {
                 return [{
@@ -93,14 +93,14 @@
             },
             change() {
                 this.sendAnswer(() => {
-                    this.answerSingle(this.answer);
-                });
+                    this.answerSingle(this.answer)
+                })
             },
             answerSingle(value) {
-                this.$store.dispatch("answerSingleOptionQuestion", { answer: value, identity: this.$me.id })
+                this.$store.dispatch('answerSingleOptionQuestion', { answer: value, identity: this.$me.id })
             },                       
             toggleOptions(){
-                this.showAllOptions = !this.showAllOptions;
+                this.showAllOptions = !this.showAllOptions
             }
         },        
         created() {

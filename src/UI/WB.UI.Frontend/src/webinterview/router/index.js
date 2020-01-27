@@ -1,13 +1,13 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-import Complete from "../components/Complete"
-import Cover from "../components/Cover"
-import Section from "../components/Section"
-import SideBar from "../components/Sidebar"
-import Splash from "../components/Splash"
+import Complete from '../components/Complete'
+import Cover from '../components/Cover'
+import Section from '../components/Section'
+import SideBar from '../components/Sidebar'
+import Splash from '../components/Splash'
 
 const Interview = () => import(/* webpackChunkName: "interview" */'~/webinterview/components/Interview.vue')
 
@@ -15,41 +15,41 @@ function NewRouter(store) {
 
     const router = new VueRouter({
         base: Vue.$config.virtualPath,
-        mode: "history",
+        mode: 'history',
         routes: [
             {
-                name: "finish",
-                path: "/Finish/:interviewId"
+                name: 'finish',
+                path: '/Finish/:interviewId'
             },
             {
-                name: "splash",
-                path: "/run/:interviewId",
+                name: 'splash',
+                path: '/run/:interviewId',
                 components: {
                     default: Splash,
                     sideBar: SideBar
                 }
             },
             {
-                name: "WebInterview",
-                path: "/:interviewId",
+                name: 'WebInterview',
+                path: '/:interviewId',
                 components: {
                     default: Interview,
                     sideBar: SideBar
                 },
                 children: [
                     {
-                        name: "prefilled",
-                        path: "Cover",
+                        name: 'prefilled',
+                        path: 'Cover',
                         component: Cover,
                     },
                     {
-                        name: "section",
-                        path: "Section/:sectionId",
+                        name: 'section',
+                        path: 'Section/:sectionId',
                         component: Section
                     },
                     {
-                        name: "complete",
-                        path: "Complete",
+                        name: 'complete',
+                        path: 'Complete',
                         component: Complete
                     },
                 ]
@@ -57,7 +57,7 @@ function NewRouter(store) {
         ],
         scrollBehavior(to, from, savedPosition) {
             if (savedPosition) {
-                store.dispatch("sectionRequireScroll", { id: (from.params).sectionId })
+                store.dispatch('sectionRequireScroll', { id: (from.params).sectionId })
             } else {
                 return { x: 0, y: 0 }
             }
@@ -66,31 +66,31 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
-        if(Vue.$config.splashScreen) { next(); return; }
-        next();
+        if(Vue.$config.splashScreen) { next(); return }
+        next()
     })
 
     router.afterEach(() => {
-        const hamburger = document.getElementById("sidebarHamburger")
+        const hamburger = document.getElementById('sidebarHamburger')
 
         // check for button visibility.
         if (hamburger && hamburger.offsetParent != null) {
-            store.dispatch("toggleSidebarPanel", false /* close sidebar panel */)
+            store.dispatch('toggleSidebarPanel', false /* close sidebar panel */)
         }
     })
 
     store.subscribeAction((action, state) => {
         switch (action.type) {
-            case "finishInterview":
-                location.replace(router.resolve({ name: "finish", params: { interviewId: state.route.params.interviewId } }).href)
-                break;
-            case "navigateTo":
+            case 'finishInterview':
+                location.replace(router.resolve({ name: 'finish', params: { interviewId: state.route.params.interviewId } }).href)
+                break
+            case 'navigateTo':
                 router.replace(action.payload)
-                break;
+                break
         }
     })
 
-    return router;
+    return router
 }
 
-export default NewRouter;
+export default NewRouter

@@ -55,7 +55,7 @@
     </HqLayout>
 </template>
 <script>
-import Vue from "vue"
+import Vue from 'vue'
 
 export default {
     data() {
@@ -68,55 +68,55 @@ export default {
             withErrorsCount  : null,
             totalCount  : null,
             status  : null,
-        };
+        }
     },
     created() {
-        this.updateStatus();
+        this.updateStatus()
         this.timerId = window.setInterval(() => {
-            this.updateStatus();
-        }, 3000);
+            this.updateStatus()
+        }, 3000)
     },
     computed:{
-        isQueued() { return this.status === 'Queued'; },
-        isInProgress() { return  this.status === 'InProgress'; },
-        isDone() { return  this.status === 'Done'; },
-        isFailed() { return  this.status === 'Failed'; },
-        isCanceled() { return  this.status === 'Canceled'; },
-        isStopped() { return this.isDone || this.isFailed || this.isCanceled; },
+        isQueued() { return this.status === 'Queued' },
+        isInProgress() { return  this.status === 'InProgress' },
+        isDone() { return  this.status === 'Done' },
+        isFailed() { return  this.status === 'Failed' },
+        isCanceled() { return  this.status === 'Canceled' },
+        isStopped() { return this.isDone || this.isFailed || this.isCanceled },
         overallProgressPercent() {
-            return Math.round((this.processedCount * 100) / this.totalCount);
+            return Math.round((this.processedCount * 100) / this.totalCount)
         },
         exportErrorsLink(){
-            return this.$config.model.api.exportErrors;
+            return this.$config.model.api.exportErrors
         }
     },
     methods: {
         updateStatus(){
-            var self = this;
+            var self = this
             this.$http.get(this.$config.model.api.statusUrl)
                 .then(function (response) {
-                    const invitationsInfo = response.data || {};
-                    self.title = invitationsInfo.fullName;
-                    self.questionnaireIdentity = invitationsInfo.questionnaireIdentity;
-                    const status = invitationsInfo.status;
-                    self.responsibleName = status.responsibleName;
-                    self.processedCount = status.processedCount || 0;
-                    self.withErrorsCount = status.withErrorsCount || 0;
-                    self.totalCount = status.totalCount || 0;
-                    self.status = status.status;
+                    const invitationsInfo = response.data || {}
+                    self.title = invitationsInfo.fullName
+                    self.questionnaireIdentity = invitationsInfo.questionnaireIdentity
+                    const status = invitationsInfo.status
+                    self.responsibleName = status.responsibleName
+                    self.processedCount = status.processedCount || 0
+                    self.withErrorsCount = status.withErrorsCount || 0
+                    self.totalCount = status.totalCount || 0
+                    self.status = status.status
                 })
                 .catch(function (error) { 
-                    Vue.config.errorHandler(error, self);
-                });
+                    Vue.config.errorHandler(error, self)
+                })
         },
         cancel(){
-            var self = this;
-            self.$store.dispatch("showProgress");
+            var self = this
+            self.$store.dispatch('showProgress')
             this.$http.post(this.$config.model.api.cancelUrl).then(function (response) {
-                self.$store.dispatch("hideProgress");
-            });
+                self.$store.dispatch('hideProgress')
+            })
         }
     }
 
-};
+}
 </script>

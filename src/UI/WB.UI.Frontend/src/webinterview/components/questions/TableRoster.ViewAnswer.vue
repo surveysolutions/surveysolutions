@@ -47,7 +47,7 @@
             }
         }, 
         watch: {
-            ["$watchedQuestion"](watchedQuestion) {
+            ['$watchedQuestion'](watchedQuestion) {
                 if (watchedQuestion.updatedAt != this.lastUpdate) {
                     this.question = watchedQuestion
                     this.cacheQuestionData()

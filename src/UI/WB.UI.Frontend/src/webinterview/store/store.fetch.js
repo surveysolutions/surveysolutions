@@ -1,10 +1,10 @@
-import Vue from "vue";
+import Vue from 'vue'
 
 function setFetchState(state, id, done) {
-    const $id = Object.prototype.hasOwnProperty.call(id, "id") ? id.id : id;
-    const hasInState = state[$id] != null;
+    const $id = Object.prototype.hasOwnProperty.call(id, 'id') ? id.id : id
+    const hasInState = state[$id] != null
     if (done) {
-        if (hasInState) Vue.delete(state, $id);
+        if (hasInState) Vue.delete(state, $id)
     } else {
         if (!hasInState) Vue.set(state, $id, true)
     }
@@ -12,7 +12,7 @@ function setFetchState(state, id, done) {
 }
 
 function updateFetchProgress(state) {
-    state.inProgress = Object.keys(state.state).length > 0 || state.requestInProgress > 0;
+    state.inProgress = Object.keys(state.state).length > 0 || state.requestInProgress > 0
 }
 
 const fetch = {
@@ -31,42 +31,42 @@ const fetch = {
     },
     getters: {
         scrollState(state) {
-            return state.scroll.id;
+            return state.scroll.id
         }
     },
     actions: {
         fetch({ commit }, { id, ids, done }) {
-            commit("SET_FETCH", {
+            commit('SET_FETCH', {
                 id,
                 ids,
                 done: done || false
-            });
+            })
         },
 
         fetchProgress({ commit }, amount) {
-            commit("SET_FETCH_IN_PROGRESS", amount);
+            commit('SET_FETCH_IN_PROGRESS', amount)
         },
         sectionRequireScroll({ commit }, { id }) {
-            commit("SET_SCROLL_TARGET", id);
+            commit('SET_SCROLL_TARGET', id)
         },
 
         uploadProgress({ commit, rootState }, { id, now, total }) {
-            commit("SET_UPLOAD_PROGRESS", {
+            commit('SET_UPLOAD_PROGRESS', {
                 entity: rootState.webinterview.entityDetails[id],
                 now,
                 total
-            });
+            })
         },
         resetScroll({ commit }) {
-            commit("SET_SCROLL_TARGET", null);
+            commit('SET_SCROLL_TARGET', null)
         }
     },
 
     mutations: {
         SET_UPLOAD_PROGRESS(state, { entity, now, total }) {
-            Vue.set(entity, "fetchState", {});
-            Vue.set(entity.fetchState, "uploaded", now);
-            Vue.set(entity.fetchState, "total", total);
+            Vue.set(entity, 'fetchState', {})
+            Vue.set(entity.fetchState, 'uploaded', now)
+            Vue.set(entity.fetchState, 'total', total)
         },
         SET_FETCH(state, { id, ids, done }) {
             if (id) {
@@ -76,22 +76,22 @@ const fetch = {
             if (ids) {
                 ids.forEach(element => {
                     setFetchState(state.state, element, done)
-                });
+                })
             }
 
-            updateFetchProgress(state);
+            updateFetchProgress(state)
         },
         SET_FETCH_IN_PROGRESS(state, amount) {
-            state.requestInProgress = state.requestInProgress + amount;
-            updateFetchProgress(state);
+            state.requestInProgress = state.requestInProgress + amount
+            updateFetchProgress(state)
         },
         SET_SCROLL_TARGET(state, id) {
-            state.scroll.id = id;
+            state.scroll.id = id
         },
         SET_LOADING_PROGRESS(state, value) {
-            state.loadingProgress = value;
+            state.loadingProgress = value
         }
     }
-};
+}
 
-export { fetch };
+export { fetch }

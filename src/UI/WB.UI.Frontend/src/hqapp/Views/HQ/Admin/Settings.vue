@@ -249,7 +249,7 @@
     </script>-->
 </template>
 <script>
-import Vue from "vue"
+import Vue from 'vue'
 import modal from '@/shared/modal'
 
 export default {
@@ -315,7 +315,7 @@ export default {
             }
         },
         async clearMessage(){
-            this.globalNotice = ""
+            this.globalNotice = ''
             return this.updateMessage()
         },
         updateAllowInterviewerUpdateProfile() {
@@ -330,14 +330,14 @@ export default {
         onLogoSubmit() {
              if (window.File && window.FileReader && window.FileList && window.Blob) {
                 //get the file size and file type from file input field
-                var fsize = this.$refs.logoRef.files[0].size;
+                var fsize = this.$refs.logoRef.files[0].size
 
                 if (fsize > 1024*1024*10) 
                 {
-                    alert('Logo image size should be less than 10mb');
-                    return false;
+                    alert('Logo image size should be less than 10mb')
+                    return false
                 } else {
-                    return true;
+                    return true
                 }
             }
         },

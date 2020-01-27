@@ -1,9 +1,9 @@
-import Supervisor from "./Supervisor"
-import Interviewer from "./Interviewer"
+import Supervisor from './Supervisor'
+import Interviewer from './Interviewer'
 
 export default class UsersComponent {
     constructor(rootStore) {
-        this.rootStore = rootStore;
+        this.rootStore = rootStore
     }
 
     get routes() {

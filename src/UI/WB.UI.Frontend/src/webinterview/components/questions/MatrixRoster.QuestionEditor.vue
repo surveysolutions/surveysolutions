@@ -12,8 +12,8 @@
 
 <script lang="js">
     import Vue from 'vue'
-    import { getLocationHash } from "~/shared/helpers"
-    import { debounce } from "lodash"
+    import { getLocationHash } from '~/shared/helpers'
+    import { debounce } from 'lodash'
 
     export default {
         name: 'MatrixRoster_QuestionEditor',
@@ -25,12 +25,12 @@
             }
         }, 
         watch: {
-            ["$store.getters.scrollState"]() {
-                 this.scroll();
+            ['$store.getters.scrollState']() {
+                 this.scroll()
             },
         },
         mounted() {
-            this.scroll();
+            this.scroll()
         },
         computed: {
             $me() {
@@ -69,15 +69,15 @@
                     this.$refs.editQuestionComponent.destroy()
             },
             doScroll: debounce(function() {
-                if(this.$store.getters.scrollState ==  "#" + this.id){
-                    window.scroll({ top: this.$parent.$parent.$el.offsetTop, behavior: "smooth" })
-                    this.$store.dispatch("resetScroll")
+                if(this.$store.getters.scrollState ==  '#' + this.id){
+                    window.scroll({ top: this.$parent.$parent.$el.offsetTop, behavior: 'smooth' })
+                    this.$store.dispatch('resetScroll')
                 }
             }, 200),
 
             scroll() {
-                if(this.$store && this.$store.state.route.hash === "#" + this.id) {
-                    this.doScroll(); 
+                if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+                    this.doScroll() 
                 }
             }
         },

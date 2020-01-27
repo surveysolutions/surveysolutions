@@ -18,7 +18,7 @@
     </div>
 </template>
 <script lang="js">
-    import { GroupStatus } from "./questions"
+    import { GroupStatus } from './questions'
 
     export default {
         name: 'sidebar-panel',
@@ -30,7 +30,7 @@
             loading() {
                 return {
                     collapsed: true,
-                    title: "...",
+                    title: '...',
                     id: this.panel.id,
                     validity: {
                         isValid: true
@@ -38,7 +38,7 @@
                 }
             },
             title() {
-                return this.panel.title + (this.panel.isRoster ? (this.panel.rosterTitle ? ` - ${this.panel.rosterTitle}` :" - [...]") : "")
+                return this.panel.title + (this.panel.isRoster ? (this.panel.rosterTitle ? ` - ${this.panel.rosterTitle}` :' - [...]') : '')
             },
             to() {
                 if (this.panel.to) {
@@ -68,20 +68,20 @@
                     current: this.panel.current,
                     active: this.isActive,
                     complete: this.panel.status === GroupStatus.Completed && !this.hasError ,
-                    "has-error": this.hasError
+                    'has-error': this.hasError
                 }]
             },
             hasError() {
-                return this.panel.validity.isValid == false;
+                return this.panel.validity.isValid == false
             }
 
         },
         watch: {
-             ["$route.params.sectionId"]() {
+             ['$route.params.sectionId']() {
                 this.update()
                
             },
-            "panel"() {
+            'panel'() {
                 this.update()
             }
         },
@@ -92,7 +92,7 @@
         },
         methods: {
             fetchChild() {
-                this.$store.dispatch("fetchSidebar", this.panel.id)
+                this.$store.dispatch('fetchSidebar', this.panel.id)
             },
             update() {
                 if (this.panel.hasChildren && !this.panel.collapsed) {
@@ -100,7 +100,7 @@
                 }
             },
             toggle() {
-                this.$store.dispatch("toggleSidebar", {
+                this.$store.dispatch('toggleSidebar', {
                     panel: this.panel,
                     collapsed: !this.panel.collapsed
                 })

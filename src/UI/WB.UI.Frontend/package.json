@@ -86,6 +86,14 @@
       "eslint:recommended"
     ],
     "rules": {
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "never"
+      ],
       "no-unused-vars": "off",
       "vue/no-unused-vars": "off",
       "vue/require-v-for-key": "off"

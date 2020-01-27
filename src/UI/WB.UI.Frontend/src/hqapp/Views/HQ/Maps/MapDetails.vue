@@ -53,27 +53,27 @@
 <script>
 export default {
     mounted() {
-        this.reload();
+        this.reload()
     },
     methods: {     
         reload() {
             if (this.$refs.table){
-                this.$refs.table.reload();
+                this.$refs.table.reload()
             }
         },   
         addParamsToRequest(requestData) {
-            requestData.mapName = this.$config.model.fileName;
+            requestData.mapName = this.$config.model.fileName
         },
         contextMenuItems({ rowData }) {
             return [{
-                name: this.$t("Pages.MapDetails_DelinkUser"),
+                name: this.$t('Pages.MapDetails_DelinkUser'),
                 callback: () => { this.delinkUserFromMap(rowData.userName, this.$config.model.fileName)}                    
-            }];
+            }]
         },
 
         delinkUserFromMap(userName, fileName) 
         {
-            const self = this;
+            const self = this
             this.$refs.confirmDiscard.promt(ok => 
             {
                 if (ok) 
@@ -83,31 +83,31 @@ export default {
                         url: this.config.deleteMapUserLinkUrl,
                         data: {user:userName, map: fileName}})
 
-                    this.$refs.table.reload();
+                    this.$refs.table.reload()
                 }
             })
         },        
     },
     computed: {        
         config() {
-            return this.$config.model;
+            return this.$config.model
         },
         tableOptions() {
-            var self = this;
+            var self = this
             return {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: "userName",
-                        name: "UserName", // case-sensitive!
-                        "class": "title",
-                        title: this.$t("Pages.MapDetails_InterviewerName"),
+                        data: 'userName',
+                        name: 'UserName', // case-sensitive!
+                        'class': 'title',
+                        title: this.$t('Pages.MapDetails_InterviewerName'),
                         orderable: true                       
                     }                    
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
-                    type: "GET"
+                    type: 'GET'
                 },
                 responsive: false,
                 order: [[0, 'asc']],

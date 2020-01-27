@@ -36,10 +36,10 @@
 
 <script lang="js">
 
-    import { entityDetails } from "../mixins"
+    import { entityDetails } from '../mixins'
     import Vue from 'vue'
-    import modal from "@/shared/modal"
-    import {find, map, includes, without, filter as loFilter} from "lodash"
+    import modal from '@/shared/modal'
+    import {find, map, includes, without, filter as loFilter} from 'lodash'
     
     export default {
         name: 'MultiComboboxQuestion',
@@ -52,7 +52,7 @@
         },
         computed: {
             selectedOptions() {
-                var self = this;
+                var self = this
                 return map(self.$me.answer, (val) => {
                     return {
                         title: find(self.$me.options, (opt) => { return opt.value === val }).title,
@@ -73,10 +73,10 @@
 
                 let newAnswer = this.$me.answer.slice()
                 newAnswer.push(newValue)
-                this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, identity: this.$me.id })
+                this.$store.dispatch('answerMultiOptionQuestion', { answer: newAnswer, identity: this.$me.id })
             },
             optionsSource(filter) {
-                const self = this;
+                const self = this
                 const interviewId = this.$route.params.interviewId
                 const excludedOptionIds = self.$me.answer
                 const optionsPromise = Vue.$api.interview.get('getTopFilteredOptionsForQuestionWithExclude', {interviewId, id:this.$me.id, filter, count:20, excludedOptionIds})
@@ -93,16 +93,16 @@
                 const newAnswer = without(this.$me.answer, valueToRemove)
                 
                 if (this.$me.isRosterSize) {
-                    const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
+                    const confirmMessage = this.$t('WebInterviewUI.ConfirmRosterRemove')
                     modal.confirm(confirmMessage, result => {
                         if (result) {
-                            this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, identity: this.$me.id })
+                            this.$store.dispatch('answerMultiOptionQuestion', { answer: newAnswer, identity: this.$me.id })
                             return
                         } 
                     })
                 }
                 else {
-                    this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, identity: this.$me.id })
+                    this.$store.dispatch('answerMultiOptionQuestion', { answer: newAnswer, identity: this.$me.id })
                 }
             }
         }

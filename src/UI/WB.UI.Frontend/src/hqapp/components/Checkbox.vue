@@ -30,11 +30,11 @@ export default {
 
     methods: {
         checkedChange(ev) {
-            this.$emit("input", ev.target.checked, {
+            this.$emit('input', ev.target.checked, {
                 checked: ev.target.checked,
                 selected: this.radioGroup,
                 name: this.name
-            });
+            })
         }
     },
 
@@ -51,5 +51,5 @@ export default {
             return this.radioGroup == null ? 'checkbox' : 'radio'
         }
     }
-};
+}
 </script>

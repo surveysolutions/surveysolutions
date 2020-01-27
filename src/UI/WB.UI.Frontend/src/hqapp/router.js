@@ -8,11 +8,11 @@ export default class HqRouter {
     constructor(options) {
         this.options = assign({
             base: window.input.settings.config.basePath,
-            mode: "history",
+            mode: 'history',
             scrollBehavior() {
                 return { x: 0, y: 0 }
             }
-        }, options);
+        }, options)
     }
 
     get router() {

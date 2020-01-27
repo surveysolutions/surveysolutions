@@ -35,8 +35,8 @@
 </template>
 <script>
 
-import routeSync from "~/shared/routeSync"
-import escape from "lodash"
+import routeSync from '~/shared/routeSync'
+import escape from 'lodash'
 
 export default {
     mixins: [routeSync],
@@ -111,7 +111,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "SupervisorAssigned")
+                                'SupervisorAssigned')
                     }
                 },
                 {
@@ -123,7 +123,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "InterviewerAssigned")
+                                'InterviewerAssigned')
                     }
                 },
                 {
@@ -135,7 +135,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "Completed")
+                                'Completed')
                     }
                 },
                 {
@@ -147,7 +147,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "RejectedBySupervisor")
+                                'RejectedBySupervisor')
                     }
                 },
                 {
@@ -159,7 +159,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "ApprovedBySupervisor")
+                                'ApprovedBySupervisor')
                     }
                 },
                 {
@@ -171,7 +171,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "RejectedByHeadquarters")
+                                'RejectedByHeadquarters')
                     }
                 },
                 {
@@ -183,7 +183,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "ApprovedByHeadquarters")
+                                'ApprovedByHeadquarters')
                     }
                 },
                 {
@@ -195,7 +195,7 @@ export default {
                         return self.getLinkToInterviews(
                                 data,
                                 row,
-                                "")
+                                '')
                     }
                 }
             ]

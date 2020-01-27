@@ -63,7 +63,7 @@ export default {
             password: null,
             errorMessage: null,
             invalidCredentials: false
-        };
+        }
     },
     methods: {
         async trySignIn() {

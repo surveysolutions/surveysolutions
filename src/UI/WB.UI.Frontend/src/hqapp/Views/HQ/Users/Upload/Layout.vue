@@ -23,13 +23,13 @@
 
 
 <script>
-import Vue from "vue";
+import Vue from 'vue'
 export default {
    mounted() {
     Vue.nextTick(() => {
-      window.ajustNoticeHeight();
-      window.ajustDetailsPanelHeight();
-    });
+      window.ajustNoticeHeight()
+      window.ajustDetailsPanelHeight()
+    })
   }
-};
+}
 </script>

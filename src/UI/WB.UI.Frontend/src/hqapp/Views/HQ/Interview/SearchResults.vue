@@ -28,54 +28,54 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import SearchSectionResult from "./components/SearchSectionResult"
+import SearchSectionResult from './components/SearchSectionResult'
 
 export default {
 
     methods: {
         hideSearchResults() {
-            this.$store.dispatch("resetAllFilters");
-            this.$store.dispatch("hideSearchResults");
+            this.$store.dispatch('resetAllFilters')
+            this.$store.dispatch('hideSearchResults')
         },
 
         infiniteHandler($state) {
-            const self = this;
+            const self = this
 
-            this.$store.dispatch("fetchSearchResults")
+            this.$store.dispatch('fetchSearchResults')
                 .then(() => { 
-                    $state.loaded();
+                    $state.loaded()
                     
                     if(self.searchResult.skip >= self.searchResult.count) {
-                        $state.complete();
+                        $state.complete()
                     }
-                 });
+                 })
         }
     },
 
     computed: {
         searchResultsAreVisible() {
-            return !this.$store.state.webinterview.sidebar.searchResultsHidden;
+            return !this.$store.state.webinterview.sidebar.searchResultsHidden
         },
 
         searchResult() {
-            return this.$store.getters.searchResult;
+            return this.$store.getters.searchResult
         }
     },
 
     watch:{
-        "searchResult.count"() {
+        'searchResult.count'() {
             if(this.$refs.loader != null)
-                this.$refs.loader.$emit('$InfiniteLoading:reset');
+                this.$refs.loader.$emit('$InfiniteLoading:reset')
         }
     },
 
     mounted() {
         this.$nextTick(() => {
-           this.$store.dispatch("fetchSearchResults")
+           this.$store.dispatch('fetchSearchResults')
         })
     },
 
     components: { SearchSectionResult,InfiniteLoading}
-};
+}
 </script>
 

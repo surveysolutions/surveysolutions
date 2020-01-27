@@ -19,10 +19,10 @@
 
 <script lang="js">
     import Vue from 'vue'
-    import { entityDetails } from "../mixins"
-    import { GroupStatus } from "./index"
-    import { debounce, every, some, map } from "lodash"
-    import { AgGridVue } from "ag-grid-vue";
+    import { entityDetails } from '../mixins'
+    import { GroupStatus } from './index'
+    import { debounce, every, some, map } from 'lodash'
+    import { AgGridVue } from 'ag-grid-vue'
 
     // import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
     // import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
@@ -64,17 +64,17 @@
                 resizable: true,
                 editable: true, // make every column editable
                 autoHeight: true,
-            };
+            }
 
             this.initQuestionAsColumns()
             this.initQuestionsInRows()
         },
 
         watch: {
-            ["$store.getters.scrollState"]() {
-                this.scroll();
+            ['$store.getters.scrollState']() {
+                this.scroll()
             },
-            ["$me.instances"]() {
+            ['$me.instances']() {
                 if (this.countOfInstances != this.$me.instances.length) {
                     this.countOfInstances = this.$me.instances.length
                     this.initQuestionsInRows()
@@ -84,7 +84,7 @@
         },
 
         mounted() {
-            this.scroll();
+            this.scroll()
         },
 
         computed: {
@@ -100,7 +100,7 @@
         },
         methods : {
             initQuestionAsColumns() {
-                var self = this;
+                var self = this
                 var columnsFromQuestions = map(
                     this.$me.questions,
                     (question, key) => {
@@ -123,16 +123,16 @@
                                 id: question.id,
                                 value: question,
                             },
-                        };
+                        }
                     }
-                );
+                )
                 columnsFromQuestions.unshift({
                     headerName: this.$me.title, 
                     headerComponentFramework: 'TableRoster_Title',
                     headerComponentParams: {
                         title: this.$me.title
                     },
-                    field: "rosterTitle", 
+                    field: 'rosterTitle', 
                     autoHeight: true, 
                     pinned: true, 
                     editable: false,                     
@@ -144,7 +144,7 @@
             },
 
             initQuestionsInRows() {
-                var self = this;
+                var self = this
 
                 var rosterInstancesWithQuestionsAsRows = map(
                     this.$me.instances,
@@ -155,24 +155,24 @@
                                 tableRoster: self,
                                 rowIndex: key,
                             }, 
-                        };
+                        }
                         self.$me.questions.forEach(question => {
                             var questionIdentity = question.id + instance.rosterVector
                             instanceAsRow[question.id] = {
                                 identity : questionIdentity,
                                 type     : question.entityType
                             }
-                        });
+                        })
                         
-                        return instanceAsRow;
+                        return instanceAsRow
                     }
                 )
                 this.rowData = rosterInstancesWithQuestionsAsRows
             },
 
             onGridReady(params) {
-                this.gridApi = params.api;
-                this.columnApi = params.columnApi;
+                this.gridApi = params.api
+                this.columnApi = params.columnApi
 
                 this.autosizeHeaders(params)
                 this.setTableRosterHeight()
@@ -180,20 +180,20 @@
 
             autosizeHeaders(event) {
                 if (event.finished !== false) {
-                    const MIN_HEIGHT = 16;
-                    event.api.setHeaderHeight(MIN_HEIGHT);
-                    const headerCells = $(this.$refs.tableRoster.$el).find('.ag-header-cell-label');
-                    let minHeight = MIN_HEIGHT;
+                    const MIN_HEIGHT = 16
+                    event.api.setHeaderHeight(MIN_HEIGHT)
+                    const headerCells = $(this.$refs.tableRoster.$el).find('.ag-header-cell-label')
+                    let minHeight = MIN_HEIGHT
                     for (let index = 0; index < headerCells.length; index++) {
-                        const cell = headerCells[index];
-                        minHeight = Math.max(minHeight, cell.scrollHeight);
+                        const cell = headerCells[index]
+                        minHeight = Math.max(minHeight, cell.scrollHeight)
                     }
 
                     // set header height to calculated height + padding (top: 8px, bottom: 8px)
-                    event.api.setHeaderHeight(minHeight);
+                    event.api.setHeaderHeight(minHeight)
 
                     // set all rows height to auto
-                    event.api.resetRowHeights();
+                    event.api.resetRowHeights()
                 }
             },
 
@@ -202,30 +202,30 @@
                 {
                     if (this.$me.instances.length > 20) {
                         this.gridApi.setDomLayout('normal')
-                        this.$refs.tableRoster.$el.style.height = '1024px';
+                        this.$refs.tableRoster.$el.style.height = '1024px'
                     }
                     else {
-                        this.gridApi.setDomLayout('autoHeight');
-                        this.$refs.tableRoster.$el.style.height = '';
+                        this.gridApi.setDomLayout('autoHeight')
+                        this.$refs.tableRoster.$el.style.height = ''
                 }
                 }
             },
 
             doScroll: debounce(function() {
                 if(this.$store.getters.scrollState == this.id){
-                    window.scroll({ top: this.$el.offsetTop, behavior: "smooth" })
-                    this.$store.dispatch("resetScroll")
+                    window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                    this.$store.dispatch('resetScroll')
                 }
             }, 200),
 
             scroll() {
-                if(this.$store && this.$store.state.route.hash === "#" + this.id) {
-                    this.doScroll(); 
+                if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+                    this.doScroll() 
                 }
             },
 
             endCellEditting(event) {
-                event.api.resetRowHeights();
+                event.api.resetRowHeights()
             }
         }
     }

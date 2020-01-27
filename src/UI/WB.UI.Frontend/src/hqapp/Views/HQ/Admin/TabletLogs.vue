@@ -6,7 +6,7 @@
 
 <script>
 import {DateFormats} from '~/shared/helpers'
-import moment from "moment"
+import moment from 'moment'
 
 export default {
     computed: {
@@ -51,7 +51,7 @@ export default {
             menu.push({
                 name: self.$t('Common.Download'),
                 callback: () => {
-                    window.open(rowData.downloadUrl, "_blank")
+                    window.open(rowData.downloadUrl, '_blank')
                 }
             })
             return menu

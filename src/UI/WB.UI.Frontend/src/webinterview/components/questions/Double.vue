@@ -57,9 +57,9 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from "../mixins"
-    import * as $ from "jquery"
-    import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from "./question_helpers"
+    import { entityDetails } from '../mixins'
+    import * as $ from 'jquery'
+    import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from './question_helpers'
     
     export default {
         data() {
@@ -72,8 +72,8 @@
         computed: {
             isSpecialValueSelected(){
                 if (this.$me.answer == null || this.$me.answer == undefined)
-                    return undefined;
-                return this.isSpecialValue(this.$me.answer);
+                    return undefined
+                return this.isSpecialValue(this.$me.answer)
             },
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
@@ -92,24 +92,24 @@
                     return this.$me.answer
                 },
                 set(value) {
-                    this.saveAnswer(value, true);
+                    this.saveAnswer(value, true)
                 }
             }
         },        
         methods: {
             answerDoubleQuestion(evnt) {
-                const answerString = this.autoNumericElement.getNumericString();
-                if (answerString.replace(/[^0-9]/g, "").length > 15) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
+                const answerString = this.autoNumericElement.getNumericString()
+                if (answerString.replace(/[^0-9]/g, '').length > 15) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig'))
                     return
                 }
 
                 const answer = answerString != undefined && answerString != ''
                     ? parseFloat(answerString)
-                    : null;
+                    : null
 
-                const isSpecialValue = this.isSpecialValue(answer);
-                this.saveAnswer(answer, isSpecialValue);
+                const isSpecialValue = this.isSpecialValue(answer)
+                this.saveAnswer(answer, isSpecialValue)
             },
             saveAnswer(answer, isSpecialValue){
                 this.sendAnswer(() => {
@@ -117,29 +117,29 @@
                         return
                     }
                     if (answer > 999999999999999 || answer < -999999999999999) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalCannotParse"))
+                        this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse'))
                         return
                     }
 
                     this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
-                });
+                })
             },
             isSpecialValue(value){
-                const options = this.$me.options || [];
+                const options = this.$me.options || []
                 if (options.length == 0)
-                    return false;
+                    return false
                 for(let i=0;i<options.length;i++)
                 {
                     if (options[i].value === value)
-                        return true;
+                        return true
                 }
-                return false;
+                return false
             },
             removeAnswer() {                                
                 if(this.autoNumericElement)
                     this.autoNumericElement.clear()
                 
-                this.$store.dispatch("removeAnswer", this.id)
+                this.$store.dispatch('removeAnswer', this.id)
                     return
                 }
         },

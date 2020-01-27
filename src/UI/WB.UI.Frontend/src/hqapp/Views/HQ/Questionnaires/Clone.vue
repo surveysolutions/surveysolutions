@@ -74,7 +74,7 @@
 </template>
 <script>
 
-import Vue from 'vue';
+import Vue from 'vue'
 import VeeValidate from 'vee-validate'
 Vue.use(VeeValidate)
 

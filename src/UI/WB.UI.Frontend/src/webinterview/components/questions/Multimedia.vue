@@ -16,9 +16,9 @@
     </wb-question>
 </template>
 <script lang="js">
-    import { entityDetails } from "../mixins"
+    import { entityDetails } from '../mixins'
 
-    const imageFileSizeLimit = 30 * 1024 * 1024; // mb
+    const imageFileSizeLimit = 30 * 1024 * 1024 // mb
 
     export default {
         name: 'picture-question',
@@ -39,12 +39,12 @@
 
                 if(this.$me.validity.isValid) return this.uploadingImage != null
 
-                return false;
+                return false
             }
         },
 
         watch:{
-            "$me.answer"() {
+            '$me.answer'() {
                 this.uploadingImage = null
             }
         },
@@ -56,19 +56,19 @@
             },
             onFileChange(e) {
                 this.sendAnswer(() => {
-                    const files = e.target.files || e.dataTransfer.files;
+                    const files = e.target.files || e.dataTransfer.files
 
                     if (!files.length) {
-                        return;
+                        return
                     }
 
-                    this.createImage(files[0]);
+                    this.createImage(files[0])
                 })
             },
             createImage(file) {
                 if (file.size > imageFileSizeLimit) {
                     // Image is too big to upload. Please, choose an image less than 30 Mb
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.PhotoTooBig"))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoTooBig'))
                     return
                 }
 
@@ -92,11 +92,11 @@
                         reader.readAsDataURL(file)
                     } else {
                         // Only image files are allowed to upload
-                        self.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.PhotoIsNotImage") )
+                        self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
                     }
-                };
+                }
 
-                image.src = URL.createObjectURL(file);
+                image.src = URL.createObjectURL(file)
             }
         }
     }

@@ -56,9 +56,9 @@
 
 <script lang="js">
     import Vue from 'vue'
-    import { filter, difference , join} from "lodash"
-    import { entityDetails, tableCellEditor } from "../mixins"
-    import modal from "@/shared/modal";
+    import { filter, difference , join} from 'lodash'
+    import { entityDetails, tableCellEditor } from '../mixins'
+    import modal from '@/shared/modal'
 
     export default {
         name: 'MatrixRoster_CategoricalMulti',
@@ -74,7 +74,7 @@
             }
         }, 
         watch: {
-            ["$watchedQuestion"](watchedQuestion) {
+            ['$watchedQuestion'](watchedQuestion) {
                 if (watchedQuestion.updatedAt != this.lastUpdate) {
                     this.question = watchedQuestion
                     this.cacheQuestionData()
@@ -95,10 +95,10 @@
                 return this.$me.options == null || this.$me.options.length == 0
             },
             answeredOrAllOptions() {
-                return this.$me.options;
+                return this.$me.options
             },
             allAnswersGiven() {
-                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount;
+                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
             },
             questionStyle() {
                 return [{
@@ -116,25 +116,25 @@
             },
             change() {
                 this.sendAnswer(() => {
-                    this.answerMulti(this.answer);
-                });
+                    this.answerMulti(this.answer)
+                })
             },
             //questionId()  {
             //    return this.params.value.identity
             //},
             answerMulti(value) {
                 if (!this.$me.isRosterSize) {
-                    this.$store.dispatch("answerMultiOptionQuestion", { answer: value, identity: this.$me.id })
-                    return;
+                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
+                    return
                 }
 
-                const currentAnswerCount = value.length;
-                const previousAnswersCount = this.$me.answer.length;
-                const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
+                const currentAnswerCount = value.length
+                const previousAnswersCount = this.$me.answer.length
+                const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount
 
                 if (!isNeedRemoveRosters) {
-                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id });
-                    return;
+                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
+                    return
                 }
 
                 const diff = difference(this.$me.answer, value)
@@ -142,14 +142,14 @@
                     return find(this.answeredOrAllOptions, { value: v }).title
                 }), ', ')
 
-                const confirmMessage = this.$t("WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage", {
+                const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
                     rosterTitle
-                } );
+                } )
 
                 modal.confirm(confirmMessage, result => {
                     if (result) {
-                        this.$store.dispatch("answerMultiOptionQuestion", { answer: value, identity: this.$me.id })
-                        return;
+                        this.$store.dispatch('answerMultiOptionQuestion', { answer: value, identity: this.$me.id })
+                        return
                     } else {
                         this.fetch()
                         return
@@ -157,17 +157,17 @@
                 })
             },
             toggleOptions(){
-                this.showAllOptions = !this.showAllOptions;
+                this.showAllOptions = !this.showAllOptions
             },
             isProtected(answerValue) {
-                if (!this.$me.protectedAnswer) return false;
+                if (!this.$me.protectedAnswer) return false
                 
                 var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
-                return answerIndex > -1;
+                return answerIndex > -1
             },
             getAnswerOrder(answerValue) {
                 var answerIndex = this.$me.answer.indexOf(answerValue)
-                return answerIndex > -1 ? answerIndex + 1 : ""
+                return answerIndex > -1 ? answerIndex + 1 : ''
             },
         },
         created() {
