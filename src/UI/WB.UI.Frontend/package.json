@@ -8,7 +8,7 @@
     "styles": "vue-cli-service build --css",
     "styles:dev": "vue-cli-service build --css --mode development",
     "dev": "vue-cli-service build --mode development",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint --fix --format stylish",
     "hot": "vue-cli-service build --mode development --watch",
     "test:unit": "vue-cli-service test:unit"
   },
@@ -62,8 +62,8 @@
     "babel-eslint": "^10.0.3",
     "clean-webpack-plugin": "^3.0.0",
     "cross-env": "^6.0.3",
-    "eslint": "6.8.0",
-    "eslint-plugin-vue": "6.1.2",
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^6.1.2",
     "extra-watch-webpack-plugin": "^1.0.3",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.0",
@@ -85,14 +85,25 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-unused-vars": "off",
+      "vue/no-unused-vars": "off",
+      "vue/require-v-for-key": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "globals": {
+      "$": "readonly",
+      "google": "readonly"
     },
     "ignorePatterns": [
       "dist/**",
       "js/**",
-      "**/*.test.js"
+      "**/*.test.js",
+      "vendor/**",
+      "vue.config.js",
+      "tools/**"
     ]
   },
   "postcss": {
