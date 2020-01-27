@@ -1,5 +1,6 @@
 import Vue from "vue"
 import Vuex from "vuex"
+import { concat } from "lodash"
 
 Vue.use(Vuex)
 
@@ -17,7 +18,7 @@ export default {
     },
 
     actions: {
-        async loadAdditionalInfo({ dispatch, commit, rootState }, { id }) {
+        async loadAdditionalInfo({ commit }, { id }) {
             const data = await Vue.$api.interview.get('overviewItemAdditionalInfo', { id });
             commit("SET_ADDITIONAL_INFO", {
                 id,
@@ -30,7 +31,7 @@ export default {
             dispatch("loadOverview", { skip: 0 });
         },
 
-        async loadOverview({ commit, dispatch, state, rootState }, { skip }) {
+        async loadOverview({ commit, dispatch, state }, { skip }) {
             const data = await Vue.$api.interview.get('overview', { skip, take: state.pageSize });
 
             commit("SET_OVERVIEW_RESPONSE", data);
@@ -55,7 +56,7 @@ export default {
 
         SET_OVERVIEW_RESPONSE(state, data) {
             state.total = data.total
-            state.entities = _.concat(state.entities, data.items)
+            state.entities = concat(state.entities, data.items)
             state.loaded = state.entities.length
             if (data.isLastPage) state.isLoaded = true
         },

@@ -1,14 +1,16 @@
+function FormData() {
+    this.fake = true;
+    this.boundary = "--------FormData" + Math.random();
+    this._fields = [];
+}
+
 /**
  * Emulate FormData for some browsers
  * MIT License
  * (c) 2010 François de Metz
  */
 if (!window.FormData) {
-    function FormData() {
-        this.fake = true;
-        this.boundary = "--------FormData" + Math.random();
-        this._fields = [];
-    }
+
     FormData.prototype.append = function (key, value) {
         this._fields.push([key, value]);
     }

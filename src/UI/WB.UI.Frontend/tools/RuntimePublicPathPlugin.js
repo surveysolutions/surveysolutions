@@ -9,7 +9,7 @@ module.exports = class RuntimePublicPathPlugin {
         var runtimePublicPathStr = this.options.runtimePublicPath;
         if (!runtimePublicPathStr) {
             throw PLUGINNAME +
-                ": no `runtimePublicPath` is specified. This plugin will do nothing.";
+            ": no `runtimePublicPath` is specified. This plugin will do nothing.";
         }
         // compiler.hooks.thisCompilation
         // compiler.hooks.compilation
@@ -17,7 +17,7 @@ module.exports = class RuntimePublicPathPlugin {
             compilation.mainTemplate.hooks.requireExtensions.tap(
                 PLUGINNAME,
                 source => {
-                    const publicPathOverride = `// Dynamic assets path override\n__webpack_require__.p = (${runtimePublicPathStr}) || __webpack_require__.p;`;
+                    const publicPathOverride = `// Dynamic assets path override\n__webpack_require_p = (${runtimePublicPathStr}) || __webpack_require_p;`;
                     return `${source}\n\n${publicPathOverride}`;
                 }
             );

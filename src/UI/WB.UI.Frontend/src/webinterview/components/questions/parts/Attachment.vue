@@ -1,11 +1,20 @@
 <template>
-
     <div>
-        <div v-if="localContentType === 'image'" class="image-zoom-box image-wrapper" :class="customCssClass">
-            <img :src="thumbPath" alt="custom photo" class="zoomImg" @click="showModal(true)" :style="previewStyle">
+        <div
+            v-if="localContentType === 'image'"
+            class="image-zoom-box image-wrapper"
+            :class="customCssClass"
+        >
+            <img
+                :src="thumbPath"
+                alt="custom photo"
+                class="zoomImg"
+                @click="showModal(true)"
+                :style="previewStyle"
+            />
             <div class="modal-img" :style="modalView" @click="showModal(false)">
                 <span class="close-zoomming-img">×</span>
-                <img class="modal-img-content" :src="fullPath" alt="">
+                <img class="modal-img-content" :src="fullPath" alt />
                 <span class="caption"></span>
             </div>
         </div>
@@ -14,9 +23,11 @@
                 <a class="btn btn-link" :href="contentUrl" target="_blank">{{$t("Common.Download")}}</a>
             </div>
             <div>
-                <audio controls preload="auto" :src="contentUrl">
-                    {{ $t('WebInterviewUI.MultimediaNotSupported') }}
-                </audio>
+                <audio
+                    controls
+                    preload="auto"
+                    :src="contentUrl"
+                >{{ $t('WebInterviewUI.MultimediaNotSupported') }}</audio>
             </div>
         </div>
         <div v-if="localContentType === 'video'">
@@ -24,16 +35,18 @@
                 <a class="btn btn-link" :href="contentUrl" target="_blank">{{$t("Common.Download")}}</a>
             </div>
             <div>
-                <video controls preload="auto" style="width:300px" :src="contentUrl">
-                    {{ $t('WebInterviewUI.MultimediaNotSupported') }}
-                </video>
+                <video
+                    controls
+                    preload="auto"
+                    style="width:300px"
+                    :src="contentUrl"
+                >{{ $t('WebInterviewUI.MultimediaNotSupported') }}</video>
             </div>
         </div>
         <div v-if="localContentType === 'pdf'">
             <div class="instructions-wrapper">
                 <a class="btn btn-link" :href="contentUrl" target="_blank">{{$t("Common.Download")}}</a>
             </div>
-
         </div>
     </div>
 </template>
@@ -137,6 +150,7 @@
                     return 'audio'
                 if (startsWith(this.contentType, 'video'))
                     return 'video'
+                return ''
             },
             modalView() {
                 return {

@@ -4,7 +4,13 @@
             <div class="options-group">
                 <div class="form-group" v-if="$me.isProtected">
                     <div class="field locked-option unavailable-option answered">
-                        <input type="number" class="field-to-fill" placeholder="Tap to enter number" :value="$me.protectedAnswer" disabled="">
+                        <input
+                            type="number"
+                            class="field-to-fill"
+                            placeholder="Tap to enter number"
+                            :value="$me.protectedAnswer"
+                            disabled
+                        />
                         <button type="submit" class="btn btn-link btn-clear">
                             <span></span>
                         </button>
@@ -13,14 +19,19 @@
                 </div>
                 <div class="form-group">
                     <div class="field" :class="{ answered: $me.isAnswered }">
-                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" 
-                        :placeholder="noAnswerWatermark" 
-                        :title="noAnswerWatermark" 
-                        :value="$me.answer" v-blurOnEnterKey 
-                        :disabled="isSpecialValueSelected || !$me.acceptAnswer"
-                        :class="{ 'special-value-selected': isSpecialValueSelected }"
-                        @blur="answerIntegerQuestion" 
-                        v-numericFormatting="{
+                        <input
+                            type="text"
+                            autocomplete="off"
+                            inputmode="numeric"
+                            class="field-to-fill"
+                            :placeholder="noAnswerWatermark"
+                            :title="noAnswerWatermark"
+                            :value="$me.answer"
+                            v-blurOnEnterKey
+                            :disabled="isSpecialValueSelected || !$me.acceptAnswer"
+                            :class="{ 'special-value-selected': isSpecialValueSelected }"
+                            @blur="answerIntegerQuestion"
+                            v-numericFormatting="{
                                 digitGroupSeparator: groupSeparator,
                                 decimalCharacter: decimalSeparator,  
                                 decimalPlaces: 0, 
@@ -28,27 +39,38 @@
                                 maximumValue: '2147483647'
                             }"
                         />
-                        <wb-remove-answer v-if="!isSpecialValueSelected && !$me.isProtected" :on-remove="removeAnswer" />
+                        <wb-remove-answer
+                            v-if="!isSpecialValueSelected && !$me.isProtected"
+                            :on-remove="removeAnswer"
+                        />
                     </div>
                 </div>
-                <div class="radio" v-if="isSpecialValueSelected != false" v-for="option in $me.options" :key="$me.id + '_' + option.value">
-                    <div class="field">
-                        <input class="wb-radio" 
-                            type="radio" 
-                            :id="$me.id + '_' + option.value" 
-                            :name="$me.id" 
-                            :value="option.value" 
-                            :disabled="!$me.acceptAnswer"
-                            v-model="specialValue">
-                        <label :for="$me.id + '_' + option.value">
-                            <span class="tick"></span> {{option.title}}
-                        </label>
-                        <wb-remove-answer :on-remove="removeAnswer" v-if="!$me.isProtected" />
+                <template v-if="isSpecialValueSelected != false">
+                    <div
+                        class="radio"
+                        v-for="option in $me.options"
+                        :key="$me.id + '_' + option.value"
+                    >
+                        <div class="field">
+                            <input
+                                class="wb-radio"
+                                type="radio"
+                                :id="$me.id + '_' + option.value"
+                                :name="$me.id"
+                                :value="option.value"
+                                :disabled="!$me.acceptAnswer"
+                                v-model="specialValue"
+                            />
+                            <label :for="$me.id + '_' + option.value">
+                                <span class="tick"></span>
+                                {{option.title}}
+                            </label>
+                            <wb-remove-answer :on-remove="removeAnswer" v-if="!$me.isProtected" />
+                        </div>
                     </div>
-                </div>
+                </template>
                 <wb-lock />
             </div>
-            
         </div>
     </wb-question>
 </template>

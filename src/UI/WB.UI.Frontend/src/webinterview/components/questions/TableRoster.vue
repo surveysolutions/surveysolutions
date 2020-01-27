@@ -3,7 +3,6 @@
         <ag-grid-vue
             ref="tableRoster"
             class="ag-theme-customStyles"
-            
             domLayout="autoHeight"
             rowHeight="40"
             headerHeight="50"
@@ -22,14 +21,14 @@
     import Vue from 'vue'
     import { entityDetails } from "../mixins"
     import { GroupStatus } from "./index"
-    import { debounce, every, some } from "lodash"
+    import { debounce, every, some, map } from "lodash"
     import { AgGridVue } from "ag-grid-vue";
 
-    import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
-    import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
-    import TableRoster_RosterTitle from "./TableRoster.RosterTitle";
-    import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";    
-    import TableRoster_Title from "./TableRoster.Title";    
+    // import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
+    // import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
+    // import TableRoster_RosterTitle from "./TableRoster.RosterTitle";
+    // import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";    
+    // import TableRoster_Title from "./TableRoster.Title";    
 
     export default {
         name: 'TableRoster',
@@ -49,11 +48,11 @@
 
         components: {
             AgGridVue,
-            TableRoster_ViewAnswer,
-            TableRoster_QuestionEditor,
-            TableRoster_RosterTitle,
-            TableRoster_QuestionTitle,
-            TableRoster_Title,
+            // TableRoster_ViewAnswer,
+            // TableRoster_QuestionEditor,
+            // TableRoster_RosterTitle,
+            // TableRoster_QuestionTitle,
+            // TableRoster_Title,
         },
 
         beforeMount() {
@@ -102,7 +101,7 @@
         methods : {
             initQuestionAsColumns() {
                 var self = this;
-                var columnsFromQuestions = _.map(
+                var columnsFromQuestions = map(
                     this.$me.questions,
                     (question, key) => {
                         return {
@@ -147,7 +146,7 @@
             initQuestionsInRows() {
                 var self = this;
 
-                var rosterInstancesWithQuestionsAsRows = _.map(
+                var rosterInstancesWithQuestionsAsRows = map(
                     this.$me.instances,
                     (instance, key) => {
                         var instanceAsRow = {
@@ -227,7 +226,7 @@
 
             endCellEditting(event) {
                 event.api.resetRowHeights();
-		    }
+            }
         }
     }
 </script>

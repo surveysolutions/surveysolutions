@@ -1,9 +1,13 @@
 <template>
-    <input type="text" autocomplete="off" inputmode="numeric" class="ag-cell-edit-input" 
+    <input
+        type="text"
+        autocomplete="off"
+        inputmode="numeric"
+        class="ag-cell-edit-input"
         ref="inputDouble"
-        :placeholder="noAnswerWatermark" 
+        :placeholder="noAnswerWatermark"
         :title="noAnswerWatermark"
-        :value="$me.answer" 
+        :value="$me.answer"
         :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
                 minimumValue:'-99999999999999.99999999999999',
@@ -13,8 +17,7 @@
                 decimalPlaces: decimalPlacesCount, 
                 allowDecimalPadding: false
             }"
-        />
-
+    />
 </template>
 
 <script lang="js">
@@ -71,7 +74,7 @@
                     }
                     
                     if (answer > 999999999999999 || answer < -999999999999999) {
-                        this.markAnswerAsNotSavedWithMessage($t("WebInterviewUI.DecimalCannotParse"))
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalCannotParse"))
                         return
                     }
 

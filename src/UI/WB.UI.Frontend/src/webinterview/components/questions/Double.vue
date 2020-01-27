@@ -3,12 +3,18 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field" :class="{ answered: $me.isAnswered }"> 
-                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
+                    <div class="field" :class="{ answered: $me.isAnswered }">
+                        <input
+                            type="text"
+                            autocomplete="off"
+                            inputmode="numeric"
+                            class="field-to-fill"
                             ref="inputDouble"
-                            :placeholder="noAnswerWatermark" 
+                            :placeholder="noAnswerWatermark"
                             :title="noAnswerWatermark"
-                            :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
+                            :value="$me.answer"
+                            v-blurOnEnterKey
+                            @blur="answerDoubleQuestion"
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }"
                             v-numericFormatting="{minimumValue:'-99999999999999.99999999999999',
@@ -16,25 +22,35 @@
                                                  digitGroupSeparator: groupSeparator,
                                                  decimalCharacter:decimalSeparator, 
                                                  decimalPlaces: decimalPlacesCount, 
-                                                 allowDecimalPadding: false}">
-                            <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
+                                                 allowDecimalPadding: false}"
+                        />
+                        <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer" />
                     </div>
                 </div>
-                <div class="radio" v-if="isSpecialValueSelected != false" v-for="option in $me.options" :key="$me.id + '_' + option.value">
-                    <div class="field">
-                        <input class="wb-radio" 
-                            type="radio" 
-                            :id="$me.id + '_' + option.value" 
-                            :name="$me.id" 
-                            :value="option.value" 
-                            :disabled="!$me.acceptAnswer"
-                            v-model="specialValue">
-                        <label :for="$me.id + '_' + option.value">
-                            <span class="tick"></span> {{option.title}}
-                        </label>
-                        <wb-remove-answer :on-remove="removeAnswer"/>
+                <template v-if="isSpecialValueSelected != false">
+                    <div
+                        class="radio"
+                        v-for="option in $me.options"
+                        :key="$me.id + '_' + option.value"
+                    >
+                        <div class="field">
+                            <input
+                                class="wb-radio"
+                                type="radio"
+                                :id="$me.id + '_' + option.value"
+                                :name="$me.id"
+                                :value="option.value"
+                                :disabled="!$me.acceptAnswer"
+                                v-model="specialValue"
+                            />
+                            <label :for="$me.id + '_' + option.value">
+                                <span class="tick"></span>
+                                {{option.title}}
+                            </label>
+                            <wb-remove-answer :on-remove="removeAnswer" />
+                        </div>
                     </div>
-                </div>
+                </template>
                 <wb-lock />
             </div>
         </div>

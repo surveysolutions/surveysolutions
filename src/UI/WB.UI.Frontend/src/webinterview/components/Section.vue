@@ -2,22 +2,27 @@
     <div id="questionsList" class="unit-section" :class="sectionClass">
         <SectionLoadingProgress />
         <Breadcrumbs :showHumburger="showHumburger" />
-        <component v-for="entity in entities" :key="entity.identity" :is="entity.entityType" :id="entity.identity"></component>
+        <component
+            v-for="entity in entities"
+            :key="entity.identity"
+            :is="entity.entityType"
+            :id="entity.identity"
+        ></component>
     </div>
 </template>
 
 <script lang="js">
     import SectionProgress from "./SectionLoadProgress"
-    import Vue from 'vue'
+    // import Vue from 'vue'
     import { GroupStatus } from "./questions"
     
-    async function checkSectionPermission(to) {
-          if (to.name === "section") {
-              const sectionId = to.params["sectionId"]
-              const interviewId = to.params["interviewId"]
-              return await Vue.$api.interview.get('isEnabled', {interviewId, id:sectionId})
-          }
-    }
+    // async function checkSectionPermission(to) {
+    //       if (to.name === "section") {
+    //           const sectionId = to.params["sectionId"]
+    //           const interviewId = to.params["interviewId"]
+    //           return await Vue.$api.interview.get('isEnabled', {interviewId, id:sectionId})
+    //       }
+    // }
 
     export default {
         name: 'section-view',

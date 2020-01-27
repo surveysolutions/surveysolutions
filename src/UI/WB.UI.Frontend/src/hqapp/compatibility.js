@@ -25,7 +25,7 @@ window.ajustDetailsPanelHeight = function () {
     var height = $(".view-mode").outerHeight();
 
     var panelDetails = $(".panel-details");
-    if(panelDetails.length > 0){
+    if (panelDetails.length > 0) {
         height = panelDetails.outerHeight();
     }
 
@@ -36,8 +36,6 @@ window.ajustDetailsPanelHeight = function () {
 }
 
 $(function () {
-    var globalSettings = window.input.settings;
-
     $("#hide-filters").click(function () {
         $(".filters").toggleClass("hidden-filters");
         $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
@@ -46,7 +44,7 @@ $(function () {
     $("footer").removeClass("hold-transition");
 
     $(window).on('resize',
-        function() {
+        function () {
             if ($(window).width() > 880) {
                 if ($(".navbar-collapse.collapse.in").length > 0) {
                     $("main").addClass("display-block");
@@ -56,7 +54,7 @@ $(function () {
             }
         });
 
-    $(".navbar-toggle").click(function() {
+    $(".navbar-toggle").click(function () {
         $(".navbar-collapse").fadeToggle();
         $(".navbar-collapse").animate({ height: '100%' }, 0);
         $(".top-menu").toggleClass("top-animate");
@@ -75,10 +73,10 @@ $(function () {
 
     $('form').preventDoubleSubmission();
 
-        
+
     window.ajustNoticeHeight();
     window.ajustDetailsPanelHeight();
-    
+
     $('.view-mode .alerts .alert').on('closed.bs.alert', function () {
         window.ajustNoticeHeight();
         window.ajustDetailsPanelHeight();

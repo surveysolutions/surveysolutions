@@ -4,7 +4,7 @@ import { DateFormats } from "~/shared/helpers"
 import { forEach } from "lodash"
 import moment from "moment"
 
-Vue.directive("dateTimeFormatting", (el, binding) => {
+Vue.directive("dateTimeFormatting", (el) => {
     const timeElements = el.getElementsByTagName("time")
 
     forEach(timeElements, timeElement => {

@@ -1,202 +1,215 @@
 <template>
-  <HqLayout :title="$config.model.reportName" :subtitle="$config.model.subtitle" :hasFilter="true">
-    <Filters slot="filters">
-      <FilterBlock
-        :title="$t('Common.Questionnaire')">
-        <Typeahead control-id="questionnaireId"
-          ref="questionnaireIdControl" 
-          data-vv-name="questionnaireId"
-          data-vv-as="questionnaire"
-          :placeholder="$t('Common.AllQuestionnaires')"
-          :value="questionnaireId"
-          v-on:selected="questionnaireSelected"
-          :fetch-url="$config.model.questionnairesUrl"
-        />
-      </FilterBlock>
+    <HqLayout
+        :title="$config.model.reportName"
+        :subtitle="$config.model.subtitle"
+        :hasFilter="true"
+    >
+        <Filters slot="filters">
+            <FilterBlock :title="$t('Common.Questionnaire')">
+                <Typeahead
+                    control-id="questionnaireId"
+                    ref="questionnaireIdControl"
+                    data-vv-name="questionnaireId"
+                    data-vv-as="questionnaire"
+                    :placeholder="$t('Common.AllQuestionnaires')"
+                    :value="questionnaireId"
+                    v-on:selected="questionnaireSelected"
+                    :fetch-url="$config.model.questionnairesUrl"
+                />
+            </FilterBlock>
 
-      <FilterBlock
-        :title="$t('Common.QuestionnaireVersion')">
-        <Typeahead control-id="questionnaireVersion"
-          ref="questionnaireVersionControl" 
-          data-vv-name="questionnaireVersion"
-          data-vv-as="questionnaireVersion"
-          :placeholder="$t('Common.AllVersions')"
-          :value="questionnaireVersion"
-          v-on:selected="questionnaireVersionSelected"
-          :fetch-url="questionnaireVersionFetchUrl"
-          :disabled="questionnaireVersionFetchUrl == null"
-        />
-      </FilterBlock>
-    </Filters>
-    <div class="clearfix">
-      <div class="col-sm-8">
-        <h4>{{this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value}}, {{this.questionnaireVersion == null ? $t('Common.AllVersions').toLowerCase() : this.questionnaireVersion.value}} </h4>        
-      </div>
-    </div>
-    <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :no-search="true" exportable hasTotalRow></DataTables>
-  </HqLayout>
+            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                <Typeahead
+                    control-id="questionnaireVersion"
+                    ref="questionnaireVersionControl"
+                    data-vv-name="questionnaireVersion"
+                    data-vv-as="questionnaireVersion"
+                    :placeholder="$t('Common.AllVersions')"
+                    :value="questionnaireVersion"
+                    v-on:selected="questionnaireVersionSelected"
+                    :fetch-url="questionnaireVersionFetchUrl"
+                    :disabled="questionnaireVersionFetchUrl == null"
+                />
+            </FilterBlock>
+        </Filters>
+        <div class="clearfix">
+            <div class="col-sm-8">
+                <h4>{{this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value}}, {{this.questionnaireVersion == null ? $t('Common.AllVersions').toLowerCase() : this.questionnaireVersion.value}}</h4>
+            </div>
+        </div>
+        <DataTables
+            ref="table"
+            :tableOptions="tableOptions"
+            :addParamsToRequest="addFilteringParams"
+            :no-search="true"
+            exportable
+            hasTotalRow
+        ></DataTables>
+    </HqLayout>
 </template>
 <script>
-import { formatNumber } from "./helpers"
-import { ok } from 'assert';
-
+import {formatNumber} from './helpers'
+import {ok} from 'assert'
+import {assign, isNumber, isUndefined} from 'lodash'
 export default {
     data() {
         return {
             questionnaireId: null,
-            questionnaireVersion: null
+            questionnaireVersion: null,
         }
-
     },
     async mounted() {
         const self = this
 
-        var questionnaireInfo = await self.loadQuestionnaireId();
+        var questionnaireInfo = await self.loadQuestionnaireId()
 
-        if (questionnaireInfo.questionnaireId)
-        {
+        if (questionnaireInfo.questionnaireId) {
             this.$refs.questionnaireIdControl.fetchOptions().then(q => {
-                self.questionnaireId = { key: questionnaireInfo.questionnaireId, value: questionnaireInfo.questionnaireTitle };
+                self.questionnaireId = {
+                    key: questionnaireInfo.questionnaireId,
+                    value: questionnaireInfo.questionnaireTitle,
+                }
 
-                if (self.$route.query.questionnaireVersion)
-                {
+                if (self.$route.query.questionnaireVersion) {
                     this.$refs.questionnaireVersionControl.fetchOptions().then(v => {
-                        self.questionnaireVersion = { key: questionnaireInfo.version, value: "ver. " + questionnaireInfo.version };
-                        self.reloadTable();
-                    });
+                        self.questionnaireVersion = {
+                            key: questionnaireInfo.version,
+                            value: 'ver. ' + questionnaireInfo.version,
+                        }
+                        self.reloadTable()
+                    })
+                } else {
+                    self.reloadTable()
                 }
-                else{
-                    self.reloadTable();
-                }
-            });
+            })
         }
-          
+
         self.startWatchers(['questionnaireId', 'questionnaireVersion'], self.onWatcherChange.bind(self))
     },
     methods: {
-        onWatcherChange()
-        {
+        onWatcherChange() {
             const self = this
-            self.reloadTable();
+            self.reloadTable()
         },
 
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
         },
 
-        questionnaireVersionSelected(newValue){
+        questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
         },
-        reloadTable(){
+        reloadTable() {
             this.isLoading = true
-            
+
             this.$refs.table.reload(this.reloadTable)
 
             this.addParamsToQueryString()
         },
         startWatchers(props, watcher) {
-            var iterator = (prop) => this.$watch(prop, watcher)
+            var iterator = prop => this.$watch(prop, watcher)
 
             props.forEach(iterator, this)
         },
         addParamsToQueryString() {
-            var queryString = { }
+            var queryString = {}
 
             if (this.questionnaireId != null) {
                 queryString.questionnaireId = this.questionnaireId.key
-            }
-            else {
+            } else {
                 queryString.questionnaireId = ''
             }
-            if(this.questionnaireVersion != null) {
+            if (this.questionnaireVersion != null) {
                 queryString.questionnaireVersion = this.questionnaireVersion.key
-            }
-            else {
+            } else {
                 queryString.questionnaireVersion = ''
             }
 
-            this.$router.push({ query: queryString })
+            this.$router.push({query: queryString})
         },
 
         addFilteringParams(data) {
             if (this.questionnaireId != null) {
                 data.templateId = this.questionnaireId.key
-            }
-            else {
+            } else {
                 data.templateId = null
             }
 
-            if(this.questionnaireVersion != null) {
+            if (this.questionnaireVersion != null) {
                 data.templateVersion = this.questionnaireVersion.key
-            }
-            else {
+            } else {
                 data.templateVersion = null
             }
         },
 
         async loadQuestionnaireId() {
-            let requestParams = null;
+            let requestParams = null
 
-            const questionnaireId = this.$route.query.questionnaireId;
-            let version = this.$route.query.questionnaireVersion || "";
-            version = (version === "" ? "0" : version);
+            const questionnaireId = this.$route.query.questionnaireId
+            let version = this.$route.query.questionnaireVersion || ''
+            version = version === '' ? '0' : version
 
             if (questionnaireId && version) {
-                requestParams = _.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false }, this.ajaxParams);
-                const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
+                requestParams = assign(
+                    {questionnaireIdentity: questionnaireId + '$' + version, cache: false},
+                    this.ajaxParams
+                )
+                const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, {params: requestParams})
 
                 if (response.data) {
-                    return { questionnaireId: questionnaireId, questionnaireTitle: response.data.title, version: response.data.version};
+                    return {
+                        questionnaireId: questionnaireId,
+                        questionnaireTitle: response.data.title,
+                        version: response.data.version,
+                    }
                 }
-
-            } else 
-                return {};
+            } else return {}
         },
-        
 
         getLinkToInterviews(data, row, interviewStatus) {
             const formatedNumber = formatNumber(data)
 
             if (data === 0 || row.DT_RowClass === 'total-row') {
-                return _.isNumber(data) ?  `<span>${formatedNumber}</span>` : `<span>${this.$config.model.allTeamsTitle}</span>`
+                return isNumber(data)
+                    ? `<span>${formatedNumber}</span>`
+                    : `<span>${this.$config.model.allTeamsTitle}</span>`
             }
 
             var queryObject = {}
 
-            const templateId = (this.questionnaireId || {}).key; 
-            const templateVersion = (this.questionnaireVersion || {}).key;
+            const templateId = (this.questionnaireId || {}).key
+            const templateVersion = (this.questionnaireVersion || {}).key
 
-            if (!_.isUndefined(templateVersion)) {
+            if (!isUndefined(templateVersion)) {
                 queryObject.templateVersion = templateVersion
             }
-            if(!_.isUndefined(templateId)) {
-                queryObject.templateId = templateId == undefined ? '' : this.formatGuid(templateId);
+            if (!isUndefined(templateId)) {
+                queryObject.templateId = templateId == undefined ? '' : this.formatGuid(templateId)
             }
 
             if (row.responsible) {
                 queryObject.responsible = row.responsible
             }
 
-            if (!_.isUndefined(interviewStatus)) {
+            if (!isUndefined(interviewStatus)) {
                 queryObject.status = interviewStatus
             }
 
             var queryString = $.param(queryObject)
 
-            var linkUrl =
-                this.$config.model.interviewsUrl + (queryString ? "?" + queryString : "")
+            var linkUrl = this.$config.model.interviewsUrl + (queryString ? '?' + queryString : '')
 
-            return `<a href=\"${linkUrl}\">${formatedNumber}</a>`
+            return `<a href="${linkUrl}">${formatedNumber}</a>`
         },
-        formatGuid(guid){
-            var parts = [];
-            parts.push(guid.slice(0,8));
-            parts.push(guid.slice(8,12));
-            parts.push(guid.slice(12,16));
-            parts.push(guid.slice(16,20));
-            parts.push(guid.slice(20,32));
-            return parts.join('-'); 
-        }
+        formatGuid(guid) {
+            var parts = []
+            parts.push(guid.slice(0, 8))
+            parts.push(guid.slice(8, 12))
+            parts.push(guid.slice(12, 16))
+            parts.push(guid.slice(16, 20))
+            parts.push(guid.slice(20, 32))
+            return parts.join('-')
+        },
     },
     computed: {
         config() {
@@ -204,7 +217,7 @@ export default {
         },
 
         questionnaireVersionFetchUrl() {
-             if(this.questionnaireId && this.questionnaireId.key)
+            if (this.questionnaireId && this.questionnaireId.key)
                 return `${this.$config.model.questionnairesUrl}/${this.questionnaireId.key}`
             return null
         },
@@ -214,132 +227,99 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: "responsible",
-                        name: "Responsible",
+                        data: 'responsible',
+                        name: 'Responsible',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "")
+                            return self.getLinkToInterviews(data, row, '')
                         },
-                        title: this.$config.model.teamTitle
+                        title: this.$config.model.teamTitle,
                     },
                     {
-                        className: "type-numeric",
-                        data: "supervisorAssignedCount",
-                        name: "SupervisorAssignedCount",
+                        className: 'type-numeric',
+                        data: 'supervisorAssignedCount',
+                        name: 'SupervisorAssignedCount',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "SupervisorAssigned")
+                            return self.getLinkToInterviews(data, row, 'SupervisorAssigned')
                         },
-                        title: this.$t("Reports.SupervisorAssigned")
+                        title: this.$t('Reports.SupervisorAssigned'),
                     },
                     {
-                        className: "type-numeric",
-                        data: "interviewerAssignedCount",
-                        name: "InterviewerAssignedCount",
+                        className: 'type-numeric',
+                        data: 'interviewerAssignedCount',
+                        name: 'InterviewerAssignedCount',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "InterviewerAssigned")
+                            return self.getLinkToInterviews(data, row, 'InterviewerAssigned')
                         },
-                        title: this.$t("Reports.InterviewerAssigned")
+                        title: this.$t('Reports.InterviewerAssigned'),
                     },
                     {
-                        className: "type-numeric",
-                        data: "completedCount",
-                        name: "CompletedCount",
+                        className: 'type-numeric',
+                        data: 'completedCount',
+                        name: 'CompletedCount',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "Completed")
+                            return self.getLinkToInterviews(data, row, 'Completed')
                         },
-                        title: this.$t("Reports.Completed")
+                        title: this.$t('Reports.Completed'),
                     },
                     {
-                        className: "type-numeric",
-                        data: "rejectedBySupervisorCount",
-                        name: "RejectedBySupervisorCount",
+                        className: 'type-numeric',
+                        data: 'rejectedBySupervisorCount',
+                        name: 'RejectedBySupervisorCount',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "RejectedBySupervisor")
+                            return self.getLinkToInterviews(data, row, 'RejectedBySupervisor')
                         },
-                        title: this.$t("Reports.RejectedBySupervisor")
+                        title: this.$t('Reports.RejectedBySupervisor'),
                     },
                     {
-                        className: "type-numeric",
-                        data: "approvedBySupervisorCount",
-                        name: "ApprovedBySupervisorCount",
+                        className: 'type-numeric',
+                        data: 'approvedBySupervisorCount',
+                        name: 'ApprovedBySupervisorCount',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "ApprovedBySupervisor"
-                            )
+                            return self.getLinkToInterviews(data, row, 'ApprovedBySupervisor')
                         },
-                        title: this.$t("Reports.ApprovedBySupervisor")
+                        title: this.$t('Reports.ApprovedBySupervisor'),
                     },
                     {
-                        className: "type-numeric",
-                        data: "rejectedByHeadquartersCount",
-                        name: "RejectedByHeadquartersCount",
+                        className: 'type-numeric',
+                        data: 'rejectedByHeadquartersCount',
+                        name: 'RejectedByHeadquartersCount',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "RejectedByHeadquarters"
-                            )
+                            return self.getLinkToInterviews(data, row, 'RejectedByHeadquarters')
                         },
-                        title: this.$t("Reports.RejectedByHQ")
+                        title: this.$t('Reports.RejectedByHQ'),
                     },
                     {
-                        className: "type-numeric",
-                        data: "approvedByHeadquartersCount",
-                        name: "ApprovedByHeadquartersCount",
+                        className: 'type-numeric',
+                        data: 'approvedByHeadquartersCount',
+                        name: 'ApprovedByHeadquartersCount',
                         render(data, type, row) {
-                            if (self.$config.model.isSupervisorMode){
-                                const formatedNumber = formatNumber(data);
-                                return `<span>${formatedNumber}</span>`;
-                            }
-                            else
-                                return self.getLinkToInterviews(
-                                    data,
-                                    row,
-                                    "ApprovedByHeadquarters"
-                            )
+                            if (self.$config.model.isSupervisorMode) {
+                                const formatedNumber = formatNumber(data)
+                                return `<span>${formatedNumber}</span>`
+                            } else return self.getLinkToInterviews(data, row, 'ApprovedByHeadquarters')
                         },
-                        title: this.$t("Reports.ApprovedByHQ")
+                        title: this.$t('Reports.ApprovedByHQ'),
                     },
                     {
-                        className: "type-numeric",
-                        data: "totalCount",
-                        name: "TotalCount",
+                        className: 'type-numeric',
+                        data: 'totalCount',
+                        name: 'TotalCount',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(
-                                data,
-                                row,
-                                ""
-                            )
+                            return self.getLinkToInterviews(data, row, '')
                         },
-                        title: this.$t("Common.Total")
-                    }
+                        title: this.$t('Common.Total'),
+                    },
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
-                    type: "GET",
-                    contentType: "application/json"
+                    type: 'GET',
+                    contentType: 'application/json',
                 },
                 responsive: false,
-                order: [[0, "asc"]],
-                sDom: 'rf<"table-with-scroll"t>ip'
+                order: [[0, 'asc']],
+                sDom: 'rf<"table-with-scroll"t>ip',
             }
-        }
-    }
+        },
+    },
 }
 </script>
