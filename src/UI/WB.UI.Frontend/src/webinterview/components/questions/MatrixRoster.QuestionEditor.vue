@@ -1,5 +1,6 @@
 <template>
-    <div class="ag-input-text-wrapper" :id="hash">
+    <div class="ag-input-text-wrapper"
+        :id="hash">
         <component ref='editQuestionComponent' 
             :key="question.identity" 
             v-bind:is="'MatrixRoster_' + question.entityType" 

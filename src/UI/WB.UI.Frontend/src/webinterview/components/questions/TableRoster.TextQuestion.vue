@@ -9,8 +9,7 @@
         :value="$me.answer"
         :disabled="!$me.acceptAnswer"
         v-maskedText="$me.mask"
-        :data-mask-completed="$me.isAnswered"
-    />
+        :data-mask-completed="$me.isAnswered"/>
 </template>
 
 <script lang="js">

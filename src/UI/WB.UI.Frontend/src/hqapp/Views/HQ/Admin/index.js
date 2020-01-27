@@ -2,7 +2,7 @@ import EmailProviders from './EmailProviders'
 import TabletLogs from './TabletLogs'
 import Settings from './Settings'
 import Vue from 'vue'
-import AuditLog from "./AuditLog"
+import AuditLog from './AuditLog'
 
 export default class AdminComponent {
     constructor(rootStore) {
@@ -17,10 +17,10 @@ export default class AdminComponent {
         {
             path: '/Diagnostics/Logs',
             component: TabletLogs,
-            },
-            {
-                path: '/Diagnostics/AuditLog',
-                component: AuditLog
+        },
+        {
+            path: '/Diagnostics/AuditLog',
+            component: AuditLog,
         },
         {
             path: '/Settings',

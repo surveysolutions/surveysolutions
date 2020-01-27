@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :hasFilter="true" :hasHeader="false">
+    <HqLayout :hasFilter="true"
+        :hasHeader="false">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead
@@ -8,8 +9,7 @@
                     :placeholder="$t('Common.SelectQuestionnaire')"
                     :value="selectedQuestionnaireId"
                     :values="questionnaires"
-                    v-on:selected="selectQuestionnaire"
-                />
+                    v-on:selected="selectQuestionnaire"/>
             </FilterBlock>
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
                 <Typeahead
@@ -18,8 +18,7 @@
                     :value="selectedVersion"
                     :values="selectedQuestionnaireId == null ? null : selectedQuestionnaireId.versions"
                     v-on:selected="selectQuestionnaireVersion"
-                    :disabled="selectedQuestionnaireId == null"
-                />
+                    :disabled="selectedQuestionnaireId == null"/>
             </FilterBlock>
             <FilterBlock :title="$t('Reports.Variables')">
                 <Typeahead
@@ -29,19 +28,18 @@
                     no-clear
                     :values="gpsQuestions"
                     :value="selectedQuestion"
-                    @selected="selectGpsQuestion"
-                />
+                    @selected="selectGpsQuestion"/>
             </FilterBlock>
             <FilterBlock>
                 <div class="center-block">
                     <Checkbox
                         :label="$t('Reports.HeatMapView')"
                         name="pivot"
-                        v-model="showHeatmap"
-                    />
+                        v-model="showHeatmap"/>
                 </div>
             </FilterBlock>
-            <FilterBlock :title="$t('Reports.HeatRadius')" v-if="showHeatmap">
+            <FilterBlock :title="$t('Reports.HeatRadius')"
+                v-if="showHeatmap">
                 <input
                     type="range"
                     min="1"
@@ -50,10 +48,10 @@
                     class="slider"
                     id="myRange"
                     v-model="heatMapOptions.radius"
-                    @change="updateHeatMap"
-                />
+                    @change="updateHeatMap"/>
             </FilterBlock>
-            <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
+            <FilterBlock v-if="isLoading"
+                :title="$t('Reports.MapDataLoading')">
                 <div class="progress">
                     <div
                         class="progress-bar progress-bar-striped active"
@@ -61,18 +59,17 @@
                         aria-valuenow="100"
                         aria-valuemin="0"
                         aria-valuemax="100"
-                        style="width: 100%"
-                    ></div>
+                        style="width: 100%"></div>
                 </div>
             </FilterBlock>
             <div class="preset-filters-container">
-                <div class="center-block" style="margin-left: 0">
+                <div class="center-block"
+                    style="margin-left: 0">
                     <button
                         class="btn btn-default btn-lg"
                         id="reloadMarkersInBounds"
                         v-if="readyToUpdate"
-                        @click="reloadMarkersInBounds"
-                    >{{$t("MapReport.ReloadMarkers")}}</button>
+                        @click="reloadMarkersInBounds">{{$t("MapReport.ReloadMarkers")}}</button>
                 </div>
             </div>
         </Filters>
@@ -98,12 +95,12 @@
                     <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>
                     &nbsp;{{selectedTooltip.LastUpdatedDate}}
                 </div>
-                <div class="row-fluid" style="white-space:nowrap;">
+                <div class="row-fluid"
+                    style="white-space:nowrap;">
                     <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
                     <a
                         v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.InterviewId)"
-                        target="_blank"
-                    >{{$t("MapReport.details")}}</a>
+                        target="_blank">{{$t("MapReport.details")}}</a>
                 </div>
             </div>
         </div>

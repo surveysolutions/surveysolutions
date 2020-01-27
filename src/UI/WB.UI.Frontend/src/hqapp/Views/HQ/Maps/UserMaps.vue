@@ -11,13 +11,13 @@
                 <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
             </p>
         </div>
-        <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"></DataTables>
 
         <Confirm
             ref="confirmDiscard"
             id="discardConfirm"
-            slot="modals"
-        >{{ $t("Pages.Map_DiscardConfirm") }}</Confirm>
+            slot="modals">{{ $t("Pages.Map_DiscardConfirm") }}</Confirm>
     </HqLayout>
 </template>
 

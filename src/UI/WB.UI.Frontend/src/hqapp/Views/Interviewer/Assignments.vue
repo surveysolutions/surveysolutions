@@ -1,6 +1,8 @@
 <template>
     <HqLayout :title="title">
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"></DataTables>
     </HqLayout>
 </template>
 

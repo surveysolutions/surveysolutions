@@ -1,9 +1,17 @@
 <template>
-    <div v-if="$me.instructions && !$me.isDisabled" class="instructions-wrapper">
-        <div class="information-block instruction" v-if="!$me.hideInstructions || shown">            
-            <p v-dateTimeFormatting v-html="$me.instructions"></p>
+    <div v-if="$me.instructions && !$me.isDisabled"
+        class="instructions-wrapper">
+        <div class="information-block instruction"
+            v-if="!$me.hideInstructions || shown">            
+            <p v-dateTimeFormatting
+                v-html="$me.instructions"></p>
         </div>
-        <button v-else type="button" class="btn btn-link" @click="show">{{ $t("WebInterviewUI.InstructionShow") }}</button>
+        <button v-else
+            type="button"
+            class="btn btn-link"
+            @click="show">
+            {{ $t("WebInterviewUI.InstructionShow") }}
+        </button>
     </div>
 </template>
 <script lang="js">
