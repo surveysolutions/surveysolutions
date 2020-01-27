@@ -199,7 +199,7 @@
                     :value="this.$hq.Util.getCsrfCookie()"
                 />
                 <div class="block-filter">
-                    <div class="form-group">
+                    <div class="form-group" :class="{ 'has-error': this.$config.model.invalidImage }">
                         <label for="companyLogo">{{$t('Settings.Logo')}}</label>
                         <input
                             type="file"
@@ -208,6 +208,7 @@
                             name="logo"
                             accept="image/gif, image/jpeg, image/png"
                         />
+                        <span class="help-block" v-if="this.$config.model.invalidImage">{{ this.$t('Settings.LogoNotUpdated') }}</span>
                     </div>
                 </div>
                 <div class="block-filter">
