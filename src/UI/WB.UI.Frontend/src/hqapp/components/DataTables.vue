@@ -1,11 +1,12 @@
 <template>
     <div :class="wrapperClass">
-        <span id="loadingPixel" style="display:none" :data-loading="isProcessingFlag"></span>
+        <span id="loadingPixel"
+            style="display:none"
+            :data-loading="isProcessingFlag"></span>
         <table
             ref="table"
             v-bind:class="tableClass"
-            class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive"
-        >
+            class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
             <thead ref="header">
                 <slot name="header"></slot>
             </thead>
@@ -14,19 +15,32 @@
                 <div
                     class="dataTables_processing"
                     v-if="isProcessing"
-                    :class="{ 'error': errorMessage != null }"
-                >
-                    <div v-if="errorMessage">{{errorMessage}}</div>
-                    <div v-else>{{$t("Common.Processing")}}...</div>
+                    :class="{ 'error': errorMessage != null }">
+                    <div v-if="errorMessage">
+                        {{errorMessage}}
+                    </div>
+                    <div v-else>
+                        {{$t("Common.Processing")}}...
+                    </div>
                 </div>
             </transition>
         </table>
-        <div class="download-report-as" v-if="exportable">
+        <div class="download-report-as"
+            v-if="exportable">
             {{$t("Pages.DownloadReport")}}
-            <a target="_blank" v-bind:href="this.export.excel">XLSX</a>,
-            <a target="_blank" v-bind:href="this.export.csv">CSV</a>
+            <a target="_blank"
+                v-bind:href="this.export.excel">
+                XLSX
+            </a>,
+            <a target="_blank"
+                v-bind:href="this.export.csv">
+                CSV
+            </a>
             {{$t("Pages.Or")}}
-            <a target="_blank" v-bind:href="this.export.tab">TAB</a>
+            <a target="_blank"
+                v-bind:href="this.export.tab">
+                TAB
+            </a>
         </div>
         <slot />
     </div>

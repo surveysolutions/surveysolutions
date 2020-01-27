@@ -2,8 +2,7 @@
     <HqLayout
         has-filter
         :title="$t('MainMenu.SurveyStatistics')"
-        :subtitle="$t('Pages.SurveyStatisticsDescription')"
-    >
+        :subtitle="$t('Pages.SurveyStatisticsDescription')">
         <div class="clearfix">
             <div class="col-sm-8">
                 <h4>{{this.filter.questionnaire == null ? $t('Common.AllQuestionnaires') : this.filter.questionnaire.title}}, {{this.filter.version == null ? $t('Common.AllVersions').toLowerCase() : ('ver. ' + this.filter.version)}}</h4>
@@ -12,13 +11,13 @@
         <div>
             <div class="row">
                 <div class="col-md-6">
-                    <QuestionDetail :question="filter.question" :title="$t('Reports.Question')"></QuestionDetail>
+                    <QuestionDetail :question="filter.question"
+                        :title="$t('Reports.Question')"></QuestionDetail>
                 </div>
                 <div class="col-md-6">
                     <QuestionDetail
                         :question="filter.condition"
-                        :title="$t('Reports.ConditionQuestion')"
-                    ></QuestionDetail>
+                        :title="$t('Reports.ConditionQuestion')"></QuestionDetail>
                 </div>
             </div>
         </div>
@@ -27,13 +26,11 @@
             <SurveyStatisticsFilter
                 @input="filterChanged"
                 @mounted="filtersLoaded"
-                :isSupervisor="isSupervisor"
-            />
+                :isSupervisor="isSupervisor"/>
         </Filters>
         <div
             class="alert-warning"
-            v-if="warnings.length > 0"
-        >{{ $t('Reports.QuestionnaireCompatibilityIssues_UnknownAnswer')}}</div>
+            v-if="warnings.length > 0">{{ $t('Reports.QuestionnaireCompatibilityIssues_UnknownAnswer')}}</div>
 
         <DataTables
             ref="table"
@@ -46,8 +43,7 @@
             :tableOptions="tableOptions"
             :pageLength="isPivot ? this.filter.condition.answers.length : 15"
             @ajaxComplete="onTableReload"
-            :addParamsToRequest="addFilteringParams"
-        ></DataTables>
+            :addParamsToRequest="addFilteringParams"></DataTables>
     </HqLayout>
 </template>
 

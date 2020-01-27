@@ -1,15 +1,15 @@
 <template>
     <HqLayout :hasFilter="false" >
         <div slot="headers">
-                <ol class="breadcrumb">
-                    <li>
-                        <a :href="$config.model.mapsUrl">{{$t("Pages.MapList_Title")}}</a>
-                    </li>
-                </ol>
-                    <h1>{{$config.model.fileName}}</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a :href="$config.model.mapsUrl">{{$t("Pages.MapList_Title")}}</a>
+                </li>
+            </ol>
+            <h1>{{$config.model.fileName}}</h1>
         </div>
         <div class="row">
-          <div class="col-md-7 col-sm-12">
+            <div class="col-md-7 col-sm-12">
                 <div class="row">
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
@@ -29,24 +29,27 @@
                         </ul>
                     </div>
                 </div>
-                <iframe width="100%" height="550px" :src="$config.model.mapPreviewUrl"></iframe>
+                <iframe width="100%"
+                    height="550px"
+                    :src="$config.model.mapPreviewUrl"></iframe>
                 <p>{{ $t("Pages.MapDetails_MapDisclaimer") }} </p>
-      </div>
+            </div>
     
-      <div id="list" class="col-md-5 col-sm-6">
-        <DataTables ref="table" 
-            :tableOptions="tableOptions"
-            :addParamsToRequest="addParamsToRequest"
-            :contextMenuItems="contextMenuItems">
-        </DataTables>
+            <div id="list"
+                class="col-md-5 col-sm-6">
+                <DataTables ref="table" 
+                    :tableOptions="tableOptions"
+                    :addParamsToRequest="addParamsToRequest"
+                    :contextMenuItems="contextMenuItems">
+                </DataTables>
 
-        <Confirm ref="confirmDiscard"
-                 id="discardConfirm"
-                 slot="modals">
-            {{ $t("Pages.MapUserLink_DiscardConfirm") }}
-        </Confirm>
-      </div>
-      </div>
+                <Confirm ref="confirmDiscard"
+                    id="discardConfirm"
+                    slot="modals">
+                    {{ $t("Pages.MapUserLink_DiscardConfirm") }}
+                </Confirm>
+            </div>
+        </div>
     </HqLayout>
 </template>
 

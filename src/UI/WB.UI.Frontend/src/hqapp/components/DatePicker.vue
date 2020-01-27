@@ -1,5 +1,6 @@
 <template>
-    <div class="form-date input-group" id="dates-range">
+    <div class="form-date input-group"
+        id="dates-range">
         <input
             type="text"
             :id="id"
@@ -10,12 +11,13 @@
             :placeholder="placeholder"
             :required="required"
             v-model="mutableValue"
-            data-input
-        />
-        <button type="submit" class="btn btn-link btn-clear">
+            data-input/>
+        <button type="submit"
+            class="btn btn-link btn-clear">
             <span></span>
         </button>
-        <span class="input-group-addon" data-toggle>
+        <span class="input-group-addon"
+            data-toggle>
             <span class="calendar"></span>
         </span>
     </div>

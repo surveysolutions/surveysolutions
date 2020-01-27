@@ -3,28 +3,29 @@
         :title="$config.model.title"
         :hasFilter="false"
         :topicButton="$t('Dashboard.ImportTemplate')"
-        :topicButtonRef="!$config.model.isObserver ? $config.model.importQuestionnaireUrl: ''"
-    >
-        <ol class="list-unstyled" slot="subtitle">
+        :topicButtonRef="!$config.model.isObserver ? $config.model.importQuestionnaireUrl: ''">
+        <ol class="list-unstyled"
+            slot="subtitle">
             <li>{{this.$t('Dashboard.SurveySetupIntroMessage1')}}</li>
             <li>{{this.$t('Dashboard.SurveySetupIntroMessage2')}}</li>
         </ol>
 
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"></DataTables>
 
-        <ModalFrame ref="deleteQuestionnaireModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="deleteQuestionnaireModal"
+            :title="$t('Pages.ConfirmationNeededTitle')">
             <p>{{ $t("Pages.GlobalSettings_DeleteQuestionnareConfirmation" )}}</p>
             <div slot="actions">
                 <button
                     type="button"
                     class="btn btn-danger"
-                    @click="deleteQuestionnaire"
-                >{{ $t("Common.Delete") }}</button>
+                    @click="deleteQuestionnaire">{{ $t("Common.Delete") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
-                    data-dismiss="modal"
-                >{{ $t("Common.Cancel") }}</button>
+                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
     </HqLayout>

@@ -1,6 +1,9 @@
 <template>
-    <div class="action-container" v-if="$me && visible">
-        <a class="btn btn-lg" :class="css" @click="navigate">
+    <div class="action-container"
+        v-if="$me && visible">
+        <a class="btn btn-lg"
+            :class="css"
+            @click="navigate">
             <span v-html="buttonTitle"></span>
         </a>
     </div>

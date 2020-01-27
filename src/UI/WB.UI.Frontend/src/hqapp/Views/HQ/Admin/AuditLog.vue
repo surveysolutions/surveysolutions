@@ -1,12 +1,14 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('AuditLog.PageTitle')" >
-        <DataTables :tableOptions="tableOptions" noSearch></DataTables>
+    <HqLayout :hasFilter="false"
+        :title="$t('AuditLog.PageTitle')" >
+        <DataTables :tableOptions="tableOptions"
+            noSearch></DataTables>
     </HqLayout>
 </template>
 
 <script>
 import {DateFormats} from '~/shared/helpers'
-import moment from "moment"
+import moment from 'moment'
 
 export default {
     computed: {
@@ -21,23 +23,23 @@ export default {
                         title: this.$t('AuditLog.LogDate'),
                         render: function(data) {
                             return self.formatUtcDate(data)
-                        }
+                        },
                     },
                     {
                         data: 'userName',
                         name: 'UserName',
-                        title: this.$t('AuditLog.User')
+                        title: this.$t('AuditLog.User'),
                     },
                     {
                         data: 'type',
                         name: 'Type',
-                        title: this.$t('AuditLog.EventType')
+                        title: this.$t('AuditLog.EventType'),
                     },
                     {
                         data: 'log',
                         name: 'Log',
-                        title: this.$t('AuditLog.Log')
-                    }
+                        title: this.$t('AuditLog.Log'),
+                    },
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
@@ -45,16 +47,16 @@ export default {
                     contentType: 'application/json',
                 },
                 responsive: false,
-                order: [[0, 'desc']]
+                order: [[0, 'desc']],
             }
-        }
+        },
     },
     methods: {
         formatUtcDate(date) {
             const momentDate = moment.utc(date)
             return momentDate.local().format(DateFormats.dateTime)
-        }
-    }
+        },
+    },
 }
 </script>
 

@@ -9,8 +9,7 @@
                 :values="questionnaireList"
                 :value="selectedQuestionnaire"
                 :forceLoadingState="loading.questionnaire"
-                @selected="selectQuestionnaire"
-            />
+                @selected="selectQuestionnaire"/>
         </FilterBlock>
 
         <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -22,8 +21,7 @@
                 :value="selectedQuestionnaireVersion"
                 :forceLoadingState="loading.questionnaire"
                 :disabled="selectedQuestionnaire == null"
-                @selected="selectQuestionnaireVersion"
-            />
+                @selected="selectQuestionnaireVersion"/>
         </FilterBlock>
         <FilterBlock :title="$t('Reports.Question')">
             <Typeahead
@@ -34,44 +32,40 @@
                 :forceLoadingState="loading.questions"
                 :values="questionsList"
                 :value="selectedQuestion"
-                @selected="selectQuestion"
-            />
+                @selected="selectQuestion"/>
         </FilterBlock>
 
         <FilterBlock
             :title="$t('Reports.ViewOptions')"
-            v-if="!isSupervisor && this.question != null"
-        >
+            v-if="!isSupervisor && this.question != null">
             <div class="options-group">
                 <Radio
                     :label="$t('Reports.TeamLeadsOnly')"
                     :radioGroup="false"
                     name="expandTeams"
                     :value="expandTeams"
-                    @input="radioChanged"
-                />
+                    @input="radioChanged"/>
                 <Radio
                     :label="$t('Reports.WithInterviewers')"
                     :radioGroup="true"
                     name="expandTeams"
                     :value="expandTeams"
-                    @input="radioChanged"
-                />
+                    @input="radioChanged"/>
             </div>
         </FilterBlock>
 
         <FilterBlock
             :title="$t('Reports.ByAnswerValue')"
-            v-if="question && question.type == 'Numeric'"
-        >
+            v-if="question && question.type == 'Numeric'">
             <div class="row">
                 <div class="col-xs-6">
                     <div
                         class="form-group"
                         v-bind:class="{'has-error': errors.has('min')}"
-                        :title="errors.first('min')"
-                    >
-                        <label for="min">{{ $t("Reports.Min") }}</label>
+                        :title="errors.first('min')">
+                        <label for="min">
+                            {{ $t("Reports.Min") }}
+                        </label>
                         <input
                             type="number"
                             class="form-control input-sm"
@@ -79,17 +73,17 @@
                             :placeholder="$t('Reports.Min')"
                             @input="inputChange"
                             v-validate.initial="{ max_value: max }"
-                            :value="min"
-                        />
+                            :value="min"/>
                     </div>
                 </div>
                 <div class="col-xs-6">
                     <div
                         class="form-group"
                         v-bind:class="{'has-error': errors.has('max')}"
-                        :title="errors.first('max')"
-                    >
-                        <label for="max">{{ $t("Reports.Max") }}</label>
+                        :title="errors.first('max')">
+                        <label for="max">
+                            {{ $t("Reports.Max") }}
+                        </label>
                         <input
                             type="number"
                             class="form-control input-sm"
@@ -97,8 +91,7 @@
                             v-validate.initial="{ min_value: min }"
                             name="max"
                             @input="inputChange"
-                            :value="max"
-                        />
+                            :value="max"/>
                     </div>
                 </div>
             </div>
@@ -112,25 +105,23 @@
                     :values="conditionVariablesList"
                     :value="selectedCondition"
                     fuzzy
-                    @selected="selectCondition"
-                />
+                    @selected="selectCondition"/>
             </FilterBlock>
             <template v-if="condition != null">
                 <Checkbox
                     :label="$t('Reports.PivotView')"
                     name="pivot"
                     :value="query.pivot"
-                    @input="checkedChange"
-                />
+                    @input="checkedChange"/>
 
-                <ul class="list-group small" v-if="!query.pivot">
+                <ul class="list-group small"
+                    v-if="!query.pivot">
                     <li
                         class="list-group-item pointer"
                         v-for="answer in condition.Answers"
                         :key="answer.Answer"
                         :class="{ 'list-group-item-success': isSelectedAnswer(answer.answer)}"
-                        @click="selectConditionAnswer(answer.answer)"
-                    >{{answer.answer}}. {{answer.text}}</li>
+                        @click="selectConditionAnswer(answer.answer)">{{answer.answer}}. {{answer.text}}</li>
                 </ul>
             </template>
         </template>
