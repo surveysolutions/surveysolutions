@@ -31,7 +31,7 @@ export default {
         },
         completedDateString() {
             return this.$config.model.completedDate.toISOString()
-        }
+        },
     }
 }
 
