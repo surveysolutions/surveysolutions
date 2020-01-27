@@ -144,7 +144,7 @@
 <script>
 import * as toastr from 'toastr'
 import Vue from 'vue'
-import {isNull, chain, debounce, delay, forEach} from 'lodash'
+import {isNull, chain, debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
 
 const mapStyles = [
