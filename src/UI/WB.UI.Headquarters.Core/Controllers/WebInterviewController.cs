@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -24,6 +23,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -31,34 +31,27 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
-using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Filters;
-using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [BrowsersRestriction]
     [WebInterviewErrorFilter]
     [Route("WebInterview/{id}")]
-    public partial class WebInterviewController : Controller
+    public class WebInterviewController : Controller
     {
         private readonly ICommandService commandService;
         private readonly IWebInterviewConfigProvider configProvider;
-        private readonly IImageFileStorage imageFileStorage;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IUserViewFactory usersRepository;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICaptchaProvider captchaProvider;
         private readonly IAssignmentsService assignments;
-        private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
-        private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IAudioFileStorage audioFileStorage;
-        private readonly IAudioProcessingService audioProcessingService;
         private readonly IPauseResumeQueue pauseResumeQueue;
         private readonly IInvitationService invitationService;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
@@ -110,17 +103,12 @@ namespace WB.UI.Headquarters.Controllers
         public WebInterviewController(ICommandService commandService,
             IWebInterviewConfigProvider configProvider,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IImageFileStorage imageFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IImageProcessingService imageProcessingService,
             IConnectionLimiter connectionLimiter,
-            IWebInterviewNotificationService webInterviewNotificationService,
-            ILogger logger, IUserViewFactory usersRepository,
+            IUserViewFactory usersRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
             IAssignmentsService assignments,
-            IAudioFileStorage audioFileStorage,
-            IAudioProcessingService audioProcessingService,
             IPauseResumeQueue pauseResumeQueue,
             IInvitationService invitationService,
             INativeReadSideStorage<InterviewSummary> interviewSummary,
@@ -132,17 +120,12 @@ namespace WB.UI.Headquarters.Controllers
             this.commandService = commandService;
             this.configProvider = configProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.imageFileStorage = imageFileStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.imageProcessingService = imageProcessingService;
             this.connectionLimiter = connectionLimiter;
-            this.webInterviewNotificationService = webInterviewNotificationService;
             this.usersRepository = usersRepository;
             this.keyGenerator = keyGenerator;
             this.captchaProvider = captchaProvider;
             this.assignments = assignments;
-            this.audioFileStorage = audioFileStorage;
-            this.audioProcessingService = audioProcessingService;
             this.pauseResumeQueue = pauseResumeQueue;
             this.invitationService = invitationService;
             this.interviewSummary = interviewSummary;
@@ -304,6 +287,32 @@ namespace WB.UI.Headquarters.Controllers
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
 
             return this.View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EmailLink(string interviewId, string email)
+        {
+            var assignmentId = interviewSummary.GetById(interviewId)?.AssignmentId ?? 0;
+            var assignment = assignments.GetAssignment(assignmentId);
+
+            int invitationId = invitationService.CreateInvitationForPublicLink(assignment, interviewId);
+
+            try
+            {
+                await invitationMailingService.SendResumeAsync(invitationId, assignment, email);
+                if (Request.Cookies[AskForEmail] != null)
+                {
+                    Response.Cookies.Delete(AskForEmail);
+                }
+
+                return this.Json("ok");
+            }
+            catch (EmailServiceException e)
+            {
+                invitationService.InvitationWasNotSent(invitationId, assignmentId, email, e.Message);
+                return this.Json("fail");
+            }
         }
 
         [HttpPost]

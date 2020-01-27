@@ -33,13 +33,11 @@
                 <div v-else>
                       {{item.answer}}
                 </div>
-              
-              
             </div>
             <div class="btn-link" v-if="item.state == 'Unanswered'">{{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}</div>
         </div>
 
-        <AdditionalInfo ref="additionalInfo" :item="item" />
+        <AdditionalInfo ref="additionalInfo" :item="item" :addCommentsAllowed="$store.getters.addCommentsAllowed" />
     </div>
 </template>
 
@@ -48,80 +46,80 @@ const State = {
     Answered: 'Answered',
     Commented: 'Commented',
     Invalid: 'Invalid',
-    Unanswered: 'Unanswered'
-};
-import Vue from "vue";
+    Unanswered: 'Unanswered',
+}
+import Vue from 'vue'
 import AdditionalInfo from './OverviewItemAdditionalInfo'
-import api from "~/shared/api"
+import api from '~/shared/api'
 import moment from 'moment'
 
 export default {
     props: {
         item: {
             required: true,
-            type: Object
-        }
+            type: Object,
+        },
     },
 
     data() {
         return {
-            watcher: null
-        };
+            watcher: null,
+        }
     },
 
     mounted() {
         if (this.item.isGroup || this.item.isSection) {
-            this.$emit("mount", {
+            this.$emit('mount', {
                 el: this.$el,
-                item: this.item
-            });
+                item: this.item,
+            })
         }
     },
 
     destroyed() {
         if (this.watcher != null) {
-            this.watcher.destroy();
+            this.watcher.destroy()
         }
     },
     methods: {
         showAdditionalDetails(){
             if (this.item.isGroup || this.item.isSection) 
-                return;
+                return
             
             const cantLeaveCommentAndNoWarningsNoErrors = !this.item.supportsComments 
                 && !this.item.hasWarnings 
-                && !this.item.hasErrors;
+                && !this.item.hasErrors
 
             if (cantLeaveCommentAndNoWarningsNoErrors)
-                return;
+                return
 
-            this.$emit("showAdditionalInfo", this);
-            this.$refs.additionalInfo.show();
+            this.$emit('showAdditionalInfo', this)
+            this.$refs.additionalInfo.show()
         },
         hideAdditionalDetails(){
             if (this.$refs.additionalInfo)
-                this.$refs.additionalInfo.close();
+                this.$refs.additionalInfo.close()
         },
         parseGps(str)
         {
-            return JSON.parse(str || "{ latitude: 0, longitude: 0 }");
-        }
+            return JSON.parse(str || '{ latitude: 0, longitude: 0 }')
+        },
     },
     computed: {
         interviewId(){
-            return this.$route.params.interviewId;
+            return this.$route.params.interviewId
         },
         areaAnswerUrl() {
             return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.item.id}`
         },
         googleMapPosition() {
-            let coords = this.parseGps(this.item.answer);
+            let coords = this.parseGps(this.item.answer)
             return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${coords.latitude},${coords.longitude}`
                 + `&zoom=14&scale=0&size=340x177&markers=color:blue|label:O|${coords.latitude},${coords.longitude}`
                 + `&key=${this.$config.googleApiKey}`
         },
         audioRecordPath() {
-            return api.resources.audioRecordUri(this.interviewId, this.item.answer);
+            return api.resources.audioRecordUri(this.interviewId, this.item.answer)
         },
         itemClass() {
             return {
@@ -129,35 +127,35 @@ export default {
                 section: this.item.isSection,
                 unanswered: this.item.state == State.Unanswered,
                 invalid: this.item.state == State.Invalid,
-                hasComment: this.item.hasComment
-            };
+                hasComment: this.item.hasComment,
+            }
         },
         hasDate(){
             if (!this.item.answerTimeUtc)
-                return false;
+                return false
             if  (this.item.isGroup || this.item.isSection)
-                return false;
-            return true;
+                return false
+            return true
         },
         answerDate(){
-            if (!this.hasDate) return;   
-            let local = moment.utc(this.item.answerTimeUtc).local();
-            return local.format("MMM DD");
+            if (!this.hasDate) return   
+            let local = moment.utc(this.item.answerTimeUtc).local()
+            return local.format('MMM DD')
         },
         answerTime(){
-            if (!this.hasDate) return;
-            let local = moment.utc(this.item.answerTimeUtc).local();
-            return local.format("HH:mm");
+            if (!this.hasDate) return
+            let local = moment.utc(this.item.answerTimeUtc).local()
+            return local.format('HH:mm')
         },
         attachmentContentId(){
-            return this.item.attachmentContentId;
+            return this.item.attachmentContentId
         },
         hasAttachment(){
-            return this.attachmentContentId != null;
-        }
+            return this.attachmentContentId != null
+        },
     },
     components: {
-        AdditionalInfo
-    }
-};
+        AdditionalInfo,
+    },
+}
 </script>

@@ -37,79 +37,79 @@
 </template>
 
 <script lang="js">
-    import Vue from 'vue'
-    import { entityDetails, tableCellEditor } from "../mixins"
+import Vue from 'vue'
+import { entityDetails, tableCellEditor } from '../mixins'
 
-    export default {
-        name: 'MatrixRoster_CategoricalSingle',
-        mixins: [entityDetails, tableCellEditor],
-        props: ['isDisabled'],
-        data() {
-            return {
-                showAllOptions: false,
-                answer: null,
-                question : null,
-                lastUpdate: null,
-                questionId: null
-            }
-        }, 
-        watch: {
-            ["$watchedQuestion"](watchedQuestion) {
-                if (watchedQuestion.updatedAt != this.lastUpdate) {
-                    this.question = watchedQuestion
-                    this.cacheQuestionData()
-                }
-            }
-        },
-        computed: {
-            $watchedQuestion() {
-                return this.$store.state.webinterview.entityDetails[this.questionId] 
-            },
-            
-            disabled() {
-                if (this.$me.isDisabled || this.$me.isLocked || !this.$me.acceptAnswer)
-                    return true
-                return false
-            },
-            noOptions() {
-                return this.$me.options == null || this.$me.options.length == 0
-            },
-            answeredOrAllOptions(){
-                return this.$me.options;
-            },
-            questionStyle() {
-                return [{
-                    'disabled-element' : this.question.isDisabled,
-                    'has-error' : !this.question.isDisabled && !this.question.validity.isValid,
-                    'has-warnings' : !this.question.isDisabled &&  this.question.validity.warnings.length > 0,
-                    'not-applicable' : this.question.isLocked,
-                    'syncing': this.isFetchInProgress
-                }, 'cell-unit', 'options-group', ' h-100',' d-flex']
-            }            
-        },
-        methods: {
-            cacheQuestionData() {
-                this.lastUpdate = this.question.updatedAt
-            },
-            change() {
-                this.sendAnswer(() => {
-                    this.answerSingle(this.answer);
-                });
-            },
-            answerSingle(value) {
-                this.$store.dispatch("answerSingleOptionQuestion", { answer: value, identity: this.$me.id })
-            },                       
-            toggleOptions(){
-                this.showAllOptions = !this.showAllOptions;
-            }
-        },        
-        created() {
-            this.questionId = this.editorParams.value.identity
-            this.question = this.$watchedQuestion
-            this.cacheQuestionData()
-        },
-        mounted() {
-            this.answer = this.$me.answer            
+export default {
+    name: 'MatrixRoster_CategoricalSingle',
+    mixins: [entityDetails, tableCellEditor],
+    props: ['isDisabled'],
+    data() {
+        return {
+            showAllOptions: false,
+            answer: null,
+            question : null,
+            lastUpdate: null,
+            questionId: null,
         }
-    }
+    }, 
+    watch: {
+        ['$watchedQuestion'](watchedQuestion) {
+            if (watchedQuestion.updatedAt != this.lastUpdate) {
+                this.question = watchedQuestion
+                this.cacheQuestionData()
+            }
+        },
+    },
+    computed: {
+        $watchedQuestion() {
+            return this.$store.state.webinterview.entityDetails[this.questionId] 
+        },
+            
+        disabled() {
+            if (this.$me.isDisabled || this.$me.isLocked || !this.$me.acceptAnswer)
+                return true
+            return false
+        },
+        noOptions() {
+            return this.$me.options == null || this.$me.options.length == 0
+        },
+        answeredOrAllOptions(){
+            return this.$me.options
+        },
+        questionStyle() {
+            return [{
+                'disabled-element' : this.question.isDisabled,
+                'has-error' : !this.question.isDisabled && !this.question.validity.isValid,
+                'has-warnings' : !this.question.isDisabled &&  this.question.validity.warnings.length > 0,
+                'not-applicable' : this.question.isLocked,
+                'syncing': this.isFetchInProgress,
+            }, 'cell-unit', 'options-group', ' h-100',' d-flex']
+        },            
+    },
+    methods: {
+        cacheQuestionData() {
+            this.lastUpdate = this.question.updatedAt
+        },
+        change() {
+            this.sendAnswer(() => {
+                this.answerSingle(this.answer)
+            })
+        },
+        answerSingle(value) {
+            this.$store.dispatch('answerSingleOptionQuestion', { answer: value, identity: this.$me.id })
+        },                       
+        toggleOptions(){
+            this.showAllOptions = !this.showAllOptions
+        },
+    },        
+    created() {
+        this.questionId = this.editorParams.value.identity
+        this.question = this.$watchedQuestion
+        this.cacheQuestionData()
+    },
+    mounted() {
+        this.answer = this.$me.answer            
+    },
+}
 </script>

@@ -54,10 +54,10 @@
 </template>
 <script lang="js">
 
-import { entityDetails } from "../mixins"
-import moment from "moment"
-import "~/shared/misc/audioRecorder.js"
-import api from "~/shared/api"
+import { entityDetails } from '../mixins'
+import moment from 'moment'
+import '~/shared/misc/audioRecorder.js'
+import api from '~/shared/api'
 
 const AudioRecorder = new window.AudioRecorder
 
@@ -73,55 +73,55 @@ export default {
             stopwatchInterval: null,
             maxDuration: 3 * 60 * 1000,
             maxDurationInterval: null,
-            formattedTimer: "00:00:00"
+            formattedTimer: '00:00:00',
         }
     },
     computed: {
-            answerHolderId(){
-                return `audio_answer_${this.$me.id}`
-            },
-            modalId(){
-                return `audio_dialog_${this.$me.id}`
-            },
-            audioRecordPath() {
-                return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + "#" + this.$me.updatedAt.getTime()
-            },
-            formattedLength() {
-                if (this.$me.isAnswered){
-                    var d = moment.utc(this.$me.answer);
-                    return d.format("mm:ss");
-                }
-                return ''
-            },
-            humanizedLength() {
-                if (this.$me.isAnswered){
-                    return moment.duration(this.$me.answer, 'milliseconds').humanize();
-                }
-                return ''
-            },
-            isRecorded() {
-                return this.isRecording == false && this.$me.isAnswered;
-            }
+        answerHolderId(){
+            return `audio_answer_${this.$me.id}`
         },
+        modalId(){
+            return `audio_dialog_${this.$me.id}`
+        },
+        audioRecordPath() {
+            return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + '#' + this.$me.updatedAt.getTime()
+        },
+        formattedLength() {
+            if (this.$me.isAnswered){
+                var d = moment.utc(this.$me.answer)
+                return d.format('mm:ss')
+            }
+            return ''
+        },
+        humanizedLength() {
+            if (this.$me.isAnswered){
+                return moment.duration(this.$me.answer, 'milliseconds').humanize()
+            }
+            return ''
+        },
+        isRecorded() {
+            return this.isRecording == false && this.$me.isAnswered
+        },
+    },
     methods: {
         showModal() {
-            var modal = $(this.$el).find(".modal");
-            $(this.$el).find(".modal-backdrop").show()
-            modal.addClass('in');
-            modal.show();
+            var modal = $(this.$el).find('.modal')
+            $(this.$el).find('.modal-backdrop').show()
+            modal.addClass('in')
+            modal.show()
         },
         closeModal() {
-            var modal = $(this.$el).find(".modal");
-            $(this.$el).find(".modal-backdrop").hide()
-            modal.removeClass('in');
+            var modal = $(this.$el).find('.modal')
+            $(this.$el).find('.modal-backdrop').hide()
+            modal.removeClass('in')
             modal.hide()
         },
         stopRecording() {
-            this.terminateRecording();
+            this.terminateRecording()
             AudioRecorder.stop()
         },
         cancelRecording() {
-            this.terminateRecording();
+            this.terminateRecording()
             AudioRecorder.cancel()
         },
         terminateRecording() {
@@ -129,16 +129,16 @@ export default {
             this.closeModal()
             clearInterval(this.stopwatchInterval)
             clearInterval(this.maxDurationInterval)
-            this.formattedTimer = "00:00:00"
+            this.formattedTimer = '00:00:00'
         },
         startRecording() {
             this.sendAnswer(() => {
                 this.showModal()
                 const self = this
                 AudioRecorder.initAudio({
-                    analyserEl: $(this.$el).find(".analyser")[0],
+                    analyserEl: $(this.$el).find('.analyser')[0],
                     startRecordingCallback: () => {
-                        self.isRecording = true;
+                        self.isRecording = true
                         self.startRecordingTime = self.currentTime()
                         clearInterval(self.stopwatchInterval)
                         clearInterval(self.maxDurationInterval)
@@ -146,25 +146,25 @@ export default {
                         self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
                     },
                     errorCallback: (e) => {
-                        self.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.AudioInitializationFailed"))
+                        self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.AudioInitializationFailed'))
                         this.closeModal()
                     },
                     doneCallback: (blob) => {
                         self.$store.dispatch('answerAudioQuestion', {
                             identity: self.id,
-                            file: blob
+                            file: blob,
                         })
-                    }
+                    },
                 })
-            });
+            })
         },
         currentTime() {
-            return new Date().getTime();
+            return new Date().getTime()
         },
         updateTimer() {
-            var diff = moment.utc(this.currentTime() - this.startRecordingTime);
-            this.formattedTimer = diff.format("mm:ss:SS");
-        }
-    }   
+            var diff = moment.utc(this.currentTime() - this.startRecordingTime)
+            this.formattedTimer = diff.format('mm:ss:SS')
+        },
+    },   
 }
 </script>

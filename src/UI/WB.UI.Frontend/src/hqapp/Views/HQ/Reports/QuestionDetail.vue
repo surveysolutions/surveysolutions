@@ -18,8 +18,8 @@ export default {
     props: {
         title: String,
         question: {
-            type: Object
-        }
-    }
-};
+            type: Object,
+        },
+    },
+}
 </script>

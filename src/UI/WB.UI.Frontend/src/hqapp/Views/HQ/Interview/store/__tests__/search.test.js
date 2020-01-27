@@ -8,7 +8,7 @@ const searchResults = require("./_searchResults.json")
 
 describe("filters search", () => {
     describe("when aggregating search results", () => {
-        
+
         function emptyState() {
             return {
                 search: { results: [], count: 0, skip: 0, pageSize: 3 }
@@ -41,8 +41,8 @@ describe("filters search", () => {
             });
 
             it("should merge sections having same sectionId", () => {
-                const section2 = _.find(state.search.results, {sectionId: "f133fdc78a81dbafbe6507952bf06384_1"})
-                
+                const section2 = find(state.search.results, { sectionId: "f133fdc78a81dbafbe6507952bf06384_1" })
+
                 expect(section2.questions.length).toBe(2) // More info about Kenshi
                 expect(section2.questions[0].target).toBe("6a639942539484e7b0caf8bef1d245a4_1"); // Specify the best combo
                 expect(section2.questions[1].target).toBe("c2f188f90e379c6a5f228eae6fba9aa8_1"); // Numeric with validation
