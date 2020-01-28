@@ -15,16 +15,24 @@ namespace WB.UI.Headquarters.Controllers
     public class HomeController : Controller
     {
         private readonly UserManager<HqUser> userManager;
-
-        public HomeController(UserManager<HqUser> userManager)
+        private readonly SignInManager<HqUser> signInManager;
+        
+        public HomeController(UserManager<HqUser> userManager, 
+            SignInManager<HqUser> signInManager)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                await this.signInManager.SignOutAsync();
+                return Redirect("Index");
+            }
             var roleForCurrentUser = user.Roles.Select(x => x.Id.ToUserRole()).FirstOrDefault();
             
             switch (roleForCurrentUser)

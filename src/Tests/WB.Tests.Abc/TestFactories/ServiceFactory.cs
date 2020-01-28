@@ -13,6 +13,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Events;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Ncqrs.Eventing;
 using NHibernate.Linq;
 using Quartz;
@@ -598,22 +600,34 @@ namespace WB.Tests.Abc.TestFactories
             IUserImportVerifier userImportVerifier = null,
             IAuthorizedUser authorizedUser = null,
             IUnitOfWork sessionProvider = null,
-            UsersImportTask usersImportTask = null)
+            UsersImportTask usersImportTask = null,
+            PasswordOptions passwordOptions = null)
         {
             var scheduler = new Mock<IScheduler>();
             scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Array.Empty<IJobExecutionContext>());
 
-            usersImportTask = usersImportTask ?? new UsersImportTask(scheduler.Object);
+            usersImportTask ??= new UsersImportTask(scheduler.Object);
+            
+            PasswordOptions defaultPasswordOptions = passwordOptions ?? new PasswordOptions
+            {
+                RequireDigit = true,
+                RequiredLength = 10,
+                RequireLowercase = true,
+                RequireUppercase = true,
+                RequiredUniqueChars = 5,
+                RequireNonAlphanumeric = true
+            };
 
-            userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
+            userPreloadingSettings ??= Create.Entity.UserPreloadingSettings();
             return new UserImportService(
                 userPreloadingSettings,
                 csvReader ?? Stub<ICsvReader>.WithNotEmptyValues,
                 importUsersProcessRepository ?? Stub<IPlainStorageAccessor<UsersImportProcess>>.WithNotEmptyValues,
                 importUsersRepository ?? Stub<IPlainStorageAccessor<UserToImport>>.WithNotEmptyValues,
                 userStorage ?? Stub<IUserRepository>.WithNotEmptyValues,
-                userImportVerifier ?? new UserImportVerifier(userPreloadingSettings),
+                userImportVerifier ?? new UserImportVerifier(userPreloadingSettings,
+                    Mock.Of<IOptions<IdentityOptions>>(x => x.Value == new IdentityOptions {Password = defaultPasswordOptions} )),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
                 sessionProvider ?? Stub<IUnitOfWork>.WithNotEmptyValues,
                 usersImportTask ?? Stub<UsersImportTask>.WithNotEmptyValues);

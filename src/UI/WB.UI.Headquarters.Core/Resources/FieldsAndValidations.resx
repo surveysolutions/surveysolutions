@@ -249,4 +249,22 @@
   <data name="MandatoryField" xml:space="preserve">
     <value>This field is mandatory</value>
   </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+      <value>Passwords must have at least one digit ('0'-'9').</value>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+      <value>Passwords must have at least one lowercase ('a'-'z').</value>
+  </data>
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+      <value>Passwords must have at least one non alphanumeric character.</value>
+  </data>
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+      <value>Passwords must use at least {0} different characters.</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+      <value>Passwords must have at least one uppercase ('A'-'Z').</value>
+  </data>
+  <data name="PasswordTooShort" xml:space="preserve">
+      <value>Passwords must be at least {0} characters.</value>
+  </data>
 </root>
