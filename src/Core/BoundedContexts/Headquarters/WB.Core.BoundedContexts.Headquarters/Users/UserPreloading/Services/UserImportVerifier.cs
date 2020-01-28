@@ -3,23 +3,27 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {
     public class UserImportVerifier : IUserImportVerifier
     {
         private readonly UserPreloadingSettings userPreloadingSettings;
-        private readonly Regex passwordValidationRegex;
         private readonly Regex loginValidatioRegex;
         private readonly Regex emailValidationRegex;
         private readonly Regex phoneNumberValidationRegex;
         private readonly Regex fullNameRegex;
-
-        public UserImportVerifier(UserPreloadingSettings userPreloadingSettings)
+        private IOptions<IdentityOptions> passwordValidator;
+        
+        public UserImportVerifier(UserPreloadingSettings userPreloadingSettings, 
+            IOptions<IdentityOptions> passwordValidator)
         {
             this.userPreloadingSettings = userPreloadingSettings;
-            this.passwordValidationRegex = new Regex(this.userPreloadingSettings.PasswordFormatRegex);
+            this.passwordValidator = passwordValidator;
             this.loginValidatioRegex = new Regex(this.userPreloadingSettings.LoginFormatRegex);
             this.emailValidationRegex = new Regex(this.userPreloadingSettings.EmailFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
             this.phoneNumberValidationRegex = new Regex(this.userPreloadingSettings.PhoneNumberFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
@@ -119,10 +123,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             if (userPreloadingDataRecord.Password.Length > 100)
                 return true;
 
-            if (userPreloadingDataRecord.Password.Length < 10)
+            var options = this.passwordValidator.Value.Password;
+            var password = userPreloadingDataRecord.Password;
+            
+            if (userPreloadingDataRecord.Password.Length < options.RequiredLength)
                 return true;
-
-            return !this.passwordValidationRegex.IsMatch(userPreloadingDataRecord.Password);
+            
+            if (options.RequireNonAlphanumeric && password.All(char.IsLetterOrDigit))
+            {
+                return true;
+            }
+            if (options.RequireDigit && !password.Any(char.IsDigit))
+            {
+                return true;
+            }
+            if (options.RequireLowercase && !password.Any(char.IsLower))
+            {
+                return true;
+            }
+            if (options.RequireUppercase && !password.Any(char.IsUpper))
+            {
+                return true;
+            }
+            if (options.RequiredUniqueChars >= 1 && password.Distinct().Count() < options.RequiredUniqueChars)
+            {
+                return true;
+            }
+            
+            return false;
         }
 
         private bool LoginFormatVerification(UserToImport userPreloadingDataRecord)
