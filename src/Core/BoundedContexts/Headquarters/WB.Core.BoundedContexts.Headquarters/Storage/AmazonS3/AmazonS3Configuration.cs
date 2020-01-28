@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
             bucketInfo = new AmazonBucketInfo(
                 uri.Host, // example => deccapi
-                uri.AbsolutePath.TrimEnd('/') + "/" + this.hqOptions.Value.TenantName + "/" // example => /hq/tenantName/
+                uri.AbsolutePath.Trim('/') + "/" + this.hqOptions.Value.TenantName + "/" // example => hq/tenantName/
             );
             
             return bucketInfo;
