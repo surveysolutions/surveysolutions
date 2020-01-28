@@ -225,4 +225,68 @@
   <data name="PLU0005Recomendation" xml:space="preserve">
     <value>Разрешены только буквы, цифры и символ подчёркивания. Длина должна быть от 3 до 15 символов</value>
   </data>
+  <data name="PLU0015" xml:space="preserve">
+      <value>Пароль слишком короткий</value>
+  </data>
+  <data name="PLU0015Description" xml:space="preserve">
+      <value>Пароль '{0}' слишком короткий</value>
+  </data>
+  <data name="PLU0015Recomendation" xml:space="preserve">
+      <value>Пароль должен содержать хотя бы 10 символов</value>
+  </data>
+  <data name="PLU0016" xml:space="preserve">
+      <value>Простой пароль</value>
+  </data>
+  <data name="PLU0016Description" xml:space="preserve">
+      <value>Пароль '{0}' не содержит не цифро буквенных символов</value>
+  </data>
+  <data name="PLU0016Recomendation" xml:space="preserve">
+      <value>Добавьте хотя бы один не цифро буквенный символ</value>
+  </data>
+  <data name="PLU0017" xml:space="preserve">
+      <value>Простой пароль</value>
+  </data>
+  <data name="PLU0017Description" xml:space="preserve">
+      <value>Пароль '{0}' не содержит цифру</value>
+  </data>
+  <data name="PLU0017Recomendation" xml:space="preserve">
+      <value>Добавьте хотя бы одну цифру ('0'-'9').</value>
+  </data>
+  <data name="PLU0018" xml:space="preserve">
+      <value>Простой пароль</value>
+  </data>
+  <data name="PLU0018Description" xml:space="preserve">
+      <value>Пароль '{0}' не содержит символа в нижнем регистре</value>
+  </data>
+  <data name="PLU0018Recomendation" xml:space="preserve">
+      <value>Добавьте хотя бы один символ в нижнем регистре
+</value>
+  </data>
+  <data name="PLU0019" xml:space="preserve">
+      <value>Простой пароль</value>
+  </data>
+  <data name="PLU0019Description" xml:space="preserve">
+      <value>Пароль '{0}' не содержит символа в верхнем регистре</value>
+  </data>
+  <data name="PLU0019Recomendation" xml:space="preserve">
+      <value>Добавьте хотя бы один символ в верхнем регистре</value>
+  </data>
+  <data name="PLU0020" xml:space="preserve">
+      <value>Простой пароль</value>
+  </data>
+  <data name="PLU0020Description" xml:space="preserve">
+      <value>Пароль '{0}' не содержит достаточного количества уникальных символов</value>
+  </data>
+  <data name="PLU0020Recomendation" xml:space="preserve">
+      <value>Добавьте уникальных символов.</value>
+  </data>
+  <data name="PLU0021" xml:space="preserve">
+      <value>Необходим пароль</value>
+  </data>
+  <data name="PLU0021Description" xml:space="preserve">
+      <value>Необходим пароль</value>
+  </data>
+  <data name="PLU0021Recomendation" xml:space="preserve">
+      <value>Добавьте пароль</value>
+  </data>
 </root>

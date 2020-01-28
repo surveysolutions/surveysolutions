@@ -59,7 +59,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, row), "PLU0003", u => u.Login),
                 new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewerNamesMappedOnSupervisorName, archivedSupervisorNames, row), "PLU0004", u => u.Login),
                 new PreloadedDataValidator(LoginFormatVerification, "PLU0005", u => u.Login),
-                new PreloadedDataValidator(PasswordFormatVerification, "PLU0006", u => u.Password),
                 new PreloadedDataValidator(EmailFormatVerification, "PLU0007", u => u.Email),
                 new PreloadedDataValidator(PhoneNumberFormatVerification, "PLU0008", u => u.PhoneNumber),
                 new PreloadedDataValidator(RoleVerification, "PLU0009", u => u.Role),
@@ -67,9 +66,75 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 new PreloadedDataValidator(FullNameLengthVerification, "PLU0012", u => u.FullName),
                 new PreloadedDataValidator(PhoneLengthVerification, "PLU0013", u => u.PhoneNumber),
                 new PreloadedDataValidator(FullNameAllowedSymbolsValidation, "PLU0014", u => u.FullName),
+                
+                new PreloadedDataValidator(PasswordLength, "PLU0015", u => u.Password),
+                new PreloadedDataValidator(PasswordRequireNonAlphanumeric, "PLU0016", u => u.Password),
+                new PreloadedDataValidator(PasswordRequireDigit, "PLU0017", u => u.Password),
+                new PreloadedDataValidator(PasswordRequireLowercase, "PLU0018", u => u.Password),
+                new PreloadedDataValidator(PasswordRequireUppercase, "PLU0019", u => u.Password),
+                new PreloadedDataValidator(PasswordRequiredUniqueChars, "PLU0020", u => u.Password),
+                new PreloadedDataValidator(PasswordRequired, "PLU0021", u => u.Password),
             };
         }
 
+        private bool PasswordRequired(UserToImport userPreloadingDataRecord)
+        {
+            return string.IsNullOrEmpty(userPreloadingDataRecord.Password);
+        }
+        
+        private bool PasswordLength(UserToImport userPreloadingDataRecord)
+        {
+            var options = this.passwordValidator.Value.Password;
+
+            return !string.IsNullOrEmpty(userPreloadingDataRecord.Password) &&
+                   userPreloadingDataRecord.Password.Length < options.RequiredLength;
+        }
+        
+        private bool PasswordRequireNonAlphanumeric(UserToImport userPreloadingDataRecord)
+        {
+            var options = this.passwordValidator.Value.Password;
+
+            return options.RequireNonAlphanumeric &&
+                   !string.IsNullOrEmpty(userPreloadingDataRecord.Password) &&
+                   userPreloadingDataRecord.Password.All(char.IsLetterOrDigit) == true;
+        }
+        
+        private bool PasswordRequireDigit(UserToImport userPreloadingDataRecord)
+        {
+            var options = this.passwordValidator.Value.Password;
+
+            return options.RequireDigit && 
+                   !string.IsNullOrEmpty(userPreloadingDataRecord.Password) &&
+                   userPreloadingDataRecord.Password?.Any(char.IsDigit) == false;
+        }
+
+        private bool PasswordRequireLowercase(UserToImport userPreloadingDataRecord)
+        {
+            var options = this.passwordValidator.Value.Password;
+
+            return options.RequireLowercase && 
+                   !string.IsNullOrEmpty(userPreloadingDataRecord.Password) &&
+                   userPreloadingDataRecord.Password.Any(char.IsLower) == false;
+        }
+
+        private bool PasswordRequireUppercase(UserToImport userPreloadingDataRecord)
+        {
+            var options = this.passwordValidator.Value.Password;
+
+            return options.RequireUppercase && 
+                   !string.IsNullOrEmpty(userPreloadingDataRecord.Password) &&
+                   userPreloadingDataRecord.Password?.Any(char.IsUpper) == false;
+        }
+
+        private bool PasswordRequiredUniqueChars(UserToImport userToImport)
+        {
+            var options = this.passwordValidator.Value.Password;
+
+            return options.RequiredUniqueChars >= 1 &&
+                   !string.IsNullOrEmpty(userToImport.Password) &&
+                   userToImport.Password.Distinct().Count() < options.RequiredUniqueChars;
+        }
+        
         public PreloadedDataValidator[] GetAllUsersValidations(
             UserToValidate[] allInterviewersAndSupervisors, IList<UserToImport> usersToImport)
         {
@@ -113,44 +178,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 return false;
 
             return !string.IsNullOrEmpty(userPreloadingDataRecord.Supervisor);
-        }
-
-        private bool PasswordFormatVerification(UserToImport userPreloadingDataRecord)
-        {
-            if (string.IsNullOrEmpty(userPreloadingDataRecord.Password))
-                return true;
-
-            if (userPreloadingDataRecord.Password.Length > 100)
-                return true;
-
-            var options = this.passwordValidator.Value.Password;
-            var password = userPreloadingDataRecord.Password;
-            
-            if (userPreloadingDataRecord.Password.Length < options.RequiredLength)
-                return true;
-            
-            if (options.RequireNonAlphanumeric && password.All(char.IsLetterOrDigit))
-            {
-                return true;
-            }
-            if (options.RequireDigit && !password.Any(char.IsDigit))
-            {
-                return true;
-            }
-            if (options.RequireLowercase && !password.Any(char.IsLower))
-            {
-                return true;
-            }
-            if (options.RequireUppercase && !password.Any(char.IsUpper))
-            {
-                return true;
-            }
-            if (options.RequiredUniqueChars >= 1 && password.Distinct().Count() < options.RequiredUniqueChars)
-            {
-                return true;
-            }
-            
-            return false;
         }
 
         private bool LoginFormatVerification(UserToImport userPreloadingDataRecord)
