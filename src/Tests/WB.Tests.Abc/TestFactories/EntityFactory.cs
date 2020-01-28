@@ -1361,7 +1361,7 @@ namespace WB.Tests.Abc.TestFactories
             => new UserLight(userId ?? Guid.NewGuid(), "test");
 
         public UserToImport UserToImport(
-            string login = "test", string supervisor = "", string password = "Qwerty1234", string email = "", string phoneNumber = "",
+            string login = "test", string supervisor = "", string password = "Qwerty1234$", string email = "", string phoneNumber = "",
             string role = null, string fullName = null)
             => new UserToImport
             {
