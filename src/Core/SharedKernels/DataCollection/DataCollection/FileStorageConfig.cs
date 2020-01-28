@@ -1,7 +1,32 @@
-﻿namespace WB.Core.SharedKernels.DataCollection
+﻿using System;
+
+namespace WB.Core.SharedKernels.DataCollection
 {
     public class FileStorageConfig
     {
         public string AppData { get; set; } = "~/App_Data";
+
+        public StorageProviderType? StorageProviderType { get; set; }
+
+        private StorageProviderType? storageType;
+
+        public StorageProviderType GetStorageProviderType()
+        {
+            if (storageType != null) return storageType.Value;
+
+            if (StorageProviderType != null) return StorageProviderType.Value;
+
+            storageType = AppData.StartsWith("s3://", StringComparison.OrdinalIgnoreCase) 
+                ? DataCollection.StorageProviderType.AmazonS3 
+                : DataCollection.StorageProviderType.FileSystem;
+
+            return storageType.Value;
+        }
+    }
+
+    public enum StorageProviderType
+    {
+        FileSystem = 0,
+        AmazonS3 = 1
     }
 }
