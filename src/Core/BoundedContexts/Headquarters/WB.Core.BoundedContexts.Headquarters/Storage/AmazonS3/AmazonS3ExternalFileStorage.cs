@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 var getObject = new GetObjectRequest
                 {
                     BucketName = BucketInfo.BucketName,
-                    Key = BucketInfo.PathPrefix + key
+                    Key = BucketInfo.PathTo(key)
                 };
 
                 using var response = await client.GetObjectAsync(getObject).ConfigureAwait(false);
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                log.Trace($"Cannot get object from S3. [{e.StatusCode.ToString()}] {BucketInfo.PathPrefix + key}");
+                log.Trace($"Cannot get object from S3. [{e.StatusCode.ToString()}] {BucketInfo.PathTo(key)}");
                 return null;
             }
             catch (Exception e)
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 var listObjects = new ListObjectsV2Request
                 {
                     BucketName = BucketInfo.BucketName,
-                    Prefix = BucketInfo.PathPrefix + prefix
+                    Prefix = BucketInfo.PathTo(prefix)
                 };
 
                 ListObjectsV2Response response = await client.ListObjectsV2Async(listObjects).ConfigureAwait(false);
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                log.Trace($"Cannot list objects from S3. [{e.StatusCode.ToString()}] {BucketInfo.PathPrefix + prefix}");
+                log.Trace($"Cannot list objects from S3. [{e.StatusCode.ToString()}] {BucketInfo.PathTo(prefix)}");
                 return null;
             }
             catch (Exception e)
@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             {
                 Protocol = Protocol.HTTPS,
                 BucketName = BucketInfo.BucketName,
-                Key = BucketInfo.PathPrefix + key,
+                Key = BucketInfo.PathTo(key),
                 Expires = DateTime.UtcNow.Add(expiration)
             });
         }
@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 var uploadRequest = new TransferUtilityUploadRequest
                 {
                     BucketName = BucketInfo.BucketName,
-                    Key = BucketInfo.PathPrefix + key,
+                    Key = BucketInfo.PathTo(key),
                     ContentType = contentType,
                     AutoCloseStream = false,
                     AutoResetStreamPosition = false,
@@ -158,7 +158,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 var uploadRequest = new TransferUtilityUploadRequest
                 {
                     BucketName = BucketInfo.BucketName,
-                    Key = BucketInfo.PathPrefix + key,
+                    Key = BucketInfo.PathTo(key),
                     ContentType = contentType,
                     AutoCloseStream = false,
                     AutoResetStreamPosition = false,
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         {
             try
             {
-                await client.DeleteObjectAsync(BucketInfo.BucketName, BucketInfo.PathPrefix + path).ConfigureAwait(false);
+                await client.DeleteObjectAsync(BucketInfo.BucketName, BucketInfo.PathTo(path)).ConfigureAwait(false);
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
