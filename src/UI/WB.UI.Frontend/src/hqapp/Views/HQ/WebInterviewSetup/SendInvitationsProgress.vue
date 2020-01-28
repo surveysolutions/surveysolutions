@@ -119,14 +119,14 @@ export default {
             this.$http.get(this.$config.model.api.statusUrl)
                 .then(function (response) {
                     const invitationsInfo = response.data || {}
-                    self.title = invitationsInfo.fullName
+                    self.title = self.$t('Pages.QuestionnaireNameFormat', {name: invitationsInfo.title, version: invitationsInfo.version})
                     self.questionnaireIdentity = invitationsInfo.questionnaireIdentity
                     const status = invitationsInfo.status
                     self.responsibleName = status.responsibleName
                     self.processedCount = status.processedCount || 0
                     self.withErrorsCount = status.withErrorsCount || 0
                     self.totalCount = status.totalCount || 0
-                    self.status = status.status
+                    self.status = status.status 
                 })
                 .catch(function (error) { 
                     Vue.config.errorHandler(error, self)
