@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
-    public class HeadquarterOptions
+    public class HeadquartersConfig
     {
         public string BaseUrl { get; set; }
         public string TenantName { get; set; }

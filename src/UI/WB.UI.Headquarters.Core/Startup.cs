@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Text;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -121,7 +120,7 @@ namespace WB.UI.Headquarters
                 new DataCollectionSharedKernelModule(),
                 new OrmModule(unitOfWorkConnectionSettings),
                 new OwinSecurityModule(),
-                new FileStorageModule(Configuration),
+                new FileStorageModule(),
                 new FileInfrastructureModule(),
                 new DataExportModule(),
                 GetHqBoundedContextModule(),
@@ -221,6 +220,8 @@ namespace WB.UI.Headquarters
             services.AddScoped<InstallationFilter>();
             services.AddScoped<AntiForgeryFilter>();
             services.AddScoped<GlobalNotificationResultFilter>();
+
+            FileStorageModule.Setup(services, Configuration);
             
             AddCompression(services);
 
