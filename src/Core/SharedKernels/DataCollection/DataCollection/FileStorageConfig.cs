@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
     public class FileStorageConfig
     {
         public string AppData { get; set; } = "~/App_Data";
+        public string TempData { get; set; } = "~/App_Data";
 
         public StorageProviderType? StorageProviderType { get; set; }
 
