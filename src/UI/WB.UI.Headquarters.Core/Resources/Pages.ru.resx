@@ -616,8 +616,8 @@
     <value>Версия интервьюера полученная по время последней синхронизации планшета</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-      <value>{{name}} (вер. {{version}})</value>
-      <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+    <value>{{name}} (вер. {{version}})</value>
+    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
     <value>Скачать последнюю версию</value>
@@ -635,16 +635,16 @@
     <value>Интервьюер: {0}</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-      <value>{{interviewer}} (супервизор: {{supervisor}})</value>
+    <value>{{interviewer}} (супервизор: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-      <value>E-mail: {{email}}</value>
+    <value>E-mail: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
-      <value>ФИО: {{fullName}}</value>
+    <value>ФИО: {{fullName}}</value>
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
-      <value>Телефон: {{phone}}</value>
+    <value>Телефон: {{phone}}</value>
   </data>
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>Редактировать данные пользователя</value>
@@ -680,7 +680,7 @@
     <value>Состояние батареи (%)</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
-      <value>{{percent}}%, источник питания: {{power}}, экономия заряда батареи: {{powerSaver}}</value>
+    <value>{{percent}}%, источник питания: {{power}}, экономия заряда батареи: {{powerSaver}}</value>
   </data>
   <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
     <value>включена</value>
@@ -737,16 +737,16 @@
     <value>Длительность синхронизации</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-      <value>Соединение: тип: {{networkType}} {{networkSubType}}, мобильный оператор: {{operator}}</value>
+    <value>Соединение: тип: {{networkType}} {{networkSubType}}, мобильный оператор: {{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-      <value>Соединение: {{networkType}}</value>
+    <value>Соединение: {{networkType}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
     <value>Скорость соединения</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
-      <value>{{uploaded}} загружено, {{downloaded}} скаченно</value>
+    <value>{{uploaded}} загружено, {{downloaded}} скаченно</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>Средняя скорость синхронизации</value>
@@ -1197,16 +1197,16 @@
     <value>Карты успешно загружены</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-      <value>Интервьюер(ы) {{interviewers}} будут переведены в другую команду супервизора {{supervisor}}</value>
+    <value>Интервьюер(ы) {{interviewers}} будут переведены в другую команду супервизора {{supervisor}}</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-      <value>Интервьюер(ы) {{interviewers}} уже в команде супервизора {{supervisor}} и никакие действия предприняты не будут.</value>
+    <value>Интервьюер(ы) {{interviewers}} уже в команде супервизора {{supervisor}} и никакие действия предприняты не будут.</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-      <value>Перенести интервьюера(ов) с их заданиями и интервью в новую команду супервизора {{supervisor}}</value>
+    <value>Перенести интервьюера(ов) с их заданиями и интервью в новую команду супервизора {{supervisor}}</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
-      <value>Выберите команду для переноса {{names}}</value>
+    <value>Выберите команду для переноса {{names}}</value>
   </data>
   <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
     <value>Перенести в другую команду</value>
@@ -1215,7 +1215,7 @@
     <value>{0} и {1}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
-      <value>{{names}} и еще {{more}}</value>
+    <value>{{names}} и еще {{more}}</value>
   </data>
   <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>Сделать первичного супервизора ответственным за задания и интервью перемещаемых интервьюеров. </value>
@@ -1319,7 +1319,10 @@
     <value>Количество подсекций</value>
   </data>
   <data name="Home" xml:space="preserve">
-      <value>Домой</value>
-      <comment>Домой</comment>
+    <value>Домой</value>
+    <comment>Домой</comment>
+  </data>
+  <data name="AppUpdates" xml:space="preserve">
+    <value>Apk infos</value>
   </data>
 </root>
