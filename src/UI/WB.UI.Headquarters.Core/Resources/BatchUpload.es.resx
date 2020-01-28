@@ -367,7 +367,7 @@
       <value>{{count}} asignaciones creados</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-      <value>{{coun}t} errores encontrados</value>
+      <value>{{count}} errores encontrados</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
     <value>{0} entrevistas no se pudieron crear</value>
