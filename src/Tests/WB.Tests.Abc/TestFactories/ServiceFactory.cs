@@ -615,8 +615,8 @@ namespace WB.Tests.Abc.TestFactories
                 RequiredLength = 10,
                 RequireLowercase = true,
                 RequireUppercase = true,
-                RequiredUniqueChars = 0,
-                RequireNonAlphanumeric = false
+                RequiredUniqueChars = 5,
+                RequireNonAlphanumeric = true
             };
 
             userPreloadingSettings ??= Create.Entity.UserPreloadingSettings();
