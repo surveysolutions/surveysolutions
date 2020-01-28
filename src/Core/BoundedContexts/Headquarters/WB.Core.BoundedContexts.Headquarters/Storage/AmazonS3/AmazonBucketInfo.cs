@@ -10,5 +10,7 @@
 
         public string BucketName { get; }
         public string PathPrefix { get; }
+
+        public string PathTo(string key) => PathPrefix + key.TrimStart('/');
     }
 }
