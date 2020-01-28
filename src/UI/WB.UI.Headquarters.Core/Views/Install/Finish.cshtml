@@ -11,7 +11,7 @@
             @Users.CreateAdmin
         </div>
 
-        @Html.ValidationSummary()
+        @Html.ValidationSummary(false, null, new {@class="error-text"})
 
         <form method="post">
             @Html.AntiForgeryToken()
