@@ -208,7 +208,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         }
 
         [TestCase("", "PLU0021")] //empty
-        [TestCase("Q11w#", "PLU0015")]  
+        [TestCase("Q12wzyt#", "PLU0015")]  
         [TestCase("P@$$w0rd5", "PLU0016")] 
         [TestCase("QwertyQW$werty", "PLU0017")] 
         [TestCase("QWE1TYQWWE$RTY", "PLU0018")] 
