@@ -24,7 +24,6 @@ namespace WB.UI.Headquarters
             services.Configure<DesignerConfig>(configuration.GetSection("Designer"));
             services.Configure<GoogleMapsConfig>(configuration.GetSection("GoogleMap"));
             services.Configure<HeadquarterOptions>(configuration.HeadquarterOptions());
-            services.Configure<PasswordPolicyConfig>(configuration.GetSection("PasswordPolicy"));
             services.Configure<PreloadingConfig>(configuration.GetSection("PreLoading"));
             services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
             services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
