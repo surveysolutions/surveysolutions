@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.Controllers
             if (signInResult.Succeeded)
             {
                 this.captchaService.ResetFailedLogin(model.UserName);
-                return Redirect(returnUrl ?? Url.Content("~/"));
+                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
             }
 
             if (signInResult.IsLockedOut)
