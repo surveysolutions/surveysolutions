@@ -160,8 +160,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         [Test]
         public void should_properly_generate_pathTo_key_and_normalize_slashes()
         {
-            Assert.That(bucketInfo.PathTo("/path"), Is.EqualTo("/base/fiji/path"));
-            Assert.That(bucketInfo.PathTo("path"), Is.EqualTo("/base/fiji/path"));
+            Assert.That(bucketInfo.PathTo("/path"), Is.EqualTo("base/fiji/path"));
+            Assert.That(bucketInfo.PathTo("path"), Is.EqualTo("base/fiji/path"));
         }
 
         [Test]
@@ -179,7 +179,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
             ).GetAmazonS3BucketInfo();
 
             Assert.That(bucket.BucketName, Is.EqualTo("another.bucket.name"));
-            Assert.That(bucket.PathPrefix, Is.EqualTo("/test/for/folder/fiji/"), "Should add tenant name from hq config");
+            Assert.That(bucket.PathPrefix, Is.EqualTo("test/for/folder/fiji/"), "Should add tenant name from hq config");
         }
 
         [TestCase("s3://some/path", ExpectedResult = StorageProviderType.AmazonS3)]
