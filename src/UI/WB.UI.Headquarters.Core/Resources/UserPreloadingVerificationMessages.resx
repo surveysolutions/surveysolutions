@@ -202,10 +202,10 @@
     <value>Wrong full name format</value>
   </data>
   <data name="PLU0001Recomendation" xml:space="preserve">
-    <value></value>
+    <value />
   </data>
   <data name="PLU0002Recomendation" xml:space="preserve">
-    <value></value>
+    <value />
   </data>
   <data name="PLU0003Recomendation" xml:space="preserve">
     <value>Archived user cannot be re-used because it belongs to another team</value>
@@ -220,19 +220,19 @@
     <value>It must contain at least one number, one upper case character, and one lower case character. Length should be between 10 and 100 characters</value>
   </data>
   <data name="PLU0007Recomendation" xml:space="preserve">
-    <value></value>
+    <value />
   </data>
   <data name="PLU0008Recomendation" xml:space="preserve">
-    <value></value>
+    <value />
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
     <value>Only "supervisor" or "interviewer" are allowed</value>
   </data>
   <data name="PLU0010Recomendation" xml:space="preserve">
-    <value></value>
+    <value />
   </data>
   <data name="PLU0011Recomendation" xml:space="preserve">
-    <value></value>
+    <value />
   </data>
   <data name="PLU0012Recomendation" xml:space="preserve">
     <value>It should not contain more than 100 characters</value>
@@ -242,5 +242,68 @@
   </data>
   <data name="PLU0014Recomendation" xml:space="preserve">
     <value>Only letters, dots, spaces, and apostrophes are allowed</value>
+  </data>
+  <data name="PLU0015" xml:space="preserve">
+    <value>Password too short</value>
+  </data>
+  <data name="PLU0015Description" xml:space="preserve">
+    <value>Password '{0}' is too short</value>
+  </data>
+  <data name="PLU0015Recomendation" xml:space="preserve">
+    <value>Password must be at least 10 characters long</value>
+  </data>
+  <data name="PLU0016" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+  <data name="PLU0016Description" xml:space="preserve">
+    <value>Password '{0}' does not contain non alphanumeric character</value>
+  </data>
+  <data name="PLU0016Recomendation" xml:space="preserve">
+    <value>Add at least one non alphanumeric character</value>
+  </data>
+  <data name="PLU0017" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>Password '{0}' does not contain digit</value>
+  </data>
+  <data name="PLU0017Recomendation" xml:space="preserve">
+    <value>Add at least one digit ('0'-'9').</value>
+  </data>
+  <data name="PLU0018" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>Password '{0}' does not contain lower case character</value>
+  </data>
+  <data name="PLU0018Recomendation" xml:space="preserve">
+    <value>Add at least one lowercase character ('a'-'z').</value>
+  </data>
+  <data name="PLU0019" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>Password '{0}' does not contain upper case character</value>
+  </data>
+  <data name="PLU0019Recomendation" xml:space="preserve">
+    <value>Add at least one uppercase ('A'-'Z').</value>
+  </data>
+  <data name="PLU0020" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>Password '{0}' does not contain enough unique characters</value>
+  </data>
+  <data name="PLU0020Recomendation" xml:space="preserve">
+      <value>Add different characters.</value>
+  </data>
+  <data name="PLU0021" xml:space="preserve">
+    <value>Password required</value>
+  </data>
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>Password is required </value>
+  </data>
+  <data name="PLU0021Recomendation" xml:space="preserve">
+    <value>Add password</value>
   </data>
 </root>
