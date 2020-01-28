@@ -14,15 +14,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public string UserName { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredPasswordErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
-        [PasswordStringLength(100, ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordLengthMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
-        [PasswordRegularExpression(ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         [DataType(DataType.Password)]
         [Display(Name = nameof(FieldsAndValidations.PasswordFieldName), ResourceType = typeof(FieldsAndValidations), Order = 2)]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = nameof(FieldsAndValidations.ConfirmPasswordFieldName), ResourceType = typeof(FieldsAndValidations), Order = 3)]
-        [System.ComponentModel.DataAnnotations.Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
+        [Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         public string ConfirmPassword { get; set; }
 
         [EmailAddress(ErrorMessageResourceName = nameof(FieldsAndValidations.EmailErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
