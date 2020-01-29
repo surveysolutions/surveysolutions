@@ -7,10 +7,15 @@
                     <a :href="$config.model.surveySetupUrl">{{$t('MainMenu.SurveySetup')}}</a>
                 </li>
             </ol>
-            <h1
-                v-if="isDone">{{$t('Assignments.UpgradeProgressDoneTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}</h1>
-            <h1
-                v-else>{{$t('Assignments.UpgradeProgressTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}</h1>
+            <h1 v-if="isDone">
+                {{$t('Assignments.UpgradeProgressDoneTitle', {
+                    to: this.questionnaireName(progress.migrateTo.title, progress.migrateTo.version), 
+                    from: this.questionnaireName(progress.migrateFrom.title, progress.migrateFrom.version)
+                })}}
+            </h1>
+            <h1 v-else>
+                {{$t('Assignments.UpgradeProgressTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}
+            </h1>
         </div>
         <div class="row-fluid"
             v-if="progress.progressDetails.status === 'Queued'">
@@ -133,6 +138,9 @@ export default {
         },
         stop() {
             this.$http.post(`${this.$config.model.stopUrl}/${this.processId}`)
+        },
+        questionnaireName(name, version){
+            return this.$t('Pages.QuestionnaireNameFormat', {name: name, version: version})
         },
     },
 }
