@@ -889,7 +889,7 @@
     <value>Número de días que la asignación de los entrevistadores ha estado en el estado actual</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-    <value>Esta acción creará un usuario con privilegios de supervisor, &lt;bar&gt; para crear varios usuarios usted puede usar &lt;a href="{0}" target="_blank"&gt;creación en lote de usuarios&lt;/a&gt;.</value>
+      <value>Esta acción creará un usuario con privilegios de supervisor, &lt;bar&gt; para crear varios usuarios usted puede usar &lt;a href="{{link}}" target="_blank"&gt;creación en lote de usuarios&lt;/a&gt;.</value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Supervisor bloqueado no puede ingresar al sistema ni ejecutar ninguna acción en el servidor.</value>

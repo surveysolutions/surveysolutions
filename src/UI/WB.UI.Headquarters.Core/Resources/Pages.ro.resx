@@ -1036,8 +1036,8 @@
     <value>Numărul de zile în care unitățile de anchetat și interviurile au rămas în starea lor actuală</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-    <value>Această acțiune va crea un utilizator individual cu drepturi de control,
-        &lt;br&gt;pentru a crea mai mulți utilizatori puteți utiliza &lt;a href='{0}' target='_blank'&gt;crearea de grupuri de utilizatori&lt;/a&gt;.</value>
+      <value>Această acțiune va crea un utilizator individual cu drepturi de control,
+        &lt;br&gt;pentru a crea mai mulți utilizatori puteți utiliza &lt;a href='{{link}}' target='_blank'&gt;crearea de grupuri de utilizatori&lt;/a&gt;.</value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Controlorul blocat (caseta bifată) nu se poate conecta și nu poate efectua nicio acțiune pe server.</value>
