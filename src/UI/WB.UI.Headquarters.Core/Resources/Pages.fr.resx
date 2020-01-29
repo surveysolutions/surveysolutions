@@ -970,7 +970,7 @@
 </value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-    <value>Cette action va créer un utilisateur individuel avec des droits de chef d'équipe, pour créer plusieurs utilisateurs, vous pouvez utiliser la &lt;a href=""{0}"" target=""_blank""&gt; création par lots utilisateur &lt;/a&gt;.</value>
+      <value>Cette action va créer un utilisateur individuel avec des droits de chef d'équipe, pour créer plusieurs utilisateurs, vous pouvez utiliser la &lt;a href=""{{link}}"" target=""_blank""&gt; création par lots utilisateur &lt;/a&gt;.</value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Le chef d'équipe verrouillé (case cochée) ne peut pas se connecter et effectuer des actions sur le serveur.</value>

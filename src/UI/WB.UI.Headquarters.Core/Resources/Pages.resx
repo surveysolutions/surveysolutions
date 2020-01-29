@@ -813,7 +813,7 @@
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>This action will create individual user with supervisor rights,
-        &lt;br&gt;to create several users you can use &lt;a href="{0}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+        &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
     <value>Personal information details (optional) &lt;br&gt; will be visible to HQ users only</value>
@@ -1384,5 +1384,8 @@
   </data>
   <data name="Admin_InterviewPackages_Reason" xml:space="preserve">
     <value>Reason</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Create user</value>
   </data>
 </root>
