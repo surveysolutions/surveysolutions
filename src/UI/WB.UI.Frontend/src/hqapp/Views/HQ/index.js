@@ -14,6 +14,7 @@ import Template from './Template'
 import UsersUpload from './Users/Upload'
 import ControlPanel from './ControlPanel'
 import Download from './Download'
+import WebInterview from './WebInterview'
 
 export default [
     Assignments,
@@ -32,4 +33,5 @@ export default [
     UsersUpload,
     ControlPanel,
     Download,
+    WebInterview,
 ]

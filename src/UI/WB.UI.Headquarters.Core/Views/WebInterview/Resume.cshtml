@@ -1,29 +1,14 @@
-﻿@using WB.Core.BoundedContexts.Headquarters.WebInterview
-@using WB.Enumerator.Native.Resources
-@using WB.UI.Headquarters.Models.WebInterview
-@using WB.UI.Headquarters.Views.WebInterview
-@model ResumeWebInterview
+﻿@using WB.Enumerator.Native.Resources
+@using WB.UI.Headquarters.Code
+
+@model WB.UI.Headquarters.Models.WebInterview.ResumeWebInterview
 @{
+    ViewBag.Title = WebInterview.ResumeInterview;
     Layout = "_WebInterviewLayout.cshtml";
 }
 
-<div class="centered-box-table">
-    <div class="row-element mb-20">
-        <div class="h2">@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeWelcome).ToString(), Model.QuestionnaireTitle)</div>
-    </div>
-    <div class="row-element mb-40">
-        <p class="font-bold">@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(), Model.QuestionnaireTitle)</p>
-    </div>
-    <div class="row-element mb-40">
-        <p class="font-bold primary-text">@WebInterview.ResumeInterviewDescription</p>
-    </div>
-    <div class="additional-info-block">
-        <ul class="list-unstyled">
-            @if (Model.StartedDate.HasValue)
-            {
-                <li>@WebInterview.InterviewStartDateFormatText <time datetime="@Model.StartedDate.Value.ToString("o")"></time></li>
-            }
-        </ul>
-    </div>
-    <partial name="_StartOrResumeForm" model="Model" />
-</div>
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+
+<div id="vueApp"></div>
