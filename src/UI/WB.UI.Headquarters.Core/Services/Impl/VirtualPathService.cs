@@ -7,9 +7,9 @@ namespace WB.UI.Headquarters.Services.Impl
 {
     public class VirtualPathService : IVirtualPathService
     {
-        private readonly IOptions<HeadquarterOptions> options;
+        private readonly IOptions<HeadquartersConfig> options;
 
-        public VirtualPathService(IOptions<HeadquarterOptions> options)
+        public VirtualPathService(IOptions<HeadquartersConfig> options)
         {
             this.options = options ?? throw new ArgumentNullException(nameof(options));
         }

@@ -15,12 +15,12 @@ namespace WB.UI.Headquarters.Services
     class ExportServiceApiFactory : IExportServiceApiFactory
     {
         private readonly IOptions<DataExportOptions> exportOptions;
-        private readonly IOptions<HeadquarterOptions> headquarterOptions;
+        private readonly IOptions<HeadquartersConfig> headquarterOptions;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
         private readonly IHttpContextAccessor httpContextAccessor;
 
         public ExportServiceApiFactory(IOptions<DataExportOptions> exportOptions,
-            IOptions<HeadquarterOptions> headquarterOptions,
+            IOptions<HeadquartersConfig> headquarterOptions,
             IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings, 
             IHttpContextAccessor httpContextAccessor)
         {
