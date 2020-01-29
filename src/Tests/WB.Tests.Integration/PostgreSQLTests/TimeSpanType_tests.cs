@@ -100,6 +100,72 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 Assert.That(item.DurationNull, Is.EqualTo(test.DurationNull));
             }
         }
+        
+        [Test]
+        public void should_not_commit_transaction_without_accept_changes_call()
+        {
+            var test = new TestClass
+            {
+                Duration = TimeSpan.FromMilliseconds(4234234234),
+                DurationNull = TimeSpan.FromMilliseconds(23423523345)
+            };
+
+            using (var u = CreateUnitOfWork())
+            {
+                u.Session.SaveOrUpdate(test);
+            }
+
+            using (var u = CreateUnitOfWork())
+            {
+                var item = u.Session.Get<TestClass>(test.Id);
+                Assert.That(item, Is.Null);
+            }
+        }
+        
+        [Test]
+        public void should_not_commit_transaction_after_discard_changes_call()
+        {
+            var test = new TestClass
+            {
+                Duration = TimeSpan.FromMilliseconds(4234234234),
+                DurationNull = TimeSpan.FromMilliseconds(23423523345)
+            };
+
+            using (var u = CreateUnitOfWork())
+            {
+                u.Session.SaveOrUpdate(test);
+                u.DiscardChanges();
+                u.AcceptChanges();
+            }
+
+            using (var u = CreateUnitOfWork())
+            {
+                var item = u.Session.Get<TestClass>(test.Id);
+                Assert.That(item, Is.Null);
+            }
+        }
+        
+        [Test]
+        public void should_commit_transaction_after_accept_changes_call()
+        {
+            var test = new TestClass
+            {
+                Duration = TimeSpan.FromMilliseconds(4234234234),
+                DurationNull = TimeSpan.FromMilliseconds(23423523345)
+            };
+
+            using (var u = CreateUnitOfWork())
+            {
+                u.Session.SaveOrUpdate(test);
+                u.AcceptChanges();
+            }
+
+            using (var u = CreateUnitOfWork())
+            {
+                var item = u.Session.Get<TestClass>(test.Id);
+                Assert.That(item, Is.Not.Null);
+            }
+        }
 
         [OneTimeTearDown]
         public void TearDown()
