@@ -183,6 +183,7 @@ export default {
                     },
                     {
                         data: 'version',
+                        name: 'Version',
                         title: this.$t('Dashboard.Version'),
                     },
                     {
