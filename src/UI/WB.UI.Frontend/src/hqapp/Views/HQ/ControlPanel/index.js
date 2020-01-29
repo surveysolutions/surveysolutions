@@ -12,10 +12,6 @@ export default class MapComponent {
                 component: ControlPanelLayout,
                 children: [
                     {
-                        path: '',
-                        component: InterviewPackages,
-                    },
-                    {
                         path: 'Configuration',
                         component: Configuration,
                     },
