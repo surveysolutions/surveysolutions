@@ -8,11 +8,11 @@ namespace WB.UI.Headquarters.Services.Impl
 {
     public class WebInterviewEmailRenderer : IWebInterviewEmailRenderer
     {
-        private readonly IOptions<HeadquarterOptions> options;
+        private readonly IOptions<HeadquartersConfig> options;
         private readonly IViewRenderService viewRenderService;
 
         public WebInterviewEmailRenderer(IViewRenderService viewRenderService,
-            IOptions<HeadquarterOptions> options)
+            IOptions<HeadquartersConfig> options)
         {
             this.viewRenderService = viewRenderService;
             this.options = options;
