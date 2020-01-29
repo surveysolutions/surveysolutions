@@ -19,7 +19,7 @@ const locales = {
         "Pages", "Report", "Reports", "Settings", "Strings", "TabletLogs", "UploadUsers",
         "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI",
         "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport",
-        "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel", "AuditLog", "InterviewerAuditRecord"],
+        "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel", "AuditLog", "OutdatedBrowser", "InterviewerAuditRecord"],
     webtester: ["WebInterviewUI", "WebInterview", "Common"],
     webinterview: ["WebInterviewUI", "WebInterview", "Common", "Details"]
 }
@@ -56,7 +56,7 @@ const pages = {
     },
 
     webinterview: {
-        entry: "src/webinterview/main.js",
+        entry: "src/hqapp/main.js",
         filename: path.join(hqDist, "Views", "WebInterview", "_WebInterviewLayout.cshtml"),
         template: path.join(hqFolder, "Views", "WebInterview", "_WebInterviewLayout.Template.cshtml")
     },
