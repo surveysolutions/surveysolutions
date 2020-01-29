@@ -1322,4 +1322,12 @@
       <value>Домой</value>
       <comment>Домой</comment>
   </data>
+  <data name="InterviewPackages" xml:space="preserve">
+      <value>Интервью пакеты</value>
+      <comment>Интервью пакеты</comment>
+  </data>
+  <data name="Exceptions" xml:space="preserve">
+      <value>Ошибки</value>
+      <comment>Ошибки</comment>
+  </data>
 </root>
