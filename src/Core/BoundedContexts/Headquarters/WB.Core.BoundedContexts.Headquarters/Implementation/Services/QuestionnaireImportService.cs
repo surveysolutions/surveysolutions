@@ -15,8 +15,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire;
@@ -203,7 +201,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
 
                 shouldRollback = false;
-                return new QuestionnaireImportResult()
+                return new QuestionnaireImportResult
                 {
                     Identity = questionnaireIdentity
                 };
