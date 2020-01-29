@@ -92,31 +92,4 @@
     </Content>
     <EmbeddedResource Include="wwwroot\**\*" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resources\Pages.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Pages.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Pages.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.ru.resx.BASE.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Pages.ru.resx.BASE.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.ru.resx.LOCAL.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Pages.ru.resx.LOCAL.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.ru.resx.REMOTE.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Pages.ru.resx.REMOTE.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>  
 </Project>
