@@ -291,6 +291,18 @@ export default {
                         name: 'ExceptionMessage',
                         title: this.$t('Pages.Admin_InterviewPackages_Exception'),
                         orderable: true,
+                        render: function(data, type, row) {
+                            return '<div class="accordion-group accordion-caret">' +
+                            '<div class="accordion-heading">' +
+                                `<a class="accordion-toggle collapsed" data-toggle="collapse" href= "#show${row.id}">` +
+                                    `<strong>${data}</strong>` +
+                                '</a>' +
+                            '</div>' +
+                            `<div class="accordion-body collapse" id="show${row.id}">` +
+                                `<pre class="accordion-inner margin-left10">${row.exceptionStackTrace}</pre>` +
+                            '</div>' +
+                        '</div>' 
+                        },
                     },
                 ],
                 ajax: {
