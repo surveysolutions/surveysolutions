@@ -17,6 +17,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private ISession session;
         private ITransaction transaction;
         private bool isDisposed = false;
+        private bool shouldAcceptChanges = false;
+        private bool shouldDiscardChanges = false;
         public Guid? SessionId;
         private static long counter = 0;
         public long Id { get; }
@@ -33,22 +35,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public void AcceptChanges()
         {
             if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
-            this.session?.Flush();
-
-            if(transaction?.IsActive == true)
-                transaction.Commit();
+            shouldAcceptChanges = true;
         }
 
-        public async Task AcceptChangesAsync()
+        public void DiscardChanges()
         {
             if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
-            if (this.session != null)
-            {
-                await this.session.FlushAsync().ConfigureAwait(false);
-            }
-
-            if(transaction?.IsActive == true)
-                await transaction.CommitAsync().ConfigureAwait(false);
+            shouldDiscardChanges = true;
         }
 
         public ISession Session
@@ -75,9 +68,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public void Dispose()
         {
             if (isDisposed) return;
+
             if (transaction?.IsActive == true)
             {
-                transaction.Rollback();
+                if (shouldAcceptChanges && !shouldDiscardChanges)
+                {
+                    transaction.Commit();
+                }
+                else
+                {
+                    transaction.Rollback();
+                }
             }
 
             transaction?.Dispose();

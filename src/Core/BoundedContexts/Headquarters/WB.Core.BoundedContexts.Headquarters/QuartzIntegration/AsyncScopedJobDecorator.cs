@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 throw new ArgumentNullException(nameof(job));
 
             await job.Execute(context);
-            await uow.AcceptChangesAsync();
+            uow.AcceptChanges();
         }
     }
 }
