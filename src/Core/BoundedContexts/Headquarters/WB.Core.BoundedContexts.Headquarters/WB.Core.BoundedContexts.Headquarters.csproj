@@ -47,6 +47,9 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.3.104.21" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.100.1" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.110.19" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.19" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.99" />
