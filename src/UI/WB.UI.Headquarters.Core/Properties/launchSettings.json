@@ -26,7 +26,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://+:5001;https://+:5000"
+      "applicationUrl": "http://0.0.0.0:5001;https://0.0.0.0:5000"
     },
     "IIS": {
       "commandName": "IIS",
