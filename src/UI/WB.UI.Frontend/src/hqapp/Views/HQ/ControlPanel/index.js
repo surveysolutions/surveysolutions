@@ -2,12 +2,12 @@ import Configuration from './Configuration'
 import ControlPanelLayout from './ControlPanelLayout'
 import TabletInfos from './TabletInfos'
 import AppUpdates from './AppUpdates'
-
+import CreateAdmin from './CreateAdmin'
 
 export default class MapComponent {
     get routes() {
         return [{
-            path: '/ControlPanel', 
+            path: '/ControlPanel',
             component: ControlPanelLayout,
             children: [{
                 path: 'Configuration',
@@ -20,6 +20,10 @@ export default class MapComponent {
             {
                 path: 'AppUpdates',
                 component: AppUpdates,
+            },
+            {
+                path: 'CreateAdmin',
+                component: CreateAdmin,
             }],
         }]
     }

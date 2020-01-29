@@ -939,6 +939,9 @@
   <data name="Profile_ApiUserWasCreated" xml:space="preserve">
     <value>API User &lt;b&gt;{0}&lt;/b&gt; was successfully created</value>
   </data>
+  <data name="CreateAdmin" xml:space="preserve">
+    <value>Create admin</value>
+  </data>
   <data name="Profile_ApiUsersList" xml:space="preserve">
     <value>API users</value>
   </data>
