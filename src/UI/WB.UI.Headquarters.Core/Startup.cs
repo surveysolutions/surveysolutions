@@ -82,23 +82,8 @@ namespace WB.UI.Headquarters
         {
             autofacKernel = new AutofacKernel(builder, c => InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(c)));
 
-            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
-            {
-                ConnectionString = connectionString,
-                ReadSideMappingAssemblies = mappingAssemblies,
-                PlainStorageSchemaName = "plainstore",
-                PlainMappingAssemblies = new List<Assembly>
-                {
-                    typeof(HeadquartersBoundedContextModule).Assembly,
-                    typeof(ProductVersionModule).Assembly,
-                },
-                PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
-                ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace),
-                LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly, typeof(M201905171139_AddErrorsTable).Namespace),
-                UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()
-            };
+            var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString);
 
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
                 .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
@@ -130,6 +115,29 @@ namespace WB.UI.Headquarters
                 new ProductVersionModule(typeof(Startup).Assembly),
                 GetQuartzModule()
                 );
+        }
+
+        public static UnitOfWorkConnectionSettings BuildUnitOfWorkSettings(string connectionString)
+        {
+            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
+
+            var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
+            {
+                ConnectionString = connectionString,
+                ReadSideMappingAssemblies = mappingAssemblies,
+                PlainStorageSchemaName = "plainstore",
+                PlainMappingAssemblies = new List<Assembly>
+                {
+                    typeof(HeadquartersBoundedContextModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                },
+                PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
+                ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace),
+                LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly,
+                    typeof(M201905171139_AddErrorsTable).Namespace),
+                UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()
+            };
+            return unitOfWorkConnectionSettings;
         }
 
         private QuartzModule GetQuartzModule()
