@@ -216,4 +216,7 @@
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
+  <data name="Administration" xml:space="preserve">
+    <value>Administration</value>
+  </data>
 </root>

@@ -74,7 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <Folder Include="wwwroot\apidocs\" />
+    <Folder Include="wwwroot\apidocs\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -92,5 +92,5 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
     <EmbeddedResource Include="wwwroot\**\*" />
-  </ItemGroup>  
+  </ItemGroup>
 </Project>
