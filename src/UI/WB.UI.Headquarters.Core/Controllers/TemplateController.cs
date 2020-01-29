@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Headquarters.Resources;
 
@@ -114,14 +116,11 @@ namespace WB.UI.Headquarters.Controllers
 
                 if (result.IsSuccess)
                 {
-                    if (request.ShouldMigrateAssignments)
+                    if (request.ShouldMigrateAssignments && !string.IsNullOrEmpty(request.MigrateFrom))
                     {
-                        dynamic migrateFrom = JObject.Parse(request.MigrateFrom);
-                        long version = migrateFrom.version;
-                        Guid questionnaireId = migrateFrom.templateId;
+                        var sourceQuestionnaireId = QuestionnaireIdentity.Parse(request.MigrateFrom);
 
                         var processId = Guid.NewGuid();
-                        var sourceQuestionnaireId = new QuestionnaireIdentity(questionnaireId, version);
                         this.upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, result.Identity);
                         return RedirectToAction("UpgradeProgress", "SurveySetup", new {id = processId});
                     }
@@ -143,7 +142,12 @@ namespace WB.UI.Headquarters.Controllers
                 model.QuestionnaireInfo = questionnaireInfo;
                 model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
                 model.QuestionnairesToUpgradeFrom =
-                    this.questionnaires.GetOlderQuestionnairesWithPendingAssignments(id, model.NewVersionNumber);
+                    this.questionnaires.GetOlderQuestionnairesWithPendingAssignments(id, model.NewVersionNumber)
+                        .Select(x =>
+                            new ComboboxOptionModel(
+                                new QuestionnaireIdentity(x.TemplateId, x.TemplateVersion).ToString(),
+                                string.Format(Pages.QuestionnaireNameVersionFirst, x.TemplateName, x.TemplateVersion)))
+                        .ToList();
                 model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
                 model.ListOfMyQuestionnaires = Url.Action("Import");
             }
