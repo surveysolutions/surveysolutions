@@ -41,7 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IAuthorizedUser authorizedUser;
         private readonly IDesignerApi designerApi;
 
-        public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider,
+        public QuestionnaireImportService(
+            ISupportedVersionProvider supportedVersionProvider,
             IStringCompressor zipUtils,
             IAttachmentContentService attachmentContentService,
             IQuestionnaireVersionProvider questionnaireVersionProvider,
@@ -74,14 +75,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode, string comment, string requestUrl, bool includePdf = true)
         {
+            bool shouldRollback = true;
             try
             {
-                var query = this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156)"); // prevent 2 concurrent requests from importing
+                // prevent 2 concurrent requests from importing
+                var query =  this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156)");
+
                 await query.ExecuteUpdateAsync();
 
                 var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
 
-                try { await this.designerApi.IsLoggedIn(); }
+                try
+                {
+                    await this.designerApi.IsLoggedIn();
+                }
                 catch
                 {
                     return new QuestionnaireImportResult
@@ -95,14 +102,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 await TriggerPdfRendering(questionnaireId, includePdf);
 
                 var questionnairePackage = await this.designerApi.GetQuestionnaire(questionnaireId, supportedVersion, minSupported);
-                                
+
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
 
                 await TriggerPdfTranslationsRendering(questionnaire, includePdf);
 
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
-                
+
                 if (questionnaire.Attachments != null)
                 {
                     foreach (var questionnaireAttachment in questionnaire.Attachments)
@@ -167,6 +174,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
 
                 logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
+
                 this.commandService.Execute(new ImportFromDesigner(
                     this.authorizedUser.Id,
                     questionnaire,
@@ -175,16 +183,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireContentVersion,
                     questionnaireVersion,
                     comment));
-                
+
                 logger.Verbose($"UpdateRevisionMetadata: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
-                await designerApi.UpdateRevisionMetadata(questionnaire.PublicKey, questionnaire.Revision, new QuestionnaireRevisionMetadataModel
-                {
-                    HqHost = GetDomainFromUri(requestUrl),
-                    HqTimeZoneMinutesOffset = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
-                    HqImporterLogin = this.authorizedUser.UserName,
-                    HqQuestionnaireVersion = questionnaireIdentity.Version,
-                    Comment = comment,
-                });
+                await designerApi.UpdateRevisionMetadata(questionnaire.PublicKey, questionnaire.Revision,
+                    new QuestionnaireRevisionMetadataModel
+                    {
+                        HqHost = GetDomainFromUri(requestUrl),
+                        HqTimeZoneMinutesOffset =
+                            (int) TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
+                        HqImporterLogin = this.authorizedUser.UserName,
+                        HqQuestionnaireVersion = questionnaireIdentity.Version,
+                        Comment = comment,
+                    });
 
                 logger.Verbose($"DownloadAndStorePdf: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
@@ -192,6 +202,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
 
+                shouldRollback = false;
                 return new QuestionnaireImportResult()
                 {
                     Identity = questionnaireIdentity
@@ -243,11 +254,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             catch (Exception ex)
             {
                 var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
-                if (domainEx != null) return new QuestionnaireImportResult() { ImportError = domainEx.Message };
+                if (domainEx != null) return new QuestionnaireImportResult() {ImportError = domainEx.Message};
 
                 this.logger.Error($"Designer: error when importing template #{questionnaireId}", ex);
 
                 throw;
+            }
+            finally
+            {
+                if (shouldRollback)
+                {
+                    this.unitOfWork.DiscardChanges();
+                }
             }
         }
 
