@@ -8,6 +8,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     {
         void AcceptChanges();
         Task AcceptChangesAsync();
+        void DiscardChanges();
         ISession Session { get; }
     }
 }
