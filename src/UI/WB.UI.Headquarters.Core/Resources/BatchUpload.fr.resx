@@ -406,22 +406,22 @@
     <value>1 erreur</value>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>{0} affectations vérifiées avec succès</value>
+      <value>{{count}} affectations vérifiées avec succès</value>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>Erreurs {0}</value>
+      <value>Erreurs {{count}}</value>
   </data>
   <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
     <value>Vérification des données d'affectation</value>
   </data>
   <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
-    <value>Vérification des affectations pour le questionnaire {0}</value>
+      <value>Vérification des affectations pour le questionnaire {{title}}</value>
   </data>
   <data name="Import_VerificationOfDataFile" xml:space="preserve">
     <value>Vérification du fichier de données</value>
   </data>
   <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-    <value>étape {0} de {1}</value>
+      <value>étape {{verifiedCount}} de {{totalCount}}</value>
   </data>
   <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
     <value>Vérification du fichier de données réussie</value>
@@ -430,10 +430,10 @@
     <value>Création de plusieurs affectations avec téléchargement groupé</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Importation d'affectations pour {0}</value>
+      <value>Importation d'affectations pour {{title}}</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
-    <value>Importation d'informations de {0} pour {1}</value>
+      <value>Importation d'informations de {{fileName}} pour {{title}}</value>
   </data>
   <data name="Importing" xml:space="preserve">
     <value>Importation</value>
@@ -454,7 +454,7 @@
     <value>Importation d'entretiens pour {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} sur {1}</value>
+      <value>{{createdCount}} sur {{totalCount}}</value>
   </data>
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>Aucun entretien n'a été créé</value>
@@ -466,13 +466,13 @@
     <value>mode manuel</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>Les affectations {0} n'ont pas pu être créées</value>
+      <value>Les affectations {{count}} n'ont pas pu être créées</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} affectations créées</value>
+      <value>{{count}} affectations créées</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>{0} erreurs trouvées</value>
+      <value>{{count}} erreurs trouvées</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
     <value>{0} les entretiens n'ont pas pu être créés</value>

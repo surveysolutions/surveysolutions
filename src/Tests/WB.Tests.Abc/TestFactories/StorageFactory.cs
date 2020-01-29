@@ -89,11 +89,14 @@ namespace WB.Tests.Abc.TestFactories
         public SQLiteConnectionWithLock InMemorySqLiteConnection =>
             new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true));
 
-        // TODO: Core migration https://issues.mysurvey.solutions/youtrack/issue/KP-13442
-        //public S3FileStorage S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
-        //{
-        //    return new S3FileStorage(s3Settings, client, transferUtility, loggerProvider);
-        //}
+        public AmazonS3ExternalFileStorage AmazonS3ExternalFileStorage(
+            IAmazonS3Configuration s3Settings, 
+            IAmazonS3 client, 
+            ITransferUtility transferUtility, 
+            ILoggerProvider loggerProvider)
+        { 
+            return new AmazonS3ExternalFileStorage(s3Settings, client, transferUtility, loggerProvider);
+        }
 
         public IPlainStorage<TEntity> SqliteInmemoryStorage<TEntity>(params TEntity[] items)
             where TEntity : class, IPlainStorageEntity, IPlainStorageEntity<string>, new()

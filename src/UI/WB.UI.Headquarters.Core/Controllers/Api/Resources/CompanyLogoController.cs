@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             {
                 companyLogo = new CompanyLogo
                 {
-                    Logo = System.IO.File.ReadAllBytes(webHost.MapPath("~/Dependencies/img/logo.png"))
+                    Logo = System.IO.File.ReadAllBytes(webHost.MapPath("img/logo.png"))
                 };
             }
 

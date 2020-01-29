@@ -21,9 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             services.AddTransient<ICsvReader, CsvReader>();
             services.AddTransient<ICsvWriter, CsvWriter>();
             services.AddTransient<ICsvWriterService, CsvWriterService>();
-            services.AddTransient<IDataExportFileAccessor, DataExportFileAccessor>();
             services.AddTransient<IDataExportStatusReader, DataExportStatusReader>();
-            services.AddTransient<IDatasetWriterFactory, DatasetWriterFactory>();
             services.AddTransient<IExportSettings, ExportSettings>();
             services.AddTransient<IExportViewFactory, ExportViewFactory>();
             services.AddTransient<IInterviewsToExportViewFactory, InterviewsToExportViewFactory>();

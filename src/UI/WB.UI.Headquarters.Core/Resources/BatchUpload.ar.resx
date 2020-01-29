@@ -274,22 +274,22 @@
     <value>1 خطأ</value>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>تم التحقق من المهام بنجاح {0}</value>
+      <value>تم التحقق من المهام بنجاح {{count}}</value>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>{0} أخطاء</value>
+      <value>{{count}} أخطاء</value>
   </data>
   <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
     <value>التحقق من بيانات التعيين</value>
   </data>
   <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
-    <value>التحقق من تخصيصات الاستبيان {0}</value>
+      <value>التحقق من تخصيصات الاستبيان {{title}}</value>
   </data>
   <data name="Import_VerificationOfDataFile" xml:space="preserve">
     <value>التحقق من ملف البيانات</value>
   </data>
   <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-    <value>الخطوة {0} من {1}</value>
+      <value>من {{verifiedCount}} الخطوة {{totalCount}}</value>
   </data>
   <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
     <value>تم التحقق من ملف البيانات بنجاح</value>
@@ -298,10 +298,10 @@
     <value>انشاء مهام متعددة مع تحميل دفعة واحدة</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>استيراد المهام ل {0}</value>
+      <value>استيراد المهام ل {{title}}</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
-    <value>استيراد المعلومات من {0} ل {1}</value>
+      <value>ل {{fileName}} استاد المعلومات من {{title}}</value>
   </data>
   <data name="Importing" xml:space="preserve">
     <value>استيراد</value>
@@ -331,7 +331,7 @@
     <value>استيراد المقابلات ل {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{1} من {0}</value>
+      <value>{{totalCount}} من {{createdCount}}</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>استيراد عينة</value>
@@ -364,13 +364,13 @@
     <value>رسالة</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>فشل انشاء مهام {0}</value>
+      <value>فشل انشاء مهام {{count}}</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>انشاء مهام {0}</value>
+      <value>انشاء مهام {{count}}</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>{0} وجد أخطاء</value>
+      <value>{{count}} وجد أخطاء</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
     <value>{0} مقابلات فشل انشاءها</value>

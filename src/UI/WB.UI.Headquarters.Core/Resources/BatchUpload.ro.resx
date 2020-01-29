@@ -280,22 +280,22 @@
     <value>1 eroare</value>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>{0} interviuri alocate cu succes</value>
+      <value>{{count}} interviuri alocate cu succes</value>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>{0} erori</value>
+      <value>{{count}} erori</value>
   </data>
   <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
     <value>Verificarea interviurilor alocate</value>
   </data>
   <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
-    <value>Verificarea interviurilor alocate pentru chestionarul {0}</value>
+      <value>Verificarea interviurilor alocate pentru chestionarul {{title}}</value>
   </data>
   <data name="Import_VerificationOfDataFile" xml:space="preserve">
     <value>Verificarea fișierului</value>
   </data>
   <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-    <value>pasul {0} din {1}</value>
+      <value>pasul {{verifiedCount}} din {{totalCount}}</value>
   </data>
   <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
     <value>Verificare completă</value>
@@ -304,10 +304,10 @@
     <value>Crearea alocării multiple cu încărcare automată</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Importarea interviurilor alocate pentru {0}</value>
+      <value>Importarea interviurilor alocate pentru {{title}}</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
-    <value>Importarea informației din fișierul {0} pentru chestionarul {1}</value>
+      <value>Importarea informației din fișierul {{fileName}} pentru chestionarul {{title}}</value>
   </data>
   <data name="Importing" xml:space="preserve">
     <value>Importare</value>
@@ -337,7 +337,7 @@
     <value>Importarea interviurilor pentru {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} din {1}</value>
+      <value>{{createdCount}} din {{totalCount}}</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Importarea eșantionului</value>
@@ -370,13 +370,13 @@
     <value>Mesaj</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0} interviuri alocate eșuate</value>
+      <value>{{count}} interviuri alocate eșuate</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} interviuri alocate create</value>
+      <value>{{count}} interviuri alocate create</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>{0} erori găsite</value>
+      <value>{{count}} erori găsite</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
     <value>{0} interviuri eșuate</value>

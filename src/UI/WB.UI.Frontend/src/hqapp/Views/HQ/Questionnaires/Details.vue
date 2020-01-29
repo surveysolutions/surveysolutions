@@ -123,7 +123,8 @@
                 <button
                     type="button"
                     class="btn btn-link"
-                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    data-dismiss="modal"
+                    @click="cancelSetAudio">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
     </HqLayout>
@@ -165,6 +166,9 @@ export default {
             if(response.status !== 204) 
                 this.audioAudit = !this.audioAudit
             this.$refs.audioAuditModal.modal('hide')
+        },
+        cancelSetAudio() {
+            this.audioAudit = false
         },
     },
 }
