@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.UI.Headquarters.Resources;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -26,15 +27,10 @@ namespace WB.UI.Headquarters.Controllers
             this.tabletInformationService = tabletInformationService;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
+        public ActionResult Index() => View();
 
-        public IActionResult TabletInfos()
-        {
-            return View("Index");
-        }
+        [ActivePage(MenuItem.Administration_TabletInfo)]
+        public IActionResult TabletInfos() => View("Index");
 
         [HttpPost]
         public async Task<ActionResult> TabletInfos(IFormFile file)
@@ -54,16 +50,16 @@ namespace WB.UI.Headquarters.Controllers
             return RedirectToAction("TabletInfos");
         }
 
-        public IActionResult Configuration()
-        {
-            return View("Index");
-        }
-        
+        [ActivePage(MenuItem.Administration_Config)]
+        public IActionResult Configuration() => View("Index");
+
+        [ActivePage(MenuItem.Administration_Exceptions)]
         public async Task Exceptions() => await ExceptionalMiddleware.HandleRequestAsync(HttpContext);
 
-        public IActionResult AppUpdates()
-        {
-            return View("Index");
-        }
+        [ActivePage(MenuItem.Administration_AppUpdates)]
+        public IActionResult AppUpdates() => View("Index");
+
+        [ActivePage(MenuItem.Administration_InterviewPackages)]
+        public IActionResult InterviewPackages() => this.View("Index");
     }
 }
