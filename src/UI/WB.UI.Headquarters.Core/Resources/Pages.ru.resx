@@ -201,6 +201,9 @@
   <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
     <value>Не все отметки были загружены</value>
   </data>
+   <data name="CreateAdmin" xml:space="preserve">
+    <value>Создать администратора</value>
+  </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
     <value>Нет никакой информации об отметках геолокации</value>
   </data>

@@ -12,6 +12,9 @@
                 <li>
                     <router-link to="/ControlPanel/AppUpdates">{{$t('Pages.AppUpdates')}}</router-link>
                 </li>
+                <li>
+                    <router-link to="/ControlPanel/CreateAdmin">{{$t('Pages.CreateAdmin')}}</router-link>
+                </li>
             </ol>
         </Filters>
         <router-view />
