@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = "Interviewer")]
-        public InterviewsDataTableResponse GetInterviews([FromQuery] InterviewsDataTableRequest request)
+        public InterviewsDataTableResponse GetInterviews(InterviewsDataTableRequest request)
         {
             
             var input = new AllInterviewsInputModel

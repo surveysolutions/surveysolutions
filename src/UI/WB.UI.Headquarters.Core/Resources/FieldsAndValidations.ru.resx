@@ -253,4 +253,22 @@
     <value>Это обязательное поле</value>
     <comment>Это обязательное поле</comment>
   </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+      <value>Пароли должны содержать хотя бы одну цифру ('0'-'9').</value>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+      <value>Пароли должны содержать символы в нижнем регистре ('а'-'я').</value>
+  </data>
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+      <value>Пароли должны содержать хотя бы один не  буквенно-цифровой символ.</value>
+  </data>
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+      <value>Пароли должны содержать хотя бы {0} уникальных символов.</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+      <value>Пароли должны содержать символы в верхнем  регистре ('А'-'Я').</value>
+  </data>
+  <data name="PasswordTooShort" xml:space="preserve">
+      <value>Пароли должны содержать не менее {0} символов.</value>
+  </data>
 </root>

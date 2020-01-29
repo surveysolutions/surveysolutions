@@ -16,8 +16,10 @@ namespace WB.UI.Headquarters.Code.Authentication
         public static void AddHqAuthorization(this IServiceCollection services)
         {
             services.AddIdentity<HqUser, HqRole>()
+               .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
                .AddUserStore<HqUserStore>()
-               .AddRoleStore<HqRoleStore>();
+               .AddRoleStore<HqRoleStore>()
+               .AddDefaultTokenProviders();
 
             services.AddAuthorization();
 

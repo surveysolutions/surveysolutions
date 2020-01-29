@@ -425,8 +425,7 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <value>creating multiple assignments</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
-    <value>Importing information from {0} for {1}</value>
-    <comment>{0} - imported file name, {1} - questionnaire name and version </comment>
+      <value>Importing information from {{fileName}} for {{title}}</value>
   </data>
   <data name="ImportInterviews_PageTitle" xml:space="preserve">
     <value>Creating multiple interviews with batch upload</value>
@@ -438,8 +437,8 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <value>No interviews were created</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>{0} errors found</value>
-    <comment>{0} - count of founded errors</comment>
+      <value>{{count}} errors found</value>
+      <comment>{0} - count of founded errors</comment>
   </data>
   <data name="SingleErrorFound" xml:space="preserve">
     <value>1 error found</value>
@@ -489,8 +488,7 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <comment>{0} - questionnaire name and version</comment>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>Importing assignments for {0}</value>
-    <comment>{0} - questionnaire name and version</comment>
+      <value>Importing assignments for {{title}}</value>
   </data>
   <data name="ImportInterviews_Done" xml:space="preserve">
     <value>Done:</value>
@@ -499,8 +497,7 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <value>None failed</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{0} of {1}</value>
-    <comment>{0} - count of created entities; {1} - total number to be created</comment>
+      <value>{{createdCount}} of {{totalCount}}</value>
   </data>
   <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
     <value>Importing assignments</value>
@@ -510,16 +507,14 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <comment>{0} - count of created interviews (always &gt; 1)</comment>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0} assignments failed to be created</value>
-    <comment>{0} - count of created assignments (always &gt; 1)</comment>
+      <value>{{count}} assignments failed to be created</value>
   </data>
   <data name="MultipleInterviewsCreated" xml:space="preserve">
     <value>{0} interviews created</value>
     <comment>{0} - count of created interviews (always &gt; 1)</comment>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{0} assignments created</value>
-    <comment>{0} - count of created assignments (always &gt; 1)</comment>
+      <value>{{count}} assignments created</value>
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
     <value>Select the responsible for this batch</value>
@@ -570,13 +565,13 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <value>Verification of assignment data</value>
   </data>
   <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
-    <value>Verification of assignments for questionnaire {0}</value>
+      <value>Verification of assignments for questionnaire {{title}}</value>
   </data>
   <data name="Import_VerificationOfDataFile" xml:space="preserve">
     <value>Verification of data file</value>
   </data>
   <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-    <value>step {0} of {1}</value>
+      <value>step {{verifiedCount}} of {{totalCount}}</value>
   </data>
   <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
     <value>Verification of data file succeeded</value>
@@ -588,10 +583,10 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <value>1 error</value>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>{0} assignments verified successfully</value>
+      <value>{{count}} assignments verified successfully</value>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>{0} errors</value>
+      <value>{{count}} errors</value>
   </data>
   <data name="Prerequisite_Questionnaire" xml:space="preserve">
     <value>Questionnaire cannot be used for preloading</value>

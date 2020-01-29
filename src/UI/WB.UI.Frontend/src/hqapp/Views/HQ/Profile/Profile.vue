@@ -366,7 +366,7 @@
                     <tbody>
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_DeviceId')}}</td>
-                            <td>{{this.fullModel.deviceId}}}</td>
+                            <td>{{this.fullModel.deviceId}}</td>
                         </tr>
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_DeviceSerial')}}</td>

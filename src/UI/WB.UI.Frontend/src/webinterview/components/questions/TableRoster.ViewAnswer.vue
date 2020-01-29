@@ -99,7 +99,7 @@ export default {
     },
     filters: {
         formatNumber (value) {
-            if (value == null || value == undefined || Number.isNan(value))
+            if (value == null || value == undefined || Number.isNaN(value))
                 return ''
                 
             return value.toLocaleString(undefined, {style: 'decimal', maximumFractionDigits : 15, minimumFractionDigits : 0})    

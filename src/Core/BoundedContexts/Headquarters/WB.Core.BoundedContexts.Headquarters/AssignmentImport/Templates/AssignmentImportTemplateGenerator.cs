@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
             this.archiveUtils = archiveUtils;
             this.exportFileNameService = exportFileNameService;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
-            this.path = fileSystemAccessor.CombinePath(fileStorageOptions.Value.AppData, FolderName);
+            this.path = fileSystemAccessor.CombinePath(fileStorageOptions.Value.TempData, FolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);

@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             this.archiveUtils = archiveUtils;
             this.encryptionService = encryptionService;
 
-            this.basePath = fileSystemAccessor.CombinePath(fileStorageOptions.Value.AppData, TabletInformationFolderName);
+            this.basePath = fileSystemAccessor.CombinePath(fileStorageOptions.Value.TempData, TabletInformationFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.basePath))
                 fileSystemAccessor.CreateDirectory(this.basePath);
         }

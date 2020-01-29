@@ -17,12 +17,12 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly ISampleWebInterviewService sampleWebInterviewService;
         private readonly IFileSystemAccessor fileNameService;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseView;
-        private readonly IOptions<HeadquarterOptions> headquartersOptions;
+        private readonly IOptions<HeadquartersConfig> headquartersOptions;
 
         public LinksExportController(ISampleWebInterviewService sampleWebInterviewService,
             IFileSystemAccessor fileNameService,
             IQuestionnaireBrowseViewFactory questionnaireBrowseView,
-            IOptions<HeadquarterOptions> headquartersOptions)
+            IOptions<HeadquartersConfig> headquartersOptions)
         {
             this.sampleWebInterviewService = sampleWebInterviewService;
             this.fileNameService = fileNameService;

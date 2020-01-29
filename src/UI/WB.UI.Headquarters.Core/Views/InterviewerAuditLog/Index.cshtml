@@ -1,0 +1,16 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Headquarters.Code
+@model WB.UI.Headquarters.Controllers.InterviewerAuditLogModel
+
+@{
+    ViewBag.Title = InterviewerAuditRecord.PageTitle;
+    ViewBag.ActivePage = MenuItem.Interviewers;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section Scripts {
+    @Html.RenderHqConfig(Model)
+}
+
+<div id="vueApp"></div>
+
