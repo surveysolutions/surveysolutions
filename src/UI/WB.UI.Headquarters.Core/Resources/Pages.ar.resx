@@ -892,8 +892,8 @@
     <value>عدد الايام التي بقيت فيها المهمات والمقابلات في وضعها الحالي</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-    <value>هذا الاجراء سوف ينشئ مستخدم فردي بحقوق مشرف,
-        &lt;br&gt;to create several users you can use &lt;a href="{0}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+      <value>هذا الاجراء سوف ينشئ مستخدم فردي بحقوق مشرف,
+        &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>المشرف المؤمن (مربع الفحص) لا يمكنه تسجيل الدخول وتنفيذ أي إجراءات على الخادم.</value>
