@@ -19,17 +19,19 @@
 </template>
 
 <script lang="js">
+/* eslint-disable vue/no-unused-components */
+
 import Vue from 'vue'
 import { entityDetails } from '../mixins'
 import { GroupStatus } from './index'
 import { debounce, every, some, map } from 'lodash'
 import { AgGridVue } from 'ag-grid-vue'
 
-// import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
-// import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
-// import TableRoster_RosterTitle from "./TableRoster.RosterTitle";
-// import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";    
-// import TableRoster_Title from "./TableRoster.Title";    
+import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
+import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
+import TableRoster_RosterTitle from './TableRoster.RosterTitle'
+import TableRoster_QuestionTitle from './TableRoster.QuestionTitle'    
+import TableRoster_Title from './TableRoster.Title'    
 
 export default {
     name: 'TableRoster',
@@ -49,11 +51,11 @@ export default {
 
     components: {
         AgGridVue,
-        // TableRoster_ViewAnswer,
-        // TableRoster_QuestionEditor,
-        // TableRoster_RosterTitle,
-        // TableRoster_QuestionTitle,
-        // TableRoster_Title,
+        TableRoster_ViewAnswer,
+        TableRoster_QuestionEditor,
+        TableRoster_RosterTitle,
+        TableRoster_QuestionTitle,
+        TableRoster_Title,
     },
 
     beforeMount() {
