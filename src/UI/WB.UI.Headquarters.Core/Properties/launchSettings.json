@@ -33,7 +33,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "commandLineArgs": "manage users create --role=Administrator --login=Admin --password=Qwerty1234"
+      "commandLineArgs": "manage users create --role=Administrator --login=Admin --password=qwer"
     },
     "IIS": {
       "commandName": "IIS",

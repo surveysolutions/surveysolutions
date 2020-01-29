@@ -90,13 +90,13 @@ namespace WB.UI.Headquarters
                     }
                     else
                     {
+                        logger.LogError("Failed to create user {user}", login);
                         foreach (var error in creationResult.Errors)
                         {
-                            logger.LogError("Failed to create user {user}", login);
                             logger.LogError(error.Description);
                         }
                         
-                        unitOfWork.Dispose(); // todo: replace with call of unitOfWork.DiscardChanges() after hotfix-20-01-05 merge 
+                        unitOfWork.DiscardChanges(); 
                     }
                 });
 
