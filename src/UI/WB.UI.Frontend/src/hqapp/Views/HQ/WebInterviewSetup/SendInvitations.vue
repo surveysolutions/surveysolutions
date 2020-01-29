@@ -99,7 +99,7 @@ export default {
         this.$http.get(this.$config.model.api.invitationsInfo)
             .then(function (response) {
                 const invitationsInfo = response.data || {}
-                self.title = invitationsInfo.fullName,
+                self.title = self.$t('Pages.QuestionnaireNameFormat', {name: invitationsInfo.title, version: invitationsInfo.version}),
                 self.questionnaireIdentity = invitationsInfo.questionnaireIdentity,
                 self.started = invitationsInfo.started,
                 self.totalInvitationsCount = invitationsInfo.totalInvitationsCount || 0,

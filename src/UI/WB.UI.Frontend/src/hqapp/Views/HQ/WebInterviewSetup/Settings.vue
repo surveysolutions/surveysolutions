@@ -8,7 +8,15 @@
                 </li>
             </ol>
             <h1>
-                {{$t('WebInterviewSettings.WebInterviewSetupFor_Title')}} <b> {{this.$config.model.questionnaireFullName}} </b>
+                {{this.$t('WebInterviewSettings.WebInterviewSetupFor_Title')}} 
+                <b> 
+                    {{ $t('Pages.QuestionnaireNameFormat', 
+                          { 
+                              name: this.$config.model.questionnaireTitle, 
+                              version: this.$config.model.questionnaireVersion 
+                          })
+                    }} 
+                </b>
             </h1>
         </div>
 
