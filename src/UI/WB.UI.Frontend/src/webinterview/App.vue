@@ -16,7 +16,7 @@
 
 import '@/assets/css/markup.scss'
 import '@/assets/css/markup-web-interview.scss'
-    
+
 export default {
     name: 'app',
 }

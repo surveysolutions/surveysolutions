@@ -125,7 +125,7 @@ import moment from 'moment'
 import {formatNumber} from './formatNumber'
 import routeSync from '~/shared/routeSync'
 import InterviewersMoveToOtherTeam from './InterviewersMoveToOtherTeam'
-import {map} from 'lodash'
+import {map, find} from 'lodash'
 
 export default {
     mixins: [routeSync],
@@ -266,7 +266,7 @@ export default {
                             : data
 
                         if (row.isLocked) {
-                            tdHtml += `<span class='lock' title='${self.$t('Users.Locked')}'></span>`
+                            tdHtml += `<span class='lock' style="left: auto" title='${self.$t('Users.Locked')}'></span>`
                         }
                         return tdHtml
                     },

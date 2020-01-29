@@ -1,14 +1,14 @@
-import webinterview from '~/webinterview/store' 
+import webinterview from '~/webinterview/store'
 import takeNew from './takenew'
 import upload from './upload'
 
 const store = {
-    modules:{
+    modules: {
         takeNew,
     },
 
     actions: {
-        
+
     },
     getters: {
         isReviewMode() {

@@ -6,7 +6,6 @@
             int maxAllowedRecordNumber, 
             string loginFormatRegex, 
             string emailFormatRegex, 
-            string passwordFormatRegex, 
             string phoneNumberFormatRegex, 
             int fullNameMaxLength, 
             int phoneNumberMaxLength, 
@@ -15,7 +14,6 @@
             this.MaxAllowedRecordNumber = maxAllowedRecordNumber;
             this.LoginFormatRegex = loginFormatRegex;
             this.EmailFormatRegex = emailFormatRegex;
-            this.PasswordFormatRegex = passwordFormatRegex;
             this.PhoneNumberFormatRegex = phoneNumberFormatRegex;
             this.FullNameMaxLength = fullNameMaxLength;
             this.PhoneNumberMaxLength = phoneNumberMaxLength;
@@ -26,7 +24,6 @@
 
         public string LoginFormatRegex { get; private set; }
         public string EmailFormatRegex { get; private set; }
-        public string PasswordFormatRegex { get; private set; }
         public string PhoneNumberFormatRegex { get; private set; }
 
         public int FullNameMaxLength { get; private set; }

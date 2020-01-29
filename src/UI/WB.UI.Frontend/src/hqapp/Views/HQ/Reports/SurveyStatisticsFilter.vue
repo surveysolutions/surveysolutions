@@ -131,7 +131,7 @@
 <script>
 import Vue from 'vue'
 import routeSync from '~/shared/routeSync'
-import {xor, assign, isEqual, chain, isNumber, isUndefined, filter} from 'lodash'
+import {xor, find, assign, isEqual, chain, isNumber, isUndefined, filter} from 'lodash'
 
 export default {
     mixins: [routeSync],
@@ -418,7 +418,7 @@ export default {
 
         selectedQuestionnaireVersion() {
             let key = parseInt(this.query.version)
-            key = Number.isNan(key) ? null : key
+            key = Number.isNaN(key) ? null : key
             return find(this.questionnaireVersionsList, {key})
         },
 

@@ -4,12 +4,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
@@ -23,9 +25,9 @@ namespace WB.UI.Headquarters.Controllers
     public class UsersController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
-        private readonly HqUserStore userRepository;
+        private readonly UserManager<HqUser> userRepository;
 
-        public UsersController(IAuthorizedUser authorizedUser, HqUserStore userRepository)
+        public UsersController(IAuthorizedUser authorizedUser, UserManager<HqUser> userRepository)
         {
             this.authorizedUser = authorizedUser;
             this.userRepository = userRepository;
@@ -83,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers
         [AntiForgeryFilter]
         public async Task<ActionResult> Manage(Guid? id)
         {
-            var user = await this.userRepository.FindByIdAsync(id ?? this.authorizedUser.Id);
+            var user = await this.userRepository.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
 
             if (!HasPermissionsToManageUser(user)) return this.Forbid();
@@ -133,6 +135,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.UserBatchUpload)]
+        [Authorize(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
         public ActionResult Upload() => View(new
         {
@@ -176,7 +179,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (model.SupervisorId.HasValue)
             {
-                var supervisor = await this.userRepository.FindByIdAsync(model.SupervisorId.Value);
+                var supervisor = await this.userRepository.FindByIdAsync(model.SupervisorId.FormatGuid());
                 if (supervisor == null || !supervisor.IsInRole(UserRoles.Supervisor) || supervisor.IsArchivedOrLocked)
                     this.ModelState.AddModelError(nameof(CreateUserModel.SupervisorId), HQ.SupervisorNotFound);
             }
@@ -195,16 +198,25 @@ namespace WB.UI.Headquarters.Controllers
                     Profile = model.SupervisorId.HasValue ? new HqUserProfile {SupervisorId = model.SupervisorId} : null
                 };
 
-                var identityResult = await this.userRepository.CreateAsync(user);
-                if(!identityResult.Succeeded)
-                    this.ModelState.AddModelError(nameof(CreateUserModel.UserName), string.Join(@", ", identityResult.Errors.Select(x => x.Description)));
+                var identityResult = await this.userRepository.CreateAsync(user, model.Password);
+                if (!identityResult.Succeeded)
+                {
+                    foreach (var error in identityResult.Errors)
+                    {
+                        if (error.Code.StartsWith("Password"))
+                        {
+                            this.ModelState.AddModelError(nameof(CreateUserModel.Password),
+                                error.Description);                            
+                        }
+                        else
+                        {
+                            this.ModelState.AddModelError(nameof(CreateUserModel.UserName), error.Description);
+                        }
+                    }
+                }
                 else
                 {
-                    identityResult = await this.userRepository.ChangePasswordAsync(user, model.Password);
-                    if (!identityResult.Succeeded)
-                        this.ModelState.AddModelError(nameof(CreateUserModel.Password), string.Join(@", ", identityResult.Errors.Select(x => x.Description)));
-                    else
-                        await this.userRepository.AddToRoleAsync(user, model.Role, CancellationToken.None);
+                    await this.userRepository.AddToRoleAsync(user, model.Role);
                 }
             }
             
@@ -219,7 +231,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
 
-            var currentUser = await this.userRepository.FindByIdAsync(model.UserId);
+            var currentUser = await this.userRepository.FindByIdAsync(model.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
@@ -238,7 +250,8 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.ModelState.IsValid)
             {
-                var updateResult = await this.userRepository.ChangePasswordAsync(currentUser, model.Password);
+                var passwordResetToken = await this.userRepository.GeneratePasswordResetTokenAsync(currentUser);
+                var updateResult = await this.userRepository.ResetPasswordAsync(currentUser, passwordResetToken, model.Password);
 
                 if (!updateResult.Succeeded)
                     this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
@@ -255,7 +268,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
 
-            var currentUser = await this.userRepository.FindByIdAsync(editModel.UserId);
+            var currentUser = await this.userRepository.FindByIdAsync(editModel.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -90,7 +91,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                         });
                     });
 
-                assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted);
+                InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
+                    serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
+                        .SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted));
 
                 var questionnaireTitle = this.questionnaireBrowseViewFactory.GetById(importProcessStatus.QuestionnaireIdentity).Title;
                 var questionnaireVersion = importProcessStatus.QuestionnaireIdentity.Version;
