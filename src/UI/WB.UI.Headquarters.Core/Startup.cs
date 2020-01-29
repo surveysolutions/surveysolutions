@@ -12,6 +12,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -157,7 +158,6 @@ namespace WB.UI.Headquarters
                     configurationSection.MaxAllowedRecordNumber,
                     loginFormatRegex: CreateUserModel.UserNameRegularExpression,
                     emailFormatRegex: configurationSection.EmailFormatRegex,
-                    passwordFormatRegex: configurationSection.PasswordStrengthRegularExpression,
                     phoneNumberFormatRegex: configurationSection.PhoneNumberFormatRegex,
                     fullNameMaxLength: EditUserModel.PersonNameMaxLength,
                     phoneNumberMaxLength: EditUserModel.PhoneNumberLength,
@@ -220,13 +220,15 @@ namespace WB.UI.Headquarters
             services.AddScoped<UnitOfWorkActionFilter>();
             services.AddScoped<InstallationFilter>();
             services.AddScoped<AntiForgeryFilter>();
-
+            services.AddScoped<GlobalNotificationResultFilter>();
+            
             AddCompression(services);
 
             services.AddMvc(mvc =>
             {
                 mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
                 mvc.Filters.AddService<InstallationFilter>(100);
+                mvc.Filters.AddService<GlobalNotificationResultFilter>(200);
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
                 mvc.ModelBinderProviders.Insert(0, new DataTablesRequestModelBinderProvider());
                 var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
@@ -258,6 +260,19 @@ namespace WB.UI.Headquarters
             {
                 services.AddHostedService<QuartzHostedService>();
             }
+            
+            var passwordOptions = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
+            
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Default Password settings.
+                options.Password.RequireDigit = passwordOptions.RequireDigit;
+                options.Password.RequireLowercase = passwordOptions.RequireLowercase;
+                options.Password.RequireNonAlphanumeric = passwordOptions.RequireNonAlphanumeric;
+                options.Password.RequireUppercase = passwordOptions.RequireUppercase;
+                options.Password.RequiredLength = passwordOptions.RequiredLength;
+                options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
+            });
         }
 
         private static void AddCompression(IServiceCollection services)

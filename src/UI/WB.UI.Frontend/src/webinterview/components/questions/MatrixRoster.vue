@@ -25,16 +25,17 @@
 </template>
 
 <script lang="js">
+/* eslint-disable vue/no-unused-components */
 import Vue from 'vue'
 import { entityDetails } from '../mixins'
 import { GroupStatus } from './index'
 import { debounce, every, some, map } from 'lodash'
 import { AgGridVue } from 'ag-grid-vue'
 
-// import MatrixRoster_QuestionEditor from "./MatrixRoster.QuestionEditor";    
-// import MatrixRoster_RosterTitle from "./MatrixRoster.RosterTitle";
-// import MatrixRoster_QuestionTitle from "./MatrixRoster.QuestionTitle";
-// import MatrixRoster_CategoricalSingle from "./MatrixRoster.CategoricalSingle";
+import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'    
+import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
+import MatrixRoster_QuestionTitle from './MatrixRoster.QuestionTitle'
+import MatrixRoster_CategoricalSingle from './MatrixRoster.CategoricalSingle'
 
 export default {
     name: 'MatrixRoster',
@@ -56,10 +57,10 @@ export default {
 
     components: {
         AgGridVue,            
-        // MatrixRoster_QuestionEditor,
-        // MatrixRoster_RosterTitle,
-        // MatrixRoster_QuestionTitle,
-        // MatrixRoster_CategoricalSingle
+        MatrixRoster_QuestionEditor,
+        MatrixRoster_RosterTitle,
+        MatrixRoster_QuestionTitle,
+        MatrixRoster_CategoricalSingle,
     },
 
     beforeMount() {
