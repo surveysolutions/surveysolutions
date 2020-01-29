@@ -207,11 +207,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             Assert.AreEqual(userName, errors[0].CellValue);
         }
 
-        [TestCase("")] //empty
-        [TestCase("Q11w")] //less 10 
-        [TestCase("QqQqQqQqQqQqQq")] //regexp
-        [TestCase("A1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890")] //more 100
-        public void When_users_password_is_empty_Then_record_verification_error_with_code_PLU0006(string password)
+        [TestCase("", "PLU0021")] //empty
+        [TestCase("Q12wzyt#", "PLU0015")]  
+        [TestCase("Qwerty12345", "PLU0016")] 
+        [TestCase("QwertyQW$werty", "PLU0017")] 
+        [TestCase("QWE1TYQWWE$RTY", "PLU0018")] 
+        [TestCase("qw1erty$qwerty", "PLU0019")] 
+        [TestCase("qq1q$qqqqqqqqQ", "PLU0020")] 
+        public void When_users_password_is_empty_Then_record_verification_error_with_code_PLU0006(string password, string expectedCode)
         {
             //arrange
             var userImportService = CreateUserImportService(null,
@@ -221,8 +224,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0006", errors[0].Code);
+            Assert.That(errors, Has.Length.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo(expectedCode));
             Assert.AreEqual(2, errors[0].RowNumber);
             Assert.AreEqual("Password", errors[0].ColumnName);
             Assert.AreEqual(password, errors[0].CellValue);

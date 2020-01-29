@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
@@ -19,12 +20,13 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         public async Task Execute(IJobExecutionContext context)
         {
             using var scope = this.serviceProvider.CreateScope();
-            
+            using var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var job = scope.ServiceProvider.GetService(jobType) as IJob;
-                if (job == null)
-                    throw new ArgumentNullException(nameof(job));
+            if (job == null)
+                throw new ArgumentNullException(nameof(job));
 
             await job.Execute(context);
+            await uow.AcceptChangesAsync();
         }
     }
 }

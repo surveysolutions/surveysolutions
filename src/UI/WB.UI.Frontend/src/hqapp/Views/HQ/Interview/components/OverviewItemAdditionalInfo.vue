@@ -23,7 +23,7 @@
             <div v-if="additionalInfo.warnings && additionalInfo.warnings.length > 0">
                 <div class="information-block text-warning">
                     <h6>{{ $t("WebInterviewUI.WarningsHeader") }}</h6>
-                    <p v-for="(warning, index) in warnings"
+                    <p v-for="(warning, index) in additionalInfo.warnings"
                         :key="index"><span v-html="warning"></span></p>
                 </div>
                 <hr />
@@ -33,7 +33,7 @@
                     <wb-comment-item 
                         :userRole="comment.userRole" 
                         :text="comment.text"
-                        :isOwnComment="comment.isOwnComment" 
+                        :isOwnComment="comment.isOwnComment"
                         :resolved="comment.resolved"
                         :key="comment.commentTimeUtc" />
                 </template>

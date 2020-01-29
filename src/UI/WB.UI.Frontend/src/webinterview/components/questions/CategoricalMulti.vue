@@ -56,7 +56,7 @@
 <script lang="js">
 import { entityDetails } from '../mixins'
 import modal from '@/shared/modal'
-import { filter, difference, join } from 'lodash'
+import { filter, find, difference, join } from 'lodash'
 import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
 
 export default {
