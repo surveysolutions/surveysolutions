@@ -6,7 +6,7 @@
                 type="hidden"
                 :value="this.$hq.Util.getCsrfCookie()"/>
             <fieldset class="form-horizontal">
-                <legend>Create administrator:</legend>
+                <legend>{{$t('Users.CreateAdministrator')}}:</legend>
                 <form-group
                     :label="$t('FieldsAndValidations.UserNameFieldName')"
                     :error="modelState['UserName']"
