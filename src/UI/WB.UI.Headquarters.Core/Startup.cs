@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Text;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -52,6 +51,7 @@ using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.HealthChecks;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Shared.Web.Configuration;
@@ -107,7 +107,7 @@ namespace WB.UI.Headquarters
                 new DataCollectionSharedKernelModule(),
                 new OrmModule(unitOfWorkConnectionSettings),
                 new OwinSecurityModule(),
-                new FileStorageModule(Configuration),
+                new FileStorageModule(),
                 new FileInfrastructureModule(),
                 new DataExportModule(),
                 GetHqBoundedContextModule(),
@@ -229,6 +229,9 @@ namespace WB.UI.Headquarters
             services.AddScoped<InstallationFilter>();
             services.AddScoped<AntiForgeryFilter>();
             services.AddScoped<GlobalNotificationResultFilter>();
+            services.AddHeadquartersHealthCheck();
+
+            FileStorageModule.Setup(services, Configuration);
             
             AddCompression(services);
 
