@@ -77,7 +77,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             return Ok(new
             {
                 Title = questionnaire.Title,
-                FullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version),
+                Version = questionnaire.Version,
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version),
                 Started = config.Started,
                 TotalInvitationsCount = totalInvitationsCount,
@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             return Ok(new
             {
                 Title = questionnaire.Title,
-                FullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version),
+                Version = questionnaire.Version,
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version),
                 Status = status
             });
