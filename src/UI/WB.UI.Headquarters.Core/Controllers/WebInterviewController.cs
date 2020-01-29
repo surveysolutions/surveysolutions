@@ -320,6 +320,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Route("{invitationId}/Start")]
+        [AntiForgeryFilter]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StartPost(string invitationId, [FromForm] string password)
         {
@@ -557,6 +558,7 @@ namespace WB.UI.Headquarters.Controllers
         [Route("Resume/{id:Guid}")]
         [WebInterviewAuthorize]
         [AntiForgeryFilter]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResumePost(string id, string password, string returnUrl)
         {
             var interview = this.statefulInterviewRepository.Get(id);
