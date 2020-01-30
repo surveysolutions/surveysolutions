@@ -297,4 +297,12 @@
       <value>Сброс пароля пользователя</value>
       <comment>Сброс пароля пользователя</comment>
   </data>
+  <data name="UserNotFound" xml:space="preserve">
+      <value>Пользователь не найден</value>
+      <comment>Пользователь не найден</comment>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+      <value>Пароль для пользователя {0} изменен</value>
+      <comment>Пароль для пользователя {0} изменен</comment>
+  </data>
 </root>
