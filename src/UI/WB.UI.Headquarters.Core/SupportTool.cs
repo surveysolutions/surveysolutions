@@ -46,7 +46,8 @@ namespace WB.UI.Headquarters
         {
             return new Command("users")
             {
-                UsersCreateCommand()
+                UsersCreateCommand(),
+                ResetPasswordCommand(),
             };
         }
 
@@ -92,6 +93,58 @@ namespace WB.UI.Headquarters
                     {
                         logger.LogError("Failed to create user {user}", login);
                         foreach (var error in creationResult.Errors)
+                        {
+                            logger.LogError(error.Description);
+                        }
+                        
+                        unitOfWork.DiscardChanges(); 
+                    }
+                });
+
+            });
+            return cmd;
+        }
+
+        private Command ResetPasswordCommand()
+        {
+            var cmd = new Command("reset-password")
+            {
+                new Option("--username")
+                {
+                    Required = true,
+                    Argument = new Argument<string>()
+                },
+                new Option("--password")
+                {
+                    Required = true,
+                    Argument = new Argument<string>()
+                },
+            };
+            cmd.Handler = CommandHandler.Create<string, string>(async (username, password) =>
+            {
+                var inScopeExecutor = this.host.Services.GetRequiredService<IInScopeExecutor>();
+                await inScopeExecutor.ExecuteAsync(async (locator, unitOfWork) =>
+                {
+                    var loggerProvider = locator.GetInstance<ILoggerProvider>();
+                    var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
+                    var userManager = locator.GetInstance<UserManager<HqUser>>();
+                    var user = await userManager.FindByNameAsync(username);
+                    if (user == null)
+                    {
+                        logger.LogError($"User {username} not found");
+                        unitOfWork.DiscardChanges();
+                        return;
+                    }
+
+                    var result = await userManager.ResetPasswordAsync(user, user.PasswordHashSha1, password);
+                    if (result.Succeeded)
+                    {
+                        logger.LogInformation($"Reset password for user {username} succeeded");
+                    }
+                    else
+                    {
+                        logger.LogError($"Failed to reset password for user {username}");
+                        foreach (var error in result.Errors)
                         {
                             logger.LogError(error.Description);
                         }
