@@ -38,6 +38,11 @@
         SurveyStatistics = 34,
         EmailProviders = 35,
         Interviews = 36,
-        TabletLogs
+        TabletLogs,
+        Administration_TabletInfo,
+        Administration_Config,
+        Administration_AppUpdates,
+        Administration_InterviewPackages,
+        Administration_Exceptions,
     }
 }

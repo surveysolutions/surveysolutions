@@ -133,6 +133,231 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Broken.
+        /// </summary>
+        public static string Admin_InterviewPackages_Broken {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Broken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception.
+        /// </summary>
+        public static string Admin_InterviewPackages_Exception {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception type.
+        /// </summary>
+        public static string Admin_InterviewPackages_ExceptionType {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_ExceptionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incoming date.
+        /// </summary>
+        public static string Admin_InterviewPackages_IncomingDate {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_IncomingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer.
+        /// </summary>
+        public static string Admin_InterviewPackages_Interviewer {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Interviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview id.
+        /// </summary>
+        public static string Admin_InterviewPackages_InterviewId {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_InterviewId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key.
+        /// </summary>
+        public static string Admin_InterviewPackages_InterviewKey {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_InterviewKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} packages is going to be changed.
+        /// </summary>
+        public static string Admin_InterviewPackages_NumberOfPackagesAffected {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_NumberOfPackagesAffected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        public static string Admin_InterviewPackages_PackageSize {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_PackageSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Period.
+        /// </summary>
+        public static string Admin_InterviewPackages_Period {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Period", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing date.
+        /// </summary>
+        public static string Admin_InterviewPackages_ProcessingDate {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_ProcessingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put reason.
+        /// </summary>
+        public static string Admin_InterviewPackages_PutReason {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_PutReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        public static string Admin_InterviewPackages_Questionnaire {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Questionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reason.
+        /// </summary>
+        public static string Admin_InterviewPackages_Reason {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Reason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejected.
+        /// </summary>
+        public static string Admin_InterviewPackages_Rejected {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reprocess.
+        /// </summary>
+        public static string Admin_InterviewPackages_Reprocess {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Reprocess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to reprocess selected broken packages?.
+        /// </summary>
+        public static string Admin_InterviewPackages_ReprocessSelectedConfirmation {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_ReprocessSelectedConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} package(s) selected.
+        /// </summary>
+        public static string Admin_InterviewPackages_SelectedPackagesCount {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_SelectedPackagesCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select exception type.
+        /// </summary>
+        public static string Admin_InterviewPackages_SelectExceptionType {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_SelectExceptionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select interviewer.
+        /// </summary>
+        public static string Admin_InterviewPackages_SelectInterviewer {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_SelectInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select questionnaire.
+        /// </summary>
+        public static string Admin_InterviewPackages_SelectQuestionnaire {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_SelectQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select reason.
+        /// </summary>
+        public static string Admin_InterviewPackages_SelectReason {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_SelectReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you lost interview or get massage that interview was corrupted, &lt;br/&gt; you can find data by that interview here.
+        /// </summary>
+        public static string Admin_InterviewPackages_Subtitle {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview packages({{count}}).
+        /// </summary>
+        public static string Admin_InterviewPackages_Title {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type of exceptions.
+        /// </summary>
+        public static string Admin_InterviewPackages_Type {
+            get {
+                return ResourceManager.GetString("Admin_InterviewPackages_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Any.
         /// </summary>
         public static string AnyOption {
@@ -507,6 +732,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string ErrorIndex_Title {
             get {
                 return ResourceManager.GetString("ErrorIndex_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exceptions.
+        /// </summary>
+        public static string Exceptions {
+            get {
+                return ResourceManager.GetString("Exceptions", resourceCulture);
             }
         }
         
@@ -2199,6 +2433,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewOverview {
             get {
                 return ResourceManager.GetString("InterviewOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview packages.
+        /// </summary>
+        public static string InterviewPackages {
+            get {
+                return ResourceManager.GetString("InterviewPackages", resourceCulture);
             }
         }
         

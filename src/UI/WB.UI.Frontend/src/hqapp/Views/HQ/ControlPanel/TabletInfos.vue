@@ -1,25 +1,29 @@
 <template>
-    <div class="row">
-        <form method="post"
-            ref="frm"
-            class="topic-with-button"
-            enctype="multipart/form-data">
-            <label class="btn btn-success btn-file" >
-                {{$t('Pages.Upload_Upload')}}
-                <input ref="uploader"
-                    name="file"
-                    @change="onFileChange"
-                    type="file"
-                    value="" />
-            </label>
-        </form>
-        <DataTables ref="table"
-            :tableOptions="tableOptions"></DataTables>
-    </div>
+    <HqLayout>
+        <div class="row">
+            <form
+                method="post"
+                ref="frm"
+                class="topic-with-button"
+                enctype="multipart/form-data">
+                <label class="btn btn-success btn-file">
+                    {{ $t('Pages.Upload_Upload') }}
+                    <input
+                        ref="uploader"
+                        name="file"
+                        @change="onFileChange"
+                        type="file"
+                        value=""/>
+                </label>
+            </form>
+            <DataTables ref="table"
+                :tableOptions="tableOptions"></DataTables>
+        </div>
+    </HqLayout>
 </template>
 
 <script>
-import {DateFormats, humanFileSize} from '~/shared/helpers'
+import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
 
 export default {
@@ -53,7 +57,9 @@ export default {
                     data: 'size',
                     title: this.$t('Pages.PackagesInfo_Size'),
                     render: function(data, _, row) {
-                        return `<a href=${row.downloadUrl}>${humanFileSize(data)} <span class="glyphicon glyphicon-download"></span></a>`
+                        return `<a href=${row.downloadUrl}>${humanFileSize(
+                            data
+                        )} <span class="glyphicon glyphicon-download"></span></a>`
                     },
                 },
             ]

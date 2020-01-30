@@ -9,8 +9,9 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Users;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -33,14 +34,10 @@ namespace WB.UI.Headquarters.Controllers
             this.users = users;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
+        public ActionResult Index() => View();
 
-        public IActionResult TabletInfos()
-        {
-            return View("Index");
+        [ActivePage(MenuItem.Administration_TabletInfo)]
+        public IActionResult TabletInfos() => View("Index");
         }
 
         [AntiForgeryFilter]
@@ -84,7 +81,6 @@ namespace WB.UI.Headquarters.Controllers
                 Model = model,
                 ModelState = this.ModelState.ErrorsToJsonResult()
             });
-        }
 
         [HttpPost]
         public async Task<ActionResult> TabletInfos(IFormFile file)
@@ -104,16 +100,16 @@ namespace WB.UI.Headquarters.Controllers
             return RedirectToAction("TabletInfos");
         }
 
-        public IActionResult Configuration()
-        {
-            return View("Index");
-        }
-        
+        [ActivePage(MenuItem.Administration_Config)]
+        public IActionResult Configuration() => View("Index");
+
+        [ActivePage(MenuItem.Administration_Exceptions)]
         public async Task Exceptions() => await ExceptionalMiddleware.HandleRequestAsync(HttpContext);
 
-        public IActionResult AppUpdates()
-        {
-            return View("Index");
-        }
+        [ActivePage(MenuItem.Administration_AppUpdates)]
+        public IActionResult AppUpdates() => View("Index");
+
+        [ActivePage(MenuItem.Administration_InterviewPackages)]
+        public IActionResult InterviewPackages() => this.View("Index");
     }
 }
