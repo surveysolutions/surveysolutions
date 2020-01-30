@@ -2284,7 +2284,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} and {1}.
+        ///   Looks up a localized string similar to {{names}} and {{lastname}}.
         /// </summary>
         public static string Interviewers_NamesFormatLessThanLimit {
             get {
