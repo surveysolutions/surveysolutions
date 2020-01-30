@@ -113,7 +113,8 @@
             </div>
         </div>
         <ModalFrame ref="audioAuditModal"
-            :title="$t('Pages.ConfirmationNeededTitle')">
+            :title="$t('Pages.ConfirmationNeededTitle')"
+            :canClose="false">
             <p>{{ $t("Pages.GlobalSettings_TurningAudioAuditOn" )}}</p>
             <div slot="actions">
                 <button
@@ -155,7 +156,10 @@ export default {
         },
         recordAudioChanged() {
             if (this.audioAudit) 
-                this.$refs.audioAuditModal.modal('show')
+                this.$refs.audioAuditModal.modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                })
             else 
                 return this.recordAudioSend()
         },
