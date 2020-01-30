@@ -136,9 +136,9 @@ export default {
 
             if (names.length <= limit) {
                 var sliceLength = Math.min(limit, names.length)
-                return this.$t('Pages.Interviewers_NamesFormatMoreThanLimit', {
+                return this.$t('Pages.Interviewers_NamesFormatLessThanLimit', {
                     names: names.slice(0, sliceLength - 1).join(', '),
-                    more: names[sliceLength - 1],
+                    lastname: names[sliceLength - 1],
                 })
             }
 
