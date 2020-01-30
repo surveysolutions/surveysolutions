@@ -4,7 +4,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages
 {
-    public class BrokenInterviewPackageFilter
+    public class InterviewPackageFilter
     {
         public Guid? ResponsibleId { get; set; }
         public string QuestionnaireIdentity { get; set; }
