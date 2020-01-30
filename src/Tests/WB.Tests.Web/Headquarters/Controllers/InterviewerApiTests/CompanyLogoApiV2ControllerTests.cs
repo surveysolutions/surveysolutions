@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
+using AngleSharp.Network;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -11,6 +12,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Models.CompanyLogo;
+using HeaderNames = Microsoft.Net.Http.Headers.HeaderNames;
 
 namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 {
@@ -45,7 +47,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
             // assert
             Assert.That(response, Is.InstanceOf<FileContentResult>());
             var fileResult = (FileContentResult) response;
-            Assert.That(fileResult.EntityTag, Is.EqualTo($"\"{logo.GetEtagValue()}\""));
+            var expectedEtag = $"\"{logo.GetEtagValue()}\"";
+            Assert.That(fileResult.EntityTag.ToString(), Is.EqualTo(expectedEtag));
             Assert.That(fileResult.FileContents, Is.EquivalentTo(logo.Logo));
         }
 
@@ -74,16 +77,17 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
                 interviewerSettingsStorage ?? new InMemoryKeyValueStorage<InterviewerSettings>(),
                 new InMemoryKeyValueStorage<TenantSettings>(),
                 Mock.Of<ISecureStorage>());
-            var httpRequestMessage = new HttpRequestMessage();
-            if (requestEtag != null)
-            {
-                httpRequestMessage.Headers.IfNoneMatch.Add(new EntityTagHeaderValue(requestEtag));
-            }
 
+            var defaultHttpContext = new DefaultHttpContext();
             companyLogoApiV2Controller.ControllerContext  = new ControllerContext
             {
-                
+                HttpContext = defaultHttpContext
             };
+            if (requestEtag != null)
+            {
+                defaultHttpContext.Request.Headers[HeaderNames.IfNoneMatch] = requestEtag;
+            }
+            
             return companyLogoApiV2Controller;
         }
     }
