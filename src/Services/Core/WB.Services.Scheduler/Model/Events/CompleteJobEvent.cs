@@ -6,4 +6,12 @@
         {
         }
     }
+
+    public class ReEnqueueJobEvent : JobEvent
+    {
+        public ReEnqueueJobEvent(long jobId) : base(jobId)
+        {
+            
+        }
+    }
 }

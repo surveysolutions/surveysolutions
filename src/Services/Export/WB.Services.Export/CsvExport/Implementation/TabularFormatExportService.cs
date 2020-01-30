@@ -97,23 +97,37 @@ namespace WB.Services.Export.CsvExport.Implementation
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
             var assignmentIdsToExport = new HashSet<int>(interviewsToExport.Where(x => x.AssignmentId.HasValue).Select(x => x.AssignmentId.Value)).ToList();
 
+            var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
             Stopwatch exportWatch = Stopwatch.StartNew();
 
-            await Task.WhenAll(
-                this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, tempPath, tenant, exportCommentsProgress, cancellationToken),
-                this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cancellationToken),
-                this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cancellationToken),
-                this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cancellationToken),
-                this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath, exportAssignmentActionsProgress, cancellationToken),
-                this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath)
-            );
+            try
+            {
+                await Task.WhenAll(
+                    this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, tempPath, tenant, exportCommentsProgress, cts.Token),
+                    this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cts.Token),
+                    this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cts.Token),
+                    this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cts.Token),
+                    this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath, exportAssignmentActionsProgress, cts.Token),
+                    this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cts.Token)
+                );
+            }
+            catch
+            {
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    cts.Cancel();
+                }
+
+                throw;
+            }
 
             exportWatch.Stop();
 
             this.logger.LogInformation("Export with all steps finished for questionnaire {questionnaireIdentity}. " +
                                        "Took {elapsed:c} to export {interviewIds} interviews",
                 questionnaireIdentity, exportWatch.Elapsed, interviewIdsToExport.Count
-                );
+            );
         }
         
         public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension)
