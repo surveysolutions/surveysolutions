@@ -1,6 +1,5 @@
 import Layout from './Layout'
 import Assignments from './HqAssignments'
-import CreateNew from './CreateNew'
 import Details from './Details'
 import Upload from './Upload/Index'
 import UploadErrors from './Upload/Errors'
@@ -21,7 +20,7 @@ export default class AssignmentsComponent {
         return [
             {
                 path: '/HQ/TakeNewAssignment/:interviewId',
-                component: CreateNew,
+                component: () => import(/* webpackChunkName: "review" */'./CreateNew'),
             },
             {
                 path: '/Assignments', component: Layout,
