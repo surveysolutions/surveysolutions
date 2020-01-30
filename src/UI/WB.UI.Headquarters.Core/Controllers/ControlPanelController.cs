@@ -121,7 +121,7 @@ namespace WB.UI.Headquarters.Controllers
         [AntiForgeryFilter]
         [ValidateAntiForgeryToken]
         [ActivePage(MenuItem.Administration_ChangePassword)]
-        public async Task<IActionResult> ResetPrivilegedUserPassword([FromBody] ChangePasswordByNameModel model)
+        public async Task<IActionResult> ResetPrivilegedUserPassword([FromForm] ChangePasswordByNameModel model)
         {
             if (ModelState.IsValid)
             {
@@ -132,7 +132,8 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 else
                 {
-                    var result = await users.ResetPasswordAsync(user, user.PasswordHashSha1, model.Password);
+                    var resetToken = await users.GeneratePasswordResetTokenAsync(user);
+                    var result = await users.ResetPasswordAsync(user, resetToken, model.Password);
                     foreach (var error in result.Errors)
                     {
                         this.ModelState.AddModelError(nameof(ChangePasswordByNameModel.Password), error.Description);
