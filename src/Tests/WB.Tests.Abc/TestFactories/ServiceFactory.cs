@@ -1165,6 +1165,11 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new ReusableCategoriesFillerIntoQuestionnaire(reusableCategoriesStorage);
         }
+
+        public UserArchiveService UserArchiveService(IUserRepository userRepository)
+        {
+            return new UserArchiveService(userRepository, Mock.Of<ISystemLog>());
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
