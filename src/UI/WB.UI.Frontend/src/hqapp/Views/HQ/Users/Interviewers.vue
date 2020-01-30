@@ -63,7 +63,7 @@
             :tableOptions="tableOptions"
             @ajaxComplete="onTableReload"
             exportable
-            :selectable="model.canArchiveUnarchive"
+            :selectable="model.canArchiveUnarchive || model.canArchiveMoveToOtherTeam"
             mutliRowSelect
             :selectableId="'userId'"
             @selectedRowsChanged="rows => selectedInterviewers = rows"
