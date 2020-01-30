@@ -1,6 +1,7 @@
 <template>
     <HqLayout :hasFilter="false"
-        :fixedWidth="true">
+        :fixedWidth="true"
+        :hasRow="false">
         <template slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -51,7 +52,7 @@
                     </li>
                     <li>
                         {{$t('QuestionnaireImport.Questions')}}:
-                        <span>{{$config.model.questionnaireInfo.QuestionsCount}}</span>
+                        <span>{{$config.model.questionnaireInfo.questionsCount}}</span>
                         ({{$t('QuestionnaireImport.QuestionsWithConditions', {count: $config.model.questionnaireInfo.questionsWithConditionsCount})}})
                     </li>
                 </ul>
