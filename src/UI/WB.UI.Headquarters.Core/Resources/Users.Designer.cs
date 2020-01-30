@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create supervisor.
+        ///   Looks up a localized string similar to Create administrator.
         /// </summary>
         public static string CreateAdministrator {
             get {
