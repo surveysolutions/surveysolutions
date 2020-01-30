@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WB.Services.Infrastructure.Logging;
 using WB.Services.Scheduler.Model;
 
 namespace WB.Services.Scheduler.Services.Implementation
@@ -28,6 +29,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task StartAsync(CancellationToken token)
         {
+            using var logContext = LoggingHelpers.LogContext("workerId", Environment.MachineName + ":" + this.Id);
             Info("Start new worker");
 
             while (true)
