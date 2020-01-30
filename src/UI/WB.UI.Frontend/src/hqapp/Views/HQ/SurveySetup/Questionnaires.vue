@@ -191,7 +191,7 @@ export default {
                         name: 'ImportDate',
                         title: this.$t('Dashboard.ImportDate'),
                         render: function(data, type, row) {
-                            return new moment(data).format(DateFormats.dateTime)
+                            return new moment.utc(data).local().format(DateFormats.dateTime)
                         },
                     },
                     {
@@ -200,7 +200,7 @@ export default {
                         class: 'date',
                         title: this.$t('Dashboard.LastEntryDate'),
                         render: function(data, type, row) {
-                            return new moment(data).format(DateFormats.dateTime)
+                            return new moment.utc(data).local().format(DateFormats.dateTime)
                         },
                     },
                     {
@@ -209,7 +209,7 @@ export default {
                         class: 'date',
                         title: this.$t('Dashboard.CreationDate'),
                         render: function(data, type, row) {
-                            return new moment(data).format(DateFormats.dateTime)
+                            return new moment.utc(data).local().format(DateFormats.dateTime)
                         },
                     },
                     {

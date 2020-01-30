@@ -16,8 +16,8 @@
                                         {{ topicButton }}
                                     </a>
                                 </div>
-                                <i v-if="subtitle">
-                                    {{ subtitle }}
+                                <i v-if="subtitle"
+                                    v-html="subtitle">
                                 </i>
                             </slot>
                             <slot name="subtitle" />
