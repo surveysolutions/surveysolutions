@@ -23,10 +23,10 @@ export default class MapComponent {
                     {
                         path: 'AppUpdates',
                         component: AppUpdates,
-            },
-            {
-                path: 'CreateAdmin',
-                component: CreateAdmin,
+                    },
+                    {
+                        path: 'CreateAdmin',
+                        component: CreateAdmin,
                     },
                     {
                         path: 'InterviewPackages',
