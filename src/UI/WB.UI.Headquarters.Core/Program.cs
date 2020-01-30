@@ -1,5 +1,9 @@
 using System;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +17,7 @@ namespace WB.UI.Headquarters
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
             var appRoot = Path.GetDirectoryName(typeof(Program).Assembly.Location);
             var logsFileLocation = Path.Combine(appRoot, "..", "logs", "log.log");
@@ -31,18 +35,24 @@ namespace WB.UI.Headquarters
 
             try
             {
-                var host = CreateHostBuilder(args).Build();
-
+                IHost host = CreateHostBuilder(args).Build();
+                if (args.Length > 0 && args[0].Equals("manage", StringComparison.OrdinalIgnoreCase))
+                {
+                    return await new SupportTool(host).Run(args.Skip(1).ToArray());
+                }
+                
                 var version = host.Services.GetRequiredService<IProductVersion>();
                 var applicationVersion = version.ToString();
 
                 Log.Logger.Warning("HQ application starting. Version {version}", applicationVersion);
 
-                host.Run();
+                await host.RunAsync();
+                return 0;
             }
             catch (Exception e)
             {
                 Log.Fatal(e, "Host terminated unexpectedly");
+                return 1;
             }
             finally
             {

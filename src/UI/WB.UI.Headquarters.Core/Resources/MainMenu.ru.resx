@@ -221,4 +221,8 @@
   <data name="SurveyStatistics" xml:space="preserve">
     <value>Статистика обследования</value>
   </data>
+  <data name="Administration" xml:space="preserve">
+      <value>Администрирование</value>
+      <comment>Администрирование</comment>
+  </data>
 </root>

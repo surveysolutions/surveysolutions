@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -50,7 +51,55 @@ namespace WB.Tests.Unit.Applications.Headquarters
             //Assert
             Assert.That(importResult.ImportError, Is.EqualTo(exprectedErrorMessageFromServer));
         }
-        
+
+        [Test]
+        public async Task when_importing_questionnaire_and_rest_service_error_occured_should_not_commit_transaction()
+        {
+            var versionProvider = SetUp.SupportedVersionProvider(ApiVersion.MaxQuestionnaireVersion);
+            var uow = GetUnitOfWorkMock();
+
+            var rest = new Mock<IDesignerApi>();
+
+            rest.Setup(s => s.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>()))
+                .Throws(new RestException(""));
+
+            var service = CreateIQuestionnaireImportService(supportedVersionProvider: versionProvider, 
+                designerApi: rest.Object, unitOfWork: uow.Object);
+
+            //Act
+            await service.Import(Guid.NewGuid(), "null", false, null, null);
+
+            //Assert
+            uow.Verify(u => u.DiscardChanges(), Times.Once);
+        }
+
+        [Test]
+        public async Task when_importing_questionnaire_and_questionnaire_already_exists_should_not_commit_transaction()
+        {
+            var uow = GetUnitOfWorkMock();
+
+            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedQuestionnaireVersion() == 1);
+
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(cs => cs.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Throws(new QuestionnaireAssemblyAlreadyExistsException("", Create.Entity.QuestionnaireIdentity()));
+
+            var zipUtilsMock = Mock.Of<IStringCompressor>(_ => _.DecompressString<QuestionnaireDocument>(It.IsAny<string>()) == new QuestionnaireDocument(new List<IComposite>()));
+            var designerApi = new Mock<IDesignerApi>();
+            SetupGetQuestionnaire(designerApi);
+
+            var service = CreateIQuestionnaireImportService(commandService: commandService.Object,
+                supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, 
+                designerApi: designerApi.Object, unitOfWork: uow.Object);
+
+            // Act
+            await service.Import(Guid.NewGuid(), "null", false, null, null);
+            
+            //Assert
+            uow.Verify(u => u.DiscardChanges(), Times.Once);
+        }
+
         [Test]
         public void when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception()
         {
@@ -268,6 +317,14 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 )), Times.Once);
         }
 
+        private static Mock<IUnitOfWork> GetUnitOfWorkMock()
+        {
+            var session = Mock.Of<NHibernate.ISession>(s => s.CreateSQLQuery(It.IsAny<string>()) == Mock.Of<ISQLQuery>());
+            var mock = new Mock<IUnitOfWork>();
+            mock.Setup(m => m.Session).Returns(session);
+            return mock;
+        }
+
         protected static IQuestionnaireImportService CreateIQuestionnaireImportService(
           ICommandService commandService = null,
           IAuthorizedUser authorizedUser = null,
@@ -279,7 +336,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
           IPlainStorageAccessor<TranslationInstance> translationInstances = null,
           IQuestionnaireVersionProvider questionnaireVersionProvider = null,
           IDesignerUserCredentials designerUserCredentials = null,
-          IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null
+          IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null,
+          IUnitOfWork unitOfWork = null
       )
         {
             var globalInfoProvider = authorizedUser ?? new Mock<IAuthorizedUser> { DefaultValue = DefaultValue.Mock }.Object;
@@ -291,9 +349,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 designerUserCredentials = mockOfUserCredentials.Object;
             }
 
-            var session = Mock.Of<NHibernate.ISession>(s => s.CreateSQLQuery(It.IsAny<string>()) == Mock.Of<ISQLQuery>());
-            var unitOfWork = Mock.Of<IUnitOfWork>(x => x.Session == session);
-            
+            unitOfWork = unitOfWork ?? GetUnitOfWorkMock().Object;
+
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,

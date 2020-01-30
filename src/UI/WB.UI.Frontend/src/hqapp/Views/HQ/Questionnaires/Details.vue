@@ -113,7 +113,8 @@
             </div>
         </div>
         <ModalFrame ref="audioAuditModal"
-            :title="$t('Pages.ConfirmationNeededTitle')">
+            :title="$t('Pages.ConfirmationNeededTitle')"
+            :canClose="false">
             <p>{{ $t("Pages.GlobalSettings_TurningAudioAuditOn" )}}</p>
             <div slot="actions">
                 <button
@@ -123,7 +124,8 @@
                 <button
                     type="button"
                     class="btn btn-link"
-                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    data-dismiss="modal"
+                    @click="cancelSetAudio">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
     </HqLayout>
@@ -154,7 +156,10 @@ export default {
         },
         recordAudioChanged() {
             if (this.audioAudit) 
-                this.$refs.audioAuditModal.modal('show')
+                this.$refs.audioAuditModal.modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                })
             else 
                 return this.recordAudioSend()
         },
@@ -165,6 +170,9 @@ export default {
             if(response.status !== 204) 
                 this.audioAudit = !this.audioAudit
             this.$refs.audioAuditModal.modal('hide')
+        },
+        cancelSetAudio() {
+            this.audioAudit = false
         },
     },
 }

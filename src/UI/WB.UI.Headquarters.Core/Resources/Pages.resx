@@ -939,6 +939,9 @@
   <data name="Profile_ApiUserWasCreated" xml:space="preserve">
     <value>API User &lt;b&gt;{0}&lt;/b&gt; was successfully created</value>
   </data>
+  <data name="CreateAdmin" xml:space="preserve">
+    <value>Create admin</value>
+  </data>
   <data name="Profile_ApiUsersList" xml:space="preserve">
     <value>API users</value>
   </data>
@@ -1303,5 +1306,86 @@
   </data>
   <data name="AppUpdates" xml:space="preserve">
     <value>Apk infos</value>
+  </data>
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>Interview packages</value>
+  </data>
+  <data name="Exceptions" xml:space="preserve">
+    <value>Exceptions</value>
+  </data>
+  <data name="Admin_InterviewPackages_Exception" xml:space="preserve">
+    <value>Exception</value>
+  </data>
+  <data name="Admin_InterviewPackages_InterviewKey" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="Admin_InterviewPackages_InterviewId" xml:space="preserve">
+    <value>Interview id</value>
+  </data>
+  <data name="Admin_InterviewPackages_IncomingDate" xml:space="preserve">
+    <value>Incoming date</value>
+  </data>
+  <data name="Admin_InterviewPackages_ProcessingDate" xml:space="preserve">
+    <value>Processing date</value>
+  </data>
+  <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="Admin_InterviewPackages_SelectInterviewer" xml:space="preserve">
+    <value>Select interviewer</value>
+  </data>
+  <data name="Admin_InterviewPackages_Interviewer" xml:space="preserve">
+    <value>Interviewer</value>
+  </data>
+  <data name="Admin_InterviewPackages_SelectQuestionnaire" xml:space="preserve">
+    <value>Select questionnaire</value>
+  </data>
+  <data name="Admin_InterviewPackages_Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
+  <data name="Admin_InterviewPackages_ExceptionType" xml:space="preserve">
+    <value>Exception type</value>
+  </data>
+  <data name="Admin_InterviewPackages_SelectExceptionType" xml:space="preserve">
+    <value>Select exception type</value>
+  </data>
+  <data name="Admin_InterviewPackages_Type" xml:space="preserve">
+    <value>Type of exceptions</value>
+  </data>
+  <data name="Admin_InterviewPackages_Broken" xml:space="preserve">
+    <value>Broken</value>
+  </data>
+  <data name="Admin_InterviewPackages_Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="Admin_InterviewPackages_Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="Admin_InterviewPackages_ReprocessSelectedConfirmation" xml:space="preserve">
+    <value>Are you sure you want to reprocess selected broken packages?</value>
+  </data>
+  <data name="Admin_InterviewPackages_SelectedPackagesCount" xml:space="preserve">
+    <value>{{count}} package(s) selected</value>
+  </data>
+  <data name="Admin_InterviewPackages_Reprocess" xml:space="preserve">
+    <value>Reprocess</value>
+  </data>
+  <data name="Admin_InterviewPackages_PutReason" xml:space="preserve">
+    <value>Put reason</value>
+  </data>
+  <data name="Admin_InterviewPackages_Title" xml:space="preserve">
+    <value>Interview packages({{count}})</value>
+  </data>
+  <data name="Admin_InterviewPackages_Subtitle" xml:space="preserve">
+    <value>If you lost interview or get massage that interview was corrupted, &lt;br/&gt; you can find data by that interview here</value>
+  </data>
+  <data name="Admin_InterviewPackages_NumberOfPackagesAffected" xml:space="preserve">
+    <value>{{count}} packages is going to be changed</value>
+  </data>
+  <data name="Admin_InterviewPackages_SelectReason" xml:space="preserve">
+    <value>Select reason</value>
+  </data>
+  <data name="Admin_InterviewPackages_Reason" xml:space="preserve">
+    <value>Reason</value>
   </data>
 </root>

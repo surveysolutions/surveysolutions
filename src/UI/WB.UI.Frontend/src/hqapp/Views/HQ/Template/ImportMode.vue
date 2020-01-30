@@ -1,6 +1,7 @@
 <template>
     <HqLayout :hasFilter="false"
-        :fixedWidth="true">
+        :fixedWidth="true"
+        :hasRow="false">
         <template slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -51,7 +52,7 @@
                     </li>
                     <li>
                         {{$t('QuestionnaireImport.Questions')}}:
-                        <span>{{$config.model.questionnaireInfo.QuestionsCount}}</span>
+                        <span>{{$config.model.questionnaireInfo.questionsCount}}</span>
                         ({{$t('QuestionnaireImport.QuestionsWithConditions', {count: $config.model.questionnaireInfo.questionsWithConditionsCount})}})
                     </li>
                 </ul>
@@ -87,7 +88,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="$config.model.questionnairesToUpgradeFrom.length">
+                    <div v-if="this.$config.model.questionnairesToUpgradeFrom.length">
                         <div class="col-sm-8">
                             <div class="form-group">
                                 <input
@@ -95,7 +96,8 @@
                                     id="ckbUpgradeAssignments"
                                     type="checkbox"
                                     value="True"
-                                    name="ShouldMigrateAssignments"/>
+                                    name="ShouldMigrateAssignments"
+                                    v-model="shouldMigrateAssignments"/>
                                 <label for="ckbUpgradeAssignments">
                                     <span class="tick"></span>
                                     {{$t('QuestionnaireImport.UpgradeAssignments')}}
@@ -105,18 +107,18 @@
 
                         <div class="col-sm-8"
                             id="templateSelectorBlock"
-                            style="display: none">
+                            v-if="shouldMigrateAssignments">
+                            <input type="hidden"
+                                name="migrateFrom"
+                                :value="(questionnaireId||{}).key">
                             <div class="form-group">
-                                <select
-                                    id="templateSelector"
-                                    data-bind="value: SelectedTemplate"
-                                    class="selectpicker"
-                                    name="migrateFrom">
-                                    <option
-                                        v-for="item in $config.model.questionnairesToUpgradeFrom"
-                                        :value="`{'templateId': '${item.templateId}', 'version': ${item.templateVersion}}`"
-                                        :key="`${item.templateId}_${item.templateVersion}`">({{$t('Assignments.QuestionnaireVersion', {version: item.TemplateVersion})}}) {{item.TemplateName}}</option>
-                                </select>
+                                <Typeahead control-id="questionnaire"
+                                    noSearch 
+                                    noClear
+                                    :placeholder="$t('Common.Questionnaire')" 
+                                    :values="this.$config.model.questionnairesToUpgradeFrom"
+                                    :value="questionnaireId" 
+                                    @selected="selectQuestionnaire" />
                             </div>
                         </div>
                     </div>
@@ -161,9 +163,18 @@
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
 export default {
+    data() {
+        return {
+            shouldMigrateAssignments: false,
+            questionnaireId: null, 
+        }
+    },
     methods: {
-        formatDate(date){
+        formatDate(date) {
             return new moment(date).format(DateFormats.dateTime)
+        },
+        selectQuestionnaire(value) {
+            this.questionnaireId = value
         },
     },
 }
