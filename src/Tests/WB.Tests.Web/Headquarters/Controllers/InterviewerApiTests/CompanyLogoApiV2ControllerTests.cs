@@ -9,14 +9,14 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
+using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 {
     [TestFixture]
     [TestOf(typeof(SettingsV2Controller))]
-    public class CompanyLogoApiV2ControllerTests
+    public class CompanyLogoApiV2ControllerTestsL
     {
         [Test]
         public void when_headquarters_has_no_logo_Should_return_NoContent_response()
