@@ -10,7 +10,6 @@
     <ItemGroup>
         <PackageReference Include="Autofac" Version="4.9.4" />
         <PackageReference Include="FluentAssertions" Version="5.9.0" />
-        <PackageReference Include="Moq" Version="4.13.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <PackageReference Include="NUnit" Version="3.12.0" />
         <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
@@ -21,12 +20,71 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.4.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     </ItemGroup>
 
     <ItemGroup>
         <!--<ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" />-->
         <!--<ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" />-->
+        <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj" />
         <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Headquarters\Controllers\InterviewerInterviewsControllerTests\**" />
+      <Compile Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
+      <Compile Remove="Headquarters\Controllers\PublicApiTests\**" />
+      <Compile Remove="Headquarters\Controllers\ResourceControllerTests\**" />
+      <Compile Remove="Headquarters\Controllers\TabletReportControllerTests\**" />
+      <Compile Remove="Headquarters\Controllers\WebInterview\**" />
+      <Compile Remove="Headquarters\Controllers\AssignmentsApiControllerTests.cs" />
+      <Compile Remove="Headquarters\Controllers\AssignmentsApiV2ControllerTests.cs" />
+      <Compile Remove="Headquarters\Controllers\DoNotUseVoidApiMethods.cs" />
+      <Compile Remove="Headquarters\Controllers\DummyRestSeviceForCollectUrls.cs" />
+      <Compile Remove="Headquarters\Controllers\HeadquaertersApiRouteTests.cs" />
+      <Compile Remove="Headquarters\Controllers\SupervisorApiControllerTests.cs" />
+      <Compile Remove="Headquarters\InstallationAttributeTests\**" />
+      <Compile Remove="Headquarters\QuestionnaireExporterTest\**" />
+      <Compile Remove="Headquarters\UtilsTests\**" />
+      <Compile Remove="Headquarters\WebInterview\**" />
+      <Compile Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
+      <Compile Remove="Integration\**" />
+      <Compile Remove="Shared\**" />
+      <Compile Remove="SignalrResolverMock.cs" />
+      <Compile Remove="Headquarters\Controllers\InterviewerApiTests\CompanyLogoApiV2ControllerTests.cs" />
+      <Compile Remove="Headquarters\Controllers\InterviewerApiTests\when_map_assignment_to_assignmentApiDocument_AssignmentViewFactoryTests.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Headquarters\Controllers\InterviewerInterviewsControllerTests\**" />
+      <EmbeddedResource Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
+      <EmbeddedResource Remove="Headquarters\Controllers\PublicApiTests\**" />
+      <EmbeddedResource Remove="Headquarters\Controllers\ResourceControllerTests\**" />
+      <EmbeddedResource Remove="Headquarters\Controllers\TabletReportControllerTests\**" />
+      <EmbeddedResource Remove="Headquarters\Controllers\WebInterview\**" />
+      <EmbeddedResource Remove="Headquarters\InstallationAttributeTests\**" />
+      <EmbeddedResource Remove="Headquarters\QuestionnaireExporterTest\**" />
+      <EmbeddedResource Remove="Headquarters\UtilsTests\**" />
+      <EmbeddedResource Remove="Headquarters\WebInterview\**" />
+      <EmbeddedResource Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
+      <EmbeddedResource Remove="Integration\**" />
+      <EmbeddedResource Remove="Shared\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Headquarters\Controllers\InterviewerInterviewsControllerTests\**" />
+      <None Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
+      <None Remove="Headquarters\Controllers\PublicApiTests\**" />
+      <None Remove="Headquarters\Controllers\ResourceControllerTests\**" />
+      <None Remove="Headquarters\Controllers\TabletReportControllerTests\**" />
+      <None Remove="Headquarters\Controllers\WebInterview\**" />
+      <None Remove="Headquarters\InstallationAttributeTests\**" />
+      <None Remove="Headquarters\QuestionnaireExporterTest\**" />
+      <None Remove="Headquarters\UtilsTests\**" />
+      <None Remove="Headquarters\WebInterview\**" />
+      <None Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
+      <None Remove="Integration\**" />
+      <None Remove="Shared\**" />
     </ItemGroup>
 
 </Project>
