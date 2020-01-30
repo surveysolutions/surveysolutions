@@ -1215,7 +1215,7 @@
     <value>Перенести в другую команду</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0} и {1}</value>
+      <value>{{names}} и {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{{names}} и еще {{more}}</value>
