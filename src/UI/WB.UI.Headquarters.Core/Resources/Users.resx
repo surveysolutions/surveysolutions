@@ -142,7 +142,7 @@
     <value>Create supervisor</value>
   </data>
   <data name="CreateAdministrator" xml:space="preserve">
-    <value>Create supervisor</value>
+    <value>Create administrator</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
     <value>Archived supervisors</value>

@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Users;
 
 namespace WB.UI.Headquarters.Controllers
@@ -38,9 +37,9 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.Administration_TabletInfo)]
         public IActionResult TabletInfos() => View("Index");
-        }
 
         [AntiForgeryFilter]
+        [ActivePage(MenuItem.Administration_CreateAdmin)]
         public IActionResult CreateAdmin()
         {
             return View("Index", new {});
@@ -50,37 +49,38 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAdmin(CreateUserModel model)
         {
-            if (ModelState.IsValid)
+        if (ModelState.IsValid)
+        {
+            var hqUser = new HqUser
             {
-                var hqUser = new HqUser
+                UserName = model.UserName,
+                Email = model.Email
+            };
+            var creationResult = await users.CreateAsync(hqUser, model.Password);
+            if (creationResult.Succeeded)
+            {
+                await users.AddToRoleAsync(hqUser, "Administrator");
+                return RedirectToAction("LogOn", "Account");
+            }
+            else
+            {
+                foreach (var error in creationResult.Errors)
                 {
-                    UserName = model.UserName,
-                    Email = model.Email
-                };
-                var creationResult = await users.CreateAsync(hqUser, model.Password);
-                if (creationResult.Succeeded)
-                {
-                    await users.AddToRoleAsync(hqUser, "Administrator");
-                    return RedirectToAction("LogOn", "Account");
-                }
-                else
-                {
-                    foreach (var error in creationResult.Errors)
-                    {
-                        this.ModelState.AddModelError(
-                            error.Code.StartsWith("Password")
-                                ? nameof(CreateUserModel.Password)
-                                : nameof(CreateUserModel.UserName),
-                            error.Description);
-                    }
+                    this.ModelState.AddModelError(
+                        error.Code.StartsWith("Password")
+                            ? nameof(CreateUserModel.Password)
+                            : nameof(CreateUserModel.UserName),
+                        error.Description);
                 }
             }
+        }
 
-            return View("Index", new
-            {
-                Model = model,
-                ModelState = this.ModelState.ErrorsToJsonResult()
-            });
+        return View("Index", new
+        {
+            Model = model,
+            ModelState = this.ModelState.ErrorsToJsonResult()
+        });
+        }
 
         [HttpPost]
         public async Task<ActionResult> TabletInfos(IFormFile file)
