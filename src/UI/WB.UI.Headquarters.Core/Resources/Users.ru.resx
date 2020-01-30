@@ -289,4 +289,12 @@
     <value>Пожалуйста, повторите попытку позже</value>
     <comment>Пожалуйста, повторите попытку позже</comment>
   </data>
+  <data name="ResetPassword" xml:space="preserve">
+      <value>Сброс пароля</value>
+      <comment>Сброс пароля</comment>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+      <value>Сброс пароля пользователя</value>
+      <comment>Сброс пароля пользователя</comment>
+  </data>
 </root>

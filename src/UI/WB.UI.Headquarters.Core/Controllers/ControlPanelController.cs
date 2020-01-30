@@ -111,5 +111,40 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.Administration_InterviewPackages)]
         public IActionResult InterviewPackages() => this.View("Index");
+
+        [HttpGet]
+        [AntiForgeryFilter]
+        [ActivePage(MenuItem.Administration_ChangePassword)]
+        public IActionResult ResetPrivilegedUserPassword() => this.View("Index", new { });
+
+        [HttpPost]
+        [AntiForgeryFilter]
+        [ValidateAntiForgeryToken]
+        [ActivePage(MenuItem.Administration_ChangePassword)]
+        public async Task<IActionResult> ResetPrivilegedUserPassword([FromBody] ChangePasswordByNameModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await users.FindByNameAsync(model.UserName);
+                if (user == null)
+                {
+                    ModelState.AddModelError(nameof(ChangePasswordByNameModel.UserName), "User not found"); 
+                }
+                else
+                {
+                    var result = await users.ResetPasswordAsync(user, user.PasswordHashSha1, model.Password);
+                    foreach (var error in result.Errors)
+                    {
+                        this.ModelState.AddModelError(nameof(ChangePasswordByNameModel.Password), error.Description);
+                    }
+                }
+            }
+
+            return View("Index", new
+            {
+                Model = model,
+                ModelState = this.ModelState.ErrorsToJsonResult()
+            });
+        }
     }
 }

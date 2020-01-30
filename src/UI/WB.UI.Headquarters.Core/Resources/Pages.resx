@@ -942,6 +942,9 @@
   <data name="CreateAdmin" xml:space="preserve">
     <value>Create admin</value>
   </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Reset user password</value>
+  </data>
   <data name="Profile_ApiUsersList" xml:space="preserve">
     <value>API users</value>
   </data>
