@@ -37,7 +37,7 @@ namespace WB.Services.Export.Host
                 var pathToContentRoot = Path.GetDirectoryName(pathToExe);
                 
                 Directory.SetCurrentDirectory(pathToContentRoot);
-                OpenPIDFile();
+                // OpenPIDFile();
 
                 var host = CreateWebHostBuilder(args).UseWindowsService();
                 
@@ -71,6 +71,7 @@ namespace WB.Services.Export.Host
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithProperty("AppType", "ExportService")
+                .Enrich.WithProperty("workerId", "root")
                 .Enrich.WithProperty("Version", fvi.FileVersion)
                 .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
                 .Enrich.WithProperty("Host", Environment.MachineName)
@@ -84,7 +85,6 @@ namespace WB.Services.Export.Host
 
                 .WriteTo
                     .File(Path.GetFullPath(fileLog), LogEventLevel.Debug,
-
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
                     rollingInterval: RollingInterval.Day);
 
@@ -124,7 +124,8 @@ namespace WB.Services.Export.Host
                 {
                     var logConfig = new LoggerConfiguration();
                     logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
-                    logConfig.WriteTo.Console(LogEventLevel.Debug);
+                    logConfig.WriteTo.Console(LogEventLevel.Debug,
+                        "[{Timestamp:HH:mm:ss} {Level:u3}] {workerId} {tenantName} #{jobId} {Message:lj}{NewLine}{Exception}");
                     logConfig.Destructure.ByMaskingProperties("Password", "ArchivePassword");
 
                     ConfigureSerilog(logConfig, hosting.Configuration);
