@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,12 @@ namespace WB.Services.Scheduler.Services.Implementation
             cts = new CancellationTokenSource();
 
             this.scope = this.serviceProvider.CreateScope();
+
+            using (var migrationScope = this.serviceProvider.CreateScope())
+            {
+                await migrationScope.ServiceProvider.GetRequiredService<IJobContextMigrator>().MigrateAsync(cts.Token);
+            }
+
             this.backgroundServices = scope.ServiceProvider.GetServices<IHostedSchedulerService>();
 
             foreach (var backgroundService in backgroundServices)
