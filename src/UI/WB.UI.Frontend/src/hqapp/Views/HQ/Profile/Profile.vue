@@ -493,7 +493,7 @@ export default {
             points: new Map(),
             infoWindow: null,
             lines: [],
-            interviewerId: this.$route.params.interviewerId,
+            interviewerId: this.$route.params.interviewerId || this.$config.model.fullModel.interviewerId,
             selectedTooltips: {},
             colorMap: {
                 red: '#e74924',
