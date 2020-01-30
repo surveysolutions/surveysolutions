@@ -51,7 +51,6 @@
       <Compile Remove="Integration\**" />
       <Compile Remove="Shared\**" />
       <Compile Remove="SignalrResolverMock.cs" />
-      <Compile Remove="Headquarters\Controllers\InterviewerApiTests\CompanyLogoApiV2ControllerTests.cs" />
       <Compile Remove="Headquarters\Controllers\InterviewerApiTests\when_map_assignment_to_assignmentApiDocument_AssignmentViewFactoryTests.cs" />
     </ItemGroup>
 

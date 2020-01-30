@@ -1,7 +1,7 @@
-﻿using System.Net;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
-namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
+namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 {
     [TestFixture]
     [TestOf(typeof(SettingsV2Controller))]
@@ -27,12 +27,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var response = controller.CompanyLogo();
             
             // assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
-            Assert.That(response.Content, Is.Null);
+            Assert.That(response, Is.InstanceOf<NoContentResult>());
         }
 
         [Test]
-        public async Task when_there_is_logo_on_headquarters_and_no_etag_provided()
+        public void when_there_is_logo_on_headquarters_and_no_etag_provided()
         {
             CompanyLogo logo = Web.Create.Entity.HqCompanyLogo();
             IPlainKeyValueStorage<CompanyLogo> logoStorage = new InMemoryKeyValueStorage<CompanyLogo>();
@@ -44,13 +43,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var response = controller.CompanyLogo();
 
             // assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(response.Headers.ETag.Tag, Is.EqualTo($"\"{logo.GetEtagValue()}\""), "Etag of the logo should be provided in response");
-            Assert.That(response.Content, Is.InstanceOf(typeof(ByteArrayContent)));
-
-            var byteArrayContent = (ByteArrayContent)response.Content;
-            var byteArray = await byteArrayContent.ReadAsByteArrayAsync();
-            Assert.That(byteArray, Is.EquivalentTo(logo.Logo));
+            Assert.That(response, Is.InstanceOf<FileContentResult>());
+            var fileResult = (FileContentResult) response;
+            Assert.That(fileResult.EntityTag, Is.EqualTo($"\"{logo.GetEtagValue()}\""));
+            Assert.That(fileResult.FileContents, Is.EquivalentTo(logo.Logo));
         }
 
         [Test]
@@ -66,8 +62,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var response = controller.CompanyLogo();
 
             // assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotModified));
-            Assert.That(response.Content, Is.Null);
+            Assert.That(response, Is.InstanceOf<StatusCodeResult>()
+                                    .With.Property(nameof(StatusCodeResult.StatusCode))
+                                         .EqualTo(StatusCodes.Status304NotModified));
         }
 
         SettingsV2Controller GetController(IPlainKeyValueStorage<CompanyLogo> logoStorage = null,
@@ -83,7 +80,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 httpRequestMessage.Headers.IfNoneMatch.Add(new EntityTagHeaderValue(requestEtag));
             }
 
-            companyLogoApiV2Controller.Request = httpRequestMessage;
+            companyLogoApiV2Controller.ControllerContext  = new ControllerContext
+            {
+                
+            };
             return companyLogoApiV2Controller;
         }
     }
