@@ -29,7 +29,7 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
-
+    <PackageReference Include="System.CommandLine.Experimental" Version="0.3.0-alpha.19577.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
@@ -49,6 +49,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
+    <PackageReference Include="UAParser" Version="3.1.43" />
     <PackageReference Include="ZXing.Net" Version="0.16.5" />
   </ItemGroup>
 
@@ -73,7 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <Folder Include="wwwroot\apidocs\" />
+    <Folder Include="wwwroot\apidocs\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -91,5 +92,5 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
     <EmbeddedResource Include="wwwroot\**\*" />
-  </ItemGroup>  
+  </ItemGroup>
 </Project>
