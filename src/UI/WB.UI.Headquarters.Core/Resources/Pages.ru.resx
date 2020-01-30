@@ -1440,4 +1440,8 @@
       <value>Причина</value>
       <comment>Причина</comment>
   </data>
+  <data name="ChangePassword" xml:space="preserve">
+      <value>Сброс пользовательского пароля</value>
+      <comment>Сброс пользовательского пароля</comment>
+  </data>
 </root>
