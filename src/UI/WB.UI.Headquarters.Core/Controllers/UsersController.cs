@@ -328,7 +328,8 @@ namespace WB.UI.Headquarters.Controllers
         [Route("/Interviewers")]
         public ActionResult Interviewers()
         {
-            var showAddInterviewerButton = (authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter) && !authorizedUser.IsObserving;
+            var canAddUser = (authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter) && !authorizedUser.IsObserving;
+
             return this.View(new
             {
                 DataUrl = Url.Action("AllInterviewers", "UsersApi"),
@@ -338,10 +339,11 @@ namespace WB.UI.Headquarters.Controllers
                 MoveUserToAnotherTeamUrl = Url.Action("MoveUserToAnotherTeam", "UsersApi"),
                 InterviewerProfile = Url.Action("Profile", "Interviewer"),
                 EditUrl = authorizedUser.IsAdministrator ? Url.Action("Manage") : null,
-                CreateUrl = showAddInterviewerButton ? Url.Action("Create", new{ id = UserRoles.Interviewer }) : null,
-                ShowFirstInstructions = !authorizedUser.IsSupervisor && !authorizedUser.IsObserving,
+                CreateUrl = canAddUser ? Url.Action("Create", new{ id = UserRoles.Interviewer }) : null,
+                ShowFirstInstructions = canAddUser,
                 ShowSupervisorColumn = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
                 CanArchiveUnarchive = authorizedUser.IsAdministrator,
+                CanArchiveMoveToOtherTeam = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
                 ShowContextMenu = authorizedUser.IsObserver,
                 InterviewerIssues = new[]
                 {
