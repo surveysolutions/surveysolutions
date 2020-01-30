@@ -136,7 +136,8 @@ namespace WB.UI.Headquarters
                         return;
                     }
 
-                    var result = await userManager.ResetPasswordAsync(user, user.PasswordHashSha1, password);
+                    var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+                    var result = await userManager.ResetPasswordAsync(user, resetToken, password);
                     if (result.Succeeded)
                     {
                         logger.LogInformation($"Reset password for user {username} succeeded");
