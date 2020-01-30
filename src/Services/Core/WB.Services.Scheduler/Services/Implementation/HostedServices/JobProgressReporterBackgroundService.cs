@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using WB.Services.Infrastructure.Logging;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Model.Events;
 
@@ -27,6 +28,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         {
             return Task.Run(async () =>
             {
+                using var ctx = LoggingHelpers.LogContext("workerId", "progressReporter");
                 logger.LogInformation("JobProgressReporterBackgroundService started");
                 foreach (var task in queue.GetConsumingEnumerable())
                 {
