@@ -1078,7 +1078,7 @@
     <value>Le déplacement est en cours</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0} et {1}</value>
+      <value>{{names}} et {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
       <value>{{names}} et {{more}} autres</value>

@@ -1217,7 +1217,7 @@
     <value>Select a team where to move {{names}}</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0} and {1}</value>
+      <value>{{names}} and {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{{names}} and {{more}} more</value>
