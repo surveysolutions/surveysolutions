@@ -276,4 +276,10 @@
   <data name="InterviewerIssues" xml:space="preserve">
     <value>Interviewer issues</value>
   </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Reset user password</value>
+  </data>
 </root>
