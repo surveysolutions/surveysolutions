@@ -258,6 +258,9 @@
     <value>Дата создания учетной записи хедквотера</value>
     <comment>Дата создания учетной записи хедквотера</comment>
   </data>
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Создать администратора</value>
+  </data>
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>Электронная почта хедквотера</value>
     <comment>Электронная почта хедквотера</comment>

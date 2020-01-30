@@ -2,6 +2,7 @@ import Configuration from './Configuration'
 import ControlPanelLayout from './ControlPanelLayout'
 import TabletInfos from './TabletInfos'
 import AppUpdates from './AppUpdates'
+import CreateAdmin from './CreateAdmin'
 import InterviewPackages from './InterviewPackages'
 
 export default class MapComponent {
@@ -22,6 +23,10 @@ export default class MapComponent {
                     {
                         path: 'AppUpdates',
                         component: AppUpdates,
+                    },
+                    {
+                        path: 'CreateAdmin',
+                        component: CreateAdmin,
                     },
                     {
                         path: 'InterviewPackages',
