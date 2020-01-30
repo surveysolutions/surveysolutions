@@ -43,7 +43,12 @@
                             class="btn btn-primary">
                             {{$t('Users.ResetPassword')}}
                         </button>
+                        <span style="padding-left:30px;color:green;"
+                            v-if="$config.model.succeededText"
+                            v-text="$config.model.succeededText">
+                        </span>
                     </div>
+                    
                 </fieldset>
             </form>
         </div>
