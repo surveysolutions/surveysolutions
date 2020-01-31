@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public List<string> CaptchaErrors { get; set; }
         public bool IsPasswordInvalid { get; set; }
         public string SubmitUrl { get; set; }
-        public string CaptchaHtml { get; set; }
+        public string HostedCaptchaHtml { get; set; }
     }
 
     public class FinishWebInterview

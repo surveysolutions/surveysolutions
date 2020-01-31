@@ -28,6 +28,7 @@ using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
@@ -35,6 +36,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -60,7 +62,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
         private readonly IOptions<RecaptchaSettings> recaptchaSettings;
-        private readonly IHostedCaptcha hostedCaptcha;
+        private readonly IOptions<CaptchaConfig> captchaConfig;
+        private readonly IServiceLocator serviceLocator;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -117,7 +120,8 @@ namespace WB.UI.Headquarters.Controllers
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
             IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage,
             IOptions<RecaptchaSettings> recaptchaSettings,
-            IHostedCaptcha hostedCaptcha)
+            IOptions<CaptchaConfig> captchaConfig,
+            IServiceLocator serviceLocator)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
@@ -135,7 +139,8 @@ namespace WB.UI.Headquarters.Controllers
             this.emailProviderSettingsStorage = emailProviderSettingsStorage;
             this.webInterviewSettingsStorage = webInterviewSettingsStorage;
             this.recaptchaSettings = recaptchaSettings;
-            this.hostedCaptcha = hostedCaptcha;
+            this.captchaConfig = captchaConfig;
+            this.serviceLocator = serviceLocator;
         }
 
         [WebInterviewAuthorize]
@@ -669,7 +674,7 @@ namespace WB.UI.Headquarters.Controllers
                 StartedDate = interview.StartedDate?.ToString("o"),
                 QuestionnaireTitle = model.QuestionnaireTitle,
                 UseCaptcha = model.UseCaptcha,
-                CaptchaHtml = model.CaptchaHtml,
+                HostedCaptchaHtml = model.HostedCaptchaHtml,
                 RecaptchaSiteKey = model.RecaptchaSiteKey,
                 HasPassword = model.HasPassword,
                 CaptchaErrors = model.CaptchaErrors,
@@ -700,8 +705,6 @@ namespace WB.UI.Headquarters.Controllers
             var view = new StartWebInterview
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
-                UseCaptcha = webInterviewConfig.UseCaptcha,
-                RecaptchaSiteKey = recaptchaSettings.Value.SiteKey,
                 HasPassword = !string.IsNullOrWhiteSpace(assignment?.Password ?? String.Empty),
                 WelcomeText = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(),
@@ -711,7 +714,9 @@ namespace WB.UI.Headquarters.Controllers
                                 : new List<string>(),
                 IsPasswordInvalid = ViewData.ModelState.ContainsKey("InvalidPassword") && ViewData.ModelState["InvalidPassword"].Errors.Any(),
                 SubmitUrl = Url.Action("Start", "WebInterview"),
-                CaptchaHtml = webInterviewConfig.UseCaptcha ? hostedCaptcha.Render<string>(null).Value : null,
+                UseCaptcha = webInterviewConfig.UseCaptcha,
+                RecaptchaSiteKey = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha ? recaptchaSettings.Value.SiteKey : null,
+                HostedCaptchaHtml = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Hosted ? serviceLocator.GetInstance<IHostedCaptcha>().Render<string>(null).Value : null,
             };
 
             if (assignment != null)
