@@ -5,13 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Net.Http.Headers;
 using Microsoft.Security.Application;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using NHibernate.SqlCommand;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -34,30 +31,6 @@ namespace WB.UI.Headquarters.Code
 
         private static Regex buildVersionRegex = new Regex("build (\\d+)", RegexOptions.Compiled);
 
-        public static Version GetProductVersionFromUserAgent(this HttpRequest request, string productName)
-        {
-            foreach (var product in request.Headers[HeaderNames.UserAgent])
-            {
-                if (product.StartsWith(productName, StringComparison.OrdinalIgnoreCase))
-                {
-                    var parts = product.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length > 0)
-                    {
-                        var productVersion = parts[0].Split('/', StringSplitOptions.RemoveEmptyEntries);
-                        if (productVersion.Length == 2)
-                        {
-                            if (Version.TryParse(productVersion[1], out Version version))
-                            {
-                                return version;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-
         public static int? GetBuildNumberFromUserAgent(this HttpRequest request)
         {
             if (request?.Headers?.ContainsKey(HeaderNames.UserAgent) != true) return null;
@@ -78,11 +51,6 @@ namespace WB.UI.Headquarters.Code
             return null;
         }
 
-        //public static IHtmlContent ToSafeJavascriptMessage(this IHtmlHelper<object> page, string sourceMessage)
-        //{
-        //    return ToSafeJavascriptMessage(page as HtmlHelper, sourceMessage);
-        //}
-
         public static IHtmlContent ToSafeJavascriptMessage(this IHtmlHelper page, string sourceMessage)
         {
             var html = Encoder.JavaScriptEncode(sourceMessage, false);
@@ -101,24 +69,12 @@ namespace WB.UI.Headquarters.Code
                 script += $"window.CONFIG.title=\"{helper.ToSafeJavascriptMessage(titleString)}\"";
             }
 
-            var json = model != null ? JsonConvert.SerializeObject(model, asJsonValueSettings) : "null";
+            var json = model != null ? JsonConvert.SerializeObject(model, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }) : "null";
 
             return new HtmlString($@"<script>{script};window.CONFIG.model={json}</script>");
-        }
-
-        private static readonly JsonSerializerSettings asJsonValueSettings = new JsonSerializerSettings
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
-
-        public static string QuestionnaireName(this IHtmlHelper html, string name, long version)
-        {
-            return string.Format(Pages.QuestionnaireNameFormat, name, version);
-        }
-
-        public static string QuestionnaireNameVerstionFirst(this IHtmlHelper html, string name, long version)
-        {
-            return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
         }
 
         public static T Get<T>(this ISession session, string key)
@@ -145,10 +101,7 @@ namespace WB.UI.Headquarters.Code
             }
         }
 
-        public static string MapPath(this IWebHostEnvironment hostingEnvironment, string path)
-        {
-            var targetPath = Path.Combine(hostingEnvironment.WebRootPath, path);
-            return targetPath;
-        }
+        public static string MapPath(this IWebHostEnvironment hostingEnvironment, string path) =>
+            Path.Combine(hostingEnvironment.WebRootPath, path);
     }
 }
