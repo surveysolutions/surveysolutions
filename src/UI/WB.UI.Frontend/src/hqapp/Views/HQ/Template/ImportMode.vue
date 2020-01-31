@@ -14,12 +14,14 @@
             </ol>
             <h1>{{this.$t('QuestionnaireImport.ImportModePageTitle')}}</h1>
         </template>
-        <div class="row">
+        <div class="row"
+            v-if="hasQuestionnaireInfo">
             <div class="col-sm-8">
                 <h2>{{this.$config.model.questionnaireInfo.name}}</h2>
             </div>
         </div>
-        <div class="row questionnaire-statistics">
+        <div class="row questionnaire-statistics"
+            v-if="hasQuestionnaireInfo">
             <div class="col-md-4 col-sm-5">
                 <ul>
                     <li>
@@ -59,7 +61,8 @@
             </div>
         </div>
         <form method="post"
-            class="import-questionnaire-form">
+            class="import-questionnaire-form"
+            v-if="hasQuestionnaireInfo">
             <input
                 name="__RequestVerificationToken"
                 type="hidden"
@@ -175,6 +178,11 @@ export default {
         },
         selectQuestionnaire(value) {
             this.questionnaireId = value
+        },
+    },
+    computed: {
+        hasQuestionnaireInfo() {
+            return this.$config.model.questionnaireInfo != null
         },
     },
 }

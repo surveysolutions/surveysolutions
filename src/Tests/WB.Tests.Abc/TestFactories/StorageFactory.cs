@@ -3,6 +3,7 @@ using System.Linq;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using Main.Core.Documents;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -64,19 +65,17 @@ namespace WB.Tests.Abc.TestFactories
 
         public IInterviewerProfileFactory UserProfileFactory() => Mock.Of<IInterviewerProfileFactory>();
 
-        // TODO: Core migration https://issues.mysurvey.solutions/youtrack/issue/KP-13523
-        //public HqUserManager HqUserManager(IUserRepository userStore = null,
-        //    IHashCompatibilityProvider hashCompatibilityProvider = null,
-        //    IIdentityPasswordHasher passwordHasher = null,
-        //    IPasswordValidator passwordValidator = null,
-        //    IIdentityValidator identityValidator = null,
-        //    ISystemLog logger = null)
-        //    => new HqUserManager(userStore ?? Mock.Of<IUserRepository>(),
-        //        hashCompatibilityProvider,
-        //        passwordHasher ?? Mock.Of<IIdentityPasswordHasher>(),
-        //        passwordValidator ?? Mock.Of<IPasswordValidator>(),
-        //        identityValidator ?? Mock.Of<IIdentityValidator>(),
-        //        logger ?? Mock.Of<ISystemLog>());
+        // public UserManager<HqUser> HqUserManager(IUserRepository userStore = null,
+        //     IHashCompatibilityProvider hashCompatibilityProvider = null,
+        //     IIdentityPasswordHasher passwordHasher = null,
+        //     IIdentityValidator identityValidator = null,
+        //     ISystemLog logger = null)
+        //     => new UserManager<HqUser>(userStore ?? Mock.Of<IUserRepository>(),
+        //         hashCompatibilityProvider,
+        //         passwordHasher ?? Mock.Of<IIdentityPasswordHasher>(),
+        //         passwordValidator ?? Mock.Of<IPasswordValidator>(),
+        //         identityValidator ?? Mock.Of<IIdentityValidator>(),
+        //         logger ?? Mock.Of<ISystemLog>());
 
         public IAssignmentDocumentsStorage AssignmentDocumentsInmemoryStorage()
         {

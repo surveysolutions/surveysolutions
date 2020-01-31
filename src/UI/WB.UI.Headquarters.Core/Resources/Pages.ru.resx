@@ -1215,7 +1215,7 @@
     <value>Перенести в другую команду</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0} и {1}</value>
+      <value>{{names}} и {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{{names}} и еще {{more}}</value>
@@ -1439,5 +1439,9 @@
   <data name="Admin_InterviewPackages_Reason" xml:space="preserve">
       <value>Причина</value>
       <comment>Причина</comment>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+      <value>Сброс пользовательского пароля</value>
+      <comment>Сброс пользовательского пароля</comment>
   </data>
 </root>

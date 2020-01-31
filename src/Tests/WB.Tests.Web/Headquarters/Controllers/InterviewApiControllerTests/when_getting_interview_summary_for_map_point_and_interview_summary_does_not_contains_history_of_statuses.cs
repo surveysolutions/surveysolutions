@@ -3,10 +3,9 @@ using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Controllers.Api;
 
-
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
+namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
 {
     internal class when_getting_interview_summary_for_map_point_and_interview_summary_does_not_contains_history_of_statuses : InterviewApiControllerTestsContext
     {
