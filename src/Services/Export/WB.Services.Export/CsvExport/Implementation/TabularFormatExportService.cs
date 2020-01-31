@@ -97,30 +97,15 @@ namespace WB.Services.Export.CsvExport.Implementation
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
             var assignmentIdsToExport = new HashSet<int>(interviewsToExport.Where(x => x.AssignmentId.HasValue).Select(x => x.AssignmentId.Value)).ToList();
 
-            var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-
             Stopwatch exportWatch = Stopwatch.StartNew();
 
-            try
-            {
-                await Task.WhenAll(
-                    this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, tempPath, tenant, exportCommentsProgress, cts.Token),
-                    this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cts.Token),
-                    this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cts.Token),
-                    this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cts.Token),
-                    this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath, exportAssignmentActionsProgress, cts.Token),
-                    this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cts.Token)
-                );
-            }
-            catch
-            {
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    cts.Cancel();
-                }
-
-                throw;
-            }
+            // TODO: Make them real parallel
+            await this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, tempPath, tenant, exportCommentsProgress, cancellationToken);
+            await this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cancellationToken);
+            await this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cancellationToken);
+            await this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant,  exportDiagnosticsProgress, cancellationToken);
+            await this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath,  exportAssignmentActionsProgress, cancellationToken);
+            await this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
 
             exportWatch.Stop();
 
