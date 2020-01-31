@@ -20,7 +20,6 @@ namespace WB.Services.Export.Host
 {
     class Program
     {
-        private static FileStream pid;
 
         static async Task Main(string[] args)
         {
@@ -32,15 +31,19 @@ namespace WB.Services.Export.Host
                     Console.WriteLine(eventArgs.ExceptionObject.ToString());
                     Log.Logger.Fatal("Unhandled exception occur {exception}", new[] { eventArgs.ExceptionObject.ToString() });
                 };
-                
+
                 var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
                 var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-                
+
                 Directory.SetCurrentDirectory(pathToContentRoot);
-                // OpenPIDFile();
+
+                if (args.All(a => a != "--ignore-pid"))
+                {
+                    new StartupBlocker().OpenPIDFile();
+                }
 
                 var host = CreateWebHostBuilder(args).UseWindowsService();
-                
+
                 if (WindowsServiceHelpers.IsWindowsService())
                 {
                     host = host.UseContentRoot(pathToContentRoot);
@@ -154,19 +157,8 @@ namespace WB.Services.Export.Host
                         c.AddCommandLine(args);
                     });
 
-                     web.UseSerilog();
+                    web.UseSerilog();
                 });
-        }
-
-        // pid file - is a file that is exists only while process is alive and contains own process id
-        private static void OpenPIDFile()
-        {
-            pid = new FileStream("pid", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read, 4096,
-                FileOptions.DeleteOnClose);
-            var writer = new StreamWriter(pid);
-
-            writer.WriteLine(Process.GetCurrentProcess().Id);
-            writer.Flush();
         }
     }
 }
