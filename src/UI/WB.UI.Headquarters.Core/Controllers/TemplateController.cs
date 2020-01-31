@@ -134,22 +134,23 @@ namespace WB.UI.Headquarters.Controllers
 
         private async Task<ImportModeModel> GetImportModel(Guid id)
         {
-            ImportModeModel model = new ImportModeModel();
+            var model = new ImportModeModel
+            {
+                SurveySetupUrl = Url.Action("Index", "SurveySetup"), 
+                ListOfMyQuestionnaires = Url.Action("Import"),
+                NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id)
+            };
+            model.QuestionnairesToUpgradeFrom =
+                this.questionnaires.GetOlderQuestionnairesWithPendingAssignments(id, model.NewVersionNumber)
+                    .Select(x =>
+                        new ComboboxOptionModel(
+                            new QuestionnaireIdentity(x.TemplateId, x.TemplateVersion).ToString(),
+                            string.Format(Pages.QuestionnaireNameVersionFirst, x.TemplateName, x.TemplateVersion)))
+                    .ToList();
+
             try
             {
-                var questionnaireInfo = await this.designerApi.GetQuestionnaireInfo(id);
-
-                model.QuestionnaireInfo = questionnaireInfo;
-                model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
-                model.QuestionnairesToUpgradeFrom =
-                    this.questionnaires.GetOlderQuestionnairesWithPendingAssignments(id, model.NewVersionNumber)
-                        .Select(x =>
-                            new ComboboxOptionModel(
-                                new QuestionnaireIdentity(x.TemplateId, x.TemplateVersion).ToString(),
-                                string.Format(Pages.QuestionnaireNameVersionFirst, x.TemplateName, x.TemplateVersion)))
-                        .ToList();
-                model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
-                model.ListOfMyQuestionnaires = Url.Action("Import");
+                model.QuestionnaireInfo = await this.designerApi.GetQuestionnaireInfo(id);
             }
             catch (RestException e)
             {
