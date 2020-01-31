@@ -11,7 +11,15 @@
 	}
 	.panel-details{
 		z-index: 7;
-	}
+    }
+    .action-container{
+        padding: 20px 40px 20px 80px;
+        a{
+            max-width: $width-question-editor - 20px;
+            white-space: normal;
+            text-align: left;
+        }
+    }
 }
 .reset-filters{
 	font-size: 14px;
@@ -246,14 +254,7 @@
 		}
 	}
 }
-.action-container{
-	padding: 20px 40px 20px 80px;
-	a{
-		max-width: $width-question-editor - 20px;
-		white-space: normal;
-		text-align: left;
-	}
-}
+
 %border-color{
 	.options-group{
 		background-color: transparent;
