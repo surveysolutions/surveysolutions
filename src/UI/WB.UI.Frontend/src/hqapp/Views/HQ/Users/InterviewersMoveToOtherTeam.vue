@@ -189,6 +189,8 @@ export default {
                 await self.migarateInterviewer(interviewer)
                 await self.timeout(500)
             }
+
+            this.$emit('moveInterviewersCompleted')
         },
         async migarateInterviewer(interviewer) {
             var self = this
