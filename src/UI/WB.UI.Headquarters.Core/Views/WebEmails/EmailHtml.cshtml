@@ -100,7 +100,7 @@
                             <ul>
                                 @if (Model.Id != null)
                                 {
-                                    <li><a href="@(webRoot + "/" + linkGenerator.GetPathByAction("Html", "WebEmails", new {id = Model.Id}))" style="color: #808080; text-decoration: none; padding: 0 10px;">View email in browser</a></li>
+                                    <li><a href="@(new Uri(webRoot, linkGenerator.GetPathByAction("Html", "WebEmails", new {id = Model.Id})))" style="color: #808080; text-decoration: none; padding: 0 10px;">View email in browser</a></li>
                                 }
                             </ul>
                         </td>
