@@ -61,7 +61,8 @@
         </Confirm>
 
         <ModalFrame ref="progress"
-            id="move-interviewer-progress-template">
+            id="move-interviewer-progress-template"
+            :title="movingDialogTitle">
             <div class="max-height-in-popup">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
@@ -112,6 +113,7 @@ export default {
             whatToDoWithAssignments: null,
             supervisor: null,
             progressInterviewers: [],
+            movingDialogTitle: '',
         }
     },
     props: {
@@ -152,6 +154,7 @@ export default {
         moveToAnotherTeam() {
             this.whatToDoWithAssignments = null
             this.supervisor = null
+            this.movingDialogTitle = ''
 
             var self = this
             this.$refs.move.promt(async ok => {
@@ -168,6 +171,8 @@ export default {
         },
         async runMoveInterviewersProgress() {
             var self = this
+
+            this.movingDialogTitle = this.$t('Pages.Interviewers_MovingIsInProgress')
 
             this.progressInterviewers = map(this.interviewers, function(interviewer) {
                 var progressItem = {}
@@ -191,6 +196,8 @@ export default {
                 await self.migarateInterviewer(interviewer)
                 await self.timeout(500)
             }
+
+            this.movingDialogTitle = this.$t('Pages.Interviewers_MovingCompleted')
 
             this.$emit('moveInterviewersCompleted')
         },
@@ -220,6 +227,9 @@ export default {
     },
     computed: {
         model() {
+            return this.$config.model
+        },
+        movingTitle() {
             return this.$config.model
         },
         selectedSupervisor() {
