@@ -13,7 +13,7 @@
         </div>
         <div class="additional-info-block">
             <ul class="list-unstyled">
-                <li v-if="model.startedDate"
+                <li v-if="$config.model.startedDate"
                     v-dateTimeFormatting>
                     {{ $t('WebInterview.InterviewStartDateFormatText') }} 
                     <time :datetime="$config.model.startedDate"></time>
