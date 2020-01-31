@@ -44,13 +44,17 @@ namespace WB.Tests.Web.TestFactories
             IUserViewFactory userViewFactory = null,
             ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory = null)
         {
-            return new ReportsController(
+            var reportsController = new ReportsController(
                 mapReport ?? Mock.Of<IMapReport>(),
                 Mock.Of<IChartStatisticsViewFactory>(),
                 allUsersAndQuestionnairesFactory ?? Mock.Of<IAllUsersAndQuestionnairesFactory>(_ => _.Load() == new AllUsersAndQuestionnairesView() { Questionnaires = new TemplateViewItem[0] }),
                 new TestInMemoryWriter<InterviewSummary>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(), 
                 authorizedUser ?? Mock.Of<IAuthorizedUser>());
+
+            reportsController.Url = Mock.Of<IUrlHelper>();
+
+            return reportsController;
         }
 
         public InterviewerControllerBase InterviewerApiController(ITabletInformationService tabletInformationService = null,
