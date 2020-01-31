@@ -43,7 +43,10 @@ export default class AssignmentsComponent {
                                     Vue.$http
                                         .get(config.model.api.importStatusUrl)
                                         .then(response => {
-                                            self.rootStore.dispatch('setUploadStatus', response.data)
+                                            if (response.data) {
+                                                self.rootStore.dispatch('setUploadStatus', response.data)
+                                            }
+
                                             if (response.data != null && response.data.isOwnerOfRunningProcess) {
                                                 if (to.params.questionnaireId != response.data.questionnaireIdentity.id)
                                                     window.location.href = '/Assignments/Upload/' + response.data.questionnaireIdentity.id
