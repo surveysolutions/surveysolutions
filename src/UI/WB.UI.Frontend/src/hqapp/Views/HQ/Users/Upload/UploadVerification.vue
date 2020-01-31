@@ -18,8 +18,8 @@
                     v-for="(error, i) in verificationErrors"
                     :key="i">
                     <h5 class="error-text">
-                        <span>[{{$t('UploadUsers.Line')}}: {{error.line}}, {{$t('UploadUsers.Column')}}: {{error.column}}]</span>
-                        : {{error.message}}
+                        <span v-if="hasLineAndColumn(error)">[{{$t('UploadUsers.Line')}}: {{error.line}}, {{$t('UploadUsers.Column')}}: {{error.column}}] :</span>
+                        {{error.message}}
                     </h5>
                     <p>{{error.description}}</p>
                     <p>{{error.recomendation}}</p>
@@ -49,6 +49,7 @@
 
 <script>
 import * as toastr from 'toastr'
+import {isEmpty} from 'lodash'
 
 export default {
     computed: {
@@ -94,6 +95,9 @@ export default {
                     else if (e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage)
                     else toastr.error(window.input.settings.messages.unhandledExceptionMessage)
                 })
+        },
+        hasLineAndColumn(error){
+            return !isEmpty(error.line) && !isEmpty(error.column)
         },
     },
 }

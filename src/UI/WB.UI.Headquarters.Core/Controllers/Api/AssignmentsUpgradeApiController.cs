@@ -86,6 +86,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 csvWriter.Flush();
                 streamWriter.Flush();
 
+                resultStream.Seek(0, SeekOrigin.Begin);
                 var fileContents = Compress(resultStream);
                 var fileName = this.GetOutputFileName(assignmentUpgradeProgressDetails.MigrateTo);
                 return File(fileContents, "application/octet-stream", fileName, null, null, false);

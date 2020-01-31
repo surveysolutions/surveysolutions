@@ -1,10 +1,9 @@
 using FluentAssertions;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Tests.Web;
-using WB.UI.Headquarters.Code.CommandTransformation;
+using WB.UI.Headquarters.Services.Impl;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.CommandTransformatorTests
+namespace WB.Tests.Web.Headquarters.CommandTransformatorTests
 {
     internal class when_need_to_transform_CreateInterviewControllerCommand: CommandTransformatorTestsContext
     {

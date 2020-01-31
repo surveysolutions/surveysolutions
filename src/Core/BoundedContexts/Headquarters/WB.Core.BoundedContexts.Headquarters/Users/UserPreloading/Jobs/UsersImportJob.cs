@@ -18,42 +18,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
     {
         private readonly IServiceLocator serviceLocator;
         private readonly ILogger logger;
-        private readonly IUserImportService userImportService;
         private readonly ISystemLog systemLog;
 
-        public UsersImportJob(IServiceLocator serviceLocator, ILogger logger, IUserImportService userImportService,
-            ISystemLog systemLog)
+        public UsersImportJob(IServiceLocator serviceLocator, ILogger logger, ISystemLog systemLog)
         {
             this.serviceLocator = serviceLocator;
             this.logger = logger;
-            this.userImportService = userImportService;
             this.systemLog = systemLog;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             logger.Info("User import job: Started");
 
             var sw = new Stopwatch();
             sw.Start();
 
-            ImportUsers();
+            await ImportUsersAsync();
 
             sw.Stop();
             logger.Info($"User import job: Finished. Elapsed time: {sw.Elapsed}");
-            return Task.CompletedTask;
         }
 
-        private void ImportUsers()
+        private async Task ImportUsersAsync()
         {
             try
             {
-                var userToImport = this.userImportService.GetUserToImport();
+                var userImportService = this.serviceLocator.GetInstance<IUserImportService>();
+
+                var userToImport = userImportService.GetUserToImport();
                 if (userToImport == null) return;
 
                 do
                 {
-                    this.CreateUserOrUnarchiveAndUpdateAsync(userToImport).WaitAndUnwrapException();
+                    await this.CreateUserOrUnarchiveAndUpdateAsync(userToImport);
 
                     userImportService.RemoveImportedUser(userToImport);
 
@@ -74,47 +72,45 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 
         private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate)
         {
-            using (var userManager = serviceLocator.GetInstance<UserManager<HqUser>>())
+            var userManager = serviceLocator.GetInstance<UserManager<HqUser>>();
+            var userRepository = serviceLocator.GetInstance<IUserRepository>();
+            var user = await userManager.FindByNameAsync(userToCreate.Login);
+
+            if (user == null)
             {
-                var userRepository = serviceLocator.GetInstance<IUserRepository>();
-                var user = await userManager.FindByNameAsync(userToCreate.Login);
+                Guid? supervisorId = null;
 
-                if (user == null)
+                if (!string.IsNullOrEmpty(userToCreate.Supervisor))
+                    supervisorId = (await userManager.FindByNameAsync(userToCreate.Supervisor))?.Id;
+
+                var role = userRepository.FindRole(userToCreate.UserRole.ToUserId());
+                var hqUser = new HqUser
                 {
-                    Guid? supervisorId = null;
+                    Id = Guid.NewGuid(),
+                    UserName = userToCreate.Login,
+                    FullName = userToCreate.FullName,
+                    Email = userToCreate.Email,
+                    PhoneNumber = userToCreate.PhoneNumber,
+                    Profile = supervisorId.HasValue
+                        ? new HqUserProfile
+                        {
+                            SupervisorId = supervisorId
+                        }
+                        : null,
+                };
+                hqUser.Roles.Add(role);
+                await userManager.CreateAsync(hqUser, userToCreate.Password);
+            }
+            else
+            {
+                user.FullName = userToCreate.FullName;
+                user.Email = userToCreate.Email;
+                user.PhoneNumber = userToCreate.PhoneNumber;
+                user.IsArchived = false;
 
-                    if (!string.IsNullOrEmpty(userToCreate.Supervisor))
-                        supervisorId = (await userManager.FindByNameAsync(userToCreate.Supervisor))?.Id;
-
-                    var role = userRepository.FindRole(userToCreate.UserRole.ToUserId());
-                    var hqUser = new HqUser
-                    {
-                        Id = Guid.NewGuid(),
-                        UserName = userToCreate.Login,
-                        FullName = userToCreate.FullName,
-                        Email = userToCreate.Email,
-                        PhoneNumber = userToCreate.PhoneNumber,
-                        Profile = supervisorId.HasValue
-                            ? new HqUserProfile
-                            {
-                                SupervisorId = supervisorId
-                            }
-                            : null,
-                    };
-                    hqUser.Roles.Add(role);
-                    await userManager.CreateAsync(hqUser, userToCreate.Password);
-                }
-                else
-                {
-                    user.FullName = userToCreate.FullName;
-                    user.Email = userToCreate.Email;
-                    user.PhoneNumber = userToCreate.PhoneNumber;
-                    user.IsArchived = false;
-
-                    await userManager.UpdateAsync(user);
-                    string passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
-                    await userManager.ResetPasswordAsync(user, passwordResetToken, userToCreate.Password);
-                }
+                await userManager.UpdateAsync(user);
+                string passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+                await userManager.ResetPasswordAsync(user, passwordResetToken, userToCreate.Password);
             }
         }
     }

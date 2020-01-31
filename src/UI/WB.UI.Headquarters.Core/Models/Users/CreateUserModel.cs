@@ -13,6 +13,7 @@ namespace WB.UI.Headquarters.Models.Users
         [RegularExpression(UserNameRegularExpression, ErrorMessageResourceName = nameof(FieldsAndValidations.UserNameErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         public string UserName { get; set; }
 
+        [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredPasswordErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
 
