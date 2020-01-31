@@ -7,11 +7,10 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Controllers.Api;
 using WB.UI.Headquarters.Models.Api;
 
-
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
+namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
 {
     internal class when_getting_all_interviews_for_team_containing_tags_in_prefield : InterviewApiControllerTestsContext
     {

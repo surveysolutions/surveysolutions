@@ -11,8 +11,6 @@ namespace WB.Tests.Web
 
         public static readonly CommandFactory Command = new CommandFactory();
 
-        public static readonly OtherFactory Other = new OtherFactory();
-
         public static readonly StorageFactory Storage = new StorageFactory();
 
         public static readonly ControllerFactory Controller = new ControllerFactory();
