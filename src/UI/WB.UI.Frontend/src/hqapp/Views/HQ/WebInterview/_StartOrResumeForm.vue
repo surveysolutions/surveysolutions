@@ -21,8 +21,15 @@
                 </p>
             </div>
 
-            <div v-if="model.useCaptcha && !model.serverUnderLoad"
-                v-html="model.captchaHtml"
+            <div v-if="model.useCaptcha && model.recaptchaSiteKey && !model.serverUnderLoad"
+                class="form-group">
+                <vue-recaptcha
+                    v-if="model.useCaptcha"
+                    :sitekey="model.recaptchaSiteKey"
+                    :loadRecaptchaScript="true"></vue-recaptcha>
+            </div>
+            <div v-if="model.useCaptcha && model.hostedCaptchaHtml && !model.serverUnderLoad"
+                v-html="model.hostedCaptchaHtml"
                 class="form-group">
             </div>
 
@@ -68,7 +75,12 @@
 
 <script>
 
+import VueRecaptcha from 'vue-recaptcha'
+
 export default {
+    components: {
+        VueRecaptcha,
+    },
     props: {
         buttonTitle: null,
     },
