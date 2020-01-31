@@ -5,56 +5,58 @@
             :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', {names: this.formatNames(this.interviewers)})"
             slot="modals"
             :disableOk="!whatToDoWithAssignments || !supervisor">
-            <Typeahead
-                ref="supervisorControl"
-                control-id="supervisor"
-                fuzzy
-                data-vv-name="supervisor"
-                data-vv-as="supervisor"
-                :placeholder="$t('Common.AllSupervisors')"
-                :value="supervisor"
-                :fetch-url="$config.model.supervisorsUrl"
-                v-on:selected="supervisorSelected"/>
+            <div class="alert">
+                <Typeahead
+                    ref="supervisorControl"
+                    control-id="supervisor"
+                    fuzzy
+                    data-vv-name="supervisor"
+                    data-vv-as="supervisor"
+                    :placeholder="$t('Common.AllSupervisors')"
+                    :value="supervisor"
+                    :fetch-url="$config.model.supervisorsUrl"
+                    v-on:selected="supervisorSelected"/>
 
-            <br />
-            <br />
-            <div v-if="supervisor && interviewersToStay.length > 0">
-                <p
-                    v-html="$t('Pages.Interviewers_InterviewersToStay', { interviewers: `<b>${interviewersToStayNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>` })"></p>
-            </div>
-            <div v-if="supervisor && interviewersToMove.length > 0">
-                <p
-                    v-html="$t('Pages.Interviewers_InterviewersToMove', { interviewers: `<b>${interviewersToMoveNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>`})"></p>
-            </div>
+                <br />
+                <br />
+                <div v-if="supervisor && interviewersToStay.length > 0">
+                    <p
+                        v-html="$t('Pages.Interviewers_InterviewersToStay', { interviewers: `<b>${interviewersToStayNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>` })"></p>
+                </div>
+                <div v-if="supervisor && interviewersToMove.length > 0">
+                    <p
+                        v-html="$t('Pages.Interviewers_InterviewersToMove', { interviewers: `<b>${interviewersToMoveNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>`})"></p>
+                </div>
 
-            <div class="radio"
-                v-if="supervisor && interviewersToMove.length > 0">
-                <input
-                    id="reassignToOriginalSupervisor"
-                    v-model="whatToDoWithAssignments"
-                    name="whatToDoWithAssignments"
-                    value="ReassignToOriginalSupervisor"
-                    type="radio"
-                    class="wb-radio"/>
-                <label for="reassignToOriginalSupervisor">
-                    <span class="tick"></span>
-                    {{ $t('Pages.Interviewers_ReassignToOriginalSupervisor') }}
-                </label>
-            </div>
-            <div class="radio"
-                v-if="supervisor && interviewersToMove.length > 0">
-                <input
-                    id="moveAllToNewTeam"
-                    type="radio"
-                    v-model="whatToDoWithAssignments"
-                    name="whatToDoWithAssignments"
-                    value="MoveAllToNewTeam"
-                    class="wb-radio"/>
-                <label for="moveAllToNewTeam">
-                    <span class="tick"></span>
-                    <span
-                        v-html="$t('Pages.Interviewers_MoveAllToNewTeam', { supervisor: `<b>${selectedSupervisor}</b>`})"></span>
-                </label>
+                <div class="radio"
+                    v-if="supervisor && interviewersToMove.length > 0">
+                    <input
+                        id="reassignToOriginalSupervisor"
+                        v-model="whatToDoWithAssignments"
+                        name="whatToDoWithAssignments"
+                        value="ReassignToOriginalSupervisor"
+                        type="radio"
+                        class="wb-radio"/>
+                    <label for="reassignToOriginalSupervisor">
+                        <span class="tick"></span>
+                        {{ $t('Pages.Interviewers_ReassignToOriginalSupervisor') }}
+                    </label>
+                </div>
+                <div class="radio"
+                    v-if="supervisor && interviewersToMove.length > 0">
+                    <input
+                        id="moveAllToNewTeam"
+                        type="radio"
+                        v-model="whatToDoWithAssignments"
+                        name="whatToDoWithAssignments"
+                        value="MoveAllToNewTeam"
+                        class="wb-radio"/>
+                    <label for="moveAllToNewTeam">
+                        <span class="tick"></span>
+                        <span
+                            v-html="$t('Pages.Interviewers_MoveAllToNewTeam', { supervisor: `<b>${selectedSupervisor}</b>`})"></span>
+                    </label>
+                </div>
             </div>
         </Confirm>
 
