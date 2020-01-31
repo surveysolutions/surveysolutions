@@ -1,6 +1,4 @@
 using System;
-using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,7 +36,7 @@ namespace WB.UI.Headquarters
                 IHost host = CreateHostBuilder(args).Build();
                 if (args.Length > 0 && args[0].Equals("manage", StringComparison.OrdinalIgnoreCase))
                 {
-                    return await new SupportTool(host).Run(args.Skip(1).ToArray());
+                    return await new SupportTool.SupportTool(host).Run(args.Skip(1).ToArray());
                 }
                 
                 var version = host.Services.GetRequiredService<IProductVersion>();
