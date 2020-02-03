@@ -35,74 +35,73 @@ namespace WB.Services.Export.Interview
                 var connection = tenantDbContext.Database.GetDbConnection();
                 var interviewsQuery = InterviewQueryBuilder.GetInterviewsQuery(@group);
 
-                using (var reader = connection.ExecuteReader(interviewsQuery, new { ids = interviewsId }))
+                using var reader = connection.ExecuteReader(interviewsQuery, new { ids = interviewsId });
+
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    var groupInterviewEntity = new InterviewEntity
                     {
-                        var groupInterviewEntity = new InterviewEntity
+                        Identity = new Identity(@group.PublicKey,
+                            @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty),
+                        EntityType = EntityType.Section,
+                        InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
+                        IsEnabled = (bool)reader[$"enablement__{@group.ColumnName}"]
+                    };
+
+                    yield return groupInterviewEntity;
+
+                    foreach (var groupChild in @group.Children)
+                    {
+                        if (groupChild is Question question)
                         {
-                            Identity = new Identity(group.PublicKey,
-                                         @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty),
-                            EntityType = EntityType.Section,
-                            InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
-                            IsEnabled = (bool)reader[$"enablement__{group.ColumnName}"]
-                        };
+                            var identity = new Identity(question.PublicKey,
+                                @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty);
+                            var interviewEntity = new InterviewEntity
+                            {
+                                Identity = identity,
+                                EntityType = EntityType.Question,
+                                InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
+                                InvalidValidations = reader[$"validity__{question.ColumnName}"] is DBNull
+                                    ? Array.Empty<int>()
+                                    : (int[])reader[$"validity__{question.ColumnName}"],
+                                IsEnabled = (bool)reader[$"enablement__{question.ColumnName}"]
+                            };
 
-                        yield return groupInterviewEntity;
-
-                        foreach (var groupChild in @group.Children)
+                            var answer = reader[$"data__{question.ColumnName}"];
+                            FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
+                            yield return interviewEntity;
+                        }
+                        else if (groupChild is Variable variable)
                         {
-                            if (groupChild is Question question)
+                            var identity = new Identity(variable.PublicKey,
+                                @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty);
+                            var interviewEntity = new InterviewEntity
                             {
-                                var identity = new Identity(question.PublicKey,
-                                    @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty);
-                                var interviewEntity = new InterviewEntity
-                                {
-                                    Identity = identity,
-                                    EntityType = EntityType.Question,
-                                    InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
-                                    InvalidValidations = reader[$"validity__{question.ColumnName}"] is DBNull
-                                        ? Array.Empty<int>()
-                                        : (int[])reader[$"validity__{question.ColumnName}"],
-                                    IsEnabled = (bool)reader[$"enablement__{question.ColumnName}"]
-                                };
+                                Identity = identity,
+                                EntityType = EntityType.Variable,
+                                InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
+                                IsEnabled = (bool)reader[$"enablement__{variable.ColumnName}"]
+                            };
+                            var val = reader[$"data__{variable.ColumnName}"];
+                            FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
+                            yield return interviewEntity;
+                        }
+                        else if (groupChild is StaticText staticText)
+                        {
+                            var identity = new Identity(staticText.PublicKey,
+                                @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty);
+                            var interviewEntity = new InterviewEntity
+                            {
+                                Identity = identity,
+                                EntityType = EntityType.StaticText,
+                                InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
+                                IsEnabled = (bool)reader[$"enablement__{staticText.ColumnName}"],
+                                InvalidValidations = reader[$"validity__{staticText.ColumnName}"] is DBNull
+                                    ? Array.Empty<int>()
+                                    : (int[])reader[$"validity__{staticText.ColumnName}"],
+                            };
 
-                                var answer = reader[$"data__{question.ColumnName}"];
-                                FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
-                                yield return interviewEntity;
-                            }
-                            else if (groupChild is Variable variable)
-                            {
-                                var identity = new Identity(variable.PublicKey,
-                                    @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty);
-                                var interviewEntity = new InterviewEntity
-                                {
-                                    Identity = identity,
-                                    EntityType = EntityType.Variable,
-                                    InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
-                                    IsEnabled = (bool)reader[$"enablement__{variable.ColumnName}"]
-                                };
-                                var val = reader[$"data__{variable.ColumnName}"];
-                                FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
-                                yield return interviewEntity;
-                            }
-                            else if (groupChild is StaticText staticText)
-                            {
-                                var identity = new Identity(staticText.PublicKey,
-                                    @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty);
-                                var interviewEntity = new InterviewEntity
-                                {
-                                    Identity = identity,
-                                    EntityType = EntityType.StaticText,
-                                    InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
-                                    IsEnabled = (bool)reader[$"enablement__{staticText.ColumnName}"],
-                                    InvalidValidations = reader[$"validity__{staticText.ColumnName}"] is DBNull
-                                        ? Array.Empty<int>()
-                                        : (int[])reader[$"validity__{staticText.ColumnName}"],
-                                };
-
-                                yield return interviewEntity;
-                            }
+                            yield return interviewEntity;
                         }
                     }
                 }
@@ -256,8 +255,6 @@ namespace WB.Services.Export.Interview
 
             return levels;
         }
-
-
 
         private bool CheckIfAllRostersAreDisabled(IEnumerable<Identity> rosterIdentitiesInLevel, Dictionary<Identity, InterviewEntity> interviewEntities)
         {

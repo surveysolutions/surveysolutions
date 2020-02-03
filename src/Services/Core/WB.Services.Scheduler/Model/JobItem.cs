@@ -46,27 +46,48 @@ namespace WB.Services.Scheduler.Model
             this.Data["errorType"] = Enum.GetName(typeof(JobError), JobError.Canceled);
         }
 
-        private void Apply(CompleteJobEvent ev)
+        private void Apply(CompleteJobEvent _)
         {
             this.EndAt = DateTime.UtcNow;
             this.Status = JobStatus.Completed;
         }
 
+        private void Apply(ReEnqueueJobEvent _)
+        {
+            this.Status = JobStatus.Created;
+            this.EndAt = null;
+        }
+
         private void Apply(FailJobEvent ev)
         {
             this.EndAt = DateTime.UtcNow;
-            this.Status = JobStatus.Fail;
-            this.Data["error"] = ev.Exception.ToString();
-
-            var errorType = JobError.Unexpected;
-            switch (ev.Exception)
+            
+            if (!this.Data.ContainsKey("retry"))
             {
-                case IOException io when io.HResult == 0x70:
-                    errorType = JobError.NotEnoughExternalStorageSpace;
-                    break;
+                this.Data["retry"] = 3l;
             }
 
-            this.Data["errorType"] = Enum.GetName(typeof(JobError), errorType);
+            var retryLeft = this.GetData<long>("retry");
+            if (retryLeft > 0)
+            {
+                this.Status = JobStatus.Created;
+                this.Data["retry"] = retryLeft - 1;
+            }
+            else
+            {
+                this.Status = JobStatus.Fail;
+                this.Data["error"] = ev.Exception.ToString();
+
+                var errorType = JobError.Unexpected;
+                switch (ev.Exception)
+                {
+                    case IOException io when io.HResult == 0x70:
+                        errorType = JobError.NotEnoughExternalStorageSpace;
+                        break;
+                }
+
+                this.Data["errorType"] = Enum.GetName(typeof(JobError), errorType);
+            }
         }
 
         private void Apply(UpdateDataEvent ev)
@@ -77,6 +98,12 @@ namespace WB.Services.Scheduler.Model
         public JobItem Start(string workerId)
         {
             this.Handle(new StartJobEvent(Id, workerId));
+            return this;
+        }
+
+        public JobItem ReEnqueue()
+        {
+            this.Handle(new ReEnqueueJobEvent(Id));
             return this;
         }
 
