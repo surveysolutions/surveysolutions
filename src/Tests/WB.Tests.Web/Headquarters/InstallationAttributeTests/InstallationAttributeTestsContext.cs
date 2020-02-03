@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+using Amazon.Runtime.Internal;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Moq;
-using NSubstitute;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Tests.Abc;
 
 using WB.UI.Headquarters.Filters;
@@ -13,31 +12,19 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
 {
     internal class InstallationAttributeTestsContext
     {
-        protected static InstallationAttribute CreateInstallationAttribute()
+        protected static InstallationFilter CreateInstallationAttribute(IUserRepository userRepository = null)
         {
-            var installationAttribute = new InstallationAttribute();
-            InstallationAttribute.Installed = false;
+            var installationAttribute = new InstallationFilter(userRepository ?? Create.Storage.UserRepository());
+            InstallationFilter.Installed = false;
             return installationAttribute;
         }
 
-        protected static ActionExecutingContext CreateFilterContext(ControllerBase specifiedController = null, IUserRepository userRepository = null)
+        protected static ActionExecutingContext CreateFilterContext(ControllerBase specifiedController = null)
         {
-            var requestContext = new RequestContext(Mock.Of<HttpContextBase>(), new RouteData());
-
-            var controllerContext = new ControllerContext(requestContext,
-                specifiedController ?? Mock.Of<ControllerBase>());
-
-            var users = userRepository ?? Create.Storage.UserRepository();
-            
-            var dependencyResolver = Substitute.For<IDependencyResolver>();
-            dependencyResolver
-                .GetService<IUserRepository>()
-                .Returns(users);
-
-            DependencyResolver.SetResolver(dependencyResolver);
-
-            return new ActionExecutingContext(controllerContext, new Mock<ActionDescriptor>().Object,
-                new Dictionary<string, object>());
+            return new ActionExecutingContext(new ActionContext(), 
+                new List<IFilterMetadata>(), 
+                new Dictionary<string, object>(), 
+                specifiedController);
         }
     }
 }

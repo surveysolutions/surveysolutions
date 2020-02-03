@@ -50,7 +50,7 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<IChartStatisticsViewFactory>(),
                 allUsersAndQuestionnairesFactory ?? Mock.Of<IAllUsersAndQuestionnairesFactory>(_ => _.Load() == new AllUsersAndQuestionnairesView() { Questionnaires = new TemplateViewItem[0] }),
                 new TestInMemoryWriter<InterviewSummary>(),
-                userViewFactory ?? Mock.Of<IUserViewFactory>(), 
+                userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>());
 
             reportsController.Url = Mock.Of<IUrlHelper>();
@@ -125,6 +125,19 @@ namespace WB.Tests.Web.TestFactories
                 commandTransformator
                 );
 
+            return result;
+        }
+
+        public InstallController InstallController(ISupportedVersionProvider supportedVersionProvider = null,
+            SignInManager<HqUser> identityManager = null,
+            UserManager<HqUser> userManager = null,
+            IUserRepository userRepository = null)
+        {
+            var result = new InstallController(
+                supportedVersionProvider ?? Abc.Create.Service.SupportedVersionProvider(),
+                identityManager ?? Create.Service.SignInManager(),
+                userManager ?? Create.Service.UserManager(),
+                userRepository);
             return result;
         }
     }
