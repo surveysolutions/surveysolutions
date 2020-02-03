@@ -769,7 +769,7 @@
     <value>Lëvizja po kryhet</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0} dhe {1}</value>
+      <value>{{names}} dhe {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
       <value>{{names}} dhe {{more}} më shumë</value>

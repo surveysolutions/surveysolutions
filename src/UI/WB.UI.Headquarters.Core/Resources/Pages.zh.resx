@@ -1156,7 +1156,7 @@
     <value>正在转移</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0}和{1}</value>
+      <value>{{names}}和{{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
       <value>{{names}}和{{more}}更多</value>

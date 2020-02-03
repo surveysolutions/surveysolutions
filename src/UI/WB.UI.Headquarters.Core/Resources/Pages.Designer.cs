@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Pages {
@@ -543,6 +543,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string CautionTitle {
             get {
                 return ResourceManager.GetString("CautionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset user password.
+        /// </summary>
+        public static string ChangePassword {
+            get {
+                return ResourceManager.GetString("ChangePassword", resourceCulture);
             }
         }
         
@@ -2293,7 +2302,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} and {1}.
+        ///   Looks up a localized string similar to {{names}} and {{lastname}}.
         /// </summary>
         public static string Interviewers_NamesFormatLessThanLimit {
             get {

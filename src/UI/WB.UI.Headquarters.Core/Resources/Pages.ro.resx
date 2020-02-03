@@ -721,7 +721,7 @@
     <value>Mutarea este în desfășurare</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0} și {1}</value>
+      <value>{{names}} și {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
       <value>{{names}} și {{more}} mai mult</value>

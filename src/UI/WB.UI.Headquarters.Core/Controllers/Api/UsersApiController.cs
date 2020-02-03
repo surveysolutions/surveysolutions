@@ -234,7 +234,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<MoveInterviewerToAnotherTeamResult> MoveUserToAnotherTeam(MoveUserToAnotherTeamRequest moveRequest)
+        public async Task<MoveInterviewerToAnotherTeamResult> MoveUserToAnotherTeam([FromBody] MoveUserToAnotherTeamRequest moveRequest)
         {
             var userId = this.authorizedUser.Id;
             var result = await this.moveUserToAnotherTeamService.Move(
