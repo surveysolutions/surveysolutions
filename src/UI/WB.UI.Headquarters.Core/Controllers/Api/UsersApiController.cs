@@ -234,7 +234,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<MoveInterviewerToAnotherTeamResult> MoveUserToAnotherTeam(MoveUserToAnotherTeamRequest moveRequest)
+        public async Task<MoveInterviewerToAnotherTeamResult> MoveUserToAnotherTeam([FromBody] MoveUserToAnotherTeamRequest moveRequest)
         {
             var userId = this.authorizedUser.Id;
             var result = await this.moveUserToAnotherTeamService.Move(
@@ -280,7 +280,8 @@ namespace WB.UI.Headquarters.Controllers
             var fileExtension = Path.GetExtension(request.File.FileName).ToLower();
 
             if (!new[] {TextExportFile.Extension, TabExportFile.Extention}.Contains(fileExtension))
-                return this.BadRequest(string.Format(BatchUpload.UploadUsers_NotAllowedExtension, TabExportFile.Extention, TextExportFile.Extension));
+                return this.Ok(ToImportError(string.Format(BatchUpload.UploadUsers_NotAllowedExtension, TabExportFile.Extention,
+                        TextExportFile.Extension)));
 
             try
             {
@@ -294,7 +295,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (PreloadingException e)
             {
-                return this.BadRequest(e.Message);
+                return this.Ok(ToImportError(e.Message));
             }
         }
 
@@ -334,6 +335,7 @@ namespace WB.UI.Headquarters.Controllers
         private string ToImportErrorMessage(string errorCode)
             => UserPreloadingVerificationMessages.ResourceManager.GetString(errorCode);
 
+        private ImportUserError[] ToImportError(string message) => new[] {new ImportUserError {Message = message}};
 
         public class ImportUserError
         {

@@ -11,18 +11,19 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Code.Implementation
 {
     public class MailNotifier : IRecipientNotifier
     {
         private readonly IEmailSender mailer;
-        private readonly IViewRenderingService renderingService;
+        private readonly IViewRenderService renderingService;
         private readonly IActionContextAccessor contextAccessor;
         private readonly IUrlHelperFactory urlHelperFactory;
 
         public MailNotifier(IEmailSender mailer,
-            IViewRenderingService renderingService,
+            IViewRenderService renderingService,
             IActionContextAccessor contextAccessor,
             IUrlHelperFactory urlHelperFactory)
         {

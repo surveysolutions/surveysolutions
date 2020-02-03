@@ -138,8 +138,11 @@
   <data name="CreateObserver" xml:space="preserve">
     <value>Create observer</value>
   </data>
-  <data name="CreateSupervisor" xml:space="preserve">
+  <data name="CreateSupervisor" xml:space="preserve">   
     <value>Create supervisor</value>
+  </data>
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Create administrator</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
     <value>Archived supervisors</value>
@@ -272,5 +275,17 @@
   </data>
   <data name="InterviewerIssues" xml:space="preserve">
     <value>Interviewer issues</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Reset user password</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User not found</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Password for user {0} changed</value>
   </data>
 </root>

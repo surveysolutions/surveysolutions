@@ -769,7 +769,7 @@
     <value>Lëvizja po kryhet</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0} dhe {1}</value>
+      <value>{{names}} dhe {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
       <value>{{names}} dhe {{more}} më shumë</value>
@@ -1093,7 +1093,7 @@
     <value>Numri i ditëve në të cilat detyrat dhe intervistat kanë qëndruar në statusin e tyre aktual</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-    <value>Ky veprim do të krijojë përdorues individual me të drejta supervizori,                                    &lt;br&gt;për të krijuar disa përdorues, mund të përdorni &lt;a href="{0}" target="_blank"&gt;krijimin në grup të përdoruesve &lt;/a&gt;</value>
+      <value>Ky veprim do të krijojë përdorues individual me të drejta supervizori,                                    &lt;br&gt;për të krijuar disa përdorues, mund të përdorni &lt;a href="{{link}}" target="_blank"&gt;krijimin në grup të përdoruesve &lt;/a&gt;</value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Supervizori i bllokuar (kutiza e shënjuar) nuk mund të hyjë dhe s’kryen dot asnjë veprim në server.</value>

@@ -1,13 +1,18 @@
 <template>
     <div class="radio">
-        <div class="field" :title="tooltip">
-            <input class="wb-radio" type="radio"
+        <div class="field"
+            :title="tooltip">
+            <input class="wb-radio"
+                type="radio"
                 :id="name + '_' + radioGroup" 
                 :disabled="!enabled ? 'disabled': null" 
-                :name="name" :checked="checked" @change="checkedChange"
+                :name="name"
+                :checked="checked"
+                @change="checkedChange"
                 :value="radioGroup" >
             <label :for="name + '_' + radioGroup">
-                <span class="tick" style="background-position-y: 0px"></span>{{ label }}</label>
+                <span class="tick"
+                    style="background-position-y: 0px"></span>{{ label }}</label>
         </div>
     </div>
 </template>
@@ -17,33 +22,33 @@
 export default {
     props: {
         radioGroup: {            
-            default: null
+            default: null,
         },
 
         enabled: {type: Boolean, default: true},
 
         name: {
             type: String,
-            required: true
+            required: true,
         },
 
         value: {
-            required: true
+            required: true,
         },
 
         label: String,
 
-        tooltip: String
+        tooltip: String,
     },
 
     methods: {
         checkedChange(ev) {
-            this.$emit("input", {
+            this.$emit('input', {
                 checked: ev.target.checked,
                 selected: this.radioGroup,
-                name: this.name
-            });
-        }
+                name: this.name,
+            })
+        },
     },
 
     computed: {
@@ -57,8 +62,8 @@ export default {
 
         inputType() {
             return this.radioGroup == null ? 'checkbox' : 'radio'
-        }
-    }
+        },
+    },
 }
 
 </script>

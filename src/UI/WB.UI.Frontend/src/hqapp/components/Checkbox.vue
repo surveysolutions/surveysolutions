@@ -1,9 +1,13 @@
 <template>
-    <div class="form-group" :title="tooltip">
+    <div class="form-group"
+        :title="tooltip">
         <input class="checkbox-filter" 
-            :id="name" type="checkbox"
+            :id="name"
+            type="checkbox"
             :disabled="!enabled ? 'disabled': null" 
-            :name="name" :checked="checked" @change="checkedChange" />
+            :name="name"
+            :checked="checked"
+            @change="checkedChange" />
         <label :for="name">
             <span class="tick"></span>{{ label }}</label>
     </div>
@@ -16,26 +20,26 @@ export default {
 
         name: {
             type: String,
-            required: true
+            required: true,
         },
 
         value: {
-            required: true
+            required: true,
         },
 
         label: String,
 
-        tooltip: String
+        tooltip: String,
     },
 
     methods: {
         checkedChange(ev) {
-            this.$emit("input", ev.target.checked, {
+            this.$emit('input', ev.target.checked, {
                 checked: ev.target.checked,
                 selected: this.radioGroup,
-                name: this.name
-            });
-        }
+                name: this.name,
+            })
+        },
     },
 
     computed: {
@@ -49,7 +53,7 @@ export default {
 
         inputType() {
             return this.radioGroup == null ? 'checkbox' : 'radio'
-        }
-    }
-};
+        },
+    },
+}
 </script>

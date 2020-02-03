@@ -1,28 +1,28 @@
-import Export from "./Export"
-import Vue from "vue"
+import Export from './Export'
+import Vue from 'vue'
 import store from './export.store.js'
 
 export default class ExportComponent {
     constructor(rootStore) {
-        this.rootStore = rootStore;
+        this.rootStore = rootStore
     }
 
     get routes() {
         return [{
-                path: '/DataExport/New',
-                component: Export
-            }
+            path: '/DataExport/New',
+            component: Export,
+        },
         ]
     }
     
     initialize() {
-        const VeeValidate = require('vee-validate');
-        Vue.use(VeeValidate);
+        const VeeValidate = require('vee-validate')
+        Vue.use(VeeValidate)
     }
 
     get modules() {
         return {
-            export: store
+            export: store,
         }
     }
 }

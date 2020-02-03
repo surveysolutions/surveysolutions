@@ -42,10 +42,9 @@ namespace WB.UI.Shared.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Status()
+        public IActionResult Status()
         {
-            await underConstructionInfo.WaitForFinish;
-            return Ok();
+            return Ok(underConstructionInfo.Status);
         }
     }
 }

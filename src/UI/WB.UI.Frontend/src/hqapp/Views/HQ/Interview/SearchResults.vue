@@ -1,7 +1,10 @@
 <template>
-    <aside class="filters-results" :class="{'active' : searchResultsAreVisible}">
+    <aside class="filters-results"
+        :class="{'active' : searchResultsAreVisible}">
         <div>
-            <button class="btn btn-link close-btn" type="button" @click="hideSearchResults">
+            <button class="btn btn-link close-btn"
+                type="button"
+                @click="hideSearchResults">
                 <span class="cancel"></span>
             </button>
             
@@ -18,9 +21,12 @@
                 :search="search">
             </search-section-result>
 
-            <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
-                 <span slot="no-more"></span>
-                 <span slot="no-results"></span>
+            <infinite-loading ref="loader"
+                v-if="searchResultsAreVisible"
+                @infinite="infiniteHandler"
+                :distance="250">
+                <span slot="no-more"></span>
+                <span slot="no-results"></span>
             </infinite-loading>
         </div>
     </aside>
@@ -28,54 +34,54 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import SearchSectionResult from "./components/SearchSectionResult"
+import SearchSectionResult from './components/SearchSectionResult'
 
 export default {
 
     methods: {
         hideSearchResults() {
-            this.$store.dispatch("resetAllFilters");
-            this.$store.dispatch("hideSearchResults");
+            this.$store.dispatch('resetAllFilters')
+            this.$store.dispatch('hideSearchResults')
         },
 
         infiniteHandler($state) {
-            const self = this;
+            const self = this
 
-            this.$store.dispatch("fetchSearchResults")
+            this.$store.dispatch('fetchSearchResults')
                 .then(() => { 
-                    $state.loaded();
+                    $state.loaded()
                     
                     if(self.searchResult.skip >= self.searchResult.count) {
-                        $state.complete();
+                        $state.complete()
                     }
-                 });
-        }
+                })
+        },
     },
 
     computed: {
         searchResultsAreVisible() {
-            return !this.$store.state.webinterview.sidebar.searchResultsHidden;
+            return !this.$store.state.webinterview.sidebar.searchResultsHidden
         },
 
         searchResult() {
-            return this.$store.getters.searchResult;
-        }
+            return this.$store.getters.searchResult
+        },
     },
 
     watch:{
-        "searchResult.count"() {
+        'searchResult.count'() {
             if(this.$refs.loader != null)
-                this.$refs.loader.$emit('$InfiniteLoading:reset');
-        }
+                this.$refs.loader.$emit('$InfiniteLoading:reset')
+        },
     },
 
     mounted() {
         this.$nextTick(() => {
-           this.$store.dispatch("fetchSearchResults")
+            this.$store.dispatch('fetchSearchResults')
         })
     },
 
-    components: { SearchSectionResult,InfiniteLoading}
-};
+    components: { SearchSectionResult,InfiniteLoading},
+}
 </script>
 

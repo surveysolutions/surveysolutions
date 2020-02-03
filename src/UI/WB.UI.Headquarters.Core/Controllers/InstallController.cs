@@ -68,8 +68,7 @@ namespace WB.UI.Headquarters.Controllers
                     return this.Redirect("~/");
                 }
 
-
-                foreach (var error in creationResult.Errors)
+                foreach (IdentityError error in creationResult.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }

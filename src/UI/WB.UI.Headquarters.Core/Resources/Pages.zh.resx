@@ -841,7 +841,7 @@
       <value>{{name}}(版本：{{version}})</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-    <value>这个动作将创建具有督导员权限的单个用户。&lt;br&gt;要创建多个用户，您可以使用&lt;a href="{0}" target="_blank"&gt;批量用户创建&lt;/a&gt;。</value>
+      <value>这个动作将创建具有督导员权限的单个用户。&lt;br&gt;要创建多个用户，您可以使用&lt;a href="{{link}}" target="_blank"&gt;批量用户创建&lt;/a&gt;。</value>
   </data>
   <data name="Supervisors_ActiveUsers" xml:space="preserve">
     <value>活动的督导员</value>
@@ -1156,7 +1156,7 @@
     <value>正在转移</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0}和{1}</value>
+      <value>{{names}}和{{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
       <value>{{names}}和{{more}}更多</value>

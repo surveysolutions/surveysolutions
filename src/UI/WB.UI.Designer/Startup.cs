@@ -176,7 +176,7 @@ namespace WB.UI.Designer
             });
             services.Configure<MailSettings>(Configuration.GetSection("Mail"));
             services.AddTransient<IEmailSender, MailSender>();
-            services.AddTransient<IViewRenderingService, ViewRenderingService>();
+            services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IQuestionnaireHelper, QuestionnaireHelper>();
             services.AddTransient<IDomainRepository, DomainRepository>();
             services.AddScoped<ILoggedInUser, LoggedInUser>();
@@ -272,6 +272,11 @@ namespace WB.UI.Designer
 
             app.UseEndpoints(routes =>
             {
+                routes.MapControllerRoute(
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller}/{action}/{id?}",
+                    defaults: new { action = "Index" });
+
                 routes.MapControllerRoute(
                     name: "default", 
                     pattern: "{controller=Questionnaire}/{action=Index}/{id?}");

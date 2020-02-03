@@ -43,14 +43,20 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return Ok(new
                 {
                     progressDetails = assignmentUpgradeProgressDetails,
-                    migrateToTitle = string.Format(Pages.QuestionnaireNameFormat, questionnaireTo.Title,
-                        questionnaireTo.Version),
-                    migrateFromTitle = string.Format(Pages.QuestionnaireNameFormat, questionnaireFrom.Title,
-                        questionnaireFrom.Version)
+                    migrateTo = new
+                    {
+                        questionnaireTo.Title,
+                        questionnaireTo.Version
+                    },
+                    migrateFrom = new
+                    {
+                        questionnaireFrom.Title,
+                        questionnaireFrom.Version
+                    },
                 });
             }
-
             return NotFound();
+
         }
 
         [HttpPost]
@@ -80,6 +86,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 csvWriter.Flush();
                 streamWriter.Flush();
 
+                resultStream.Seek(0, SeekOrigin.Begin);
                 var fileContents = Compress(resultStream);
                 var fileName = this.GetOutputFileName(assignmentUpgradeProgressDetails.MigrateTo);
                 return File(fileContents, "application/octet-stream", fileName, null, null, false);

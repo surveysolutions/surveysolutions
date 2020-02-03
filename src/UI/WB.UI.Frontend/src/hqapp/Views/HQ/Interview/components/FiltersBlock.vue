@@ -1,5 +1,6 @@
 <template>
-    <div class="block-filter" :class="{ 'separate-filters-group': separate }">
+    <div class="block-filter"
+        :class="{ 'separate-filters-group': separate }">
         <slot />
     </div>
 </template>
@@ -8,8 +9,8 @@
 export default {
     props: {
         separate: {
-            type: Boolean
-        }
-    }
-};
+            type: Boolean,
+        },
+    },
+}
 </script>

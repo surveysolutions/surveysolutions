@@ -1,5 +1,7 @@
 <template>
-    <HqLayout :hasFilter="false" :fixedWidth="true">
+    <HqLayout :hasFilter="false"
+        :fixedWidth="true"
+        :hasRow="false">
         <template slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -7,18 +9,19 @@
                 </li>
                 <li>
                     <a
-                        :href="this.$config.model.listOfMyQuestionnaires"
-                    >{{this.$t('QuestionnaireImport.ListOfMyQuestionnaires')}}</a>
+                        :href="this.$config.model.listOfMyQuestionnaires">{{this.$t('QuestionnaireImport.ListOfMyQuestionnaires')}}</a>
                 </li>
             </ol>
             <h1>{{this.$t('QuestionnaireImport.ImportModePageTitle')}}</h1>
         </template>
-        <div class="row">
+        <div class="row"
+            v-if="hasQuestionnaireInfo">
             <div class="col-sm-8">
                 <h2>{{this.$config.model.questionnaireInfo.name}}</h2>
             </div>
         </div>
-        <div class="row questionnaire-statistics">
+        <div class="row questionnaire-statistics"
+            v-if="hasQuestionnaireInfo">
             <div class="col-md-4 col-sm-5">
                 <ul>
                     <li>
@@ -51,18 +54,19 @@
                     </li>
                     <li>
                         {{$t('QuestionnaireImport.Questions')}}:
-                        <span>{{$config.model.questionnaireInfo.QuestionsCount}}</span>
+                        <span>{{$config.model.questionnaireInfo.questionsCount}}</span>
                         ({{$t('QuestionnaireImport.QuestionsWithConditions', {count: $config.model.questionnaireInfo.questionsWithConditionsCount})}})
                     </li>
                 </ul>
             </div>
         </div>
-        <form method="post" class="import-questionnaire-form">
+        <form method="post"
+            class="import-questionnaire-form"
+            v-if="hasQuestionnaireInfo">
             <input
                 name="__RequestVerificationToken"
                 type="hidden"
-                :value="this.$hq.Util.getCsrfCookie()"
-            />
+                :value="this.$hq.Util.getCsrfCookie()"/>
             <div v-if="$config.model.newVersionNumber > 1">
                 <div class="row">
                     <div class="col-sm-8">
@@ -79,8 +83,7 @@
                                     name="optionsRadios"
                                     id="imortAsNewVersion"
                                     value="new-version"
-                                    checked
-                                />
+                                    checked/>
                                 <label for="imortAsNewVersion">
                                     <span class="tick"></span>
                                     {{$t('QuestionnaireImport.ImportAsNewVersion', {version: $config.model.newVersionNumber})}}
@@ -88,7 +91,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="$config.model.questionnairesToUpgradeFrom.length">
+                    <div v-if="this.$config.model.questionnairesToUpgradeFrom.length">
                         <div class="col-sm-8">
                             <div class="form-group">
                                 <input
@@ -97,7 +100,7 @@
                                     type="checkbox"
                                     value="True"
                                     name="ShouldMigrateAssignments"
-                                />
+                                    v-model="shouldMigrateAssignments"/>
                                 <label for="ckbUpgradeAssignments">
                                     <span class="tick"></span>
                                     {{$t('QuestionnaireImport.UpgradeAssignments')}}
@@ -105,20 +108,20 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-8" id="templateSelectorBlock" style="display: none">
+                        <div class="col-sm-8"
+                            id="templateSelectorBlock"
+                            v-if="shouldMigrateAssignments">
+                            <input type="hidden"
+                                name="migrateFrom"
+                                :value="(questionnaireId||{}).key">
                             <div class="form-group">
-                                <select
-                                    id="templateSelector"
-                                    data-bind="value: SelectedTemplate"
-                                    class="selectpicker"
-                                    name="migrateFrom"
-                                >
-                                    <option
-                                        v-for="item in $config.model.questionnairesToUpgradeFrom"
-                                        :value="`{'templateId': '${item.templateId}', 'version': ${item.templateVersion}}`"
-                                        :key="`${item.templateId}_${item.templateVersion}`"
-                                    >({{$t('Assignments.QuestionnaireVersion', {version: item.TemplateVersion})}}) {{item.TemplateName}}</option>
-                                </select>
+                                <Typeahead control-id="questionnaire"
+                                    noSearch 
+                                    noClear
+                                    :placeholder="$t('Common.Questionnaire')" 
+                                    :values="this.$config.model.questionnairesToUpgradeFrom"
+                                    :value="questionnaireId" 
+                                    @selected="selectQuestionnaire" />
                             </div>
                         </div>
                     </div>
@@ -139,33 +142,48 @@
                                     name="Comment"
                                     class="form-control"
                                     rows="5"
-                                    maxlength="500"
-                                ></textarea>
+                                    maxlength="500"></textarea>
                             </p>
                         </div>
                         <div>
                             <button
                                 type="submit"
-                                class="btn btn-primary"
-                            >{{$t('QuestionnaireImport.RegularImportTitle')}}</button>
+                                class="btn btn-primary">{{$t('QuestionnaireImport.RegularImportTitle')}}</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
-        <div class="row col-sm-12" v-if="$config.model.errorMessage">
-            <div class="alert alert-danger">{{$config.model.errorMessage}}</div>
+        <div class="row col-sm-12"
+            v-if="$config.model.errorMessage">
+            <div class="alert alert-danger">
+                {{$config.model.errorMessage}}
+            </div>
         </div>
     </HqLayout>
 </template>
 <script>
-import { DateFormats } from "~/shared/helpers"
-import moment from "moment"
+import { DateFormats } from '~/shared/helpers'
+import moment from 'moment'
 export default {
-    methods: {
-        formatDate(date){
-            return new moment(date).format(DateFormats.dateTime)
+    data() {
+        return {
+            shouldMigrateAssignments: false,
+            questionnaireId: null, 
         }
-    }
+    },
+    methods: {
+        formatDate(date) {
+            return new moment(date).format(DateFormats.dateTime)
+        },
+        selectQuestionnaire(value) {
+            this.questionnaireId = value
+        },
+    },
+    computed: {
+        hasQuestionnaireInfo() {
+            return this.$config.model.questionnaireInfo != null
+        },
+    },
 }
 </script>

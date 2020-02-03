@@ -1,7 +1,11 @@
-﻿@model WB.UI.Headquarters.Models.WebInterview.WebInterviewError
+﻿@using WB.UI.Headquarters.Code
+@model WB.UI.Headquarters.Models.WebInterview.WebInterviewError
 @{
     Layout = "_WebInterviewLayout.cshtml";
 }
-<h3>
-    @Model.Message
-</h3>
+
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+
+<div id="vueApp"></div>

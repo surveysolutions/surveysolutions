@@ -1,5 +1,6 @@
 <template>
-    <div class="field" :class="{'answered': hasValue === true}">
+    <div class="field"
+        :class="{'answered': hasValue === true}">
         <input
             class="form-control with-clear-btn"
             :class="{'input-validation-error': haserror === true}"
@@ -7,16 +8,14 @@
             v-bind:value="value"
             v-on="inputListeners"
             ref="input"
-            autocomplete="new-password"
-        />
+            autocomplete="new-password"/>
 
         <button
             type="button"
             class="btn btn-link btn-clear"
             v-if="hasValue"
             @click="clearFilter"
-            tabindex="-1"
-        >
+            tabindex="-1">
             <span></span>
         </button>
     </div>

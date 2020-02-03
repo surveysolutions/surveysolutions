@@ -144,6 +144,7 @@ namespace WB.UI.WebTester
 
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
+            registry.Bind<IApplicationRestarter, ApplicationRestarter>();
 
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 

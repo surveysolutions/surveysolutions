@@ -19,14 +19,15 @@ const locales = {
         "Pages", "Report", "Reports", "Settings", "Strings", "TabletLogs", "UploadUsers",
         "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI",
         "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport",
-    "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel"],
+        "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel", "AuditLog", "OutdatedBrowser", "InterviewerAuditRecord"
+        , "Roles"],
     webtester: ["WebInterviewUI", "WebInterview", "Common"],
     webinterview: ["WebInterviewUI", "WebInterview", "Common", "Details"]
 }
 
 const isPack = process.argv.indexOf("--package") >= 0;
 
-const hqDist = !isPack ? hqFolder :  join("dist", "package", "hq")
+const hqDist = !isPack ? hqFolder : join("dist", "package", "hq")
 const webTesterDist = !isPack ? webTesterFolder : join("dist", "package", "webtester")
 
 const pages = {
@@ -56,7 +57,7 @@ const pages = {
     },
 
     webinterview: {
-        entry: "src/webinterview/main.js",
+        entry: "src/hqapp/main.js",
         filename: path.join(hqDist, "Views", "WebInterview", "_WebInterviewLayout.cshtml"),
         template: path.join(hqFolder, "Views", "WebInterview", "_WebInterviewLayout.Template.cshtml")
     },
@@ -76,6 +77,12 @@ const pages = {
         entry: "src/pages/under_construction.js",
         filename: path.join(hqDist, "Views", "UnderConstruction", "Index.cshtml"),
         template: path.join(hqFolder, "Views", "UnderConstruction", "Index.Template.cshtml")
+    },
+
+    empty_layout: {
+        entry: "src/hqapp/main.js",
+        filename: path.join(hqDist, "Views", "Shared", "_EmptyLayout.cshtml"),
+        template: path.join(hqFolder, "Views", "Shared", "_EmptyLayout.Template.cshtml")
     }
 };
 
@@ -125,7 +132,10 @@ module.exports = {
             path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
             path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
         ]
-        
+
+        Object.keys(pages).forEach(page => {
+            resxFiles.push(path.join(uiFolder, pages[page].template))
+        })
 
         config.plugin('extraWatch')
             .use(extraWatch, [{ files: resxFiles }])
@@ -167,7 +177,7 @@ module.exports = {
             jQuery: "jquery",
         }]);
 
-        config.module.rules.delete("eslint");
+        // config.module.rules.delete("eslint");
 
         config.resolve.alias
             .set("moment$", "moment/moment.js")

@@ -1,6 +1,7 @@
 <template>
-   <HqLayout :title="$config.model.title" :hasFilter="false">
-       <template slot="headers">
+    <HqLayout :title="$config.model.title"
+        :hasFilter="false">
+        <template slot="headers">
             <ol class="breadcrumb">
                 <li>
                     <a :href="this.$config.model.surveySetup">
@@ -25,15 +26,14 @@
         <DataTables
             ref="table"
             :tableOptions="tableOptions"
-            tableClass='import-interview'
-        ></DataTables>
+            tableClass='import-interview'></DataTables>
     </HqLayout>
 </template>
 
 <script>
 import escape from 'lodash'
-import { DateFormats } from "~/shared/helpers"
-import moment from "moment"
+import { DateFormats } from '~/shared/helpers'
+import moment from 'moment'
 
 export default {
     computed: {
@@ -42,30 +42,30 @@ export default {
             return {
                 columns: [
                     {
-                        data: "title",
-                        name: "Title",
+                        data: 'title',
+                        name: 'Title',
                         title: this.$t('ImportQuestionnaire.Table_Title'),
                         render: function (data, type, row) {
                             return `<a href="${self.$config.model.importMode}/${row.id}">${escape(data)}</a>`
-                        }
+                        },
                     },
                     {
-                        data: "lastModified",
-                        name: "LastEntryDate",
-                        "class": "changed-recently",
+                        data: 'lastModified',
+                        name: 'LastEntryDate',
+                        'class': 'changed-recently',
                         title: this.$t('ImportQuestionnaire.Table_LastModified'),
                         render: function(data) {
-                            if (data === null || data === undefined || data === "") 
-                                return ""
+                            if (data === null || data === undefined || data === '') 
+                                return ''
                             return new moment(data).format(DateFormats.dateTime)
-                        }
+                        },
                     },
                     {
-                        data: "createdBy",
-                        name: "CreatorName",
+                        data: 'createdBy',
+                        name: 'CreatorName',
                         title: this.$t('ImportQuestionnaire.Table_CreatedBy'),
-                        "class": "created-by"
-                    }
+                        'class': 'created-by',
+                    },
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
@@ -76,9 +76,9 @@ export default {
                 order: [[1, 'desc']],
                 bInfo: false,
                 footer: true,
-                responsive: false
+                responsive: false,
             }
-        }
-    }
+        },
+    },
 }
 </script>

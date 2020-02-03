@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -16,7 +17,9 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Configs;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Controllers.Services;
+using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
@@ -42,17 +45,25 @@ namespace WB.UI.Headquarters
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
             registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
+            registry.Bind<IApplicationRestarter, ApplicationRestarter>();
             registry.Bind<IAudioProcessingService, AudioProcessingService>();
             services.Bind<ICaptchaService, WebCacheBasedCaptchaService>();
-            registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
+            registry.Bind<IWebInterviewInterviewEntityFactory, HqWebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
+            registry.Bind<IViewRenderService, ViewRenderService>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
-            registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
+            
+             
+            registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
+                cfg.AddProfile(new AssignmentProfile());
+                cfg.AddProfile(new AssignmentsPublicApiMapProfile());
+                cfg.ConstructServicesUsing(_.Get);
             }).CreateMapper());
+            
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
             ConfigureEventBus(registry);

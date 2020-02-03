@@ -1,18 +1,24 @@
 <template>
-    <main class="web-interview web-interview-for-supervisor" :class="classes">
+    <main class="web-interview web-interview-for-supervisor"
+        :class="classes">
         <div class="container-fluid">
             <div class="row">
                 <DetailsInfo />
                 <Facets />
                 <SearchResults />
-                <Sidebar :showComplete="false" :show-foldback-button-as-hamburger="false" />
+                <Sidebar :showComplete="false"
+                    :show-foldback-button-as-hamburger="false" />
                 <section class="questionnaire details-interview">
-                    <Interview :interviewId="interviewId" review @connected="connected" />
+                    <Interview :interviewId="interviewId"
+                        review
+                        @connected="connected" />
                 </section>
             </div>
         </div>
         <IdleTimeoutService />
-        <span id="loadingPixel" style="display:none" :data-loading="isLoading"></span>
+        <span id="loadingPixel"
+            style="display:none"
+            :data-loading="isLoading"></span>
     </main>
 </template>
 
@@ -22,10 +28,10 @@ import SearchResults from './SearchResults'
 import Sidebar from '~/webinterview/components/Sidebar'
 import DetailsInfo from './DetailsInfo.vue'
 import Vue from 'vue'
-import http from "~/webinterview/api/http";
+import http from '~/webinterview/api/http'
 
-import "@/assets/css/markup-web-interview.scss"
-import "@/assets/css/markup-interview-review.scss"
+import '@/assets/css/markup-web-interview.scss'
+import '@/assets/css/markup-interview-review.scss'
 
 export default {
     watch: {
@@ -71,7 +77,7 @@ export default {
     },
 
     beforeMount() {
-      Vue.use(http, { store: this.$store });
+        Vue.use(http, { store: this.$store })
     },
 
     mounted() {
@@ -95,7 +101,7 @@ export default {
         SearchResults,
         Sidebar,
         DetailsInfo,
-        Interview: () => import(/* webpackChunkName: "review" */'~/webinterview/components/Interview.vue'),
+        Interview: () => import(/* webpackChunkName: "interview" */'~/webinterview/components/Interview.vue'),
     },
 
     beforeDestroy() {

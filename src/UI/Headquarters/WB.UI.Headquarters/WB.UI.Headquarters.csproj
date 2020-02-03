@@ -547,16 +547,6 @@
     <Content Include="App_GlobalResources\MapReport.zh.resx">
       <DependentUpon>MapReport.resx</DependentUpon>
     </Content>
-    <Content Include="App_GlobalResources\Roles.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Roles.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Roles.ru.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>Roles.ru.designer.cs</LastGenOutput>
-      <DependentUpon>Roles.resx</DependentUpon>
-    </Content>
     <Content Include="App_GlobalResources\TakeNewInterview.ar.resx">
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
     </Content>
@@ -1171,11 +1161,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireImport.sq.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Roles.Designer.cs">
-      <DependentUpon>Roles.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="App_GlobalResources\TakeNewInterview.sq.designer.cs">
       <AutoGen>True</AutoGen>

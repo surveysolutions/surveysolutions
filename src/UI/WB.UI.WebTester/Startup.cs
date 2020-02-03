@@ -17,7 +17,6 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging;
-using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Versions;
 using WB.UI.WebTester.Infrastructure;
@@ -80,20 +79,15 @@ namespace WB.UI.WebTester
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var initTask = autofacKernel.InitCoreAsync(app.ApplicationServices.GetAutofacRoot(), false);
+            var initTask = autofacKernel.InitAsync(true);
+            initTask.Wait(TimeSpan.FromSeconds(5));
 
             if (!env.IsDevelopment())
             {
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
                 app.UseHttpsRedirection();
-                initTask.Wait();
+            }
 
-            }
-            else
-            {
-                initTask.Wait(TimeSpan.FromSeconds(10));
-            }
-            
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
             {

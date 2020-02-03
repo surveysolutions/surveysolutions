@@ -1,45 +1,67 @@
 <template>
-    <div :class="itemClass" class="overview-item">
+    <div :class="itemClass"
+        class="overview-item">
         <div class="date">
-            <div v-if="hasDate">{{answerDate}}</div>
-            <div v-if="hasDate">{{answerTime}}</div>
+            <div v-if="hasDate">
+                {{answerDate}}
+            </div>
+            <div v-if="hasDate">
+                {{answerTime}}
+            </div>
         </div>
-        <div ref="itemContent" class="item-content" @click="showAdditionalDetails">
+        <div ref="itemContent"
+            class="item-content"
+            @click="showAdditionalDetails">
             <h4>
                 <span v-html="item.title"></span>
                 <template v-if="item.rosterTitle != null"><span> - </span>
-                <i v-if="item.rosterTitle != null" v-html="item.rosterTitle"></i>
+                    <i v-if="item.rosterTitle != null"
+                        v-html="item.rosterTitle"></i>
                 </template>
             </h4>
-            <div class="answer" v-if="hasAttachment">
-                <wb-attachment :contentId="attachmentContentId" :interviewId="interviewId" :previewOnly="true" customCssClass="static-text-image"></wb-attachment>
+            <div class="answer"
+                v-if="hasAttachment">
+                <wb-attachment :contentId="attachmentContentId"
+                    :interviewId="interviewId"
+                    :previewOnly="true"
+                    customCssClass="static-text-image"></wb-attachment>
             </div>
-            <div class="answer" v-if="item.state != 'Unanswered'">
+            <div class="answer"
+                v-if="item.state != 'Unanswered'">
                 <div v-if="item.controlType === 'image'">
-                    <wb-attachment :filename="item.answer" :previewOnly="true"></wb-attachment>
+                    <wb-attachment :filename="item.answer"
+                        :previewOnly="true"></wb-attachment>
                 </div>
                 <div v-else-if="item.controlType === 'audio'">
-                    <audio controls preload="auto" 
+                    <audio controls
+                        preload="auto" 
                         style="width:300px" 
                         :src="audioRecordPath">
                     </audio>
                 </div>
                 <div v-else-if="item.controlType === 'area'">
-                    <iframe width="100%" height="250px" frameBorder="0" :src="areaAnswerUrl"></iframe>
+                    <iframe width="100%"
+                        height="250px"
+                        frameBorder="0"
+                        :src="areaAnswerUrl"></iframe>
                 </div>
                 <div v-else-if="item.controlType === 'map'">
-                    <img v-bind:src="googleMapPosition" draggable="false" />
+                    <img v-bind:src="googleMapPosition"
+                        draggable="false" />
                 </div>
                 <div v-else>
-                      {{item.answer}}
+                    {{item.answer}}
                 </div>
-              
-              
             </div>
-            <div class="btn-link" v-if="item.state == 'Unanswered'">{{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}</div>
+            <div class="btn-link"
+                v-if="item.state == 'Unanswered'">
+                {{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}
+            </div>
         </div>
 
-        <AdditionalInfo ref="additionalInfo" :item="item" />
+        <AdditionalInfo ref="additionalInfo"
+            :item="item"
+            :addCommentsAllowed="$store.getters.addCommentsAllowed" />
     </div>
 </template>
 
@@ -48,80 +70,80 @@ const State = {
     Answered: 'Answered',
     Commented: 'Commented',
     Invalid: 'Invalid',
-    Unanswered: 'Unanswered'
-};
-import Vue from "vue";
+    Unanswered: 'Unanswered',
+}
+import Vue from 'vue'
 import AdditionalInfo from './OverviewItemAdditionalInfo'
-import api from "~/shared/api"
+import api from '~/shared/api'
 import moment from 'moment'
 
 export default {
     props: {
         item: {
             required: true,
-            type: Object
-        }
+            type: Object,
+        },
     },
 
     data() {
         return {
-            watcher: null
-        };
+            watcher: null,
+        }
     },
 
     mounted() {
         if (this.item.isGroup || this.item.isSection) {
-            this.$emit("mount", {
+            this.$emit('mount', {
                 el: this.$el,
-                item: this.item
-            });
+                item: this.item,
+            })
         }
     },
 
     destroyed() {
         if (this.watcher != null) {
-            this.watcher.destroy();
+            this.watcher.destroy()
         }
     },
     methods: {
         showAdditionalDetails(){
             if (this.item.isGroup || this.item.isSection) 
-                return;
+                return
             
             const cantLeaveCommentAndNoWarningsNoErrors = !this.item.supportsComments 
                 && !this.item.hasWarnings 
-                && !this.item.hasErrors;
+                && !this.item.hasErrors
 
             if (cantLeaveCommentAndNoWarningsNoErrors)
-                return;
+                return
 
-            this.$emit("showAdditionalInfo", this);
-            this.$refs.additionalInfo.show();
+            this.$emit('showAdditionalInfo', this)
+            this.$refs.additionalInfo.show()
         },
         hideAdditionalDetails(){
             if (this.$refs.additionalInfo)
-                this.$refs.additionalInfo.close();
+                this.$refs.additionalInfo.close()
         },
         parseGps(str)
         {
-            return JSON.parse(str || "{ latitude: 0, longitude: 0 }");
-        }
+            return JSON.parse(str || '{ latitude: 0, longitude: 0 }')
+        },
     },
     computed: {
         interviewId(){
-            return this.$route.params.interviewId;
+            return this.$route.params.interviewId
         },
         areaAnswerUrl() {
             return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.item.id}`
         },
         googleMapPosition() {
-            let coords = this.parseGps(this.item.answer);
+            let coords = this.parseGps(this.item.answer)
             return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${coords.latitude},${coords.longitude}`
                 + `&zoom=14&scale=0&size=340x177&markers=color:blue|label:O|${coords.latitude},${coords.longitude}`
                 + `&key=${this.$config.googleApiKey}`
         },
         audioRecordPath() {
-            return api.resources.audioRecordUri(this.interviewId, this.item.answer);
+            return api.resources.audioRecordUri(this.interviewId, this.item.answer)
         },
         itemClass() {
             return {
@@ -129,35 +151,35 @@ export default {
                 section: this.item.isSection,
                 unanswered: this.item.state == State.Unanswered,
                 invalid: this.item.state == State.Invalid,
-                hasComment: this.item.hasComment
-            };
+                hasComment: this.item.hasComment,
+            }
         },
         hasDate(){
             if (!this.item.answerTimeUtc)
-                return false;
+                return false
             if  (this.item.isGroup || this.item.isSection)
-                return false;
-            return true;
+                return false
+            return true
         },
         answerDate(){
-            if (!this.hasDate) return;   
-            let local = moment.utc(this.item.answerTimeUtc).local();
-            return local.format("MMM DD");
+            if (!this.hasDate) return   
+            let local = moment.utc(this.item.answerTimeUtc).local()
+            return local.format('MMM DD')
         },
         answerTime(){
-            if (!this.hasDate) return;
-            let local = moment.utc(this.item.answerTimeUtc).local();
-            return local.format("HH:mm");
+            if (!this.hasDate) return
+            let local = moment.utc(this.item.answerTimeUtc).local()
+            return local.format('HH:mm')
         },
         attachmentContentId(){
-            return this.item.attachmentContentId;
+            return this.item.attachmentContentId
         },
         hasAttachment(){
-            return this.attachmentContentId != null;
-        }
+            return this.attachmentContentId != null
+        },
     },
     components: {
-        AdditionalInfo
-    }
-};
+        AdditionalInfo,
+    },
+}
 </script>

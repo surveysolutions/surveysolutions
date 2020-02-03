@@ -379,7 +379,7 @@
     <value>隐藏必填的识别数据列表</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
-    <value>正在从{0}和{1}中导入信息</value>
+      <value>正在从{{fileName}}和{{title}}中导入信息</value>
   </data>
   <data name="Importing" xml:space="preserve">
     <value>导入中</value>
@@ -397,7 +397,7 @@
     <value>正在为{0}导入访谈</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{1}中的{0}个</value>
+      <value>{{totalCount}}中的{{createdCount}}个</value>
   </data>
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>没有创建访谈</value>
@@ -406,7 +406,7 @@
     <value>手动模式</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>找到{0}个错误</value>
+      <value>找到{{count}}个错误</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
     <value>{0}个访谈创建失败</value>
@@ -490,22 +490,22 @@
     <value>1个错误</value>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>成功验证了{0}个任务</value>
+      <value>成功验证了{{count}}个任务</value>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>{0}个错误</value>
+      <value>{{count}}个错误</value>
   </data>
   <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
     <value>任务数据验证</value>
   </data>
   <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
-    <value>问卷模板{0}的任务验证</value>
+      <value>问卷模板{{title}}的任务验证</value>
   </data>
   <data name="Import_VerificationOfDataFile" xml:space="preserve">
     <value>数据文件验证</value>
   </data>
   <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-    <value>{1}个步骤中的第{0}步</value>
+      <value>{{totalCount}}个步骤中的第{{verifiedCount}}步</value>
   </data>
   <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
     <value>成功验证了数据文件</value>
@@ -514,7 +514,7 @@
     <value>使用批量上传创建多个分配</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>正在为{0}中导入信息</value>
+      <value>正在为{{title}}中导入信息</value>
   </data>
   <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
     <value>选择负责人</value>
@@ -526,10 +526,10 @@
       <value>您可以通过在{{url}}中输入全部必填数据创建单个任务</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{0}个任务新建失败</value>
+      <value>{{count}}个任务新建失败</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>新建了{0}个任务</value>
+      <value>新建了{{count}}个任务</value>
   </data>
   <data name="Prerequisite_Questionnaire" xml:space="preserve">
     <value>问卷模板不能用于预加载</value>

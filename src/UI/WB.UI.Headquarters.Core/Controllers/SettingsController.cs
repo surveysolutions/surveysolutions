@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SixLabors.ImageSharp;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Filters;
@@ -29,13 +31,18 @@ namespace WB.UI.Headquarters.Controllers
         [AntiForgeryFilter]
         public IActionResult Index()
         {
-            return View(new
-            {
-                UpdateLogoUrl = Url.Action("UpdateLogo"),
-                RemoveLogoUrl = Url.Action("RemoveLogo"),
-                LogoUrl = Url.Content("~/api/CompanyLogo/Thumbnail"),
-                DefaultLogoUrl = Url.Content("~/img/HQ-login-3_05.png")
-            });
+            var model = GetSettingsModel();
+            return View(model);
+        }
+
+        private AdminSettingsModel GetSettingsModel()
+        {
+            var adminSettingsModel = new AdminSettingsModel();
+            adminSettingsModel.UpdateLogoUrl = Url.Action("Index");
+            adminSettingsModel.RemoveLogoUrl = Url.Action("RemoveLogo");
+            adminSettingsModel.LogoUrl = Url.Content("~/api/CompanyLogo/Thumbnail");
+            adminSettingsModel.DefaultLogoUrl = Url.Content("~/img/HQ-login-3_05.png");
+            return adminSettingsModel;
         }
 
         public IActionResult EmailProviders()
@@ -53,12 +60,14 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ActionName("Index")]
         public async Task<ActionResult> UpdateLogo([FromForm(Name = "logo")]IFormFile file)
         {
-            if (file?.Length > 0)
+            try
             {
-                using (MemoryStream ms = new MemoryStream())
+                if (file?.Length > 0)
                 {
+                    using MemoryStream ms = new MemoryStream();
                     await file.CopyToAsync(ms);
                     var array = ms.ToArray();
 
@@ -69,9 +78,15 @@ namespace WB.UI.Headquarters.Controllers
                         Logo = array
                     }, AppSetting.CompanyLogoStorageKey);
                 }
-            }
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            catch (UnknownImageFormatException)
+            {
+                var model = GetSettingsModel();
+                model.InvalidImage = true;
+                return View("Index", model);
+            }
         }
 
         [HttpPost]
@@ -80,6 +95,16 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.appSettingsStorage.Remove(CompanyLogo.CompanyLogoStorageKey);
             return RedirectToAction("Index");
+        }
+
+        public class AdminSettingsModel
+        {
+            public string UpdateLogoUrl { get; set; }
+            public string RemoveLogoUrl { get; set; }
+            public string LogoUrl { get; set; }
+            public string DefaultLogoUrl { get; set; }
+            
+            public bool InvalidImage { get; set; }
         }
     }
 }

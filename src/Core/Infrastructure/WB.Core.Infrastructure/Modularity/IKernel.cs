@@ -4,10 +4,9 @@ using Autofac;
 namespace WB.Core.Infrastructure.Modularity
 {
     public interface IKernel
-    {
+    { 
         void Load<T>(params IModule<T>[] modules) where T : IIocRegistry;
 
         Task InitAsync(bool restartOnInitiazationError);
-        Task InitCoreAsync(ILifetimeScope container, bool restartOnInitiazationError);
     }
 }

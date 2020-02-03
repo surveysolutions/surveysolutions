@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewFactory,
             IInterviewerVersionReader interviewerVersionReader)
-            : base(settingsStorage, tenantSettings)
+            : base(settingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.tabletInformationService = tabletInformationService;
             this.syncVersionProvider = syncVersionProvider;
@@ -127,32 +127,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             
             return new JsonResult("158329303");
         }
-
+            
         [HttpPost]
         [Route("v1/tabletInfo")]
-        public async Task<IActionResult> PostTabletInformation(IFormFile formFile)
+        public override Task<IActionResult> PostTabletInformation()
         {
-            if (formFile == null)
-            {
-                return StatusCode(StatusCodes.Status415UnsupportedMediaType);
-            }
-
-            var memoryStream = new MemoryStream();
-            await formFile.CopyToAsync(memoryStream);
-
-            var deviceId = this.Request.Headers[@"DeviceId"].Single();
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var user = userId != null
-                ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
-                : null;
-
-            this.tabletInformationService.SaveTabletInformation(
-                content: memoryStream.ToArray(),
-                androidId: deviceId,
-                user: user);
-
-            return Ok();
+            return base.PostTabletInformation();
         }
      
         [HttpGet]

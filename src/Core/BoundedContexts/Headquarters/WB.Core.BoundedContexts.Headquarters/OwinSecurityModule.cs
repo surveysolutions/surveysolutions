@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IHashCompatibilityProvider, HashCompatibilityProvider>();
             registry.Bind<IIdentityPasswordHasher, HqPasswordHasher>();
             registry.Bind<IPasswordHasher<HqUser>, HqPasswordHasher>();
-            registry.Bind<IPasswordValidator, HqPasswordValidator>();
             registry.Bind<IIdentityValidator, HqUserValidator>();
 
             registry.Bind<HqUserStore, HqUserStore>();

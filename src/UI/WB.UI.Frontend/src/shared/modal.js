@@ -1,14 +1,14 @@
-import box from "bootbox"
-import "bootstrap/js/modal"
+import box from 'bootbox'
+import 'bootstrap/js/modal'
 
 export default {
     init(i18n, locale) {
         box.setLocale(locale)
-        box.addLocale("ar", {
-            OK: i18n.t("Common.Ok"),
-            CANCEL: i18n.t("Common.Cancel"),
-            CONFIRM: i18n.t("Common.Confirm")
-        });
+        box.addLocale('ar', {
+            OK: i18n.t('Common.Ok'),
+            CANCEL: i18n.t('Common.Cancel'),
+            CONFIRM: i18n.t('Common.Confirm'),
+        })
     },
     confirm(message, callback) {
         box.confirm(message, callback)
@@ -20,6 +20,6 @@ export default {
         box.dialog(options)
     },
     prompt(options){
-        return box.prompt(options);
-    }
+        return box.prompt(options)
+    },
 }

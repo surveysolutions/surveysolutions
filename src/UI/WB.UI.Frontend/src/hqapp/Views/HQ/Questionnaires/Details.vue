@@ -16,12 +16,10 @@
                     <a
                         :href="model.designerUrl"
                         target="_blank"
-                        v-if="model.designerUrl != null"
-                    >
+                        v-if="model.designerUrl != null">
                         <span
                             :title="$t('Dashboard.ShowOnDesigner')"
-                            class="glyphicon glyphicon-link"
-                        />
+                            class="glyphicon glyphicon-link"/>
                     </a>
                 </h3>
                 <table class="table table-striped table-bordered">
@@ -56,8 +54,7 @@
                                             id="recordAudio"
                                             type="checkbox"
                                             v-model="audioAudit"
-                                            @change="recordAudioChanged"
-                                        />
+                                            @change="recordAudioChanged"/>
                                         <label for="recordAudio">
                                             <span class="tick"></span>
                                         </label>
@@ -78,8 +75,7 @@
                                     </li>
                                     <li
                                         v-for="lang in model.translatedPdfVersions"
-                                        v-bind:key="lang.name"
-                                    >
+                                        v-bind:key="lang.name">
                                         <a :href="lang.pdfUrl">{{lang.name}}</a>
                                     </li>
                                 </ul>
@@ -116,19 +112,20 @@
                 </table>
             </div>
         </div>
-        <ModalFrame ref="audioAuditModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="audioAuditModal"
+            :title="$t('Pages.ConfirmationNeededTitle')"
+            :canClose="false">
             <p>{{ $t("Pages.GlobalSettings_TurningAudioAuditOn" )}}</p>
             <div slot="actions">
                 <button
                     type="button"
                     class="btn btn-danger"
-                    @click="recordAudioSend"
-                >{{ $t("Common.Ok") }}</button>
+                    @click="recordAudioSend">{{ $t("Common.Ok") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
                     data-dismiss="modal"
-                >{{ $t("Common.Cancel") }}</button>
+                    @click="cancelSetAudio">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
     </HqLayout>
@@ -147,7 +144,7 @@ export default {
     computed: {
         model() {
             return this.$config.model
-        }
+        },
     },
     mounted() {
         this.audioAudit = this.$config.model.audioAudit
@@ -159,7 +156,10 @@ export default {
         },
         recordAudioChanged() {
             if (this.audioAudit) 
-                this.$refs.audioAuditModal.modal('show')
+                this.$refs.audioAuditModal.modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                })
             else 
                 return this.recordAudioSend()
         },
@@ -170,7 +170,10 @@ export default {
             if(response.status !== 204) 
                 this.audioAudit = !this.audioAudit
             this.$refs.audioAuditModal.modal('hide')
-        }
-    }
+        },
+        cancelSetAudio() {
+            this.audioAudit = false
+        },
+    },
 }
 </script>

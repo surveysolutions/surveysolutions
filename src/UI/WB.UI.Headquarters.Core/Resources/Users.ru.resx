@@ -258,6 +258,9 @@
     <value>Дата создания учетной записи хедквотера</value>
     <comment>Дата создания учетной записи хедквотера</comment>
   </data>
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Создать администратора</value>
+  </data>
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>Электронная почта хедквотера</value>
     <comment>Электронная почта хедквотера</comment>
@@ -285,5 +288,21 @@
   <data name="TryLater" xml:space="preserve">
     <value>Пожалуйста, повторите попытку позже</value>
     <comment>Пожалуйста, повторите попытку позже</comment>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+      <value>Сброс пароля</value>
+      <comment>Сброс пароля</comment>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+      <value>Сброс пароля пользователя</value>
+      <comment>Сброс пароля пользователя</comment>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+      <value>Пользователь не найден</value>
+      <comment>Пользователь не найден</comment>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+      <value>Пароль для пользователя {0} изменен</value>
+      <comment>Пароль для пользователя {0} изменен</comment>
   </data>
 </root>
