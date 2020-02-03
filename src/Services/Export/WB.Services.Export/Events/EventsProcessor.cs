@@ -3,14 +3,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
 
@@ -22,21 +20,18 @@ namespace WB.Services.Export.Events
         private readonly IServiceProvider serviceProvider;
         private readonly ILogger<EventsProcessor> logger;
         private readonly IDataExportProcessesService dataExportProcessesService;
-        private readonly IEventsHandler eventsHandler;
 
         public EventsProcessor(
             ITenantContext tenant,
             IServiceProvider serviceProvider,
             ILogger<EventsProcessor> logger,
             IDataExportProcessesService dataExportProcessesService,
-            IOptions<ExportServiceSettings> settings,
-            IEventsHandler eventsHandler)
+            IOptions<ExportServiceSettings> settings)
         {
             this.tenant = tenant;
             this.serviceProvider = serviceProvider;
             this.logger = logger;
             this.dataExportProcessesService = dataExportProcessesService;
-            this.eventsHandler = eventsHandler;
             pageSize = settings.Value.DefaultEventQueryPageSize;
         }
 
@@ -44,7 +39,6 @@ namespace WB.Services.Export.Events
 
         long? maximumSequenceToQuery;
         private const double BatchSizeMultiplier = 1;
-        private const string ApiEventsQueryMonitoringKey = "api_events_query";
 
         private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
@@ -88,6 +82,9 @@ namespace WB.Services.Export.Events
                     try
                     {
                         feedRanges.Add(new FeedRangeDebugDataItem(feed));
+                        using var scope = this.serviceProvider.CreateScope();
+                        scope.ServiceProvider.SetTenant(this.tenant.Tenant);
+                        var eventsHandler = scope.ServiceProvider.GetRequiredService<IEventsHandler>();
                         await eventsHandler.HandleEventsFeedAsync(feed, token);
                     }
                     catch(Exception e)
@@ -106,6 +103,7 @@ namespace WB.Services.Export.Events
             {
                 executionTrack.Restart();
 
+                // Action execution. Everything else is for estimation and progress reporting
                 await action();
 
                 executionTrack.Stop();
