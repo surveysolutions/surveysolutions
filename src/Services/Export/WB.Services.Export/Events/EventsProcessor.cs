@@ -22,18 +22,21 @@ namespace WB.Services.Export.Events
         private readonly IServiceProvider serviceProvider;
         private readonly ILogger<EventsProcessor> logger;
         private readonly IDataExportProcessesService dataExportProcessesService;
+        private readonly IEventsHandler eventsHandler;
 
         public EventsProcessor(
             ITenantContext tenant,
             IServiceProvider serviceProvider,
             ILogger<EventsProcessor> logger,
             IDataExportProcessesService dataExportProcessesService,
-            IOptions<ExportServiceSettings> settings)
+            IOptions<ExportServiceSettings> settings,
+            IEventsHandler eventsHandler)
         {
             this.tenant = tenant;
             this.serviceProvider = serviceProvider;
             this.logger = logger;
             this.dataExportProcessesService = dataExportProcessesService;
+            this.eventsHandler = eventsHandler;
             pageSize = settings.Value.DefaultEventQueryPageSize;
         }
 
@@ -45,11 +48,7 @@ namespace WB.Services.Export.Events
 
         private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
-            using var scope = serviceProvider.CreateScope();
-
-            scope.PropagateTenantContext(tenant);
-
-            var tenantDbContext = scope.ServiceProvider.GetService<TenantDbContext>();
+            var tenantDbContext = this.serviceProvider.GetService<TenantDbContext>();
             if (tenantDbContext.Database.IsNpgsql())
             {
                 await tenantDbContext.CheckSchemaVersionAndMigrate(cancellationToken);
@@ -58,15 +57,10 @@ namespace WB.Services.Export.Events
 
         public async Task HandleNewEvents(long exportProcessId, CancellationToken token = default)
         {
-            long sequenceToStartFrom;
             await EnsureMigrated(token);
 
-            using (var scope = serviceProvider.CreateScope())
-            {
-                scope.PropagateTenantContext(tenant);
-                var tenantDbContext = scope.ServiceProvider.GetService<TenantDbContext>();
-                sequenceToStartFrom = tenantDbContext.GlobalSequence.AsLong;
-            }
+            var tenantDbContext = this.serviceProvider.GetService<TenantDbContext>();
+            var sequenceToStartFrom = tenantDbContext.GlobalSequence.AsLong;
 
             await HandleNewEventsImplementation(exportProcessId, sequenceToStartFrom, token);
         }
@@ -93,8 +87,6 @@ namespace WB.Services.Export.Events
                 {
                     try
                     {
-                        using var batchScope = this.serviceProvider.CreateTenantScope(tenant);
-                        var eventsHandler = batchScope.ServiceProvider.GetRequiredService<IEventsHandler>();
                         feedRanges.Add(new FeedRangeDebugDataItem(feed));
                         await eventsHandler.HandleEventsFeedAsync(feed, token);
                     }

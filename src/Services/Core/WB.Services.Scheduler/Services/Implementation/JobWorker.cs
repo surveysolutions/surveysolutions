@@ -13,7 +13,7 @@ namespace WB.Services.Scheduler.Services.Implementation
         private readonly IServiceProvider serviceProvider;
 
         private readonly ILogger<JobWorker> logger;
-        private static long _instanceCounter = 0;
+        private static long instanceCounter = 0;
         public long Id { get; set; }
         public Task Task { get; set; }
 
@@ -22,7 +22,7 @@ namespace WB.Services.Scheduler.Services.Implementation
         {
             this.serviceProvider = serviceProvider;
             this.logger = logger;
-            Id = Interlocked.Increment(ref _instanceCounter);
+            Id = Interlocked.Increment(ref instanceCounter);
         }
 
         private void Info(string message) => logger.LogInformation("[{Id}] {message}", Id, message);
