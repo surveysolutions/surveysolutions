@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
-
 using WB.UI.Headquarters.API.PublicApi.Models;
 using It = Moq.It;
 
@@ -20,15 +19,22 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             this.Assignment = Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.g1, 10),
                 responsibleName: "TestName", assigneeSupervisorId: Id.gE,
-                interviewSummary: new HashSet<InterviewSummary>{
+                interviewSummary: new HashSet<InterviewSummary>
+                {
                     new InterviewSummary(),
                     new InterviewSummary()
                 });
 
             this.Assignment.IdentifyingData = new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test22", identity: Create.Identity(Id.g2)),
-                Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test33", identity: Create.Identity(Id.g3))
+                Create.Entity.IdentifyingAnswer(this.Assignment,
+                    answer: "Test22",
+                    identity: Create.Identity(Id.g2),
+                    variable: Questionnaire.GetQuestionVariableName(Id.g2)),
+                Create.Entity.IdentifyingAnswer(this.Assignment, 
+                    answer: "Test33",
+                    identity: Create.Identity(Id.g3),
+                    variable: Questionnaire.GetQuestionVariableName(Id.g3))
             };
         }
 
@@ -74,18 +80,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
         [Test]
         public void should_map_IdentifyingAnswer_Answer() =>
-            Assert.That(this.AssignmentDetails.IdentifyingData[0].Answer, Is.EqualTo(this.Assignment.IdentifyingData[0].Answer));
+            Assert.That(this.AssignmentDetails.IdentifyingData[0].Answer,
+                Is.EqualTo(this.Assignment.IdentifyingData[0].Answer));
 
         [Test]
         public void should_map_IdentifyingAnswer_QuestionId() =>
-            Assert.That(this.AssignmentDetails.IdentifyingData[0].Identity, Is.EqualTo(this.Assignment.IdentifyingData[0].Identity.ToString()));
+            Assert.That(this.AssignmentDetails.IdentifyingData[0].Identity,
+                Is.EqualTo(this.Assignment.IdentifyingData[0].Identity.ToString()));
 
         [Test]
         public void should_map_IdentifyingAnswer_Variable_name_from_questionnaire() =>
             Assert.That(this.AssignmentDetails.IdentifyingData[0].Variable, Is.EqualTo("test2"));
-        
-        [Test]
-        public void should_query_questionnaire_storage() =>
-            this.storageMock.Verify(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()), Times.Once);
     }
 }
