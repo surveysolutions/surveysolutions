@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using WB.Services.Infrastructure.Tenant;
+using WB.Services.Scheduler.Model;
+using WB.Services.Scheduler.Model.Events;
 using WB.Services.Scheduler.Services.Implementation;
 
 namespace WB.Services.Scheduler.Tests.JobServiceTests
@@ -38,6 +43,79 @@ namespace WB.Services.Scheduler.Tests.JobServiceTests
 
             var job = await jobService.GetFreeJobAsync();
             Assert.That(job, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task only_one_worker_should_acquire_job_for_same_tenant()
+        {
+            var addJobEvent = new ManualResetEvent(false);
+            var canRunEvent = new ManualResetEvent(false);
+            var sw = new Stopwatch();
+            int waitForThreads = 8;
+
+            var tasks = Enumerable.Range(0, waitForThreads).Select(i => Task.Run(() => Runner(i))).ToArray();
+
+            async Task<JobItem> Runner(int id)
+            {
+                using var scope = serviceProvider.CreateScope();
+                var jobService = scope.ServiceProvider.GetService<JobService>();
+
+                if (Interlocked.Decrement(ref waitForThreads) == 0)
+                {
+                    canRunEvent.Set();
+                }
+
+                addJobEvent.WaitOne();
+
+                int attempt = 5;
+
+                while (attempt-- > 0)
+                {
+                    var job = await jobService.GetFreeJobAsync();
+                   
+                    if (job != null)
+                    {
+                        Console.WriteLine($"[{sw.ElapsedMilliseconds}ms] #{id} - got job {job?.Tenant ?? "null"}");
+                        return job;
+                    }
+                }
+
+                return null;
+            }
+
+            canRunEvent.WaitOne();
+
+            // generate several hundreds completed jobs for longer DB work
+            
+            var count = 200;
+            Console.WriteLine($"Generating {count} jobs history");
+            while (count-- > 0)
+            {
+                await CreateNewJobs(Create.Entity.Job(tag: "job_" + count, tenant: "tenant_" + count % 13).Cancel(""));
+            }
+
+            Console.WriteLine("Adding 4 jobs for 4 tenants to process");
+
+            await CreateNewJobs(
+                Create.Entity.Job(tag: "job1", tenant: "oneTenant"),
+                Create.Entity.Job(tag: "job1", tenant: "oneTenant"),
+                Create.Entity.Job(tag: "job1", tenant: "oneTenant"),
+                Create.Entity.Job(tag: "job1", tenant: "oneTenant"),
+                Create.Entity.Job(tag: "job1", tenant: "oneTenant"),
+                Create.Entity.Job(tag: "job1", tenant: "oneTenant"),
+                Create.Entity.Job(tag: "job1", tenant: "oneTenant"),
+                Create.Entity.Job(tag: "job1", tenant: "oneTenant"),
+                Create.Entity.Job(tag: "job2", tenant: "twoTenant"),
+                Create.Entity.Job(tag: "job3", tenant: "threeeTenant"),
+                Create.Entity.Job(tag: "job4", tenant: "fourTenant"));
+
+            Console.WriteLine("Start workers");
+            sw.Restart();
+            addJobEvent.Set();
+
+            var result = await Task.WhenAll(tasks);
+
+            Assert.That(result.Count(r => r != null), Is.EqualTo(4));
         }
 
         [Test]
