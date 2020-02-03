@@ -62,9 +62,8 @@ namespace WB.Services.Scheduler.Services.Implementation
                             return;
                         }
 
-                        await exportJob.ExecuteAsync(job.Args, new JobExecutingContext(job),  linkedCancellation.Token);
+                        await exportJob.ExecuteAsync(job.Args, new JobExecutingContext(job), linkedCancellation.Token);
                         progressReporter.CompleteJob(job.Id);
-
                         await tr.CommitAsync(linkedCancellation.Token);
                     }
                 }

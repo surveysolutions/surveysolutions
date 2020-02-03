@@ -29,7 +29,7 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
-    <PackageReference Include="System.CommandLine.Experimental" Version="0.3.0-alpha.19577.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
@@ -56,7 +56,6 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
   </ItemGroup>
-
 
   <ItemGroup>
     <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
