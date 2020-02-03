@@ -10,6 +10,10 @@
         </div>
         <div class="extra-margin-bottom">
             <div class="profile">
+                <div class="col-sm-7"
+                    v-if="isInterviewer || isSupervisor || isHeadquarters">
+                    <p v-html="$t('Pages.Supervisor_CreateText', {link: '/Users/Upload'})"></p>
+                </div>
                 <div class="col-sm-12">
                     <form-group
                         :label="$t('FieldsAndValidations.UserNameFieldName')"

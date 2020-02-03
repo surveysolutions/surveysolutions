@@ -601,6 +601,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create user.
+        /// </summary>
+        public static string CreateUser {
+            get {
+                return ResourceManager.GetString("CreateUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create admin.
         /// </summary>
         public static string CreateAdmin {
@@ -3338,7 +3347,7 @@ namespace WB.UI.Headquarters.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to This action will create individual user with supervisor rights,
-        ///        &lt;br&gt;to create several users you can use &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;..
+        ///        &lt;br&gt;to create several users you can use &lt;a href=&quot;{{link}}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;..
         /// </summary>
         public static string Supervisor_CreateText {
             get {
