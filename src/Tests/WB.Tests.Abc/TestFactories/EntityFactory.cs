@@ -1852,7 +1852,10 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
-        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Identity identity = null, string answer = null, string answerAsString = null)
+        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Identity identity = null, 
+            string answer = null,
+            string answerAsString = null,
+            string variable = null)
         {
             var result = new IdentifyingAnswer();
             
@@ -1861,6 +1864,7 @@ namespace WB.Tests.Abc.TestFactories
             dynamic.Identity = identity;
             dynamic.Answer = answer;
             dynamic.AnswerAsString = answerAsString;
+            dynamic.VariableName = variable;
             return result;
         }
 

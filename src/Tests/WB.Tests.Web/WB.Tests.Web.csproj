@@ -97,6 +97,17 @@
       <Compile Include="Headquarters\Controllers\PeriodicStatusReportTests\when_request_quantity_report_by_supervisors.cs" />
       <Compile Include="Headquarters\Controllers\PeriodicStatusReportTests\when_request_speed_report_by_interviewers_for_user_in_supervisor_role.cs" />
       <Compile Include="Headquarters\Controllers\PeriodicStatusReportTests\when_request_speed_report_by_supervisors.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\ApiTestContext.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\AssignmentsPublicApiMapProfileSpecification.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\AudioRecoding_Methods_Tests.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\BaseAssignmentsControllerTest.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\CloseEndpointTests.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_archive_with_AssignmentsPublicApi.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_assign_new_user_with_AssignmentsPublicApi.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_changing_quantity_with_AssignmentsPublicApi.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_create_assignment_with_AssignmentsPublicApi.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_list_assignments_with_AssignmentsPublicApi.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_map_assignment_to_assignmentDetails.cs" />
     </ItemGroup>
 
 </Project>
