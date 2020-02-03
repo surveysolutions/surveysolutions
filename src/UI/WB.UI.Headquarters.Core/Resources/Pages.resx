@@ -942,6 +942,9 @@
   <data name="CreateAdmin" xml:space="preserve">
     <value>Create admin</value>
   </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Reset user password</value>
+  </data>
   <data name="Profile_ApiUsersList" xml:space="preserve">
     <value>API users</value>
   </data>
@@ -1217,7 +1220,7 @@
     <value>Select a team where to move {{names}}</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>{0} and {1}</value>
+      <value>{{names}} and {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{{names}} and {{more}} more</value>
