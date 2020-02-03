@@ -67,10 +67,9 @@ namespace WB.Services.Scheduler.Services.Implementation
                         await tr.CommitAsync(linkedCancellation.Token);
                     }
                 }
-                catch (OperationCanceledException oce)
+                catch (OperationCanceledException)
                 {
                     logger.LogWarning("Job cancelled [ {jobArgs} ]", job.Args);
-                    progressReporter.CancelJob(job.Id, oce.Message);
                 }
                 catch (Exception e)
                 {

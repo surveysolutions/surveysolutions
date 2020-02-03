@@ -112,5 +112,7 @@ namespace WB.Services.Scheduler.Model
             this.Handle(new CancelJobEvent(Id, reason));
             return this;
         }
+
+        public bool ShouldDropTenantSchema => this.GetData<long>("retry") == 1;
     }
 }

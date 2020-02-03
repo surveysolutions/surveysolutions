@@ -40,7 +40,7 @@ namespace WB.Services.Export.Events
                 await using var tr = await this.dbContext.Database.BeginTransactionAsync(token);
 
                 var eventsToPublish = eventsFilter != null
-                    ? await eventsFilter.FilterAsync(feed.Events)
+                    ? await eventsFilter.FilterAsync(feed.Events, token)
                     : feed.Events;
 
                 var globalSequence = dbContext.GlobalSequence;
@@ -51,6 +51,8 @@ namespace WB.Services.Export.Events
 
                     foreach (var handler in handlers)
                     {
+                        token.ThrowIfCancellationRequested();
+
                         eventHandlerStopwatch.Restart();
                         foreach (var ev in eventsToPublish)
                         {
@@ -92,7 +94,7 @@ namespace WB.Services.Export.Events
             }
             catch (PostgresException pe) when (pe.SqlState == "57014")
             {
-                throw;
+                throw new OperationCanceledException("Job canceled", pe);
             }
             catch (Exception e) when (e.InnerException is TaskCanceledException)
             {

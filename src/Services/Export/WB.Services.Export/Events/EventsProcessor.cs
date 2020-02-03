@@ -111,7 +111,7 @@ namespace WB.Services.Export.Events
                 // ReSharper disable once PossibleInvalidOperationException - max value will always be set
                 var totalEventsToRead = maximumSequenceToQuery.Value - sequenceToStartFrom;
                 var eventsProcessed = feed.Events.Last().GlobalSequence - sequenceToStartFrom;
-                var percent = eventsProcessed.PercentDOf(totalEventsToRead);
+                var percent = (eventsProcessed + sequenceToStartFrom).PercentDOf(totalEventsToRead);
 
                 // in events/second
                 var thisBatchProcessingSpeed = feed.Events.Count / executionTrack.Elapsed.TotalSeconds;

@@ -615,7 +615,7 @@ namespace WB.Services.Export.Tests
             if (withDefaultEventsFilter)
             {
                 var filerMock = new Mock<IEventsFilter>();
-                filerMock.Setup(c => c.FilterAsync(It.IsAny<List<Event>>()))
+                filerMock.Setup(c => c.FilterAsync(It.IsAny<List<Event>>(), It.IsAny<CancellationToken>()))
                     .Returns<List<Event>>(Task.FromResult);
 
                 services.AddTransient(c => filerMock.Object);
