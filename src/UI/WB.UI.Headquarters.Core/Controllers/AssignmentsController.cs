@@ -294,15 +294,11 @@ namespace WB.UI.Headquarters.Controllers
                                 .Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase));
 
                             if (protectedFile != null)
-                            {
                                 errors = this.dataVerifier.VerifyProtectedVariables(fileName, protectedFile, questionnaire).Take(10).ToArray();
 
-                                if (!errors.Any())
-                                {
-                                    errors = this.assignmentsImportService.VerifyPanelAndSaveIfNoErrors(fileName,
-                                        allImportedFiles.Where(x => !x.Equals(protectedFile)).ToArray(), model.ResponsibleId.Value, protectedFile, questionnaire).Take(10).ToArray();       
-                                }
-                            }
+                            if (!errors.Any())
+                                errors = this.assignmentsImportService.VerifyPanelAndSaveIfNoErrors(fileName,
+                                    allImportedFiles.Where(x => !x.Equals(protectedFile)).ToArray(), model.ResponsibleId.Value, protectedFile, questionnaire).Take(10).ToArray();       
                         }
                         else
                         {

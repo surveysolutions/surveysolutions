@@ -105,7 +105,7 @@ export default {
             return this.status.processStatus != 'ImportCompleted'
         },
         processedWithoutErrorsCount() {
-            return this.status.processedCount - this.status.withErrorsCount
+            return (this.isInProgress ? this.status.processedCount : this.status.totalCount) - this.status.withErrorsCount
         },
     },
     mounted() {
