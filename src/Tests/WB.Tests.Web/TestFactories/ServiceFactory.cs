@@ -1,9 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -12,7 +20,9 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.WebInterview.Services;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
@@ -91,6 +101,31 @@ namespace WB.Tests.Web.TestFactories
                 new SupervisorGroupStateCalculationStrategy(), 
                 Create.Service.WebNavigationService(),
                 Create.Service.SubstitutionTextFactory());
+        }
+
+        public SignInManager<HqUser> SignInManager()
+        {
+            return new SignInManager<HqUser>(UserManager(),
+                Mock.Of<IHttpContextAccessor>(),
+                Mock.Of<IUserClaimsPrincipalFactory<HqUser>>(),
+                Mock.Of<IOptions<IdentityOptions>>(),
+                Mock.Of<ILogger<SignInManager<HqUser>>>(),
+                Mock.Of<IAuthenticationSchemeProvider>(),
+                Mock.Of<IUserConfirmation<HqUser>>());
+        }
+
+        public UserManager<HqUser> UserManager()
+        {
+            var hqUserStore = new HqUserStore(Mock.Of<IUnitOfWork>(), new LocalizedIdentityErrorDescriber());
+            return new UserManager<HqUser>(hqUserStore,
+                Mock.Of<IOptions<IdentityOptions>>(),
+                Mock.Of<IPasswordHasher<HqUser>>(), 
+                new List<IUserValidator<HqUser>>(),
+                new List<IPasswordValidator<HqUser>>(),
+                Mock.Of<ILookupNormalizer>(),
+                new LocalizedIdentityErrorDescriber(), 
+                Mock.Of<IServiceProvider>(),
+                Mock.Of<ILogger<UserManager<HqUser>>>());
         }
     }
 }

@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Filters
 {
     public class InstallationFilter : IActionFilter
     {
-        private IUserRepository userRepository;
+        private readonly IUserRepository userRepository;
         internal static bool Installed = false;
 
         public InstallationFilter(IUserRepository userRepository)
