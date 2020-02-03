@@ -34,7 +34,6 @@
       <Compile Remove="Headquarters\Controllers\InterviewerInterviewsControllerTests\**" />
       <Compile Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
       <Compile Remove="Headquarters\Controllers\PublicApiTests\**" />
-      <Compile Remove="Headquarters\Controllers\ResourceControllerTests\**" />
       <Compile Remove="Headquarters\Controllers\TabletReportControllerTests\**" />
       <Compile Remove="Headquarters\Controllers\WebInterview\**" />
       <Compile Remove="Headquarters\Controllers\AssignmentsApiControllerTests.cs" />
@@ -58,7 +57,6 @@
       <EmbeddedResource Remove="Headquarters\Controllers\InterviewerInterviewsControllerTests\**" />
       <EmbeddedResource Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
       <EmbeddedResource Remove="Headquarters\Controllers\PublicApiTests\**" />
-      <EmbeddedResource Remove="Headquarters\Controllers\ResourceControllerTests\**" />
       <EmbeddedResource Remove="Headquarters\Controllers\TabletReportControllerTests\**" />
       <EmbeddedResource Remove="Headquarters\Controllers\WebInterview\**" />
       <EmbeddedResource Remove="Headquarters\InstallationAttributeTests\**" />
@@ -74,7 +72,6 @@
       <None Remove="Headquarters\Controllers\InterviewerInterviewsControllerTests\**" />
       <None Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
       <None Remove="Headquarters\Controllers\PublicApiTests\**" />
-      <None Remove="Headquarters\Controllers\ResourceControllerTests\**" />
       <None Remove="Headquarters\Controllers\TabletReportControllerTests\**" />
       <None Remove="Headquarters\Controllers\WebInterview\**" />
       <None Remove="Headquarters\InstallationAttributeTests\**" />
