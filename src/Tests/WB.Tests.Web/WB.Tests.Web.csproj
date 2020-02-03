@@ -6,8 +6,10 @@
         <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
-
     <ItemGroup>
+        <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
+
         <PackageReference Include="Autofac" Version="4.9.4" />
         <PackageReference Include="FluentAssertions" Version="5.9.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -22,107 +24,19 @@
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.4.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     </ItemGroup>
-
     <ItemGroup>
-        <!--<ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" />-->
-        <!--<ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" />-->
         <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj" />
         <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
     </ItemGroup>
-
     <ItemGroup>
-      <Compile Remove="Headquarters\Controllers\InterviewerInterviewsControllerTests\**" />
-      <Compile Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
-      <Compile Remove="Headquarters\Controllers\PublicApiTests\**" />
-      <Compile Remove="Headquarters\Controllers\WebInterview\**" />
-      <Compile Remove="Headquarters\QuestionnaireExporterTest\**" />
-      <Compile Remove="Headquarters\UtilsTests\**" />
-      <Compile Remove="Headquarters\WebInterview\**" />
+      <Compile Remove="Headquarters\Controllers\HeadquartersApiRouteTests.cs" />
+      <Compile Remove="Headquarters\WebInterview\ConnectionsMonitorTests.cs" />
       <Compile Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
-      <Compile Remove="Shared\**" />
-      <Compile Remove="SignalrResolverMock.cs" />
-      <Compile Remove="Headquarters\Controllers\InterviewerApiTests\when_map_assignment_to_assignmentApiDocument_AssignmentViewFactoryTests.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\InterviewOverviewServiceTests.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\Group_state_and_validitiy_depend_on_viewer_for_groups_with_hidden_and_prefilled_questions.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\WebInterviewInterviewEntityFactory_GroupDetailsTests.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\when_all_answers_valid_and_answered.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\when_all_questions_answered_in_group_and_not_answered_in_subgroup.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\when_valid_section_have_invalid_question_in_subgroup.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\InterviewSimpleStatusTests.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\WebInterviewInterviewEntityFactorySpecification.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\when_getting_entity_details.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\when_getting_status_of_invalid_flat_roster_parent.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\when_get_details_for_linked_question.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\when_get_interview_details_with_markdown_links.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Filtering\FilterTestCase.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Filtering\StatefullInterviewSearchTests.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\Review\Filtering\when_interview_has_prefilled_readonly_question.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\WebInterview_FlatMode_Tests.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\WebInterview_TableMode_Tests.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\WebNavigationServiceTests.cs" />
-      <Compile Remove="Headquarters\Controllers\HeadquaertersApiRouteTests.cs" />
     </ItemGroup>
-
     <ItemGroup>
-      <EmbeddedResource Remove="Headquarters\Controllers\InterviewerInterviewsControllerTests\**" />
-      <EmbeddedResource Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
-      <EmbeddedResource Remove="Headquarters\Controllers\PublicApiTests\**" />
-      <EmbeddedResource Remove="Headquarters\Controllers\WebInterview\**" />
-      <EmbeddedResource Remove="Headquarters\QuestionnaireExporterTest\**" />
-      <EmbeddedResource Remove="Headquarters\UtilsTests\**" />
-      <EmbeddedResource Remove="Headquarters\WebInterview\**" />
       <EmbeddedResource Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
-      <EmbeddedResource Remove="Shared\**" />
     </ItemGroup>
-
     <ItemGroup>
-      <None Remove="Headquarters\Controllers\InterviewerInterviewsControllerTests\**" />
-      <None Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
-      <None Remove="Headquarters\Controllers\PublicApiTests\**" />
-      <None Remove="Headquarters\Controllers\WebInterview\**" />
-      <None Remove="Headquarters\QuestionnaireExporterTest\**" />
-      <None Remove="Headquarters\UtilsTests\**" />
-      <None Remove="Headquarters\WebInterview\**" />
       <None Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
-      <None Remove="Shared\**" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Include="Headquarters\Controllers\InterviewerInterviewsControllerTests\v2\InterviewsApiV2ControllerTestsContext.cs" />
-      <Compile Include="Headquarters\Controllers\InterviewerInterviewsControllerTests\v2\when_getting_interviews.cs" />
-      <Compile Include="Headquarters\Controllers\InterviewerInterviewsControllerTests\v2\when_marking_interview_as_received.cs" />
-      <Compile Include="Headquarters\Controllers\InterviewerInterviewsControllerTests\v2\when_posting_image_by_interview.cs" />
-      <Compile Include="Headquarters\Controllers\InterviewerInterviewsControllerTests\v2\when_posting_sync_package.cs" />
-      <Compile Include="Headquarters\Controllers\PeriodicStatusReportTests\when_request_quantity_report_by_interviewers_for_user_in_hq_role.cs" />
-      <Compile Include="Headquarters\Controllers\PeriodicStatusReportTests\when_request_quantity_report_by_interviewers_for_user_in_supervisor_role.cs" />
-      <Compile Include="Headquarters\Controllers\PeriodicStatusReportTests\when_request_quantity_report_by_supervisors.cs" />
-      <Compile Include="Headquarters\Controllers\PeriodicStatusReportTests\when_request_speed_report_by_interviewers_for_user_in_supervisor_role.cs" />
-      <Compile Include="Headquarters\Controllers\PeriodicStatusReportTests\when_request_speed_report_by_supervisors.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\ApiTestContext.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\AssignmentsPublicApiMapProfileSpecification.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\AudioRecoding_Methods_Tests.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\BaseAssignmentsControllerTest.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\CloseEndpointTests.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_archive_with_AssignmentsPublicApi.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_assign_new_user_with_AssignmentsPublicApi.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_changing_quantity_with_AssignmentsPublicApi.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_create_assignment_with_AssignmentsPublicApi.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_list_assignments_with_AssignmentsPublicApi.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_map_assignment_to_assignmentDetails.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\QuestionnaireController_RecordAudioTests.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_getting_attachment_content.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_getting_questionnaire_attachments.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_approving_interview.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_assigning_interview.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_hqapproving_interview.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_hqrejecting_interview.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_hqunapproving_interview.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_rejecting_interview.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_questionnaires_controller_interviews_with_not_empty_params.cs" />
-      <Compile Include="Headquarters\Controllers\PublicApiTests\when_questionnaires_controller_questionnaries_by_id.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\NotificationService\LazyNotificationServiceTests.cs" />
-      <Compile Include="Headquarters\Controllers\WebInterview\NotificationService\WebInterviewNotificationServiceTests.cs" />
-    </ItemGroup>
-
 </Project>
