@@ -102,6 +102,6 @@ namespace WB.UI.Headquarters.Code
         }
 
         public static string MapPath(this IWebHostEnvironment hostingEnvironment, string path) =>
-            Path.Combine(hostingEnvironment.WebRootPath, path);
+            Path.Combine(hostingEnvironment.ContentRootPath, "wwwroot", path);
     }
 }

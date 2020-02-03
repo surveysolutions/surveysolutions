@@ -4,6 +4,7 @@ import TabletInfos from './TabletInfos'
 import AppUpdates from './AppUpdates'
 import CreateAdmin from './CreateAdmin'
 import InterviewPackages from './InterviewPackages'
+import ChangePassword from './ChangePassword'
 
 export default class MapComponent {
     get routes() {
@@ -31,6 +32,10 @@ export default class MapComponent {
                     {
                         path: 'InterviewPackages',
                         component: InterviewPackages,
+                    },
+                    {
+                        path: 'ResetPrivilegedUserPassword',
+                        component: ChangePassword,
                     },
                 ],
             },

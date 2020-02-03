@@ -44,6 +44,7 @@
         Administration_AppUpdates,
         Administration_InterviewPackages,
         Administration_Exceptions,
-        Administration_CreateAdmin
+        Administration_CreateAdmin,
+        Administration_ChangePassword,
     }
 }

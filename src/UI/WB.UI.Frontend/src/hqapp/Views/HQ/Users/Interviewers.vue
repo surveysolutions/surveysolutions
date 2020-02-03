@@ -116,7 +116,8 @@
         <InterviewersMoveToOtherTeam
             ref="interviewersMoveToOtherTeam"
             :interviewers="selectedInterviewersFullInfo"
-            :moveUserToAnotherTeamUrl="model.moveUserToAnotherTeamUrl"></InterviewersMoveToOtherTeam>
+            :moveUserToAnotherTeamUrl="model.moveUserToAnotherTeamUrl"
+            @moveInterviewersCompleted="loadData"></InterviewersMoveToOtherTeam>
     </HqLayout>
 </template>
 
