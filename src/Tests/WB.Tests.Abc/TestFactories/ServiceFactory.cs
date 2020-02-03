@@ -1170,6 +1170,11 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new UserArchiveService(userRepository, Mock.Of<ISystemLog>());
         }
+        
+        public ISupportedVersionProvider SupportedVersionProvider()
+        {
+            return new SupportedVersionProvider(new InMemoryKeyValueStorage<QuestionnaireVersion>());
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
