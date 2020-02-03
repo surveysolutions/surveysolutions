@@ -35,12 +35,6 @@
       <Compile Remove="Headquarters\Controllers\PeriodicStatusReportTests\**" />
       <Compile Remove="Headquarters\Controllers\PublicApiTests\**" />
       <Compile Remove="Headquarters\Controllers\WebInterview\**" />
-      <Compile Remove="Headquarters\Controllers\AssignmentsApiControllerTests.cs" />
-      <Compile Remove="Headquarters\Controllers\AssignmentsApiV2ControllerTests.cs" />
-      <Compile Remove="Headquarters\Controllers\DoNotUseVoidApiMethods.cs" />
-      <Compile Remove="Headquarters\Controllers\DummyRestSeviceForCollectUrls.cs" />
-      <Compile Remove="Headquarters\Controllers\HeadquaertersApiRouteTests.cs" />
-      <Compile Remove="Headquarters\Controllers\SupervisorApiControllerTests.cs" />
       <Compile Remove="Headquarters\QuestionnaireExporterTest\**" />
       <Compile Remove="Headquarters\UtilsTests\**" />
       <Compile Remove="Headquarters\WebInterview\**" />
@@ -48,6 +42,25 @@
       <Compile Remove="Shared\**" />
       <Compile Remove="SignalrResolverMock.cs" />
       <Compile Remove="Headquarters\Controllers\InterviewerApiTests\when_map_assignment_to_assignmentApiDocument_AssignmentViewFactoryTests.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\InterviewOverviewServiceTests.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\Group_state_and_validitiy_depend_on_viewer_for_groups_with_hidden_and_prefilled_questions.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\WebInterviewInterviewEntityFactory_GroupDetailsTests.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\when_all_answers_valid_and_answered.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\when_all_questions_answered_in_group_and_not_answered_in_subgroup.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\GetGroupDetailsTests\when_valid_section_have_invalid_question_in_subgroup.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\InterviewSimpleStatusTests.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\WebInterviewInterviewEntityFactorySpecification.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\when_getting_entity_details.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\when_getting_status_of_invalid_flat_roster_parent.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\when_get_details_for_linked_question.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Api\when_get_interview_details_with_markdown_links.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Filtering\FilterTestCase.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Filtering\StatefullInterviewSearchTests.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\Review\Filtering\when_interview_has_prefilled_readonly_question.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\WebInterview_FlatMode_Tests.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\WebInterview_TableMode_Tests.cs" />
+      <Compile Include="Headquarters\Controllers\WebInterview\WebNavigationServiceTests.cs" />
+      <Compile Remove="Headquarters\Controllers\HeadquaertersApiRouteTests.cs" />
     </ItemGroup>
 
     <ItemGroup>

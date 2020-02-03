@@ -6,6 +6,7 @@ using WB.Tests.Abc;
 
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
 {
