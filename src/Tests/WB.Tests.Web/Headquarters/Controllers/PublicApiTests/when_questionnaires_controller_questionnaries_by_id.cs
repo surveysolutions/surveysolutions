@@ -3,8 +3,8 @@ using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
-using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static QuestionnaireApiView actionResult;
-        private static QuestionnairesController controller;
+        private static QuestionnairesPublicApiController controller;
         private static Mock<IQuestionnaireBrowseViewFactory> questionnaireBrowseViewFactoryMock;
     }
 }

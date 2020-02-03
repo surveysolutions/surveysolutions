@@ -105,6 +105,18 @@
       <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_create_assignment_with_AssignmentsPublicApi.cs" />
       <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_list_assignments_with_AssignmentsPublicApi.cs" />
       <Compile Include="Headquarters\Controllers\PublicApiTests\AssignmentsTests\when_map_assignment_to_assignmentDetails.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\QuestionnaireController_RecordAudioTests.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_getting_attachment_content.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_getting_questionnaire_attachments.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_approving_interview.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_assigning_interview.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_hqapproving_interview.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_hqrejecting_interview.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_hqunapproving_interview.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_intervews_controller_rejecting_interview.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_questionnaires_controller_interviews_with_not_empty_params.cs" />
+      <Compile Include="Headquarters\Controllers\PublicApiTests\when_questionnaires_controller_questionnaries_by_id.cs" />
     </ItemGroup>
 
 </Project>
