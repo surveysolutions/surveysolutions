@@ -111,7 +111,7 @@ namespace WB.Services.Export.Questionnaire
             {
                 reference = new InterviewReference { QuestionnaireId = questionnaireIdentity, InterviewId = @event.EventSourceId };
 
-                await this.dbContext.AddAsync(reference);
+                await this.dbContext.InterviewReferences.AddAsync(reference);
             }
 
             return reference;

@@ -81,7 +81,7 @@ namespace WB.Services.Export.Infrastructure
                     });
             }
         }
-        
+
         public Metadata GlobalSequence
         {
             get
