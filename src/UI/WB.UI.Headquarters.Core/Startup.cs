@@ -361,8 +361,6 @@ namespace WB.UI.Headquarters
 
                 endpoints.MapHub<WebInterview>("interview",
                     options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
-                
-                endpoints.MapRazorPages();
             });
         }
 
