@@ -106,7 +106,7 @@ namespace WB.Services.Scheduler.Tests
             catch { /* 
                     If DB is not created, then db.Database.MigrateAsync will create it with public schema
                     but if there is already created DB without public schema, them MigrateAsync will fail.
-                    So it's OK to fail here and om om om exception and fail later on Migrate if there is a 
+                    So it's OK to fail here and om om om exception and fail later on MigrateAsync if there is a 
                     problem with migrations or DB access
                  */ }
          }

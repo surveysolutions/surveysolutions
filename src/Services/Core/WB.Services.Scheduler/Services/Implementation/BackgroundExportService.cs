@@ -28,6 +28,12 @@ namespace WB.Services.Scheduler.Services.Implementation
             cts = new CancellationTokenSource();
 
             this.scope = this.serviceProvider.CreateScope();
+
+            using (var migrationScope = this.serviceProvider.CreateScope())
+            {
+                await migrationScope.ServiceProvider.GetRequiredService<IJobContextMigrator>().MigrateAsync(cts.Token);
+            }
+
             this.backgroundServices = scope.ServiceProvider.GetServices<IHostedSchedulerService>();
 
             foreach (var backgroundService in backgroundServices)

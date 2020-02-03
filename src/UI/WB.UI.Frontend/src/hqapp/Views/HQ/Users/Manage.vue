@@ -27,11 +27,13 @@
                 <div class="col-sm-12">
                     <form-group :label="$t('Pages.AccountManage_Login')">
                         <TextInput :value="userInfo.userName"
+                            id="UserName"
                             disabled />
                     </form-group>
 
                     <form-group :label="$t('Pages.AccountManage_Role')">
                         <TextInput :value="userInfo.role"
+                            id="Role"
                             disabled />
                     </form-group>
 
@@ -40,21 +42,24 @@
                         :error="modelState['PersonName']">
                         <TextInput
                             v-model.trim="personName"
-                            :haserror="modelState['PersonName'] !== undefined"/>
+                            :haserror="modelState['PersonName'] !== undefined"
+                            id="PersonName"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.EmailFieldName')"
                         :error="modelState['Email']">
                         <TextInput
                             v-model.trim="email"
-                            :haserror="modelState['Email'] !== undefined"/>
+                            :haserror="modelState['Email'] !== undefined"
+                            id="Email"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
                         :error="modelState['PhoneNumber']">
                         <TextInput
                             v-model.trim="phoneNumber"
-                            :haserror="modelState['PhoneNumber'] !== undefined"/>
+                            :haserror="modelState['PhoneNumber'] !== undefined"
+                            id="PhoneNumber"/>
                     </form-group>
                     <p v-if="lockMessage != null">{{lockMessage}}</p>
                     <form-group v-if="!isOwnProfile">
@@ -92,9 +97,11 @@
                             type="submit"
                             class="btn btn-success"
                             style="margin-right:5px"
+                            id="btnUpdateUser"
                             @click="updateAccount">{{$t('Pages.Update')}}</button>
                         <a class="btn btn-default"
-                            v-bind:href="referrerUrl">
+                            v-bind:href="referrerUrl"
+                            id="lnkCancelUpdateUser">
                             {{$t('Common.Cancel')}}
                         </a>
                     </div>
@@ -112,7 +119,8 @@
                         <TextInput
                             type="password"
                             v-model.trim="oldPassword"
-                            :haserror="modelState['OldPassword'] !== undefined"/>
+                            :haserror="modelState['OldPassword'] !== undefined"
+                            id="OldPassword"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.NewPasswordFieldName')"
@@ -120,7 +128,8 @@
                         <TextInput
                             type="password"
                             v-model.trim="password"
-                            :haserror="modelState['Password'] !== undefined"/>
+                            :haserror="modelState['Password'] !== undefined"
+                            id="Password"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
@@ -128,7 +137,8 @@
                         <TextInput
                             type="password"
                             v-model.trim="confirmPassword"
-                            :haserror="modelState['ConfirmPassword'] !== undefined"/>
+                            :haserror="modelState['ConfirmPassword'] !== undefined"
+                            id="ConfirmPassword"/>
                     </form-group>
                 </div>
 
@@ -138,9 +148,11 @@
                             type="submit"
                             class="btn btn-success"
                             style="margin-right:5px"
+                            id="btnUpdatePassword"
                             @click="updatePassword">{{$t('Pages.Update')}}</button>
                         <a class="btn btn-default"
-                            v-bind:href="referrerUrl">
+                            v-bind:href="referrerUrl"
+                            id="lnkCancelUpdatePassword">
                             {{$t('Common.Cancel')}}
                         </a>
                     </div>
