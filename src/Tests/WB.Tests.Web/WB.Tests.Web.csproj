@@ -45,11 +45,7 @@
       <Compile Remove="Headquarters\UtilsTests\**" />
       <Compile Remove="Headquarters\WebInterview\**" />
       <Compile Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
-      <Compile Remove="Integration\**" />
       <Compile Remove="Shared\**" />
-      <Compile Remove="Headquarters\InstallationAttributeTests\when_action_executing_and_admin_user_does_not_exists_and_not_install_controller.cs" />
-      <Compile Remove="Headquarters\InstallationAttributeTests\when_action_executing_and_admin_user_exists_and_install_controller.cs" />
-      <Compile Remove="Headquarters\InstallationAttributeTests\when_action_executing_and_control_panel_controller.cs" />
       <Compile Remove="SignalrResolverMock.cs" />
       <Compile Remove="Headquarters\Controllers\InterviewerApiTests\when_map_assignment_to_assignmentApiDocument_AssignmentViewFactoryTests.cs" />
     </ItemGroup>
@@ -63,7 +59,6 @@
       <EmbeddedResource Remove="Headquarters\UtilsTests\**" />
       <EmbeddedResource Remove="Headquarters\WebInterview\**" />
       <EmbeddedResource Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
-      <EmbeddedResource Remove="Integration\**" />
       <EmbeddedResource Remove="Shared\**" />
     </ItemGroup>
 
@@ -76,7 +71,6 @@
       <None Remove="Headquarters\UtilsTests\**" />
       <None Remove="Headquarters\WebInterview\**" />
       <None Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
-      <None Remove="Integration\**" />
       <None Remove="Shared\**" />
     </ItemGroup>
 

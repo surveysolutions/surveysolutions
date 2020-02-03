@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using Amazon.Runtime.Internal;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Tests.Abc;
@@ -21,7 +24,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
 
         protected static ActionExecutingContext CreateFilterContext(ControllerBase specifiedController = null)
         {
-            return new ActionExecutingContext(new ActionContext(), 
+            return new ActionExecutingContext(new ActionContext
+                {
+                    HttpContext = new DefaultHttpContext(),
+                    RouteData = new RouteData(),
+                    ActionDescriptor = new ActionDescriptor()
+                }, 
                 new List<IFilterMetadata>(), 
                 new Dictionary<string, object>(), 
                 specifiedController);
