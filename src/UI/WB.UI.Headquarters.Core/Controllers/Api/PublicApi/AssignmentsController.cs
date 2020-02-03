@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
@@ -49,6 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IAssignmentPasswordGenerator passwordGenerator;
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IUnitOfWork unitOfWork;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -64,6 +66,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IAssignmentPasswordGenerator passwordGenerator,
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
+            IUnitOfWork unitOfWork,
             ICommandTransformator commandTransformator)
         {
             this.assignmentViewFactory = assignmentViewFactory;
@@ -79,6 +82,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.passwordGenerator = passwordGenerator;
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
+            this.unitOfWork = unitOfWork;
             this.commandTransformator = commandTransformator;
         }
 
@@ -94,8 +98,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         {
             Assignment assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
-                return StatusCode(StatusCodes.Status404NotFound);
-            var questionnaire = questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
+                return NotFound();
             var result = this.mapper.Map<FullAssignmentDetails>(assignment);
             return result;
         }
@@ -111,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Authorize(Roles = "ApiUser, Administrator")]
         public async Task<ActionResult<AssignmentsListView>> List([FromQuery] AssignmentsListFilter filter)
         {
-            filter = filter ?? new AssignmentsListFilter
+            filter ??= new AssignmentsListFilter
             {
                 Offset = 0,
                 Limit = 20
@@ -148,6 +151,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
             catch (NotSupportedException)
             {
+                unitOfWork.DiscardChanges();
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
@@ -290,6 +294,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }
                 catch (Exception ae)
                 {
+                    unitOfWork.DiscardChanges();
                     return StatusCode(StatusCodes.Status400BadRequest,
                         $"Answer '{item.Answer}' cannot be parsed for question with Identity '{item.Identity}' and variable '{item.Variable}'." +
                         Environment.NewLine +
@@ -311,6 +316,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (result != null)
             {
+                unitOfWork.DiscardChanges();
                 return StatusCode(StatusCodes.Status400BadRequest, new CreateAssignmentResult
                 {
                     Assignment = mapper.Map<AssignmentDetails>(assignment),
@@ -352,7 +358,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+                return NotFound();
             }
 
             var responsibleUser = await this.GetResponsibleIdPersonFromRequestValueAsync(assigneeRequest?.Responsible);
@@ -364,6 +370,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
             catch (HttpException e)
             {
+                unitOfWork.DiscardChanges();
                 return StatusCode(e.StatusCode, e.Message);
             }
 
