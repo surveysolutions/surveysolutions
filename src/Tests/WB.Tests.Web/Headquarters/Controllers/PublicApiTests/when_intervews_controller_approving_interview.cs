@@ -4,6 +4,9 @@ using System.Net;
 using System.Net.Http;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -13,6 +16,8 @@ using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
@@ -36,11 +41,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 
         public void BecauseOf() 
         {
-            httpResponseMessage = controller.Approve(interviewId, null);
+            httpResponseMessage = (IStatusCodeActionResult)controller.Approve(interviewId, null);
         }
 
         [NUnit.Framework.Test] public void should_return_OK_status_code () =>
-            httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+            httpResponseMessage.StatusCode.Should().Be(StatusCodes.Status200OK);
 
         [NUnit.Framework.Test] public void should_execute_AssignInterviewerCommand_with_specified_UserId () =>
             commandService.Verify(command => command.Execute(Moq.It.Is<ApproveInterviewCommand>(cp => cp.InterviewId == interviewId), Moq.It.IsAny<string>()));
@@ -50,8 +55,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         private static Guid executorId = Guid.Parse("22111111111111111111111111111112");
 
         private static Mock<ICommandService> commandService;
-        private static HttpResponseMessage httpResponseMessage;
-        private static InterviewsController controller;
+        private static IStatusCodeActionResult httpResponseMessage;
+        private static InterviewsPublicApiController controller;
         
     }
 }
