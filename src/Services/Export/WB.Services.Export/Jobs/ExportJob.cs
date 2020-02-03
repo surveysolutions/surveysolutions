@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using WB.Services.Export.Events;
@@ -17,11 +18,13 @@ namespace WB.Services.Export.Jobs
         private readonly IEventProcessor processor;
         private readonly IExportProcessHandler<DataExportProcessArgs> exportProcessHandler;
         private readonly ILogger<ExportJob> logger;
+        private readonly IQuestionnaireSchemaGenerator questionnaireSchemaGenerator;
 
         public ExportJob(IServiceProvider serviceProvider,
             IEventProcessor processor,
             ILogger<ExportJob> logger, 
-            IExportProcessHandler<DataExportProcessArgs> exportProcessHandler)
+            IExportProcessHandler<DataExportProcessArgs> exportProcessHandler, 
+            IQuestionnaireSchemaGenerator questionnaireSchemaGenerator)
         {
             logger.LogTrace("Constructed instance of ExportJob");
 
@@ -29,6 +32,7 @@ namespace WB.Services.Export.Jobs
             this.processor = processor;
             this.logger = logger;
             this.exportProcessHandler = exportProcessHandler;
+            this.questionnaireSchemaGenerator = questionnaireSchemaGenerator;
         }
 
         public async Task ExecuteAsync(DataExportProcessArgs pendingExportProcess, CancellationToken cancellationToken)
@@ -38,6 +42,12 @@ namespace WB.Services.Export.Jobs
             try
             {
                 serviceProvider.SetTenant(pendingExportProcess.ExportSettings.Tenant);
+
+                if (pendingExportProcess.ShouldDropTenantSchema)
+                {
+                    await questionnaireSchemaGenerator.DropTenantSchemaAsync(
+                        pendingExportProcess.ExportSettings.Tenant.Name, cancellationToken);
+                }
 
                 await processor.HandleNewEvents(pendingExportProcess.ProcessId, cancellationToken);
 

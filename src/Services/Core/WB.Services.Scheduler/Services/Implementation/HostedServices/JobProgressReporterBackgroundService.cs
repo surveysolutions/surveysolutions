@@ -11,7 +11,7 @@ using WB.Services.Scheduler.Model.Events;
 
 namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 {
-    internal class JobProgressReporterBackgroundService : BackgroundService, Services.IJobProgressReporter
+    internal class JobProgressReporterBackgroundService : BackgroundService, IJobProgressReporter
     {
         private readonly ILogger<JobProgressReporterBackgroundService> logger;
         private readonly TaskCompletionSource<bool> queueCompletion = new TaskCompletionSource<bool>();
@@ -29,14 +29,20 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
             return Task.Run(async () =>
             {
                 using var ctx = LoggingHelpers.LogContext("workerId", "progressReporter");
-                logger.LogInformation("JobProgressReporterBackgroundService started");
+                logger.LogInformation("{service} started", nameof(JobProgressReporterBackgroundService));
                 foreach (var task in queue.GetConsumingEnumerable())
                 {
                     try
                     {
                         using var scope = serviceProvider.CreateScope();
                         var runner = scope.ServiceProvider.GetRequiredService<IJobProgressReportWriter>();
+                        stoppingToken.ThrowIfCancellationRequested();
                         await runner.WriteReportAsync(task, stoppingToken);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        logger.LogError("{service} cancellation requested. Stopping", nameof(JobProgressReporterBackgroundService));
+                        return;
                     }
                     catch (Exception e)
                     {
