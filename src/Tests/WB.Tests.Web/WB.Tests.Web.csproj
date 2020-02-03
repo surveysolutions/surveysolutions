@@ -29,7 +29,6 @@
         <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Compile Remove="Headquarters\Controllers\HeadquartersApiRouteTests.cs" />
       <Compile Remove="Headquarters\WebInterview\ConnectionsMonitorTests.cs" />
       <Compile Remove="Headquarters\WriteToSyncLogAttributeTests\**" />
     </ItemGroup>
