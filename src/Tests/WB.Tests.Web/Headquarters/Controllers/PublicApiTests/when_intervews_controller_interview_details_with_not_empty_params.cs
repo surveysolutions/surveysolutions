@@ -1,11 +1,9 @@
 using System;
-using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using WB.Tests.Abc;
-
-using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
-
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
@@ -19,7 +17,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             controller = CreateInterviewsController(statefulInterviewRepository: Create.Fake.StatefulInterviewRepositoryWith(statefulInterview));
             BecauseOf();
 
-            actionResult.Should().BeOfType<InterviewApiDetails>();
+            Assert.That(actionResult.Value.Answers, Is.Not.Null);
         }
 
         public void BecauseOf()
@@ -28,8 +26,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         }
 
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
-        private static InterviewApiDetails actionResult;
-        private static InterviewsController controller;
+        private static ActionResult<InterviewApiDetails> actionResult;
+        private static InterviewsPublicApiController controller;
 
     }
 }
