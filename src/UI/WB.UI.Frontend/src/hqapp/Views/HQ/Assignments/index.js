@@ -48,12 +48,14 @@ export default class AssignmentsComponent {
                                             }
 
                                             if (response.data != null && response.data.isOwnerOfRunningProcess) {
-                                                if (to.params.questionnaireId != response.data.questionnaireIdentity.id)
-                                                    window.location.href = '/Assignments/Upload/' + response.data.questionnaireIdentity.id
-                                                else if (response.data.processStatus == 'Verification')
+                                                var isVerification = response.data.processStatus == 'Verification'
+                                                var isImport = response.data.processStatus == 'Import'
+                                                if (isVerification)
                                                     next({ name: 'assignments-upload-verification', params: { questionnaireId: response.data.questionnaireIdentity.id } })
-                                                else if (response.data.processStatus == 'Import')
+                                                else if (isImport)
                                                     next({ name: 'assignments-upload-progress', params: { questionnaireId: response.data.questionnaireIdentity.id } })
+                                                else if (to.params.questionnaireId != response.data.questionnaireIdentity.id && (isVerification || isImport))
+                                                    window.location.href = '/Assignments/Upload/' + response.data.questionnaireIdentity.id
                                                 else next()
                                             }
                                             else next()
