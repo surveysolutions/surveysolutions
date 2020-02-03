@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -21,7 +22,7 @@ using WB.UI.Headquarters;
 namespace WB.Tests.Unit.Applications.Headquarters.ApiTests
 {
     [TestFixture]
-    public class HeadquaertersApiRouteTests
+    public class HeadquartersApiRouteTests
     {
         public const string DataCollectionApiNamespace = "WB.UI.Headquarters.API.DataCollection";
 
