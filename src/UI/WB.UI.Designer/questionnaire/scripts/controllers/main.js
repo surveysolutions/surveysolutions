@@ -595,9 +595,12 @@ angular.module('designerApp')
             $scope.aceEditorUpdateMode = function (editor, editorType) {
                 if (editor) {
                     var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
-                    editor.getSession().setMode(new CSharpExtendableMode(function () {
-                        return _.pluck($rootScope.variableNames, "name");
-                    }));
+                    var session = editor.getSession()
+                    if(session != null) {
+                        session.setMode(new CSharpExtendableMode(function () {
+                            return _.pluck($rootScope.variableNames, "name");
+                        }));
+                    }
 
                     var variablesCompletor =
                     {

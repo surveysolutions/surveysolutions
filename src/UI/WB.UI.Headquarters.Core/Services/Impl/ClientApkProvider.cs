@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -47,7 +48,7 @@ namespace WB.UI.Headquarters.Services.Impl
             {
                 FileDownloadName = responseFileName,
                 EnableRangeProcessing = true,
-                EntityTag = new EntityTagHeaderValue(Convert.ToBase64String(fileHash))
+                EntityTag = new EntityTagHeaderValue($"\"{Convert.ToBase64String(fileHash)}\"")
             };
         }
 
@@ -64,7 +65,7 @@ namespace WB.UI.Headquarters.Services.Impl
             return new FileStreamResult(fileStream, "application/vnd.android.package-archive")
             {
                 EnableRangeProcessing = true,
-                EntityTag = new EntityTagHeaderValue(Convert.ToBase64String(this.fileSystemAccessor.ReadHash(pathToInterviewerPatch)))
+                EntityTag = new EntityTagHeaderValue($"\"{Convert.ToBase64String(this.fileSystemAccessor.ReadHash(pathToInterviewerPatch))}\"")
             };
         }
 

@@ -5,7 +5,7 @@ namespace WB.UI.Designer.Extensions
 {
     public static class EnvironmentExtensions
     {
-        public static string MapPath(this IHostingEnvironment hostingEnvironment, string path)
+        public static string MapPath(this IWebHostEnvironment hostingEnvironment, string path)
         {
             var targetPath = Path.Combine(hostingEnvironment.WebRootPath, path);
             return targetPath;

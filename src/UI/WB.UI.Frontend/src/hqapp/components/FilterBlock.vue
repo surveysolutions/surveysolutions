@@ -1,6 +1,9 @@
 <template>
     <div class="block-filter">
-        <h5 :title="tooltip" v-if="title != null">{{title}}</h5>
+        <h5 :title="tooltip"
+            v-if="title != null">
+            {{title}}
+        </h5>
         <slot></slot>
     </div>
 </template>

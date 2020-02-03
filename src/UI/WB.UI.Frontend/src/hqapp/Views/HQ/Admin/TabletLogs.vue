@@ -1,12 +1,17 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('TabletLogs.PageTitle')" :subtitle="$t('TabletLogs.PageSubTitle')">
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems" noSearch></DataTables>
+    <HqLayout :hasFilter="false"
+        :title="$t('TabletLogs.PageTitle')"
+        :subtitle="$t('TabletLogs.PageSubTitle')">
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"
+            noSearch></DataTables>
     </HqLayout>
 </template>
 
 <script>
 import {DateFormats} from '~/shared/helpers'
-import moment from "moment"
+import moment from 'moment'
 
 export default {
     computed: {
@@ -18,12 +23,12 @@ export default {
                     {
                         data: 'deviceId',
                         name: 'DeviceId',
-                        title: this.$t('TabletLogs.DeviceId')
+                        title: this.$t('TabletLogs.DeviceId'),
                     },
                     {
                         data: 'userName',
                         name: 'UserName',
-                        title: this.$t('TabletLogs.UserName')
+                        title: this.$t('TabletLogs.UserName'),
                     },
                     {
                         data: 'receiveDateUtc',
@@ -31,8 +36,8 @@ export default {
                         title: this.$t('TabletLogs.ReceiveDateUtc'),
                         render: function(data) {
                             return self.formatUtcDate(data)
-                        }
-                    }
+                        },
+                    },
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
@@ -40,9 +45,9 @@ export default {
                     contentType: 'application/json',
                 },
                 responsive: false,
-                order: [[2, 'desc']]
+                order: [[2, 'desc']],
             }
-        }
+        },
     },
     methods: {
         contextMenuItems({rowData, rowIndex}) {
@@ -51,8 +56,8 @@ export default {
             menu.push({
                 name: self.$t('Common.Download'),
                 callback: () => {
-                    window.open(rowData.downloadUrl, "_blank")
-                }
+                    window.open(rowData.downloadUrl, '_blank')
+                },
             })
             return menu
         },
@@ -60,6 +65,6 @@ export default {
             const momentDate = moment.utc(date)
             return momentDate.local().format(DateFormats.dateTime)
         },
-    }
+    },
 }
 </script>

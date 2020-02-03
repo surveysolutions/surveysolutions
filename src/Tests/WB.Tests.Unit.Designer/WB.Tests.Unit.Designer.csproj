@@ -14,6 +14,7 @@
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithPermittedTags.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithRandomOrderColumns.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\TranslationsForCascading.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
   </ItemGroup>
   <ItemGroup>
@@ -27,6 +28,7 @@
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithPermittedTags.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithRandomOrderColumns.xlsx" />
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\TranslationsForCascading.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
   </ItemGroup>
   <ItemGroup>
@@ -43,15 +45,18 @@
     <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="EPPlus" Version="4.5.3.2" />
-    <PackageReference Include="FluentAssertions" Version="5.9.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
-    <PackageReference Include="Moq" Version="4.13.0" />
+    <PackageReference Include="FluentAssertions" Version="5.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NSubstitute" Version="4.2.1" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.7" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>

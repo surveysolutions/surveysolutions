@@ -1,34 +1,35 @@
 <template>
-  <div class="form-date input-group" id="dates-range">
-    <input
-      type="text"
-      :id="id"
-      :disabled="disabled"
-      class="form-control flatpickr-input"
-      readonly="readonly"
-      :name="name"
-      :placeholder="placeholder"
-      :required="required"
-      v-model="mutableValue"
-      data-input
-    >
-    <button type="submit" class="btn btn-link btn-clear">
-      <span></span>
-    </button>
-    <span class="input-group-addon" data-toggle>
-      <span class="calendar"></span>
-    </span>
-  </div>
-  
+    <div class="form-date input-group"
+        id="dates-range">
+        <input
+            type="text"
+            :id="id"
+            :disabled="disabled"
+            class="form-control flatpickr-input"
+            readonly="readonly"
+            :name="name"
+            :placeholder="placeholder"
+            :required="required"
+            v-model="mutableValue"
+            data-input/>
+        <button type="submit"
+            class="btn btn-link btn-clear">
+            <span></span>
+        </button>
+        <span class="input-group-addon"
+            data-toggle>
+            <span class="calendar"></span>
+        </span>
+    </div>
 </template>
 
 <script type="text/javascript">
-import Flatpickr from "flatpickr";
-import { browserLanguage } from "~/shared/helpers";
-import FlatpickrLocale from "flatpickr/dist/l10n";
-import { assign } from 'lodash'
+import Flatpickr from 'flatpickr'
+import {browserLanguage} from '~/shared/helpers'
+import FlatpickrLocale from 'flatpickr/dist/l10n'
+import {assign} from 'lodash'
 
-Flatpickr.localize(FlatpickrLocale[browserLanguage]);
+Flatpickr.localize(FlatpickrLocale[browserLanguage])
 // You have to import css yourself
 
 export default {
@@ -40,94 +41,94 @@ export default {
                 return (
                     value === null ||
                     value instanceof Date ||
-                    typeof value === "string" ||
+                    typeof value === 'string' ||
                     value instanceof String ||
                     value instanceof Array
-                );
-            }
+                )
+            },
         },
         // https://chmln.github.io/flatpickr/options/
         config: {
             type: Object,
             default: () => ({
-                wrap: false
-            })
+                wrap: false,
+            }),
         },
         disabled: Boolean,
         placeholder: {
             type: String,
-            default: ""
+            default: '',
         },
         inputClass: {
             type: [String, Object],
-            default: ""
+            default: '',
         },
         name: {
             type: String,
-            default: "date-time"
+            default: 'date-time',
         },
         required: {
             type: Boolean,
-            default: false
+            default: false,
         },
         withClear: {
             type: Boolean,
-            default: false
+            default: false,
         },
         id: {
-            type: String
+            type: String,
         },
         clearLabel: {
             type: String,
-            default: null
-        }
+            default: null,
+        },
     },
     data() {
         return {
             mutableValue: this.value,
-            fp: null
-        };
+            fp: null,
+        }
     },
     mounted() {
         // Load flatPickr if not loaded yet
 
         if (!this.fp) {
             // Bind on parent element if wrap is true
-            const elem = this.config.wrap ? this.$el.parentNode : this.$el;
-            const self = this;
-            let config = this.config;
+            const elem = this.config.wrap ? this.$el.parentNode : this.$el
+            const self = this
+            let config = this.config
             if (this.withClear) {
                 config = assign(
                     {
                         onReady: function(dateObj, dateStr, instance) {
-                            $(".flatpickr-calendar").each(function() {
-                                var $this = $(this);
-                                if ($this.find(".flatpickr-clear").length < 1) {
+                            $('.flatpickr-calendar').each(function() {
+                                var $this = $(this)
+                                if ($this.find('.flatpickr-clear').length < 1) {
                                     $this.append(
                                         '<div class="flatpickr-clear" style=" cursor: pointer;">' +
                                             (self.clearLabel || 'Clear') +
-                                            "</div>"
-                                    );
-                                    $this.find(".flatpickr-clear").on("click", function() {
-                                        instance.close();
-                                        self.$emit("clear");
-                                    });
+                                            '</div>'
+                                    )
+                                    $this.find('.flatpickr-clear').on('click', function() {
+                                        instance.close()
+                                        self.$emit('clear')
+                                    })
                                 }
-                            });
-                        }
+                            })
+                        },
                     },
                     this.config
-                );
+                )
             }
 
-            this.fp = new Flatpickr(elem, config);
+            this.fp = new Flatpickr(elem, config)
         }
     },
     beforeDestroy() {
         // Free up memory
         if (this.fp) {
-            this.fp.destroy();
-            this.fp = null;
+            this.fp.destroy()
+            this.fp = null
         }
     },
     watch: {
@@ -137,9 +138,9 @@ export default {
          * @param newConfig Object
          */
         config(newConfig) {
-            this.fp.config = assign(this.fp.config, newConfig);
-            this.fp.redraw();
-            this.fp.setDate(this.value, true);
+            this.fp.config = assign(this.fp.config, newConfig)
+            this.fp.redraw()
+            this.fp.setDate(this.value, true)
         },
         /**
          * Watch for value changed by date-picker itself and notify parent component
@@ -147,7 +148,7 @@ export default {
          * @param newValue
          */
         mutableValue(newValue) {
-            this.$emit("input", newValue);
+            this.$emit('input', newValue)
         },
         /**
          * Watch for changes from parent component and update DOM
@@ -155,9 +156,9 @@ export default {
          * @param newValue
          */
         value(newValue) {
-            this.fp && this.fp.setDate(newValue, true);
-        }
-    }
-};
+            this.fp && this.fp.setDate(newValue, true)
+        },
+    },
+}
 </script>
 

@@ -9,5 +9,7 @@ namespace WB.UI.Headquarters.Services
         IActionResult GetPatchFileAsHttpResponse(HttpRequest request, string fileName);
         int? GetApplicationBuildNumber(string appName);
         string GetApplicationVersionString(string appName);
+        
+        string ApkClientsFolder();
     }
 }

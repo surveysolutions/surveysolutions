@@ -2,8 +2,7 @@
     <HqLayout
         :title="$t('Pages.SurveysAndStatuses_Overview')"
         :subtitle="$t('Pages.SurveysAndStatuses_HeadquartersDescription')"
-        :hasFilter="true"
-    >
+        :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.SurveysAndStatuses_SupervisorTitle')">
                 <Typeahead
@@ -14,8 +13,7 @@
                     :placeholder="$t('Strings.AllTeams')"
                     :value="responsible" 
                     v-on:selected="selectResponsible"
-                    :fetch-url="$config.model.responsiblesUrl"
-                />
+                    :fetch-url="$config.model.responsiblesUrl"/>
             </FilterBlock>
         </Filters>
 
@@ -29,14 +27,13 @@
             :addParamsToRequest="addFilteringParams"
             :no-search="true"
             exportable
-            :hasTotalRow="questionnaireId != null"
-        ></DataTables>
+            :hasTotalRow="questionnaireId != null"></DataTables>
     </HqLayout>
 </template>
 <script>
 
-import routeSync from "~/shared/routeSync"
-import escape from "lodash"
+import routeSync from '~/shared/routeSync'
+import { escape } from 'lodash'
 
 export default {
     mixins: [routeSync],
@@ -75,12 +72,12 @@ export default {
             const responsibleName = (this.responsible || {}).value
             const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
             return `<a href=${url}>${escape(data)}</a>`
-        }
+        },
     },
     watch: {
         responsible() {
             this.reloadTable()
-        }
+        },
     },
     computed: {
         tableOptions() {
@@ -100,7 +97,7 @@ export default {
                         }
                         
                         return `<a href=${window.location}?questionnaireId=${row.questionnaireId}>${escape(data)}</a>`
-                    }
+                    },
                 },
                 {
                     data: 'supervisorAssignedCount',
@@ -109,10 +106,10 @@ export default {
                     title: this.$t('Reports.SupervisorAssigned'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "SupervisorAssigned")
-                    }
+                            data,
+                            row,
+                            'SupervisorAssigned')
+                    },
                 },
                 {
                     data: 'interviewerAssignedCount',
@@ -121,10 +118,10 @@ export default {
                     title: this.$t('Reports.InterviewerAssigned'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "InterviewerAssigned")
-                    }
+                            data,
+                            row,
+                            'InterviewerAssigned')
+                    },
                 },
                 {
                     data: 'completedCount',
@@ -133,10 +130,10 @@ export default {
                     title: this.$t('Reports.Completed'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "Completed")
-                    }
+                            data,
+                            row,
+                            'Completed')
+                    },
                 },
                 {
                     data: 'rejectedBySupervisorCount',
@@ -145,10 +142,10 @@ export default {
                     title: this.$t('Reports.RejectedBySupervisor'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "RejectedBySupervisor")
-                    }
+                            data,
+                            row,
+                            'RejectedBySupervisor')
+                    },
                 },
                 {
                     data: 'approvedBySupervisorCount',
@@ -157,10 +154,10 @@ export default {
                     title: this.$t('Reports.ApprovedBySupervisor'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "ApprovedBySupervisor")
-                    }
+                            data,
+                            row,
+                            'ApprovedBySupervisor')
+                    },
                 },
                 {
                     data: 'rejectedByHeadquartersCount',
@@ -169,10 +166,10 @@ export default {
                     title: this.$t('Reports.RejectedByHQ'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "RejectedByHeadquarters")
-                    }
+                            data,
+                            row,
+                            'RejectedByHeadquarters')
+                    },
                 },
                 {
                     data: 'approvedByHeadquartersCount',
@@ -181,10 +178,10 @@ export default {
                     title: this.$t('Reports.ApprovedByHQ'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "ApprovedByHeadquarters")
-                    }
+                            data,
+                            row,
+                            'ApprovedByHeadquarters')
+                    },
                 },
                 {
                     data: 'totalCount',
@@ -193,20 +190,20 @@ export default {
                     title: this.$t('Common.Total'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "")
-                    }
-                }
+                            data,
+                            row,
+                            '')
+                    },
+                },
             ]
 
             if(self.questionnaireId) {
                 columns.splice(1, 0, 
-                {
-                    data: 'questionnaireVersion',
-                    className: 'type-numeric version centered-italic',
-                    title: this.$t('Reports.TemplateVersion')
-                })
+                    {
+                        data: 'questionnaireVersion',
+                        className: 'type-numeric version centered-italic',
+                        title: this.$t('Reports.TemplateVersion'),
+                    })
             }
 
             return {
@@ -231,7 +228,7 @@ export default {
         },
         questionnaireId() {
             return this.$route.query.questionnaireId
-        }
-    }
+        },
+    },
 }
 </script>

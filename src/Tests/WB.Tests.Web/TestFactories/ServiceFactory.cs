@@ -13,6 +13,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.API.WebInterview.Services;
+using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Services;
@@ -21,29 +22,22 @@ namespace WB.Tests.Web.TestFactories
 {
     public class ServiceFactory
     {
-        public IConfigurationManager ConfigurationManager(NameValueCollection appSettings = null,
-            NameValueCollection membershipSettings = null)
-        {
-            return new ConfigurationManager(appSettings ?? new NameValueCollection(),
-                membershipSettings ?? new NameValueCollection());
-        }
-
-        public WebCacheBasedCaptchaService WebCacheBasedCaptchaService(int? failedLoginsCount = 5,
-            int? timeSpanForLogins = 5, IConfigurationManager configurationManager = null)
-        {
-            return new WebCacheBasedCaptchaService(configurationManager ?? this.ConfigurationManager(
-                                                       new NameValueCollection
-                                                       {
-                                                           {
-                                                               "CountOfFailedLoginAttemptsBeforeCaptcha",
-                                                               (failedLoginsCount ?? 5).ToString()
-                                                           },
-                                                           {
-                                                               "TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt",
-                                                               (timeSpanForLogins ?? 5).ToString()
-                                                           },
-                                                       }));
-        }
+        // public WebCacheBasedCaptchaService WebCacheBasedCaptchaService(int? failedLoginsCount = 5,
+        //     int? timeSpanForLogins = 5, IConfigurationManager configurationManager = null)
+        // {
+        //     return new WebCacheBasedCaptchaService(configurationManager ?? this.ConfigurationManager(
+        //                                                new NameValueCollection
+        //                                                {
+        //                                                    {
+        //                                                        "CountOfFailedLoginAttemptsBeforeCaptcha",
+        //                                                        (failedLoginsCount ?? 5).ToString()
+        //                                                    },
+        //                                                    {
+        //                                                        "TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt",
+        //                                                        (timeSpanForLogins ?? 5).ToString()
+        //                                                    },
+        //                                                }));
+        // }
 
         public StatefullInterviewSearcher StatefullInterviewSearcher()
         {

@@ -99,21 +99,20 @@ namespace WB.Services.Export.CsvExport.Implementation
 
             Stopwatch exportWatch = Stopwatch.StartNew();
 
-            await Task.WhenAll(
-                this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, tempPath, tenant, exportCommentsProgress, cancellationToken),
-                this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cancellationToken),
-                this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cancellationToken),
-                this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cancellationToken),
-                this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath, exportAssignmentActionsProgress, cancellationToken),
-                this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath)
-            );
+            // TODO: Make them real parallel
+            await this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, tempPath, tenant, exportCommentsProgress, cancellationToken);
+            await this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cancellationToken);
+            await this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cancellationToken);
+            await this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant,  exportDiagnosticsProgress, cancellationToken);
+            await this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath,  exportAssignmentActionsProgress, cancellationToken);
+            await this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
 
             exportWatch.Stop();
 
             this.logger.LogInformation("Export with all steps finished for questionnaire {questionnaireIdentity}. " +
                                        "Took {elapsed:c} to export {interviewIds} interviews",
                 questionnaireIdentity, exportWatch.Elapsed, interviewIdsToExport.Count
-                );
+            );
         }
         
         public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension)

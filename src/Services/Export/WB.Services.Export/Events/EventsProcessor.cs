@@ -3,14 +3,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
 
@@ -41,15 +39,10 @@ namespace WB.Services.Export.Events
 
         long? maximumSequenceToQuery;
         private const double BatchSizeMultiplier = 1;
-        private const string ApiEventsQueryMonitoringKey = "api_events_query";
 
         private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
-            using var scope = serviceProvider.CreateScope();
-
-            scope.PropagateTenantContext(tenant);
-
-            var tenantDbContext = scope.ServiceProvider.GetService<TenantDbContext>();
+            var tenantDbContext = this.serviceProvider.GetService<TenantDbContext>();
             if (tenantDbContext.Database.IsNpgsql())
             {
                 await tenantDbContext.CheckSchemaVersionAndMigrate(cancellationToken);
@@ -58,15 +51,10 @@ namespace WB.Services.Export.Events
 
         public async Task HandleNewEvents(long exportProcessId, CancellationToken token = default)
         {
-            long sequenceToStartFrom;
             await EnsureMigrated(token);
 
-            using (var scope = serviceProvider.CreateScope())
-            {
-                scope.PropagateTenantContext(tenant);
-                var tenantDbContext = scope.ServiceProvider.GetService<TenantDbContext>();
-                sequenceToStartFrom = tenantDbContext.GlobalSequence.AsLong;
-            }
+            var tenantDbContext = this.serviceProvider.GetService<TenantDbContext>();
+            var sequenceToStartFrom = tenantDbContext.GlobalSequence.AsLong;
 
             await HandleNewEventsImplementation(exportProcessId, sequenceToStartFrom, token);
         }
@@ -93,9 +81,10 @@ namespace WB.Services.Export.Events
                 {
                     try
                     {
-                        using var batchScope = this.serviceProvider.CreateTenantScope(tenant);
-                        var eventsHandler = batchScope.ServiceProvider.GetRequiredService<IEventsHandler>();
                         feedRanges.Add(new FeedRangeDebugDataItem(feed));
+                        using var scope = this.serviceProvider.CreateScope();
+                        scope.ServiceProvider.SetTenant(this.tenant.Tenant);
+                        var eventsHandler = scope.ServiceProvider.GetRequiredService<IEventsHandler>();
                         await eventsHandler.HandleEventsFeedAsync(feed, token);
                     }
                     catch(Exception e)
@@ -114,6 +103,7 @@ namespace WB.Services.Export.Events
             {
                 executionTrack.Restart();
 
+                // Action execution. Everything else is for estimation and progress reporting
                 await action();
 
                 executionTrack.Stop();

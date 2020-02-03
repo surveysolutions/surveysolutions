@@ -16,7 +16,6 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [LimitsFilter]
     [Authorize(Roles = "Administrator, Headquarter")]
     public class MapsController : Controller
     {

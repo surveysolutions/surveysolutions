@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = "Interviewer")]
-        public InterviewsDataTableResponse GetInterviews([FromQuery] InterviewsDataTableRequest request)
+        public InterviewsDataTableResponse GetInterviews(InterviewsDataTableRequest request)
         {
             
             var input = new AllInterviewsInputModel
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
-        public List<CommentedStatusHistoryView> ChangeStateHistory(ChangeStateHistoryViewModel data)
+        public List<CommentedStatusHistoryView> ChangeStateHistory([FromBody]ChangeStateHistoryViewModel data)
         {
             var interviewSummary = this.changeStatusFactory.GetFilteredStatuses(data.InterviewId);
 
