@@ -1,5 +1,5 @@
-import { forEach, differenceBy } from "lodash"
-import Vue from "vue"
+import { forEach, differenceBy } from 'lodash'
+import Vue from 'vue'
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
@@ -16,16 +16,16 @@ export default {
         e.answer = answer
     },
     SET_SECTION_DATA(state, sectionData) {
-        var entitiesToDelete = differenceBy(state.entities, sectionData, 'identity');
+        var entitiesToDelete = differenceBy(state.entities, sectionData, 'identity')
         forEach(entitiesToDelete, entity => {
             Vue.delete(state.entityDetails, entity.identity)
             Vue.delete(state.fetch.state, entity.identity)
-        });
+        })
         state.entities = sectionData
     },
     CLEAR_ENTITIES(state, {ids}) {
         forEach(ids, id => {
-             Vue.delete(state.entityDetails, id)
+            Vue.delete(state.entityDetails, id)
         })
     },
     SET_ANSWER_NOT_SAVED(state, { id, message }) {
@@ -40,14 +40,14 @@ export default {
         validity.messages = []
     },
     SET_BREADCRUMPS(state, crumps) {
-        Vue.set(state, "breadcrumbs", crumps)
+        Vue.set(state, 'breadcrumbs', crumps)
     },
     SET_LANGUAGE_INFO(state, languageInfo) {
         if(languageInfo == null) return
 
-        Vue.set(state, "originalLanguageName", languageInfo.originalLanguageName)
-        Vue.set(state, "currentLanguage", languageInfo.currentLanguage)
-        Vue.set(state, "languages", languageInfo.languages)
+        Vue.set(state, 'originalLanguageName', languageInfo.originalLanguageName)
+        Vue.set(state, 'currentLanguage', languageInfo.currentLanguage)
+        Vue.set(state, 'languages', languageInfo.languages)
     },
     SET_INTERVIEW_INFO(state, interviewInfo) {
         if(interviewInfo == null) return
@@ -64,10 +64,10 @@ export default {
         state.coverInfo = coverInfo
     },
     SET_COMPLETE_INFO(state, completeInfo) {
-        Vue.set(state, "completeInfo", completeInfo)
+        Vue.set(state, 'completeInfo', completeInfo)
     },
     SET_INTERVIEW_STATUS(state, interviewState) {
-        Vue.set(state, "interviewState", interviewState)
+        Vue.set(state, 'interviewState', interviewState)
     },
     SET_INTERVIEW_SHUTDOWN(state){
         state.interviewShutdown = true
@@ -76,7 +76,7 @@ export default {
         state.hasCoverPage = hasCoverPage
     },
     POSTING_COMMENT(state, {questionId}){
-        const question = state.entityDetails[questionId];
+        const question = state.entityDetails[questionId]
         if (question){ // can be posted from overview and question is not loaded
             question.postingComment = true
         }
@@ -86,6 +86,6 @@ export default {
         state.lastActivityTimestamp = new Date()
     },
     COMPLETE_INTERVIEW(state) {
-        state.interviewCompleted = true;
-    }
+        state.interviewCompleted = true
+    },
 }

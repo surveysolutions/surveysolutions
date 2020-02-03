@@ -437,5 +437,194 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("PLU0014Recomendation", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password too short.
+        /// </summary>
+        public static string PLU0015 {
+            get {
+                return ResourceManager.GetString("PLU0015", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password &apos;{0}&apos; is too short.
+        /// </summary>
+        public static string PLU0015Description {
+            get {
+                return ResourceManager.GetString("PLU0015Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be at least 10 characters long.
+        /// </summary>
+        public static string PLU0015Recomendation {
+            get {
+                return ResourceManager.GetString("PLU0015Recomendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simple password.
+        /// </summary>
+        public static string PLU0016 {
+            get {
+                return ResourceManager.GetString("PLU0016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password &apos;{0}&apos; does not contain non alphanumeric character.
+        /// </summary>
+        public static string PLU0016Description {
+            get {
+                return ResourceManager.GetString("PLU0016Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add at least one non alphanumeric character.
+        /// </summary>
+        public static string PLU0016Recomendation {
+            get {
+                return ResourceManager.GetString("PLU0016Recomendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simple password.
+        /// </summary>
+        public static string PLU0017 {
+            get {
+                return ResourceManager.GetString("PLU0017", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password &apos;{0}&apos; does not contain digit.
+        /// </summary>
+        public static string PLU0017Description {
+            get {
+                return ResourceManager.GetString("PLU0017Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add at least one digit (&apos;0&apos;-&apos;9&apos;)..
+        /// </summary>
+        public static string PLU0017Recomendation {
+            get {
+                return ResourceManager.GetString("PLU0017Recomendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simple password.
+        /// </summary>
+        public static string PLU0018 {
+            get {
+                return ResourceManager.GetString("PLU0018", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password &apos;{0}&apos; does not contain lower case character.
+        /// </summary>
+        public static string PLU0018Description {
+            get {
+                return ResourceManager.GetString("PLU0018Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add at least one lowercase character (&apos;a&apos;-&apos;z&apos;)..
+        /// </summary>
+        public static string PLU0018Recomendation {
+            get {
+                return ResourceManager.GetString("PLU0018Recomendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simple password.
+        /// </summary>
+        public static string PLU0019 {
+            get {
+                return ResourceManager.GetString("PLU0019", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password &apos;{0}&apos; does not contain upper case character.
+        /// </summary>
+        public static string PLU0019Description {
+            get {
+                return ResourceManager.GetString("PLU0019Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add at least one uppercase (&apos;A&apos;-&apos;Z&apos;)..
+        /// </summary>
+        public static string PLU0019Recomendation {
+            get {
+                return ResourceManager.GetString("PLU0019Recomendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simple password.
+        /// </summary>
+        public static string PLU0020 {
+            get {
+                return ResourceManager.GetString("PLU0020", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password &apos;{0}&apos; does not contain enough unique characters.
+        /// </summary>
+        public static string PLU0020Description {
+            get {
+                return ResourceManager.GetString("PLU0020Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add different characters..
+        /// </summary>
+        public static string PLU0020Recomendation {
+            get {
+                return ResourceManager.GetString("PLU0020Recomendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password required.
+        /// </summary>
+        public static string PLU0021 {
+            get {
+                return ResourceManager.GetString("PLU0021", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is required .
+        /// </summary>
+        public static string PLU0021Description {
+            get {
+                return ResourceManager.GetString("PLU0021Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add password.
+        /// </summary>
+        public static string PLU0021Recomendation {
+            get {
+                return ResourceManager.GetString("PLU0021Recomendation", resourceCulture);
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Prometheus.Advanced;
+﻿using Prometheus;
 
 namespace WB.Infrastructure.Native.Monitoring
 {
@@ -9,38 +8,18 @@ namespace WB.Infrastructure.Native.Monitoring
 
         public void RegisterOnDemandCollectors(params IOnDemandCollector[] collectors)
         {
-            Prometheus.Advanced.DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(
-                collectors.Select(Convert).ToArray());
-        }
-
-        private Prometheus.Advanced.IOnDemandCollector Convert(IOnDemandCollector onDemandCollector)
-        {
-            return new OnDemandCollectorWrapper(onDemandCollector);
-        }
-
-        private class OnDemandCollectorWrapper : Prometheus.Advanced.IOnDemandCollector
-        {
-            private readonly IOnDemandCollector collector;
-
-            public OnDemandCollectorWrapper(IOnDemandCollector collector)
-            {
-                this.collector = collector;
-            }
-
-            public void RegisterMetrics()
+            foreach (var collector in collectors)
             {
                 collector.RegisterMetrics();
             }
 
-            public void RegisterMetrics(ICollectorRegistry registry)
+            Metrics.DefaultRegistry.AddBeforeCollectCallback(() =>
             {
-                
-            }
-
-            public void UpdateMetrics()
-            {
-                collector.UpdateMetrics();
-            }
+                foreach (var collector in collectors)
+                {
+                    collector.UpdateMetrics();
+                }
+            });
         }
     }
 }

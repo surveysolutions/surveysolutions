@@ -26,14 +26,14 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         public IOptions<CaptchaConfig> CaptchaOptions { get; }
 
         private readonly UserManager<DesignerIdentityUser> userManager;
-        private readonly IViewRenderingService viewRenderingService;
+        private readonly IViewRenderService viewRenderingService;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
         private readonly IRecaptchaService recaptchaService;
 
         public RegisterModel(
             UserManager<DesignerIdentityUser> userManager,
-            IViewRenderingService viewRenderingService,
+            IViewRenderService viewRenderingService,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IRecaptchaService recaptchaService,

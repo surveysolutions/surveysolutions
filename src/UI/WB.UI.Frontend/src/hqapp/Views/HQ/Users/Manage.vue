@@ -1,9 +1,15 @@
 <template>
     <HqLayout :hasFilter="false">
         <div slot="filters">
-            <div v-if="successMessage != null" id="alerts" class="alerts">
+            <div v-if="successMessage != null"
+                id="alerts"
+                class="alerts">
                 <div class="alert alert-success">
-                    <button class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <button class="close"
+                        data-dismiss="alert"
+                        aria-hidden="true">
+                        ×
+                    </button>
                     {{successMessage}}
                 </div>
             </div>
@@ -20,64 +26,65 @@
             <div class="profile">
                 <div class="col-sm-12">
                     <form-group :label="$t('Pages.AccountManage_Login')">
-                        <TextInput :value="userInfo.userName" disabled />
+                        <TextInput :value="userInfo.userName"
+                            id="UserName"
+                            disabled />
                     </form-group>
 
                     <form-group :label="$t('Pages.AccountManage_Role')">
-                        <TextInput :value="userInfo.role" disabled />
+                        <TextInput :value="userInfo.role"
+                            id="Role"
+                            disabled />
                     </form-group>
 
                     <form-group
                         :label="$t('FieldsAndValidations.PersonNameFieldName')"
-                        :error="modelState['PersonName']"
-                    >
+                        :error="modelState['PersonName']">
                         <TextInput
                             v-model.trim="personName"
                             :haserror="modelState['PersonName'] !== undefined"
-                        />
+                            id="PersonName"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.EmailFieldName')"
-                        :error="modelState['Email']"
-                    >
+                        :error="modelState['Email']">
                         <TextInput
                             v-model.trim="email"
                             :haserror="modelState['Email'] !== undefined"
-                        />
+                            id="Email"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
-                        :error="modelState['PhoneNumber']"
-                    >
+                        :error="modelState['PhoneNumber']">
                         <TextInput
                             v-model.trim="phoneNumber"
                             :haserror="modelState['PhoneNumber'] !== undefined"
-                        />
+                            id="PhoneNumber"/>
                     </form-group>
                     <p v-if="lockMessage != null">{{lockMessage}}</p>
-                    <form-group v-if="!userInfo.isOwnProfile">
+                    <form-group v-if="!isOwnProfile">
                         <input
                             class="checkbox-filter single-checkbox"
                             id="IsLocked"
                             name="IsLocked"
                             type="checkbox"
-                            v-model="isLockedByHeadquarters"
-                        />
-                        <label for="IsLocked" style="font-weight: bold">
+                            v-model="isLockedByHeadquarters"/>
+                        <label for="IsLocked"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{$t('FieldsAndValidations.IsLockedFieldName')}}
                         </label>
                     </form-group>
-                    <form-group v-if="!userInfo.isOwnProfile && canLockBySupervisor">
+                    <form-group v-if="!isOwnProfile && canLockBySupervisor">
                         <input
                             class="checkbox-filter single-checkbox"
                             data-val="true"
                             id="IsLockedBySupervisor"
                             name="IsLockedBySupervisor"
                             type="checkbox"
-                            v-model="isLockedBySupervisor"
-                        />
-                        <label for="IsLockedBySupervisor" style="font-weight: bold">
+                            v-model="isLockedBySupervisor"/>
+                        <label for="IsLockedBySupervisor"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
                         </label>
@@ -90,9 +97,13 @@
                             type="submit"
                             class="btn btn-success"
                             style="margin-right:5px"
-                            @click="updateAccount"
-                        >{{$t('Pages.Update')}}</button>
-                        <a class="btn btn-default" v-bind:href="referrerUrl">{{$t('Common.Cancel')}}</a>
+                            id="btnUpdateUser"
+                            @click="updateAccount">{{$t('Pages.Update')}}</button>
+                        <a class="btn btn-default"
+                            v-bind:href="referrerUrl"
+                            id="lnkCancelUpdateUser">
+                            {{$t('Common.Cancel')}}
+                        </a>
                     </div>
                 </div>
             </div>
@@ -102,35 +113,32 @@
                 </div>
                 <div class="col-sm-12">
                     <form-group
-                        v-if="userInfo.isOwnProfile"
+                        v-if="isOwnProfile"
                         :label="$t('FieldsAndValidations.OldPasswordFieldName')"
-                        :error="modelState['OldPassword']"
-                    >
+                        :error="modelState['OldPassword']">
                         <TextInput
                             type="password"
                             v-model.trim="oldPassword"
                             :haserror="modelState['OldPassword'] !== undefined"
-                        />
+                            id="OldPassword"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.NewPasswordFieldName')"
-                        :error="modelState['Password']"
-                    >
+                        :error="modelState['Password']">
                         <TextInput
                             type="password"
                             v-model.trim="password"
                             :haserror="modelState['Password'] !== undefined"
-                        />
+                            id="Password"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
-                        :error="modelState['ConfirmPassword']"
-                    >
+                        :error="modelState['ConfirmPassword']">
                         <TextInput
                             type="password"
                             v-model.trim="confirmPassword"
                             :haserror="modelState['ConfirmPassword'] !== undefined"
-                        />
+                            id="ConfirmPassword"/>
                     </form-group>
                 </div>
 
@@ -140,9 +148,13 @@
                             type="submit"
                             class="btn btn-success"
                             style="margin-right:5px"
-                            @click="updatePassword"
-                        >{{$t('Pages.Update')}}</button>
-                        <a class="btn btn-default" v-bind:href="referrerUrl">{{$t('Common.Cancel')}}</a>
+                            id="btnUpdatePassword"
+                            @click="updatePassword">{{$t('Pages.Update')}}</button>
+                        <a class="btn btn-default"
+                            v-bind:href="referrerUrl"
+                            id="lnkCancelUpdatePassword">
+                            {{$t('Common.Cancel')}}
+                        </a>
                     </div>
                 </div>
             </div>
@@ -194,6 +206,9 @@ export default {
         isApiUser() {
             return this.userInfo.role == 'ApiUser'
         },
+        isOwnProfile() {
+            return this.userInfo.isOwnProfile
+        },
         canLockBySupervisor() {
             return this.isInterviewer
         },
@@ -204,21 +219,25 @@ export default {
             return null
         },
         referrerTitle() {
-            if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
-            if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
-            if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
-            if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
-            if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
+            if (!this.isOwnProfile) {
+                if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
+                if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
+                if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
+                if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
+                if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
+            }
 
             return this.$t('Pages.Home')
         },
         referrerUrl() {
-            if (this.isHeadquarters) return '../../Headquarters'
-            if (this.isSupervisor) return '../../Supervisors'
-            if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
-            if (this.isObserver) return '../../Observers'
-            if (this.isApiUser) return '../../ApiUsers'
-            
+            if (!this.isOwnProfile) {
+                if (this.isHeadquarters) return '../../Headquarters'
+                if (this.isSupervisor) return '../../Supervisors'
+                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
+                if (this.isObserver) return '../../Observers'
+                if (this.isApiUser) return '../../ApiUsers'
+            }
+
             return '/'
         },
     },

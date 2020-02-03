@@ -23,10 +23,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private const int defaultImageSizeToScale = 156;
 
         private readonly IAttachmentService attachmentService;
-        private readonly IHostingEnvironment environment;
+        private readonly IWebHostEnvironment environment;
 
         public AttachmentsController(IAttachmentService attachmentService,
-            IHostingEnvironment environment)
+            IWebHostEnvironment environment)
         {
             this.attachmentService = attachmentService;
             this.environment = environment;

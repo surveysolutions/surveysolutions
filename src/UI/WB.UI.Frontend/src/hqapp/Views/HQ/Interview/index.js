@@ -1,20 +1,16 @@
-import Vue from 'vue'
+import localStore from './store'
 
-import localStore from "./store"
-
-const Review = () => import(/* webpackChunkName: "review" */"./Review")
-const Cover = () => import(/* webpackChunkName: "review" */"~/webinterview/components/Cover")
-const ReviewSection = () => import(/* webpackChunkName: "review" */"./ReviewSection")
-const Overview = () => import(/* webpackChunkName: "review" */"./Overview")
+const Review = () => import(/* webpackChunkName: "review" */'./Review')
+const Cover = () => import(/* webpackChunkName: "review" */'~/webinterview/components/Cover')
+const ReviewSection = () => import(/* webpackChunkName: "review" */'./ReviewSection')
+const Overview = () => import(/* webpackChunkName: "review" */'./Overview')
 
 export default class ReviewComponent {
     constructor(rootStore) {
-        this.rootStore = rootStore;
+        this.rootStore = rootStore
     }
 
     get routes() {
-        var self = this;
-
         return [{
             path: '/Interview/Review/:interviewId',
             component: Review,
@@ -23,8 +19,8 @@ export default class ReviewComponent {
                 component: Cover,
                 props: {
                     navigateToPrefilled: true,
-                    showHumburger: false
-                }
+                    showHumburger: false,
+                },
             },
             {
                 path: 'Overview',
@@ -32,8 +28,8 @@ export default class ReviewComponent {
                 component: Overview,
                 props: {
                     navigateToPrefilled: true,
-                    showHumburger: false
-                }
+                    showHumburger: false,
+                },
             },
             {
                 path: 'Cover',
@@ -41,15 +37,15 @@ export default class ReviewComponent {
                 component: Cover,
                 props: {
                     navigateToPrefilled: true,
-                    showHumburger: false
-                }
+                    showHumburger: false,
+                },
             },
             {
                 path: 'Section/:sectionId',
                 name: 'section',
-                component: ReviewSection
-            }
-            ]
+                component: ReviewSection,
+            },
+            ],
         }]
     }
 
@@ -57,6 +53,6 @@ export default class ReviewComponent {
     }
 
     get modules() {
-        return localStore;
+        return localStore
     }
 }

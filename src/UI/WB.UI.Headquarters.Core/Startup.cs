@@ -7,11 +7,11 @@ using System.Reflection;
 using System.Text;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -51,6 +51,7 @@ using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.HealthChecks;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Shared.Web.Configuration;
@@ -79,25 +80,10 @@ namespace WB.UI.Headquarters
         // Don't build the container; that gets done for you by the factory.
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            autofacKernel = new AutofacKernel(builder);
+            autofacKernel = new AutofacKernel(builder, c => InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(c)));
 
-            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
-            {
-                ConnectionString = connectionString,
-                ReadSideMappingAssemblies = mappingAssemblies,
-                PlainStorageSchemaName = "plainstore",
-                PlainMappingAssemblies = new List<Assembly>
-                {
-                    typeof(HeadquartersBoundedContextModule).Assembly,
-                    typeof(ProductVersionModule).Assembly,
-                },
-                PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
-                ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace),
-                LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly, typeof(M201905171139_AddErrorsTable).Namespace),
-                UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()
-            };
+            var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString);
 
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
                 .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
@@ -115,20 +101,43 @@ namespace WB.UI.Headquarters
             autofacKernel.Load(
                 new NcqrsModule(),
                 eventStoreModule,
-                GetQuartzModule(),
                 new InfrastructureModule(),
                 new DataCollectionSharedKernelModule(),
                 new WebInterviewModule(),
                 new DataCollectionSharedKernelModule(),
                 new OrmModule(unitOfWorkConnectionSettings),
                 new OwinSecurityModule(),
-                new FileStorageModule(Configuration),
+                new FileStorageModule(),
                 new FileInfrastructureModule(),
                 new DataExportModule(),
                 GetHqBoundedContextModule(),
                 new HeadquartersUiModule(Configuration),
-                new ProductVersionModule(typeof(Startup).Assembly)
+                new ProductVersionModule(typeof(Startup).Assembly),
+                GetQuartzModule()
                 );
+        }
+
+        public static UnitOfWorkConnectionSettings BuildUnitOfWorkSettings(string connectionString)
+        {
+            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
+
+            var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
+            {
+                ConnectionString = connectionString,
+                ReadSideMappingAssemblies = mappingAssemblies,
+                PlainStorageSchemaName = "plainstore",
+                PlainMappingAssemblies = new List<Assembly>
+                {
+                    typeof(HeadquartersBoundedContextModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                },
+                PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
+                ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace),
+                LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly,
+                    typeof(M201905171139_AddErrorsTable).Namespace),
+                UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()
+            };
+            return unitOfWorkConnectionSettings;
         }
 
         private QuartzModule GetQuartzModule()
@@ -157,7 +166,6 @@ namespace WB.UI.Headquarters
                     configurationSection.MaxAllowedRecordNumber,
                     loginFormatRegex: CreateUserModel.UserNameRegularExpression,
                     emailFormatRegex: configurationSection.EmailFormatRegex,
-                    passwordFormatRegex: configurationSection.PasswordStrengthRegularExpression,
                     phoneNumberFormatRegex: configurationSection.PhoneNumberFormatRegex,
                     fullNameMaxLength: EditUserModel.PersonNameMaxLength,
                     phoneNumberMaxLength: EditUserModel.PhoneNumberLength,
@@ -169,8 +177,7 @@ namespace WB.UI.Headquarters
 
             if (Configuration.GetSection("ExternalStorages").Exists())
             {
-                externalStoragesSettings = new ExternalStoragesSettings();
-                Configuration.GetSection("ExternalStorages").Bind(externalStoragesSettings);
+                externalStoragesSettings = Configuration.GetSection("ExternalStorages").Get<ExternalStoragesSettings>();
             }
 
             return new HeadquartersBoundedContextModule(userPreloadingSettings,
@@ -221,13 +228,18 @@ namespace WB.UI.Headquarters
             services.AddScoped<UnitOfWorkActionFilter>();
             services.AddScoped<InstallationFilter>();
             services.AddScoped<AntiForgeryFilter>();
+            services.AddScoped<GlobalNotificationResultFilter>();
+            services.AddHeadquartersHealthCheck();
 
+            FileStorageModule.Setup(services, Configuration);
+            
             AddCompression(services);
 
             services.AddMvc(mvc =>
             {
                 mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
                 mvc.Filters.AddService<InstallationFilter>(100);
+                mvc.Filters.AddService<GlobalNotificationResultFilter>(200);
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
                 mvc.ModelBinderProviders.Insert(0, new DataTablesRequestModelBinderProvider());
                 var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
@@ -259,6 +271,19 @@ namespace WB.UI.Headquarters
             {
                 services.AddHostedService<QuartzHostedService>();
             }
+            
+            var passwordOptions = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
+            
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Default Password settings.
+                options.Password.RequireDigit = passwordOptions.RequireDigit;
+                options.Password.RequireLowercase = passwordOptions.RequireLowercase;
+                options.Password.RequireNonAlphanumeric = passwordOptions.RequireNonAlphanumeric;
+                options.Password.RequireUppercase = passwordOptions.RequireUppercase;
+                options.Password.RequiredLength = passwordOptions.RequiredLength;
+                options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
+            });
         }
 
         private static void AddCompression(IServiceCollection services)
@@ -294,7 +319,7 @@ namespace WB.UI.Headquarters
                 app.UseHsts();
             }
             
-            InitModules(app);
+            InitModules(env);
 
             app.UseStaticFiles();
             app.UseSerilogRequestLogging();
@@ -341,10 +366,10 @@ namespace WB.UI.Headquarters
             });
         }
 
-        private void InitModules(IApplicationBuilder app)
+        private void InitModules(IWebHostEnvironment env)
         {
-            var lifetimeScope = app.ApplicationServices.GetAutofacRoot();
-            autofacKernel.InitCoreAsync(lifetimeScope, false).Wait(TimeSpan.FromSeconds(3));
+            var initTask = autofacKernel.InitAsync(true);
+            initTask.Wait(TimeSpan.FromSeconds(5));
         }
     }
 }

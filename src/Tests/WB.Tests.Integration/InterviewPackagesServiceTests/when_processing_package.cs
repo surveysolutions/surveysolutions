@@ -121,7 +121,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                             DateTime.UtcNow, DateTime.Today),
                     });
 
-            interviewPackagesService.StoreOrProcessPackage(
+            interviewPackagesService.ProcessPackage(
                     new InterviewPackage
                     {
                         InterviewId = expectedCommand.InterviewId,
@@ -133,12 +133,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents
                             .Select(IntegrationCreate.AggregateRootEvent).ToArray())
                     });
-
-            BecauseOf();
-           
         }
 
-        private void BecauseOf() => interviewPackagesService.ProcessPackage("1");
 
         [NUnit.Framework.Test] public void should_execute_SynchronizeInterviewEventsCommand_command () =>
             mockOfCommandService.Verify(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), origin), Times.Once);

@@ -8,9 +8,9 @@ namespace WB.UI.Headquarters.Services.Impl
 {
     public class QRCodeHelper : IQRCodeHelper
     {
-        private readonly IOptions<HeadquarterOptions> options;
+        private readonly IOptions<HeadquartersConfig> options;
 
-        public QRCodeHelper(IOptions<HeadquarterOptions> options)
+        public QRCodeHelper(IOptions<HeadquartersConfig> options)
         {
             this.options = options ?? throw new ArgumentNullException(nameof(options));
         }

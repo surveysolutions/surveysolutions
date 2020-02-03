@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('Pages.UpgradeAssignmentsTitle')">
+    <HqLayout :hasFilter="false"
+        :title="$t('Pages.UpgradeAssignmentsTitle')">
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -20,7 +21,8 @@
         <div class="row-fluid">
             <div class="col-sm-12">
                 <h3>{{$t('Assignments.SelectQuestionnaireToUpgradeFrom')}}</h3>
-                <Typeahead control-id="questionnaire" noSearch 
+                <Typeahead control-id="questionnaire"
+                    noSearch 
                     :placeholder="$t('Common.Questionnaire')" 
                     :values="questionnaires" 
                     :value="questionnaireId" 
@@ -28,12 +30,17 @@
             </div>
         </div>
         <form method="post">
-            <input type="hidden" :value="questionnaireId ? questionnaireId.key : ''" name="sourceQuestionnaireId"/>
+            <input type="hidden"
+                :value="questionnaireId ? questionnaireId.key : ''"
+                name="sourceQuestionnaireId"/>
             <div class="col-sm-7 col-xs-12 action-buttons">
-                 <button type="submit" class="btn btn-success" :disabled="!questionnaireId">
+                <button type="submit"
+                    class="btn btn-success"
+                    :disabled="!questionnaireId">
                     {{$t('Assignments.UpgradeBtn')}}
                 </button>
-                <a :href="$config.model.surveySetupUrl" class="back-link">
+                <a :href="$config.model.surveySetupUrl"
+                    class="back-link">
                     {{$t('WebInterviewSetup.BackToQuestionnaires')}}
                 </a>
             </div>
@@ -43,18 +50,18 @@
 
 <script>
 export default {
-  data() {
-    return { questionnaireId: null };
-  },
-  computed: {
-    questionnaires() {
-      return this.$config.model.questionnaires;
-    }
-  },
-  methods: {
-    selectQuestionnaire(value) {
-        this.questionnaireId = value;
-    }
-  }
-};
+    data() {
+        return { questionnaireId: null }
+    },
+    computed: {
+        questionnaires() {
+            return this.$config.model.questionnaires
+        },
+    },
+    methods: {
+        selectQuestionnaire(value) {
+            this.questionnaireId = value
+        },
+    },
+}
 </script>

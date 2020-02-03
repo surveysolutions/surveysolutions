@@ -10,54 +10,54 @@
         </div>
         <div class="extra-margin-bottom">
             <div class="profile">
+                <div class="col-sm-7"
+                    v-if="isInterviewer || isSupervisor || isHeadquarters">
+                    <p v-html="$t('Pages.Supervisor_CreateText', {link: '/Users/Upload'})"></p>
+                </div>
                 <div class="col-sm-12">
                     <form-group
                         :label="$t('FieldsAndValidations.UserNameFieldName')"
                         :error="modelState['UserName']"
-                        :mandatory="true"
-                    >
+                        :mandatory="true">
                         <TextInput
                             v-model.trim="userName"
                             :haserror="modelState['UserName'] !== undefined"
-                        />
+                            id="UserName"/>
                     </form-group>
                     <form-group
                         v-if="isInterviewer"
                         :label="$t('Pages.Interviewers_SupervisorTitle')"
                         :error="modelState['SupervisorId']"
-                        :mandatory="true"
-                    >
-                        <div class="field" :class="{answered: supervisor != null}">
+                        :mandatory="true">
+                        <div class="field"
+                            :class="{answered: supervisor != null}">
                             <Typeahead
                                 control-id="supervisor"
                                 :value="supervisor"
                                 :ajax-params="{ }"
                                 :fetch-url="model.api.responsiblesUrl"
-                                @selected="supervisorSelected"
-                            ></Typeahead>
+                                @selected="supervisorSelected"></Typeahead>
                         </div>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.NewPasswordFieldName')"
                         :error="modelState['Password']"
-                        :mandatory="true"
-                    >
+                        :mandatory="true">
                         <TextInput
                             type="password"
                             v-model.trim="password"
                             :haserror="modelState['Password'] !== undefined"
-                        />
+                            id="Password"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
                         :error="modelState['ConfirmPassword']"
-                        :mandatory="true"
-                    >
+                        :mandatory="true">
                         <TextInput
                             type="password"
                             v-model.trim="confirmPassword"
                             :haserror="modelState['ConfirmPassword'] !== undefined"
-                        />
+                            id="ConfirmPassword"/>
                     </form-group>
                     <p v-if="lockMessage != null">{{lockMessage}}</p>
                     <form-group>
@@ -66,9 +66,9 @@
                             id="IsLocked"
                             name="IsLocked"
                             type="checkbox"
-                            v-model="isLockedByHeadquarters"
-                        />
-                        <label for="IsLocked" style="font-weight: bold">
+                            v-model="isLockedByHeadquarters"/>
+                        <label for="IsLocked"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{$t('FieldsAndValidations.IsLockedFieldName')}}
                         </label>
@@ -80,9 +80,9 @@
                             id="IsLockedBySupervisor"
                             name="IsLockedBySupervisor"
                             type="checkbox"
-                            v-model="isLockedBySupervisor"
-                        />
-                        <label for="IsLockedBySupervisor" style="font-weight: bold">
+                            v-model="isLockedBySupervisor"/>
+                        <label for="IsLockedBySupervisor"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
                         </label>
@@ -92,33 +92,31 @@
                     <div class="separate-line"></div>
                 </div>
                 <div class="col-sm-12">
-                    <h5 class="extra-margin-bottom" v-html="$t('Pages.PublicSection')"></h5>
+                    <h5 class="extra-margin-bottom"
+                        v-html="$t('Pages.PublicSection')"></h5>
                     <form-group
                         :label="$t('FieldsAndValidations.PersonNameFieldName')"
-                        :error="modelState['PersonName']"
-                    >
+                        :error="modelState['PersonName']">
                         <TextInput
                             v-model.trim="personName"
                             :haserror="modelState['PersonName'] !== undefined"
-                        />
+                            id="PersonName"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.EmailFieldName')"
-                        :error="modelState['Email']"
-                    >
+                        :error="modelState['Email']">
                         <TextInput
                             v-model.trim="email"
                             :haserror="modelState['Email'] !== undefined"
-                        />
+                            id="Email"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
-                        :error="modelState['PhoneNumber']"
-                    >
+                        :error="modelState['PhoneNumber']">
                         <TextInput
                             v-model.trim="phoneNumber"
                             :haserror="modelState['PhoneNumber'] !== undefined"
-                        />
+                            id="PhoneNumber"/>
                     </form-group>
                 </div>
 
@@ -128,9 +126,13 @@
                             type="submit"
                             class="btn btn-success"
                             style="margin-right:5px"
-                            @click="createAccount"
-                        >{{$t('Pages.Create')}}</button>
-                        <a class="btn btn-default" v-bind:href="referrerUrl">{{$t('Common.Cancel')}}</a>
+                            id="btnCreate"
+                            @click="createAccount">{{$t('Pages.Create')}}</button>
+                        <a class="btn btn-default"
+                            v-bind:href="referrerUrl"
+                            id="lnkCancel">
+                            {{$t('Common.Cancel')}}
+                        </a>
                     </div>
                 </div>
             </div>
@@ -156,7 +158,7 @@ export default {
             isLockedByHeadquarters: false,
             isLockedBySupervisor: false,
             successMessage: null,
-            supervisor: null
+            supervisor: null,
         }
     },
     computed: {
@@ -234,7 +236,7 @@ export default {
     },
     methods: {
         supervisorSelected(newValue) {
-            this.supervisor = newValue;
+            this.supervisor = newValue
         },
         createAccount: function(event) {
             this.successMessage = null

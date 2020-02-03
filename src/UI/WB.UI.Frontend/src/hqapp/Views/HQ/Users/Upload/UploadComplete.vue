@@ -11,8 +11,14 @@
                     {{$t('UploadUsers.CompleteDescription')}}
                 </div>
                 <div class="action-buttons">
-                    <a class="btn btn-primary" v-bind:href="config.api.questionnairesUrl">{{$t('UploadUsers.Questionnaires')}}</a>
-                    <router-link class="btn btn-link" :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
+                    <a class="btn btn-primary"
+                        v-bind:href="config.api.questionnairesUrl">
+                        {{$t('UploadUsers.Questionnaires')}}
+                    </a>
+                    <router-link class="btn btn-link"
+                        :to="{ name: 'upload'}">
+                        {{$t('UploadUsers.BackToImport')}}
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -22,25 +28,25 @@
 
 <script>
 export default {
-  computed: {
-    config() {
-      return this.$config.model;
+    computed: {
+        config() {
+            return this.$config.model
+        },
+        fileName() {
+            return this.$store.getters.upload.fileName
+        },
+        totalCount() {
+            if (!this.$store.getters.upload.complete) return 0
+            return this.supervisorsCount + this.interviewersCount
+        },
+        supervisorsCount() {
+            if (!this.$store.getters.upload.complete) return 0
+            return this.$store.getters.upload.complete.supervisorsCount
+        },
+        interviewersCount() {
+            if (!this.$store.getters.upload.complete) return 0
+            return this.$store.getters.upload.complete.interviewersCount
+        },
     },
-    fileName() {
-      return this.$store.getters.upload.fileName;
-    },
-    totalCount() {
-      if (!this.$store.getters.upload.complete) return 0;
-      return this.supervisorsCount + this.interviewersCount;
-    },
-    supervisorsCount() {
-      if (!this.$store.getters.upload.complete) return 0;
-      return this.$store.getters.upload.complete.supervisorsCount;
-    },
-    interviewersCount() {
-      if (!this.$store.getters.upload.complete) return 0;
-      return this.$store.getters.upload.complete.interviewersCount;
-    }
-  }
-};
+}
 </script>

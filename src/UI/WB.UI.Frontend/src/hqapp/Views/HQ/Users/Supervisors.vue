@@ -7,10 +7,10 @@
                     <a
                         v-if="!user.isObserver"
                         class="btn btn-success"
-                        :href="api.createUrl"
-                    >{{ $t('Users.AddSupervisor') }}</a>
+                        :href="api.createUrl">{{ $t('Users.AddSupervisor') }}</a>
                 </div>
-                <ol v-if="!user.isObserver && !user.isObserving" class="list-unstyled">
+                <ol v-if="!user.isObserver && !user.isObserving"
+                    class="list-unstyled">
                     <li>{{ $t('Pages.Users_Supervisors_Instruction1') }}</li>
                     <li>{{ $t('Pages.Users_Supervisors_Instruction2') }}</li>
                 </ol>
@@ -22,33 +22,34 @@
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"
             :supportContextMenu="user.isObserver"
-            :selectable="!this.user.isObserver && !this.user.isObserving"
+            :selectable="user.isAdministrator"
             selectableId="userId"
             @selectedRowsChanged="rows => selectedSupervisors = rows"
             @totalRows="(rows) => usersCount = rows"
             @page="resetSelection"
             mutliRowSelect
-            :noPaging="false"
-        ></DataTables>
+            :noPaging="false"></DataTables>
         <Confirm
             ref="confirmArchive"
             id="confirmArchive"
-            slot="modals"
-        >{{$t('Pages.Supervisors_ArchiveSupervisorsConfirmMessage')}}</Confirm>
-        <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
-            {{$t('Archived.UnarchiveSupervisorWarning')}} <br/>
+            slot="modals">{{$t('Pages.Supervisors_ArchiveSupervisorsConfirmMessage')}}</Confirm>
+        <Confirm ref="confirmUnarchive"
+            id="confirmUnarchive"
+            slot="modals">
+            {{$t('Archived.UnarchiveSupervisorWarning')}}
+            <br />
             {{$t('Pages.Supervisors_UnarchiveSupervisorsConfirm')}}
         </Confirm>
 
-        <div class="panel panel-table" v-if="user.isAdministrator && hasSelectedSupervisors">
+        <div class="panel panel-table"
+            v-if="user.isAdministrator && hasSelectedSupervisors">
             <div class="panel-body">
                 <input
                     class="double-checkbox-white"
                     id="q1az"
                     type="checkbox"
                     checked
-                    disabled="disabled"
-                />
+                    disabled="disabled"/>
                 <label for="q1az">
                     <span class="tick"></span>
                     <span>{{selectedSupervisors.length}} {{$t('Pages.Supervisors_Selected')}}</span>
@@ -56,13 +57,11 @@
                 <button
                     type="button"
                     class="btn btn-default btn-danger"
-                    @click="archiveSupervisors"
-                >{{$t('Pages.Supervisors_Archive')}}</button>
+                    @click="archiveSupervisors">{{$t('Pages.Supervisors_Archive')}}</button>
                 <button
                     type="button"
                     class="btn btn-default btn-success"
-                    @click="unArchiveSupervisors"
-                >{{$t('Pages.Supervisors_Unarchive')}}</button>
+                    @click="unArchiveSupervisors">{{$t('Pages.Supervisors_Unarchive')}}</button>
             </div>
         </div>
     </HqLayout>
@@ -78,7 +77,6 @@ export default {
             selectedSupervisors: [],
         }
     },
-    computed: {},
     mounted() {
         this.loadData()
     },
@@ -170,7 +168,7 @@ export default {
                         title: this.$t('Users.SupervisorEmail'),
                         orderable: true,
                         render: function(data, type, row) {
-                            return data ? "<a href='mailto:" + data + "'>" + data + '</a>' : ''
+                            return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                         },
                     },
                     {

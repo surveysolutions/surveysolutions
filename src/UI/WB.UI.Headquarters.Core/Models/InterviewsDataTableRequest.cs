@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -10,6 +11,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     {
         public Guid? QuestionnaireId { get; set; }
         public long? QuestionnaireVersion { get; set; }
+        
+        [FromQuery(Name = "statuses[]")]
         public InterviewStatus[] Statuses { get; set; }
         public string SearchBy { get; set; }
         public int? AssignmentId { get; set; }

@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         [Test]
         public void when_checking_that_translated_resources_have_same_property_names_in_format_elements_as_original()
         {
-            var csproj = TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.csproj");
+            var csproj = TestEnvironment.GetAllProjectsInSolution();
             var translatedResourceFiles = GetAllLinkedResourceFiles(csproj).Where(file => Path.GetFileNameWithoutExtension(file).Contains("."))
                 .Where(file => !fileNamesToExculde.Any(x => Path.GetFileName(file).Contains(x)))
                 .ToList();

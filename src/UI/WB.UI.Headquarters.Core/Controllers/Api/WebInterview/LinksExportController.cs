@@ -2,6 +2,8 @@
 using Ionic.Zip;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.FileSystem;
@@ -15,14 +17,17 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly ISampleWebInterviewService sampleWebInterviewService;
         private readonly IFileSystemAccessor fileNameService;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseView;
+        private readonly IOptions<HeadquartersConfig> headquartersOptions;
 
         public LinksExportController(ISampleWebInterviewService sampleWebInterviewService,
             IFileSystemAccessor fileNameService,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseView)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseView,
+            IOptions<HeadquartersConfig> headquartersOptions)
         {
             this.sampleWebInterviewService = sampleWebInterviewService;
             this.fileNameService = fileNameService;
             this.questionnaireBrowseView = questionnaireBrowseView;
+            this.headquartersOptions = headquartersOptions;
         }
 
         [HttpGet]
@@ -30,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
 
-            byte[] uncompressedDataStream = this.sampleWebInterviewService.Generate(questionnaireIdentity, this.Url.Content("~/WebInterview"));
+            byte[] uncompressedDataStream = this.sampleWebInterviewService.Generate(questionnaireIdentity, this.Url.Content($"{headquartersOptions.Value.BaseUrl}/WebInterview"));
 
             var compressedBytes = Compress(uncompressedDataStream);
 
