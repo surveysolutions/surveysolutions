@@ -353,21 +353,22 @@ namespace WB.Tests.Unit.Applications.Headquarters
             unitOfWork = unitOfWork ?? GetUnitOfWorkMock().Object;
 
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
-                //supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
+                supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
-                //attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
+                attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
                 questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
-                //Mock.Of<ITranslationManagementService>(),
-                //lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
-                //commandService ?? Mock.Of<ICommandService>(),
+                Mock.Of<ITranslationManagementService>(),
+                lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
+                commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<ISystemLog>(),
                 unitOfWork,
                 globalInfoProvider,
-                designerApi ?? Mock.Of<IDesignerApi>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>(),
-                //Mock.Of<IReusableCategoriesStorage>(),
-                Mock.Of<IAssignmentsUpgradeService>());
+                Mock.Of<IReusableCategoriesStorage>(),
+                Mock.Of<IAssignmentsUpgradeService>(),
+                designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
+                Mock.Of<IDesignerApiFactory>(x => x.Get() == designerApi));
             return questionnaireImportService;
         }
     }
