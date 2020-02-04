@@ -1,12 +1,11 @@
 ﻿using System;
 using Serilog;
-using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.UI.Shared.Web.LoggingIntegration
 {
     public class SerilogLogger : Core.GenericSubdomains.Portable.Services.ILogger
     {
-        private Serilog.ILogger logger;
+        private readonly Serilog.ILogger logger;
 
         public SerilogLogger()
         {
