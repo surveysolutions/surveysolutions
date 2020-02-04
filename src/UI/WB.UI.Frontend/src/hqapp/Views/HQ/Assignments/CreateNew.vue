@@ -401,7 +401,7 @@ export default {
         },
         async create() {
             var validationResult = await this.$validator.validateAll()
-
+            const self = this
             this.sizeQuestion.validity.isValid = !this.errors.has('size')
             this.emailQuestion.validity.isValid = !this.errors.has('email')
             this.passwordQuestion.validity.isValid = !this.errors.has('password')
@@ -411,7 +411,6 @@ export default {
 
             const submitAllowed = validationResult && this.newResponsibleId != null
             if (submitAllowed) {
-                var self = this
                 this.$http
                     .post(this.config.createNewAssignmentUrl, {
                         interviewId: this.interviewId,
@@ -429,7 +428,7 @@ export default {
                     .catch(e => {
                         if (e.response.data.message) toastr.error(e.response.data.message)
                         else if (e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage)
-                        else toastr.error(window.input.settings.messages.unhandledExceptionMessage)
+                        else toastr.error(self.$t('Pages.GlobalSettings_UnhandledExceptionMessage'))
                     })
             }
         },

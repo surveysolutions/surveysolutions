@@ -318,7 +318,7 @@ export default {
                         toastr.error(e.response.data.ExceptionMessage)
                     else
                         toastr.error(
-                            window.input.settings.messages.unhandledExceptionMessage
+                            self.$t('Pages.GlobalSettings_UnhandledExceptionMessage')
                         )
                 })
         },
