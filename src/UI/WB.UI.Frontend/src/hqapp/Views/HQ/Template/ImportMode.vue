@@ -61,6 +61,8 @@
             </div>
         </div>
         <form method="post"
+            ref="importingForm"
+            @submit.prevent="startImport"
             class="import-questionnaire-form"
             v-if="hasQuestionnaireInfo">
             <input
@@ -146,18 +148,20 @@
                             </p>
                         </div>
                         <div>
-                            <button
+                            <button v-if="!isImporting"
                                 type="submit"
                                 class="btn btn-primary">{{$t('QuestionnaireImport.RegularImportTitle')}}</button>
+                            <span v-if="isImporting" 
+                                v-text="progressText"></span>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
         <div class="row col-sm-12"
-            v-if="$config.model.errorMessage">
+            v-if="errorMessage">
             <div class="alert alert-danger">
-                {{$config.model.errorMessage}}
+                {{errorMessage}}
             </div>
         </div>
     </HqLayout>
@@ -170,6 +174,9 @@ export default {
         return {
             shouldMigrateAssignments: false,
             questionnaireId: null, 
+            isImporting: false,
+            progressPercent: 0,
+            errorMessage: null,
         }
     },
     methods: {
@@ -179,10 +186,41 @@ export default {
         selectQuestionnaire(value) {
             this.questionnaireId = value
         },
+        async startImport() {
+            this.isImporting = true
+            this.progressPercent = 0
+
+            var formData = new FormData(this.$refs.importingForm)
+            var currentStatus = await this.$http.post(this.$route.fullPath, formData)
+
+            await this.timeout(1000)
+
+            do {
+                this.progressPercent = currentStatus.data.status.percent
+
+                if (currentStatus.data.redirectUrl) {
+                    window.location.replace(currentStatus.data.redirectUrl)
+                }
+
+                if (currentStatus.data.status.importError) {
+                    this.errorMessage = currentStatus.data.status.importError
+                }
+                
+                await this.timeout(1000)
+                currentStatus = await this.$http.post(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.identity)
+
+            } while (currentStatus.data.status.status == 'Progress')
+        },
+        timeout(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+        },
     },
     computed: {
         hasQuestionnaireInfo() {
             return this.$config.model.questionnaireInfo != null
+        },
+        progressText() {
+            return 'Importing ' + this.progressPercent + '%'
         },
     },
 }
