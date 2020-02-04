@@ -125,25 +125,14 @@ namespace WB.UI.WebTester
 
             app.UseRouting();
 
-            app.UseEndpoints(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHealthChecks(".hc");
+                endpoints.MapHealthChecks(".hc");
 
-                routes.MapControllerRoute("Section", "WebTester/Interview/{id:Guid}/Section/{sectionId:Guid}", 
-                    defaults: new { controller = "WebTester", action = "Section" });
+                endpoints.MapDefaultControllerRoute();
 
-                routes.MapControllerRoute("Interview", "WebTester/Interview/{id}/{*url}", new
-                {
-                    controller = "WebTester",
-                    action = "Interview"
-                });
-
-                routes.MapHub<WebInterview>("interview",
+                endpoints.MapHub<WebInterview>("interview",
                     options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
-
-                routes.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=WebTester}/{action=Index}/{id?}");
             });
           
         }

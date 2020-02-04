@@ -21,7 +21,7 @@ const locales = {
         "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport",
         "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel", "AuditLog", "OutdatedBrowser", "InterviewerAuditRecord"
         , "Roles"],
-    webtester: ["WebInterviewUI", "WebInterview", "Common"],
+    webtester: ["WebInterviewUI", "WebInterview", "Common", "Details"],
     webinterview: ["WebInterviewUI", "WebInterview", "Common", "Details"]
 }
 
