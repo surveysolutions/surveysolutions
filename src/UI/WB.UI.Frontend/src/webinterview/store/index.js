@@ -53,7 +53,7 @@ const store = safeStore({
             return !state.interviewCannotBeChanged
         },
         basePath() {
-            return window.input ? window.input.settings.config.basePath : window.CONFIG.basePath
+            return window.CONFIG.basePath
         },
     },
 })
