@@ -154,15 +154,26 @@ namespace WB.UI.Headquarters.Controllers
             var result = await this.importService.ImportAndMigrateAssignments(id, model.QuestionnaireInfo?.Name, false,
                 request.Comment, Request.GetDisplayUrl(), true, request.ShouldMigrateAssignments, migrateFrom);
 
-            return ImportStatus(result.Identity.ToString());
+            return ImportStatusImpl(result);
         }
 
 
         [HttpGet]
-        public ActionResult ImportStatus([FromQuery] string id)
+        [Route("Template/ImportStatus/{id}")]
+        public ActionResult ImportStatus(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var result = this.importService.GetStatus(questionnaireIdentity);
+            if (result == null)
+                return NotFound();
+
+            return ImportStatusImpl(result);
+        }       
+        
+        private ActionResult ImportStatusImpl(QuestionnaireImportResult result)
+        {
+            if (result == null)
+                return NotFound();
 
             if (result.Status == QuestionnaireImportStatus.MigrateAssignments)
             {
@@ -172,8 +183,7 @@ namespace WB.UI.Headquarters.Controllers
                     RedirectUrl = Url.Action("UpgradeProgress", "SurveySetup", new { id = result.MigrateAssignmentProcessId.Value }),
                 });
             }
-
-            if (result.IsSuccess)
+            if (result.Status == QuestionnaireImportStatus.Finished)
             {
                 return Ok(new ImportStatusModel()
                 {
@@ -181,7 +191,10 @@ namespace WB.UI.Headquarters.Controllers
                     RedirectUrl = Url.Action("Index", "SurveySetup"),
                 });
             }
-            return Ok(result);
+            return Ok(new ImportStatusModel()
+            {
+                Status = result
+            });
         }
 
         private async Task<ImportModeModel> GetImportModel(Guid id)
