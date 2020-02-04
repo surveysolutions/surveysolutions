@@ -103,10 +103,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             bool isCensusMode,
             string comment, string requestUrl, bool includePdf, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom)
         {
-            // prevent 2 concurrent requests from importing
-            var query = this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156)");
-            await query.ExecuteUpdateAsync();
-
             var designerCredentials = designerUserCredentials.Get();
             var designerApi = designerApiFactory.Get(new ScopeDesignerUserCredentials(designerCredentials));
 
@@ -128,38 +124,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (statuses.ContainsKey(questionnaireIdentity))
             {
-                return new QuestionnaireImportResult()
-                {
-                    Status = QuestionnaireImportStatus.Error,
-                    ImportError = ErrorMessages.QuestionnaireAlreadyImporting
-                };
+                return GetStatus(questionnaireIdentity);
             }
 
             var questionnaireImportResult = new QuestionnaireImportResult
             {
                 Identity = questionnaireIdentity,
                 QuestionnaireId = questionnaireIdentity.ToString(),
-                Percent = 0,
+                Progress = new Progress(),
                 Status = QuestionnaireImportStatus.Progress
             };
             statuses.Add(questionnaireIdentity, questionnaireImportResult);
 
             _ = Task.Run(async () =>
             {
-                var result = await InScopeExecutor.Current.ExecuteAsync((serviceLocatorLocal) =>
+                return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
                     var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
-                    return questionnaireImportService.ImportImpl(designerApi, questionnaireImportResult, name, isCensusMode, comment, requestUrl, includePdf);
-                });
-                if (shouldMigrateAssignments && migrateFrom != null)
-                {
-                    var sourceQuestionnaireId = migrateFrom;
+                    var result = await questionnaireImportService.ImportImpl(designerApi, questionnaireImportResult, name, isCensusMode, comment, requestUrl, includePdf);
 
-                    var processId = Guid.NewGuid();
-                    this.upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, result.Identity);
-                    result.MigrateAssignmentProcessId = processId;
-                    result.Status = QuestionnaireImportStatus.MigrateAssignments;
-                }
+                    if (shouldMigrateAssignments && migrateFrom != null)
+                    {
+                        var sourceQuestionnaireId = migrateFrom;
+
+                        var processId = Guid.NewGuid();
+                        this.upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, result.Identity);
+                        result.MigrateAssignmentProcessId = processId;
+                        result.Status = QuestionnaireImportStatus.MigrateAssignments;
+                    }
+
+                    return result;
+                });
             });
 
             return questionnaireImportResult;
@@ -174,26 +169,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             bool shouldRollback = true;
             try
             {
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                this.logger.Trace($"IMPORT!!! Trigger pdf render {stopwatch.Elapsed}");
+                // prevent 2 concurrent requests from importing
+                var query = this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156)");
+                await query.ExecuteUpdateAsync();
 
                 await TriggerPdfRendering(designerApi, questionnaireImportResult.Identity.QuestionnaireId, includePdf);
-                questionnaireImportResult.Percent = 5;
+                questionnaireImportResult.Progress.Current++;
 
                 var minSupported = supportedVersionProvider.GetMinVerstionSupportedByInterviewer();
                 var supportedVersion = supportedVersionProvider.GetSupportedQuestionnaireVersion();
                 var questionnairePackage = await designerApi.GetQuestionnaire(questionnaireImportResult.Identity.QuestionnaireId, supportedVersion, minSupported);
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
 
-                this.logger.Debug($"IMPORT!!! Downloaded questionnaire {stopwatch.Elapsed}");
+                questionnaireImportResult.Progress.Total = CalculateTotalOperations(questionnaire);
+                questionnaireImportResult.Progress.Current += 2;
 
-                questionnaireImportResult.Percent = 20;
-
-                await TriggerPdfTranslationsRendering(designerApi, questionnaire, includePdf);
-                questionnaireImportResult.Percent = 25;
-                this.logger.Trace($"IMPORT!!! TriggerPdfTranslationsRendering {stopwatch.Elapsed}");
+                await TriggerPdfTranslationsRendering(designerApi, questionnaireImportResult.Progress, questionnaire, includePdf);
 
                 if (questionnaire.Attachments != null)
                 {
@@ -204,17 +195,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                         var attachmentContent = await designerApi.DownloadQuestionnaireAttachment(
                             questionnaireAttachment.ContentId, questionnaireAttachment.AttachmentId);
+                        questionnaireImportResult.Progress.Current++;
 
                         attachmentContentService.SaveAttachmentContent(
                             questionnaireAttachment.ContentId,
                             attachmentContent.ContentType,
                             attachmentContent.FileName,
                             attachmentContent.Content);
+                        questionnaireImportResult.Progress.Current++;
                     }
                 }
-                questionnaireImportResult.Percent = 35;
-
-                this.logger.Trace($"IMPORT!!! Attachments {stopwatch.Elapsed}");
 
                 this.logger.Debug($"checking translations questionnaire {questionnaireId}");
                 if (questionnaire.Translations?.Count > 0)
@@ -223,6 +213,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                     this.logger.Debug($"loading translations {questionnaireId}");
                     var translationContent = await designerApi.GetTranslations(questionnaire.PublicKey);
+                    questionnaireImportResult.Progress.Current++;
 
                     translationManagementService.Store(translationContent.Select(x => new TranslationInstance
                     {
@@ -233,9 +224,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         TranslationIndex = x.TranslationIndex,
                         TranslationId = x.TranslationId
                     }));
+                    questionnaireImportResult.Progress.Current++;
                 }
-                questionnaireImportResult.Percent = 45;
-                this.logger.Trace($"IMPORT!!! translations {stopwatch.Elapsed}");
 
                 this.logger.Debug($"checking lookup tables questionnaire {questionnaireId}");
                 if (questionnaire.LookupTables.Any())
@@ -244,13 +234,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         this.logger.Debug($"Loading lookup table questionnaire {questionnaireId}. Lookup id {lookupId}");
                         var lookupTable = await designerApi.GetLookupTables(questionnaire.PublicKey, lookupId);
+                        questionnaireImportResult.Progress.Current++;
 
                         lookupTablesStorage.Store(lookupTable, questionnaireIdentity, lookupId);
+                        questionnaireImportResult.Progress.Current++;
                     }
                 }
-                questionnaireImportResult.Percent = 55;
-                this.logger.Trace($"IMPORT!!! LookupTables {stopwatch.Elapsed}");
-
 
                 this.logger.Debug($"checking reusable categories for questionnaire {questionnaireId}");
                 if (questionnaire.Categories.Any())
@@ -259,12 +248,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         this.logger.Debug($"Loading reusable category for questionnaire {questionnaireId}. Category id {category.Id}");
                         var reusableCategories = await designerApi.GetReusableCategories(questionnaire.PublicKey, category.Id);
+                        questionnaireImportResult.Progress.Current++;
                         reusableCategoriesStorage.Store(questionnaireIdentity, category.Id, reusableCategories);
+                        questionnaireImportResult.Progress.Current++;
                     }
                 }
-                questionnaireImportResult.Percent = 65;
-                this.logger.Trace($"IMPORT!!! Categories {stopwatch.Elapsed}");
-
 
                 logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
@@ -279,9 +267,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireContentVersion,
                     questionnaireIdentity.Version,
                     comment));
-                this.logger.Trace($"IMPORT!!! commandService {stopwatch.Elapsed}");
-                questionnaireImportResult.Percent = 75;
-
+                questionnaireImportResult.Progress.Current++;
 
                 logger.Verbose($"UpdateRevisionMetadata: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
                 await designerApi.UpdateRevisionMetadata(questionnaire.PublicKey, questionnaire.Revision,
@@ -294,20 +280,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         HqQuestionnaireVersion = questionnaireIdentity.Version,
                         Comment = comment,
                     });
-                questionnaireImportResult.Percent = 80;
-                this.logger.Trace($"IMPORT!!! UpdateRevisionMetadata {stopwatch.Elapsed}");
+                questionnaireImportResult.Progress.Current++;
 
 
                 logger.Verbose($"DownloadAndStorePdf: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
-                await DownloadAndStorePdf(designerApi, questionnaireIdentity, questionnaire, includePdf);
-                questionnaireImportResult.Percent = 95;
-                this.logger.Trace($"IMPORT!!! DownloadAndStorePdf {stopwatch.Elapsed}");
+                await DownloadAndStorePdf(designerApi, questionnaireImportResult.Progress, questionnaireIdentity, questionnaire, includePdf);
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
-                this.logger.Trace($"IMPORT!!! QuestionnaireImported {stopwatch.Elapsed}");
-                stopwatch.Stop();
-                questionnaireImportResult.Percent = 100;
+                questionnaireImportResult.Progress.Current = questionnaireImportResult.Progress.Total;
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Finished;
 
                 shouldRollback = false;
@@ -377,13 +358,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
+        private int CalculateTotalOperations(QuestionnaireDocument questionnaire)
+        {
+            return 3 // pdf rendering and downloading
+                   + (questionnaire.Translations?.Count ?? 0) * 3 // translation rendering and downloading
+                   + 2 // questionnaire and assembly
+                   + questionnaire.Attachments.Count * 2 // download and save attachments
+                   + (questionnaire.Translations != null ? 2 : 0) // download and save translations
+                   + questionnaire.LookupTables.Count * 2 // lookup tables
+                   + questionnaire.Categories.Count * 2 // categories
+                   + 1 // run import command
+                   + 1 // update designer metadata
+                ;
+        }
+
         private async Task TriggerPdfRendering(IDesignerApi designerApi, Guid questionnaireId, bool includePdf)
         {
             if (includePdf)
                 await designerApi.GetPdfStatus(questionnaireId);
         }
 
-        private async Task TriggerPdfTranslationsRendering(IDesignerApi designerApi, QuestionnaireDocument questionnaire, bool includePdf)
+        private async Task TriggerPdfTranslationsRendering(IDesignerApi designerApi, Progress progress, QuestionnaireDocument questionnaire, bool includePdf)
         {
             if (!includePdf)
                 return;
@@ -393,10 +388,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             foreach (var questionnaireTranslation in questionnaire.Translations)
             {
                 await designerApi.GetPdfStatus(questionnaire.PublicKey, questionnaireTranslation.Id);
+                progress.Current++;
             }
         }
 
-        private async Task DownloadAndStorePdf(IDesignerApi designerApi, QuestionnaireIdentity questionnaireIdentity,
+        private async Task DownloadAndStorePdf(IDesignerApi designerApi, Progress progress, QuestionnaireIdentity questionnaireIdentity,
             QuestionnaireDocument questionnaire, bool includePdf)
         {
             if (!includePdf)
@@ -405,7 +401,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var pdfRetry = Policy
                 .HandleResult<PdfStatus>(x => x.ReadyForDownload == false && x.CanRetry != true)
                 .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));
-
+            
             await pdfRetry.ExecuteAsync(async () =>
             {
                 this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
@@ -415,8 +411,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.logger.Error("Loading pdf for default language");
 
             var pdfFile = await designerApi.DownloadPdf(questionnaireIdentity.QuestionnaireId);
+            progress.Current++;
 
             this.pdfStorage.Store(new QuestionnairePdf { Content = pdfFile.Content }, questionnaireIdentity.ToString());
+            progress.Current++;
 
             this.logger.Error($"PDF for questionnaire stored {questionnaireIdentity}");
 
@@ -432,9 +430,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 });
 
                 var pdfTranslated = await designerApi.DownloadPdf(questionnaireIdentity.QuestionnaireId, translation.Id);
+                progress.Current++;
 
                 this.pdfStorage.Store(new QuestionnairePdf { Content = pdfTranslated.Content },
                     $"{translation.Id.FormatGuid()}_{questionnaireIdentity}");
+                progress.Current++;
 
                 this.logger.Error($"PDF for questionnaire stored {questionnaireIdentity} translation {translation.Id}, {translation.Name}");
             }
