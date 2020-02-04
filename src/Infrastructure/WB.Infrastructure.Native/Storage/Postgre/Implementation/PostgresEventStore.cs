@@ -107,6 +107,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var copyFromCommand = $"COPY {tableNameWithSchema}(id, origin, timestamp, eventsourceid, value, eventsequence, eventtype) FROM STDIN BINARY;";
             var npgsqlConnection = connection.Connection as NpgsqlConnection;
 
+            // https://www.postgresql.org/docs/11/explicit-locking.html#LOCKING-TABLES
+            npgsqlConnection.Execute($"lock table {tableNameWithSchema} in EXCLUSIVE mode;");
+
             using (var writer = npgsqlConnection.BeginBinaryImport(copyFromCommand))
             {
                 foreach (var @event in eventStream)
