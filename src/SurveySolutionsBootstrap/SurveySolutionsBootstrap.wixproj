@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="img\" />
-    <Folder Include="redist" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SurveySolutionsProduct\SurveySolutions.wixproj">
@@ -65,7 +64,6 @@
   <ItemGroup>
     <Content Include="img\logo-50.bmp" />
     <Content Include="img\logo-50.png" />
-    <Content Include="redist\ndp48-web.exe" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
