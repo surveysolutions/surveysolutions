@@ -180,4 +180,7 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Обновить задания</value>
   </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Загрузка {{percent}}%</value>
+  </data>
 </root>
