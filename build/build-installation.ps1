@@ -49,7 +49,7 @@ $supportPath = Join-path $workdir "SupportPackage"
 $targetSupportPath = Join-path $HQsitePath "Support"
 
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
-Remove-Item "$HQsitePath\HostMap.config"
+#Remove-Item "$HQsitePath\HostMap.config"
 
 Copy-Item $HQSourcePath\ExportService $HQsitePath\.bin\Export -Force -Recurse
 Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
