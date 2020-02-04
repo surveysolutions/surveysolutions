@@ -1,21 +1,20 @@
 <template>
-    <HqLayout :fixedWidth="true"
-        :hasHeader="false">
-        <div slot="filters">
-            <div class="row">
-                <div class="page-header">
-                    <ol class="breadcrumb">
-                        <li>
-                            <a href="/SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
-                        </li>
-                    </ol>
-                    <h1>{{$t('BatchUpload.CreatingMultipleAssignments')}}</h1>
-                </div>
-                <div class="row">
-                    <div class="col-sm-8">
-                        <h2>{{$t('Pages.QuestionnaireNameFormat', { name : questionnaire.title, version : questionnaire.version})}}</h2>
-                    </div>
-                </div>
+    <HqLayout :hasFilter="false"
+        :fixedWidth="true"
+        :hasRow="false">
+        
+        <template slot="headers">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
+                </li>
+            </ol>
+            <h1>{{$t('BatchUpload.CreatingMultipleAssignments')}}</h1>
+        </template>
+            
+        <div class="row">
+            <div class="col-sm-8">
+                <h2>{{$t('Pages.QuestionnaireNameFormat', { name : questionnaire.title, version : questionnaire.version})}}</h2>
             </div>
         </div>
         <div class="row">
