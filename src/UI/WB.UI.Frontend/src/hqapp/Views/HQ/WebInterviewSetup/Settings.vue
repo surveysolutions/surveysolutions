@@ -1300,12 +1300,12 @@ export default {
             self.$store.dispatch('showProgress')
             await this.$hq.WebInterviewSettings.updateAdditionalSettings(this.questionnaireId,
                 this.spamProtectionIsEnabled,
-                this.reminderAfterDaysIfNoResponse,
-                this.reminderAfterDaysIfPartialResponse,
+                this.reminderAfterDaysIfNoResponse == 'null' ? null : this.reminderAfterDaysIfNoResponse,
+                this.reminderAfterDaysIfPartialResponse == 'null' ? null : this.reminderAfterDaysIfPartialResponse,
                 this.singleResponseIsEnabled)
                 .then(function (response) {
                     self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled
-                    self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse
+                    self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse 
                     self.cancelReminderAfterDaysIfPartialResponse = self.reminderAfterDaysIfPartialResponse
                     self.cancelSingleResponseIsEnabled = self.singleResponseIsEnabled
                     self.$validator.reset('additionalSettings')
