@@ -32,8 +32,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NLog" Version="4.6.8" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="refit" Version="5.0.23" />
     <PackageReference Include="System.Reactive" Version="4.3.2" />
   </ItemGroup>
@@ -67,5 +67,20 @@
     <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\ar.42375966a49e.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\en.ecf1978b6927.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\es.005459f898b4.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\es.b0ae15fa984b.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\fr.b105467ba35d.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\ka.27147233582c.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\pt.0d08f0b6a241.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\ro.f262978019cb.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\ru.c8e477e90c34.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\sq.1b3aa1deb7ab.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\uk-UA.fdbe292c27c3.json" />
+    <_ContentIncludedByDefault Remove="Content\Dist\locale\webtester\zh.466b9939b52b.json" />
   </ItemGroup>
 </Project>
