@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 export default class HqRouter {
     constructor(options) {
         this.options = assign({
-            base: window.input.settings.config.basePath,
+            base: window.CONFIG.basePath,
             mode: 'history',
             scrollBehavior() {
                 return { x: 0, y: 0 }

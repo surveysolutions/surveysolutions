@@ -10,9 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Model.Title</title>
-
-    <inject component="markup" type="css"></inject>
-    <inject component="markup-web-interview" type="css"></inject>
+    <locale component="webtester"></locale>
 </head>
 <body class="gray-background">
     <script>
@@ -25,8 +23,8 @@
         audioGet: '@Url.Content(@"~/Multimedia/AudioRecord")',
         verboseLogging: false,
         appVersion: '@(version.ToString())',
-		googleApiKey: '@Model.GoogleMapsKey',
-		googleMapsApiBaseUrl: 'https://maps.googleapis.com',
+        googleApiKey: '@Model.GoogleMapsKey',
+        googleMapsApiBaseUrl: 'https://maps.googleapis.com',
         googleMapsBaseUrl: 'https://www.google.com',
         inWebTesterMode: true,
         reloadQuestionnaireUrl: '@Model.ReloadQuestionnaireUrl',
@@ -42,7 +40,6 @@
     </script>
     @RenderSection("scripts", false)
     <div id="app"></div>
-    <partial name="partial.webtester" />
     @RenderSection("footer", false)
 </body>
 </html>
