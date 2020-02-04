@@ -195,8 +195,8 @@ export default {
 
             await this.timeout(1000)
 
-            do {
-                this.progressPercent = currentStatus.data.status.percent
+            while (currentStatus.data.status.status == 'Progress') {
+                this.progressPercent = currentStatus.data.status.progress.percent
 
                 if (currentStatus.data.redirectUrl) {
                     window.location.replace(currentStatus.data.redirectUrl)
@@ -208,10 +208,9 @@ export default {
                 
                 await this.timeout(1000)
                 currentStatus = await this.$http.get(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.questionnaireId)
+            } 
 
-            } while (currentStatus.data.status.status == 'Progress')
-
-            if (currentStatus.data.status.status == 'Progress') {
+            if (currentStatus.data.status.status == 'Error') {
                 this.errorMessage = currentStatus.data.status.importError
             }
 
