@@ -207,9 +207,19 @@ export default {
                 }
                 
                 await this.timeout(1000)
-                currentStatus = await this.$http.post(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.identity)
+                currentStatus = await this.$http.get(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.questionnaireId)
 
             } while (currentStatus.data.status.status == 'Progress')
+
+            if (currentStatus.data.status.status == 'Progress') {
+                this.errorMessage = currentStatus.data.status.importError
+            }
+
+            if (currentStatus.data.redirectUrl) {
+                window.location.replace(currentStatus.data.redirectUrl)
+            }
+
+            this.isImporting = false
         },
         timeout(ms) {
             return new Promise(resolve => setTimeout(resolve, ms))
