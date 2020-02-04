@@ -26,5 +26,9 @@ namespace WB.Services.Export.Infrastructure
         }
 
         public IHeadquartersApi Api { get; private set; }
+        public void SetTenant(TenantInfo tenant)
+        {
+            this.Tenant = tenant;
+        }
     }
 }
