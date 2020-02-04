@@ -17,6 +17,7 @@ using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
 {
+    [Route("WebTester")]
     public class WebTesterController : Controller
     {
         private const string SaveScenarioSessionKey = "SaveScenarioAvailable";
@@ -37,6 +38,7 @@ namespace WB.UI.WebTester.Controllers
             this.testerConfig = testerConfig;
         }
 
+        [Route("Run/{id:Guid}")]
         public IActionResult Run(Guid id, string sid, string saveScenarioAvailable, int? scenarioId = null)
         {
             if (!string.IsNullOrEmpty(saveScenarioAvailable) && bool.TryParse(saveScenarioAvailable, out var saveScenarioAvailableBool))
@@ -52,6 +54,7 @@ namespace WB.UI.WebTester.Controllers
             });
         }
 
+        [Route("Redirect/{id:Guid}")]
         public async Task<IActionResult> Redirect(Guid id, string originalInterviewId, string scenarioId)
         {
             if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
@@ -90,6 +93,9 @@ namespace WB.UI.WebTester.Controllers
             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
 
+        [Route("Interview/{id}")]
+        [Route("Interview/{id}/Section/{url}")]
+        [Route("Interview/{id}/Cover")]
         public IActionResult Interview(string id)
         {
             try
@@ -142,33 +148,6 @@ namespace WB.UI.WebTester.Controllers
             }
             
             return interviewPageModel;
-        }
-
-        public IActionResult Section(string id, string sectionId)
-        {
-            var interview = this.statefulInterviewRepository.Get(id);
-
-            if (interview == null)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, string.Empty);
-            }
-
-            var targetSectionIsEnabled = interview.IsEnabled(Identity.Parse(sectionId));
-            if (targetSectionIsEnabled != true)
-            {
-                var firstSectionId = interview.GetAllEnabledGroupsAndRosters().First().Identity.ToString();
-                var uri = $@"~/WebTester/Interview/{interview.Id:N}/Section/{firstSectionId}";
-
-                return Redirect(uri);
-            }
-
-            var model = GetInterviewPageModel(id);
-            if (model == null)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, string.Empty);
-            }
-
-            return this.View("Interview", model);
         }
     }
 
