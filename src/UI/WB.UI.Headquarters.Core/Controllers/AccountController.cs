@@ -102,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> ReturnToObserver()
         {
             if (!this.authorizedUser.IsObserver)
-                NotFound();
+                return NotFound();
 
             var observerName = User.FindFirst(AuthorizedUser.ObserverClaimType)?.Value;
             var observer = await this.signInManager.UserManager.FindByNameAsync(observerName);
@@ -119,14 +119,11 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<IActionResult> ObservePerson(string personName)
         {
             if (string.IsNullOrEmpty(personName))
-                NotFound();
+                return  NotFound();
 
             var user = await this.signInManager.UserManager.FindByNameAsync(personName);
-            if (user == null)
-                NotFound();
-
-            if (!ObservableRoles.Contains(user.Roles.First().Id))
-                NotFound();
+            if (user == null || !ObservableRoles.Contains(user.Roles.First().Id))
+               return NotFound();
 
             //do not forget pass current user to display you are observing
             await this.SignInAsObserverAsync(personName);
