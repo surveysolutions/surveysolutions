@@ -25,5 +25,6 @@ namespace WB.UI.Headquarters.Models
         public List<ComboboxOptionModel> QuestionnairesToUpgradeFrom { get; set; }
         public string SurveySetupUrl { get; set; }
         public string ListOfMyQuestionnaires { get; set; }
+        public string CheckImportingStatus { get; set; }
     }
 }
