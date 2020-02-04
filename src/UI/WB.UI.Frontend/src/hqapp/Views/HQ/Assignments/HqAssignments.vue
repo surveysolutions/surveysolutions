@@ -260,6 +260,7 @@
 import * as toastr from 'toastr'
 import { map, join, assign, findIndex } from 'lodash'
 import moment from 'moment'
+import {DateFormats} from '~/shared/helpers'
 
 export default {
     data() {
@@ -449,7 +450,7 @@ export default {
                     searchable: false,
                     render(data) {
                         var date = moment.utc(data)
-                        return date.local().format(global.input.settings.clientDateTimeFormat)
+                        return date.local().format(DateFormats.dateTime)
                     },
                 },
                 {
@@ -460,7 +461,7 @@ export default {
                     searchable: false,
                     render(data) {
                         var date = moment.utc(data)
-                        return date.local().format(global.input.settings.clientDateTimeFormat)
+                        return date.local().format(DateFormats.dateTime)
                     },
                 },
                 {

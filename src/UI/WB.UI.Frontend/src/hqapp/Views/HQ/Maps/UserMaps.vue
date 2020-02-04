@@ -84,7 +84,7 @@ export default {
                             const mapsLinks = map(data, map => {
                                 return (
                                     '<a href=\'' +
-                                    window.input.settings.config.basePath +
+                                    self.$hq.basePath +
                                     'Maps/Details?mapname=' +
                                     encodeURIComponent(map) +
                                     '\'>' +
