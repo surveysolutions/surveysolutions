@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
     [Route("api/supervisor/v1/interviews")]
     public class InterviewsApiV1Controller : SupervisorInterviewsControllerBase
     {
-        public InterviewsApiV1Controller(IImageFileStorage imageFileStorage, 
+        public InterviewsApiV1Controller(IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
             IAudioAuditFileStorage audioAuditFileStorage,
             IAuthorizedUser authorizedUser,
@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
-            IHeadquartersEventStore eventStore) : 
+            IHeadquartersEventStore eventStore) :
             base(imageFileStorage,
                 audioFileStorage,
                 authorizedUser,
@@ -37,8 +37,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 packagesService,
                 commandService,
                 metaBuilder,
-                synchronizationSerializer, 
-                eventStore, 
+                synchronizationSerializer,
+                eventStore,
                 audioAuditFileStorage)
         {
         }
@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [WriteToSyncLog(SynchronizationLogType.PostInterviewV3)]
         [HttpPost]
         [Route("{id:guid}")]
-        public IActionResult Post([FromBody]InterviewPackageApiView package) => base.PostV3(package);
+        public IActionResult Post([FromBody] InterviewPackageApiView package) => base.PostV3(package);
 
         [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         [HttpPost]
@@ -66,15 +66,15 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
         [HttpPost]
         [Route("{id:guid}/image")]
-        public override IActionResult PostImage(PostFileRequest request) => base.PostImage(request);
+        public override IActionResult PostImage([FromBody] PostFileRequest request) => base.PostImage(request);
 
         [HttpPost]
         [Route("{id:guid}/audio")]
-        public override IActionResult PostAudio(PostFileRequest request) => base.PostAudio(request);
+        public override IActionResult PostAudio([FromBody] PostFileRequest request) => base.PostAudio(request);
 
         [HttpPost]
         [Route("{id:guid}/audioaudit")]
-        public override IActionResult PostAudioAudit(PostFileRequest request) => base.PostAudioAudit(request);
+        public override IActionResult PostAudioAudit([FromBody] PostFileRequest request) => base.PostAudioAudit(request);
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]

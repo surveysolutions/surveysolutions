@@ -81,21 +81,21 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return StatusCode(StatusCodes.Status204NoContent);
         }
         
-        public virtual IActionResult PostImage(PostFileRequest request)
+        public virtual IActionResult PostImage([FromBody] PostFileRequest request)
         {
             this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), null);
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        public virtual IActionResult PostAudio(PostFileRequest request)
+        public virtual IActionResult PostAudio([FromBody] PostFileRequest request)
         {
             this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), request.ContentType);
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        public virtual IActionResult PostAudioAudit(PostFileRequest request)
+        public virtual IActionResult PostAudioAudit([FromBody] PostFileRequest request)
         {
             this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), request.ContentType);
