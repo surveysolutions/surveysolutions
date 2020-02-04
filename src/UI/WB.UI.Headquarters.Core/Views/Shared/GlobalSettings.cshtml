@@ -1,65 +1,12 @@
 ﻿@using System.Globalization
-@using Microsoft.Extensions.Options
-@using WB.Core.BoundedContexts.Headquarters
 @using WB.Core.Infrastructure.Versions
 @using WB.UI.Headquarters.Configs
 @using WB.UI.Headquarters.Services
-
-@*@functions{
-    public string TokenHeaderValue()
-    {
-        AntiForgery.GetTokens(null, out var cookieToken, out var formToken);
-        return cookieToken + @":" + formToken;
-    }
-}*@
 
 @inject IOptions<GoogleMapsConfig> googleMapsConfig
 @inject IProductVersion productVersion
 
 <script type="text/javascript">
-    var input = window.input || (function () {
-        'use strict';
-
-        @{ var model = new
-           {
-               settings = new
-               {
-                   messages = new
-                   {
-                       forbiddenMessage = Pages.GlobalSettings_ForbiddenMessage,
-                       unhandledExceptionMessage = Pages.GlobalSettings_UnhandledExceptionMessage,
-                       notifyDialogTitle = Pages.GlobalSettings_NotifyDialogTitle,
-                       notifyDialogText = Pages.GlobalSettings_NotifyDialogText,
-                       notifyNoMarkersTitle = Pages.GlobalSettings_NotifyNoMarkersDialogTitle,
-                       notifyNoMarkersText = Pages.GlobalSettings_NotifyNoMarkersDialogText,
-                       deleteQuestionnaireConfirmationMessage = Pages.GlobalSettings_DeleteQuestionnareConfirmation,
-                       notifyMarkersLimitReachedTitle = Pages.GlobalSettings_NotifyMarkersLimitReachedTitle,
-                       notifyNoMarkersLimitReachedText = Pages.GlobalSettings_NotifyMarkersLimitReachedText,
-                       deleteMapConfirmationMessage = Pages.GlobalSettings_DeleteMapConfirmation,
-                       confirmationNeededTitle = Pages.ConfirmationNeededTitle,
-                       enablingAuditConfirmationMessage = Pages.GlobalSettings_TurningAudioAuditOn
-                   },
-                   acsrf = new
-                   {
-                       tokenName = "",
-                       token = "" // TokenHeaderValue()
-                   },
-                   clientDateTimeFormat = Extensions.ClientDateTimeFormat,
-                   config = new {
-                    basePath = Url.Content("~/"),
-                    dataTableTranslationsUrl = Url.RouteUrl("DefaultApi", new
-                    {
-                        httproute = "", controller = "DataTableTranslations"
-                    })
-                },
-               }
-           };
-        }
-
-        return @(model.AsJsonValue());
-    }(document));
-    window.input = input;
-
     window.CONFIG = @( new {
         verboseMode = false,
         googleApiKey = googleMapsConfig.Value.ApiKey,
@@ -69,8 +16,6 @@
         imageGetBase = Url.Content("~/api/WebInterviewResources"),
         audioGet = Url.Content("~/Resource/AudioRecord"),
         appVersion = productVersion.ToString(),
-        dateFormat = Extensions.ClientDateTimeFormat,
-        signalrPath = Url.Content("~/signalr/hubs"),
         supportedTransports = new [] { "webSockets", "longPolling"}
     }.AsJsonValue());
 

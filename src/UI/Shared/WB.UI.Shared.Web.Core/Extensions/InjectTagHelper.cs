@@ -1,30 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Newtonsoft.Json;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.UI.Shared.Web.Extensions
 {
     [HtmlTargetElement("locale")]
     public class LocaleTagHelper : TagHelper
     {
         private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly IUrlHelperFactory urlHelperFactory;
 
-        [ViewContext]
-        [HtmlAttributeNotBound]
-        public ViewContext ViewContext { get; set; }
-
-        public LocaleTagHelper(IWebHostEnvironment webHostEnvironment, IUrlHelperFactory urlHelperFactory)
+        public LocaleTagHelper(IWebHostEnvironment webHostEnvironment)
         {
             this.webHostEnvironment = webHostEnvironment;
-            this.urlHelperFactory = urlHelperFactory;
         }
 
         public override int Order => 1;

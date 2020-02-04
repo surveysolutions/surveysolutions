@@ -23,6 +23,7 @@ using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
+using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters
@@ -55,7 +56,6 @@ namespace WB.UI.Headquarters
             registry.Bind<IViewRenderService, ViewRenderService>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             
-             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
@@ -88,17 +88,6 @@ namespace WB.UI.Headquarters
                     services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
                     break;
             }
-
-            registry.Bind<ILoggerProvider, SerilogLoggerProvider>();
-            registry.Bind<Microsoft.Extensions.Logging.ILoggerProvider, Serilog.Extensions.Logging.SerilogLoggerProvider>();
-
-            registry.BindToMethod<ILogger>(context =>
-            {
-                if (context.MemberDeclaringType != null)
-                    return new SerilogLogger(context.MemberDeclaringType);
-
-                return new SerilogLogger();
-            });
         }
 
         private void ConfigureEventBus(IIocRegistry registry)
