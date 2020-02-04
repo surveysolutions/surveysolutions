@@ -12,8 +12,10 @@ using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -21,6 +23,7 @@ using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc;
@@ -280,7 +283,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var result = await importService.Import(questionnaireId, "null", false, null, null);
 
             // Assert
-            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.Status, Is.EqualTo(QuestionnaireImportStatus.Error));
             Assert.That(result.ImportError, Is.EqualTo(someFaultReason));
         }
 
@@ -352,6 +355,12 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             unitOfWork = unitOfWork ?? GetUnitOfWorkMock().Object;
 
+            var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            var executor = new Mock<IInScopeExecutor>();
+            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
+                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
+            InScopeExecutor.Init(executor.Object);
+
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
@@ -368,7 +377,10 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IReusableCategoriesStorage>(),
                 Mock.Of<IAssignmentsUpgradeService>(),
                 designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
-                Mock.Of<IDesignerApiFactory>(x => x.Get() == designerApi));
+                Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi));
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
+
             return questionnaireImportService;
         }
     }

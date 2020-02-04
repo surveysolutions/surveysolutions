@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return new QuestionnaireImportResult()
                 {
                     Status = QuestionnaireImportStatus.Error,
-                    ImportError = "Questionnaire already exists, please refresh page"
+                    ImportError = ErrorMessages.QuestionnaireAlreadyImporting
                 };
             }
 
