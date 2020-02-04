@@ -823,7 +823,6 @@ export default {
         executeCommand(command, onSuccess, onDone) {
             var url = this.config.commandsUrl
             var requestHeaders = {}
-            //requestHeaders[global.input.settings.acsrf.tokenName] = global.input.settings.acsrf.token
 
             $.ajax({
                 cache: false,
