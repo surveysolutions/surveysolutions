@@ -55,7 +55,8 @@ Copy-Item $HQSourcePath\ExportService $HQsitePath\.bin\Export -Force -Recurse
 #Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
-$version = [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
+$version = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName).FileVersion
+#    [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 
 setupExportService "$HQsitePath\.bin\Export\appsettings.json"
 
