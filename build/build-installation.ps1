@@ -37,12 +37,12 @@ if ($HQSourcePath -eq "") {
 }
 
 #Set-Location $HQSourcePath
-$sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "PackageTmp"}).FullName
+$sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "dist"}).FullName
 
 $HQsitePath = Join-path $workdir "HQwork"
 if (!(Test-Path $HQsitePath)) {
 	New-Item $HQsitePath -ItemType Directory
-	New-Item (Join-Path $HQsitePath "App_Data") -ItemType Directory
+#	New-Item (Join-Path $HQsitePath "App_Data") -ItemType Directory
 }
 
 $supportPath = Join-path $workdir "SupportPackage"
@@ -54,17 +54,17 @@ Remove-Item "$HQsitePath\HostMap.config"
 Copy-Item $HQSourcePath\ExportService $HQsitePath\.bin\Export -Force -Recurse
 Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
-$file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll"})
+$file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
 $version = [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 
 setupExportService "$HQsitePath\.bin\Export\appsettings.json"
 
 # Cleaning up slack configuration section from config
-$hqConfig = "$HQsitePath\Web.config"
-[xml]$xml = Get-Content $hqConfig
-$node = $xml.SelectSingleNode("//slack")
-$node.ParentNode.RemoveChild($node)
-$xml.save($hqConfig)
+#  $hqConfig = "$HQsitePath\Web.config"
+#  [xml]$xml = Get-Content $hqConfig
+#  $node = $xml.SelectSingleNode("//slack")
+#  $node.ParentNode.RemoveChild($node)
+#  $xml.save($hqConfig)
 
 $installationArgs = @(
     $InstallationProject;
