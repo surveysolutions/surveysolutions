@@ -2,6 +2,8 @@
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -17,10 +19,12 @@ namespace WB.UI.Headquarters.Controllers
     public class DataExportController: Controller
     {
         private readonly ExternalStoragesSettings externalStoragesSettings;
+        private readonly IOptions<HeadquartersConfig> hqConfig;
 
-        public DataExportController(ExternalStoragesSettings externalStoragesSettings)
+        public DataExportController(ExternalStoragesSettings externalStoragesSettings, IOptions<HeadquartersConfig> hqConfig)
         {
             this.externalStoragesSettings = externalStoragesSettings;
+            this.hqConfig = hqConfig;
         }
 
         [ObserverNotAllowed]
@@ -59,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers
                     DataAvailabilityUrl = Url.Action("DataAvailability", "DataExportApi"),
                     WasExportFileRecreatedUrl = Url.Action("WasExportFileRecreated", "DataExportApi"),
                     DownloadDataUrl = Url.Action("DownloadData", "DataExportApi"),
-                    ExportToExternalStorageUrl = Url.Action("ExportToExternalStorage", "DataExportApi"),
+                    ExportToExternalStorageUrl = hqConfig.Value.BaseUrl + Url.Action("ExportToExternalStorage", "DataExportApi"),
                     CancelExportProcessUrl = Url.Action("DeleteDataExportProcess", "DataExportApi"),
                 }
             };
