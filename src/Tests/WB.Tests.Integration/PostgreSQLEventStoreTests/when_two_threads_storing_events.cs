@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Moq;
@@ -29,6 +30,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             var tick3 = new ManualResetEvent(false);
             var tick4 = new ManualResetEvent(false);
             var tick5 = new ManualResetEvent(false);
+            var tickCCompleted = new ManualResetEvent(false);
 
             TimeSpan TimeOut = TimeSpan.FromSeconds(30);
 
@@ -92,35 +94,68 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 tick3.Set(); // notify that thB is completed
             });
 
+
+            List<RawEvent> eventList = null;
+            var threadC = new Thread(() =>
+            {
+                var db = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+                db.Open();
+
+                using (db.BeginTransaction())
+                {
+                   var store = CreateNewEventStore(db);
+                   tick3.WaitOne(TimeOut);
+                   eventList = store.GetRawEventsFeed(0, 100).ToList();
+                }
+
+                tickCCompleted.Set();
+            });
+
             threadA.Start();
             threadB.Start();
+            threadC.Start();
 
             var db3 = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             db3.Open();
             var eventStore = CreateNewEventStore(db3);
 
             // before first tick. Assert that there is no events in database
-            Assert.That(eventStore.GetRawEventsFeed(0, 100).ToList().Count, Is.EqualTo(0));
+            using (db3.BeginTransaction())
+            {
+                Assert.That(eventStore.GetRawEventsFeed(0, 100).ToList().Count, Is.EqualTo(0));
+            }
 
             // thA store events set tick 2, wait tick 4, stop before commiting, then thB store events, set tick 3
             tick1.Set();
 
             // wait for thB. If thread is blocked, wait for 5 seconds
-            var tick3Result = tick3.WaitOne(TimeSpan.FromSeconds(5)); 
+            var tick3Result = tick3.WaitOne(TimeSpan.FromSeconds(5));
 
-            // thA is still in progress, thB commit or not, we should not receive events from EventsStore
-            Assert.That(eventStore.GetRawEventsFeed(0, 100).ToList().Count, Is.EqualTo(0));
-
+            // Wait for thread C to start waiting for events table
+            var waitOne = tickCCompleted.WaitOne(TimeSpan.FromSeconds(5));
+            if(waitOne)
+            {
+                Assert.That(eventList, Is.Null, "Reading thread should wait for all transactions to be completed");
+            }
+            
             // notify thA to continue as we done all asserts
             tick4.Set();
 
+            tickCCompleted.WaitOne(TimeOut);
+            Assert.That(eventList, Is.Not.Null, "Reading thread should wait for all transactions to be completed");
+            
             // wait for thA to commit
             tick5.WaitOne(TimeOut); 
 
             // if thB were blocked then it should be unblocked as thA is commit, wait for thB to commit
             if (!tick3Result) tick3.WaitOne(TimeOut);
 
-            var events = eventStore.GetRawEventsFeed(0, 100).ToList();
+            List<RawEvent> events;
+            using (db3.BeginTransaction())
+            {
+                events = eventStore.GetRawEventsFeed(0, 100).ToList();
+            }
+
             Assert.That(events.Count, Is.EqualTo(6));
 
             Assert.That(events[0].GlobalSequence, Is.EqualTo(1));
