@@ -1,6 +1,6 @@
 <template>
     <div>
-        {{ $config.model.Message }}
+        {{ $config.model.errorMessage }}
     </div>
 </template>
 
