@@ -6,49 +6,48 @@
      xmlns:PanelSW="http://schemas.panel-sw.co.il/wix/WixExtension"
      xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
 
-  <Product Id="*"
+    <Product Id="*"
            Name="Survey Solutions"
            Language="1033"
            Version="$(var.SurveySolutionsVersion)"
            Manufacturer="World Bank"
            UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
-    <util:CloseApplication Id="CloseExportService" CloseMessage="yes" Timeout="10" RebootPrompt="no" TerminateProcess="3" Target="WB.Services.Export.Host.exe" />
+        <util:CloseApplication Id="CloseExportService" CloseMessage="yes" Timeout="10" RebootPrompt="no" TerminateProcess="3" Target="WB.Services.Export.Host.exe" />
 
-    <!--Will override all files-->
-    <Property Id="REINSTALLMODE" Value="amus" />
+        <!--Will override all files-->
+        <Property Id="REINSTALLMODE" Value="amus" />
 
-    <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
+        <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
+        <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
 
-    <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
+        <!--<PropertyRef Id="NETFRAMEWORK45" />
+        <Condition Message="This application requires .NET Framework 4.8 Please install the .NET 4.8 Framework then run this installer again.">
+            <![CDATA[Installed OR (NETFRAMEWORK45 AND NETFRAMEWORK45 >= "#528040")]]>
+        </Condition>-->
 
-    <!--not supported in wix 3.11-->
-    <!--<PropertyRef Id="WIX_IS_NETFRAMEWORK_471_OR_LATER_INSTALLED" />-->
-
-    <PropertyRef Id="NETFRAMEWORK45" />
-    <Condition Message="This application requires .NET Framework 4.8 Please install the .NET 4.8 Framework then run this installer again.">
-      <![CDATA[Installed OR (NETFRAMEWORK45 AND NETFRAMEWORK45 >= "#528040")]]>
-    </Condition>
-
+        <!--server OS-->
+        <!--AND MsiNTProductType > 1-->
         <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
             <![CDATA[Installed OR (VersionNT64 >= 603 AND MsiNTProductType > 1)]]>
         </Condition>
-        <!--AND MsiNTProductType > 1--> <!--server OS-->
 
-    <Property Id="SITEPORT" Value="9700"></Property>
+        <Property Id="SITEPORT" Value="9700"></Property>
+        <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
+        <Property Id="CONNPORT" Value="5432"></Property>
+        <Property Id="CONNUSERNAME" Value="postgres"></Property>
 
-    <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
-    <Property Id="CONNPORT" Value="5432"></Property>
-    <Property Id="CONNUSERNAME" Value="postgres"></Property>
-
-
-    <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
-
-    <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions">
-      <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions"
-                      Name="Install Path" Win64='yes'></RegistrySearch>
-    </Property>
+        <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
+        <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions">
+            <RegistrySearch Id="SurveySolutionsPath" 
+                            Type="directory" 
+                            Root="HKLM" 
+                            Key="SOFTWARE\World Bank\Survey Solutions"
+                            Name="Install Path" 
+                            Win64='yes'>
+            </RegistrySearch>
+        </Property>
 
     <!--        <Condition Message="Path was not found.">
             <![CDATA[((( Installed AND (PATCH OR REINSTALL ) ) OR WIX_UPGRADE_DETECTED) AND (NOT INSTALLFOLDER))]]>
@@ -120,7 +119,7 @@
 
       <Property Id="ARPNOMODIFY" Value="1" />
 
-      <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Survey Solutions has been succesfully installed." />
+      <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Survey Solutions has been successfully installed." />
 
     </UI>
 
@@ -134,7 +133,6 @@
     <!-- MODIFY CONFIGURATIONS -->
 
     <Property Id="ModifyExportSettings" Value="INSTALLFOLDER=[INSTALLFOLDER];Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;" ></Property>
-     
 
     <!-- Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) -->
     <!-- Build path to dism.exe (full path is important, just calling dism.exe without path will fail) -->
@@ -171,31 +169,31 @@
       <Custom Action="OpenURL" After="SetOpenURL">
         <![CDATA[NOT Installed]]>
       </Custom>
-
     </InstallExecuteSequence>
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
                   AllowDowngrades="no"
-                      Schedule="afterInstallExecute" /> <!--preserves settings-->
-
+                  Schedule="afterInstallExecute" />
+    <!--preserves settings-->
 
     <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
-      <ComponentGroupRef Id="ProductComponents" />
-      <ComponentGroupRef Id="SettingsUpdate"  />
-      <ComponentRef Id ="ApplicationShortcut"/>
-
+        <ComponentGroupRef Id="ProductComponents" />
+        <ComponentGroupRef Id="SettingsUpdate" />
+        <ComponentGroupRef Id="ExportService" />
+        <ComponentRef Id ="ApplicationShortcut" />
     </Feature>
-
   </Product>
 
-  <Fragment>
-    <util:ProductSearch Id="OldProductSearch" UpgradeCode="{0C543B8A-9023-4486-89C9-421D875F5AFA}" Variable="OldProductInstalled" Result="state"></util:ProductSearch>
+    <Fragment>
+    <util:ProductSearch Id="OldProductSearch" 
+                        UpgradeCode="{0C543B8A-9023-4486-89C9-421D875F5AFA}" 
+                        Variable="OldProductInstalled" 
+                        Result="state"></util:ProductSearch>
     <Condition Message="Please uninstsall previous version of Survey Solutions.">
       <![CDATA[(OldProductInstalled = 2)]]>
     </Condition>
   </Fragment>
-
-  <Fragment>
+    <Fragment>
     <!--<SetDirectory Id='INSTALLFOLDER' Value='[WindowsVolume]SurveySolutions' />-->
 
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -220,71 +218,85 @@
         <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D" >
           <Directory Id="CONFIGFOLDER" Name="Configuration">
           </Directory>
+          <Directory Id="EXPORTSERVICE" Name="ExportService">
+          </Directory>
         </Directory>
       </Directory>
     </Directory>
-
   </Fragment>
+    <Fragment>
+      <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
 
-  <Fragment>
-    <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
-      <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
-        <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
-        </RegistryKey>
-      </Component>
+        <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
+            <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
+                <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
+            </RegistryKey>
+        </Component>
 
-      <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes" >
+        <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes" >
+            <iis:WebAppPool
+                Id="AppSurveySolutions"
+                Name="AppSurveySolutions"
+                ManagedRuntimeVersion="v4.0"
+                ManagedPipelineMode="integrated"
+                Identity="applicationPoolIdentity" />
+            <iis:WebSite Id="webSite" SiteId="*" Description="Survey Solutions" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
+                <iis:WebAddress Id="webSite" Port="[SITEPORT]" />
+                <iis:WebDirProperties Id="webSite" AnonymousAccess="yes" WindowsAuthentication="no" />
+                <iis:WebApplication Id="webSite" WebAppPool="AppSurveySolutions" Name="SurveySolutions" />
+                <iis:MimeMap Id="MIME_OTF" Extension=".otf" Type="application/x-font-otf" />
+                <iis:MimeMap Id="MIME_WOFF" Extension=".woff" Type="application/x-font-woff" />
+                <iis:MimeMap Id="MIME_APK" Extension=".apk" Type="application/vnd.android.package-archive" />
+                <iis:MimeMap Id="MIME_TPK" Extension=".tpk" Type="application/octet-stream" />
+            </iis:WebSite>
+        </Component>
+        <!--add harvested project output-->
 
-        <iis:WebAppPool
-            Id="AppSurveySolutions"
-            Name="AppSurveySolutions"
-            ManagedRuntimeVersion="v4.0"
-            ManagedPipelineMode="integrated"
-            Identity="applicationPoolIdentity" />
-
-        <iis:WebSite Id="webSite" SiteId="*" Description="Survey Solutions" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
-          <iis:WebAddress Id="webSite" Port="[SITEPORT]" />
-          <iis:WebDirProperties Id="webSite" AnonymousAccess="yes" WindowsAuthentication="no" />
-          <iis:WebApplication Id="webSite" WebAppPool="AppSurveySolutions" Name="SyrveySolutions" />
-
-          <iis:MimeMap Id="MIME_OTF" Extension=".otf" Type="application/x-font-otf" />
-          <iis:MimeMap Id="MIME_WOFF" Extension=".woff" Type="application/x-font-woff" />
-
-          <iis:MimeMap Id="MIME_APK" Extension=".apk" Type="application/vnd.android.package-archive" />
-          <iis:MimeMap Id="MIME_TPK" Extension=".tpk" Type="application/octet-stream" />
-
-        </iis:WebSite>
-
-      </Component>
-
-      <!--add harvested project output-->
-
-      <ComponentGroupRef Id="ProductFilesComponentGroup"></ComponentGroupRef>
-
+        <ComponentGroupRef Id="ProductFilesComponentGroup"></ComponentGroupRef>
     </ComponentGroup>
+      
+    <ComponentGroup Id="SettingsUpdate" Directory="INSTALLSITEFOLDER" >
+        <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA" NeverOverwrite="yes">
+            <!--<CreateFolder/>-->
+            <!--<File Source="appsettings.Production.ini" PatchIgnore="yes" />-->
 
-    <ComponentGroup Id="SettingsUpdate" Directory="CONFIGFOLDER" >
-      <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA" NeverOverwrite="yes">
-        <!--<CreateFolder/>-->
-        <File Source="Headquarters.Web.config" PatchIgnore="yes" />
+            <!--<IniFile Id ="IniHeadquartersBaseUrl"
+                     Name="appsettings.Production.ini"
+                     Section="Headquarters"
+                     Action="addLine"
+                     Key="BaseUrl"
+                     Value=""/>-->
 
-        <!--<connectionStrings>
-                           <add name="Postgres" connectionString="Persist Security Info=true;Server=prod-db.mysurvey.solutions;Port=5432;User Id=brpdsa;Password=Qwerty1234;Database=brpdsa;ApplicationName=brpdsa" />
-                </connectionStrings>-->
-        <util:XmlFile Id="CreateElementConnectionStrings"
-                      File="[CONFIGFOLDER]\Headquarters.Web.config"
-                      Action="createElement"
-                      ElementPath="//configuration"
-                      Name="connectionStrings" Sequence='1'/>
+            <IniFile Id ="IniHeadquartersTenantName"
+                     Name="appsettings.Production.ini"
+                     Section="Headquarters"
+                     Action="addLine"
+                     Key="TenantName"
+                     Value="hq"/>
 
-        <util:XmlFile Id="CreateAddElementConnectionStrings"
+
+          <IniFile Id ="IniConnectionString"
+                     Name="appsettings.Production.ini"
+                     Section="ConnectionString"
+                     Action="addLine"
+                     Key="DefaultConnection"
+                     Value="Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;"/>
+
+
+
+            <!--<util:XmlFile Id="CreateElementConnectionStrings"
+                          File="[CONFIGFOLDER]\Headquarters.Web.config"
+                          Action="createElement"
+                          ElementPath="//configuration"
+                          Name="connectionStrings" Sequence='1'/>
+
+            <util:XmlFile Id="CreateAddElementConnectionStrings"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
                       ElementPath="//configuration/connectionStrings"
                       Name="add" Sequence='2'/>
 
-        <util:XmlFile Id="UpdateNameElementConnectionStrings"
+            <util:XmlFile Id="UpdateNameElementConnectionStrings"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="setValue"
                       ElementPath="//configuration/connectionStrings/add"
@@ -292,7 +304,7 @@
                       Value="Postgres"
                       Sequence='3'/>
 
-        <util:XmlFile Id="UpdateConnectionStringProviderName"
+            <util:XmlFile Id="UpdateConnectionStringProviderName"
                        File="[CONFIGFOLDER]\Headquarters.Web.config"
                        Action="setValue"
                        ElementPath="//configuration/connectionStrings/add"
@@ -300,7 +312,7 @@
                        Value="Npgsql"
                        Sequence='4'/>
 
-        <util:XmlFile Id="UpdateConnectionStringsElementConnectionStringValue"
+            <util:XmlFile Id="UpdateConnectionStringsElementConnectionStringValue"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="setValue"
                       ElementPath="//configuration/connectionStrings/add"
@@ -308,15 +320,15 @@
                       Value="Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;"
                       Sequence='5'/>
 
-        <!--<add key="EventStore.Provider" value="Postgres" />-->
-        <util:XmlFile Id="CreateAddElementEventStore"
+            ~1~<add key="EventStore.Provider" value="Postgres" />@1@
+            <util:XmlFile Id="CreateAddElementEventStore"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
                       ElementPath="//configuration/appSettings"
                       Name="add"
                       Sequence='6'/>
 
-        <util:XmlFile Id="UpdateKeyElementEventStore"
+            <util:XmlFile Id="UpdateKeyElementEventStore"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="setValue"
                       ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
@@ -324,7 +336,7 @@
                       Value="EventStore.Provider"
                       Sequence='7'/>
 
-        <util:XmlFile Id="SetValueKeyElementEventStore"
+            <util:XmlFile Id="SetValueKeyElementEventStore"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="setValue"
                       ElementPath="//configuration/appSettings/add[\[]@key='EventStore.Provider'[\]]"
@@ -332,14 +344,14 @@
                       Value="Postgres"
                       Sequence='8'/>
 
-        <!--<add key="DataStorePath" value="..." />-->
-        <util:XmlFile Id="CreateElementDataStorePath"
+            ~1~<add key="DataStorePath" value="..." />@1@
+            <util:XmlFile Id="CreateElementDataStorePath"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
                       ElementPath="//configuration/appSettings"
                       Name="add" Sequence='9'/>
 
-        <util:XmlFile Id="UpdateKeyElementDataStorePath"
+            <util:XmlFile Id="UpdateKeyElementDataStorePath"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="setValue"
                       ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
@@ -347,7 +359,7 @@
                       Value="DataStorePath"
                       Sequence='10'/>
 
-        <util:XmlFile Id="SetValueElementDataStorePath"
+            <util:XmlFile Id="SetValueElementDataStorePath"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="setValue"
                       ElementPath="//configuration/appSettings/add[\[]@key='DataStorePath'[\]]"
@@ -355,8 +367,8 @@
                       Value="[INSTALLFOLDER]Data_Site"
                       Sequence='11'/>
 
-        <!--<add key="DesignerAddress" value="https://solutions.worldbank.org" />-->
-        <util:XmlFile Id="CreateElementDesignerAddress"
+            ~1~<add key="DesignerAddress" value="https://solutions.worldbank.org" />@1@
+            <util:XmlFile Id="CreateElementDesignerAddress"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
                       ElementPath="//configuration/appSettings"
@@ -377,7 +389,7 @@
                       Name="value"
                       Value="https://designer.mysurvey.solutions"
                       Sequence='14'/>
-        <!--<add key="WebInterviewEnabled" value="true" />-->
+        ~1~<add key="WebInterviewEnabled" value="true" />@1@
         <util:XmlFile Id="CreateElementWebInterviewEnabled"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
@@ -398,9 +410,9 @@
                       ElementPath="//configuration/appSettings/add[\[]@key='WebInterviewEnabled'[\]]"
                       Name="value"
                       Value="true"
-                      Sequence='17'/>       
-          
-        <!--<add key="Export.ServiceUrl" value="http://localhost:5000" />-->
+                      Sequence='17'/>
+
+        ~1~<add key="Export.ServiceUrl" value="http://localhost:5000" />@1@
         <util:XmlFile Id="CreateElementExportServiceUrl"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
@@ -421,14 +433,33 @@
                       ElementPath="//configuration/appSettings/add[\[]@key='Export.ServiceUrl'[\]]"
                       Name="value"
                       Value="http://localhost:5000"
-                      Sequence='20'/>
+                      Sequence='20'/>-->
       </Component>
     </ComponentGroup>
-
-
+    <ComponentGroup Id="ExportService" Directory="EXPORTSERVICE" >
+            <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
+                <File Id="ExportServiceEXE"
+                      Name="WB.Services.Export.Host.exe"
+                      DiskId="1"
+                      Source="WB.Services.Export.Host.exe"
+                      Vital="yes"
+                      KeyPath="yes" />
+                <ServiceInstall Id="ExportServiceInstall"
+                                Name="SurveySolutionsExport"
+                                DisplayName="Survey Solutions Export Service"
+                                Type="ownProcess"
+                                Start="auto"
+                                ErrorControl="normal"></ServiceInstall>
+                <ServiceControl Id="ExportServiceControl"
+                                Name="SurveySolutionsExport"
+                                Start="install"
+                                Stop="both"
+                                Remove="both"
+                                Wait="yes"></ServiceControl>
+            </Component>
+        </ComponentGroup>
   </Fragment>
-
-  <Fragment>
+    <Fragment>
     <UI>
       <Dialog Id="ConnectionStringDlg" Width="370" Height="270" Title="!(loc.ConnectionStringDlg_Title)">
 
