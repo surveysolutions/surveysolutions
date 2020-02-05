@@ -457,7 +457,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             string userName = string.Empty;
             string userRole = string.Empty;
-            if (userId.HasValue)
+            if (userId.HasValue && userId != Guid.Empty)
             {
                 var user = this.GetUserDocument(userId.Value);
                 userName = this.GetUserName(user);
