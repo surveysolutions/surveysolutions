@@ -8,19 +8,43 @@ export default class ProfileComponent {
     get routes() {
         return [
             {
-                path: '/WebInterview/:invitationId/Start', component: Start,
+                path: '/WebInterview/:invitationId/Start',
+                component: Start,
+                beforeEnter: (to, from, next) => {
+                    if (window.CONFIG.model.errorMessage)
+                        next('/WebInterview/Error')
+                    else
+                        next()
+                },
             },
             {
-                path: '/WebInterview/Resume/:interviewId', component: Resume,
+                path: '/WebInterview/Resume/:interviewId',
+                component: Resume,
+                beforeEnter: (to, from, next) => {
+                    if (window.CONFIG.model.errorMessage)
+                        next('/WebInterview/Error')
+                    else
+                        next()
+                },
             },
             {
-                path: '/WebInterview/Finish/:interviewId', component: Finish,
+                path: '/WebInterview/Finish/:interviewId',
+                component: Finish,
+                beforeEnter: (to, from, next) => {
+                    if (window.CONFIG.model.errorMessage)
+                        next('/WebInterview/Error')
+                    else
+                        next()
+                },
             },
             {
-                path: '/WebInterview/OutdatedBrowser', component: OutdatedBrowser,
+                path: '/WebInterview/OutdatedBrowser',
+                component: OutdatedBrowser,
             },
             {
-                path: '/WebInterview/Error', component: Error,
+                path: '/WebInterview/Error',
+                component: Error,
+                name: 'WebInterviewError',
             },
         ]
     }
