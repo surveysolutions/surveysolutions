@@ -52,7 +52,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.archiveUtils = archiveUtils;
         }
 
-        
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         public IActionResult MapList(DataTableRequest request)
