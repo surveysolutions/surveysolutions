@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -33,7 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly IStringCompressor zipUtils;
         private readonly IAttachmentContentService attachmentContentService;
-        private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IDesignerUserCredentials designerUserCredentials;
         private readonly IDesignerApiFactory designerApiFactory;
         private readonly ITaskRunner taskRunner;
@@ -62,7 +62,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IAuthorizedUser authorizedUser,
             IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
             IReusableCategoriesStorage reusableCategoriesStorage,
-            IAssignmentsUpgradeService upgradeService,
             IDesignerUserCredentials designerUserCredentials,
             IDesignerApiFactory designerApiFactory,
             ITaskRunner taskRunner)
@@ -80,7 +79,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.authorizedUser = authorizedUser;
             this.pdfStorage = pdfStorage;
             this.reusableCategoriesStorage = reusableCategoriesStorage;
-            this.upgradeService = upgradeService;
             this.designerUserCredentials = designerUserCredentials;
             this.designerApiFactory = designerApiFactory;
             this.taskRunner = taskRunner;
@@ -145,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
                     var result = await questionnaireImportService.ImportImpl(designerApi, questionnaireImportResult, name, isCensusMode, comment, requestUrl, includePdf);
-                    MigrateAssignmentsIfNeed(shouldMigrateAssignments, migrateFrom, result);
+                    MigrateAssignmentsIfNeed(serviceLocatorLocal, shouldMigrateAssignments, migrateFrom, result);
                     return result;
                 });
             });
@@ -153,7 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return questionnaireImportResult;
         }
 
-        private void MigrateAssignmentsIfNeed(bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom,
+        private void MigrateAssignmentsIfNeed(IServiceLocator serviceLocatorLocal, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom,
             QuestionnaireImportResult result)
         {
             if (shouldMigrateAssignments && migrateFrom != null)
@@ -161,7 +159,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 var sourceQuestionnaireId = migrateFrom;
 
                 var processId = Guid.NewGuid();
-                this.upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, result.Identity);
+                var upgradeService = serviceLocatorLocal.GetInstance<IAssignmentsUpgradeService>();
+                upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, result.Identity);
                 result.MigrateAssignmentProcessId = processId;
                 result.Status = QuestionnaireImportStatus.MigrateAssignments;
             }
