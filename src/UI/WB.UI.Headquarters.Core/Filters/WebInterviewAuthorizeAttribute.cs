@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.Filters
                 var controller = (Controller)context.Controller;
 
                 context.Result = controller.View(@"~/Views/WebInterview/Error.cshtml",
-                    new WebInterviewError {Message = errorMessage});
+                    new WebInterviewError {ErrorMessage = errorMessage});
             }
         }
     }
