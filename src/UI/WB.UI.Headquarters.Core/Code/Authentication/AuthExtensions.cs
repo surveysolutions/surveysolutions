@@ -19,7 +19,8 @@ namespace WB.UI.Headquarters.Code.Authentication
                .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
                .AddUserStore<HqUserStore>()
                .AddRoleStore<HqRoleStore>()
-               .AddDefaultTokenProviders();
+               .AddDefaultTokenProviders()
+               .AddSignInManager<HqSignInManager>();
 
             services.AddAuthorization();
 
@@ -36,6 +37,7 @@ namespace WB.UI.Headquarters.Code.Authentication
 
                     return null;
                 };
+
                 opt.Events = new CookieAuthenticationEvents
                 {
                     OnRedirectToLogin = ctx =>
