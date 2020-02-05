@@ -87,7 +87,7 @@ export default {
             }
         },
         contextMenuItems({rowData, rowIndex}) {
-            if (!this.user.isObserver) return null
+            if (!this.user.isObserver || this.user.isObserving) return null
 
             const self = this
             const menu = []
