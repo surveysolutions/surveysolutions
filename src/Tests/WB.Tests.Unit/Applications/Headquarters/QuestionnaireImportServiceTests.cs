@@ -384,7 +384,6 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 globalInfoProvider,
                 Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>(),
                 Mock.Of<IReusableCategoriesStorage>(),
-                Mock.Of<IAssignmentsUpgradeService>(),
                 designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
                 Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
                 taskRunnerMock.Object);
