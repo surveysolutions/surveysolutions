@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
     public class WebInterviewError
     {
-        public string Message { get; set; }
+        public string ErrorMessage { get; set; }
         public bool AllowInterviewRestart { get; set; }
     }
 
