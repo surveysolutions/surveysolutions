@@ -18,6 +18,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
@@ -105,13 +106,13 @@ namespace WB.Tests.Unit.Applications.Headquarters
         }
 
         [Test]
-        public void when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception()
+        public async Task when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception()
         {
             var supportedVerstion = 1;
 
             var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedQuestionnaireVersion() == supportedVerstion);
 
-            var commandServiceException = new Exception();
+            var commandServiceException = new Exception("meessage");
 
             var commandService = new Mock<ICommandService>();
             commandService
@@ -122,13 +123,17 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var designerApi = new Mock<IDesignerApi>();
             SetupGetQuestionnaire(designerApi);
+            var uow = GetUnitOfWorkMock();
 
             var service = CreateIQuestionnaireImportService(commandService: commandService.Object,
-                supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, designerApi: designerApi.Object);
+                supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, designerApi: designerApi.Object, unitOfWork: uow.Object);
 
             // Act-assert
-            var exception = Assert.ThrowsAsync<Exception>(async () => await service.Import(Guid.NewGuid(), "null", false, null, null));
-            Assert.That(exception, Is.SameAs(commandServiceException));
+            var importResult = await service.Import(Guid.NewGuid(), "null", false, null, null);
+
+            Assert.That(importResult.Status, Is.EqualTo(QuestionnaireImportStatus.Error));
+            Assert.That(importResult.ImportError, Is.Not.Empty);
+            uow.Verify(u => u.DiscardChanges(), Times.Once);
         }
 
         [Test]
@@ -357,9 +362,13 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
-                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
+            executor.Setup(x => x.ExecuteAsync(It.IsAny<Func<IServiceLocator, Task<QuestionnaireImportResult>>> ()))
+                .Callback((Func<IServiceLocator, Task<QuestionnaireImportResult>> func) => func.Invoke(serviceLocatorNestedMock.Object));
             InScopeExecutor.Init(executor.Object);
+
+            Mock<ITaskRunner> taskRunnerMock = new Mock<ITaskRunner>();
+            taskRunnerMock.Setup(x => x.Run(It.IsAny<Func<Task<QuestionnaireImportResult>>>()))
+                .Callback((Func<Task<QuestionnaireImportResult>> func) => func.Invoke());
 
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
@@ -377,7 +386,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IReusableCategoriesStorage>(),
                 Mock.Of<IAssignmentsUpgradeService>(),
                 designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
-                Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi));
+                Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
+                taskRunnerMock.Object);
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
 

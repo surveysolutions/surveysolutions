@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters.Services.Impl
             var hc = new HttpClient(restHandler)
             {
                 BaseAddress = new Uri(serviceSettings.Endpoint),
+                Timeout = TimeSpan.FromMinutes(2),
                 DefaultRequestHeaders =
                 {
                     { "User-Agent",  serviceSettings.UserAgent },
