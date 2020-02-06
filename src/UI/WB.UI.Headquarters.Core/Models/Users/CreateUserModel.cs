@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Models.Users
@@ -14,7 +15,12 @@ namespace WB.UI.Headquarters.Models.Users
         public string UserName { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredPasswordErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordRequired), ErrorMessageResourceType = typeof(FieldsAndValidations))]
+        [Compare("Password", ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
         public Guid? SupervisorId { get; set; }
