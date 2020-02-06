@@ -192,8 +192,11 @@ namespace WB.UI.Headquarters.Controllers
 
         public string GenerateUrl(string action, string interviewId, string sectionId = null)
         {
-            return $@"~/WebInterview/{interviewId}/{action}" +
-                   (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
+            return Url.Action(action, new
+            {
+                id = interviewId,
+                sectionId = sectionId
+            });
         }
 
         [HttpGet]
@@ -325,7 +328,6 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Route("{invitationId}/Start")]
-        [AntiForgeryFilter]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StartPost(string invitationId, [FromForm] string password)
         {
@@ -415,7 +417,8 @@ namespace WB.UI.Headquarters.Controllers
 
             TempData[LastCreatedInterviewIdKey] = interviewId;
 
-            return this.Redirect(GenerateUrl("Cover", interviewId));
+            var generateUrl = GenerateUrl("Cover", interviewId);
+            return this.Redirect(generateUrl);
         }
 
         public IActionResult Continue(string id)
@@ -434,6 +437,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [WebInterviewAuthorize]
         [Route("{id:Guid}/Cover")]
+        [AntiForgeryFilter]
         public IActionResult Cover(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -581,8 +585,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
-            var isCaptchaValid = await this.captchaProvider.IsCaptchaValid(Request);
-            if (webInterviewConfig.UseCaptcha && !isCaptchaValid)
+            if (webInterviewConfig.UseCaptcha && !await this.captchaProvider.IsCaptchaValid(Request))
             {
                 var model = this.GetResumeModel(id);
                 model.CaptchaErrors = new List<string>() {Enumerator.Native.Resources.WebInterview.PleaseFillCaptcha};
