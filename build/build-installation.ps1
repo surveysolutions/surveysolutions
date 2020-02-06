@@ -77,6 +77,8 @@ $installationArgs = @(
     "/p:SurveySolutionsVersion=$version";
 )
 
+Log-Message "Calling with params: $installationArgs"
+
 & (GetPathToMSBuild) $installationArgs | Write-Host
 
 $wasBuildSuccessfull = $LASTEXITCODE -eq 0
