@@ -218,7 +218,7 @@
         <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D" >
           <Directory Id="CONFIGFOLDER" Name="Configuration">
           </Directory>
-          <Directory Id="EXPORTSERVICE" Name="ExportService">
+          <Directory Id="EXPORTSERVICEFOLDER" Name="ExportService">
           </Directory>
         </Directory>
       </Directory>
@@ -436,12 +436,12 @@
                       Sequence='20'/>-->
       </Component>
     </ComponentGroup>
-    <ComponentGroup Id="ExportService" Directory="EXPORTSERVICE" >
+    <ComponentGroup Id="ExportService" Directory="EXPORTSERVICEFOLDER" >
             <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
                 <File Id="ExportServiceEXE"
                       Name="WB.Services.Export.Host.exe"
                       DiskId="1"
-                      Source="WB.Services.Export.Host.exe"
+                      Source="[EXPORTSERVICEFOLDER]\WB.Services.Export.Host.exe"
                       Vital="yes"
                       KeyPath="yes" />
                 <ServiceInstall Id="ExportServiceInstall"
