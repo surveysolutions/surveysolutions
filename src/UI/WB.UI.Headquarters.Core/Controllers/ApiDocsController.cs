@@ -14,21 +14,12 @@ namespace WB.UI.Headquarters.Controllers
     [ApiController]
     public class ApiDocsController : ControllerBase
     {
-        private readonly IWebHostEnvironment hostEnvironment;
-
-        public ApiDocsController(IWebHostEnvironment  hostEnvironment)
-        {
-            this.hostEnvironment = hostEnvironment;
-        }
-
         [Route("")]
         [Route("index")]
         [Route("index.html")]
         public IActionResult Index()
         {
-            var pathToHtml = Path.Combine(hostEnvironment.WebRootPath, "apidocs", "index.html");
-            var fileStream = System.IO.File.OpenRead(pathToHtml);
-            return File(fileStream, "text/html");
+            return Redirect("~/apidocs/index.html");
         }
     }
 }
