@@ -40,6 +40,12 @@ if ($HQSourcePath -eq "") {
 $sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "dist"}).FullName
 
 $HQsitePath = Join-path $workdir "HQwork"
+
+#remove old files
+if (!($noDestCleanup)) {
+	Remove-Item $HQsitePath -Force -Recurse
+}
+
 if (!(Test-Path $HQsitePath)) {
 	New-Item $HQsitePath -ItemType Directory
 #	New-Item (Join-Path $HQsitePath "App_Data") -ItemType Directory
@@ -51,7 +57,7 @@ if (!(Test-Path $HQsitePath)) {
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
 #Remove-Item "$HQsitePath\HostMap.config"
 
-#Copy-Item $HQSourcePath\ExportService $HQsitePath\.bin\Export -Force -Recurse
+Copy-Item $HQSourcePath\ExportService $HQsitePath\ExportService -Force -Recurse
 Copy-Item $HQSourcePath\Client $HQsitePath\Client -Force -Recurse
 #Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
@@ -78,9 +84,9 @@ $installationArgs = @(
     "/p:SurveySolutionsVersion=$version";
 )
 
-Log-Message "Calling with params: $installationArgs"
+Log-Message "Calling build with params: $installationArgs" 
 
-& (GetPathToMSBuild) $installationArgs | Write-Host
+& (GetPathToMSBuild) $build | Write-Host
 
 $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
