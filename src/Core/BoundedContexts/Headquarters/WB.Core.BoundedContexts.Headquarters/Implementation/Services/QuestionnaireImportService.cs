@@ -128,19 +128,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaireId);
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-
-            if (statuses.ContainsKey(questionnaireIdentity))
-            {
-                return GetStatus(questionnaireIdentity);
-            }
-
             var questionnaireImportResult = statuses.GetOrAdd(questionnaireIdentity, new QuestionnaireImportResult
             {
                 Identity = questionnaireIdentity,
                 QuestionnaireId = questionnaireIdentity.ToString(),
                 Progress = new Progress(),
-                Status = QuestionnaireImportStatus.Progress
+                Status = QuestionnaireImportStatus.NotStarted
             });
+
+            if (questionnaireImportResult.Status == QuestionnaireImportStatus.Error)
+                questionnaireImportResult.Status = QuestionnaireImportStatus.NotStarted;
+
+            if (questionnaireImportResult.Status != QuestionnaireImportStatus.NotStarted)
+                return questionnaireImportResult;
 
             var bgTask = taskRunner.Run(async () =>
             {
@@ -187,8 +187,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             try
             {
                 // prevent 2 concurrent requests from importing
-                var query = this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156)");
+                var query = this.unitOfWork.Session.CreateSQLQuery("lock table plainstore.questionnairedocuments in EXCLUSIVE mode;");
                 await query.ExecuteUpdateAsync();
+                questionnaireImportResult.Status = QuestionnaireImportStatus.Progress;
 
                 await TriggerPdfRendering(designerApi, questionnaireImportResult.Identity.QuestionnaireId, includePdf);
                 questionnaireImportResult.Progress.Current++;
@@ -208,7 +209,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     foreach (var questionnaireAttachment in questionnaire.Attachments)
                     {
                         if (attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
+                        {
+                            questionnaireImportResult.Progress.Current += 2;
                             continue;
+                        }
 
                         var attachmentContent = await designerApi.DownloadQuestionnaireAttachment(
                             questionnaireAttachment.ContentId, questionnaireAttachment.AttachmentId);
