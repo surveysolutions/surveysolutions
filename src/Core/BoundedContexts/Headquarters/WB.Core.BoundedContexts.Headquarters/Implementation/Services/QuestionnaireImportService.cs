@@ -101,9 +101,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         }
 
 
-        public async Task<QuestionnaireImportResult> ImportAndMigrateAssignments(Guid questionnaireId, string name,
+        public async Task<QuestionnaireImportResult> ImportAndMigrateAssignments(Guid questionnaireId, 
+            string name,
             bool isCensusMode,
-            string comment, string requestUrl, bool includePdf, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom)
+            string comment, 
+            string requestUrl, 
+            bool includePdf, 
+            bool shouldMigrateAssignments, 
+            QuestionnaireIdentity migrateFrom)
         {
             var designerCredentials = designerUserCredentials.Get();
             var designerApi = designerApiFactory.Get(new ScopeDesignerUserCredentials(designerCredentials));
@@ -137,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 Status = QuestionnaireImportStatus.Progress
             });
 
-            _ = taskRunner.Run(async () =>
+            var bgTask = taskRunner.Run(async () =>
             {
                 return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
@@ -147,6 +152,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     return result;
                 });
             });
+
+            if (includePdf == false) // assume this is automation request
+            {
+                await bgTask;
+                return GetStatus(questionnaireIdentity);
+            }
 
             return questionnaireImportResult;
         }
