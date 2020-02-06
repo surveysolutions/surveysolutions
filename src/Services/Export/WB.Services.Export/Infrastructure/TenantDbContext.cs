@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -49,15 +50,19 @@ namespace WB.Services.Export.Infrastructure
             // with zero information on who made a call
             this.connectionString = new Lazy<string>(() =>
             {
-                if (tenantContext.Tenant == null)
-                    throw new ArgumentException(nameof(TenantDbContext) +
-                                                " cannot be resolved outside of configured ITenantContext");
+                return connectionStringCache.GetOrAdd(tenantContext.Tenant.SchemaName(), tenant =>
+                {
+                    if (tenantContext.Tenant == null)
+                        throw new ArgumentException($"{nameof(TenantDbContext)} cannot be resolved outside of configured ITenantContext");
 
-                var connectionStringBuilder =  new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
-                connectionStringBuilder.SearchPath = tenantContext.Tenant.SchemaName();
-                return connectionStringBuilder.ToString();
+                    var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
+                    connectionStringBuilder.SearchPath = tenant;
+                    return connectionStringBuilder.ToString();
+                });
             });
         }
+
+        private static readonly ConcurrentDictionary<string, string> connectionStringCache = new ConcurrentDictionary<string, string>();
 
         public DbSet<InterviewReference> InterviewReferences { get; set; }
         public DbSet<Metadata> MetadataSet { get; set; }
@@ -68,6 +73,7 @@ namespace WB.Services.Export.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
+
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseNpgsql(connectionString.Value,
