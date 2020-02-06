@@ -65,7 +65,7 @@ $file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match
 $version = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName).FileVersion
 #    [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 
-setupExportService "$HQsitePath\.bin\Export\appsettings.json"
+setupExportService "$HQsitePath\ExportService\appsettings.json"
 
 # Cleaning up slack configuration section from config
 #  $hqConfig = "$HQsitePath\Web.config"
