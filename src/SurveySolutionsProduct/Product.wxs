@@ -258,7 +258,7 @@
     <ComponentGroup Id="SettingsUpdate" Directory="INSTALLSITEFOLDER" >
         <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA" NeverOverwrite="yes">
             <!--<CreateFolder/>-->
-            <!--<File Source="appsettings.Production.ini" PatchIgnore="yes" />-->
+            <File Source="appsettings.Production.ini" PatchIgnore="yes" />
 
             <!--<IniFile Id ="IniHeadquartersBaseUrl"
                      Name="appsettings.Production.ini"
@@ -267,15 +267,14 @@
                      Key="BaseUrl"
                      Value=""/>-->
 
-            <IniFile Id ="IniHeadquartersTenantName"
+          <IniFile Id ="IniHeadquartersTenantName"
                      Name="appsettings.Production.ini"
                      Section="Headquarters"
                      Action="addLine"
                      Key="TenantName"
                      Value="hq"/>
 
-
-          <IniFile Id ="IniConnectionString"
+            <IniFile Id ="IniConnectionString"
                      Name="appsettings.Production.ini"
                      Section="ConnectionString"
                      Action="addLine"
@@ -437,11 +436,9 @@
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="ExportService" Directory="EXPORTSERVICEFOLDER" >
-            <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
-                <File Id="ExportServiceEXE"
-                      Name="WB.Services.Export.Host.exe"
-                      DiskId="1"
-                      Source="[EXPORTSERVICEFOLDER]\WB.Services.Export.Host.exe"
+            <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B000-1F22B2B48F74">
+                <File Id="WB.Services.Export.Host.exe"
+                      Source="WB.Services.Export.Host.exe"
                       Vital="yes"
                       KeyPath="yes" />
                 <ServiceInstall Id="ExportServiceInstall"
