@@ -11,6 +11,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.Users;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -111,5 +112,52 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.Administration_InterviewPackages)]
         public IActionResult InterviewPackages() => this.View("Index");
+
+        [HttpGet]
+        [AntiForgeryFilter]
+        [ActivePage(MenuItem.Administration_ChangePassword)]
+        public IActionResult ResetPrivilegedUserPassword() => this.View("Index", new { });
+
+        [HttpPost]
+        [AntiForgeryFilter]
+        [ValidateAntiForgeryToken]
+        [ActivePage(MenuItem.Administration_ChangePassword)]
+        public async Task<IActionResult> ResetPrivilegedUserPassword([FromForm] ChangePasswordByNameModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await users.FindByNameAsync(model.UserName);
+                if (user == null)
+                {
+                    ModelState.AddModelError(nameof(ChangePasswordByNameModel.UserName), Users.UserNotFound); 
+                }
+                else
+                {
+                    var resetToken = await users.GeneratePasswordResetTokenAsync(user);
+                    var result = await users.ResetPasswordAsync(user, resetToken, model.Password);
+                    if (result.Succeeded)
+                    {
+                        return View("Index", new
+                        {
+                            Model = model,
+                            SucceededText = string.Format(Users.PasswordChanged, model.UserName),
+                        });
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            this.ModelState.AddModelError(nameof(ChangePasswordByNameModel.Password), error.Description);
+                        }
+                    }
+                }
+            }
+
+            return View("Index", new
+            {
+                Model = model,
+                ModelState = this.ModelState.ErrorsToJsonResult()
+            });
+        }
     }
 }

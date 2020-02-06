@@ -91,18 +91,19 @@ Exception details:<br />
 
         private void HandleInterviewAccessError(ExceptionContext filterContext, string message)
         {
-            filterContext.ExceptionHandled = true;
-            var p = filterContext.HttpContext.RequestServices.GetRequiredService<IModelMetadataProvider>();
 
+            var p = filterContext.HttpContext.RequestServices.GetRequiredService<IModelMetadataProvider>();
             filterContext.Result = new ViewResult
             {
                 ViewName = @"~/Views/WebInterview/Error.cshtml",
 
                 ViewData = new ViewDataDictionary(p, filterContext.ModelState)
                 {
-                    Model = new WebInterviewError { Message = message }
+                    Model = new WebInterviewError { ErrorMessage = message }
                 }
             };
+
+            filterContext.ExceptionHandled = true;
         }
     }
 }

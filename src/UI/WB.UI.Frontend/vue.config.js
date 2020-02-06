@@ -21,7 +21,7 @@ const locales = {
         "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport",
         "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel", "AuditLog", "OutdatedBrowser", "InterviewerAuditRecord"
         , "Roles"],
-    webtester: ["WebInterviewUI", "WebInterview", "Common"],
+    webtester: ["WebInterviewUI", "WebInterview", "Common", "Details"],
     webinterview: ["WebInterviewUI", "WebInterview", "Common", "Details"]
 }
 
@@ -101,7 +101,7 @@ const fileTargets = [
     { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterDist, "wwwroot", "fonts") },
     { source: join("dist", "css", "*.*"), destination: path.join(webTesterDist, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
-    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js", "locale") },
+    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
 
 ]
 

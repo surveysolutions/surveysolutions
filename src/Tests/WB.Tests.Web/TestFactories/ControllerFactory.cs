@@ -26,6 +26,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Controllers;
@@ -44,13 +45,17 @@ namespace WB.Tests.Web.TestFactories
             IUserViewFactory userViewFactory = null,
             ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory = null)
         {
-            return new ReportsController(
+            var reportsController = new ReportsController(
                 mapReport ?? Mock.Of<IMapReport>(),
                 Mock.Of<IChartStatisticsViewFactory>(),
                 allUsersAndQuestionnairesFactory ?? Mock.Of<IAllUsersAndQuestionnairesFactory>(_ => _.Load() == new AllUsersAndQuestionnairesView() { Questionnaires = new TemplateViewItem[0] }),
                 new TestInMemoryWriter<InterviewSummary>(),
-                userViewFactory ?? Mock.Of<IUserViewFactory>(), 
+                userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>());
+
+            reportsController.Url = Mock.Of<IUrlHelper>();
+
+            return reportsController;
         }
 
         public InterviewerControllerBase InterviewerApiController(ITabletInformationService tabletInformationService = null,
@@ -116,9 +121,23 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<IAssignmentPasswordGenerator>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                Mock.Of<IUnitOfWork>(),
                 commandTransformator
                 );
 
+            return result;
+        }
+
+        public InstallController InstallController(ISupportedVersionProvider supportedVersionProvider = null,
+            SignInManager<HqUser> identityManager = null,
+            UserManager<HqUser> userManager = null,
+            IUserRepository userRepository = null)
+        {
+            var result = new InstallController(
+                supportedVersionProvider ?? Abc.Create.Service.SupportedVersionProvider(),
+                identityManager ?? Create.Service.SignInManager(),
+                userManager ?? Create.Service.UserManager(),
+                userRepository);
             return result;
         }
     }

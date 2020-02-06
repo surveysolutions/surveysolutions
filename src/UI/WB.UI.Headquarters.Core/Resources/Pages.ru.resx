@@ -815,9 +815,9 @@
     <comment>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</comment>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-    <value>Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;
-Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{0}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
-    <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
+      <value>Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;
+Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
+      <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
   </data>
   <data name="FilterTitle" xml:space="preserve">
     <value>Фильтры</value>
@@ -1439,5 +1439,11 @@
   <data name="Admin_InterviewPackages_Reason" xml:space="preserve">
       <value>Причина</value>
       <comment>Причина</comment>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+      <value>Создать пользователя</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+      <value>Сброс пользовательского пароля</value>
   </data>
 </root>

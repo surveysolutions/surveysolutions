@@ -20,11 +20,10 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Tests.Abc;
-
-using WB.UI.Headquarters.Services;
+using WB.UI.Headquarters.Services.Impl;
 using File = WB.UI.Headquarters.Services.File;
 
-namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.QuestionnaireExporterTest
+namespace WB.Tests.Web.Headquarters.QuestionnaireExporterTest
 {
     public class when_export_simple_questionnaire_without_additions : QuestionnaireExporterSpecification
     {
@@ -230,8 +229,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.QuestionnaireExp
             this.fixture = new Fixture();
             fixture.Customize(new AutoConfiguredMoqCustomization());
 
-            this.questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.gA, 1);
-            this.questionnaireDocument = Create.Entity.QuestionnaireDocument(id: Id.gA);
+            this.questionnaireIdentity = Abc.Create.Entity.QuestionnaireIdentity(Id.gA, 1);
+            this.questionnaireDocument = Abc.Create.Entity.QuestionnaireDocument(id: Id.gA);
 
             Context();
 

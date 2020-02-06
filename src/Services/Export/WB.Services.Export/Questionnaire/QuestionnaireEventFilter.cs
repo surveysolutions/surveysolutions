@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Events.Interview.Base;
@@ -26,7 +27,7 @@ namespace WB.Services.Export.Questionnaire
             this.databaseSchemaService = databaseSchemaService;
         }
 
-        public async Task<List<Event>> FilterAsync(ICollection<Event> feed)
+        public async Task<List<Event>> FilterAsync(ICollection<Event> feed, CancellationToken cancellationToken = default)
         {
             var filterWatch = Stopwatch.StartNew();
             List<Event> result = new List<Event>();
@@ -46,17 +47,17 @@ namespace WB.Services.Export.Questionnaire
                     }
 
                     InterviewReference reference;
-                    
+
                     switch (@event.Payload)
                     {
                         case InterviewCreated interviewCreated:
-                            reference = await AddInterviewReferenceAsync(@event, interviewCreated.QuestionnaireIdentity);
+                            reference = await AddInterviewReferenceAsync(@event, interviewCreated.QuestionnaireIdentity, cancellationToken);
                             break;
                         case InterviewOnClientCreated interviewOnClientCreated:
-                            reference = await AddInterviewReferenceAsync(@event,interviewOnClientCreated.QuestionnaireIdentity);
+                            reference = await AddInterviewReferenceAsync(@event, interviewOnClientCreated.QuestionnaireIdentity, cancellationToken);
                             break;
                         case InterviewFromPreloadedDataCreated fromPreloaded:
-                            reference = await AddInterviewReferenceAsync(@event, fromPreloaded.QuestionnaireIdentity);
+                            reference = await AddInterviewReferenceAsync(@event, fromPreloaded.QuestionnaireIdentity, cancellationToken);
                             break;
                         case InterviewDeleted _:
                         case InterviewHardDeleted _:
@@ -75,7 +76,7 @@ namespace WB.Services.Export.Questionnaire
                             $"Encountered interview id {@event.EventSourceId} without corresponding InterviewCreated or InterviewOnClientCreated events");
                     }
 
-                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(reference.QuestionnaireId));
+                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(reference.QuestionnaireId), cancellationToken);
 
                     if (!questionnaire.IsDeleted)
                     {
@@ -96,7 +97,7 @@ namespace WB.Services.Export.Questionnaire
 
             foreach (var questionnaireId in questionnaireIds)
             {
-                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
+                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, cancellationToken);
                 databaseSchemaService.CreateOrRemoveSchema(questionnaire);
             }
 
@@ -104,14 +105,14 @@ namespace WB.Services.Export.Questionnaire
             return result;
         }
 
-        private async Task<InterviewReference> AddInterviewReferenceAsync(Event @event, string questionnaireIdentity)
+        private async Task<InterviewReference> AddInterviewReferenceAsync(Event @event, string questionnaireIdentity, CancellationToken cancellationToken)
         {
-            InterviewReference reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
+            InterviewReference reference = await this.dbContext.InterviewReferences.FindAsync(new object[] { @event.EventSourceId}, cancellationToken);
             if (reference == null)
             {
                 reference = new InterviewReference { QuestionnaireId = questionnaireIdentity, InterviewId = @event.EventSourceId };
 
-                await this.dbContext.AddAsync(reference);
+                this.dbContext.InterviewReferences.Add(reference);
             }
 
             return reference;

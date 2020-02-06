@@ -22,13 +22,13 @@ namespace WB.Services.Scheduler.Services.Implementation
         }
 
         [SuppressMessage("Possible SQL injection vulnerability", "EF1000")]
-        public Task NotifyOnJobCancellationAsync(long jobId)
+        public async Task NotifyOnJobCancellationAsync(long jobId)
         {
             using var scope = serviceProvider.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<JobContext>();
+            await using var db = scope.ServiceProvider.GetRequiredService<JobContext>();
             logger.LogDebug("Sending request to cancel jobId: {jobId}", jobId);
             string sql = "notify job_cancellation, '" + jobId + "'";
-            return db.Database.ExecuteSqlRawAsync(sql);
+            await db.Database.ExecuteSqlRawAsync(sql);
         }
 
         public string Channel { get; } = "job_cancellation";

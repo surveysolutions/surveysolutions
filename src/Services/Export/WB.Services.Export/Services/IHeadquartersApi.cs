@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Refit;
 using WB.Services.Export.Assignment;
@@ -17,10 +18,10 @@ namespace WB.Services.Export.Services
     public interface IHeadquartersApi
     {
         [Get("/api/export/v1/questionnaire/{id}")]
-        Task<QuestionnaireDocument> GetQuestionnaireAsync([AliasAs("id")] QuestionnaireId questionnaireId);
+        Task<QuestionnaireDocument> GetQuestionnaireAsync([AliasAs("id")] QuestionnaireId questionnaireId, CancellationToken cancellationToken);
 
         [Get("/api/export/v1/questionnaire/{questionnaireId}/category/{categoryId}")]
-        Task<CategoryItem[]> GetCategoriesAsync(QuestionnaireId questionnaireId, Guid categoryId);
+        Task<CategoryItem[]> GetCategoriesAsync(QuestionnaireId questionnaireId, Guid categoryId, CancellationToken cancellationToken);
 
         [Get("/api/export/v1/questionnaire/{id}/pdf")]
         Task<HttpContent> GetPdfAsync([AliasAs("id")] QuestionnaireId questionnaireId, Guid? translation = null);

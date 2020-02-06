@@ -56,6 +56,7 @@ using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.UnderConstruction;
 using WB.UI.Shared.Web.Versions;
 
@@ -100,6 +101,7 @@ namespace WB.UI.Headquarters
 
             autofacKernel.Load(
                 new NcqrsModule(),
+                new SerilogLoggerModule(),
                 eventStoreModule,
                 new InfrastructureModule(),
                 new DataCollectionSharedKernelModule(),
@@ -361,8 +363,6 @@ namespace WB.UI.Headquarters
 
                 endpoints.MapHub<WebInterview>("interview",
                     options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
-                
-                endpoints.MapRazorPages();
             });
         }
 

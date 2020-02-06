@@ -10,6 +10,10 @@
         </div>
         <div class="extra-margin-bottom">
             <div class="profile">
+                <div class="col-sm-7"
+                    v-if="isInterviewer || isSupervisor || isHeadquarters">
+                    <p v-html="$t('Pages.Supervisor_CreateText', {link: '/Users/Upload'})"></p>
+                </div>
                 <div class="col-sm-12">
                     <form-group
                         :label="$t('FieldsAndValidations.UserNameFieldName')"
@@ -17,7 +21,8 @@
                         :mandatory="true">
                         <TextInput
                             v-model.trim="userName"
-                            :haserror="modelState['UserName'] !== undefined"/>
+                            :haserror="modelState['UserName'] !== undefined"
+                            id="UserName"/>
                     </form-group>
                     <form-group
                         v-if="isInterviewer"
@@ -41,7 +46,8 @@
                         <TextInput
                             type="password"
                             v-model.trim="password"
-                            :haserror="modelState['Password'] !== undefined"/>
+                            :haserror="modelState['Password'] !== undefined"
+                            id="Password"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
@@ -50,7 +56,8 @@
                         <TextInput
                             type="password"
                             v-model.trim="confirmPassword"
-                            :haserror="modelState['ConfirmPassword'] !== undefined"/>
+                            :haserror="modelState['ConfirmPassword'] !== undefined"
+                            id="ConfirmPassword"/>
                     </form-group>
                     <p v-if="lockMessage != null">{{lockMessage}}</p>
                     <form-group>
@@ -92,21 +99,24 @@
                         :error="modelState['PersonName']">
                         <TextInput
                             v-model.trim="personName"
-                            :haserror="modelState['PersonName'] !== undefined"/>
+                            :haserror="modelState['PersonName'] !== undefined"
+                            id="PersonName"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.EmailFieldName')"
                         :error="modelState['Email']">
                         <TextInput
                             v-model.trim="email"
-                            :haserror="modelState['Email'] !== undefined"/>
+                            :haserror="modelState['Email'] !== undefined"
+                            id="Email"/>
                     </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
                         :error="modelState['PhoneNumber']">
                         <TextInput
                             v-model.trim="phoneNumber"
-                            :haserror="modelState['PhoneNumber'] !== undefined"/>
+                            :haserror="modelState['PhoneNumber'] !== undefined"
+                            id="PhoneNumber"/>
                     </form-group>
                 </div>
 
@@ -116,9 +126,11 @@
                             type="submit"
                             class="btn btn-success"
                             style="margin-right:5px"
+                            id="btnCreate"
                             @click="createAccount">{{$t('Pages.Create')}}</button>
                         <a class="btn btn-default"
-                            v-bind:href="referrerUrl">
+                            v-bind:href="referrerUrl"
+                            id="lnkCancel">
                             {{$t('Common.Cancel')}}
                         </a>
                     </div>

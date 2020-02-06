@@ -14,10 +14,12 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Controllers;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
 
 using WB.UI.Headquarters.API.WebInterview;
+using WB.UI.Headquarters.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 {
@@ -195,7 +197,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument));
             var webInterviewInterviewEntityFactory = Web.Create.Service.WebInterviewInterviewEntityFactory();
 
-            var controller = new InterviewDataController(questionnaireStorage,
+            var controller = new WB.UI.Headquarters.Controllers.Api.WebInterview.InterviewDataController(questionnaireStorage,
                 statefulInterviewRepository,
                 Mock.Of<IWebInterviewNotificationService>(),
                 webInterviewInterviewEntityFactory,

@@ -33,5 +33,6 @@ namespace WB.Services.Export.Models
         public long ProcessId { get; set; }
 
         private string StorageTypeString => this.StorageType == null ? "NoExternal" : this.StorageType.ToString();
+        public bool ShouldDropTenantSchema { get; set; } = false;
     }
 }

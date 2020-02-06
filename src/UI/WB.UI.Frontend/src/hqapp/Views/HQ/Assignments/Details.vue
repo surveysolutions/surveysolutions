@@ -162,11 +162,11 @@ export default {
         },
         updatedDate() {
             var date = moment.utc(this.model.updatedAtUtc)
-            return date.local().format(global.input.settings.clientDateTimeFormat)
+            return date.local().format(DateFormats.dateTime)
         },
         createdDate() {
             var date = moment.utc(this.model.createdAtUtc)
-            return date.local().format(global.input.settings.clientDateTimeFormat)
+            return date.local().format(DateFormats.dateTime)
         },
         isAudioRecordingEnabled() {
             return this.model.isAudioRecordingEnabled ? this.$t('Common.Yes') : this.$t('Common.No')

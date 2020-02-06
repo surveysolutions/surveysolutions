@@ -5,16 +5,13 @@ using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Infrastructure.Native.Storage;
-using WB.Tests.Abc;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Tests.Abc;
 
-
-namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
+namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 {
     public class when_map_assignment_to_assignmentApiDocument_AssignmentViewFactoryTests
     {
@@ -31,32 +28,32 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 new InterviewSummary()
             };
 
-            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.TextQuestion(Id.g7, preFilled: true),
-                    Create.Entity.GpsCoordinateQuestion(Id.g3, isPrefilled: true)
+            var questionnaire = Abc.Create.Entity.PlainQuestionnaire(Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Abc.Create.Entity.TextQuestion(Id.g7, preFilled: true),
+                    Abc.Create.Entity.GpsCoordinateQuestion(Id.g3, isPrefilled: true)
             ));
 
-            this.assignment = Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.g1), 10, Id.g2, "int", summary);
+            this.assignment = Abc.Create.Entity.Assignment(1, Abc.Create.Entity.QuestionnaireIdentity(Id.g1), 10, Id.g2, "int", summary);
             this.assignment.IdentifyingData = new List<IdentifyingAnswer>
             {
-                IdentifyingAnswer.Create(assignment, questionnaire, "test", Create.Identity(Id.g7)),
-                IdentifyingAnswer.Create(assignment, questionnaire, "test", Create.Identity(Id.g3)),
+                IdentifyingAnswer.Create(assignment, questionnaire, "test", Abc.Create.Identity(Id.g7)),
+                IdentifyingAnswer.Create(assignment, questionnaire, "test", Abc.Create.Identity(Id.g3)),
             };
             this.assignment.Answers = new List<InterviewAnswer>
             {
                 new InterviewAnswer
                 {
-                    Identity = Create.Identity(Id.g3),
+                    Identity = Abc.Create.Identity(Id.g3),
                     Answer = TextAnswer.FromString("answer1")
                 },
                 new InterviewAnswer
                 {
-                    Identity = Create.Identity(Id.g7),
+                    Identity = Abc.Create.Identity(Id.g7),
                     Answer = TextAnswer.FromString("answer2")
                 },
                 new InterviewAnswer
                 {
-                    Identity = Create.Identity(Id.g3),
+                    Identity = Abc.Create.Identity(Id.g3),
                     Answer = GpsAnswer.FromGeoPosition(new GeoPosition(10.0, 20.0, 10, 10, DateTimeOffset.MaxValue))
                 }
             };
@@ -117,34 +114,34 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 new InterviewSummary()
             };
 
-            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.TextQuestion(Id.g7, preFilled: true),
-                Create.Entity.GpsCoordinateQuestion(Id.g3, isPrefilled: true)
+            var questionnaire = Abc.Create.Entity.PlainQuestionnaire(Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Abc.Create.Entity.TextQuestion(Id.g7, preFilled: true),
+                Abc.Create.Entity.GpsCoordinateQuestion(Id.g3, isPrefilled: true)
             ));
 
-            this.assignment = Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.g1),
+            this.assignment = Abc.Create.Entity.Assignment(1, Abc.Create.Entity.QuestionnaireIdentity(Id.g1),
                     quantity: null, assigneeSupervisorId: Id.g2, responsibleName: "int", interviewSummary: summary);
 
             this.assignment.IdentifyingData = new List<IdentifyingAnswer>
             {
-                IdentifyingAnswer.Create(assignment, questionnaire, "test", Create.Identity(Id.g7)),
-                IdentifyingAnswer.Create(assignment, questionnaire, "test", Create.Identity(Id.g3)),
+                IdentifyingAnswer.Create(assignment, questionnaire, "test", Abc.Create.Identity(Id.g7)),
+                IdentifyingAnswer.Create(assignment, questionnaire, "test", Abc.Create.Identity(Id.g3)),
             };
             this.assignment.Answers = new List<InterviewAnswer>
             {
                 new InterviewAnswer
                 {
-                    Identity = Create.Identity(Id.g3),
+                    Identity = Abc.Create.Identity(Id.g3),
                     Answer = TextAnswer.FromString("answer1")
                 },
                 new InterviewAnswer
                 {
-                    Identity = Create.Identity(Id.g7),
+                    Identity = Abc.Create.Identity(Id.g7),
                     Answer = TextAnswer.FromString("answer2")
                 },
                 new InterviewAnswer
                 {
-                    Identity = Create.Identity(Id.g3),
+                    Identity = Abc.Create.Identity(Id.g3),
                     Answer = GpsAnswer.FromGeoPosition(new GeoPosition(10.0, 20.0, 10, 10, DateTimeOffset.MaxValue))
                 }
             };

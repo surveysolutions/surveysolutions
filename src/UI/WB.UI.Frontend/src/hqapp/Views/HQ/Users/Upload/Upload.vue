@@ -148,7 +148,7 @@ export default {
                 .catch(e => {
                     if (e.response.data) toastr.error(e.response.data)
                     else if(e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage)
-                    else toastr.error(window.input.settings.messages.unhandledExceptionMessage)
+                    else toastr.error(self.$t('Pages.GlobalSettings_UnhandledExceptionMessage'))
                 })
         },
         updateStatus() {

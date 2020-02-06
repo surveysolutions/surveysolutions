@@ -1,12 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Dapper;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using WB.Services.Scheduler.Services;
 using WB.Services.Scheduler.Services.Implementation;
 using WB.Services.Scheduler.Services.Implementation.HostedServices;
@@ -45,7 +41,7 @@ namespace WB.Services.Scheduler
             services.AddTransient<IJobWorker, JobWorker>();
             services.AddTransient<IJobExecutor, JobExecutor>();
             services.AddProgressReporter();
-
+            services.AddTransient<IJobContextMigrator, JobContextMigrator>();
             services.AddDbContext<JobContext>(ops =>
                 ops
                     .UseNpgsql(configuration.GetConnectionString(connectionName)));
@@ -67,34 +63,6 @@ namespace WB.Services.Scheduler
         {
             services.AddTransient<THandler>();
             SchedulerGlobalConfiguration.RegisterJob(typeof(THandler).GetTypeInfo(), name);
-        }
-
-        public static void StartScheduler(this IApplicationBuilder app)
-        {
-            var serviceProvider = app.ApplicationServices;
-
-            using var scope = serviceProvider.CreateScope();
-            var db = scope.ServiceProvider.GetService<JobContext>();
-
-            serviceProvider.GetService<ILogger<JobContext>>().LogInformation("Running scheduler database migrations");
-            EnsurePublicSchemaExists(db.Database);
-            db.Database.Migrate();
-        }
-
-        private static void EnsurePublicSchemaExists(DatabaseFacade db)
-        {
-            try
-            {
-                db.GetDbConnection().Execute("create schema if not exists public");
-            }
-            catch
-            { /* 
-                    If DB is not created, then db.Database.MigrateAsync will create it with public schema
-                    but if there is already created DB without public schema, them MigrateAsync will fail.
-                    So it's OK to fail here and om om om exception and fail later on Migrate if there is a 
-                    problem with migrations or DB access
-                 */
-            }
         }
     }
 }
