@@ -51,8 +51,8 @@ if (!(Test-Path $HQsitePath)) {
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
 #Remove-Item "$HQsitePath\HostMap.config"
 
-Copy-Item $HQSourcePath\ExportService\* $HQsitePath\.bin\Export -Force -Recurse
-Copy-Item $HQSourcePath\Client\* $HQsitePath\Client -Force -Recurse
+#Copy-Item $HQSourcePath\ExportService $HQsitePath\.bin\Export -Force -Recurse
+Copy-Item $HQSourcePath\Client $HQsitePath\Client -Force -Recurse
 #Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
