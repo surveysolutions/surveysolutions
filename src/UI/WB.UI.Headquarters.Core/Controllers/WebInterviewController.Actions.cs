@@ -19,7 +19,7 @@ using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [WebInterviewErrorFilter]
+    [TypeFilter(typeof(WebInterviewErrorFilterAttribute))]
     [WebInterviewAuthorize]
     public class WebInterviewBinaryController : Controller
     {

@@ -20,6 +20,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -41,7 +42,7 @@ using WB.UI.Shared.Web.Services;
 namespace WB.UI.Headquarters.Controllers
 {
     [BrowsersRestriction]
-    [WebInterviewErrorFilter]
+    [TypeFilter(typeof(WebInterviewErrorFilterAttribute))]
     [Route("WebInterview")]
     public class WebInterviewController : Controller
     {
@@ -142,6 +143,17 @@ namespace WB.UI.Headquarters.Controllers
             this.captchaConfig = captchaConfig;
             this.serviceLocator = serviceLocator;
         }
+
+        [Route("Error")]
+        public ActionResult Error()
+        {
+            var errorMessage = TempData["WebInterview.ErrorMessage"] as string;
+            return this.View("Error", new WebInterviewError()
+            {
+                ErrorMessage = errorMessage
+            });
+        }
+
 
         [WebInterviewAuthorize]
         [Route("{id:Guid}/Section/{sectionId}")]
@@ -436,7 +448,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [WebInterviewAuthorize]
-        [Route("{id:Guid}/Cover")]
+        [Route("{id}/Cover")]
         [AntiForgeryFilter]
         public IActionResult Cover(string id)
         {

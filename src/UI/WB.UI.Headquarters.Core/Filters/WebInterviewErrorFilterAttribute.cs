@@ -17,6 +17,13 @@ namespace WB.UI.Headquarters.Filters
 {
     public class WebInterviewErrorFilterAttribute : ExceptionFilterAttribute
     {
+        private readonly ITempDataDictionaryFactory tempDataDictionaryFactory;
+
+        public WebInterviewErrorFilterAttribute(ITempDataDictionaryFactory tempDataDictionaryFactory)
+        {
+            this.tempDataDictionaryFactory = tempDataDictionaryFactory;
+        }
+
         public override void OnException(ExceptionContext filterContext)
         {
             var interviewException = filterContext.Exception.GetSelfOrInnerAs<InterviewException>();
@@ -91,18 +98,9 @@ Exception details:<br />
 
         private void HandleInterviewAccessError(ExceptionContext filterContext, string message)
         {
-
-            var p = filterContext.HttpContext.RequestServices.GetRequiredService<IModelMetadataProvider>();
-            filterContext.Result = new ViewResult
-            {
-                ViewName = @"~/Views/WebInterview/Error.cshtml",
-
-                ViewData = new ViewDataDictionary(p, filterContext.ModelState)
-                {
-                    Model = new WebInterviewError { ErrorMessage = message }
-                }
-            };
-
+            var tempData = tempDataDictionaryFactory.GetTempData(filterContext.HttpContext);
+            tempData["WebInterview.ErrorMessage"] = message;
+            filterContext.Result = new RedirectToActionResult("Error", "WebInterview", new WebInterviewError { ErrorMessage = message });
             filterContext.ExceptionHandled = true;
         }
     }
