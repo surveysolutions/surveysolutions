@@ -6,12 +6,12 @@
                     <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
                 </li>
             </ol>
-            <h1>{{$t('Pages.Create')}} {{userInfo.role}}</h1>
+            <h1>{{title}}</h1>
         </div>
         <div class="extra-margin-bottom">
             <div class="profile">
                 <div class="col-sm-7"
-                    v-if="isInterviewer || isSupervisor || isHeadquarters">
+                    v-if="isInterviewer || isSupervisor">
                     <p v-html="$t('Pages.Supervisor_CreateText', {link: '/Users/Upload'})"></p>
                 </div>
                 <div class="col-sm-12">
@@ -143,8 +143,12 @@
 <script>
 import Vue from 'vue'
 import {each} from 'lodash'
+import VuePageTitle from 'vue-page-title'
+ 
+Vue.use(VuePageTitle, {})
 
 export default {
+    title: (context) => context.title,
     data() {
         return {
             modelState: {},
@@ -209,6 +213,9 @@ export default {
             if (this.isApiUser) return '../../ApiUsers'
 
             return '/'
+        },
+        title(){
+            return `${this.$t('Pages.Create')} ${this.$t(`Roles.${this.userInfo.role}`)}`
         },
     },
     watch: {
