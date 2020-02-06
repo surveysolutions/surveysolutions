@@ -21,7 +21,7 @@
             ref="table"
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"
-            :supportContextMenu="user.isObserver"
+            :supportContextMenu="user.isObserver && !user.isObserving"
             :selectable="user.isAdministrator"
             selectableId="userId"
             @selectedRowsChanged="rows => selectedSupervisors = rows"
@@ -146,8 +146,7 @@ export default {
                         orderable: true,
                         className: 'nowrap',
                         render: function(data, type, row) {
-                            if (self.user.isObserver) return data
-                            else return `<a href='${self.api.editUrl}/${row.userId}'>${data}</a>`
+                            return `<a href='${self.api.editUrl}/${row.userId}'>${data}</a>`
                         },
                     },
                     {

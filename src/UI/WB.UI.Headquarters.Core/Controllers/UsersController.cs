@@ -102,7 +102,8 @@ namespace WB.UI.Headquarters.Controllers
                     Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToUiString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
-                    IsLockedBySupervisor = user.IsLockedBySupervisor
+                    IsLockedBySupervisor = user.IsLockedBySupervisor,
+                    IsObserving = this.authorizedUser.IsObserving
                 },
                 Api = new
                 {
@@ -344,7 +345,6 @@ namespace WB.UI.Headquarters.Controllers
                 ShowSupervisorColumn = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
                 CanArchiveUnarchive = authorizedUser.IsAdministrator,
                 CanArchiveMoveToOtherTeam = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
-                ShowContextMenu = authorizedUser.IsObserver,
                 InterviewerIssues = new[]
                 {
                     new ComboboxViewItem() { Key = InterviewerFacet.None.ToString(),                  Value = EnumNames.InterviewerFacet_None   },

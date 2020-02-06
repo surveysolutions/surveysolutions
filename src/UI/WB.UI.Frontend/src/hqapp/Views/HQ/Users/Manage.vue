@@ -98,6 +98,7 @@
                             class="btn btn-success"
                             style="margin-right:5px"
                             id="btnUpdateUser"
+                            v-bind:disabled="userInfo.isObserving"
                             @click="updateAccount">{{$t('Pages.Update')}}</button>
                         <a class="btn btn-default"
                             v-bind:href="referrerUrl"
@@ -149,6 +150,7 @@
                             class="btn btn-success"
                             style="margin-right:5px"
                             id="btnUpdatePassword"
+                            v-bind:disabled="userInfo.isObserving"
                             @click="updatePassword">{{$t('Pages.Update')}}</button>
                         <a class="btn btn-default"
                             v-bind:href="referrerUrl"
