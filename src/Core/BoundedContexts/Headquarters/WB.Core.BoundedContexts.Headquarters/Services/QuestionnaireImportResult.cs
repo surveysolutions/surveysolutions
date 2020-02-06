@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
     public enum QuestionnaireImportStatus
     {
+        NotStarted,
         Progress,
         Finished,
         Error,
