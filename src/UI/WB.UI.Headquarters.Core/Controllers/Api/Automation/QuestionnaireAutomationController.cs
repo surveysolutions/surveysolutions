@@ -72,6 +72,7 @@ namespace WB.UI.Headquarters.API.Automation
         }
 
         [HttpGet]
+        [Route("IsQuestionnaireImported")]
         public bool IsQuestionnaireImported(Guid questionnaireId, long version)
         {
             return questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(questionnaireId, version), null)
