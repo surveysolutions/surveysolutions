@@ -186,9 +186,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             bool shouldRollback = true;
             try
             {
-                // prevent 2 concurrent requests from importing
-                var query = this.unitOfWork.Session.CreateSQLQuery("lock table plainstore.questionnairedocuments in EXCLUSIVE mode;");
-                await query.ExecuteUpdateAsync();
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Progress;
 
                 await TriggerPdfRendering(designerApi, questionnaireImportResult.Identity.QuestionnaireId, includePdf);
