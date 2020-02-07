@@ -85,6 +85,7 @@ $installationArgs = @(
 )
 
 Log-Message "Calling build with params: $installationArgs" 
+Log-Message "MsBuild path: (GetPathToMSBuild)"
 
 & (GetPathToMSBuild) $build | Write-Host
 
