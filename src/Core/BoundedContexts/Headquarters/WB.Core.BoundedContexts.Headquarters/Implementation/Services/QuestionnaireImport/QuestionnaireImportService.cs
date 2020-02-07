@@ -222,15 +222,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 questionnaireImportResult.Progress.Total = CalculateTotalOperations(importSteps);
 
-                foreach (var importStep in importSteps)
-                {
-                    await importStep.DownloadFromDesignerAsync();
-                }
+                Task.WaitAll(importSteps.Select(step => step.DownloadFromDesignerAsync()).ToArray());
 
                 foreach (var importStep in importSteps)
-                {
                     importStep.SaveData();
-                }
 
                 logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
