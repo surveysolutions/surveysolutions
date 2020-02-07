@@ -282,7 +282,6 @@
                      Value="Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;"/>
 
 
-
             <!--<util:XmlFile Id="CreateElementConnectionStrings"
                           File="[CONFIGFOLDER]\Headquarters.Web.config"
                           Action="createElement"
@@ -435,10 +434,10 @@
                       Sequence='20'/>-->
       </Component>
     </ComponentGroup>
-    <ComponentGroup Id="ExportService" Directory="EXPORTSERVICEFOLDER" >
+    <ComponentGroup Id="ExportService" Directory="INSTALLFOLDER" >
             <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B000-1F22B2B48F74">
                 <File Id="WB.Services.Export.Host.exe"
-                      Source="WB.Services.Export.Host.exe"
+                      Source="ExportService\WB.Services.Export.Host.exe"
                       Vital="yes"
                       KeyPath="yes" />
                 <ServiceInstall Id="ExportServiceInstall"
