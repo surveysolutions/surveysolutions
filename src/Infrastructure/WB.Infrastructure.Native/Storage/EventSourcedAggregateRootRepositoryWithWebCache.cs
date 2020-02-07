@@ -74,7 +74,11 @@ namespace WB.Infrastructure.Native.Storage
         {
             if (!(Cache.Get(Key(aggregateId)) is IEventSourcedAggregateRoot cachedAggregate)) return null;
 
-            bool isDirty = cachedAggregate.HasUncommittedChanges() || eventStore.GetLastEventSequence(aggregateId) != cachedAggregate.Version; 
+            var hasUncommittedChanges = cachedAggregate.HasUncommittedChanges();
+
+            var b = eventStore.GetLastEventSequence(aggregateId) != cachedAggregate.Version;
+
+            bool isDirty = hasUncommittedChanges || b; 
 
             if (isDirty)
             {
