@@ -177,6 +177,7 @@ export default {
             isImporting: false,
             progressPercent: 0,
             errorMessage: null,
+            dotsCount: 0,
         }
     },
     methods: {
@@ -209,6 +210,11 @@ export default {
                 }
                 
                 await this.timeout(1000)
+
+                this.dotsCount++
+                if (this.dotsCount > 3)
+                    this.dotsCount = 1
+
                 currentStatus = await this.$http.get(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.questionnaireId)
             } 
 
@@ -220,6 +226,7 @@ export default {
                 window.location.replace(currentStatus.data.redirectUrl)
             }
 
+            this.dotsCount = 0
             this.isImporting = false
         },
         timeout(ms) {
@@ -231,10 +238,15 @@ export default {
             return this.$config.model.questionnaireInfo != null
         },
         progressText() {
-            if (this.progressPercent == 0) {
-                return this.$t('QuestionnaireImport.Prepare')
+            var text = ''
+            if (this.progressPercent === 0) {
+                text = this.$t('QuestionnaireImport.Prepare')
             }
-            return this.$t('QuestionnaireImport.Importing', { percent: this.progressPercent })
+            else {
+                text = this.$t('QuestionnaireImport.Importing', { percent: this.progressPercent })
+            }
+            text += '...'.substring(0, this.dotsCount)
+            return text
         },
     },
 }
