@@ -316,8 +316,9 @@ namespace WB.UI.Headquarters
         {
             app.UseExceptional();
 
-            if(!environment.IsDevelopment())
+            if (!env.IsDevelopment())
             {
+                app.UseStatusCodePagesWithReExecute("/error/{0}");
                 app.UseHsts();
             }
             
