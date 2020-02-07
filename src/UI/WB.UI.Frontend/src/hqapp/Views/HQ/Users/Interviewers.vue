@@ -127,6 +127,7 @@ import {formatNumber} from './formatNumber'
 import routeSync from '~/shared/routeSync'
 import InterviewersMoveToOtherTeam from './InterviewersMoveToOtherTeam'
 import {map, find} from 'lodash'
+import { DateFormats } from '~/shared/helpers'
 
 export default {
     mixins: [routeSync],
@@ -285,7 +286,7 @@ export default {
                     title: this.$t('Pages.Interviewers_CreationDateTitle'),
                     render: function(data, type, row) {
                         var localDate = moment.utc(data).local()
-                        return localDate.format(window.CONFIG.dateFormat)
+                        return localDate.format(DateFormats.dateTimeInList)
                     },
                 },
                 {
