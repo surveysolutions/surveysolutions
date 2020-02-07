@@ -88,10 +88,9 @@ $installationArgs = @(
 
 $pathToMsBuild = GetPathToMSBuild
 
-Log-Message "Calling build with params: $installationArgs" 
-Log-Message "MsBuild path: $pathToMsBuild"
+Log-Message "Calling build from $pathToMsBuild with params: $installationArgs" 
 
-& (GetPathToMSBuild) $build | Write-Host
+& (GetPathToMSBuild) $installationArgs | Write-Host
 
 $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
