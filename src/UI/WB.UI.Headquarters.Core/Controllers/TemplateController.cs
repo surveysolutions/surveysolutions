@@ -94,41 +94,6 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ImportMode(Guid id, [FromForm]ImportModel request)
-        {
-            if (this.designerUserCredentials.Get() == null)
-            {
-                //Error(Resources.LoginToDesigner.SessionExpired);
-                return this.RedirectToAction("LoginToDesigner");
-            }
-
-            var model = await this.GetImportModel(id);
-            if (model.QuestionnaireInfo != null)
-            {
-                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false,
-                    request.Comment, Request.GetDisplayUrl());
-                model.ErrorMessage = result.ImportError;
-
-                if (result.IsSuccess)
-                {
-                    if (request.ShouldMigrateAssignments && !string.IsNullOrEmpty(request.MigrateFrom))
-                    {
-                        var sourceQuestionnaireId = QuestionnaireIdentity.Parse(request.MigrateFrom);
-
-                        var processId = Guid.NewGuid();
-                        this.upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, result.Identity);
-                        return RedirectToAction("UpgradeProgress", "SurveySetup", new { id = processId });
-                    }
-
-                    return this.RedirectToAction("Index", "SurveySetup");
-                }
-            }
-
-            return this.View("ImportMode", model);
-        }*/
-
         public class ImportStatusModel
         {
             public QuestionnaireImportResult Status { get; set; }
