@@ -26,8 +26,6 @@ function setupExportService($exportSettingsPath) {
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
-$InstallationProject = 'src\Installation\SurveySolutions\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
-
 $sourceCleanup = $False
 
 $workdir = Get-Location
@@ -35,6 +33,8 @@ if ($HQSourcePath -eq "") {
 	$HQSourcePath = Join-Path $workdir "HQpackage"
 	$sourceCleanup = $True
 }
+
+$InstallationProject = Join-Path $workdir 'src\Installation\SurveySolutions\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
 
 #Set-Location $HQSourcePath
 $sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "dist"}).FullName
