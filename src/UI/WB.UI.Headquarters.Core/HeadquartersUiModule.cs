@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.Bind<IViewRenderService, ViewRenderService>();
-            registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
+            registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
