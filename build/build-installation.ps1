@@ -34,7 +34,8 @@ if ($HQSourcePath -eq "") {
 	$sourceCleanup = $True
 }
 
-$InstallationProject = Join-Path $workdir 'src\Installation\SurveySolutions\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
+$InstallationProject = 'src\Installation\SurveySolutions\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
+$MainInstallationSolution = 'src\Installation\SurveySolutions\SurveySolutionsBootstrap.sln'
 
 #Set-Location $HQSourcePath
 $sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "dist"}).FullName
@@ -87,6 +88,12 @@ $installationArgs = @(
 )
 
 $pathToMsBuild = GetPathToMSBuild
+
+
+Log-Block "Restore nuget" {
+        nuget restore $MainInstallationSolution
+    }
+
 
 Log-Message "Calling build from $pathToMsBuild with params: $installationArgs" 
 
