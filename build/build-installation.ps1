@@ -4,6 +4,11 @@ param(
 	  [switch]$noDestCleanup)
 
 $ErrorActionPreference = "Stop"
+
+$scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
+
+. "$scriptFolder\functions.ps1"
+
 Add-Type -AssemblyName System.Web.Extensions
 function setupExportService($exportSettingsPath) {
     $parser = New-Object Web.Script.Serialization.JavaScriptSerializer
