@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, designerApi: rest.Object);
 
             //Act
-            var importResult = await service.Import(Guid.NewGuid(), "null", false, null, null);
+            var importResult = await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             //Assert
             Assert.That(importResult.ImportError, Is.EqualTo(exprectedErrorMessageFromServer));
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 designerApi: rest.Object, unitOfWork: uow.Object);
 
             //Act
-            await service.Import(Guid.NewGuid(), "null", false, null, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             //Assert
             uow.Verify(u => u.DiscardChanges(), Times.Once);
@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 designerApi: designerApi.Object, unitOfWork: uow.Object);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false, null, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
             
             //Assert
             uow.Verify(u => u.DiscardChanges(), Times.Once);
@@ -129,7 +129,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, designerApi: designerApi.Object, unitOfWork: uow.Object);
 
             // Act-assert
-            var importResult = await service.Import(Guid.NewGuid(), "null", false, null, null);
+            var importResult = await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             Assert.That(importResult.Status, Is.EqualTo(QuestionnaireImportStatus.Error));
             Assert.That(importResult.ImportError, Is.Not.Empty);
@@ -166,7 +166,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtils, designerApi: designerApi.Object);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false, null, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             // Assert
             designerApi
@@ -255,7 +255,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 lookupStorage: lookupStorage);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false, null, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             // Assert
 
@@ -285,7 +285,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider.Object);
 
             // Act
-            var result = await importService.Import(questionnaireId, "null", false, null, null);
+            var result = await importService.Import(questionnaireId, "null", false, null, null, includePdf: false);
 
             // Assert
             Assert.That(result.Status, Is.EqualTo(QuestionnaireImportStatus.Error));
@@ -317,7 +317,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             );
 
             // act
-            await importService.Import(Guid.NewGuid(), "questionnaire1", false, null, "http://fsb.ru");
+            await importService.Import(Guid.NewGuid(), "questionnaire1", false, null, "http://fsb.ru", includePdf: false);
 
             designerApi.Verify(d => d.UpdateRevisionMetadata(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<QuestionnaireRevisionMetadataModel>(m =>
                 m.HqHost == "fsb.ru"
@@ -366,10 +366,6 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 .Callback((Func<IServiceLocator, Task<QuestionnaireImportResult>> func) => func.Invoke(serviceLocatorNestedMock.Object));
             InScopeExecutor.Init(executor.Object);
 
-            Mock<ITaskRunner> taskRunnerMock = new Mock<ITaskRunner>();
-            taskRunnerMock.Setup(x => x.Run(It.IsAny<Func<Task<QuestionnaireImportResult>>>()))
-                .Callback((Func<Task<QuestionnaireImportResult>> func) => func.Invoke());
-
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
@@ -385,8 +381,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>(),
                 Mock.Of<IReusableCategoriesStorage>(),
                 designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
-                Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
-                taskRunnerMock.Object);
+                Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi)
+                );
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
 
