@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Main.Core.Documents;
-using Polly;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Designer;
@@ -18,10 +16,8 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Questionnaire;
@@ -36,7 +32,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IAttachmentContentService attachmentContentService;
         private readonly IDesignerUserCredentials designerUserCredentials;
         private readonly IDesignerApiFactory designerApiFactory;
-        private readonly ITaskRunner taskRunner;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
@@ -63,8 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
             IReusableCategoriesStorage reusableCategoriesStorage,
             IDesignerUserCredentials designerUserCredentials,
-            IDesignerApiFactory designerApiFactory,
-            ITaskRunner taskRunner)
+            IDesignerApiFactory designerApiFactory)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.zipUtils = zipUtils;
@@ -81,7 +75,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.reusableCategoriesStorage = reusableCategoriesStorage;
             this.designerUserCredentials = designerUserCredentials;
             this.designerApiFactory = designerApiFactory;
-            this.taskRunner = taskRunner;
         }
 
         private static readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireImportResult> statuses = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireImportResult>();
@@ -161,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (questionnaireImportResult.Status != QuestionnaireImportStatus.NotStarted)
                 return questionnaireImportResult;
 
-            var bgTask = taskRunner.Run(async () =>
+            var bgTask = Task.Run(async () =>
             {
                 return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
