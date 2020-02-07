@@ -178,6 +178,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Receiving questionnaire data.
+        /// </summary>
+        public static string Prepare {
+            get {
+                return ResourceManager.GetString("Prepare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have already imported this questionnaire.
         /// </summary>
         public static string QuestionnaireExists {

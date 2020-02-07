@@ -231,6 +231,9 @@ export default {
             return this.$config.model.questionnaireInfo != null
         },
         progressText() {
+            if (this.progressPercent == 0) {
+                return this.$t('QuestionnaireImport.Prepare')
+            }
             return this.$t('QuestionnaireImport.Importing', { percent: this.progressPercent })
         },
     },
