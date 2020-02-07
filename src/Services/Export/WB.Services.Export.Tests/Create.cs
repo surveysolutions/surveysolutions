@@ -458,7 +458,7 @@ namespace WB.Services.Export.Tests
             return new InterviewFactory(Create.HeadquartersApi(), Create.TenantDbContext());
         }
 
-        public static TenantDbContext TenantDbContext(string databaseName = null)
+        public static TenantDbContext TenantDbContext(string databaseName = null, string tenantName = null)
         {
             var options = new DbContextOptionsBuilder<TenantDbContext>()
                 .UseInMemoryDatabase(databaseName: databaseName ?? Guid.NewGuid().ToString("N"))
@@ -466,9 +466,29 @@ namespace WB.Services.Export.Tests
             var dbContext = new TenantDbContext(
                 Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo
                 {
-                    Id = TenantId.None
+                    Id = TenantId.None,
+                    Name = tenantName ?? "none"
                 }),
                 Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()),
+                options);
+
+            return dbContext;
+        }
+
+
+        public static TenantDbContext NpgsqlTenantDbContext(string databaseName = null, string tenantName = null)
+        {
+            var options = new DbContextOptionsBuilder<TenantDbContext>().Options;
+            var dbContext = new TenantDbContext(
+                Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo
+                {
+                    Id = TenantId.None,
+                    Name = tenantName ?? "none"
+                }),
+                Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()
+                {
+                    
+                }),
                 options);
 
             return dbContext;
