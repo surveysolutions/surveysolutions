@@ -183,4 +183,7 @@
   <data name="Importing" xml:space="preserve">
     <value>Importing {{percent}}%</value>
   </data>
+  <data name="Prepare" xml:space="preserve">
+    <value>Receiving questionnaire data</value>
+  </data>
 </root>
