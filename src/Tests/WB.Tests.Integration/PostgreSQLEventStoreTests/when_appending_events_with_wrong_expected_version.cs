@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -133,20 +134,20 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             eventStore.Store(initialStoredStream);
 
             // Act 
-            var page1 = await eventStore.GetEventsFeedAsync(0, 2);
+            var page1 = eventStore.GetRawEventsFeed(0, 2).ToList();
 
             // Assert
-            Assert.That(page1.Events, Has.Count.EqualTo(2));
-            Assert.That(page1.Events[0].EventIdentifier, Is.EqualTo(Id.g1));
-            Assert.That(page1.Events[1].EventIdentifier, Is.EqualTo(Id.g2));
+            Assert.That(page1, Has.Count.EqualTo(2));
+            Assert.That(page1[0].Id, Is.EqualTo(Id.g1));
+            Assert.That(page1[1].Id, Is.EqualTo(Id.g2));
 
 
             // Act
-            var page2 = await eventStore.GetEventsFeedAsync(page1.Events[1].GlobalSequence, 2);
+            var page2 = eventStore.GetRawEventsFeed(page1[1].GlobalSequence, 2).ToList();
 
             // Assert
-            Assert.That(page2.Events, Has.Count.EqualTo(1));
-            Assert.That(page2.Events[0].EventIdentifier, Is.EqualTo(Id.g3));
+            Assert.That(page2, Has.Count.EqualTo(1));
+            Assert.That(page2[0].Id, Is.EqualTo(Id.g3));
         }
 
         public void TearDown()
