@@ -120,15 +120,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void BulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
-            try
+            foreach (var tuple in bulk)
             {
-                this.FastBulkStore(bulk);
-            }
-            catch (Exception exception)
-            {
-                this.logger.Warn($"Failed to store bulk of {bulk.Count} entities of type {this.ViewType.Name} using fast way. Switching to slow way.", exception);
-
-                this.SlowBulkStore(bulk);
+                this.Store(tuple.Item1, tuple.Item2);
             }
         }
 
@@ -199,56 +193,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public string GetReadableStatus()
         {
             return "PostgreSQL :'(";
-        }
-
-        private void FastBulkStore(List<Tuple<TEntity, TKey>> bulk)
-        {
-            var sessionFactory = serviceLocator.GetInstance<ISessionFactory>();
-
-            foreach (var subBulk in bulk.Batch(2048))
-            {
-                using (ISession session = sessionFactory.OpenSession())
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    foreach (var tuple in subBulk)
-                    {
-                        TEntity entity = tuple.Item1;
-                        TKey id = tuple.Item2;
-
-                        session.Save(entity, id);
-                    }
-
-                    transaction.Commit();
-                }
-            }
-        }
-
-        private void SlowBulkStore(List<Tuple<TEntity, TKey>> bulk)
-        {
-            var sessionFactory = serviceLocator.GetInstance<ISessionFactory>();
-            using (ISession session = sessionFactory.OpenSession())
-            using (ITransaction transaction = session.BeginTransaction())
-            {
-            foreach (var tuple in bulk)
-            {
-                TEntity entity = tuple.Item1;
-                TKey id = tuple.Item2;
-
-                var storedEntity = session.Get<TEntity>(id);
-
-                if (storedEntity != null)
-                {
-                    var merge = session.Merge(entity);
-                    session.Update(merge);
-                }
-                else
-                {
-                    session.Save(entity);
-                }
-            }
-
-            transaction.Commit();
-            }
         }
     }
 
