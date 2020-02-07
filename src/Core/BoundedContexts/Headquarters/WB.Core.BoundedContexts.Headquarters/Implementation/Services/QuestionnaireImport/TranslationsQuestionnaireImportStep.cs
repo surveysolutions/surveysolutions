@@ -48,15 +48,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             translationManagementService.Delete(questionnaireIdentity);
 
-            translationManagementService.Store(translationContent.Select(x => new TranslationInstance
+            if (translationContent != null && translationContent.Count > 0)
             {
-                QuestionnaireId = questionnaireIdentity,
-                Value = x.Value,
-                QuestionnaireEntityId = x.QuestionnaireEntityId,
-                Type = x.Type,
-                TranslationIndex = x.TranslationIndex,
-                TranslationId = x.TranslationId
-            }));
+                translationManagementService.Store(translationContent.Select(x => new TranslationInstance
+                {
+                    QuestionnaireId = questionnaireIdentity,
+                    Value = x.Value,
+                    QuestionnaireEntityId = x.QuestionnaireEntityId,
+                    Type = x.Type,
+                    TranslationIndex = x.TranslationIndex,
+                    TranslationId = x.TranslationId
+                }));
+            }
             progress.Current++;
         }
     }
