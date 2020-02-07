@@ -84,7 +84,7 @@ $installationArgs = @(
     "/p:SurveySolutionsVersion=$version";
 )
 
-$pathToMsBuild = GetPathToMSBuild()
+$pathToMsBuild = GetPathToMSBuild
 
 Log-Message "Calling build with params: $installationArgs" 
 Log-Message "MsBuild path: $pathToMsBuild"
