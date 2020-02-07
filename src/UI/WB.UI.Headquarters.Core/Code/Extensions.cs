@@ -100,8 +100,5 @@ namespace WB.UI.Headquarters.Code
                 session.Remove(key);
             }
         }
-
-        public static string MapPath(this IWebHostEnvironment hostingEnvironment, string path) =>
-            Path.Combine(hostingEnvironment.ContentRootPath, "wwwroot", path);
     }
 }
