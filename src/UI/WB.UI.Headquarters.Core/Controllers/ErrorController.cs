@@ -28,10 +28,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             return this.View();
         }
-
-        public IActionResult WebsitePathIsTooLong()
-        {
-            return this.View();
-        }
     }
 }
