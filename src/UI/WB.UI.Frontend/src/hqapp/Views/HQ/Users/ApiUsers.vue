@@ -27,6 +27,7 @@
 
 import moment from 'moment'
 import { formatNumber } from './formatNumber'
+import { DateFormats } from '~/shared/helpers'
 
 export default {
     data() {
@@ -75,7 +76,7 @@ export default {
                         title: this.$t('Users.CreationDate'),
                         render: function(data, type, row) {
                             var localDate = moment.utc(data).local()
-                            return localDate.format(window.CONFIG.dateFormat)
+                            return localDate.format(DateFormats.dateTimeInList)
                         },
                     },
                     {
