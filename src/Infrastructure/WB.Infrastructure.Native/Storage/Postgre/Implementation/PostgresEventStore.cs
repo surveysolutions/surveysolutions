@@ -103,7 +103,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             ValidateStreamVersion(eventStream, connection);
 
             var copyFromCommand = $"COPY {tableNameWithSchema}(id, origin, timestamp, eventsourceid, value, eventsequence, eventtype) FROM STDIN BINARY;";
-            var npgsqlConnection = connection.Connection as NpgsqlConnection;
+            var npgsqlConnection = (NpgsqlConnection)connection.Connection;
+
+            // fix for KP-13687
+            npgsqlConnection.Execute($"lock table {tableNameWithSchema} in ROW EXCLUSIVE mode");
 
             using (var writer = npgsqlConnection.BeginBinaryImport(copyFromCommand))
             {
@@ -203,27 +206,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                                         limit 1", new { eventSourceId, eventTypes = typeNames} );
         }
 
-        public async Task<EventsFeedPage> GetEventsFeedAsync(long startWithGlobalSequence, int pageSize)
-        {
-            var rawEventsData = await this.sessionProvider.Session.Connection
-                .QueryAsync<RawEvent>
-                 ($@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text 
-                   FROM {tableNameWithSchema} 
-                   WHERE globalsequence > @minVersion 
-                   ORDER BY globalsequence 
-                   LIMIT @batchSize",
-                   new { minVersion = startWithGlobalSequence, batchSize = pageSize });
-
-            var globalSequence = await this.sessionProvider.Session.Connection.ExecuteScalarAsync<long?>("SELECT max(globalsequence) FROM events.events") ?? 0;
-
-            var events = ToCommittedEvent(rawEventsData).ToList();
-
-            return new EventsFeedPage(globalSequence, events);
-        }
-
+    
         public IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize)
         {
-            var rawEventsData = this.sessionProvider.Session.Connection
+            // fix for KP-13687
+            var sessionConnection = this.sessionProvider.Session.Connection;
+            sessionConnection.Execute($"lock table {tableNameWithSchema} in SHARE mode");
+            
+            var rawEventsData = sessionConnection
                 .Query<RawEvent>
                 ($@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text 
                    FROM {tableNameWithSchema} 
@@ -238,7 +228,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public async Task<List<CommittedEvent>> GetEventsInReverseOrderAsync(Guid aggregateRootId, int offset, int limit)
         {
             List<CommittedEvent> result = new List<CommittedEvent>();
-            var connection = sessionProvider.Session.Connection as NpgsqlConnection;
+            var connection = sessionProvider.Session.Connection;
             var rawEvents = await connection.QueryAsync<RawEvent>(
                         $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
                         $"FROM {tableNameWithSchema} " +
@@ -261,7 +251,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public async Task<int> TotalEventsCountAsync(Guid aggregateRootId)
         {
-            var connection = sessionProvider.Session.Connection as NpgsqlConnection;
+            var connection = sessionProvider.Session.Connection;
             var result = await connection.ExecuteScalarAsync<int?>(
                     $"SELECT COUNT(id) FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId",
                     new
