@@ -43,7 +43,8 @@ $HQsitePath = Join-path $workdir "HQwork"
 
 #remove old files
 if (!($noDestCleanup)) {
-	Remove-Item $HQsitePath -Force -Recurse
+	if (Test-Path $HQsitePath)
+		Remove-Item $HQsitePath -Force -Recurse
 }
 
 if (!(Test-Path $HQsitePath)) {
