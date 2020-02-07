@@ -17,50 +17,40 @@ namespace WB.UI.Headquarters
     {
         public static async Task<int> Main(string[] args)
         {
-            var appRoot = Path.GetDirectoryName(typeof(Program).Assembly.Location);
-            var logsFileLocation = Path.Combine(appRoot, "..", "logs", "log.log");
-            var verboseLog = Path.Combine(appRoot, "..", "logs", "verbose.log");
-
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day, 
-                    restrictedToMinimumLevel: LogEventLevel.Warning)
-                .WriteTo.File(verboseLog, rollingInterval: RollingInterval.Day,
-                    restrictedToMinimumLevel: LogEventLevel.Verbose, retainedFileCountLimit: 2)
-                .CreateLogger();
-
-            try
+            IHost host = CreateHostBuilder(args).Build();
+            if (args.Length > 0 && args[0].Equals("manage", StringComparison.OrdinalIgnoreCase))
             {
-                IHost host = CreateHostBuilder(args).Build();
-                if (args.Length > 0 && args[0].Equals("manage", StringComparison.OrdinalIgnoreCase))
-                {
-                    return await new SupportTool.SupportTool(host).Run(args.Skip(1).ToArray());
-                }
-                
-                var version = host.Services.GetRequiredService<IProductVersion>();
-                var applicationVersion = version.ToString();
+                return await new SupportTool.SupportTool(host).Run(args.Skip(1).ToArray());
+            }
+            
+            var version = host.Services.GetRequiredService<IProductVersion>();
+            var applicationVersion = version.ToString();
+            var logger = host.Services.GetRequiredService<ILogger>();
+            logger.Warning("HQ application starting. Version {version}", applicationVersion);
 
-                Log.Logger.Warning("HQ application starting. Version {version}", applicationVersion);
-
-                await host.RunAsync();
-                return 0;
-            }
-            catch (Exception e)
-            {
-                Log.Fatal(e, "Host terminated unexpectedly");
-                return 1;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            await host.RunAsync();
+            return 0;
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog()
+                .UseSerilog((host, loggerConfig) =>
+                {
+                    var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "log.log");
+                    var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "verbose.log");
+
+                    loggerConfig.MinimumLevel.Debug()
+                        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                        .Enrich.FromLogContext()
+                        .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day,
+                            restrictedToMinimumLevel: LogEventLevel.Warning)
+                        .WriteTo.File(verboseLog, rollingInterval: RollingInterval.Day,
+                            restrictedToMinimumLevel: LogEventLevel.Verbose, retainedFileCountLimit: 2);
+                    if (host.HostingEnvironment.IsDevelopment())
+                    {
+                        loggerConfig.WriteTo.Console();
+                    }
+                })
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureAppConfiguration((hostingContext, c) =>
                 {
