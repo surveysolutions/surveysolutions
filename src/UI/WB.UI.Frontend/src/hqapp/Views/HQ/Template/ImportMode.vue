@@ -195,7 +195,9 @@ export default {
 
             await this.timeout(1000)
 
-            while (currentStatus.data.status.status == 'Progress' || currentStatus.data.status.status == 'NotStarted') {
+            while (currentStatus.data.status.status == 'Prepare'
+                    || currentStatus.data.status.status == 'Progress' 
+                    || currentStatus.data.status.status == 'NotStarted') {
                 this.progressPercent = currentStatus.data.status.progress.percent
 
                 if (currentStatus.data.redirectUrl) {
