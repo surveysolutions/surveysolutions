@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
 {
     [TestFixture]
-    internal class EventSourcedAggregateRootRepositoryWithExtendedCacheTests
+    internal class EventSourcedAggregateRootRepositoryWithCacheCacheTests
     {
         [Test]
         public void When_cached_aggregate_has_uncommitted_changes_Then_returns_newly_loaded_aggregate()
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
             var domainRepository = Mock.Of<IDomainRepository>();
             Mock.Get(domainRepository).SetReturnsDefault(dirtyAggregate);
 
-            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithExtendedCache(repository: domainRepository);
+            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithWebCache(repository: domainRepository);
 
             // act - get twice
             eventSourcedRepository.GetLatest(dirtyAggregate.GetType(), Guid.Empty);
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
             var domainRepository = Mock.Of<IDomainRepository>();
             Mock.Get(domainRepository).SetReturnsDefault(cleanAggregate);
 
-            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithExtendedCache(repository: domainRepository);
+            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithCache(repository: domainRepository);
 
             // act - get twice
             eventSourcedRepository.GetLatest(cleanAggregate.GetType(), Guid.Empty);
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
                 .Returns<Type, Guid, IEnumerable<CommittedEvent>>(
                     (_, aggregateId, ___) => storedAggregates[aggregateId]);
 
-            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithExtendedCache(repository: domainRepository);
+            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithWebCache(repository: domainRepository);
 
             // act
             foreach (var aggregateId in aggregateIds)
@@ -88,39 +88,6 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
             Mock.Get(domainRepository).Verify(
                 repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()),
                 Times.Exactly(100));
-        }
-
-        [Test]
-        public void When_getting_200_aggregates_and_getting_same_200_aggregates_in_reverse_order_Then_repository_load_should_be_called_300_times()
-        {
-            // arrange
-            Guid[] aggregateIds = Enumerable.Range(1, 200).Select(_ => Guid.NewGuid()).ToArray();
-            Dictionary<Guid, IEventSourcedAggregateRoot> storedAggregates = aggregateIds
-                .Select(aggregateId => Mock.Of<IEventSourcedAggregateRoot>(_ => _.EventSourceId == aggregateId))
-                .ToDictionary(aggregate => aggregate.EventSourceId);
-
-            var domainRepository = Mock.Of<IDomainRepository>();
-            Mock.Get(domainRepository)
-                .Setup(repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()))
-                .Returns<Type, Guid,  IEnumerable<CommittedEvent>>(
-                    (_, aggregateId, ___) => storedAggregates[aggregateId]);
-
-            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithExtendedCache(repository: domainRepository);
-
-            // act
-            foreach (var aggregateId in aggregateIds)
-            {
-                eventSourcedRepository.GetLatest(typeof(IEventSourcedAggregateRoot), aggregateId);
-            }
-            foreach (var aggregateId in aggregateIds.Reverse())
-            {
-                eventSourcedRepository.GetLatest(typeof(IEventSourcedAggregateRoot), aggregateId);
-            }
-
-            // assert
-            Mock.Get(domainRepository).Verify(
-                repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()),
-                Times.Exactly(300));
         }
     }
 }
