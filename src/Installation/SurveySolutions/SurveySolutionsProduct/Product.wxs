@@ -436,8 +436,9 @@
     </ComponentGroup>
     <ComponentGroup Id="ExportService" Directory="INSTALLFOLDER" >
             <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B000-1F22B2B48F74">
+                <!--Dirty hack to reference file-->
                 <File Id="WB.Services.Export.Host.exe"
-                      Source="ExportService\WB.Services.Export.Host.exe"
+                      Source="$(var.HarvestDir)\ExportService\WB.Services.Export.Host.exe"
                       Vital="yes"
                       KeyPath="yes" />
                 <ServiceInstall Id="ExportServiceInstall"
