@@ -62,6 +62,12 @@ namespace WB.Services.Infrastructure.Storage
             return db.Database.ExecuteSqlRawAsync($"select pg_advisory_xact_lock ({id})");
         }
 
+
+        public static void AcquireXactLock(this DbContext db, long id)
+        {
+            db.Database.ExecuteSqlRaw($"select pg_advisory_xact_lock ({id})");
+        }
+
         public static async Task<bool> ReleaseLockAsync(this DbContext db, long id)
         {
             return await db.Database.GetDbConnection()
