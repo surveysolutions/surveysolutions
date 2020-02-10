@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
@@ -12,15 +13,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     class AttachmentsQuestionnaireImportStep : IQuestionnaireImportStep
     {
         private readonly QuestionnaireDocument questionnaire;
-        private readonly Progress progress;
         private readonly IDesignerApi designerApi;
         private readonly IAttachmentContentService attachmentContentService;
         private readonly Dictionary<Attachment, RestFile> attachmentToProcess = new Dictionary<Attachment, RestFile>();
 
-        public AttachmentsQuestionnaireImportStep(QuestionnaireDocument questionnaire, Progress progress, IDesignerApi designerApi, IAttachmentContentService attachmentContentService)
+        public AttachmentsQuestionnaireImportStep(QuestionnaireDocument questionnaire, IDesignerApi designerApi, IAttachmentContentService attachmentContentService)
         {
             this.questionnaire = questionnaire;
-            this.progress = progress;
             this.designerApi = designerApi;
             this.attachmentContentService = attachmentContentService;
 
@@ -29,14 +28,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public void PrepareAttachmentsList()
         {
-            if (questionnaire.Attachments == null)
-                return;
-
-            foreach (var questionnaireAttachment in questionnaire.Attachments)
+            if (questionnaire.Attachments != null && questionnaire.Attachments.Count > 0)
             {
-                if (!attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
+                foreach (var questionnaireAttachment in questionnaire.Attachments)
                 {
-                    attachmentToProcess.Add(questionnaireAttachment, null);
+                    if (!attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
+                    {
+                        attachmentToProcess.Add(questionnaireAttachment, null);
+                    }
                 }
             }
         }
@@ -46,29 +45,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return attachmentToProcess.Count *  2;
         }
 
-        public async Task DownloadFromDesignerAsync()
+        public async Task DownloadFromDesignerAsync(IProgress<int> progress)
         {
-            var questionnaireAttachments = attachmentToProcess.Keys.ToList();
-            foreach (var questionnaireAttachment in questionnaireAttachments)
+            if (attachmentToProcess.Count > 0)
             {
-                var attachmentContent = await designerApi.DownloadQuestionnaireAttachment(
-                    questionnaireAttachment.ContentId, questionnaireAttachment.AttachmentId);
-                attachmentToProcess[questionnaireAttachment] = attachmentContent;
-                progress.Current++;
+                int percentPerAttachment = 100 / attachmentToProcess.Count;
+                int currentPercent = 0;
+
+                var questionnaireAttachments = attachmentToProcess.Keys.ToList();
+                foreach (var questionnaireAttachment in questionnaireAttachments)
+                {
+                    var attachmentContent = await designerApi.DownloadQuestionnaireAttachment(
+                        questionnaireAttachment.ContentId, questionnaireAttachment.AttachmentId);
+                    attachmentToProcess[questionnaireAttachment] = attachmentContent;
+
+                    currentPercent += percentPerAttachment;
+                    progress.Report(currentPercent);
+                }
             }
+            progress.Report(100);
         }
 
-        public void SaveData()
+        public void SaveData(IProgress<int> progress)
         {
-            foreach (var questionnaireAttachment in attachmentToProcess)
+            if (attachmentToProcess.Count > 0)
             {
-                attachmentContentService.SaveAttachmentContent(
-                    questionnaireAttachment.Key.ContentId,
-                    questionnaireAttachment.Value.ContentType,
-                    questionnaireAttachment.Value.FileName,
-                    questionnaireAttachment.Value.Content);
-                progress.Current++;
+                int percentPerAttachment = 100 / attachmentToProcess.Count;
+                int currentPercent = 0;
+
+                foreach (var questionnaireAttachment in attachmentToProcess)
+                {
+                    attachmentContentService.SaveAttachmentContent(
+                        questionnaireAttachment.Key.ContentId,
+                        questionnaireAttachment.Value.ContentType,
+                        questionnaireAttachment.Value.FileName,
+                        questionnaireAttachment.Value.Content);
+                    currentPercent += percentPerAttachment;
+                    progress.Report(currentPercent);
+                }
             }
+
+            progress.Report(100);
         }
     }
 }
