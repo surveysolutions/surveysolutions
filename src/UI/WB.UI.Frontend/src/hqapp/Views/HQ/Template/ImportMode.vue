@@ -199,7 +199,7 @@ export default {
             while (currentStatus.data.status.status == 'Prepare'
                     || currentStatus.data.status.status == 'Progress' 
                     || currentStatus.data.status.status == 'NotStarted') {
-                this.progressPercent = currentStatus.data.status.progress.percent
+                this.progressPercent = currentStatus.data.status.progressPercent
 
                 if (currentStatus.data.redirectUrl) {
                     window.location.replace(currentStatus.data.redirectUrl)

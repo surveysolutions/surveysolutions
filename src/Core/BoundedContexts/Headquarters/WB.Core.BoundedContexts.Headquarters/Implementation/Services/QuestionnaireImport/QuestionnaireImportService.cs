@@ -79,18 +79,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private static readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireImportResult> statuses = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireImportResult>();
 
-        List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, Progress progress, IDesignerApi designerApi, bool includePdf)
+        List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, QuestionnaireImportResult importResult, IDesignerApi designerApi, bool includePdf)
         {
             var questionnaireImportSteps = new List<IQuestionnaireImportStep>()
             {
-                new AttachmentsQuestionnaireImportStep(questionnaireDocument, progress, designerApi, attachmentContentService),
-                new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, progress, designerApi, translationManagementService, logger),
-                new LookupTablesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, progress, designerApi, lookupTablesStorage, logger),
-                new CategoriesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, progress, designerApi, reusableCategoriesStorage, logger),
+                new AttachmentsQuestionnaireImportStep(questionnaireDocument, designerApi, attachmentContentService),
+                new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, translationManagementService, logger),
+                new LookupTablesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, lookupTablesStorage, logger),
+                new CategoriesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, reusableCategoriesStorage, logger),
             };
 
             if (includePdf)
-                questionnaireImportSteps.Add(new PdfQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, progress, designerApi, pdfStorage, logger));
+                questionnaireImportSteps.Add(new PdfQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, pdfStorage, logger));
 
             return questionnaireImportSteps;
         }
@@ -141,13 +141,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 Identity = questionnaireIdentity,
                 QuestionnaireId = questionnaireIdentity.ToString(),
-                Progress = new Progress(),
+                ProgressPercent = 0,
                 Status = QuestionnaireImportStatus.NotStarted
             });
 
             if (questionnaireImportResult.Status == QuestionnaireImportStatus.Error)
             {
-                questionnaireImportResult.Progress = new Progress();
+                questionnaireImportResult.ProgressPercent = 0;
                 questionnaireImportResult.Status = QuestionnaireImportStatus.NotStarted;
             }
 
@@ -207,18 +207,51 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Progress;
 
-                questionnaireImportResult.Progress.Current += 2;
-
-                var importSteps = this.GetImportSteps(questionnaireIdentity, questionnaire, questionnaireImportResult.Progress, designerApi, includePdf)
+                var importSteps = this.GetImportSteps(questionnaireIdentity, questionnaire, questionnaireImportResult, designerApi, includePdf)
                     .Where(step => step.GetPrecessStepsCount() > 0)
                     .ToList();
 
-                questionnaireImportResult.Progress.Total = CalculateTotalOperations(importSteps);
+                #region Progress
 
-                Task.WaitAll(importSteps.Select(step => step.DownloadFromDesignerAsync()).ToArray());
+                int[] globalProgresses = new int[importSteps.Count];
+                IProgress<int> questionnaireProgress = new Progress<int>(value => UpdateGlobalProgress(0, 10, value));
+                int[] downloadFromDesignerProgresses = new int[importSteps.Count];
+                int[] saveDataProgresses = new int[importSteps.Count];
 
-                foreach (var importStep in importSteps)
-                    importStep.SaveData();
+                void UpdateDownloadProgress(int stepIndex, int percentOfStep)
+                {
+                    downloadFromDesignerProgresses[stepIndex] = percentOfStep;
+                    var progress = downloadFromDesignerProgresses.Sum(progressValue => progressValue / downloadFromDesignerProgresses.Length);
+                    UpdateGlobalProgress(1, 85, progress);
+                }
+                void UpdateSaveProgress(int stepIndex, int percentOfStep)
+                {
+                    saveDataProgresses[stepIndex] = percentOfStep;
+                    var progress = saveDataProgresses.Sum(progressValue => progressValue / saveDataProgresses.Length);
+                    UpdateGlobalProgress(2, 5, progress);
+                }
+                void UpdateGlobalProgress(int stepIndex, int percentOfGlobalStep, int value)
+                {
+                    globalProgresses[stepIndex] = value * percentOfGlobalStep / 100;
+                    questionnaireImportResult.ProgressPercent = globalProgresses.Sum();
+                }
+                #endregion
+
+                questionnaireProgress.Report(50);
+
+                Task.WaitAll(importSteps.Select((step, index) =>
+                {
+                    var progress = new Progress<int>(value => UpdateDownloadProgress(index, value) );
+                    return step.DownloadFromDesignerAsync(progress);
+                }).ToArray());
+
+                for (int i = 0; i < importSteps.Count; i++)
+                {
+                    var index = i;
+                    var importStep = importSteps[index];
+                    var progress = new Progress<int>(value => UpdateSaveProgress(index, value));
+                    importStep.SaveData(progress);
+                }
 
                 logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
@@ -230,7 +263,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnairePackage.QuestionnaireContentVersion,
                     questionnaireIdentity.Version,
                     comment));
-                questionnaireImportResult.Progress.Current++;
+                questionnaireProgress.Report(80);
 
                 logger.Verbose($"UpdateRevisionMetadata: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
                 await designerApi.UpdateRevisionMetadata(questionnaire.PublicKey, questionnaire.Revision,
@@ -243,10 +276,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         HqQuestionnaireVersion = questionnaireIdentity.Version,
                         Comment = comment,
                     });
-                questionnaireImportResult.Progress.Current++;
+                questionnaireProgress.Report(95);
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
-                questionnaireImportResult.Progress.Current = questionnaireImportResult.Progress.Total;
+                questionnaireProgress.Report(100);
+
+                questionnaireImportResult.ProgressPercent = 100;
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Finished;
 
                 shouldRollback = false;
