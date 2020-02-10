@@ -95,9 +95,9 @@ $installationArgs = @(
 $pathToMsBuild = GetPathToMSBuild
 
 
-Log-Block "Restore nuget" {
-        nuget restore $MainInstallationSolution
-    }
+#Log-Block "Restore nuget" {
+#        nuget restore $MainInstallationSolution
+#    }
 
 
 Log-Message "Calling build from $pathToMsBuild with params: $installationArgs" 
