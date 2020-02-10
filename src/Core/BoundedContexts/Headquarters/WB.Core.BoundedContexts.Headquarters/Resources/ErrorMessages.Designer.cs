@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire already is importing to Headquarters..
+        ///   Looks up a localized string similar to Another questionnaire is being imported to Headquarters now..
         /// </summary>
         public static string QuestionnaireAlreadyImporting {
             get {

@@ -136,7 +136,7 @@
     <value>Incorrect user name or password.</value>
   </data>
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
-      <value>Questionnaire already is importing to Headquarters.</value>
+      <value>Another questionnaire is being imported to Headquarters now.</value>
   </data>
   <data name="SiteAccessNotAllowed" xml:space="preserve">
     <value>You do not have permission to access this site. Contact your administrator.</value>
