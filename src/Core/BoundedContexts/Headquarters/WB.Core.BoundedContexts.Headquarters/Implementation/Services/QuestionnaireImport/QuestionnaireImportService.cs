@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IAttachmentContentService attachmentContentService;
         private readonly IDesignerUserCredentials designerUserCredentials;
         private readonly IDesignerApiFactory designerApiFactory;
+        private readonly IQuestionnaireImportStatuses questionnaireImportStatuses;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
@@ -58,7 +59,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
             IReusableCategoriesStorage reusableCategoriesStorage,
             IDesignerUserCredentials designerUserCredentials,
-            IDesignerApiFactory designerApiFactory)
+            IDesignerApiFactory designerApiFactory,
+            IQuestionnaireImportStatuses questionnaireImportStatuses)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.zipUtils = zipUtils;
@@ -75,9 +77,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.reusableCategoriesStorage = reusableCategoriesStorage;
             this.designerUserCredentials = designerUserCredentials;
             this.designerApiFactory = designerApiFactory;
+            this.questionnaireImportStatuses = questionnaireImportStatuses;
         }
-
-        private static readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireImportResult> statuses = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireImportResult>();
 
         List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, QuestionnaireImportResult importResult, IDesignerApi designerApi, bool includePdf)
         {
@@ -97,9 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public QuestionnaireImportResult GetStatus(QuestionnaireIdentity questionnaireId)
         {
-            if (statuses.TryGetValue(questionnaireId, out QuestionnaireImportResult status))
-                return status;
-            return null;
+            return questionnaireImportStatuses.GetStatus(questionnaireId);
         }
 
         public Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode,
@@ -137,7 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaireId);
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            var questionnaireImportResult = statuses.GetOrAdd(questionnaireIdentity, new QuestionnaireImportResult
+            var questionnaireImportResult = questionnaireImportStatuses.GetOrAdd(questionnaireIdentity, new QuestionnaireImportResult
             {
                 Identity = questionnaireIdentity,
                 QuestionnaireId = questionnaireIdentity.ToString(),
@@ -354,11 +353,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
-        private int CalculateTotalOperations(List<IQuestionnaireImportStep> importSteps)
-        {
-            return importSteps.Sum(step => step.GetPrecessStepsCount()) + 4;
-        }
-        
         private string GetDomainFromUri(string requestUrl)
         {
             if (requestUrl == null) return null;
