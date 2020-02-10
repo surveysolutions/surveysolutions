@@ -381,7 +381,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>(),
                 Mock.Of<IReusableCategoriesStorage>(),
                 designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
-                Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi)
+                Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
+                new QuestionnaireImportStatuses()
                 );
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
