@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -61,10 +62,15 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         {
             var user = await this.userManager.FindByNameAsync(userLogin.Username);
 
-            if (user == null || user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
+            if (user == null)
                 return Unauthorized();
 
             var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
+            if (signInResult.IsLockedOut)
+            {
+                return Unauthorized(new {Message = "User is locked"});
+            }
+
             if (signInResult.Succeeded)
             {
                 var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
