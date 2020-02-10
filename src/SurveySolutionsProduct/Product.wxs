@@ -226,8 +226,7 @@
   </Fragment>
     <Fragment>
       <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
-
-        <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
+          <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
             <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
                 <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
             </RegistryKey>
@@ -434,8 +433,17 @@
                       Sequence='20'/>-->
       </Component>
     </ComponentGroup>
-    <ComponentGroup Id="ExportService" Directory="INSTALLFOLDER" >
-            <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B000-1F22B2B48F74">
+    <ComponentGroup Id="ExportService" Directory="INSTALLSITEFOLDER" >
+        <Component Id="ExportServiceConfigUpdate" Guid="035F0D52-04C7-4DB4-BBC7-C447F405C2EA" NeverOverwrite="yes">
+            <!--<CreateFolder/>-->
+            <File Source="ExportService\appsettings.production.json" PatchIgnore="yes">
+                <PanelSW:JsonJPath 
+                    JPath="$.ConnectionString" 
+                    Value="Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;ApplicationNAme=export;Maximum Pool Size=10"/>
+            </File>
+
+        </Component>
+        <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B000-1F22B2B48F74">
                 <!--Dirty hack to reference file-->
                 <File Id="WB.Services.Export.Host.exe"
                       Source="$(var.HarvestDir)\ExportService\WB.Services.Export.Host.exe"
