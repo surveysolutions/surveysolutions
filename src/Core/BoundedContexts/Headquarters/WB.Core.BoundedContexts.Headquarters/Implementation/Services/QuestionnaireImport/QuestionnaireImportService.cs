@@ -238,11 +238,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 questionnaireProgress.Report(50);
 
-                Task.WaitAll(importSteps.Select((step, index) =>
+                await Task.WhenAll(importSteps.Select((step, index) =>
                 {
                     var progress = new Progress<int>(value => UpdateDownloadProgress(index, value) );
-                    return step.DownloadFromDesignerAsync(progress);
-                }).ToArray());
+                    return Task.Run(async () => await step.DownloadFromDesignerAsync(progress));
+                }));
 
                 for (int i = 0; i < importSteps.Count; i++)
                 {
