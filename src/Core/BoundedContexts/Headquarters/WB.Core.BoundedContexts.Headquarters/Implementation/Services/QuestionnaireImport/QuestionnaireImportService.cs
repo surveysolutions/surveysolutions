@@ -212,7 +212,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 #region Progress
 
-                int[] globalProgresses = new int[importSteps.Count];
+                int[] globalProgresses = new int[3];
                 IProgress<int> questionnaireProgress = new Progress<int>(value => UpdateGlobalProgress(0, 10, value));
                 int[] downloadFromDesignerProgresses = new int[importSteps.Count];
                 int[] saveDataProgresses = new int[importSteps.Count];
