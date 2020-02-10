@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
@@ -15,17 +16,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly QuestionnaireIdentity questionnaireIdentity;
         private readonly QuestionnaireDocument questionnaire;
-        private readonly Progress progress;
         private readonly IDesignerApi designerApi;
         private readonly ITranslationManagementService translationManagementService;
         private readonly ILogger logger;
         private List<TranslationDto> translationContent;
 
-        public TranslationsQuestionnaireImportStep(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaire, Progress progress, IDesignerApi designerApi, ITranslationManagementService translationManagementService, ILogger logger)
+        public TranslationsQuestionnaireImportStep(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaire, IDesignerApi designerApi, ITranslationManagementService translationManagementService, ILogger logger)
         {
             this.questionnaireIdentity = questionnaireIdentity;
             this.questionnaire = questionnaire;
-            this.progress = progress;
             this.designerApi = designerApi;
             this.translationManagementService = translationManagementService;
             this.logger = logger;
@@ -35,14 +34,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return questionnaire.Translations != null ? 2 : 0;
         }
 
-        public async Task DownloadFromDesignerAsync()
+        public async Task DownloadFromDesignerAsync(IProgress<int> progress)
         {
             this.logger.Debug($"loading translations {questionnaireIdentity.Id}");
             translationContent = await designerApi.GetTranslations(questionnaire.PublicKey);
-            progress.Current++;
+            progress.Report(100);
         }
 
-        public void SaveData()
+        public void SaveData(IProgress<int> progress)
         {
             this.logger.Debug($"save translations {questionnaireIdentity.Id}");
 
@@ -60,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     TranslationId = x.TranslationId
                 }));
             }
-            progress.Current++;
+            progress.Report(100);
         }
     }
 }
