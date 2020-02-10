@@ -36,6 +36,8 @@
         </BootstrapperApplicationRef>
 
         <Chain>
+            <PackageGroupRef Id="WindowsDesktopRuntime31Web"/>
+            <RollbackBoundary/>
             <MsiPackage Id="SurveySolutionsPackage"
                         Cache="no"
                         Compressed="yes"
