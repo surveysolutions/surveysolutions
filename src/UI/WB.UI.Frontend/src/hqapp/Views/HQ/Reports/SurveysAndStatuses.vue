@@ -3,6 +3,11 @@
         :title="$t('Pages.SurveysAndStatuses_Overview')"
         :subtitle="$t('Pages.SurveysAndStatuses_HeadquartersDescription')"
         :hasFilter="true">
+        <div slot="subtitle">
+            <p v-if="questionnaireId">
+                <a :href="$config.model.selfUrl">{{$t('Reports.ToAllQuestionnaires')}}</a>
+            </p>
+        </div>
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.SurveysAndStatuses_SupervisorTitle')">
                 <Typeahead
@@ -16,10 +21,6 @@
                     :fetch-url="$config.model.responsiblesUrl"/>
             </FilterBlock>
         </Filters>
-
-        <p v-if="questionnaireId">
-            <a :href="$config.model.selfUrl">{{$t('Reports.ToAllQuestionnaires')}}</a>
-        </p>
 
         <DataTables
             ref="table"
@@ -69,9 +70,12 @@ export default {
             }
         },
         getLinkToInterviews(data, row, status) {
+            const value = escape(data)
+            if (value == 0)
+                return '0'
             const responsibleName = (this.responsible || {}).value
             const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
-            return `<a href=${url}>${escape(data)}</a>`
+            return `<a href=${url}>${value}</a>`
         },
     },
     watch: {
@@ -95,8 +99,15 @@ export default {
                             }
                             return escape(data)
                         }
+
+                        var url = window.location.href
+                        if (url.indexOf('?') > 0)
+                            url += '&'
+                        else
+                            url += '?'
+                        url += `questionnaireId=${row.questionnaireId}`
                         
-                        return `<a href=${window.location}?questionnaireId=${row.questionnaireId}>${escape(data)}</a>`
+                        return `<a href=${url}>${escape(data)}</a>`
                     },
                 },
                 {
