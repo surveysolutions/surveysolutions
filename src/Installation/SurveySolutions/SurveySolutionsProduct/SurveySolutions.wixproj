@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\..\packages\PanelSwWixExtension.2.17.1\build\PanelSwWixExtension.props" Condition="Exists('..\..\..\..\packages\PanelSwWixExtension.2.17.1\build\PanelSwWixExtension.props')" />
   <Import Project="..\..\..\..\packages\WiX.3.11.2\build\wix.props" Condition="Exists('..\..\..\..\packages\WiX.3.11.2\build\wix.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -44,6 +45,7 @@
   <ItemGroup>
     <Content Include="Configuration.wxi" />
     <Content Include="appsettings.Production.ini" />
+    <Content Include="ExportService\appsettings.production.json" />
     <Content Include="img\icon-32.bmp" />
     <Content Include="img\left-image.bmp" />
     <Content Include="img\logo-50.bmp" />
@@ -52,6 +54,7 @@
     <Content Include="img\WixUIExclamationIco.bmp" />
     <Content Include="img\WixUIInfoIco.bmp" />
     <Content Include="packages.config" />
+    <Content Include="PanelSwWixExtension.xsd" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
@@ -83,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="img\" />
+    <Folder Include="ExportService" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
@@ -97,6 +101,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\..\packages\WiX.3.11.2\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\WiX.3.11.2\build\wix.props'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\PanelSwWixExtension.2.17.1\build\PanelSwWixExtension.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\PanelSwWixExtension.2.17.1\build\PanelSwWixExtension.props'))" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
