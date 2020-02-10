@@ -354,6 +354,8 @@ namespace WB.UI.Headquarters
                     new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
+                    new CultureInfo("id"),
+                    new CultureInfo("pt"),
                     new CultureInfo("zh")
                 };
             });
