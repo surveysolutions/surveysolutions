@@ -17,17 +17,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly QuestionnaireIdentity questionnaireIdentity;
         private readonly QuestionnaireDocument questionnaire;
-        private readonly Progress progress;
         private readonly IDesignerApi designerApi;
         private readonly ILogger logger;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly Dictionary<string, QuestionnairePdf> pdfFiles = new Dictionary<string, QuestionnairePdf>();
 
-        public PdfQuestionnaireImportStep(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaire, Progress progress, IDesignerApi designerApi, IPlainKeyValueStorage<QuestionnairePdf> pdfStorage, ILogger logger)
+        public PdfQuestionnaireImportStep(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaire, IDesignerApi designerApi, IPlainKeyValueStorage<QuestionnairePdf> pdfStorage, ILogger logger)
         {
             this.questionnaireIdentity = questionnaireIdentity;
             this.questionnaire = questionnaire;
-            this.progress = progress;
             this.designerApi = designerApi;
             this.pdfStorage = pdfStorage;
             this.logger = logger;
@@ -38,27 +36,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return (1 + (questionnaire.Translations?.Count ?? 0)) * 3;
         }
 
-        public async Task DownloadFromDesignerAsync()
+        public async Task DownloadFromDesignerAsync(IProgress<int> progress)
         {
-            await RequestToGeneratePdf();
-            await DownloadPdf();
+            int stepsCount = ((questionnaire.Translations?.Count ?? 0) + 1) * 2;
+            int percentPerStep = 100 / stepsCount;
+            int currentPercent = 0;
+
+            void IncrementProgress()
+            {
+                currentPercent += percentPerStep;
+                progress.Report(currentPercent);
+            }
+
+            await RequestToGeneratePdf(IncrementProgress);
+            await DownloadPdf(IncrementProgress);
+            progress.Report(100);
         }
 
-        private async Task RequestToGeneratePdf()
+        private async Task RequestToGeneratePdf(Action incrementProgress)
         {
             this.logger.Error($"Requesting pdf generator to start working for questionnaire {questionnaire.PublicKey}");
 
             await designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId);
-            progress.Current++;
+            incrementProgress.Invoke();
 
             foreach (var questionnaireTranslation in questionnaire.Translations)
             {
                 await designerApi.GetPdfStatus(questionnaire.PublicKey, questionnaireTranslation.Id);
-                progress.Current++;
+                incrementProgress.Invoke();
             }
         }
 
-        private async Task DownloadPdf()
+        private async Task DownloadPdf(Action incrementProgress)
         {
             logger.Verbose($"DownloadPdf: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
@@ -75,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.logger.Error("Loading pdf for default language");
 
             var pdfFile = await designerApi.DownloadPdf(questionnaireIdentity.QuestionnaireId);
-            progress.Current++;
+            incrementProgress.Invoke();
 
             pdfFiles.Add(questionnaireIdentity.ToString(), new QuestionnairePdf { Content = pdfFile.Content });
 
@@ -93,19 +102,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 });
 
                 var pdfTranslated = await designerApi.DownloadPdf(questionnaireIdentity.QuestionnaireId, translation.Id);
-                progress.Current++;
+                incrementProgress.Invoke();
+
                 pdfFiles.Add($"{translation.Id.FormatGuid()}_{questionnaireIdentity}", new QuestionnairePdf { Content = pdfTranslated.Content });
                 this.logger.Error($"PDF for questionnaire stored {questionnaireIdentity} translation {translation.Id}, {translation.Name}");
             }
         }
 
-        public void SaveData()
+        public void SaveData(IProgress<int> progress)
         {
             foreach (var pdfFile in pdfFiles)
             {
                 this.pdfStorage.Store(pdfFile.Value, pdfFile.Key);
-                progress.Current++;
             }
+            progress.Report(100);
         }
     }
 }
