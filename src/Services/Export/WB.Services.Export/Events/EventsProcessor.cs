@@ -53,6 +53,10 @@ namespace WB.Services.Export.Events
             if (tenantDbContext.Database.IsNpgsql())
             {
                 await tenantDbContext.CheckSchemaVersionAndMigrate(cancellationToken);
+
+                using var schemaScope = serviceProvider.CreateTenantScope(tenant);
+                var db = schemaScope.ServiceProvider.GetRequiredService<TenantDbContext>();
+                await db.SetContextSchema(cancellationToken);
             }
         }
 

@@ -62,7 +62,7 @@ namespace WB.Services.Infrastructure.Logging
 
                     try
                     {
-                        RetryPolicy.Execute(() => StoreEventsToDabase(events));
+                        RetryPolicy.Execute(() => StoreEventsToDatabase(events));
                     }
                     catch
                     {
@@ -70,57 +70,55 @@ namespace WB.Services.Infrastructure.Logging
                     }
                 });
 
-            void StoreEventsToDabase(LogEvent[] events)
+            void StoreEventsToDatabase(LogEvent[] events)
             {
-                using (var db = new NpgsqlConnection(connectionString))
-                {
-                    db.Execute($@"insert into ""{schema}"".""{tableName}"" "
-                               + "( message, jobId, source, stacktrace, level, tenant, data, timestamp, host, version, app)"
-                               + " values (@message, @jobId, @source, @stackTrace, @level, @tenant, @data::jsonb, @timestamp, "
-                               + " @host, @version, @app)",
-                        events.Select(e =>
+                using var db = new NpgsqlConnection(connectionString);
+                db.Execute($@"insert into ""{schema}"".""{tableName}"" "
+                           + "( message, jobId, source, stacktrace, level, tenant, data, timestamp, host, version, app)"
+                           + " values (@message, @jobId, @source, @stackTrace, @level, @tenant, @data::jsonb, @timestamp, "
+                           + " @host, @version, @app)",
+                    events.Select(e =>
+                    {
+                        string GetProperty(string name)
                         {
-                            string GetProperty(string name)
-                            {
-                                return e.Properties.ContainsKey(name) ? e.Properties[name].ToString() : null;
-                            }
+                            return e.Properties.ContainsKey(name) ? e.Properties[name].ToString() : null;
+                        }
 
-                            var sb = new StringBuilder();
-                            sb.Clear();
-                            var text = new StringWriter(sb);
-                            formatter.Format(e, text);
+                        var sb = new StringBuilder();
+                        sb.Clear();
+                        var text = new StringWriter(sb);
+                        formatter.Format(e, text);
 
-                            var jobId = GetProperty("jobId");
-                            var data = sb.ToString();
+                        var jobId = GetProperty("jobId");
 
-                            return new
-                            {
-                                app = GetProperty("AppType"),
-                                data,
-                                host = GetProperty("Host"),
-                                jobId = jobId != null ? int.Parse(jobId) : (int?) null,
-                                level = e.Level.ToString(),
-                                message = e.RenderMessage(),
-                                source = GetProperty("SourceContext"),
-                                stackTrace = e.Exception?.ToStringDemystified(),
-                                tenant = GetProperty("tenantName"),
-                                timestamp = e.Timestamp,
-                                version = GetProperty("Version")
-                            };
-                        }));
-                }
+                        // limit amount of data to be written
+                        var data = sb.ToString().Substring(0, Math.Min(1_000_000, sb.Length));
+
+                        return new
+                        {
+                            app = GetProperty("AppType"),
+                            data,
+                            host = GetProperty("Host"),
+                            jobId = jobId != null ? int.Parse(jobId) : (int?) null,
+                            level = e.Level.ToString(),
+                            message = e.RenderMessage(),
+                            source = GetProperty("SourceContext"),
+                            stackTrace = e.Exception?.ToStringDemystified(),
+                            tenant = GetProperty("tenantName"),
+                            timestamp = e.Timestamp,
+                            version = GetProperty("Version")
+                        };
+                    }));
             }
         }
-
 
         private void EnsureTableCreated()
         {
             RetryPolicy.Execute(() =>
             {
-                using (var db = new NpgsqlConnection(connectionString))
-                {
-                    db.Execute($@"create schema if not exists ""{schema}""  ");
-                    db.Execute($@"CREATE TABLE if not exists ""{schema}"".""{tableName}"" (
+                using var db = new NpgsqlConnection(connectionString);
+                db.Execute($@"create schema if not exists ""{schema}""  ");
+                db.Execute($@"CREATE TABLE if not exists ""{schema}"".""{tableName}"" (
 	id serial NOT NULL,
 	message varchar NULL,
     level varchar null,
@@ -137,8 +135,6 @@ namespace WB.Services.Infrastructure.Logging
 );
 CREATE INDEX if not exists {tableName}_tenant_idx ON ""{schema}"".""{tableName}"" (tenant);
 CREATE INDEX if not exists  {tableName}_timestamp_idx ON ""{schema}"".""{tableName}"" (""timestamp"");");
-                }
-
             });
         }
 
