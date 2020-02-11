@@ -165,10 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             });
 
             if (includePdf == false) // assume this is automation request
-            {
-                await bgTask;
-                return GetStatus(questionnaireIdentity);
-            }
+                return await bgTask;
 
             return questionnaireImportResult;
         }
