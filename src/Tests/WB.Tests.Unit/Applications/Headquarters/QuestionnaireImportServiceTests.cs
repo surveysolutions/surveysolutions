@@ -361,10 +361,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
             unitOfWork = unitOfWork ?? GetUnitOfWorkMock().Object;
 
             var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-            var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.ExecuteAsync(It.IsAny<Func<IServiceLocator, Task<QuestionnaireImportResult>>> ()))
-                .Callback((Func<IServiceLocator, Task<QuestionnaireImportResult>> func) => func.Invoke(serviceLocatorNestedMock.Object));
-            InScopeExecutor.Init(executor.Object);
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
+            InScopeExecutor.Init(executor);
 
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
