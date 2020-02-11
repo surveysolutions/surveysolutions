@@ -43,9 +43,9 @@
     <Compile Include="ProductFiles.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appsettings.production.json" />
     <Content Include="Configuration.wxi" />
     <Content Include="appsettings.Production.ini" />
-    <Content Include="ExportService\appsettings.production.json" />
     <Content Include="img\icon-32.bmp" />
     <Content Include="img\left-image.bmp" />
     <Content Include="img\logo-50.bmp" />
@@ -86,7 +86,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="img\" />
-    <Folder Include="ExportService" />
+    <Folder Include="Utils" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SurveySolutionsCustomActions\SurveySolutionsCustomActions.csproj">
+      <Name>SurveySolutionsCustomActions</Name>
+      <Project>{d8b73265-e8ff-45f5-8834-da32d7270c59}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />

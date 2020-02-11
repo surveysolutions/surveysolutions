@@ -6,48 +6,48 @@
      xmlns:PanelSW="http://schemas.panel-sw.co.il/wix/WixExtension"
      xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
 
-    <Product Id="*"
-           Name="Survey Solutions"
-           Language="1033"
-           Version="$(var.SurveySolutionsVersion)"
-           Manufacturer="World Bank"
-           UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
-        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
+  <Product Id="*"
+         Name="Survey Solutions"
+         Language="1033"
+         Version="$(var.SurveySolutionsVersion)"
+         Manufacturer="World Bank"
+         UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
-        <util:CloseApplication Id="CloseExportService" CloseMessage="yes" Timeout="10" RebootPrompt="no" TerminateProcess="3" Target="WB.Services.Export.Host.exe" />
+    <util:CloseApplication Id="CloseExportService" CloseMessage="yes" Timeout="10" RebootPrompt="no" TerminateProcess="3" Target="WB.Services.Export.Host.exe" />
 
-        <!--Will override all files-->
-        <Property Id="REINSTALLMODE" Value="amus" />
+    <!--Will override all files-->
+    <Property Id="REINSTALLMODE" Value="amus" />
 
-        <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
-        <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
+    <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
+    <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
 
-        <!--<PropertyRef Id="NETFRAMEWORK45" />
+    <!--<PropertyRef Id="NETFRAMEWORK45" />
         <Condition Message="This application requires .NET Framework 4.8 Please install the .NET 4.8 Framework then run this installer again.">
             <![CDATA[Installed OR (NETFRAMEWORK45 AND NETFRAMEWORK45 >= "#528040")]]>
         </Condition>-->
 
-        <!--server OS-->
-        <!--AND MsiNTProductType > 1-->
-        <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
-            <![CDATA[Installed OR (VersionNT64 >= 603 AND MsiNTProductType > 1)]]>
-        </Condition>
+    <!--server OS-->
+    <!--AND MsiNTProductType > 1-->
+    <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
+      <![CDATA[Installed OR (VersionNT64 >= 603)]]>
+    </Condition>
 
-        <Property Id="SITEPORT" Value="9700"></Property>
-        <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
-        <Property Id="CONNPORT" Value="5432"></Property>
-        <Property Id="CONNUSERNAME" Value="postgres"></Property>
+    <Property Id="SITEPORT" Value="9700"></Property>
+    <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
+    <Property Id="CONNPORT" Value="5432"></Property>
+    <Property Id="CONNUSERNAME" Value="postgres"></Property>
 
-        <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
-        <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions">
-            <RegistrySearch Id="SurveySolutionsPath" 
-                            Type="directory" 
-                            Root="HKLM" 
-                            Key="SOFTWARE\World Bank\Survey Solutions"
-                            Name="Install Path" 
-                            Win64='yes'>
-            </RegistrySearch>
-        </Property>
+    <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
+    <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions">
+      <RegistrySearch Id="SurveySolutionsPath"
+                      Type="directory"
+                      Root="HKLM"
+                      Key="SOFTWARE\World Bank\Survey Solutions"
+                      Name="Install Path"
+                      Win64='yes'>
+      </RegistrySearch>
+    </Property>
 
     <!--        <Condition Message="Path was not found.">
             <![CDATA[((( Installed AND (PATCH OR REINSTALL ) ) OR WIX_UPGRADE_DETECTED) AND (NOT INSTALLFOLDER))]]>
@@ -134,6 +134,7 @@
 
     <Property Id="ModifyExportSettings" Value="INSTALLFOLDER=[INSTALLFOLDER];Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;" ></Property>
 
+    
     <!-- Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) -->
     <!-- Build path to dism.exe (full path is important, just calling dism.exe without path will fail) -->
     <CustomAction Id="InstallIISSetProperty"
@@ -150,6 +151,21 @@
                   HideTarget="no"
                   Return="ignore"
                   Impersonate="no"/>
+
+
+    <Binary Id="CustomActionBinary"
+            SourceFile="..\SurveySolutionsCustomActions\bin\$(var.Configuration)\SurveySolutionsCustomActions.CA.dll" />
+
+    <CustomAction Id="SetUpdateExportSettingsDataValue"
+                  Return="check"
+                  Property="myActionId"
+                  Value="FILECONTENT=Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=export;ApplicationName=export;Maximum Pool Size=10" />
+
+    <CustomAction Id="myActionId"
+                  BinaryKey="CustomActionBinary"
+                  DllEntry="WriteDataToFile"
+                  Execute="deferred"
+                  Return="check" />
 
     <Property Id="ProductURL"><![CDATA[http://localhost:[SITEPORT]/]]></Property>
     <CustomAction Id="SetOpenURL" Property="WixShellExecTarget" Value="[ProductURL]" />
@@ -169,7 +185,15 @@
       <Custom Action="OpenURL" After="SetOpenURL">
         <![CDATA[NOT Installed]]>
       </Custom>
+
+      <Custom Action="SetUpdateExportSettingsDataValue" Before="myActionId" />
+      <Custom Action="myActionId" After="InstallFiles" />
     </InstallExecuteSequence>
+
+    <SetProperty Id="EXPORTDEFAULTCONNECTION1"
+                 After="InstallFiles" Sequence="execute"
+                 Value="Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=export;ApplicationName=export;Maximum Pool Size=10"/>
+
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
                   AllowDowngrades="no"
@@ -177,23 +201,24 @@
     <!--preserves settings-->
 
     <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
-        <ComponentGroupRef Id="ProductComponents" />
-        <ComponentGroupRef Id="SettingsUpdate" />
-        <ComponentGroupRef Id="ExportService" />
-        <ComponentRef Id ="ApplicationShortcut" />
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="SettingsUpdate" />
+      <ComponentGroupRef Id="ExportServiceConfig" />
+      <ComponentGroupRef Id="ExportService" />
+      <ComponentRef Id ="ApplicationShortcut" />
     </Feature>
   </Product>
 
-    <Fragment>
-    <util:ProductSearch Id="OldProductSearch" 
-                        UpgradeCode="{0C543B8A-9023-4486-89C9-421D875F5AFA}" 
-                        Variable="OldProductInstalled" 
+  <Fragment>
+    <util:ProductSearch Id="OldProductSearch"
+                        UpgradeCode="{0C543B8A-9023-4486-89C9-421D875F5AFA}"
+                        Variable="OldProductInstalled"
                         Result="state"></util:ProductSearch>
     <Condition Message="Please uninstsall previous version of Survey Solutions.">
       <![CDATA[(OldProductInstalled = 2)]]>
     </Condition>
   </Fragment>
-    <Fragment>
+  <Fragment>
     <!--<SetDirectory Id='INSTALLFOLDER' Value='[WindowsVolume]SurveySolutions' />-->
 
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -218,70 +243,86 @@
         <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D" >
           <Directory Id="CONFIGFOLDER" Name="Configuration">
           </Directory>
-          <Directory Id="EXPORTSERVICEFOLDER" Name="ExportService">
-          </Directory>
+        </Directory>
+        <Directory Id="EXPORTSERVICEFOLDER" Name="ExportService">
         </Directory>
       </Directory>
     </Directory>
   </Fragment>
-    <Fragment>
-      <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
-          <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
-            <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
-            </RegistryKey>
-        </Component>
 
-        <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes" >
-            <iis:WebAppPool
-                Id="AppSurveySolutions"
-                Name="AppSurveySolutions"
-                ManagedRuntimeVersion="v4.0"
-                ManagedPipelineMode="integrated"
-                Identity="applicationPoolIdentity" />
-            <iis:WebSite Id="webSite" SiteId="*" Description="Survey Solutions" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
-                <iis:WebAddress Id="webSite" Port="[SITEPORT]" />
-                <iis:WebDirProperties Id="webSite" AnonymousAccess="yes" WindowsAuthentication="no" />
-                <iis:WebApplication Id="webSite" WebAppPool="AppSurveySolutions" Name="SurveySolutions" />
-                <iis:MimeMap Id="MIME_OTF" Extension=".otf" Type="application/x-font-otf" />
-                <iis:MimeMap Id="MIME_WOFF" Extension=".woff" Type="application/x-font-woff" />
-                <iis:MimeMap Id="MIME_APK" Extension=".apk" Type="application/vnd.android.package-archive" />
-                <iis:MimeMap Id="MIME_TPK" Extension=".tpk" Type="application/octet-stream" />
-            </iis:WebSite>
-        </Component>
-        <!--add harvested project output-->
+  <Fragment>
+    <!--<Property Id="EXPORTDEFAULTCONNECTION0"><![CDATA[Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=export;ApplicationName=export;Maximum Pool Size=10]]></Property>-->
+    
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
+      <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
+        <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
+        </RegistryKey>
+      </Component>
 
-        <ComponentGroupRef Id="ProductFilesComponentGroup"></ComponentGroupRef>
+      <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes" >
+        <iis:WebAppPool
+            Id="AppSurveySolutions"
+            Name="AppSurveySolutions"
+            ManagedRuntimeVersion="v4.0"
+            ManagedPipelineMode="integrated"
+            Identity="applicationPoolIdentity" />
+        <iis:WebSite Id="webSite" SiteId="*" Description="Survey Solutions" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
+          <iis:WebAddress Id="webSite" Port="[SITEPORT]" />
+          <iis:WebDirProperties Id="webSite" AnonymousAccess="yes" WindowsAuthentication="no" />
+          <iis:WebApplication Id="webSite" WebAppPool="AppSurveySolutions" Name="SurveySolutions" />
+          <iis:MimeMap Id="MIME_OTF" Extension=".otf" Type="application/x-font-otf" />
+          <iis:MimeMap Id="MIME_WOFF" Extension=".woff" Type="application/x-font-woff" />
+          <iis:MimeMap Id="MIME_APK" Extension=".apk" Type="application/vnd.android.package-archive" />
+          <iis:MimeMap Id="MIME_TPK" Extension=".tpk" Type="application/octet-stream" />
+        </iis:WebSite>
+      </Component>
+      <!--add harvested project output-->
+
+      <ComponentGroupRef Id="ProductFilesComponentGroup"></ComponentGroupRef>
     </ComponentGroup>
-      
+
+    <?define InstallIniDir="INSTALLSITEFOLDER"?>
+
     <ComponentGroup Id="SettingsUpdate" Directory="INSTALLSITEFOLDER" >
-        <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA" NeverOverwrite="yes">
-            <!--<CreateFolder/>-->
-            <File Source="appsettings.Production.ini" PatchIgnore="yes" />
+      <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA" NeverOverwrite="yes">
+        <!--<CreateFolder/>-->
+        <File Source="appsettings.Production.ini" PatchIgnore="yes"/>
 
-            <!--<IniFile Id ="IniHeadquartersBaseUrl"
-                     Name="appsettings.Production.ini"
-                     Section="Headquarters"
-                     Action="addLine"
-                     Key="BaseUrl"
-                     Value=""/>-->
+        <IniFile Id ="IniHeadquartersBaseUrl"
+                 Directory="$(var.InstallIniDir)"
+                 Name="appsettings.Production.ini"
+                 Section="Headquarters"
+                 Action="addLine"
+                 Key="BaseUrl"
+                 Value="http://localhost:9700"/>
 
-          <IniFile Id ="IniHeadquartersTenantName"
-                     Name="appsettings.Production.ini"
-                     Section="Headquarters"
-                     Action="addLine"
-                     Key="TenantName"
-                     Value="hq"/>
+        <IniFile Id ="IniHeadquartersTenantName"
+                 Directory="$(var.InstallIniDir)"
+                 Name="appsettings.Production.ini"
+                 Section="Headquarters"
+                 Action="addLine"
+                 Key="TenantName"
+                 Value="hq"/>
 
-            <IniFile Id ="IniConnectionString"
-                     Name="appsettings.Production.ini"
-                     Section="ConnectionString"
-                     Action="addLine"
-                     Key="DefaultConnection"
-                     Value="Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;"/>
+        <IniFile Id ="IniHeadquartersExportUrl"
+                 Directory="$(var.InstallIniDir)"
+                 Name="appsettings.Production.ini"
+                 Section="DataExport"
+                 Action="addLine"
+                 Key="ExportServiceUrl"
+                 Value="http://localhost:5002"/>
+
+        <IniFile Id ="IniConnectionString"
+                 Directory="$(var.InstallIniDir)"
+                 Name="appsettings.Production.ini"
+                 Section="ConnectionString"
+                 Action="addLine"
+                 Key="DefaultConnection"
+                 Value="Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;"/>
 
 
-            <!--<util:XmlFile Id="CreateElementConnectionStrings"
+        <!--<util:XmlFile Id="CreateElementConnectionStrings"
                           File="[CONFIGFOLDER]\Headquarters.Web.config"
                           Action="createElement"
                           ElementPath="//configuration"
@@ -433,38 +474,46 @@
                       Sequence='20'/>-->
       </Component>
     </ComponentGroup>
-    <ComponentGroup Id="ExportService" Directory="INSTALLSITEFOLDER" >
-        <Component Id="ExportServiceConfigUpdate" Guid="035F0D52-04C7-4DB4-BBC7-C447F405C2EA" NeverOverwrite="yes">
-            <!--<CreateFolder/>-->
-            <File Source="ExportService\appsettings.production.json" PatchIgnore="yes">
-                <PanelSW:JsonJPath 
-                    JPath="$.ConnectionString" 
-                    Value="Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;ApplicationNAme=export;Maximum Pool Size=10"/>
-            </File>
 
-        </Component>
-        <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B000-1F22B2B48F74">
-                <!--Dirty hack to reference file-->
-                <File Id="WB.Services.Export.Host.exe"
-                      Source="$(var.HarvestDir)\ExportService\WB.Services.Export.Host.exe"
-                      Vital="yes"
-                      KeyPath="yes" />
-                <ServiceInstall Id="ExportServiceInstall"
-                                Name="SurveySolutionsExport"
-                                DisplayName="Survey Solutions Export Service"
-                                Type="ownProcess"
-                                Start="auto"
-                                ErrorControl="normal"></ServiceInstall>
-                <ServiceControl Id="ExportServiceControl"
-                                Name="SurveySolutionsExport"
-                                Start="install"
-                                Stop="both"
-                                Remove="both"
-                                Wait="yes"></ServiceControl>
-            </Component>
-        </ComponentGroup>
+    
+    
+    <ComponentGroup Id="ExportServiceConfig" Directory="EXPORTSERVICEFOLDER" >
+      <Component Id="ExportServiceConfigUpdate" Guid="035F0D52-04C7-4DB4-BBC7-C447F405C2EA" NeverOverwrite="yes" >
+        <!--<CreateFolder/>-->
+        <!--<Property Id='JSON_TEST'>
+                <PanelSW:JsonJpathSearch JPath="$.ConnectionString" FilePath="appsettings.production.json"/>
+            </Property>-->
+        <File Source="appsettings.production.json" PatchIgnore="yes">
+            <!--<PanelSW:JsonJPath
+                JPath="$.ConnectionString"
+                Value='{"DefaultConnection": "[EXPORTDEFAULTCONNECTION1]"}'/>-->
+        </File>
+        
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="ExportService" Directory="EXPORTSERVICEFOLDER" >
+      <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B000-1F22B2B48F74">
+        <!--Dirty hack to reference file-->
+        <File Id="WB.Services.Export.Host.exe"
+              Source="$(var.HarvestDir)\ExportService\WB.Services.Export.Host.exe"
+              Vital="yes"
+              KeyPath="yes" />
+        <ServiceInstall Id="ExportServiceInstall"
+                        Name="SurveySolutionsExport"
+                        DisplayName="Survey Solutions Export Service"
+                        Type="ownProcess"
+                        Start="auto"
+                        ErrorControl="normal"></ServiceInstall>
+        <ServiceControl Id="ExportServiceControl"
+                        Name="SurveySolutionsExport"
+                        Start="install"
+                        Stop="both"
+                        Remove="both"
+                        Wait="no"></ServiceControl>
+      </Component>
+    </ComponentGroup>
   </Fragment>
-    <Fragment>
+  <Fragment>
     <UI>
       <Dialog Id="ConnectionStringDlg" Width="370" Height="270" Title="!(loc.ConnectionStringDlg_Title)">
 
