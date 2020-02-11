@@ -337,8 +337,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 this.logger.Error($"Designer: error when importing template #{questionnaireId}", ex);
 
                 questionnaireImportResult.ImportError = "Fail to import questionnaire to Headquarters. Please contact support to resolve this problem.";
-
-                throw;
+                return questionnaireImportResult;
             }
             finally
             {
