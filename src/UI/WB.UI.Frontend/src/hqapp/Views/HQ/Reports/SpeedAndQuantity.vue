@@ -89,6 +89,7 @@
 
         <DataTables
             ref="table"
+            v-if="mounted"
             :tableOptions="tableOptions"
             :addParamsToRequest="addParamsToRequest"
             @ajaxComplete="onTableReload"
@@ -110,6 +111,7 @@ export default {
 
     data() {
         return {
+            mounted: false,
             questionnaireId: null,
             questionnaireVersion: null,
             reportTypeId: null,
@@ -159,21 +161,28 @@ export default {
         }
 
         this.loadReportData()
+        this.mounted = true
     },
+    
     methods: {
-        loadReportData() {
+        loadReportData(reloadPage = false) {
+            if(reloadPage) return // reload will happen when route change
             if (this.$refs.table) {
                 this.$refs.table.reload()
             }
         },
+        routeUpdated(route) {
+            window.location.reload()
+        },
         prepareColumns() {
             var self = this
             var columns = []
+
             columns.push({
                 data: 'responsibleName',
                 name: 'Responsible',
                 title: self.model.responsibleColumnName,
-                orderable: true,
+                orderable: false,
                 render: function(data, type, row) {
                     if (data == undefined || row.DT_RowClass == 'total-row') {
                         if (self.model.supervisorId) {
@@ -194,13 +203,12 @@ export default {
 
             const count = self.columnsCount
             for (let i = 0; i < count; i++) {
-                //const date = this.dateTimeRanges[i];
                 const index = i
                 columns.push({
                     class: 'type-numeric',
-                    title: `<span id="date${index}"></span>`, //moment(date.to).format(this.dateFormat),
-                    data: '', //date.from,
-                    name: '', //date.from,
+                    title: `<span style=" white-space: nowrap;" id="date${index}"></span>`,
+                    data: '',
+                    name: '',
                     orderable: false,
                     render: function(data, type, row) {
                         if (row.quantityByPeriod) {
@@ -215,6 +223,7 @@ export default {
                     },
                 })
             }
+            
             columns.push({
                 data: 'average',
                 name: 'Average',
@@ -234,7 +243,7 @@ export default {
                 data: 'total',
                 name: 'Total',
                 title: this.$t('PeriodicStatusReport.Total'),
-                orderable: true,
+                orderable: false,
                 render: function(data, type, row) {
                     if (row.quantityByPeriod) {
                         return self.renderQuantityValue(data)
@@ -254,7 +263,9 @@ export default {
                 const column = this.columns[i + 1]
                 const date = moment(dateRange.to).format(this.dateFormat)
                 column.title = date
-                document.getElementById(`date${i}`).textContent = date
+                const el = document.getElementById(`date${i}`)
+                if(el != null)
+                    el.textContent = date
             }
         },
         renderQuantityValue(value) {
@@ -271,24 +282,25 @@ export default {
         },
         reportTypeSelected(option) {
             this.reportTypeId = option
+
             this.onChange(query => {
                 query.reportType = this.reportTypeId.key
             })
-            this.loadReportData()
+            this.loadReportData(true)
         },
         questionnaireSelected(option) {
             this.questionnaireId = option
             this.onChange(query => {
                 query.questionnaireId = (this.questionnaireId || {}).key
             })
-            this.loadReportData()
+            this.loadReportData(true)
         },
         questionnaireVersionSelected(option) {
             this.questionnaireVersion = option
             this.onChange(query => {
                 query.questionnaireVersion = (this.questionnaireVersion || {}).key
             })
-            this.loadReportData()
+            this.loadReportData(true)
         },
         periodSelected(option) {
             this.period = option
@@ -307,16 +319,18 @@ export default {
                 query.columnCount = (this.overTheLast || {}).key
             })
             this.prepareColumns()
-            this.loadReportData()
+            this.loadReportData(true)
         },
+
         overTheLastSelected(option) {
             this.overTheLast = option
             this.onChange(query => {
                 query.columnCount = (this.overTheLast || {}).key
             })
             this.prepareColumns()
-            this.loadReportData()
+            this.loadReportData(true)
         },
+
         addParamsToRequest(requestData) {
             requestData.questionnaireId = (this.questionnaireId || {}).key
             requestData.questionnaireVersion = (this.questionnaireVersion || {}).key
@@ -357,6 +371,14 @@ export default {
         onTableReload(data) {
             this.dateTimeRanges = data.dateTimeRanges || []
             this.updateDateColumnsInfo()
+        },
+    },
+    watch: { 
+        selectedDate(to) {
+            this.onChange(query => {
+                query.from = to
+            })
+            
         },
     },
     computed: {
@@ -428,12 +450,13 @@ export default {
 
                     if (date != null && date != self.from) {
                         self.from = date
-                        self.loadReportData()
+                        self.loadReportData(true)
                     }
                 },
             }
         },
         tableOptions() {
+
             if (this.columns.length == 0) {
                 this.prepareColumns()
             }
@@ -447,7 +470,7 @@ export default {
                     contentType: 'application/json',
                 },
                 responsive: false,
-                order: [[0, 'asc']],
+                ordering: false,
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },
