@@ -5,6 +5,7 @@
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
 		<meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="e77a488dd76b43009a378716f5b2faa7" />
+        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyApLR-feMXRPfdDGjuC9NhlzH5udpuTgE4" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
