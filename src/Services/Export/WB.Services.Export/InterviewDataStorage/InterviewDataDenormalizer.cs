@@ -580,6 +580,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var columnName = (entity as Question)?.ColumnName 
                              ?? (entity as StaticText)?.ColumnName 
                              ?? throw new ArgumentException("Does not support this entity type: " + entity.GetType().Name);
+
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, validityValue, NpgsqlDbType.Array | NpgsqlDbType.Integer);
         }
 
@@ -626,22 +627,35 @@ namespace WB.Services.Export.InterviewDataStorage
             logger.LogDebug("Save state command applied on DB in {time}", sw.Elapsed);
         }
 
-        private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
+        private Guid? lastInterviewId = null;
+        private QuestionnaireDocument lastQuestionnaire = null;
+
+        private async ValueTask<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
         {
+            if (lastInterviewId == interviewId && lastQuestionnaire != null) return lastQuestionnaire;
+
             var key = $"{nameof(InterviewDataDenormalizer)}:{tenantContext.Tenant.Name}:{interviewId}";
             var questionnaireId = await memoryCache.GetOrCreateAsync(key,
                 async entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(3);
                     var interviewSummary = await interviewReferencesStorage.FindAsync(interviewId);
+
                     if (interviewSummary == null)
                         return null;
+
                     return new QuestionnaireId(interviewSummary.QuestionnaireId);
                 });
 
             if (questionnaireId == null)
+            {
+                lastQuestionnaire = null;
                 return null;
+            }
+
             var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: token);
+            lastQuestionnaire = questionnaire;
+            lastInterviewId = interviewId;
             return questionnaire;
         }
 

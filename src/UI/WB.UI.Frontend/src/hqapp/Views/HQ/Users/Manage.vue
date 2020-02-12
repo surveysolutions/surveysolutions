@@ -32,7 +32,7 @@
                     </form-group>
 
                     <form-group :label="$t('Pages.AccountManage_Role')">
-                        <TextInput :value="userInfo.role"
+                        <TextInput :value="$t(`Roles.${userInfo.role}`)"
                             id="Role"
                             disabled />
                     </form-group>

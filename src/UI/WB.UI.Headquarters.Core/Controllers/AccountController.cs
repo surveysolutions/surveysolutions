@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.CompanyLogo;
+using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Services;
@@ -20,16 +25,19 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICaptchaService captchaService;
         private readonly ICaptchaProvider captchaProvider;
         private readonly SignInManager<HqUser> signInManager;
-
+        protected readonly IAuthorizedUser authorizedUser;
+        
         public AccountController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
             ICaptchaService captchaService,
             ICaptchaProvider captchaProvider,
-            SignInManager<HqUser> signInManager)
+            SignInManager<HqUser> signInManager,
+            IAuthorizedUser authorizedUser)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.captchaService = captchaService;
             this.captchaProvider = captchaProvider;
             this.signInManager = signInManager;
+            this.authorizedUser = authorizedUser;
         }
 
         [HttpGet]
@@ -84,18 +92,65 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        
-
         public IActionResult LogOff()
         {
             this.signInManager.SignOutAsync();
             return this.Redirect("~/");
         }
 
-        [Authorize(Roles = "Administrator, Observer")]
-        public ActionResult ObservePerson(string personName)
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        public async Task<ActionResult> ReturnToObserver()
         {
-            throw new NotImplementedException();
+            if (!this.authorizedUser.IsObserver)
+                return NotFound();
+
+            var observerName = User.FindFirst(AuthorizedUser.ObserverClaimType)?.Value;
+            var observer = await this.signInManager.UserManager.FindByNameAsync(observerName);
+
+            await this.signInManager.SignOutAsync();
+            await this.signInManager.SignInAsync(observer, true);
+            
+            return this.Redirect("~/");
+        }
+        
+        private static readonly Guid[] ObservableRoles = {UserRoles.Headquarter.ToUserId(), UserRoles.Supervisor.ToUserId()};
+        
+        [Authorize(Roles = "Administrator, Observer")]
+        public async Task<IActionResult> ObservePerson(string personName)
+        {
+            if (string.IsNullOrEmpty(personName))
+                return  NotFound();
+
+            var user = await this.signInManager.UserManager.FindByNameAsync(personName);
+            if (user == null || !ObservableRoles.Contains(user.Roles.First().Id))
+               return NotFound();
+
+            //do not forget pass current user to display you are observing
+            await this.SignInAsObserverAsync(personName);
+
+            return user.IsInRole(UserRoles.Headquarter) ?
+                this.RedirectToAction("SurveysAndStatuses", "Reports") :
+                this.RedirectToAction("SurveysAndStatusesForSv", "Reports");
+        }
+
+        public async Task SignInAsObserverAsync(string userName)
+        {
+            var userToObserve = await this.signInManager.UserManager.FindByNameAsync(userName);
+            userToObserve.Claims.Add(new HqUserClaim
+            {
+                UserId = userToObserve.Id,
+                ClaimType = AuthorizedUser.ObserverClaimType,
+                ClaimValue = authorizedUser.UserName
+            });
+            userToObserve.Claims.Add(new HqUserClaim
+            {
+                UserId = userToObserve.Id,
+                ClaimType = ClaimTypes.Role,
+                ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
+            });
+            
+            await this.signInManager.SignOutAsync();
+            await this.signInManager.SignInAsync(userToObserve, true);
         }
     }
 }

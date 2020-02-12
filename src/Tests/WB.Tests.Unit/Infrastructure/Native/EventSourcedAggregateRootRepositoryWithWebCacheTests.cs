@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -23,32 +24,28 @@ namespace WB.Tests.Unit.Infrastructure.Native
             var eventStore = new Mock<IEventStore>();
             var domainRepo = new Mock<IDomainRepository>();
 
+            CommonMetrics.StateFullInterviewsCount.Set(0);
             domainRepo
                 .Setup(dr => dr.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()))
                 .Returns<Type, Guid, IEnumerable<CommittedEvent>>((type, id, ce) => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id));
 
-            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(
-                eventStore.Object, 
-                Mock.Of<IInMemoryEventStore>(), 
-                new EventBusSettings(), 
-                domainRepo.Object,
-                ServiceLocator.Current,
-                new Stub.StubAggregateLock());
+            var repo = GetRepository(eventStore: eventStore.Object, domainRepository: domainRepo.Object);
 
-            CommonMetrics.StateFullInterviewsCount.Set(0);
-
+            repo.GetLatest(typeof(IEventSourcedAggregateRoot), Guid.NewGuid());
+            var initialGaugeValue = CommonMetrics.StateFullInterviewsCount.Value;
             repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g1);
-            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(1));
+            
+            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(initialGaugeValue + 1));
 
             var entity = repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g2);
-            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(2));
+            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(initialGaugeValue + 2));
             Assert.NotNull(entity);
 
             repo.Evict(Id.g1);
-            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(1));
+            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(initialGaugeValue + 1));
 
             repo.Evict(Id.g1);
-            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(1), "Should not decrease interviews counter");
+            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(initialGaugeValue + 1), "Should not decrease interviews counter");
         }
 
         [Test]

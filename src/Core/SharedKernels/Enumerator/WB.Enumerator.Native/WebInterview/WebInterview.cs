@@ -15,7 +15,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         private readonly IPipelineModule[] hubPipelineModules;
 
-        protected string CallerInterviewId
+        private string CallerInterviewId
         {
             get
             {
@@ -56,15 +56,8 @@ namespace WB.Enumerator.Native.WebInterview
         private async Task RegisterClient()
         {
             var interviewId = CallerInterviewId;
-
             await Groups.AddToGroupAsync(Context.ConnectionId, interviewId);
-
-            var isReview = Context.Items[@"review"] as bool?;
-
-            if (isReview == false)
-            {
-                await Clients.OthersInGroup(interviewId).SendCoreAsync("closeInterview", null, CancellationToken.None);
-            }
+            await Clients.OthersInGroup(interviewId).SendAsync("closeInterview");
         }
 
         private async Task UnRegisterClient()
@@ -75,7 +68,6 @@ namespace WB.Enumerator.Native.WebInterview
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, interviewId);
         }
-
         
         public async Task ChangeSection(string sectionId, string oldSectionId = null)
         {

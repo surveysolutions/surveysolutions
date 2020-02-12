@@ -8,19 +8,25 @@ export default class ProfileComponent {
     get routes() {
         return [
             {
-                path: '/WebInterview/:invitationId/Start', component: Start,
+                path: '/WebInterview/:invitationId/Start',
+                component: Start,
             },
             {
-                path: '/WebInterview/Resume/:interviewId', component: Resume,
+                path: '/WebInterview/Resume/:interviewId',
+                component: Resume,
             },
             {
-                path: '/WebInterview/Finish/:interviewId', component: Finish,
+                path: '/WebInterview/Finish/:interviewId',
+                component: Finish,
             },
             {
-                path: '/WebInterview/OutdatedBrowser', component: OutdatedBrowser,
+                path: '/WebInterview/OutdatedBrowser',
+                component: OutdatedBrowser,
             },
             {
-                path: '/WebInterview/Error', component: Error,
+                path: '/WebInterview/Error',
+                component: Error,
+                name: 'WebInterviewError',
             },
         ]
     }

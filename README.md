@@ -3,7 +3,6 @@
 20.3 version
 - runs on .net core 3.1
 - requires chaning of configuraiton file from xml to ini format
-- apidocs url changed from /apidocs/index to /apidocs/index.html
 - link to old audit log that was in file is going to be removed
 - initial setup should be made by executing following 2 commands:
 `WB.UI.Headquarters.exe manage migrate`
