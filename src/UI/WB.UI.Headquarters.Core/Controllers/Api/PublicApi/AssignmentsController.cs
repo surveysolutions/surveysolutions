@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
@@ -34,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Route("api/v1/assignments")]
     [Localizable(false)]
+    [PublicApiJson]
     public class AssignmentsController : ControllerBase
     {
         private readonly IAssignmentsService assignmentsStorage;
