@@ -196,13 +196,16 @@ namespace WB.Tests.Abc.TestFactories
                 eventStore ?? Mock.Of<IEventStore>(),
                 repository ?? Mock.Of<IDomainRepository>(),
                 new AggregateLock());
-
-        public EventSourcedAggregateRootRepositoryWithExtendedCache
-            EventSourcedAggregateRootRepositoryWithExtendedCache(
-                IEventStore eventStore = null, IDomainRepository repository = null)
-            => new EventSourcedAggregateRootRepositoryWithExtendedCache(
-                eventStore ?? Mock.Of<IEventStore>(),
-                repository ?? Mock.Of<IDomainRepository>());
+                
+        public EventSourcedAggregateRootRepositoryWithWebCache EventSourcedAggregateRootRepositoryWithWebCache(
+            IEventStore eventStore = null, IDomainRepository repository = null)
+            => new EventSourcedAggregateRootRepositoryWithWebCache(
+                eventStore ?? Mock.Of<IEventStore>(x => x.GetLastEventSequence(It.IsAny<Guid>()) == 0),
+                new InMemoryEventStore(), 
+                new EventBusSettings(), 
+                repository ?? Mock.Of<IDomainRepository>(),
+                Create.Service.ServiceLocatorService(),
+                new AggregateLock());
 
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();

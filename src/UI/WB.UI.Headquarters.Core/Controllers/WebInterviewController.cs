@@ -20,6 +20,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -41,7 +42,7 @@ using WB.UI.Shared.Web.Services;
 namespace WB.UI.Headquarters.Controllers
 {
     [BrowsersRestriction]
-    [WebInterviewErrorFilter]
+    [TypeFilter(typeof(WebInterviewErrorFilterAttribute))]
     [Route("WebInterview")]
     public class WebInterviewController : Controller
     {
@@ -143,6 +144,17 @@ namespace WB.UI.Headquarters.Controllers
             this.serviceLocator = serviceLocator;
         }
 
+        [Route("Error")]
+        public ActionResult Error()
+        {
+            var errorMessage = TempData["WebInterview.ErrorMessage"] as string;
+            return this.View("Error", new WebInterviewError()
+            {
+                ErrorMessage = errorMessage
+            });
+        }
+
+
         [WebInterviewAuthorize]
         [Route("{id:Guid}/Section/{sectionId}")]
         public ActionResult Section(string id, string sectionId)
@@ -192,8 +204,11 @@ namespace WB.UI.Headquarters.Controllers
 
         public string GenerateUrl(string action, string interviewId, string sectionId = null)
         {
-            return $@"~/WebInterview/{interviewId}/{action}" +
-                   (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
+            return Url.Action(action, new
+            {
+                id = interviewId,
+                sectionId = sectionId
+            });
         }
 
         [HttpGet]
@@ -325,7 +340,6 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Route("{invitationId}/Start")]
-        [AntiForgeryFilter]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StartPost(string invitationId, [FromForm] string password)
         {
@@ -415,7 +429,8 @@ namespace WB.UI.Headquarters.Controllers
 
             TempData[LastCreatedInterviewIdKey] = interviewId;
 
-            return this.Redirect(GenerateUrl("Cover", interviewId));
+            var generateUrl = GenerateUrl("Cover", interviewId);
+            return this.Redirect(generateUrl);
         }
 
         public IActionResult Continue(string id)
@@ -433,7 +448,8 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [WebInterviewAuthorize]
-        [Route("{id:Guid}/Cover")]
+        [Route("{id}/Cover")]
+        [AntiForgeryFilter]
         public IActionResult Cover(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -581,8 +597,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
-            var isCaptchaValid = await this.captchaProvider.IsCaptchaValid(Request);
-            if (webInterviewConfig.UseCaptcha && !isCaptchaValid)
+            if (webInterviewConfig.UseCaptcha && !await this.captchaProvider.IsCaptchaValid(Request))
             {
                 var model = this.GetResumeModel(id);
                 model.CaptchaErrors = new List<string>() {Enumerator.Native.Resources.WebInterview.PleaseFillCaptcha};
