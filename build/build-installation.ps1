@@ -88,7 +88,7 @@ $installationArgs = @(
     "/p:HarvestDir=$HQsitePath";
     "/p:HarvestDirectory=$HQsitePath";
     "/p:Configuration=Release";
-    "/p:Platform=x32";
+    "/p:Platform=x86";
     "/p:SurveySolutionsVersion=$version";
 )
 
