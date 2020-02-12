@@ -3,15 +3,14 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
      xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
-     xmlns:localization="http://schemas.microsoft.com/wix/2006/localization"
-     xmlns:PanelSW="http://schemas.panel-sw.co.il/wix/WixExtension">
+     xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
 
-  <Product Id="*"
-         Name="Survey Solutions"
-         Language="1033"
-         Version="$(var.SurveySolutionsVersion)"
-         Manufacturer="World Bank"
-         UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
+    <Product Id="*"
+             Name="Survey Solutions"
+             Language="1033"
+             Version="$(var.SurveySolutionsVersion)"
+             Manufacturer="World Bank"
+             UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
     <util:CloseApplication Id="CloseExportService" 
@@ -126,12 +125,6 @@
 
     <Property Id="IISInstallCommandProperty" 
               Value="/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-ManagementService /FeatureName:IIS-HttpCompressionDynamic"/>
-
-    <!-- MODIFY CONFIGURATIONS -->
-
-    <Property Id="ModifyExportSettings" 
-              Value="INSTALLFOLDER=[INSTALLFOLDER];Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;" />
-
     
     <!-- Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) -->
     <!-- Build path to dism.exe (full path is important, just calling dism.exe without path will fail) -->
@@ -150,12 +143,6 @@
                   Return="ignore"
                   Impersonate="no"/>
 
-    <Property Id="OLDCONFIGCONNECTIONSTRING">
-        <PanelSW:XmlSearch Id="OldConfigConnectionStringSearch"
-                           FilePath="Configuration\Headquarters.Web.Config"
-                           XPath="/configuration/connectionStrings/add/@connectionString"
-                           Match="first"/>
-    </Property>
     
     <Binary Id="CustomActionBinary"
             SourceFile="..\SurveySolutionsCustomActions\bin\$(var.Configuration)\SurveySolutionsCustomActions.CA.dll" />
@@ -163,11 +150,12 @@
     <CustomAction Id="SetExportSettingsDataValue"
                   Return="check"
                   Property="WriteExportServiceSettings"
-                  Value="TargetFile=[EXPORTSERVICEFOLDER]appsettings.production.json;OLDCONFIGCONNECTIONSTRING=[OLDCONFIGCONNECTIONSTRING];CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions;" />
+                  Value="TargetFile=[EXPORTSERVICEFOLDER]appsettings.production.ini;SourceFile=[INSTALLFOLDER]\site\Configuration\Headquarters.Web.Config;CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions" />
 
+    <!--custom action to set settings and migrate old ones-->
     <CustomAction Id="WriteExportServiceSettings"
                   BinaryKey="CustomActionBinary"
-                  DllEntry="WriteJsonSettings"
+                  DllEntry="WriteExportIniSettings"
                   Execute="deferred"
                   Return="check" 
                   Impersonate="no"/>
@@ -175,11 +163,11 @@
     <CustomAction Id="SetSiteSettingsDataValue"
                   Return="check"
                   Property="WriteSiteSettings"
-                  Value="TargetFile=[INSTALLSITEFOLDER]appsettings.production.ini;OLDCONFIGCONNECTIONSTRING=[OLDCONFIGCONNECTIONSTRING];CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions;" />
+                  Value="TargetFile=[INSTALLSITEFOLDER]appsettings.production.ini;SourceFile=[INSTALLFOLDER]\site\Configuration\Headquarters.Web.Config;CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions" />
 
     <CustomAction Id="WriteSiteSettings"
                   BinaryKey="CustomActionBinary"
-                  DllEntry="WriteIniSettings"
+                  DllEntry="WriteSiteIniSettings"
                   Execute="deferred"
                   Return="check" 
                   Impersonate="no"/>
@@ -227,8 +215,7 @@
 
     <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
-      <!--<ComponentGroupRef Id="SettingsUpdate" />
-      <ComponentGroupRef Id="ExportServiceConfig" />-->
+      <ComponentGroupRef Id="SettingsTrack" />
       <ComponentGroupRef Id="ExportService" />
       <ComponentRef Id ="ApplicationShortcut" />
     </Feature>
@@ -244,9 +231,7 @@
     </Condition>
   </Fragment>
   <Fragment>
-    <!--<SetDirectory Id='INSTALLFOLDER' Value='[WindowsVolume]SurveySolutions' />-->
-
-    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="DesktopFolder" Name="Desktop">
         <Component Id="ApplicationShortcut" Guid="98257A59-3395-41E9-BD95-C8474C8736D9" >
           <util:InternetShortcut Id="SurveySolutionsShortcut"
@@ -276,9 +261,7 @@
   </Fragment>
 
   <Fragment>
-    <!--<Property Id="EXPORTDEFAULTCONNECTION0"><![CDATA[Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=export;ApplicationName=export;Maximum Pool Size=10]]></Property>-->
-    
-    <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
+      <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
       <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
         <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
@@ -309,13 +292,22 @@
 
     <?define InstallIniDir="INSTALLSITEFOLDER"?>
 
+    <!--creating components to track files to delete on uninstall-->
+    <ComponentGroup Id="SettingsTrack">
+      <Component Id="SiteConfigPreserve" Directory="INSTALLSITEFOLDER" Guid="035F0D52-04C7-4DB4-A9C7-C447F405CAAA" NeverOverwrite="yes">
+          <File Id="SiteConfigFile" Source="appsettings.production.ini" PatchIgnore="yes"/>
+      </Component>
+      <Component Id="ServiceConfigPreserve" Directory="EXPORTSERVICEFOLDER" Guid="035F0D52-04C7-4DB4-A9C7-C447F405CAAB" NeverOverwrite="yes">
+          <File Id="ServiceConfigFile" Source="appsettings.production.ini" PatchIgnore="yes"/>
+      </Component>
+    </ComponentGroup>
+    
     <!--<ComponentGroup Id="SettingsUpdate" Directory="INSTALLSITEFOLDER" >
         <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405CAAA" NeverOverwrite="yes">
         ~1~<CreateFolder/>@1@
         ~1~runs once if file doesn't exists@1@
         
         <File Source="appsettings.Production.ini" PatchIgnore="yes"/>
-
         
         <IniFile Id ="IniHeadquartersBaseUrl"
                  Directory="$(var.InstallIniDir)"

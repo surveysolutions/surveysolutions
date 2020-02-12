@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\..\packages\PanelSwWixExtension.2.17.1\build\PanelSwWixExtension.props" Condition="Exists('..\..\..\..\packages\PanelSwWixExtension.2.17.1\build\PanelSwWixExtension.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -68,19 +67,11 @@
   <ItemGroup>
     <Content Include="img\logo-50.bmp" />
     <Content Include="img\logo-50.png" />
-    <Content Include="packages.config" />
-    <Content Include="PanelSwWixExtension.xsd" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
   <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
-  </Target>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\packages\PanelSwWixExtension.2.17.1\build\PanelSwWixExtension.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\PanelSwWixExtension.2.17.1\build\PanelSwWixExtension.props'))" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
