@@ -151,8 +151,13 @@ namespace WB.Services.Export.Host
                     web.ConfigureAppConfiguration(c =>
                     {
                         c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
+                        c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
+
                         c.AddJsonFile($"appsettings.Cloud.json", true);
+                        c.AddIniFile($"appsettings.Cloud.ini", true);
+
                         c.AddJsonFile($"appsettings.Production.json", true);
+                        c.AddIniFile($"appsettings.Production.ini", true);
 
                         c.AddCommandLine(args);
                     });
