@@ -1,10 +1,9 @@
-﻿using System.IO;
-using WB.UI.Shared.Web.Services;
+﻿using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.WebTester.Infrastructure
 {
     public class VirtualPathService : IVirtualPathService
     {
-        public string GetAbsolutePath(string relativePath) => relativePath;
+        public string GetAbsolutePath(string relativePath) => relativePath.TrimStart('~');
     }
 }

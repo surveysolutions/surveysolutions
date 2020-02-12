@@ -24,7 +24,7 @@ export default {
             }
 
             if (!this.supervisorId) {
-                return `<a href='${this.$config.model.interviewersBaseUrl}?Facet=${facet}&supervisor=${row.teamName}'>${formatedNumber}</a>`
+                return `<a href='${this.$config.model.interviewersBaseUrl}?facet=${facet}&supervisor=${row.teamName}'>${formatedNumber}</a>`
             }
          
             return this.getLinkToInterviewerProfile(data, row)

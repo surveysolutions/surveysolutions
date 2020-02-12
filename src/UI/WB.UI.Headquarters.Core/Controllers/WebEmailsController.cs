@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -7,10 +9,12 @@ namespace WB.UI.Headquarters.Controllers
     public class WebEmailsController : Controller
     {
         private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
+        private readonly IOptions<HeadquartersConfig> options;
 
-        public WebEmailsController(IPlainKeyValueStorage<EmailParameters> emailParamsStorage)
+        public WebEmailsController(IPlainKeyValueStorage<EmailParameters> emailParamsStorage, IOptions<HeadquartersConfig> options)
         {
             this.emailParamsStorage = emailParamsStorage;
+            this.options = options;
         }
 
         // GET: WebEmail
@@ -19,6 +23,9 @@ namespace WB.UI.Headquarters.Controllers
             var emailParams = emailParamsStorage.GetById(id);
             if (emailParams.Id == null)
                 emailParams.Id = id;
+
+            this.ViewData["webRoot"] = this.options.Value.BaseUrl;
+
             return View("EmailHtml", emailParams);
         }
 

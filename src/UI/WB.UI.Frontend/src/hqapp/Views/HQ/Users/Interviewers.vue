@@ -27,6 +27,7 @@
                     :placeholder="$t('Common.AllSupervisors')"
                     :value="supervisor"
                     :fetch-url="$config.model.supervisorsUrl"
+                    :selectedValue="query.supervisor"
                     v-on:selected="supervisorSelected"/>
             </FilterBlock>
 
@@ -40,6 +41,8 @@
                     data-vv-as="facet"
                     :value="facet"
                     :values="this.$config.model.interviewerIssues"
+                    :selectedKey="this.query.facet"
+                    :selectFirst="true"
                     v-on:selected="facetSelected"/>
             </FilterBlock>
 
@@ -54,6 +57,8 @@
                     data-vv-as="archiveStatus"
                     :value="archiveStatus"
                     :values="this.$config.model.archiveStatuses"
+                    :selectedKey="this.query.archive"
+                    :selectFirst="true"
                     v-on:selected="archiveStatusSelected"/>
             </FilterBlock>
         </Filters>
@@ -127,6 +132,7 @@ import {formatNumber} from './formatNumber'
 import routeSync from '~/shared/routeSync'
 import InterviewersMoveToOtherTeam from './InterviewersMoveToOtherTeam'
 import {map, find} from 'lodash'
+import { DateFormats } from '~/shared/helpers'
 
 export default {
     mixins: [routeSync],
@@ -146,22 +152,6 @@ export default {
         }
     },
     mounted() {
-        if (this.query.supervisor) {
-            //this.supervisor = find(this.$config.model.facets, { key: this.query.supervisor })
-        }
-
-        if (this.query.facet) {
-            this.facet = find(this.$config.model.interviewerIssues, {key: this.query.facet})
-        } else if (this.facet == null && this.model.interviewerIssues.length > 0) {
-            this.facet = this.model.interviewerIssues[0]
-        }
-
-        if (this.query.archive) {
-            this.archiveStatus = find(this.$config.model.archiveStatuses, {key: this.query.archive})
-        } else if (this.archiveStatus == null && this.model.archiveStatuses.length > 0) {
-            this.archiveStatus = this.model.archiveStatuses[0]
-        }
-
         this.loadData()
     },
     methods: {
@@ -196,15 +186,25 @@ export default {
         },
         supervisorSelected(option) {
             this.supervisor = option
+            this.refreshQueryString()
             this.loadData()
         },
         facetSelected(option) {
             this.facet = option
+            this.refreshQueryString()
             this.loadData()
         },
         archiveStatusSelected(option) {
             this.archiveStatus = option
+            this.refreshQueryString()
             this.loadData()
+        },
+        refreshQueryString() {
+            this.onChange(query => {
+                if (this.supervisor) query.supervisor = this.supervisor.value
+                if (this.facet) query.facet = this.facet.key
+                if (this.archiveStatus) query.archive = this.archiveStatus.key
+            })
         },
         addParamsToRequest(requestData) {
             requestData.supervisorName = (this.supervisor || {}).value
@@ -285,7 +285,7 @@ export default {
                     title: this.$t('Pages.Interviewers_CreationDateTitle'),
                     render: function(data, type, row) {
                         var localDate = moment.utc(data).local()
-                        return localDate.format(window.CONFIG.dateFormat)
+                        return localDate.format(DateFormats.dateTimeInList)
                     },
                 },
                 {

@@ -69,6 +69,7 @@
 
 <script>
 import moment from 'moment'
+import { DateFormats } from '~/shared/helpers'
 
 export default {
     data() {
@@ -87,7 +88,7 @@ export default {
             }
         },
         contextMenuItems({rowData, rowIndex}) {
-            if (!this.user.isObserver) return null
+            if (!this.user.isObserver || this.user.isObserving) return null
 
             const self = this
             const menu = []
@@ -158,7 +159,7 @@ export default {
                         orderable: true,
                         render: function(data, type, row) {
                             var localDate = moment.utc(data).local()
-                            return localDate.format(window.CONFIG.dateFormat)
+                            return localDate.format(DateFormats.dateTimeInList)
                         },
                     },
                     {
