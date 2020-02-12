@@ -42,9 +42,7 @@
     <Compile Include="ProductFiles.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="appsettings.production.json" />
     <Content Include="Configuration.wxi" />
-    <Content Include="appsettings.Production.ini" />
     <Content Include="img\icon-32.bmp" />
     <Content Include="img\left-image.bmp" />
     <Content Include="img\logo-50.bmp" />
