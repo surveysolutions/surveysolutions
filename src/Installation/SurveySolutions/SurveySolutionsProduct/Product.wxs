@@ -3,8 +3,8 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
      xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
-     xmlns:PanelSW="http://schemas.panel-sw.co.il/wix/WixExtension"
-     xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
+     xmlns:localization="http://schemas.microsoft.com/wix/2006/localization"
+     xmlns:PanelSW="http://schemas.panel-sw.co.il/wix/WixExtension">
 
   <Product Id="*"
          Name="Survey Solutions"
@@ -14,18 +14,18 @@
          UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
-    <util:CloseApplication Id="CloseExportService" CloseMessage="yes" Timeout="10" RebootPrompt="no" TerminateProcess="3" Target="WB.Services.Export.Host.exe" />
+    <util:CloseApplication Id="CloseExportService" 
+                           CloseMessage="yes" 
+                           Timeout="10" 
+                           RebootPrompt="no" 
+                           TerminateProcess="3" 
+                           Target="WB.Services.Export.Host.exe" />
 
     <!--Will override all files-->
     <Property Id="REINSTALLMODE" Value="amus" />
 
     <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
     <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
-
-    <!--<PropertyRef Id="NETFRAMEWORK45" />
-        <Condition Message="This application requires .NET Framework 4.8 Please install the .NET 4.8 Framework then run this installer again.">
-            <![CDATA[Installed OR (NETFRAMEWORK45 AND NETFRAMEWORK45 >= "#528040")]]>
-        </Condition>-->
 
     <!--server OS-->
     <!--AND MsiNTProductType > 1-->
@@ -48,10 +48,6 @@
                       Win64='yes'>
       </RegistrySearch>
     </Property>
-
-    <!--        <Condition Message="Path was not found.">
-            <![CDATA[((( Installed AND (PATCH OR REINSTALL ) ) OR WIX_UPGRADE_DETECTED) AND (NOT INSTALLFOLDER))]]>
-        </Condition>-->
 
     <UI>
       <UIRef Id="WixUI_Common" />
@@ -128,11 +124,13 @@
     <WixVariable Id="WixUIExclamationIco" Value="img/WixUIExclamationIco.bmp" />
     <WixVariable Id="WixUIInfoIco" Value="img/WixUIInfoIco.bmp" />
 
-    <Property Id="IISInstallCommandProperty" Value="/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-ManagementService /FeatureName:IIS-HttpCompressionDynamic"/>
+    <Property Id="IISInstallCommandProperty" 
+              Value="/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-ManagementService /FeatureName:IIS-HttpCompressionDynamic"/>
 
     <!-- MODIFY CONFIGURATIONS -->
 
-    <Property Id="ModifyExportSettings" Value="INSTALLFOLDER=[INSTALLFOLDER];Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;" ></Property>
+    <Property Id="ModifyExportSettings" 
+              Value="INSTALLFOLDER=[INSTALLFOLDER];Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;" />
 
     
     <!-- Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) -->
@@ -152,22 +150,42 @@
                   Return="ignore"
                   Impersonate="no"/>
 
-
+    <Property Id="OLDCONFIGCONNECTIONSTRING">
+        <PanelSW:XmlSearch Id="OldConfigConnectionStringSearch"
+                           FilePath="Configuration\Headquarters.Web.Config"
+                           XPath="/configuration/connectionStrings/add/@connectionString"
+                           Match="first"/>
+    </Property>
+    
     <Binary Id="CustomActionBinary"
             SourceFile="..\SurveySolutionsCustomActions\bin\$(var.Configuration)\SurveySolutionsCustomActions.CA.dll" />
 
-    <CustomAction Id="SetUpdateExportSettingsDataValue"
+    <CustomAction Id="SetExportSettingsDataValue"
                   Return="check"
-                  Property="myActionId"
-                  Value="FILECONTENT=Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=export;ApplicationName=export;Maximum Pool Size=10" />
+                  Property="WriteExportServiceSettings"
+                  Value="TargetFile=[EXPORTSERVICEFOLDER]appsettings.production.json;OLDCONFIGCONNECTIONSTRING=[OLDCONFIGCONNECTIONSTRING];CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions;" />
 
-    <CustomAction Id="myActionId"
+    <CustomAction Id="WriteExportServiceSettings"
                   BinaryKey="CustomActionBinary"
-                  DllEntry="WriteDataToFile"
+                  DllEntry="WriteJsonSettings"
                   Execute="deferred"
-                  Return="check" />
+                  Return="check" 
+                  Impersonate="no"/>
+
+    <CustomAction Id="SetSiteSettingsDataValue"
+                  Return="check"
+                  Property="WriteSiteSettings"
+                  Value="TargetFile=[INSTALLSITEFOLDER]appsettings.production.ini;OLDCONFIGCONNECTIONSTRING=[OLDCONFIGCONNECTIONSTRING];CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions;" />
+
+    <CustomAction Id="WriteSiteSettings"
+                  BinaryKey="CustomActionBinary"
+                  DllEntry="WriteIniSettings"
+                  Execute="deferred"
+                  Return="check" 
+                  Impersonate="no"/>
 
     <Property Id="ProductURL"><![CDATA[http://localhost:[SITEPORT]/]]></Property>
+
     <CustomAction Id="SetOpenURL" Property="WixShellExecTarget" Value="[ProductURL]" />
     <CustomAction Id="OpenURL" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" Return="ignore" />
 
@@ -186,24 +204,31 @@
         <![CDATA[NOT Installed]]>
       </Custom>
 
-      <Custom Action="SetUpdateExportSettingsDataValue" Before="myActionId" />
-      <Custom Action="myActionId" After="InstallFiles" />
+      <Custom Action="SetExportSettingsDataValue" Before="WriteExportServiceSettings">
+        <![CDATA[NOT Installed]]>
+      </Custom>
+      <Custom Action="WriteExportServiceSettings" After="InstallFiles" >
+          <![CDATA[NOT Installed]]>
+      </Custom>
+
+      <Custom Action="SetSiteSettingsDataValue" Before="WriteSiteSettings">
+          <![CDATA[NOT Installed]]>
+      </Custom>
+      <Custom Action="WriteSiteSettings" After="InstallFiles" >
+          <![CDATA[NOT Installed]]>
+      </Custom>
     </InstallExecuteSequence>
-
-    <SetProperty Id="EXPORTDEFAULTCONNECTION1"
-                 After="InstallFiles" Sequence="execute"
-                 Value="Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=export;ApplicationName=export;Maximum Pool Size=10"/>
-
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
                   AllowDowngrades="no"
                   Schedule="afterInstallExecute" />
+    
     <!--preserves settings-->
 
     <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
-      <ComponentGroupRef Id="SettingsUpdate" />
-      <ComponentGroupRef Id="ExportServiceConfig" />
+      <!--<ComponentGroupRef Id="SettingsUpdate" />
+      <ComponentGroupRef Id="ExportServiceConfig" />-->
       <ComponentGroupRef Id="ExportService" />
       <ComponentRef Id ="ApplicationShortcut" />
     </Feature>
@@ -284,11 +309,14 @@
 
     <?define InstallIniDir="INSTALLSITEFOLDER"?>
 
-    <ComponentGroup Id="SettingsUpdate" Directory="INSTALLSITEFOLDER" >
-      <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA" NeverOverwrite="yes">
-        <!--<CreateFolder/>-->
+    <!--<ComponentGroup Id="SettingsUpdate" Directory="INSTALLSITEFOLDER" >
+        <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405CAAA" NeverOverwrite="yes">
+        ~1~<CreateFolder/>@1@
+        ~1~runs once if file doesn't exists@1@
+        
         <File Source="appsettings.Production.ini" PatchIgnore="yes"/>
 
+        
         <IniFile Id ="IniHeadquartersBaseUrl"
                  Directory="$(var.InstallIniDir)"
                  Name="appsettings.Production.ini"
@@ -311,7 +339,7 @@
                  Section="DataExport"
                  Action="addLine"
                  Key="ExportServiceUrl"
-                 Value="http://localhost:5002"/>
+                 Value="http://localhost:5000"/>
 
         <IniFile Id ="IniConnectionString"
                  Directory="$(var.InstallIniDir)"
@@ -321,8 +349,7 @@
                  Key="DefaultConnection"
                  Value="Persist Security Info=true;Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;"/>
 
-
-        <!--<util:XmlFile Id="CreateElementConnectionStrings"
+        ~1~<util:XmlFile Id="CreateElementConnectionStrings"
                           File="[CONFIGFOLDER]\Headquarters.Web.config"
                           Action="createElement"
                           ElementPath="//configuration"
@@ -358,7 +385,7 @@
                       Value="Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;"
                       Sequence='5'/>
 
-            ~1~<add key="EventStore.Provider" value="Postgres" />@1@
+            ~2~<add key="EventStore.Provider" value="Postgres" />@2@
             <util:XmlFile Id="CreateAddElementEventStore"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
@@ -382,7 +409,7 @@
                       Value="Postgres"
                       Sequence='8'/>
 
-            ~1~<add key="DataStorePath" value="..." />@1@
+            ~2~<add key="DataStorePath" value="..." />@2@
             <util:XmlFile Id="CreateElementDataStorePath"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
@@ -405,7 +432,7 @@
                       Value="[INSTALLFOLDER]Data_Site"
                       Sequence='11'/>
 
-            ~1~<add key="DesignerAddress" value="https://solutions.worldbank.org" />@1@
+            ~2~<add key="DesignerAddress" value="https://solutions.worldbank.org" />@2@
             <util:XmlFile Id="CreateElementDesignerAddress"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
@@ -427,7 +454,7 @@
                       Name="value"
                       Value="https://designer.mysurvey.solutions"
                       Sequence='14'/>
-        ~1~<add key="WebInterviewEnabled" value="true" />@1@
+        ~2~<add key="WebInterviewEnabled" value="true" />@2@
         <util:XmlFile Id="CreateElementWebInterviewEnabled"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
@@ -450,7 +477,7 @@
                       Value="true"
                       Sequence='17'/>
 
-        ~1~<add key="Export.ServiceUrl" value="http://localhost:5000" />@1@
+        ~2~<add key="Export.ServiceUrl" value="http://localhost:5000" />@2@
         <util:XmlFile Id="CreateElementExportServiceUrl"
                       File="[CONFIGFOLDER]\Headquarters.Web.config"
                       Action="createElement"
@@ -471,26 +498,26 @@
                       ElementPath="//configuration/appSettings/add[\[]@key='Export.ServiceUrl'[\]]"
                       Name="value"
                       Value="http://localhost:5000"
-                      Sequence='20'/>-->
+                      Sequence='20'/>@1@
       </Component>
-    </ComponentGroup>
+    </ComponentGroup>-->
 
-    
-    
-    <ComponentGroup Id="ExportServiceConfig" Directory="EXPORTSERVICEFOLDER" >
-      <Component Id="ExportServiceConfigUpdate" Guid="035F0D52-04C7-4DB4-BBC7-C447F405C2EA" NeverOverwrite="yes" >
-        <!--<CreateFolder/>-->
-        <!--<Property Id='JSON_TEST'>
+    <!--<ComponentGroup Id="ExportServiceConfig" Directory="EXPORTSERVICEFOLDER" >
+        <Component Id="ExportServiceConfigUpdate" Guid="035F0D52-04C7-4DB4-BBC7-C447F405C2EA" NeverOverwrite="yes" >
+            ~1~<CreateFolder/>@1@
+            ~1~<Property Id='JSON_TEST'>
                 <PanelSW:JsonJpathSearch JPath="$.ConnectionString" FilePath="appsettings.production.json"/>
-            </Property>-->
-        <File Source="appsettings.production.json" PatchIgnore="yes">
-            <!--<PanelSW:JsonJPath
+            </Property>@1@
+            <File Source="appsettings.production.json" PatchIgnore="yes">
+                ~1~<PanelSW:JsonJPath
                 JPath="$.ConnectionString"
-                Value='{"DefaultConnection": "[EXPORTDEFAULTCONNECTION1]"}'/>-->
-        </File>
+                Value='{"DefaultConnection": "[EXPORTDEFAULTCONNECTION1]"}'/>@1@
+            </File>
         
-      </Component>
+        </Component>
     </ComponentGroup>
+    -->
+  
     <ComponentGroup Id="ExportService" Directory="EXPORTSERVICEFOLDER" >
       <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B000-1F22B2B48F74">
         <!--Dirty hack to reference file-->
