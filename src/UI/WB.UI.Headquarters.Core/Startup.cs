@@ -231,7 +231,6 @@ namespace WB.UI.Headquarters
             services.AddScoped<InstallationFilter>();
             services.AddScoped<AntiForgeryFilter>();
             services.AddScoped<GlobalNotificationResultFilter>();
-            services.AddScoped<WebInterviewObserverNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
 
             FileStorageModule.Setup(services, Configuration);
