@@ -118,8 +118,8 @@
                     v-if="!query.pivot">
                     <li
                         class="list-group-item pointer"
-                        v-for="answer in condition.Answers"
-                        :key="answer.Answer"
+                        v-for="answer in condition.answers"
+                        :key="answer.answer"
                         :class="{ 'list-group-item-success': isSelectedAnswer(answer.answer)}"
                         @click="selectConditionAnswer(answer.answer)">{{answer.answer}}. {{answer.text}}</li>
                 </ul>
