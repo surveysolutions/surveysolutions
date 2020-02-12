@@ -72,7 +72,7 @@
                             name="min"
                             :placeholder="$t('Reports.Min')"
                             @input="inputChange"
-                            v-validate.initial="{ max_value: max }"
+                            v-validate.initial="{ max_value: max  || Number.MAX_VALUE }"
                             :value="min"/>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                             type="number"
                             class="form-control input-sm"
                             :placeholder="$t('Reports.Max')"
-                            v-validate.initial="{ min_value: min }"
+                            v-validate.initial="{ min_value: min || Number.MIN_VALUE }"
                             name="max"
                             @input="inputChange"
                             :value="max"/>
