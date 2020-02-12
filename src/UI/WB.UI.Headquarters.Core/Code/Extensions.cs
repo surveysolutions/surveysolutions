@@ -100,5 +100,16 @@ namespace WB.UI.Headquarters.Code
                 session.Remove(key);
             }
         }
+
+        public static string Capitalize(this string source)
+        {
+            if (Char.IsUpper(source[0])) return source;
+
+            return string.Create(source.Length, source, (resultSpan, originalSource) =>
+            {
+                originalSource.AsSpan().CopyTo(resultSpan);
+                resultSpan[0] = Char.ToUpper(resultSpan[0]);
+            });
+        }
     }
 }

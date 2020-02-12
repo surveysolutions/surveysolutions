@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Char = System.Char;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -29,6 +34,8 @@ namespace WB.UI.Headquarters.Code
                     Type = SecuritySchemeType.Http,
                     Scheme = "basic"
                 });
+
+
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -44,9 +51,10 @@ namespace WB.UI.Headquarters.Code
                     }
                 });
 
+                c.SchemaFilter<CapitalizedCaseSchemaFilter>();
+
                 c.OrderActionsBy(x =>
                 {
-
                     var sort = new StringBuilder(x.ActionDescriptor.RouteValues["controller"]);
                     sort.Append("_");
                     if (x.HttpMethod == "GET")
@@ -84,6 +92,25 @@ namespace WB.UI.Headquarters.Code
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Survey Solutions API V1");
             });
+        }
+    }
+
+    public class CapitalizedCaseSchemaFilter : ISchemaFilter
+    {
+        public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+        {
+            if (schema.Properties == null) return;
+            if (schema.Properties.Count == 0) return;
+
+            var keys = schema.Properties.Keys;
+            var newProperties = new Dictionary<string, OpenApiSchema>();
+
+            foreach (var key in keys)
+            {
+                newProperties[key.Capitalize()] = schema.Properties[key];
+            }
+
+            schema.Properties = newProperties;
         }
     }
 }
