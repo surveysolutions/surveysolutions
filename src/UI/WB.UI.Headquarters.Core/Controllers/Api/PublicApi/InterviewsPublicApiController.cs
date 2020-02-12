@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
@@ -28,6 +29,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Route("api/v1/interviews")]
     [Authorize(Roles = "ApiUser, Administrator")]
+    [PublicApiJson]
     public class InterviewsPublicApiController : ControllerBase
     {
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
