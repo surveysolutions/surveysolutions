@@ -75,7 +75,10 @@ namespace WB.UI.Headquarters.Controllers
 
             InterviewerTrafficUsage trafficUsage = await interviewerProfileFactory.GetInterviewerTrafficUsageAsync(userId);
 
-            if (trafficUsage == null) return this.NotFound();
+            if (trafficUsage == null)
+            {
+                return new InterviewerTrafficUsage();
+            }
     
             return trafficUsage;
         }
