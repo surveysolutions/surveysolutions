@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
+        private const string GoogleUrl = "https://www.google.com";
         private GpsLocation answer;
         public GpsLocation Answer
         {
@@ -33,18 +34,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set
             {
                 this.SetProperty(ref this.answer, value);
-                this.LocationInfo = value == null ? ((string, string)?) null : ($"{value.Latitude}, {value.Longitude}", $"https://www.google.com/maps?q={value.Latitude},{value.Longitude}");
+                this.LocationInfo = value == null
+                    ? null
+                    : new NavigationModel($"{value.Latitude}, {value.Longitude}", $"{GoogleUrl}/maps?q={value.Latitude},{value.Longitude}");
             }
         }
 
-        private (string text, string url)? locationInfo;
-        public (string text, string url)? LocationInfo {
+        private NavigationModel locationInfo;
+        public NavigationModel LocationInfo {
             get => this.locationInfo;
             set => this.SetProperty(ref this.locationInfo, value);
         }
 
         public bool ShowLocationOnMap => this.settings.ShowLocationOnMap &&
-                                         this.googleApiService.GetPlayServicesConnectionStatus() == GoogleApiConnectionStatus.Success;
+                                         this.googleApiService.GetPlayServicesConnectionStatus() == GoogleApiConnectionStatus.Success &&
+                                         this.networkService.IsHostReachable(GoogleUrl);
 
         public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
@@ -52,6 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly Guid userId;
         private readonly ILogger logger;
         private readonly IGoogleApiService googleApiService;
+        private readonly INetworkService networkService;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
         private readonly IViewModelEventRegistry liteEventRegistry;
@@ -78,7 +83,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             IViewModelEventRegistry liteEventRegistry,
             ILogger logger,
-            IGoogleApiService googleApiService)
+            IGoogleApiService googleApiService,
+            INetworkService networkService)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
@@ -92,6 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry = liteEventRegistry;
             this.logger = logger;
             this.googleApiService = googleApiService;
+            this.networkService = networkService;
         }
 
         public Identity Identity => this.questionIdentity;
