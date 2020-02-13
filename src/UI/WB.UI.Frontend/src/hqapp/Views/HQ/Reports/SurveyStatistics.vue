@@ -113,7 +113,7 @@ export default {
                 data.pivot = this.filter.pivot
 
                 if (!data.pivot || this.filter.conditionAnswers.length > 0) {
-                    data.condition = map(this.filter.conditionAnswers, 'Answer')
+                    data.condition = map(this.filter.conditionAnswers, 'answer')
                 }
             }
         },
