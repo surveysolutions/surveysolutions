@@ -74,8 +74,6 @@ namespace SurveySolutionsCustomActions
 
         private static string ValidateTargetFileAndGetFilePath(Session session)
         {
-            System.Diagnostics.Debugger.Launch();
-
             var filePath = session.CustomActionData["TargetFile"];
 
             if (File.Exists(filePath) && new FileInfo(filePath).Length > 0)
