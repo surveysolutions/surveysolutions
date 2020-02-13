@@ -68,6 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateTextListQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateTextQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMultiOptionQuestion>,
+        ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>,
         ICommandPostProcessor<Questionnaire, UpdateSingleOptionQuestion>,
         ICommandPostProcessor<Questionnaire, AddLookupTable>,
         ICommandPostProcessor<Questionnaire, UpdateLookupTable>,
@@ -606,6 +607,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaire.QuestionsState.Remove(command.QuestionId);
             this.questionnaireStateTrackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
         }
+
+        public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command)
+        {
+            var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            questionnaire.QuestionsState.TryGetValue(command.QuestionId, out var questionTitle);
+
+            this.AddOrUpdateQuestionState(command.QuestionnaireId, command.QuestionId, questionTitle, parentId: null);
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
+                QuestionnaireItemType.Question, command.QuestionId, questionTitle, aggregate.QuestionnaireDocument);
+        }
+
 
         public void Process(Questionnaire aggregate, MoveQuestion command)
             => this.MoveEntity(command.QuestionnaireId, command.QuestionId, command.TargetGroupId, command.ResponsibleId, aggregate.QuestionnaireDocument);

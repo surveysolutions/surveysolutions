@@ -94,6 +94,10 @@ export default {
             type: String,
             default: null,
         },
+        selectedValue: {
+            type: String,
+            default: null,
+        },    
     },
     watch: {
         fetchUrl (val) {
@@ -150,8 +154,8 @@ export default {
             keys: ['value'],
         }
 
-        if(this.selectedKey != null) {
-            this.fetchOptions(this.searchTerm, this.selectedKey)
+        if(this.selectFirst || this.selectedKey != null || this.selectedValue != null) {
+            this.fetchOptions(this.searchTerm, this.selectedKey, this.selectedValue, this.selectFirst)
         }
     },
 
@@ -174,7 +178,7 @@ export default {
             }
         },
 
-        fetchOptions(filter = '', selectedKey = null) {
+        fetchOptions(filter = '', selectedKey = null, selectedValue = null, selectFirst = false) {
             if (this.values) {
                 if (filter != '') {
                     const fuse = new Fuse(this.values, this.fuseOptions)
@@ -185,6 +189,12 @@ export default {
 
                 if(selectedKey != null) {
                     this.selectByKey(selectedKey)
+                }
+                else if (selectedValue != null) {
+                    this.selectByValue(selectedValue)
+                }
+                else if (selectFirst) {
+                    this.selectOption(this.options[0].item)
                 }
 
                 return
@@ -201,17 +211,21 @@ export default {
                 .then(response => {
                     if(response != null && response.data != null) {
                         this.options = this.setOptions(response.data.options || [])
-                        if (this.selectFirst && this.options.length > 0)
-                        {
-                            this.selectOption(this.options[0].item)
+
+                        if (this.options.length > 0) {
+                            if(selectedKey != null) {
+                                this.selectByKey(selectedKey)
+                            }
+                            else if (selectedValue != null) {
+                                this.selectByValue(selectedValue)
+                            }
+                            else if (selectFirst) {
+                                this.selectOption(this.options[0].item)
+                            }
                         }
                     }
 
                     this.isLoading = false
-                    
-                    if(selectedKey != null) {
-                        this.selectByKey(selectedKey)
-                    }
                 })
                 .catch(() => (this.isLoading = false))
         },
@@ -240,6 +254,12 @@ export default {
                 this.selectOption(itemToSelect.item)
             }
         },
+        selectByValue(value) {
+            const itemToSelect = find(this.options, o => o.item.value == value)
+            if(itemToSelect != null) {
+                this.selectOption(itemToSelect.item)
+            }
+        },        
         updateOptionsList(e) {
             this.fetchOptions(e.target.value)
         },

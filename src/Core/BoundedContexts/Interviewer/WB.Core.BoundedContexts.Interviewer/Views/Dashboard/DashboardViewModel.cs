@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public CompletedInterviewsViewModel CompletedInterviews { get; }
         public RejectedInterviewsViewModel RejectedInterviews { get; }
         public IUserInteractionService UserInteractionService { get; }
+        public IGoogleApiService GoogleApiService { get; }
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IInterviewerPrincipal principal,
@@ -60,7 +61,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             INearbyConnection nearbyConnection,
             IRestService restService,
             IUserInteractionService userInteractionService,
-            IOfflineSyncClient syncClient) : base(principal, viewModelNavigationService, permissionsService,
+            IOfflineSyncClient syncClient,
+            IGoogleApiService googleApiService) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection, interviewerSettings, restService)
         {
             this.messenger = messenger;
@@ -80,6 +82,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews = completedInterviewsViewModel;
             this.RejectedInterviews = rejectedInterviewsViewModel;
             UserInteractionService = userInteractionService;
+            GoogleApiService = googleApiService;
 
             SubscribeOnMessages();
 

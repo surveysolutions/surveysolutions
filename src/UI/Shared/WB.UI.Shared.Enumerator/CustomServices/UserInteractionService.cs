@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Utils;
+using GoogleApiAvailability = Android.Gms.Common.GoogleApiAvailability;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
@@ -292,61 +293,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 }
             }
             callback?.Invoke();
-        }
-
-        public void ShowGoogleApiErrorDialog(int errorCode, int requestCode, Action onCancel = null)
-        {
-            Dialog defaultDialog = GoogleApiAvailability.Instance.GetErrorDialog(this.mvxCurrentTopActivity.Activity, errorCode, requestCode);
-            defaultDialog.Show();
-        }
-
-        private void ShowAlert(ICharSequence title, ICharSequence message,
-            ICharSequence buttonPositiveText, IDialogInterfaceOnClickListener onClickListener,
-            Action onCancel = null)
-        {
-            var userInteractionId = Guid.NewGuid();
-
-            try
-            {
-                HandleDialogOpen(userInteractionId);
-
-                Application.SynchronizationContext.Post(
-                    ignored =>
-                    {
-                        if (this.mvxCurrentTopActivity.Activity == null)
-                        {
-                            HandleDialogClose(userInteractionId);
-                            return;
-                        }
-
-                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
-                            .SetTitle(title)
-                            .SetMessage(message)
-                            .SetPositiveButton(buttonPositiveText, onClickListener)
-                            .SetOnCancelListener(new CancelDialogHandler(() =>
-                            {
-                                HandleDialogClose(userInteractionId, onCancel);
-                            }))
-                            .Show();
-                    },
-                    null);
-            }
-            catch
-            {
-                HandleDialogClose(userInteractionId);
-                throw;
-            }
-        }
-
-        private class CancelDialogHandler : Java.Lang.Object, IDialogInterfaceOnCancelListener
-        {
-            private readonly Action onCancel;
-
-            public CancelDialogHandler(Action onCancel)
-            {
-                this.onCancel = onCancel;
-            }
-            public void OnCancel(IDialogInterface dialog) => this.onCancel.Invoke();
         }
     }
 }

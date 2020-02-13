@@ -28,10 +28,16 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public IDesignerApi Get()
         {
-            var restHandler = new RestServiceHandler(designerUserCredentials);
+            return Get(this.designerUserCredentials);
+        }      
+
+        public IDesignerApi Get(IDesignerUserCredentials userCredentials)
+        {
+            var restHandler = new RestServiceHandler(userCredentials);
             var hc = new HttpClient(restHandler)
             {
                 BaseAddress = new Uri(serviceSettings.Endpoint),
+                Timeout = TimeSpan.FromMinutes(2),
                 DefaultRequestHeaders =
                 {
                     { "User-Agent",  serviceSettings.UserAgent },

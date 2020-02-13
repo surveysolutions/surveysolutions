@@ -19,7 +19,8 @@ namespace WB.Enumerator.Native.WebInterview
             registry.BindAsSingletonWithConstructorArgument<IConnectionLimiter, ConnectionLimiter>("connectionsLimit",
                 ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100));
 
-            registry.BindInPerLifetimeScope<InterviewLifecycleEventHandler, InterviewLifecycleEventHandler>();
+            registry.Bind<InterviewLifecycleEventHandler>();
+            
             registry.BindAsSingleton<IWebInterviewInvoker, WebInterviewInvoker>();
 
         }

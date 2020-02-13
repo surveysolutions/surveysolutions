@@ -69,6 +69,7 @@
 
 <script>
 import moment from 'moment'
+import { DateFormats } from '~/shared/helpers'
 
 export default {
     data() {
@@ -157,7 +158,7 @@ export default {
                         orderable: true,
                         render: function(data, type, row) {
                             var localDate = moment.utc(data).local()
-                            return localDate.format(window.CONFIG.dateFormat)
+                            return localDate.format(DateFormats.dateTimeInList)
                         },
                     },
                     {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -57,15 +59,18 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 
         [HttpGet]
         [Route("ThumbnailOrDefault")]
-        public IActionResult ThumbnailOrDefault()
+        public async Task<IActionResult> ThumbnailOrDefault()
         {
             var companyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
 
             if (companyLogo == null)
             {
+                using var readStream = webHost.WebRootFileProvider.GetFileInfo("img/logo.png").CreateReadStream();
+                using var memoryStream = new MemoryStream();
+                await readStream.CopyToAsync(memoryStream);
                 companyLogo = new CompanyLogo
                 {
-                    Logo = System.IO.File.ReadAllBytes(webHost.MapPath("img/logo.png"))
+                    Logo = memoryStream.ToArray()
                 };
             }
 

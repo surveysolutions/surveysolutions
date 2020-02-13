@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
+using GoogleApiAvailability = Android.Gms.Common.GoogleApiAvailability;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 {
@@ -88,13 +89,12 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
         /// <returns></returns>
         private bool CheckPlayServices()
         {
-            GoogleApiAvailability apiAvailability = GoogleApiAvailability.Instance;
-            int resultCode = apiAvailability.IsGooglePlayServicesAvailable(this);
-            if (resultCode == ConnectionResult.Success) return true;
+            var resultCode = ViewModel.GoogleApiService.GetPlayServicesConnectionStatus();
+            if (resultCode == GoogleApiConnectionStatus.Success) return true;
 
-            if (apiAvailability.IsUserResolvableError(resultCode))
+            if (ViewModel.GoogleApiService.CanResolvePlayServicesErrorByUser(resultCode))
             {
-                ViewModel.UserInteractionService.ShowGoogleApiErrorDialog(resultCode,
+                ViewModel.GoogleApiService.ShowGoogleApiErrorDialog(resultCode,
                     RequestCodeRecoverPlayServices,
                     () =>
                     {
