@@ -15,7 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.UI.Headquarters.Filters;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;

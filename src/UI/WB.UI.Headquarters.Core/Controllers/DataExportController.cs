@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Filters;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Models.DataExport;
 using WB.UI.Headquarters.Services.Impl;
 
