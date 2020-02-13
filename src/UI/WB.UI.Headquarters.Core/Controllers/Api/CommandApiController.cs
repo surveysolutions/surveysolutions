@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.CommandDeserialization;
