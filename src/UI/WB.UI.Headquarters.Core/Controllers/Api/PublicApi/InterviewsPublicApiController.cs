@@ -244,7 +244,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target responsible was not found or it is not an interviewer</response>
         [HttpPatch]
         [Route("{id:guid}/assign")]
-        public ActionResult Assign(Guid id, AssignChangeApiModel request)
+        public ActionResult Assign(Guid id, [FromBody] AssignChangeApiModel request)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
@@ -360,7 +360,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
-        public ActionResult PostAssignSupervisor(Guid id, AssignChangeApiModel request)
+        public ActionResult PostAssignSupervisor(Guid id, [FromBody]  AssignChangeApiModel request)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
