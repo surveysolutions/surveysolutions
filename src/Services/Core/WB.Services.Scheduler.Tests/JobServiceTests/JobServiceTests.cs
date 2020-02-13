@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -149,6 +151,45 @@ namespace WB.Services.Scheduler.Tests.JobServiceTests
             var service = serviceProvider.GetService<JobService>();
 
             Assert.Null(await service.GetFreeJobAsync());
+        }
+
+        [Test]
+        public void should_not_increase_error_count_on_communication_errors()
+        {
+            var job = Create.Entity.Job();
+
+            var failedTimes = job.FailedTimes;
+            
+            job.Handle(new FailJobEvent(job.Id, new HttpRequestException("error", new SocketException())));
+
+            Assert.That(job.FailedTimes, Is.EqualTo(failedTimes));
+        }
+
+        [Test]
+        public void should_retry_job_specified_max_retry_times()
+        {
+            var job = Create.Entity.Job();
+            job.MaxRetryAttempts = 3;
+
+            job.Handle(new FailJobEvent(job.Id, new Exception()));
+            Assert.That(job.FailedTimes, Is.EqualTo(1));
+            Assert.That(job.Status, Is.EqualTo(JobStatus.Created));
+            Assert.That(job.ShouldDropTenantSchema, Is.EqualTo(false));
+
+            job.Handle(new FailJobEvent(job.Id, new Exception()));
+            Assert.That(job.FailedTimes, Is.EqualTo(2));
+            Assert.That(job.Status, Is.EqualTo(JobStatus.Created));
+            Assert.That(job.ShouldDropTenantSchema, Is.EqualTo(false));
+
+            job.Handle(new FailJobEvent(job.Id, new Exception()));
+            Assert.That(job.FailedTimes, Is.EqualTo(3));
+            Assert.That(job.Status, Is.EqualTo(JobStatus.Created));
+            Assert.That(job.ShouldDropTenantSchema, Is.EqualTo(true));
+
+            job.Handle(new FailJobEvent(job.Id, new Exception()));
+            Assert.That(job.FailedTimes, Is.EqualTo(4));
+            Assert.That(job.Status, Is.EqualTo(JobStatus.Fail));
+            Assert.That(job.ShouldDropTenantSchema, Is.EqualTo(false));
         }
     }
 }
