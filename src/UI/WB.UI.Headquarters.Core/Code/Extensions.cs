@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
@@ -103,5 +104,21 @@ namespace WB.UI.Headquarters.Code
 
         public static string MapPath(this IWebHostEnvironment hostingEnvironment, string path) =>
             Path.Combine(hostingEnvironment.ContentRootPath, "wwwroot", path);
+
+        /// <summary>
+        /// Determines whether the specified HTTP request is an AJAX request.
+        /// </summary>
+        /// 
+        /// <returns>
+        /// true if the specified HTTP request is an AJAX request; otherwise, false.
+        /// </returns>
+        /// <param name="request">The HTTP request.</param><exception cref="T:System.ArgumentNullException">The <paramref name="request"/> parameter is null (Nothing in Visual Basic).</exception>
+        public static bool IsJsonRequest(this HttpRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            return request.Headers != null && request.Headers["Accept"].Any(x => x.Contains("application/json"));
+        }
     }
 }
