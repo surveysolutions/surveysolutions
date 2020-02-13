@@ -325,7 +325,7 @@ export default {
 
             this.table.on('preXhr.dt', (e, diff, edit) => {
                 self.table.rows().deselect()
-                $(self.table.rows)
+                $(self.$refs.table)
                     .find('.checkbox-filter')
                     .prop('checked', false)
             })

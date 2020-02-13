@@ -112,7 +112,7 @@
                     :label="$t('Reports.PivotView')"
                     name="pivot"
                     :value="query.pivot"
-                    @input="checkedChange"/>
+                    @input="pivotChanged" />
 
                 <ul class="list-group small"
                     v-if="!query.pivot">
@@ -154,8 +154,8 @@ export default {
     },
 
     watch: {
-        filter(filter) {
-            this.$emit('input', filter)
+        filter(value) {
+            this.$emit('input', value)
         },
 
         'query.name'(to) {
@@ -264,6 +264,12 @@ export default {
                 if (id == null) {
                     query.pivot = false
                 }
+            })
+        },
+
+        pivotChanged(value) {
+            this.onChange(query => {
+                query.pivot = value
             })
         },
 
