@@ -15,5 +15,7 @@ namespace WB.Services.Scheduler
         public double ClearStaleJobsInSeconds { get; set; } = 60;
 
         public string WorkerId { get; set; } =  Environment.MachineName + ":" + Assembly.GetExecutingAssembly().GetName().Version;
+
+        public int MaxRetryAttempts { get; set; } = 3;
     }
 }
