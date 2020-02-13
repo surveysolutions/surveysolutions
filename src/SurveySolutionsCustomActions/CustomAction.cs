@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using System.Xml.XPath;
@@ -11,23 +12,31 @@ namespace SurveySolutionsCustomActions
         public static ActionResult WriteSiteIniSettings(Session session)
         {
             session.Log("Begin WriteIniSettings action");
-            
-            var filePath = ValidateTargetFileAndGetFilePath(session);
-            if(string.IsNullOrEmpty(filePath))
-                return ActionResult.SkipRemainingActions;
 
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("[Headquarters]");
-            sb.AppendLine("BaseUrl=http://localhost:9700");
-            sb.AppendLine("TenantName=hq");
-            sb.AppendLine("[DataExport]");
-            sb.AppendLine("ExportServiceUrl=http://localhost:5000");
-            sb.AppendLine("[ConnectionString]");
+            try
+            {
+                var filePath = ValidateTargetFileAndGetFilePath(session);
+                if (string.IsNullOrEmpty(filePath))
+                    return ActionResult.SkipRemainingActions;
 
-            var connectionStr = GetConnectionString(session);
-            sb.AppendLine($"DefaultConnection={connectionStr}");
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("[Headquarters]");
+                sb.AppendLine("BaseUrl=http://localhost:9700");
+                sb.AppendLine("TenantName=hq");
+                sb.AppendLine("[DataExport]");
+                sb.AppendLine("ExportServiceUrl=http://localhost:5000");
+                sb.AppendLine("[ConnectionString]");
 
-            File.WriteAllText(filePath, sb.ToString());
+                var connectionStr = GetConnectionString(session);
+                sb.AppendLine($"DefaultConnection={connectionStr}");
+
+                File.WriteAllText(filePath, sb.ToString());
+            }
+            catch (Exception e)
+            {
+                session.Log("Error on Action Execution.", e.Message);
+                return ActionResult.Failure;
+            }
 
             return ActionResult.Success;
         }
@@ -36,21 +45,29 @@ namespace SurveySolutionsCustomActions
         public static ActionResult WriteExportIniSettings(Session session)
         {
             session.Log("Begin WriteExportIniSettings  action");
-            
-            var filePath = ValidateTargetFileAndGetFilePath(session);
-            if (string.IsNullOrEmpty(filePath))
-                return ActionResult.SkipRemainingActions;
 
-            StringBuilder sb = new StringBuilder();
+            try
+            {
+                var filePath = ValidateTargetFileAndGetFilePath(session);
+                if (string.IsNullOrEmpty(filePath))
+                    return ActionResult.SkipRemainingActions;
 
-            sb.AppendLine("Port=5000");
-            sb.AppendLine();
-            sb.AppendLine("[ConnectionStrings]");
+                StringBuilder sb = new StringBuilder();
 
-            var connectionStr = GetConnectionString(session);
-            sb.AppendLine($"DefaultConnection={connectionStr}");
+                sb.AppendLine("Port=5000");
+                sb.AppendLine();
+                sb.AppendLine("[ConnectionStrings]");
 
-            File.WriteAllText(filePath, sb.ToString());
+                var connectionStr = GetConnectionString(session);
+                sb.AppendLine($"DefaultConnection={connectionStr}");
+
+                File.WriteAllText(filePath, sb.ToString());
+            }
+            catch (Exception e)
+            {
+                session.Log("Error on Action Execution.", e.Message);
+                return ActionResult.Failure;
+            }
 
             return ActionResult.Success;
         }
