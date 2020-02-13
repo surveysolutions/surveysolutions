@@ -6,6 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
@@ -16,6 +17,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     [Authorize(Roles = "ApiUser, Administrator")]
     [Route(@"api/v1/settings")]
     [Localizable(false)]
+    [PublicApiJson]
     public class SettingsController : ControllerBase
     {
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;

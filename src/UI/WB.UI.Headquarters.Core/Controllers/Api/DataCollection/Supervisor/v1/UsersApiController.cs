@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             var user = await this.userViewFactory.FindByNameAsync(userLogin.Username);
 
             var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
+            if (signInResult.IsLockedOut)
+            {
+                return Unauthorized(new {Message = "User is locked"});
+            }
 
             if (signInResult.Succeeded)
             {

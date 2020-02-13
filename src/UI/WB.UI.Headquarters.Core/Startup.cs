@@ -317,8 +317,9 @@ namespace WB.UI.Headquarters
         {
             app.UseExceptional();
 
-            if(!environment.IsDevelopment())
+            if (!env.IsDevelopment())
             {
+                app.UseStatusCodePagesWithReExecute("/error/{0}");
                 app.UseHsts();
             }
             
@@ -354,6 +355,8 @@ namespace WB.UI.Headquarters
                     new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
+                    new CultureInfo("id"),
+                    new CultureInfo("pt"),
                     new CultureInfo("zh")
                 };
             });

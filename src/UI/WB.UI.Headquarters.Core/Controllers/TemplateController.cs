@@ -36,7 +36,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireImportService importService;
         private readonly IDesignerUserCredentials designerUserCredentials;
         private readonly IAllUsersAndQuestionnairesFactory questionnaires;
-        private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ILogger<TemplateController> logger;
 
@@ -46,7 +45,6 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireImportService importService,
             IDesignerUserCredentials designerUserCredentials, 
             IAllUsersAndQuestionnairesFactory questionnaires,
-            IAssignmentsUpgradeService upgradeService,
             IAuthorizedUser authorizedUser,
             ILogger<TemplateController> logger,
             IOptions<DesignerConfig> designerConfig)
@@ -56,7 +54,6 @@ namespace WB.UI.Headquarters.Controllers
             this.importService = importService;
             this.designerUserCredentials = designerUserCredentials;
             this.questionnaires = questionnaires;
-            this.upgradeService = upgradeService;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
 
@@ -97,6 +94,12 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
+        public class ImportStatusModel
+        {
+            public QuestionnaireImportResult Status { get; set; }
+            public string RedirectUrl { get; set; }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ImportMode(Guid id, [FromForm]ImportModel request)
@@ -104,32 +107,59 @@ namespace WB.UI.Headquarters.Controllers
             if (this.designerUserCredentials.Get() == null)
             {
                 //Error(Resources.LoginToDesigner.SessionExpired);
-                return this.RedirectToAction("LoginToDesigner");
+                return Ok(new ImportStatusModel() 
+                {
+                    RedirectUrl = Url.Action("LoginToDesigner"),
+                });
             }
+
+            QuestionnaireIdentity.TryParse(request.MigrateFrom, out var migrateFrom);
 
             var model = await this.GetImportModel(id);
-            if (model.QuestionnaireInfo != null)
+            var result = await this.importService.ImportAndMigrateAssignments(id, model.QuestionnaireInfo?.Name, false,
+                request.Comment, Request.GetDisplayUrl(), true, request.ShouldMigrateAssignments, migrateFrom);
+
+            return ImportStatusImpl(result);
+        }
+
+
+        [HttpGet]
+        [Route("Template/ImportStatus/{id}")]
+        public ActionResult ImportStatus(string id)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            var result = this.importService.GetStatus(questionnaireIdentity);
+            if (result == null)
+                return NotFound();
+
+            return ImportStatusImpl(result);
+        }       
+        
+        private ActionResult ImportStatusImpl(QuestionnaireImportResult result)
+        {
+            if (result == null)
+                return NotFound();
+
+            if (result.Status == QuestionnaireImportStatus.MigrateAssignments)
             {
-                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false,
-                    request.Comment, Request.GetDisplayUrl());
-                model.ErrorMessage = result.ImportError;
-
-                if (result.IsSuccess)
+                return Ok(new ImportStatusModel()
                 {
-                    if (request.ShouldMigrateAssignments && !string.IsNullOrEmpty(request.MigrateFrom))
-                    {
-                        var sourceQuestionnaireId = QuestionnaireIdentity.Parse(request.MigrateFrom);
-
-                        var processId = Guid.NewGuid();
-                        this.upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, result.Identity);
-                        return RedirectToAction("UpgradeProgress", "SurveySetup", new {id = processId});
-                    }
-
-                    return this.RedirectToAction("Index", "SurveySetup");
-                }
+                    Status = result,
+                    RedirectUrl = Url.Action("UpgradeProgress", "SurveySetup", new { id = result.MigrateAssignmentProcessId.Value }),
+                });
             }
-
-            return this.View("ImportMode", model);
+            if (result.Status == QuestionnaireImportStatus.Finished)
+            {
+                return Ok(new ImportStatusModel()
+                {
+                    Status = result,
+                    RedirectUrl = Url.Action("Index", "SurveySetup"),
+                });
+            }
+            return Ok(new ImportStatusModel()
+            {
+                Status = result
+            });
         }
 
         private async Task<ImportModeModel> GetImportModel(Guid id)
@@ -138,7 +168,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 SurveySetupUrl = Url.Action("Index", "SurveySetup"), 
                 ListOfMyQuestionnaires = Url.Action("Import"),
-                NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id)
+                NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id),
+                CheckImportingStatus = Url.Action("ImportStatus"),
             };
             model.QuestionnairesToUpgradeFrom =
                 this.questionnaires.GetOlderQuestionnairesWithPendingAssignments(id, model.NewVersionNumber)
@@ -243,7 +274,6 @@ namespace WB.UI.Headquarters.Controllers
     public class ImportModel
     {
         public bool ShouldMigrateAssignments { get; set; }
-
         public string MigrateFrom { get; set; }
         public string Comment { get; set; }
     }

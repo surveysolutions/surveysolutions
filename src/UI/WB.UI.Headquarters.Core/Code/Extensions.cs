@@ -120,5 +120,17 @@ namespace WB.UI.Headquarters.Code
 
             return request.Headers != null && request.Headers["Accept"].Any(x => x.Contains("application/json"));
         }
+        public static string Capitalize(this string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            if (Char.IsUpper(input[0])) return input;
+
+            return string.Create(input.Length, input, (resultSpan, originalSource) =>
+            {
+                originalSource.AsSpan().CopyTo(resultSpan);
+                resultSpan[0] = Char.ToUpper(resultSpan[0]);
+            });
+        }
     }
 }

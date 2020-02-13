@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Logging;
 using WB.Services.Infrastructure.Tenant;
+using WB.Services.Scheduler;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Services;
 
@@ -18,15 +20,18 @@ namespace WB.Services.Export.Host.Jobs
         private readonly IJobService jobService;
         private readonly IJobProgressReporter jobProgressReporter;
         private readonly ILogger<PostgresDataExportProcessesService> logger;
+        private readonly IOptions<JobSettings> jobSettings;
 
         public PostgresDataExportProcessesService(
             IJobService jobService,
             IJobProgressReporter jobProgressReporter,
-            ILogger<PostgresDataExportProcessesService> logger)
+            ILogger<PostgresDataExportProcessesService> logger,
+            IOptions<JobSettings> jobSettings)
         {
             this.jobService = jobService;
             this.jobProgressReporter = jobProgressReporter;
             this.logger = logger;
+            this.jobSettings = jobSettings;
         }
 
         public async Task<long> AddDataExport(DataExportProcessArgs args)
@@ -35,6 +40,7 @@ namespace WB.Services.Export.Host.Jobs
             {
                 var job = await this.jobService.AddNewJobAsync(new JobItem
                 {
+                    MaxRetryAttempts = this.jobSettings.Value.MaxRetryAttempts,
                     Tenant = args.ExportSettings.Tenant.ToString(),
                     TenantName = args.ExportSettings.Tenant.Name,
                     Args = JsonConvert.SerializeObject(args),

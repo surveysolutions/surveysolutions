@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
     public class SupervisorOfflineSyncViewModel : BaseOfflineSyncViewModel<object>, IOfflineSyncViewModel
     {
         public IUserInteractionService UserInteractionService { get; }
+        public IGoogleApiService GoogleApiService { get; }
         private readonly IInterviewViewModelFactory viewModelFactory;
 
         private ReaderWriterLockSlim devicesLock = new ReaderWriterLockSlim();
@@ -34,10 +35,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IInterviewViewModelFactory viewModelFactory,
             IDeviceSynchronizationProgress deviceSynchronizationProgress,
             IUserInteractionService userInteractionService,
-            IRestService restService)
+            IRestService restService,
+            IGoogleApiService googleApiService)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings, restService)
         {
             UserInteractionService = userInteractionService;
+            GoogleApiService = googleApiService;
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
             communicator.IncomingInfo.Subscribe(OnIncomingData);
             this.viewModelFactory = viewModelFactory;

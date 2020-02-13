@@ -79,11 +79,11 @@ import {forEach, findIndex, assign, sortBy, find} from 'lodash'
 const LineChart = () => import(/* webpackChunkName: "report" */ './CumulativeChart')
 
 const dataSetInfo = [
-    {status: 100, label: Vue.$t('Strings.InterviewStatus_Completed'), backgroundColor: '#86B828'},
-    {status: 65, label: Vue.$t('Strings.InterviewStatus_RejectedBySupervisor'), backgroundColor: '#FFF200'},
-    {status: 120, label: Vue.$t('Strings.InterviewStatus_ApprovedBySupervisor'), backgroundColor: '#13A388'},
-    {status: 125, label: Vue.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: '#E06B5C'},
-    {status: 130, label: Vue.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: '#00647F'},
+    {status: 'Completed',              label: Vue.$t('Strings.InterviewStatus_Completed'),              backgroundColor: '#86B828'},
+    {status: 'RejectedBySupervisor',   label: Vue.$t('Strings.InterviewStatus_RejectedBySupervisor'),   backgroundColor: '#FFF200'},
+    {status: 'ApprovedBySupervisor',   label: Vue.$t('Strings.InterviewStatus_ApprovedBySupervisor'),   backgroundColor: '#13A388'},
+    {status: 'RejectedByHeadquarters', label: Vue.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: '#E06B5C'},
+    {status: 'ApprovedByHeadquarters', label: Vue.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: '#00647F'},
 ]
 
 export default {
@@ -306,13 +306,13 @@ export default {
                 .then(response => {
                     const datasets = []
 
-                    forEach(response.data.DataSets, set => {
-                        const infoIndex = findIndex(dataSetInfo, {status: set.Status})
+                    forEach(response.data.dataSets, set => {
+                        const infoIndex = findIndex(dataSetInfo, {status: set.status})
                         const info = dataSetInfo[infoIndex]
 
                         datasets.push(
                             assign(info, {
-                                data: set.Data,
+                                data: set.data,
                                 index: infoIndex,
                             })
                         )
@@ -320,25 +320,25 @@ export default {
 
                     const chartData = {
                         datasets: sortBy(datasets, 'index'),
-                        from: response.data.From,
-                        to: response.data.To,
-                        min: response.data.MinDate,
-                        max: response.data.MaxDate,
+                        from: response.data.from,
+                        to: response.data.to,
+                        min: response.data.minDate,
+                        max: response.data.maxDate,
                     }
 
                     self.hasData = datasets.length > 0
 
-                    this.chartData = {
+                    self.chartData = {
                         min: chartData.min,
                         from: chartData.from,
                         max: chartData.max,
                         to: chartData.to,
                     }
 
-                    if (this.queryString.from == null || this.queryString.to == null) {
-                        this.onChange(q => {
-                            q.from = response.data.From
-                            q.to = response.data.To
+                    if (self.queryString.from == null || self.queryString.to == null) {
+                        self.onChange(q => {
+                            q.from = response.data.from
+                            q.to = response.data.to
                         })
                     }
 

@@ -115,6 +115,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Importing {{percent}}%.
+        /// </summary>
+        public static string Importing {
+            get {
+                return ResourceManager.GetString("Importing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Questionnaire:.
         /// </summary>
         public static string ImportModePageTitle {
@@ -165,6 +174,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string MyQuestionnairesTitle {
             get {
                 return ResourceManager.GetString("MyQuestionnairesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receiving questionnaire data.
+        /// </summary>
+        public static string Prepare {
+            get {
+                return ResourceManager.GetString("Prepare", resourceCulture);
             }
         }
         

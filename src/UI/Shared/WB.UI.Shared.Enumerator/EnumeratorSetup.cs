@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Android.App;
+using Android.Gms.Maps;
 using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
@@ -102,7 +104,6 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("EnumToString", new EnumToStringConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
             registry.AddOrOverwrite("CommentStateToColor", new IsCurrentUserCommentToColorConverter());
-            registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("InMemoryImageValueWithDefault", new InMemoryImageValueWithDefaultConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
             registry.AddOrOverwrite("QuestionEditorStyleBackground", new QuestionEditorStyleBackgroundConverter());
@@ -168,12 +169,13 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<ImageButton>("Playback", (view) => new ImageButtonPlaybackToggleBinding(view));
             registry.RegisterCustomBindingFactory<RecyclerView>("ScrollToPosition", view => new RecyclerViewScrollToPositionBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("HtmlWithLinks", (view) => new TextViewHtmlWithLinksBinding(view));
-
+            registry.RegisterCustomBindingFactory<TextView>("Hyperlink", (view) => new TextViewHyperLinkBinding(view));
             registry.RegisterCustomBindingFactory<View>("ViewOverviewNodeState", (view) => new ViewOverviewNodeStateBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextViewNodeStateTextColor", (view) => new TextViewNodeStateTextColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextViewAnswerState", (view) => new TextViewAnswerStateBinding(view));
             registry.RegisterCustomBindingFactory<RadioButton>("AssignToInterviewerText", (view) => new AssignToInterviewerTextBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("TextLength", (editText) => new EditTextMaxLengthBinding(editText));
+            registry.RegisterCustomBindingFactory<MapView>("SetGpsLocation", view => new ViewSetGpsLocationBinding(view));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);

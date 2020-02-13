@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Shared.Web.Authentication;
@@ -17,6 +19,7 @@ namespace WB.UI.Headquarters.Code.Authentication
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationSchemeOptions>
     {
         private readonly UserManager<HqUser> userManager;
+        private bool isUserLocked;
 
         public BasicAuthenticationHandler(
             IOptionsMonitor<BasicAuthenticationSchemeOptions> options, 
@@ -46,6 +49,12 @@ namespace WB.UI.Headquarters.Code.Authentication
             var user = await this.userManager.FindByNameAsync(creds.Username);
             if(user == null) return AuthenticateResult.Fail("No user found");
 
+            if (user.IsArchivedOrLocked)
+            {
+                this.isUserLocked = true;
+                return AuthenticateResult.Fail("User is locked");
+            }
+
             var passwordIsValid = await this.userManager.CheckPasswordAsync(user, creds.Password);
             if(!passwordIsValid) return AuthenticateResult.Fail("Invalid password");
 
@@ -65,11 +74,16 @@ namespace WB.UI.Headquarters.Code.Authentication
             return AuthenticateResult.Success(ticket);
         }
 
-        protected override Task HandleChallengeAsync(AuthenticationProperties properties)
+        protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
         {
             HandleFail();
             Response.StatusCode = StatusCodes.Status401Unauthorized;
-            return Task.CompletedTask;
+
+            if (this.isUserLocked)
+            {
+                await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
+                await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "User is locked"}));
+            }
         }
 
         protected override Task HandleForbiddenAsync(AuthenticationProperties properties)

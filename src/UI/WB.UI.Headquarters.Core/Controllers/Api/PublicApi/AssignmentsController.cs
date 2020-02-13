@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Resources;
@@ -34,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Route("api/v1/assignments")]
     [Localizable(false)]
+    [PublicApiJson]
     public class AssignmentsController : ControllerBase
     {
         private readonly IAssignmentsService assignmentsStorage;
@@ -190,7 +192,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Authorize(Roles = "ApiUser, Administrator")]
         [Route("")]
         //[ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public async Task<ActionResult<CreateAssignmentResult>> Create(CreateAssignmentApiRequest createItem)
+        public async Task<ActionResult<CreateAssignmentResult>> Create([FromBody] CreateAssignmentApiRequest createItem)
         {
             var responsible = await this.GetResponsibleIdPersonFromRequestValueAsync(createItem?.Responsible);
 
