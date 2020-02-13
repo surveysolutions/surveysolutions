@@ -10,32 +10,14 @@ export default class ProfileComponent {
             {
                 path: '/WebInterview/:invitationId/Start',
                 component: Start,
-                beforeEnter: (to, from, next) => {
-                    if (window.CONFIG.model.errorMessage)
-                        next('/WebInterview/Error')
-                    else
-                        next()
-                },
             },
             {
                 path: '/WebInterview/Resume/:interviewId',
                 component: Resume,
-                beforeEnter: (to, from, next) => {
-                    if (window.CONFIG.model.errorMessage)
-                        next('/WebInterview/Error')
-                    else
-                        next()
-                },
             },
             {
                 path: '/WebInterview/Finish/:interviewId',
                 component: Finish,
-                beforeEnter: (to, from, next) => {
-                    if (window.CONFIG.model.errorMessage)
-                        next('/WebInterview/Error')
-                    else
-                        next()
-                },
             },
             {
                 path: '/WebInterview/OutdatedBrowser',

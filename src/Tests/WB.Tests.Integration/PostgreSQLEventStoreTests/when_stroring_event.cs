@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -14,7 +15,9 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
     public class when_stroring_event : with_postgres_db
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
             eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             int sequenceCounter = 1;
@@ -30,9 +33,12 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 sequenceCounter++,
                 0,
                 DateTime.UtcNow,
-                new AccountRegistered { ApplicationName = "App",
+                new AccountRegistered
+                {
+                    ApplicationName = "App",
                     ConfirmationToken = "token",
-                    Email = "test@test.com" }));
+                    Email = "test@test.com"
+                }));
 
             events.Append(new UncommittedEvent(Guid.NewGuid(),
                 eventSourceId,
@@ -58,33 +64,46 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 {
                     ConnectionString = connectionStringBuilder.ConnectionString,
                     SchemaName = schemaName
-                }, 
+                },
                 eventTypeResolver,
                 sessionProvider.Object);
 
             BecauseOf();
         }
 
-        public void BecauseOf() => eventStore.Store(events);
-
-        [NUnit.Framework.Test] public void should_read_stored_events () 
+        public void BecauseOf()
         {
-            var eventStream = eventStore.Read(eventSourceId, 0);
-            eventStream.Count().Should().Be(3);
-
-            var firstEvent = eventStream.First();
-            firstEvent.Payload.Should().BeOfType<AccountRegistered>();
-            var accountRegistered = (AccountRegistered)firstEvent.Payload;
-
-            accountRegistered.Email.Should().Be("test@test.com");
+            using (var transaction = npgsqlConnection.BeginTransaction())
+            {
+                eventStore.Store(events);
+                transaction.Commit();
+            }
         }
 
-        [NUnit.Framework.Test] public void should_persist_items_with_global_sequence_set () 
+        [NUnit.Framework.Test]
+        public void should_read_stored_events()
+        {
+            IEnumerable<CommittedEvent> eventStream;
+            using (npgsqlConnection.BeginTransaction())
+            {
+                eventStream = eventStore.Read(eventSourceId, 0);
+                eventStream.Count().Should().Be(3);
+
+                var firstEvent = eventStream.First();
+                firstEvent.Payload.Should().BeOfType<AccountRegistered>();
+                var accountRegistered = (AccountRegistered) firstEvent.Payload;
+
+                accountRegistered.Email.Should().Be("test@test.com");
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void should_persist_items_with_global_sequence_set()
         {
             var eventStream = eventStore.Read(eventSourceId, 0);
             eventStream.Select(x => x.GlobalSequence).Should().NotContain(0);
         }
-        
+
         [OneTimeTearDown]
         public void TearDown()
         {

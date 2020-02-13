@@ -1,8 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Routing;
-using NLog.Web.LayoutRenderers;
 using UAParser;
 
 namespace WB.UI.Headquarters.Filters

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Shared.Web.Authentication;
@@ -16,6 +19,7 @@ namespace WB.UI.Headquarters.Code.Authentication
     {
         private readonly IUserRepository userRepository;
         private readonly IApiTokenProvider authTokenProvider;
+        private bool isUserLocked;
 
         public AuthTokenAuthenticationHandler(IOptionsMonitor<AuthTokenAuthenticationSchemeOptions> options, 
             ILoggerFactory logger,
@@ -44,6 +48,12 @@ namespace WB.UI.Headquarters.Code.Authentication
             }
 
             var user = await userRepository.FindByNameAsync(creds.Username);
+            if (user.IsArchivedOrLocked)
+            {
+                this.isUserLocked = true;
+                return AuthenticateResult.Fail("User is locked");
+            }
+
             var verificationResult = await authTokenProvider.ValidateTokenAsync(user.Id, creds.Password);
             if (verificationResult)
             {
@@ -62,6 +72,16 @@ namespace WB.UI.Headquarters.Code.Authentication
             }
 
             return AuthenticateResult.Fail("Invalid auth token");
+        }
+
+        protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
+        {
+            await base.HandleChallengeAsync(properties);
+            if (this.isUserLocked)
+            {
+                await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
+                await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "User is locked"}));
+            }
         }
     }
 }
