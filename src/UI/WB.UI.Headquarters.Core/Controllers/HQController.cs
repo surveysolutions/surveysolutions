@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.UI.Headquarters.Filters;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
