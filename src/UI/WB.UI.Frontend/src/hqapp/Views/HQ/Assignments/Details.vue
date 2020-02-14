@@ -201,18 +201,18 @@ export default {
             var self = this
             const columns = [
                 {
-                    data: 'action',
+                    data: 'Action',
                     title: self.$t('Assignments.Action'),
                     render(data) {
                         return self.$t('Assignments.Action_' + data)
                     },
                 },
                 {
-                    data: 'actorName',
+                    data: 'ActorName',
                     title: self.$t('Assignments.Actor'),
                 },
                 {
-                    data: 'utcDate',
+                    data: 'UtcDate',
                     width: '180px',
                     title: self.$t('Assignments.Date'),
                     render(data) {
@@ -223,35 +223,35 @@ export default {
                     },
                 },
                 {
-                    data: 'additionalData',
+                    data: 'AdditionalData',
                     title: self.$t('Assignments.Details_Column'),
                     width: '50%',
                     render(data, type, row) {
                         switch (row.action) {
                         case 'Created': {
                             let createdText = self.$t('Assignments.Action_Created_Responsible', {
-                                responsible: data.responsible,
+                                responsible: data.Responsible,
                             })
                             if (data.comment) {
                                 createdText +=
-                                        '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: data.comment})
+                                        '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: data.Comment})
                             }
                             return createdText
                         }
                         case 'AudioRecordingChanged':
-                            if (data.audioRecording) {
+                            if (data.AudioRecording) {
                                 return self.$t('Assignments.Action_AudioRecordingChanged_True')
                             } else {
                                 return self.$t('Assignments.Action_AudioRecordingChanged_False')
                             }
                         case 'Reassigned': {
                             let result = self.$t('Assignments.Action_Reassigned_To', {
-                                newResponsible: data.newResponsible,
+                                newResponsible: data.NewResponsible,
                             })
-                            if (data.comment) {
+                            if (data.Comment) {
                                 result += '<br/>'
                                 result += self.$t('Assignments.Action_Reassigned_To_Comment', {
-                                    comment: data.comment,
+                                    comment: data.Comment,
                                 })
                             }
                             return result
@@ -260,9 +260,9 @@ export default {
                             if (data.quantity == null) {
                                 return self.$t('Assignments.Action_QuantityChanged_To_Unlimited')
                             }
-                            return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.quantity})
+                            return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.Quantity})
                         case 'WebModeChanged':
-                            if (data.webMode) {
+                            if (data.WebMode) {
                                 return self.$t('Assignments.Action_WebModeChanged_True')
                             } else {
                                 return self.$t('Assignments.Action_WebModeChanged_False')
@@ -275,15 +275,15 @@ export default {
 
             var tableOptions = {
                 rowId: function(row) {
-                    return `row_${row.id}`
+                    return `row_${row.Id}`
                 },
                 deferLoading: 0,
                 columns,
                 ordering: false,
                 ajax: {
-                    url: `${this.$router.options.base}api/v1/assignments/${this.model.id}/history`,
+                    url: `${this.$hq.basePath}api/v1/assignments/${this.model.id}/history`,
                     type: 'GET',
-                    dataSrc: 'history',
+                    dataSrc: 'History',
                 },
             }
 

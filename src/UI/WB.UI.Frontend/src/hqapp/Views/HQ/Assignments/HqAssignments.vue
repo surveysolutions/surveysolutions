@@ -700,7 +700,7 @@ export default {
                 this.editedQuantity = cellData
 
                 this.$hq.Assignments.quantitySettings(this.editedRowId).then(data => {
-                    this.canEditQuantity = data.canChangeQuantity
+                    this.canEditQuantity = data.CanChangeQuantity
                     this.$refs.editQuantityModal.modal('show')
                 })                
             }
@@ -708,7 +708,7 @@ export default {
                 this.editedRowId = parsedRowId
                 this.editedAudioRecordingEnabled = null
                 this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
-                    this.editedAudioRecordingEnabled = data.enabled
+                    this.editedAudioRecordingEnabled = data.Enabled
                     this.$refs.editAudioEnabledModal.modal('show')
                 })                
             }

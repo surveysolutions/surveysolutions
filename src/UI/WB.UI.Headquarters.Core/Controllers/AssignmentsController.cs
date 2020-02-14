@@ -86,6 +86,7 @@ namespace WB.UI.Headquarters.Controllers
         }
         
         [ActivePage(MenuItem.Assignments)]
+        [HttpGet]
         [Route("{controller}/{id}")]
         [Route("{controller}/{action=Index}")]
         public IActionResult Index(int? id = null)
