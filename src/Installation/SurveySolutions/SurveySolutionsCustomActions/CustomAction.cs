@@ -46,7 +46,7 @@ namespace SurveySolutionsCustomActions
         public static ActionResult WriteExportIniSettings(Session session)
         {
             session.Log("Begin WriteExportIniSettings  action");
-            Debugger.Launch()
+            //Debugger.Launch()
             try
             {
                 var filePath = ValidateTargetFileAndGetFilePath(session);
@@ -95,7 +95,6 @@ namespace SurveySolutionsCustomActions
             var filePath = session.CustomActionData["TargetFile"];
 
             //FileInfo(filePath).Length returns not 0 for compressed FS and NTFS
-
             if (File.Exists(filePath) && File.ReadAllText(filePath).Length > 0)
             {
                 return null;
