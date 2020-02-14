@@ -46,5 +46,6 @@
         Administration_Exceptions,
         Administration_CreateAdmin,
         Administration_ChangePassword,
+        Administration_ReevaluateInterview,
     }
 }
