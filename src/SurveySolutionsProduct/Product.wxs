@@ -32,6 +32,15 @@
       <![CDATA[Installed OR (VersionNT64 >= 603)]]>
     </Condition>
 
+
+    <Property Id="NETCOREHOSTVERSION">
+        <RegistrySearch Id="NetCoreHostVersion" Type="raw" Win64="yes" Root="HKLM" Key="SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedhost" Name="Version" />
+    </Property>
+    <Condition Message="This setup requires .NET Core 3.1">
+        <![CDATA[Installed OR (NETCOREHOSTVERSION >= "3.1.0")]]>
+    </Condition>
+
+
     <Property Id="SITEPORT" Value="9700"></Property>
     <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
     <Property Id="CONNPORT" Value="5432"></Property>
@@ -195,14 +204,14 @@
       <Custom Action="SetExportSettingsDataValue" Before="WriteExportServiceSettings">
         <![CDATA[NOT Installed]]>
       </Custom>
-      <Custom Action="WriteExportServiceSettings" After="InstallFiles" >
+      <Custom Action="WriteExportServiceSettings" Before="InstallFinalize" >
           <![CDATA[NOT Installed]]>
       </Custom>
 
       <Custom Action="SetSiteSettingsDataValue" Before="WriteSiteSettings">
           <![CDATA[NOT Installed]]>
       </Custom>
-      <Custom Action="WriteSiteSettings" After="InstallFiles" >
+      <Custom Action="WriteSiteSettings" Before="InstallFinalize" >
           <![CDATA[NOT Installed]]>
       </Custom>
     </InstallExecuteSequence>
@@ -528,7 +537,7 @@
                         Start="install"
                         Stop="both"
                         Remove="both"
-                        Wait="no"></ServiceControl>
+                        Wait="yes"></ServiceControl>
       </Component>
     </ComponentGroup>
   </Fragment>
