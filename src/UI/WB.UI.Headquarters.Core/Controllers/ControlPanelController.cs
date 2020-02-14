@@ -171,11 +171,10 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [AntiForgeryFilter]
+        [ActivePage(MenuItem.Administration_ReevaluateInterview)]
         public IActionResult ReevaluateInterview() => this.View("Index");
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult ReevaluateInterview(Guid id)
         {
             try
