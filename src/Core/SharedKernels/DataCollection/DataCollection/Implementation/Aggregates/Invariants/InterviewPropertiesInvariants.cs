@@ -191,5 +191,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     };
             }
         }
+
+        public void ThrowIfInterviewReceivedByDevice()
+        {
+            if (this.InterviewProperties.IsReceivedByInterviewer)
+                throw new InterviewException(
+                    $"Interview is received by device",
+                    InterviewDomainExceptionType.InterviewRecievedByDevice)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id}
+                    }
+                };
+        }
     }
 }
