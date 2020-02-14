@@ -34,7 +34,6 @@ namespace WB.UI.Shared.Web.Services
 
         public bool ShouldShowCaptcha(string username)
         {
-            if (this.captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha) return false;
 
             if (httpContextAccessor.HttpContext != null)
             {
