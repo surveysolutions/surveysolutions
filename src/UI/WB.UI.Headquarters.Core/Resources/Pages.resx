@@ -1391,6 +1391,27 @@
   <data name="Admin_InterviewPackages_Reason" xml:space="preserve">
     <value>Reason</value>
   </data>
+  <data name="ReevaluateInterview" xml:space="preserve">
+    <value>Reevaluate interview</value>
+  </data>
+  <data name="Admin_ControlPanelLinkTitle" xml:space="preserve">
+    <value>Control panel</value>
+  </data>
+  <data name="Admin_ReevaluateInterview_InterviewId" xml:space="preserve">
+    <value>Interview id</value>
+  </data>
+  <data name="Admin_Reevaluate" xml:space="preserve">
+    <value>Reevaluate</value>
+  </data>
+  <data name="Admin_Reevaluate_InterviewId_Required" xml:space="preserve">
+    <value>Interview id is required</value>
+  </data>
+  <data name="Admin_Reevaluate_InterviewId_Invalid" xml:space="preserve">
+    <value>Enter valid GUID value</value>
+  </data>
+  <data name="Admin_Reevaluate_Success" xml:space="preserve">
+    <value>Interview reevaluated successfully</value>
+  </data>
   <data name="CreateUser" xml:space="preserve">
     <value>Create user</value>
   </data>
