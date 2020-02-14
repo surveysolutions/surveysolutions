@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters
                     var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "log.log");
                     var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "verbose.log");
 
-                    loggerConfig.MinimumLevel.Debug()
+                    loggerConfig //.MinimumLevel.Debug()
                         .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                         .Enrich.FromLogContext()
                         .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day,

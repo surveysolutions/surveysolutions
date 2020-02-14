@@ -62,7 +62,7 @@
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == XMLHttpRequest.DONE) {
-                if (xhr.responseText == 'Finished')
+                if (xhr.responseText == '"Finished"')
                     document.location.reload(true);
                 else
                     setTimeout(function() { checkStatus() }, 5 * 1000);
