@@ -204,14 +204,14 @@
       <Custom Action="SetExportSettingsDataValue" Before="WriteExportServiceSettings">
         <![CDATA[NOT Installed]]>
       </Custom>
-      <Custom Action="WriteExportServiceSettings" Before="InstallFinalize" >
+      <Custom Action="WriteExportServiceSettings" After="InstallFiles" >
           <![CDATA[NOT Installed]]>
       </Custom>
 
       <Custom Action="SetSiteSettingsDataValue" Before="WriteSiteSettings">
           <![CDATA[NOT Installed]]>
       </Custom>
-      <Custom Action="WriteSiteSettings" Before="InstallFinalize" >
+      <Custom Action="WriteSiteSettings" After="InstallFiles" >
           <![CDATA[NOT Installed]]>
       </Custom>
     </InstallExecuteSequence>
