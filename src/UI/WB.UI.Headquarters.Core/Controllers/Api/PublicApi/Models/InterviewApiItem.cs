@@ -21,7 +21,8 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             int errorsCount, 
             InterviewStatus status, 
             DateTime lastEntryDate, 
-            IEnumerable<InterviewFeaturedQuestion> featuredQuestions)
+            IEnumerable<InterviewFeaturedQuestion> featuredQuestions,
+            bool receivedByDevice)
         {
             this.InterviewId = interviewId;
             this.QuestionnaireId = questionnaireId;
@@ -33,6 +34,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             this.Status = status;
             this.LastEntryDate = lastEntryDate;
             this.FeaturedQuestions = featuredQuestions.Select(q => q);
+            this.ReceivedByDevice = receivedByDevice;
         }
 
         [DataMember]
@@ -73,6 +75,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [DataMember]
         [Required]
         public DateTime LastEntryDate { get; set; }
+
+        [DataMember]
+        public bool ReceivedByDevice { get; set; }
         
     }
 }
