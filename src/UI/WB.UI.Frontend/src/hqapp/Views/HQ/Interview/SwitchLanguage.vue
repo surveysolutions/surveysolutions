@@ -5,8 +5,8 @@
             {{$store.state.webinterview.originalLanguageName}}
         </option>
         <option :key="language.OriginalLanguageName"
-            v-for="language in $store.state.webinterview.languages">
-            {{ language }}
+            v-for="language in $store.state.webinterview.languages"
+            v-html="language">
         </option>
     </select>
 </template>
