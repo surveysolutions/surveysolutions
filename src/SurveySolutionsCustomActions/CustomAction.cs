@@ -26,7 +26,7 @@ namespace SurveySolutionsCustomActions
                 sb.AppendLine("TenantName=hq");
                 sb.AppendLine("[DataExport]");
                 sb.AppendLine("ExportServiceUrl=http://localhost:5000");
-                sb.AppendLine("[ConnectionString]");
+                sb.AppendLine("[ConnectionStrings]");
 
                 var connectionStr = GetConnectionString(session);
                 sb.AppendLine($"DefaultConnection={connectionStr}");
