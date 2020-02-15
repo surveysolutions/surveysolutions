@@ -531,7 +531,14 @@
                         DisplayName="Survey Solutions Export Service"
                         Type="ownProcess"
                         Start="auto"
-                        ErrorControl="normal"></ServiceInstall>
+                        ErrorControl="normal">
+            <util:ServiceConfig
+                FirstFailureActionType='restart'
+                SecondFailureActionType='restart'
+                ThirdFailureActionType='restart'
+                RestartServiceDelayInSeconds='30'
+                ResetPeriodInDays='1'/>
+        </ServiceInstall>
         <ServiceControl Id="ExportServiceControl"
                         Name="SurveySolutionsExport"
                         Start="install"
