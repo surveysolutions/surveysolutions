@@ -56,6 +56,7 @@ if (!($noDestCleanup)) {
 
 if (!(Test-Path $HQsitePath)) {
 	New-Item $HQsitePath -ItemType Directory
+	New-Item $HQsitePath\Site -ItemType Directory
 #	New-Item (Join-Path $HQsitePath "App_Data") -ItemType Directory
 }
 
