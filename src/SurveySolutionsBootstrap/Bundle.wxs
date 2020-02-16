@@ -36,6 +36,7 @@
         </BootstrapperApplicationRef>
 
         <Chain>
+            <PackageGroupRef Id="ActivateIisFeatures"/>
             <PackageGroupRef Id="WindowsDotNetHosting311"/>
             <RollbackBoundary/>
             <MsiPackage Id="SurveySolutionsPackage"
