@@ -23,7 +23,7 @@ function setupExportService($exportSettingsPath) {
         }
     }
 
-    $exportSettings.ExportSettings.DirectoryPath = "..\..\..\Data_Site\ExportServiceData"
+    $exportSettings.ExportSettings.DirectoryPath = "..\Data_Site\ExportServiceData"
 
     $exportSettings | ConvertTo-Json -Depth 100 | set-content $exportSettingsPath
 }
@@ -62,14 +62,14 @@ if (!(Test-Path $HQsitePath)) {
 #$supportPath = Join-path $workdir "SupportPackage"
 #$targetSupportPath = Join-path $HQsitePath "Support"
 
-Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
+Copy-Item $sitePatha\* $HQsitePath\Site -Force -Recurse
 #Remove-Item "$HQsitePath\HostMap.config"
 
-#Copy-Item $HQSourcePath\ExportService $HQsitePath\ExportService -Force -Recurse
-Copy-Item $HQSourcePath\Client $HQsitePath\Client -Force -Recurse
+Copy-Item $HQSourcePath\ExportService $HQsitePath\ExportService -Force -Recurse
+Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse
 #Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
-$file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
+$file = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
 $version = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName).FileVersion
 #    [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 
