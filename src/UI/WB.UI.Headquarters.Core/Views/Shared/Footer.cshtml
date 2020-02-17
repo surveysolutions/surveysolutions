@@ -8,7 +8,7 @@
             &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="https://www.worldbank.org/en/about/legal">@Pages.Layout_Legal</a>.
         </div>
         <div class="text-right">
-            @(productVersion.ToString())
+            <span id="appVersion">@(productVersion.ToString())</span>
             <span>|</span>
             <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
             @*if (versionCheckService.DoesNewVersionExist())
