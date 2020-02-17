@@ -312,18 +312,23 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
+        public class SendLinkModel
+        {
+            public string InterviewId { get;set; }
+            public string Email { get; set; }
+        }
 
         [HttpPost]
-        public async Task<IActionResult> EmailLink(string interviewId, string email)
+        public async Task<IActionResult> EmailLink([FromBody]SendLinkModel data)
         {
-            var assignmentId = interviewSummary.GetById(interviewId)?.AssignmentId ?? 0;
+            var assignmentId = interviewSummary.GetById(data.InterviewId)?.AssignmentId ?? 0;
             var assignment = assignments.GetAssignment(assignmentId);
 
-            int invitationId = invitationService.CreateInvitationForPublicLink(assignment, interviewId);
+            int invitationId = invitationService.CreateInvitationForPublicLink(assignment, data.InterviewId);
 
             try
             {
-                await invitationMailingService.SendResumeAsync(invitationId, assignment, email);
+                await invitationMailingService.SendResumeAsync(invitationId, assignment, data.Email);
                 if (Request.Cookies[AskForEmail] != null)
                 {
                     Response.Cookies.Delete(AskForEmail);
@@ -333,7 +338,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (EmailServiceException e)
             {
-                invitationService.InvitationWasNotSent(invitationId, assignmentId, email, e.Message);
+                invitationService.InvitationWasNotSent(invitationId, assignmentId, data.Email, e.Message);
                 return this.Json("fail");
             }
         }
