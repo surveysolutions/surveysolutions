@@ -207,6 +207,7 @@ export default {
 
                 if (currentStatus.data.status.importError) {
                     this.errorMessage = currentStatus.data.status.importError
+                    break
                 }
                 
                 await this.timeout(1000)
@@ -215,7 +216,7 @@ export default {
                 if (this.dotsCount > 3)
                     this.dotsCount = 1
 
-                currentStatus = await this.$http.get(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.questionnaireId)
+                currentStatus = await this.$http.get(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.processId)
             } 
 
             if (currentStatus.data.status.status == 'Error') {
