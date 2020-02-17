@@ -306,7 +306,10 @@ export default {
                 }
             }
 
+            var baseHeaderCallback = options.headerCallback
             options.headerCallback = thead => {
+                if (baseHeaderCallback != undefined) baseHeaderCallback(thead)
+
                 for (let i = 0; i < options.columns.length; i++) {
                     $(thead)
                         .find('th')
