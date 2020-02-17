@@ -47,9 +47,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                     TranslationIndex = x.TranslationIndex
                 }).ToList();
 
-            return translationInstances.Count == 0
-                ? this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, $"No translations found for questionnaire Id: {id}")
-                : Ok(translationInstances);
+            return Ok(translationInstances);
         }
     }
 }
