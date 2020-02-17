@@ -53,7 +53,7 @@ body {
   color: #000;
   background: #fff;
   font: 14px/16px, sans-serif;
-  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
+  font-family: "Noto Sans", Arial, sans-serif;
 }
 b {
   font-weight: normal;
@@ -165,7 +165,7 @@ article {
   text-transform: uppercase;
 }
 .table_of_contents dl dd .appendix {
-  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
+  font-family: "Noto Sans", Arial, sans-serif;
 }
 .table_of_contents .group-statistics {
   font-size: 12px;
@@ -190,7 +190,7 @@ article {
   text-transform: uppercase;
   font-size: 10px;
   line-height: 13px;
-  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
+  font-family: "Noto Sans", Arial, sans-serif;
 }
 .page_path {
   float: left;
@@ -250,7 +250,7 @@ article {
   text-transform: uppercase;
   font-size: 10px;
   line-height: 13px;
-  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
+  font-family: "Noto Sans", Arial, sans-serif;
 }
 .type span {
   margin-top: 6px;
@@ -444,7 +444,7 @@ input[type=date] {
 }
 .condition span,
 .validation-expression span {
-  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
+  font-family: "Noto Sans", Arial, sans-serif;
   top: -1px;
 }
 .roster,
@@ -501,7 +501,7 @@ input[type=date] {
   margin-right: 3px;
 }
 .roster-title span {
-  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
+  font-family: "Noto Sans", Arial, sans-serif;
   text-transform: none;
   font-weight: normal;
   margin-right: 5px;
@@ -705,7 +705,7 @@ input[type=date],
 .validation-expression .more,
 .validation-message .more,
 .appendix_detail {
-  font-family: "Noto Sans", "Noto Sans Myanmar", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Armenian", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Mongolian", "Noto Sans Thai", "Noto Naskh Arabic", "Noto Sans CJK SC Regular", Arial, sans-serif;
+  font-family: "Noto Sans", Arial, sans-serif;
 }
 @media print {
   header {
