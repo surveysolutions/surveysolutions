@@ -306,6 +306,15 @@ export default {
                 }
             }
 
+            options.headerCallback = thead => {
+                for (let i = 0; i < options.columns.length; i++) {
+                    $(thead)
+                        .find('th')
+                        .eq(i)
+                        .attr('title', options.columns[i].tooltip)
+                }
+            }
+
             if (shouldDestroy && this.table != null) {
                 this.table.destroy()
                 $(this.$refs.header).empty()

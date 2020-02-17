@@ -92,6 +92,7 @@ export default {
                         name: 'CreationDate',
                         className: 'date',
                         title: this.$t('Users.CreationDate'),
+                        tooltip: this.$t('Users.AccountCreationDateTooltip'),
                         render: function(data, type, row) {
                             var localDate = moment.utc(data).local()
                             return localDate.format(DateFormats.dateTimeInList)
