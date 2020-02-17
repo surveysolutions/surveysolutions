@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
@@ -17,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
 
         public int TotalCount { get; set; }
 
+        [JsonProperty("data")]
         public IEnumerable<SpeedByResponsibleReportRow> Items { get; set; }
 
         public SpeedByResponsibleTotalRow TotalRow

@@ -53,7 +53,7 @@ import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import 'jquery-highlight'
 import './datatable.plugins'
-import {template, debounce, includes, without} from 'lodash'
+import {template, debounce, includes, without, assign} from 'lodash'
 
 $.fn.dataTable.ext.errMode = function(a, b, c, d) {
     // swallow all errors for production
@@ -221,7 +221,7 @@ export default {
                 }
             }
 
-            var options = $.extend(optionsFromProperties, this.tableOptions)
+            var options = assign(optionsFromProperties, this.tableOptions)
 
             var baseCreatedRow = options.createdRow
             options.createdRow = (row, data, dataIndex) => {

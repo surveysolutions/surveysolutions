@@ -73,7 +73,7 @@ export default class ReportComponent {
                 name: 'surveyStatistics',
                 path: '/Reports/surveyStatistics',
                 component: SurveyStatistics,
-                props: (route) => ({ 
+                props: (route) => ({
                     questionnaireId: route.query.questionnaire,
                     min: parseInt(route.query.min),
                     max: parseInt(route.query.max),
@@ -88,8 +88,8 @@ export default class ReportComponent {
         const VeeValidate = require('vee-validate')
         Vue.use(VeeValidate)
     }
-    
+
     get modules() {
-        return {  }
+        return {}
     }
 }
