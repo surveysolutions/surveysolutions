@@ -29,12 +29,12 @@
             v-if="exportable">
             {{$t("Pages.DownloadReport")}}
             <a target="_blank"
-                v-bind:href="this.export.excel">
-                XLSX
+                v-bind:href="this.export.excel"
+                v-html="'XLSX'">
             </a>,
             <a target="_blank"
-                v-bind:href="this.export.csv">
-                CSV
+                v-bind:href="this.export.csv"
+                v-html="'CSV'">
             </a>
             {{$t("Pages.Or")}}
             <a target="_blank"
