@@ -183,7 +183,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             try
             {
                 // prevent 2 concurrent requests from importing
-                var query = this.unitOfWork.Session.CreateSQLQuery("lock table plainstore.questionnairedocuments in EXCLUSIVE mode;");
+                var query = this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156);");
                 await query.ExecuteUpdateAsync();
 
                 var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaireId);
