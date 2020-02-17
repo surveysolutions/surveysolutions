@@ -1,11 +1,11 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+﻿using System;
+using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public interface IQuestionnaireImportStatuses
     {
-        QuestionnaireImportResult GetStatus(QuestionnaireIdentity questionnaireId);
-        QuestionnaireImportResult GetOrAdd(QuestionnaireIdentity questionnaireId, QuestionnaireImportResult valueToAdd);
+        QuestionnaireImportResult GetStatus(Guid processId);
+        QuestionnaireImportResult StartNew(Guid processId, QuestionnaireImportResult valueToAdd);
     }
 }
