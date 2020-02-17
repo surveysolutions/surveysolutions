@@ -1,6 +1,7 @@
 <template>
     <div>
         <Confirm
+            id="move-interviewer-confirmation"
             ref="move"
             :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', {names: this.formatNames(this.interviewers)})"
             slot="modals"
