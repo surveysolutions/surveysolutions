@@ -37,7 +37,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public async Task DownloadFromDesignerAsync(IProgress<int> progress)
         {
             this.logger.Debug($"loading translations {questionnaireIdentity.Id}");
-            translationContent = await designerApi.GetTranslations(questionnaire.PublicKey);
+            if (questionnaire.Translations?.Count != 0)
+            {
+                translationContent = await designerApi.GetTranslations(questionnaire.PublicKey);
+            }
+
             progress.Report(100);
         }
 
