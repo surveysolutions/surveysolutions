@@ -258,7 +258,7 @@
 
 <script>
 import * as toastr from 'toastr'
-import { map, join, assign, findIndex } from 'lodash'
+import { isEqual, map, join, assign, findIndex } from 'lodash'
 import moment from 'moment'
 import {DateFormats} from '~/shared/helpers'
 
@@ -605,7 +605,7 @@ export default {
         },
 
         addParamsToQueryString() {
-            var queryString = {showArchive: this.showArchive.key}
+            var queryString = {showArchive: this.showArchive.key.toString()}
 
             if (this.questionnaireId != null) {
                 queryString.QuestionnaireId = this.questionnaireId.value
@@ -622,7 +622,9 @@ export default {
             if (this.teamId) queryString.teamId = this.teamId
             if (this.id) queryString.id = this.id
 
-            this.$router.push({query: queryString})
+            if(!isEqual(this.$route.query, queryString)){
+                this.$router.push({ query: queryString }).catch(() => { })
+            }
         },
 
         async archiveSelected() {
