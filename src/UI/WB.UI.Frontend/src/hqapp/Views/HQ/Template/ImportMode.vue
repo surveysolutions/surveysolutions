@@ -190,6 +190,7 @@ export default {
         async startImport() {
             this.isImporting = true
             this.progressPercent = 0
+            this.errorMessage = ''
 
             var formData = new FormData(this.$refs.importingForm)
             var currentStatus = await this.$http.post(this.$route.fullPath, formData)
@@ -225,6 +226,7 @@ export default {
 
             if (currentStatus.data.redirectUrl) {
                 window.location.replace(currentStatus.data.redirectUrl)
+                return
             }
 
             this.dotsCount = 0

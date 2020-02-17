@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IDesignerUserCredentials designerUserCredentials;
         private readonly IDesignerApiFactory designerApiFactory;
         private readonly IQuestionnaireImportStatuses questionnaireImportStatuses;
+        private readonly IAssignmentsUpgradeService assignmentsUpgradeService;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
@@ -60,7 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IReusableCategoriesStorage reusableCategoriesStorage,
             IDesignerUserCredentials designerUserCredentials,
             IDesignerApiFactory designerApiFactory,
-            IQuestionnaireImportStatuses questionnaireImportStatuses)
+            IQuestionnaireImportStatuses questionnaireImportStatuses,
+            IAssignmentsUpgradeService assignmentsUpgradeService)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.zipUtils = zipUtils;
@@ -78,6 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.designerUserCredentials = designerUserCredentials;
             this.designerApiFactory = designerApiFactory;
             this.questionnaireImportStatuses = questionnaireImportStatuses;
+            this.assignmentsUpgradeService = assignmentsUpgradeService;
         }
 
         List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, QuestionnaireImportResult importResult, IDesignerApi designerApi, bool includePdf)
@@ -120,12 +123,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             var designerCredentials = designerUserCredentials.Get();
             var designerApi = designerApiFactory.Get(new ScopeDesignerUserCredentials(designerCredentials));
+            var userId = authorizedUser.Id;
+            var userName = authorizedUser.UserName;
 
             var processId = Guid.NewGuid();
             var questionnaireImportResult = questionnaireImportStatuses.StartNew(processId, new QuestionnaireImportResult
             {
                 ProcessId = processId,
                 ProgressPercent = 0,
+                ShouldMigrateAssignments = shouldMigrateAssignments,
                 Status = QuestionnaireImportStatus.NotStarted
             });
 
@@ -143,8 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
                     var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
-                    var result = await questionnaireImportService.ImportImpl(designerApi, questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, includePdf);
-                    MigrateAssignmentsIfNeed(serviceLocatorLocal, shouldMigrateAssignments, migrateFrom, questionnaireImportResult);
+                    var result = await questionnaireImportService.ImportImpl(designerApi, userId, userName, questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, shouldMigrateAssignments, migrateFrom, includePdf);
                     return result;
                 });
             });
@@ -155,18 +160,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return questionnaireImportResult;
         }
 
-        private void MigrateAssignmentsIfNeed(IServiceLocator serviceLocatorLocal, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom, QuestionnaireImportResult result)
+        private void MigrateAssignmentsIfNeed(Guid userId, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom, QuestionnaireImportResult result)
         {
             if (shouldMigrateAssignments && migrateFrom != null)
             {
-                result.Status = QuestionnaireImportStatus.MigrateAssignments;
-                var upgradeService = serviceLocatorLocal.GetInstance<IAssignmentsUpgradeService>();
-                upgradeService.EnqueueUpgrade(result.ProcessId, authorizedUser.Id, migrateFrom, result.Identity);
+                assignmentsUpgradeService.EnqueueUpgrade(result.ProcessId, userId, migrateFrom, result.Identity);
             }
         }
 
-        private async Task<QuestionnaireImportResult> ImportImpl(IDesignerApi designerApi, Guid questionnaireId, QuestionnaireImportResult questionnaireImportResult, string name, bool isCensusMode,
-            string comment, string requestUrl, bool includePdf = true)
+        private async Task<QuestionnaireImportResult> ImportImpl(IDesignerApi designerApi, Guid userId, string userName, Guid questionnaireId, QuestionnaireImportResult questionnaireImportResult, string name, bool isCensusMode,
+            string comment, string requestUrl, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom, bool includePdf = true)
         {
             try
             {
@@ -248,7 +251,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
                 commandService.Execute(new ImportFromDesigner(
-                    this.authorizedUser.Id,
+                    userId,
                     questionnaire,
                     isCensusMode,
                     questionnairePackage.QuestionnaireAssembly,
@@ -263,7 +266,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         HqHost = GetDomainFromUri(requestUrl),
                         HqTimeZoneMinutesOffset = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
-                        HqImporterLogin = this.authorizedUser.UserName,
+                        HqImporterLogin = userName,
                         HqQuestionnaireVersion = questionnaireIdentity.Version,
                         Comment = comment,
                     });
@@ -273,6 +276,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 questionnaireProgress.Report(100);
 
                 questionnaireImportResult.ProgressPercent = 100;
+
+                MigrateAssignmentsIfNeed(userId, shouldMigrateAssignments, migrateFrom, questionnaireImportResult);
+
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Finished;
 
                 shouldRollback = false;

@@ -7,6 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
     public class QuestionnaireImportResult
     {
         public Guid ProcessId { get; set; }
+        public bool ShouldMigrateAssignments { get; set; }
         public string QuestionnaireTitle { get; set; }
         public string ImportError { get; set; }
         public QuestionnaireIdentity Identity { get; set; }
@@ -21,6 +22,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         Progress,
         Finished,
         Error,
-        MigrateAssignments,
     }
 }
