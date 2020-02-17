@@ -535,14 +535,6 @@ export default {
                     info: false,
                 },
                 sDom: 'fr<"table-with-scroll"t>ip',
-                headerCallback: thead => {
-                    for (let i = 0; i < columns.length; i++) {
-                        $(thead)
-                            .find('th')
-                            .eq(i)
-                            .attr('title', columns[i].tooltip)
-                    }
-                },
                 searchHighlight: true,
             }
 
