@@ -29,9 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.translationManagementService = translationManagementService;
             this.logger = logger;
         }
-        public int GetPrecessStepsCount()
+        public bool IsNeedProcessing()
         {
-            return questionnaire.Translations != null ? 2 : 0;
+            return questionnaire.Translations?.Count > 0;
         }
 
         public async Task DownloadFromDesignerAsync(IProgress<int> progress)
