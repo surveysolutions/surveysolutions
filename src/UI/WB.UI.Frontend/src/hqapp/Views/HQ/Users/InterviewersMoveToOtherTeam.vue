@@ -9,7 +9,7 @@
             <div class="alert">
                 <Typeahead
                     ref="supervisorControl"
-                    control-id="supervisor"
+                    control-id="supervisorToAssign"
                     fuzzy
                     data-vv-name="supervisor"
                     data-vv-as="supervisor"
