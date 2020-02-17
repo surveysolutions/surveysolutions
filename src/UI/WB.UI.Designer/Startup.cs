@@ -182,7 +182,7 @@ namespace WB.UI.Designer
             services.AddTransient<IDomainRepository, DomainRepository>();
             services.AddScoped<ILoggedInUser, LoggedInUser>();
 
-            services.AddHostedService<FontInstalledCheck>();
+            //services.AddHostedService<FontInstalledCheck>(); // Fails in docker
 
             services.Configure<CompilerSettings>(Configuration.GetSection("CompilerSettings"));
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));
