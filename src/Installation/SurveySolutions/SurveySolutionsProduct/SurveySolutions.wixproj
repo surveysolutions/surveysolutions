@@ -43,6 +43,7 @@
   <ItemGroup>
     <Content Include="appsettings.production.ini" />
     <Content Include="Configuration.wxi" />
+    <Content Include="FIlter.xsl" />
     <Content Include="img\icon-32.bmp" />
     <Content Include="img\left-image.bmp" />
     <Content Include="img\logo-50.bmp" />
@@ -99,7 +100,7 @@
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
   <Target Name="BeforeBuild">
-    <HeatDirectory OutputFile="$(ProjectDir)\ProductFiles.wxs" Directory="$(HarvestDirectory)" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLSITEFOLDER" AutogenerateGuids="true" PreprocessorVariable="var.HarvestDir" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" NoLogo="true" />
+    <HeatDirectory OutputFile="$(ProjectDir)\ProductFiles.wxs" Directory="$(HarvestDirectory)" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLFILESFOLDER" AutogenerateGuids="true" PreprocessorVariable="var.HarvestDir" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" NoLogo="true" Transforms="Filter.xsl" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

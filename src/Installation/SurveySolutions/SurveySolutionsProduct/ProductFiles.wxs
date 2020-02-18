@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
-        <DirectoryRef Id="INSTALLSITEFOLDER">
-            <Directory Id="dir726AB4995AEC70A9F82C8DD4CD869EF4" Name="ExportService" />
+        <DirectoryRef Id="INSTALLFILESFOLDER">
+            <Directory Id="dirAC9381ECDA1BE1937C13321880076889" Name="ExportService" />
         </DirectoryRef>
     </Fragment>
     <Fragment>
         <ComponentGroup Id="ProductFilesComponentGroup">
-            <Component Id="cmpC45FD8B60F055547CDAE8F1B77CAD5B5" Directory="INSTALLSITEFOLDER" Guid="*">
-                <File Id="fil0ECFD1288AFE6DE65F0209209F58C59B" KeyPath="yes" Source="$(var.HarvestDir)\New Text Document.txt" />
+            <Component Id="cmpF649D99E75A1E6359ADEF5E196BAA8E9" Directory="INSTALLFILESFOLDER" Guid="*">
+                <File Id="fil25D2DFE319EC4D2D13DDFD3D2EE36094" KeyPath="yes" Source="$(var.HarvestDir)\New Text Document.txt" />
             </Component>
-            <Component Id="cmp5C1E3F44EC15AD96B07C6C2DDF266119" Directory="dir726AB4995AEC70A9F82C8DD4CD869EF4" Guid="*">
-                <File Id="fil9F913FB0D086E85084D556F07BCC9207" KeyPath="yes" Source="$(var.HarvestDir)\ExportService\WB.Services.Export.Host.exe" />
-            </Component>
+            
         </ComponentGroup>
     </Fragment>
 </Wix>
