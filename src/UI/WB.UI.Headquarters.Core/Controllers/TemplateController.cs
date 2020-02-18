@@ -139,16 +139,17 @@ namespace WB.UI.Headquarters.Controllers
             if (result == null)
                 return NotFound();
 
-            if (result.Status == QuestionnaireImportStatus.MigrateAssignments)
-            {
-                return Ok(new ImportStatusModel()
-                {
-                    Status = result,
-                    RedirectUrl = Url.Action("UpgradeProgress", "SurveySetup", new { id = result.ProcessId }),
-                });
-            }
             if (result.Status == QuestionnaireImportStatus.Finished)
             {
+                if (result.ShouldMigrateAssignments)
+                {
+                    return Ok(new ImportStatusModel()
+                    {
+                        Status = result,
+                        RedirectUrl = Url.Action("UpgradeProgress", "SurveySetup", new {id = result.ProcessId}),
+                    });
+                }
+
                 return Ok(new ImportStatusModel()
                 {
                     Status = result,
