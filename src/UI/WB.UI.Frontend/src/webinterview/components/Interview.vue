@@ -1,7 +1,8 @@
 <template>
     <div>
         <signalr @connected="connected"
-            :interviewId="interviewId" />
+            :interviewId="interviewId"
+            :mode="mode" />
         <router-view />
     </div>
 </template>
@@ -14,9 +15,15 @@ import Vue from 'vue'
 export default {
     name: 'WebInterviwew',
 
+    props: {
+        mode: {
+            type: String,
+            required: true,
+        },
+    },
+
     components: {
-        signalr: () => import(/* webpackChunkName: "core-signalr" */ './signalr/core.signalr'), 
-                
+        signalr: () => import(/* webpackChunkName: "core-signalr" */ './signalr/core.signalr'),
     },
 
     beforeMount() {

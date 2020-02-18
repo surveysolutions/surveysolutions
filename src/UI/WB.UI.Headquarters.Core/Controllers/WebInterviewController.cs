@@ -54,7 +54,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICaptchaProvider captchaProvider;
         private readonly IAssignmentsService assignments;
-        private readonly IConnectionLimiter connectionLimiter;
         private readonly IPauseResumeQueue pauseResumeQueue;
         private readonly IInvitationService invitationService;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
@@ -109,7 +108,6 @@ namespace WB.UI.Headquarters.Controllers
             IWebInterviewConfigProvider configProvider,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IConnectionLimiter connectionLimiter,
             IUserViewFactory usersRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
@@ -128,7 +126,6 @@ namespace WB.UI.Headquarters.Controllers
             this.configProvider = configProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.connectionLimiter = connectionLimiter;
             this.usersRepository = usersRepository;
             this.keyGenerator = keyGenerator;
             this.captchaProvider = captchaProvider;
@@ -307,7 +304,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
-            model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
+            model.ServerUnderLoad = false;
 
             return this.View(model);
         }
@@ -357,12 +354,12 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
-            if (!this.connectionLimiter.CanConnect())
-            {
-                var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, null);
-                model.ServerUnderLoad = true;
-                return this.View("Start", model);
-            }
+            //if (!this.connectionLimiter.CanConnect())
+            //{
+            //    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, null);
+            //    model.ServerUnderLoad = true;
+            //    return this.View("Start", model);
+            //}
 
             if (!string.IsNullOrWhiteSpace(assignment.Password))
             {
