@@ -107,7 +107,7 @@ export default {
                             url += '?'
                         url += `questionnaireId=${row.questionnaireId}`
                         
-                        return `<a href=${url}>${escape(data)}</a>`
+                        return `<a href=${url}>${escape(data || self.$t('Strings.AllQuestionnaires'))}</a>`
                     },
                 },
                 {
