@@ -96,16 +96,23 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public async Task<ActionResult> TabletInfos(IFormFile file)
         {
-            if (file != null && file.Length > 0)
+            try
             {
-                using var ms = new MemoryStream();
-                await using (var readStream = file.OpenReadStream())
-                    await readStream.CopyToAsync(ms);
+                if (file != null && file.Length > 0)
+                {
+                    using var ms = new MemoryStream();
+                    await using (var readStream = file.OpenReadStream())
+                        await readStream.CopyToAsync(ms);
 
-                this.tabletInformationService.SaveTabletInformation(
-                    content: ms.ToArray(),
-                    androidId: @"manual-restore",
-                    user: this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id)));
+                    this.tabletInformationService.SaveTabletInformation(
+                        content: ms.ToArray(),
+                        androidId: @"manual-restore",
+                        user: this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id)));
+                }
+            }
+            catch (Exception exception)
+            {
+                this.logger.LogError($"Exception on tablet info uploading: {file?.Name}", exception);
             }
 
             return RedirectToAction("TabletInfos");
