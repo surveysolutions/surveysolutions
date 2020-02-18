@@ -15,6 +15,11 @@ namespace WB.Infrastructure.Native.Monitoring
             });
         }
 
+        public void Observe(double value)
+        {
+            this.histogram.Observe(value);
+        }
+
         public void Observe(double value, params string[] labels)
         {
             this.histogram.Labels(labels).Observe(value);

@@ -14,11 +14,9 @@ namespace WB.Enumerator.Native.WebInterview
     {
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingleton<IConnectionsMonitor, ConnectionsMonitor>();
+            
             registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
-            registry.BindAsSingletonWithConstructorArgument<IConnectionLimiter, ConnectionLimiter>("connectionsLimit",
-                ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100));
-
+            
             registry.Bind<InterviewLifecycleEventHandler>();
             
             registry.BindAsSingleton<IWebInterviewInvoker, WebInterviewInvoker>();
