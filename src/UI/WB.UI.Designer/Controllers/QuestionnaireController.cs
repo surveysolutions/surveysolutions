@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -79,6 +80,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ITranslationsService translationsService;
         private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
+        private readonly ISerializer serializer;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -96,7 +98,8 @@ namespace WB.UI.Designer.Controllers
             IPublicFoldersStorage publicFoldersStorage,
             IAttachmentService attachmentService,
             ITranslationsService translationsService,
-            ICategoriesService categoriesService)
+            ICategoriesService categoriesService,
+            ISerializer serializer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -114,6 +117,7 @@ namespace WB.UI.Designer.Controllers
             this.translationsService = translationsService;
             this.categoriesService = categoriesService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.serializer = serializer;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
