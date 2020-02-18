@@ -380,7 +380,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IReusableCategoriesStorage>(),
                 designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
                 Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
-                new QuestionnaireImportStatuses()
+                new QuestionnaireImportStatuses(),
+                Mock.Of<IAssignmentsUpgradeService>()
                 );
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
