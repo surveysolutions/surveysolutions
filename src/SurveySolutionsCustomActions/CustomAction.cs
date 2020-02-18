@@ -24,6 +24,10 @@ namespace SurveySolutionsCustomActions
                 sb.AppendLine("[Headquarters]");
                 sb.AppendLine("BaseUrl=http://localhost:9700");
                 sb.AppendLine("TenantName=hq");
+                sb.AppendLine("[Apks]");
+                sb.AppendLine("ClientApkPath=Client");
+                sb.AppendLine("[Designer]");
+                sb.AppendLine("DesignerAddress = https://designer.mysurvey.solutions");
                 sb.AppendLine("[DataExport]");
                 sb.AppendLine("ExportServiceUrl=http://localhost:5000");
                 sb.AppendLine("[ConnectionStrings]");
