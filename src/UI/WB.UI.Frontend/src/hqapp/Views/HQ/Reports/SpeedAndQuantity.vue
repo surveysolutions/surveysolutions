@@ -137,11 +137,15 @@ export default {
         }
 
         if (this.query.reportType) {
-            this.reportTypeId = find(this.model.reportTypes, {key: this.query.reportType})
+            this.reportTypeId = find(this.model.reportTypes, {key: this.query.reportType})          
+            if(this.reportTypeId == null) {
+                this.reportTypeId = this.model.reportTypes[0]
+            }
         } else if (this.reportTypeId == null && this.model.reportTypes.length > 0) {
             var index = this.model.reportTypes
             this.reportTypeId = this.model.reportTypes[0]
         }
+
 
         if (this.query.columnCount) {
             this.overTheLast = find(this.model.overTheLasts, {key: this.query.columnCount})
