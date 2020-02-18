@@ -119,7 +119,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [ObserverNotAllowed]
-        [RequestSizeLimit(100 * 1024 * 1024)]
+        [RequestSizeLimit(500 * 1024 * 1024)]
         public async Task<JsonMapResponse> Upload(IFormFile file)
         {
             var response = new JsonMapResponse();
@@ -353,7 +353,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [ObserverNotAllowed]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public CommandApiController.JsonCommandResponse DeleteMapUser(DeleteMapUserRequestModel request)
+        public CommandApiController.JsonCommandResponse DeleteMapUser([FromBody] DeleteMapUserRequestModel request)
         {
             this.mapStorageService.DeleteMapUserLink(request.Map, request.User);
             return new CommandApiController.JsonCommandResponse() { IsSuccess = true };
