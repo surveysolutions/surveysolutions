@@ -29,9 +29,8 @@
     <!--server OS-->
     <!--AND MsiNTProductType > 1-->
     <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
-      <![CDATA[Installed OR (VersionNT64 >= 603)]]>
+      <![CDATA[Installed OR (VersionNT64 >= 603) AND MsiNTProductType > 1]]>
     </Condition>
-
 
     <Property Id="NETCOREHOSTVERSION">
         <RegistrySearch Id="NetCoreHostVersion" Type="raw" Win64="yes" Root="HKLM" Key="SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedhost" Name="Version" />
@@ -151,7 +150,6 @@
                   HideTarget="no"
                   Return="ignore"
                   Impersonate="no"/>
-
     
     <Binary Id="CustomActionBinary"
             SourceFile="..\SurveySolutionsCustomActions\bin\$(var.Configuration)\SurveySolutionsCustomActions.CA.dll" />
@@ -263,7 +261,7 @@
 
   <Fragment>
     <ComponentGroup Id="ProductComponents" >
-        <!--add harvested project output-->
+        <!--adding harvested project output-->
         <ComponentGroupRef Id="ProductFilesComponentGroup"></ComponentGroupRef>
         <ComponentRef Id="DIRTOINSTALLPath"/>
         <ComponentRef Id="cmpAppPool"/>
