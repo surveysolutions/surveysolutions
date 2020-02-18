@@ -76,7 +76,6 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance> translationsStorage = null,
-            IAuthorizedUser authorizedUser = null,
             IReusableCategoriesStorage categoriesStorage = null)
             => new Questionnaire(
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
@@ -84,7 +83,6 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 translationsStorage ?? new InMemoryPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance>(),
-                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 categoriesStorage ?? Mock.Of<IReusableCategoriesStorage>());
 
         public StatefulInterview StatefulInterview(Guid interviewId, 
