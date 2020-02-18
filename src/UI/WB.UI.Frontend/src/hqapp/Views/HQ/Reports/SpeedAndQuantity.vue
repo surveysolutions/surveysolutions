@@ -87,6 +87,12 @@
             </FilterBlock>
         </Filters>
 
+        <div class="clearfix">
+            <div class="col-sm-8">
+                <h4 v-html="selectedQuestionnaireTitle" />
+            </div>
+        </div>
+        
         <DataTables
             ref="table"
             v-if="mounted"
@@ -463,6 +469,13 @@ export default {
                 },
             }
         },
+
+        selectedQuestionnaireTitle() {
+            const name = this.questionnaireId == null ? this.$t('Common.AllQuestionnaires') : this.questionnaireId.value
+            const version = this.questionnaireVersion == null? this.$t('Common.AllVersions') : this.questionnaireVersion.value
+            return `${name}, ${version}`
+        },
+
         tableOptions() {
 
             if (this.columns.length == 0) {
