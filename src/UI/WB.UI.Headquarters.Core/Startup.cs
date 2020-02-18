@@ -320,10 +320,15 @@ namespace WB.UI.Headquarters
 
             if (!env.IsDevelopment())
             {
-                app.UseStatusCodePagesWithReExecute("/error/{0}");
+                app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
+                    appBuilder =>
+                    {
+                        appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
+                    });
+                
                 app.UseHsts();
             }
-            
+
             InitModules(env);
 
             app.UseStaticFiles();
