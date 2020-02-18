@@ -7,11 +7,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
@@ -25,11 +29,13 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly UserManager<HqUser> userRepository;
+        private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
 
-        public UsersController(IAuthorizedUser authorizedUser, UserManager<HqUser> userRepository)
+        public UsersController(IAuthorizedUser authorizedUser, UserManager<HqUser> userRepository, IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage)
         {
             this.authorizedUser = authorizedUser;
             this.userRepository = userRepository;
+            this.profileSettingsStorage = profileSettingsStorage;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -80,7 +86,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> Manage(Guid? id)
         {
@@ -371,6 +377,11 @@ namespace WB.UI.Headquarters.Controllers
                 return true;
 
             if (this.authorizedUser.IsSupervisor && user.IsInRole(UserRoles.Interviewer) && user.Profile?.SupervisorId == this.authorizedUser.Id)
+                return true;
+
+            if (this.authorizedUser.IsInterviewer 
+                && user.Id == this.authorizedUser.Id
+                && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
                 return true;
 
             return false;
