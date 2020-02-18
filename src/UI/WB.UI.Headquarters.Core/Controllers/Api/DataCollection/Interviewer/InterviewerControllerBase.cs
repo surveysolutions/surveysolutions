@@ -1,15 +1,9 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -20,13 +14,10 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
-using WB.UI.Shared.Web.Controllers;
-using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 {
@@ -159,11 +150,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
 
             if (deviceSyncProtocolVersion < lastNonUpdatableSyncProtocolVersion)
-                return StatusCode((int) HttpStatusCode.UpgradeRequired);
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
 
             if (!UserIsFromThisTenant(tenantId))
             {
-                return StatusCode((int) HttpStatusCode.Conflict);
+                return StatusCode(StatusCodes.Status409Conflict);
             }
             
             var serverApkBuildNumber = interviewerVersionReader.InterviewerBuildNumber;
@@ -171,7 +162,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             
             if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
             {
-                return StatusCode((int) HttpStatusCode.NotAcceptable);
+                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
             if (clientApkBuildNumber != null && this.syncVersionProvider.GetBlackListedBuildNumbers().Contains(clientApkBuildNumber.Value))
@@ -181,14 +172,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
             if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
             {
-                return StatusCode((int) HttpStatusCode.UpgradeRequired);
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
 
             if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced)
             {
                 if (this.interviewFactory.HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(this.authorizedUser.Id))
                 {
-                    return StatusCode((int) HttpStatusCode.UpgradeRequired);
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
                 }
             }
 
@@ -196,7 +187,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             {
                 if (this.assignmentsService.HasAssignmentWithAudioRecordingEnabled(this.authorizedUser.Id))
                 {
-                    return StatusCode((int) HttpStatusCode.UpgradeRequired);
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
                 }
             }
 
@@ -206,14 +197,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             }
             else if (deviceSyncProtocolVersion == 7070) // KP-11462
             {
-                return StatusCode((int) HttpStatusCode.UpgradeRequired);
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
             else if (deviceSyncProtocolVersion == 7060 /* pre protected questions release */)
             {
                 if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced
                     && this.assignmentsService.HasAssignmentWithProtectedVariables(this.authorizedUser.Id))
                 {
-                    return StatusCode((int) HttpStatusCode.UpgradeRequired);
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
                 }
             }
             else if (deviceSyncProtocolVersion == 7050 /* PRE assignment devices, that still allowed to connect*/)
@@ -223,13 +214,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
                 if (assignedQuestionarries.Any(aq => aq.AllowAssignments))
                 {
-                    return StatusCode((int) HttpStatusCode.UpgradeRequired);
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
                 }
 
             }
             else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
             {
-                return StatusCode((int) HttpStatusCode.NotAcceptable);
+                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
             return this.userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id) != deviceId
