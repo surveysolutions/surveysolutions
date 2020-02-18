@@ -61,7 +61,7 @@
                             :haserror="modelState['PhoneNumber'] !== undefined"
                             id="PhoneNumber"/>
                     </form-group>
-                    <p v-if="lockMessage != null">{{lockMessage}}</p>
+                    <p v-if="!isOwnProfile && lockMessage != null">{{lockMessage}}</p>
                     <form-group v-if="!isOwnProfile">
                         <input
                             class="checkbox-filter single-checkbox"
