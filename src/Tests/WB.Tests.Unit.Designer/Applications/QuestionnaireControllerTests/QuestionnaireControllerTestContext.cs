@@ -9,9 +9,9 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Unit.Designer.Services;
 using WB.UI.Designer.Code;
@@ -47,7 +47,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 Mock.Of<IPublicFoldersStorage>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(), 
-                categoriesService: Mock.Of<ICategoriesService>());
+                categoriesService: Mock.Of<ICategoriesService>(),
+                serializer: Mock.Of<ISerializer>());
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext
