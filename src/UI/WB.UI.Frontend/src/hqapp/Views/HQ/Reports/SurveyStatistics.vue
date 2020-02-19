@@ -244,6 +244,7 @@ export default {
         tableOptions() {
             return {
                 columns: this.tableColumns,
+                order: [],
                 ajax: {
                     url: this.$hq.Report.SurveyStatistics.Uri,
                     type: 'GET',
