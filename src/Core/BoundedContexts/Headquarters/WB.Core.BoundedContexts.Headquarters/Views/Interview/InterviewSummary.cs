@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -19,15 +19,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.Comments = new HashSet<InterviewComment>();
         }
 
-        public InterviewSummary(QuestionnaireDocument questionnaire) : this()
+        public InterviewSummary(IQuestionnaire questionnaire) : this()
         {
             int position = 0;
-            foreach (var featuredQuestion in questionnaire.Find<IQuestion>(q => q.Featured && q.QuestionType != QuestionType.GpsCoordinates))
+            foreach (var featuredQuestionId in questionnaire.GetPrefilledQuestions().Where(x=>questionnaire.GetQuestionType(x) != QuestionType.GpsCoordinates))
             {
                 var result = new QuestionAnswer
                 {
-                    Questionid = featuredQuestion.PublicKey,
-                    Title = featuredQuestion.QuestionText,
+                    Questionid = featuredQuestionId,
+                    Title = questionnaire.GetQuestionTitle(featuredQuestionId),
                     Answer = string.Empty,
                     InterviewSummary = this,
                     Position = position
