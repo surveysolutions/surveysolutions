@@ -218,17 +218,18 @@ export default {
             for (let i = 0; i < count; i++) {
                 const index = i
                 columns.push({
-                    class: 'type-numeric',
-                    title: `<span style=" white-space: nowrap;" id="date${index}"></span>`,
+                    class: 'type-numeric short-row',
+                    title: '',
                     data: '',
-                    name: '',
+                    name: `date_${index}`,
                     orderable: false,
+
                     render: function(data, type, row) {
                         if (row.quantityByPeriod) {
                             var quantity = row.quantityByPeriod[index]
                             return self.renderQuantityValue(quantity)
                         }
-                        if (row.quantityByPeriod) {
+                        if (row.speedByPeriod) {
                             var speed = row.speedByPeriod[index]
                             return self.renderSpeedValue(speed)
                         }
@@ -270,15 +271,24 @@ export default {
 
             this.columns = columns
         },
+
         updateDateColumnsInfo() {
-            for (let i = 0; i < this.dateTimeRanges.length; i++) {
-                const dateRange = this.dateTimeRanges[i]
-                const column = this.columns[i + 1]
-                const date = moment(dateRange.to).format(this.dateFormat)
-                column.title = date
-                const el = document.getElementById(`date${i}`)
-                if(el != null)
-                    el.textContent = date
+
+            const table = this.$refs.table.table
+
+            for (let i = 0; i < this.columns.length; i++) {
+                const column = table.column(`date_${i}:name`)
+
+                const dateRange = (i >= this.dateTimeRanges.length) ? null : this.dateTimeRanges[i]
+                if(dateRange) {
+                    column.visible(true)
+                    const header = column.header()
+                    const date = moment(dateRange.to).format(this.dateFormat)
+                    header.title = date
+                    header.textContent = date
+                } else {
+                    column.visible(false)
+                }
             }
         },
         renderQuantityValue(value) {
