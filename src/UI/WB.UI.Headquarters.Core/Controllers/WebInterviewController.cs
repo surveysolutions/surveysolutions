@@ -354,13 +354,6 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
-            //if (!this.connectionLimiter.CanConnect())
-            //{
-            //    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, null);
-            //    model.ServerUnderLoad = true;
-            //    return this.View("Start", model);
-            //}
-
             if (!string.IsNullOrWhiteSpace(assignment.Password))
             {
                 bool isValidPassword = invitation.IsWithAssignmentResolvedByPassword()
