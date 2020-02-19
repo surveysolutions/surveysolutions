@@ -31,7 +31,7 @@ namespace WB.Services.Export.Infrastructure
 
         private readonly Lazy<string> connectionString;
 
-        private const long ContextSchemaVersion = 2;
+        private const long ContextSchemaVersion = 3;
 
         private readonly IOptions<DbConnectionSettings> connectionSettings;
         private readonly ILogger<TenantDbContext> logger;
@@ -143,7 +143,10 @@ namespace WB.Services.Export.Infrastructure
             }
 
             this.Database.Migrate();
+        }
 
+        public async Task SetContextSchema(CancellationToken cancellationToken)
+        {
             await using var tr = Database.BeginTransaction();
 
             SchemaVersion.AsLong = ContextSchemaVersion;
