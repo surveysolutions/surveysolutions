@@ -180,6 +180,10 @@ export default {
             dotsCount: 0,
         }
     },
+    mounted() {
+        if (this.$config.model.errorMessage)
+            this.errorMessage = this.$config.model.errorMessage
+    },
     methods: {
         formatDate(date) {
             return new moment(date).format(DateFormats.dateTime)
