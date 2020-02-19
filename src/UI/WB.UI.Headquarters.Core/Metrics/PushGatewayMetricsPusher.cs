@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Metrics
 
             this.pusher = new MetricPusher(new MetricPusherOptions
             {
-                Endpoint = this.options.Value.Endpoint,
+                Endpoint = this.options.Value.PushGatewayEndpoint,
                 AdditionalLabels = new[] { Tuple.Create("site", hqOptions.Value.TenantName) },
                 Job = "hq"
             }).Start();
