@@ -9,15 +9,23 @@
 @functions {
 
     private static List<Answer> GetOptions(ICategoricalQuestion question, PdfQuestionnaireModel questionnaire)
-        => question.CategoriesId.HasValue ? questionnaire.CategoriesList.Find(x => x.Id == question.CategoriesId.Value).Items.Select(x => new Answer
-        {
-            AnswerValue = x.Id.ToString(),
-            ParentValue = x.ParentId?.ToString(),
-            AnswerText = x.Text
-        }).ToList() : question.Answers;
+    {
+        if (!question.CategoriesId.HasValue)
+            return question.Answers;
+
+        var categories = questionnaire.CategoriesList.Find(x => x.Id == question.CategoriesId.Value);
+        
+        return categories == null ? new List<Answer>() : categories.Items.
+            Select(x => new Answer
+            {
+                AnswerValue = x.Id.ToString(),
+                ParentValue = x.ParentId?.ToString(),
+                AnswerText = x.Text
+            })?.ToList();
+    }
 
     private static string GetOptionsRef(PdfQuestionnaireModel questionnaire, ICategoricalQuestion question)
-        => questionnaire.GetOptionsRef(question.CategoriesId.HasValue ? question.CategoriesId.Value : question.PublicKey);
+            => questionnaire.GetOptionsRef(question.CategoriesId.HasValue ? question.CategoriesId.Value : question.PublicKey);
 }
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;

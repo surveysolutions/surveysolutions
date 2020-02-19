@@ -864,10 +864,18 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return question.MaxAllowedAnswers.HasValue && question.MaxAllowedAnswers < 2;
         }
 
-        private static bool CategoricalQuestionHasLessThan2Options(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool CategoricalQuestionHasLessThan2Options(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue || question.CategoriesId.HasValue)
+            if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue )
                 return false;
+
+            if (question.CategoriesId.HasValue)
+            {
+                var categories =
+                    this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value);
+
+                return categories == null || categories.Count() < 2;
+            }
 
             return question.Answers == null || question.Answers.Count < 2;
         }
