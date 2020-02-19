@@ -46,6 +46,7 @@ namespace WB.Services.Export.Events
             if (tenantDbContext.Database.IsNpgsql())
             {
                 await tenantDbContext.CheckSchemaVersionAndMigrate(cancellationToken);
+                await tenantDbContext.SetContextSchema(cancellationToken);
             }
         }
 
