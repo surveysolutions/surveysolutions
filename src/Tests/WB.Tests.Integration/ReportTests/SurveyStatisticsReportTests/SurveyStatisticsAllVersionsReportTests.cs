@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -185,7 +186,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             var interviewId = Guid.NewGuid();
             var questionnaire = Questionnaires[version];
 
-            var summary = new InterviewSummary(questionnaire)
+            var summary = new InterviewSummary(new PlainQuestionnaire(questionnaire, version, null, new SubstitutionService()))
             {
                 InterviewId = interviewId,
                 Status = InterviewStatus.Completed,

@@ -200,7 +200,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISampleUploadViewFactory, SampleUploadViewFactory>();
             registry.Bind<ISurveyStatisticsReport, SurveyStatisticsReport>();
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
-            registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
             registry.Bind<IUserViewFactory, UserViewFactory>();
 
