@@ -147,7 +147,7 @@ export default {
                         orderable: true,
                         className: 'nowrap',
                         render: function(data, type, row) {
-                            return `<a href='${self.api.editUrl}/${row.userId}'>${data}</a>`
+                            return row.isArchived ? data : `<a href='${self.api.editUrl}/${row.userId}'>${data}</a>`
                         },
                     },
                     {
