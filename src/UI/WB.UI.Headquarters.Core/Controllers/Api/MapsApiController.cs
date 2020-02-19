@@ -24,6 +24,7 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator, Headquarter")]
+    [Route("api/[controller]/[action]")]
     public class MapsApiController : ControllerBase
     {
         private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk", ".tif" };
