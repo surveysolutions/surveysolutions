@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
@@ -44,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserImportService userImportService;
         private readonly IMoveUserToAnotherTeamService moveUserToAnotherTeamService;
         private readonly IUserArchiveService userArchiveService;
+        private readonly ILogger logger;
 
         public UsersApiController(
             IAuthorizedUser authorizedUser,
@@ -55,7 +57,8 @@ namespace WB.UI.Headquarters.Controllers
             IFileSystemAccessor fileSystemAccessor,
             IUserImportService userImportService, 
             IMoveUserToAnotherTeamService moveUserToAnotherTeamService,
-            IUserArchiveService userArchiveService)
+            IUserArchiveService userArchiveService,
+            ILogger logger)
         {
             this.authorizedUser = authorizedUser;
             this.usersFactory = usersFactory;
@@ -67,6 +70,7 @@ namespace WB.UI.Headquarters.Controllers
             this.userImportService = userImportService;
             this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
             this.userArchiveService = userArchiveService;
+            this.logger = logger;
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
@@ -250,10 +254,22 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<CommandApiController.JsonCommandResponse> ArchiveUsers([FromBody]ArchiveUsersRequest request)
         {
-            if (request.Archive)
-                await this.userArchiveService.ArchiveUsersAsync(request.UserIds);
-            else
-                await this.userArchiveService.UnarchiveUsersAsync(request.UserIds);
+            try
+            {
+                if (request.Archive)
+                    await this.userArchiveService.ArchiveUsersAsync(request.UserIds);
+                else
+                    await this.userArchiveService.UnarchiveUsersAsync(request.UserIds);
+            }
+            catch (UserArchiveException e)
+            {
+                return new CommandApiController.JsonCommandResponse() { IsSuccess = false, DomainException = e.Message};
+            }
+            catch (Exception e)
+            {
+                logger.Error("Archive user error:", e);
+                return new CommandApiController.JsonCommandResponse() { IsSuccess = false, DomainException = "Error occured" };
+            }
 
             return new CommandApiController.JsonCommandResponse() {IsSuccess = true};
         }
