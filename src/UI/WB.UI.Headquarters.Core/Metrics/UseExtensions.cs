@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Metrics
 {
     public static class UseExtensions
     {
-        public static void UseMetrics(this IServiceCollection services)
+        public static void AddMetrics(this IServiceCollection services)
         {
             services.AddHostedService<PushGatewayMetricsPusher>();
             services.AddTransient<IOnDemandCollector, BrokenPackagesStatsCollector>();

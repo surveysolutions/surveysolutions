@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters
             });
 
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
-            services.UseMetrics();
+            services.AddMetrics();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
