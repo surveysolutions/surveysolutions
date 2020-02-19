@@ -108,7 +108,8 @@
                     </div>
                 </div>
             </div>
-            <div class="profile">
+            <div class="profile"
+                v-if="canChangePassword">
                 <div class="col-sm-7">
                     <h2>{{$t('Pages.AccountManage_ChangePassword')}}</h2>
                 </div>
@@ -213,6 +214,13 @@ export default {
         },
         canLockBySupervisor() {
             return this.isInterviewer
+        },
+        canChangePassword() {
+            if (this.isOwnProfile && (this.isHeadquarters || this.isAdmin))
+                return true
+            if (!this.isOwnProfile)
+                return true
+            return false
         },
         lockMessage() {
             if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
