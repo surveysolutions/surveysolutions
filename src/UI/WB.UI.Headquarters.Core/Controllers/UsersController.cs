@@ -243,7 +243,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
 
             if (currentUser.IsArchived)
-                return BadRequest(FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+                this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
 
             if (model.UserId == this.authorizedUser.Id)
             {
