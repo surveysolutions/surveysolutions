@@ -125,6 +125,7 @@
 </template>
 
 <script>
+import * as toastr from 'toastr'
 import moment from 'moment'
 import {formatNumber} from './formatNumber'
 import routeSync from '~/shared/routeSync'
@@ -162,13 +163,18 @@ export default {
             this.usersCount = formatNumber(data.recordsTotal)
             this.allInterviewers = data.data
         },
-        async archiveInterviewersAsync(isArchive) {
+        async archiveInterviewersAsync(isArchive) {            
             await this.$http.post(this.model.archiveUsersUrl, {
                 archive: isArchive,
                 userIds: this.selectedInterviewers,
-            })
-
-            this.loadData()
+            }).then(
+                function(response) 
+                {
+                    if(!response.data.isSuccess)
+                        toastr.warning(response.data.domainException)
+                }
+            )
+            this.loadData()            
         },
         archiveInterviewers() {
             var self = this
