@@ -56,7 +56,7 @@
 
         <FilterBlock
             :title="$t('Reports.ByAnswerValue')"
-            v-if="question && question.type == 'Numeric'">
+            v-if="question && question.Type == 'Numeric'">
             <div class="row">
                 <div class="col-xs-6">
                     <div
