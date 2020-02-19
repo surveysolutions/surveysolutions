@@ -119,7 +119,7 @@ export default {
                         statusupdater(uploadingSuccess)
                     reloader()                    
                 },
-                error : function(error){
+                error : function(err){
                     statusupdater(uploadingErrorMessage)
                 },
             })  
