@@ -24,23 +24,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         }
 
         public void Process(Questionnaire aggregate, PasteAfter command)
-            => this.MoveCategories(command.SourceDocument, command.SourceItemId, aggregate.Id);
+            => this.CopyCategories(command.SourceDocument, command.SourceItemId, aggregate.Id);
 
         public void Process(Questionnaire aggregate, PasteInto command)
-            => this.MoveCategories(command.SourceDocument, command.SourceItemId, aggregate.Id);
+            => this.CopyCategories(command.SourceDocument, command.SourceItemId, aggregate.Id);
 
-        private void MoveCategories(QuestionnaireDocument sourceQuestionnaire, Guid sourceItemId, Guid targetQuestionnaireId)
+        private void CopyCategories(QuestionnaireDocument sourceQuestionnaire, Guid sourceItemId, Guid targetQuestionnaireId)
         {
             var categoricalQuestion = sourceQuestionnaire.Find<ICategoricalQuestion>(sourceItemId);
             if (categoricalQuestion != null)
-                this.MoveCategories(sourceQuestionnaire, categoricalQuestion, targetQuestionnaireId);
+                this.CopyCategories(sourceQuestionnaire, categoricalQuestion, targetQuestionnaireId);
 
             var group = sourceQuestionnaire.Find<IGroup>(sourceItemId);
             ((IComposite) @group)?.TreeToEnumerable(x => x.Children).OfType<ICategoricalQuestion>()
-                .ForEach(x => MoveCategories(sourceQuestionnaire, x, targetQuestionnaireId));
+                .ForEach(x => CopyCategories(sourceQuestionnaire, x, targetQuestionnaireId));
         }
 
-        private void MoveCategories(QuestionnaireDocument sourceQuestionnaire, ICategoricalQuestion categoricalQuestion, Guid targetQuestionnaireId)
+        private void CopyCategories(QuestionnaireDocument sourceQuestionnaire, ICategoricalQuestion categoricalQuestion, Guid targetQuestionnaireId)
         {
             if (categoricalQuestion?.CategoriesId == null) return;
 
