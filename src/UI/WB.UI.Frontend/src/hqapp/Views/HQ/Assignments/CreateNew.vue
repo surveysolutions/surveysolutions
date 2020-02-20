@@ -241,6 +241,7 @@
         </div>
         <IdleTimeoutService />
         <signalr @connected="connected"
+            mode="takeNew"
             :interviewId="interviewId" />
     </main>
 </template>

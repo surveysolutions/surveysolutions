@@ -9,11 +9,15 @@ export default {
             type: String,
             required: true,
         },
+        mode: {
+            type: String,
+            required: true,
+        },
     },
 
     beforeMount() {
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl('/interview?interviewId=' + this.interviewId)
+            .withUrl(`/interview?interviewId=${this.interviewId}&mode=${this.mode}`)
             .build()
 
         const api = {
