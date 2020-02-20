@@ -27,6 +27,7 @@ namespace WB.UI.Headquarters.Code.Authentication
             services.ConfigureApplicationCookie(opt =>
             {
                 opt.LoginPath = "/Account/LogOn";
+                opt.AccessDeniedPath = "/Error/401";
                 opt.ForwardDefaultSelector = ctx =>
                 {
                     if (ctx.Request.Headers.ContainsKey(HeaderNames.Authorization))

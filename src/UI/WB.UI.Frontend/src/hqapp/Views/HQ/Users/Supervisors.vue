@@ -21,7 +21,7 @@
             ref="table"
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"
-            :supportContextMenu="user.isObserver"
+            :supportContextMenu="user.isObserver && !user.isObserving"
             :selectable="user.isAdministrator"
             selectableId="userId"
             @selectedRowsChanged="rows => selectedSupervisors = rows"
@@ -147,8 +147,7 @@ export default {
                         orderable: true,
                         className: 'nowrap',
                         render: function(data, type, row) {
-                            if (self.user.isObserver) return data
-                            else return `<a href='${self.api.editUrl}/${row.userId}'>${data}</a>`
+                            return row.isArchived ? data : `<a href='${self.api.editUrl}/${row.userId}'>${data}</a>`
                         },
                     },
                     {
@@ -156,6 +155,7 @@ export default {
                         name: 'CreationDate',
                         className: 'date',
                         title: this.$t('Users.CreationDate'),
+                        tooltip: this.$t('Users.AccountCreationDateTooltip'),
                         orderable: true,
                         render: function(data, type, row) {
                             var localDate = moment.utc(data).local()
@@ -176,6 +176,7 @@ export default {
                         data: 'isArchived',
                         name: 'IsArchived',
                         title: this.$t('Users.ArchivingStatusTitle'),
+                        tooltip: this.$t('Users.ArchivingStatusTitle'),
                         orderable: true,
                         render: function(data, type, row) {
                             return data ? self.$t('Common.Yes') : self.$t('Common.No')

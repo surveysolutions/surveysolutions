@@ -61,7 +61,7 @@
                             :haserror="modelState['PhoneNumber'] !== undefined"
                             id="PhoneNumber"/>
                     </form-group>
-                    <p v-if="lockMessage != null">{{lockMessage}}</p>
+                    <p v-if="!isOwnProfile && lockMessage != null">{{lockMessage}}</p>
                     <form-group v-if="!isOwnProfile">
                         <input
                             class="checkbox-filter single-checkbox"
@@ -98,6 +98,7 @@
                             class="btn btn-success"
                             style="margin-right:5px"
                             id="btnUpdateUser"
+                            v-bind:disabled="userInfo.isObserving"
                             @click="updateAccount">{{$t('Pages.Update')}}</button>
                         <a class="btn btn-default"
                             v-bind:href="referrerUrl"
@@ -107,7 +108,8 @@
                     </div>
                 </div>
             </div>
-            <div class="profile">
+            <div class="profile"
+                v-if="canChangePassword">
                 <div class="col-sm-7">
                     <h2>{{$t('Pages.AccountManage_ChangePassword')}}</h2>
                 </div>
@@ -149,6 +151,7 @@
                             class="btn btn-success"
                             style="margin-right:5px"
                             id="btnUpdatePassword"
+                            v-bind:disabled="userInfo.isObserving"
                             @click="updatePassword">{{$t('Pages.Update')}}</button>
                         <a class="btn btn-default"
                             v-bind:href="referrerUrl"
@@ -211,6 +214,13 @@ export default {
         },
         canLockBySupervisor() {
             return this.isInterviewer
+        },
+        canChangePassword() {
+            if (this.isOwnProfile && (this.isHeadquarters || this.isAdmin))
+                return true
+            if (!this.isOwnProfile)
+                return true
+            return false
         },
         lockMessage() {
             if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')

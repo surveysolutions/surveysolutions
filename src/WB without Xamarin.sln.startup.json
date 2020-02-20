@@ -16,6 +16,11 @@
         "WB.UI.Headquarters": {}
       }
     },
+    "Designer": {
+      "Projects": {
+        "WB.UI.Designer": { "ProfileName": "WB.UI.Designer" }
+      }
+    },
     "HQ+Designer": {
       "Projects": {
         "WB.UI.Headquarters": {

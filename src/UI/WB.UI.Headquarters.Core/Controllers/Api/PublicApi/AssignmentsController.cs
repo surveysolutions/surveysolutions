@@ -23,10 +23,11 @@ using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code.CommandTransformation;
-using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Exceptions;
 
@@ -34,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Route("api/v1/assignments")]
     [Localizable(false)]
+    [PublicApiJson]
     public class AssignmentsController : ControllerBase
     {
         private readonly IAssignmentsService assignmentsStorage;
@@ -415,7 +417,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Size cannot be changed</response>
         [HttpPatch]
         [Route("{id:int}/changeQuantity")]
-        [Authorize(Roles = "ApiUser, Administrator")]
+        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         public ActionResult<AssignmentDetails> ChangeQuantity(int id, [FromBody] int? quantity)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
@@ -442,7 +444,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/archive")]
-        [Authorize(Roles = "ApiUser, Administrator")]
+        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         public ActionResult<AssignmentDetails> Archive(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
@@ -465,7 +467,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/unarchive")]
-        [Authorize(Roles = "ApiUser, Administrator")]
+        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         public ActionResult<AssignmentDetails> Unarchive(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);

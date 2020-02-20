@@ -1446,4 +1446,32 @@
   <data name="ChangePassword" xml:space="preserve">
       <value>Сброс пользовательского пароля</value>
   </data>
+  <data name="ReevaluateInterview" xml:space="preserve">
+      <value>Актуализировать интервью</value>
+      <comment>Актуализировать интервью</comment>
+  </data>
+  <data name="Admin_ControlPanelLinkTitle" xml:space="preserve">
+      <value>Панель управления</value>
+      <comment>Панель управления</comment>
+  </data>
+  <data name="Admin_ReevaluateInterview_InterviewId" xml:space="preserve">
+      <value>Идентификатор  интервью</value>
+      <comment>Идентификатор  интервью</comment>
+  </data>
+  <data name="Admin_Reevaluate" xml:space="preserve">
+      <value>Актуализировать</value>
+      <comment>Актуализировать</comment>
+  </data>
+  <data name="Admin_Reevaluate_InterviewId_Required" xml:space="preserve">
+      <value>Пустой идентификатор интервью </value>
+      <comment>Пустой идентификатор интервью </comment>
+  </data>
+  <data name="Admin_Reevaluate_InterviewId_Invalid" xml:space="preserve">
+      <value>Не валидное GUID значение</value>
+      <comment>Не валидное GUID значение</comment>
+  </data>
+  <data name="Admin_Reevaluate_Success" xml:space="preserve">
+      <value>Интервью успешно актуализировано</value>
+      <comment>Интервью успешно актуализировано</comment>
+  </data>
 </root>

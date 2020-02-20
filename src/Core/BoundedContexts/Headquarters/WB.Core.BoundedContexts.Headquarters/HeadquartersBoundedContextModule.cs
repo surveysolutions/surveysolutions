@@ -43,7 +43,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
@@ -200,7 +199,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISampleUploadViewFactory, SampleUploadViewFactory>();
             registry.Bind<ISurveyStatisticsReport, SurveyStatisticsReport>();
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
-            registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
             registry.Bind<IUserViewFactory, UserViewFactory>();
 
@@ -317,7 +315,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             }
 
             registry.Bind<IInvitationService, InvitationService>();
-            registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
+            registry.Bind<ITokenGenerator, TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
             registry.Bind<IUserImportService, UserImportService>();

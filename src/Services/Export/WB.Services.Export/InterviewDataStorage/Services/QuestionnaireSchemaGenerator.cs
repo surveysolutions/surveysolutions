@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Infrastructure.Storage;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.InterviewDataStorage.Services
@@ -21,43 +22,47 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         private readonly TenantDbContext dbContext;
         private readonly IDatabaseSchemaCommandBuilder commandBuilder;
         private readonly ILogger<DatabaseSchemaService> logger;
-        private readonly IOptions<DbConnectionSettings> connectionSettings;
 
-        public QuestionnaireSchemaGenerator(ITenantContext tenantContext,
+        public QuestionnaireSchemaGenerator(
+            ITenantContext tenantContext,
             TenantDbContext dbContext,
             IDatabaseSchemaCommandBuilder commandBuilder,
-            ILogger<DatabaseSchemaService> logger,
-            IOptions<DbConnectionSettings> connectionSettings)
+            ILogger<DatabaseSchemaService> logger)
         {
             this.tenantContext = tenantContext;
             this.dbContext = dbContext;
             this.commandBuilder = commandBuilder;
             this.logger = logger;
-            this.connectionSettings = connectionSettings;
         }
+
+        // there is no single table in DB to acquire lock on,
+        // so using some pretty random value for advisory lock
+        private const long SchemaGenerationLock = -12312312312;
 
         public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
             try
             {
-                LockByValue<string>.Lock(questionnaireDocument.QuestionnaireId.Id, () =>
+                // required to prevent same schema generation in parallel
+                // can and already happen if HQ query info on export status
+                // while export job start running
+                // Lock will be released on transaction commit at the end of current export processing batch
+                this.dbContext.AcquireXactLock(SchemaGenerationLock);
+                
+                var connection = dbContext.Database.GetDbConnection();
+
+                CreateSchema(connection, tenantContext.Tenant);
+
+                foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
                 {
-                    var connection = dbContext.Database.GetDbConnection();
+                    CreateTableForGroup(connection, storedGroup, questionnaireDocument);
+                    CreateEnablementTableForGroup(connection, storedGroup);
+                    CreateValidityTableForGroup(connection, storedGroup);
+                }
 
-                    CreateSchema(connection, tenantContext.Tenant);
-
-                    foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
-                    {
-                        CreateTableForGroup(connection, storedGroup, questionnaireDocument);
-                        CreateEnablementTableForGroup(connection, storedGroup);
-                        CreateValidityTableForGroup(connection, storedGroup);
-                    }
-
-
-                    logger.LogInformation("Created database structure for {tenantName} ({questionnaireId} [{table}])",
-                        this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId,
-                        questionnaireDocument.TableName);
-                });
+                logger.LogInformation("Created database structure for {tenantName} ({questionnaireId} [{table}])",
+                    this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId,
+                    questionnaireDocument.TableName);
             }
             catch (Exception e)
             {
@@ -71,6 +76,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         {
             try
             {
+                this.dbContext.AcquireXactLock(SchemaGenerationLock);
                 var db = dbContext.Database.GetDbConnection();
                 foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
                 {
@@ -209,7 +215,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         {
             connection.Execute(commandBuilder.GenerateCreateSchema(tenant));
         }
-        
+
         public Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)
         {
             return dbContext.DropTenantSchemaAsync(tenant, cancellationToken);

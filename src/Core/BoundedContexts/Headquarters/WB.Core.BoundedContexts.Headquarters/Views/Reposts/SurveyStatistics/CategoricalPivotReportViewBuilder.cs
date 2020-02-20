@@ -63,8 +63,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 
             report.Data = new object[rowsQuestion.Answers.Count][];
 
-            foreach (var rowIndex in rowsAnswers.Values)
+            foreach (var kv in rowsAnswers)
             {
+                var rowIndex = kv.Value;
                 report.Data[rowIndex.index] = new object[report.Columns.Length];
                 var row = report.Data[rowIndex.index];
                 row[0] = rowIndex.text;                     // first column is name of row
@@ -104,9 +105,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             return report;
         }
 
-        private Dictionary<long, (int index, string text)> GetAnswersIndex(IQuestion question)
+        private SortedDictionary<long, (int index, string text)> GetAnswersIndex(IQuestion question)
         {
-            var rowIndexMap = new Dictionary<long, (int index, string text)>();
+            var rowIndexMap = new SortedDictionary<long, (int index, string text)>();
 
             for (var index = 0; index < question.Answers.Count; index++)
             {

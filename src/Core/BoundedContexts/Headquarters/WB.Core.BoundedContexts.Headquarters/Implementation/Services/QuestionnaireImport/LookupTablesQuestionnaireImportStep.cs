@@ -28,9 +28,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.logger = logger;
         }
 
-        public int GetPrecessStepsCount()
+        public bool IsNeedProcessing()
         {
-            return (questionnaire.LookupTables?.Count ?? 0) * 2;
+            return questionnaire.LookupTables?.Count > 0;
         }
 
         public async Task DownloadFromDesignerAsync(IProgress<int> progress)

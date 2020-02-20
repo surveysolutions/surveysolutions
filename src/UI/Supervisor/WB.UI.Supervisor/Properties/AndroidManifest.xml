@@ -5,6 +5,7 @@
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
 		<meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="80bf6bc07188459192130d4895a5e041" />
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_api_key" />
 	</application>
 	<uses-permission android:name="android.permission.BLUETOOTH" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />

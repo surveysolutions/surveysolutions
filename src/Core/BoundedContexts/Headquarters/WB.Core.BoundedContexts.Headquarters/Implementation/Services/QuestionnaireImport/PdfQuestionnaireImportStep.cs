@@ -31,9 +31,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.logger = logger;
         }
 
-        public int GetPrecessStepsCount()
+        public bool IsNeedProcessing()
         {
-            return (1 + (questionnaire.Translations?.Count ?? 0)) * 3;
+            return questionnaire.Translations?.Count > 0;
         }
 
         public async Task DownloadFromDesignerAsync(IProgress<int> progress)

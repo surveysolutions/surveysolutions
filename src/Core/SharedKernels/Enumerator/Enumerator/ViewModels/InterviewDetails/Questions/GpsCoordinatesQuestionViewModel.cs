@@ -26,20 +26,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
+        private const string GoogleUrl = "https://www.google.com";
         private GpsLocation answer;
         public GpsLocation Answer
         {
             get => this.answer;
-            set => this.SetProperty(ref this.answer, value);
+            set
+            {
+                this.SetProperty(ref this.answer, value);
+                this.LocationInfo = value == null
+                    ? null
+                    : new NavigationModel($"{value.Latitude}, {value.Longitude}", $"{GoogleUrl}/maps?q={value.Latitude},{value.Longitude}");
+            }
         }
 
-        public bool ShowLocationOnMap => this.settings.ShowLocationOnMap;
+        private NavigationModel locationInfo;
+        public NavigationModel LocationInfo {
+            get => this.locationInfo;
+            set => this.SetProperty(ref this.locationInfo, value);
+        }
+
+        public bool ShowLocationOnMap => this.settings.ShowLocationOnMap &&
+                                         this.googleApiService.GetPlayServicesConnectionStatus() == GoogleApiConnectionStatus.Success &&
+                                         this.networkService.IsHostReachable(GoogleUrl);
 
         public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
         private readonly Guid userId;
         private readonly ILogger logger;
+        private readonly IGoogleApiService googleApiService;
+        private readonly INetworkService networkService;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
         private readonly IViewModelEventRegistry liteEventRegistry;
@@ -65,7 +82,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
             IViewModelEventRegistry liteEventRegistry,
-            ILogger logger)
+            ILogger logger,
+            IGoogleApiService googleApiService,
+            INetworkService networkService)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
@@ -78,6 +97,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
             this.logger = logger;
+            this.googleApiService = googleApiService;
+            this.networkService = networkService;
         }
 
         public Identity Identity => this.questionIdentity;

@@ -15,7 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.UI.Headquarters.Filters;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
@@ -24,6 +24,7 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator, Headquarter")]
+    [Route("api/[controller]/[action]")]
     public class MapsApiController : ControllerBase
     {
         private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk", ".tif" };
@@ -119,7 +120,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [ObserverNotAllowed]
-        [RequestSizeLimit(100 * 1024 * 1024)]
+        [RequestSizeLimit(500 * 1024 * 1024)]
         public async Task<JsonMapResponse> Upload(IFormFile file)
         {
             var response = new JsonMapResponse();
@@ -353,7 +354,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [ObserverNotAllowed]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public CommandApiController.JsonCommandResponse DeleteMapUser(DeleteMapUserRequestModel request)
+        public CommandApiController.JsonCommandResponse DeleteMapUser([FromBody] DeleteMapUserRequestModel request)
         {
             this.mapStorageService.DeleteMapUserLink(request.Map, request.User);
             return new CommandApiController.JsonCommandResponse() { IsSuccess = true };

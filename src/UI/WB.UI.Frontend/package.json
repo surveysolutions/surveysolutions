@@ -38,6 +38,7 @@
         "jquery-mask-plugin": "^1.14.16",
         "lodash": "^4.17.15",
         "moment": "^2.24.0",
+        "moment-duration-format": "^2.3.2",
         "pnotify": "^3.2.1",
         "popper.js": "^1.16.0",
         "smoothscroll-polyfill": "^0.4.0",

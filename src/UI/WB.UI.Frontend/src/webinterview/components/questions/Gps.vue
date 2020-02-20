@@ -7,13 +7,6 @@
                 <div class="field"
                     :class="{answered: $me.isAnswered}"
                     v-if="$me.isAnswered">
-                    <div class="map"
-                        id="map">
-                        <div>
-                            <img v-bind:src="googleMapPosition"
-                                draggable="false" />
-                        </div>
-                    </div>
                     <div class="block-with-data">
                         <a v-bind:href="goolgeMapUrl"
                             :title="$t('WebInterviewUI.ShowOnMap')"
@@ -70,11 +63,6 @@ export default {
         }
     },
     computed: {
-        googleMapPosition() {
-            return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${this.$me.answer.latitude},${this.$me.answer.longitude}`
-                    + `&zoom=14&scale=0&size=385x200&markers=color:blue|label:O|${this.$me.answer.latitude},${this.$me.answer.longitude}`
-                    + `&key=${this.$config.googleApiKey}`
-        },
         goolgeMapUrl(){
             return `${this.$config.googleMapsBaseUrl}/maps?q=${this.$me.answer.latitude},${this.$me.answer.longitude}`
         },

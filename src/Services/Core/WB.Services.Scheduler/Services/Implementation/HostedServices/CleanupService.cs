@@ -32,21 +32,25 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
                 while (!cancellationToken.IsCancellationRequested)
                 { 
                     if (cancellationToken.IsCancellationRequested) break;
-                    
-                    using (var scope = this.serviceProvider.CreateScope())
-                    {
-                        var cleanup = scope.ServiceProvider.GetService<StaleJobCleanupService>();
-                        await cleanup.ExecuteAsync(cancellationToken);
-                    }
 
                     try
                     {
+                        using (var scope = this.serviceProvider.CreateScope())
+                        {
+                            var cleanup = scope.ServiceProvider.GetService<StaleJobCleanupService>();
+                            await cleanup.ExecuteAsync(cancellationToken);
+                        }
+
                         await Task.Delay(TimeSpan.FromSeconds(options.Value.ClearStaleJobsInSeconds),
                             cancellationToken);
                     }
                     catch (OperationCanceledException)
                     {
                         logger.LogInformation("CancellationToken cancel request received.");
+                    }
+                    catch (Exception e)
+                    {
+                        logger.LogError("Error while executing cleanup service", e);
                     }
                 }
             }, cancellationToken);

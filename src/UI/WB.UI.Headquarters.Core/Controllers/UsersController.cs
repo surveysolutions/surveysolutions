@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
@@ -8,11 +7,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
@@ -26,11 +29,13 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly UserManager<HqUser> userRepository;
+        private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
 
-        public UsersController(IAuthorizedUser authorizedUser, UserManager<HqUser> userRepository)
+        public UsersController(IAuthorizedUser authorizedUser, UserManager<HqUser> userRepository, IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage)
         {
             this.authorizedUser = authorizedUser;
             this.userRepository = userRepository;
+            this.profileSettingsStorage = profileSettingsStorage;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -81,7 +86,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> Manage(Guid? id)
         {
@@ -102,7 +107,8 @@ namespace WB.UI.Headquarters.Controllers
                     Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToUiString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
-                    IsLockedBySupervisor = user.IsLockedBySupervisor
+                    IsLockedBySupervisor = user.IsLockedBySupervisor,
+                    IsObserving = this.authorizedUser.IsObserving
                 },
                 Api = new
                 {
@@ -237,7 +243,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
 
             if (currentUser.IsArchived)
-                return BadRequest(FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+                this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
 
             if (model.UserId == this.authorizedUser.Id)
             {
@@ -263,7 +269,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public async Task<ActionResult> UpdateUser([FromBody] EditUserModel editModel)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
@@ -344,7 +350,6 @@ namespace WB.UI.Headquarters.Controllers
                 ShowSupervisorColumn = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
                 CanArchiveUnarchive = authorizedUser.IsAdministrator,
                 CanArchiveMoveToOtherTeam = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
-                ShowContextMenu = authorizedUser.IsObserver,
                 InterviewerIssues = new[]
                 {
                     new ComboboxViewItem() { Key = InterviewerFacet.None.ToString(),                  Value = EnumNames.InterviewerFacet_None   },
@@ -372,6 +377,11 @@ namespace WB.UI.Headquarters.Controllers
                 return true;
 
             if (this.authorizedUser.IsSupervisor && user.IsInRole(UserRoles.Interviewer) && user.Profile?.SupervisorId == this.authorizedUser.Id)
+                return true;
+
+            if (this.authorizedUser.IsInterviewer 
+                && user.Id == this.authorizedUser.Id
+                && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
                 return true;
 
             return false;

@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -17,8 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
         {
             var defaultUserView = Create.Entity.UserViewLite(supervisorId: Guid.NewGuid());
             var userViewFactory = Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<Guid>()) == defaultUserView);
-            var questionnaireDocument = Create.Entity.QuestionnaireDocument();
-            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument());
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
             return new InterviewSummaryCompositeDenormalizer(
                 interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 new TestInMemoryWriter<InterviewSummary, int>(),

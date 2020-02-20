@@ -7,9 +7,11 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Amazon.Runtime.Internal.Util;
 using FluentMigrator.Runner;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
@@ -20,10 +22,13 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
     public class EventsApiController : Controller
     {
         private readonly IHeadquartersEventStore headquartersEventStore;
+        private readonly ILogger<EventsApiController> logger;
 
-        public EventsApiController(IHeadquartersEventStore headquartersEventStore)
+        public EventsApiController(IHeadquartersEventStore headquartersEventStore,
+            ILogger<EventsApiController> logger)
         {
             this.headquartersEventStore = headquartersEventStore;
+            this.logger = logger;
         }
 
         [Route("interview/events", Name = "EventsFeed")]
@@ -78,7 +83,10 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
             }
 
             ms.Position = 0;
-            Console.WriteLine($"Return {eventsCount} events in {timer.ElapsedMilliseconds.Milliseconds()} with {ms.Length.Bytes()} size");
+            this.logger.LogInformation("Return {eventsCount} events in {elapsed} with {bytes} size",
+                eventsCount,
+                timer.Elapsed,
+                ms.Length.Bytes());
             return File(ms, "application/json");
         }
 

@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters
             services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
             services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
             services.Configure<FileStorageConfig>(configuration.GetSection("FileStorage"));
+            services.Configure<MetricsConfig>(configuration.MetricsConfiguration());
 
             services.PostConfigure<FileStorageConfig>(c =>
             {
@@ -54,6 +55,11 @@ namespace WB.UI.Headquarters
 
                 EnsureFolderExists(c.TempData);
             });
+        }
+
+        public static IConfigurationSection MetricsConfiguration(this IConfiguration conf)
+        {
+            return conf.GetSection("Metrics");
         }
     }
 }

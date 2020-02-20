@@ -83,7 +83,7 @@ export default {
                 {                  
                     this.$http({
                         method: 'delete',
-                        url: this.config.deleteMapUserLinkUrl,
+                        url: this.$config.model.deleteMapUserLinkUrl,
                         data: {user:userName, map: fileName}})
 
                     this.$refs.table.reload()

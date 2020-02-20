@@ -13,6 +13,7 @@
                         name="file"
                         @change="onFileChange"
                         type="file"
+                        accept=".zip"
                         value=""/>
                 </label>
             </form>
