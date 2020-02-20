@@ -51,6 +51,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public static bool TryParse(string questionnaireIdentity, out QuestionnaireIdentity result)
         {
+            if (string.IsNullOrWhiteSpace(questionnaireIdentity))
+            {
+                result = null;
+                return false;
+            }
             try
             {
                 result = Parse(questionnaireIdentity);

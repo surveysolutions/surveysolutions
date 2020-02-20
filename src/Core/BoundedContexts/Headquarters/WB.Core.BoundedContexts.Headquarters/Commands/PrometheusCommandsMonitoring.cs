@@ -12,8 +12,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Commands
         {
             this.histogram = new Histogram("wb_commands_time_seconds",
                 "measures execution time of command",
-                new[] { 0.15, 0.3, 0.5, 1.5, 3 }, 
-                new[]{"duration_seconds"});
+                Prometheus.Histogram.ExponentialBuckets(0.2, 2, 5),
+                new[] { "command" });
         }
 
         public void Report(string commandName, TimeSpan duration)

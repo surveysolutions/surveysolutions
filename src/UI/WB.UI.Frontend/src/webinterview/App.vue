@@ -5,7 +5,7 @@
             slot>
             <router-view name="sideBar"></router-view>
             <section class="questionnaire details-interview">
-                <router-view></router-view>
+                <router-view mode="web"></router-view>
             </section>
             <IdleTimeoutService />
         </div>
