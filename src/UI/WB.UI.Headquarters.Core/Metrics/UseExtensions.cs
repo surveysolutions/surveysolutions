@@ -16,6 +16,7 @@ namespace WB.UI.Headquarters.Metrics
         public static void AddMetrics(this IServiceCollection services)
         {
             services.AddHostedService<PushGatewayMetricsPusher>();
+            services.AddHostedService<NpgsqlMetricsCollectionService>();
             services.AddTransient<IOnDemandCollector, BrokenPackagesStatsCollector>();
             services.AddTransient<IOnDemandCollector, NHibernateStatsCollector>();
         }
