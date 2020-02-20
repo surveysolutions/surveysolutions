@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Xml.XPath;
 using Microsoft.Deployment.WindowsInstaller;
 
 namespace SurveySolutionsCustomActions
@@ -19,10 +18,14 @@ namespace SurveySolutionsCustomActions
                 if (string.IsNullOrEmpty(filePath))
                     return ActionResult.SkipRemainingActions;
 
+                var config = new SettingsExtractor().GetPreviousConfiguration(session);
+
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("[Headquarters]");
-                sb.AppendLine("BaseUrl=http://localhost:9700");
-                sb.AppendLine("TenantName=hq");
+                var baseUrl = config?.BaseURL ?? "http://localhost:9700";
+                sb.AppendLine($"BaseUrl={baseUrl}");
+                var tenantName = config?.TenantName ?? "hq";
+                sb.AppendLine($"TenantName={tenantName}");
                 sb.AppendLine("[Apks]");
                 sb.AppendLine("ClientApkPath=Client");
                 sb.AppendLine("[Designer]");
@@ -31,7 +34,8 @@ namespace SurveySolutionsCustomActions
                 sb.AppendLine("ExportServiceUrl=http://localhost:5000");
                 sb.AppendLine("[ConnectionStrings]");
 
-                var connectionStr = GetConnectionString(session);
+                var connectionStr = config?.ConnectionString ?? 
+                                    session.CustomActionData["CONNECTIONSTRING"];
                 sb.AppendLine($"DefaultConnection={connectionStr}");
 
                 File.WriteAllText(filePath, sb.ToString());
@@ -62,7 +66,8 @@ namespace SurveySolutionsCustomActions
                 sb.AppendLine();
                 sb.AppendLine("[ConnectionStrings]");
 
-                var connectionStr = GetConnectionString(session);
+                var config = new SettingsExtractor().GetPreviousConfiguration(session);
+                var connectionStr = config?.ConnectionString ?? session.CustomActionData["CONNECTIONSTRING"];
                 sb.AppendLine($"DefaultConnection={connectionStr}");
 
                 File.WriteAllText(filePath, sb.ToString());
@@ -74,23 +79,6 @@ namespace SurveySolutionsCustomActions
             }
 
             return ActionResult.Success;
-        }
-
-        private static string GetConnectionString(Session session)
-        {
-            var filePath = session.CustomActionData["SourceFile"];
-
-            if (!File.Exists(filePath)) 
-                return session.CustomActionData["CONNECTIONSTRING"];
-            session.Log($"Reading connection string from config file {filePath}");
-            
-            var node = new XPathDocument(filePath).CreateNavigator().SelectSingleNode("/configuration/connectionStrings/add/@connectionString");
-            
-            if (node == null) 
-                return session.CustomActionData["CONNECTIONSTRING"];
-                
-            session.Log("Connection string found.");
-            return node.Value;
         }
 
         private static string ValidateTargetFileAndGetFilePath(Session session)
