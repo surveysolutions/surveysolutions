@@ -56,7 +56,7 @@
 
         <FilterBlock
             :title="$t('Reports.ByAnswerValue')"
-            v-if="question && question.type == 'Numeric'">
+            v-if="question && question.Type == 'Numeric'">
             <div class="row">
                 <div class="col-xs-6">
                     <div
@@ -72,7 +72,7 @@
                             name="min"
                             :placeholder="$t('Reports.Min')"
                             @input="inputChange"
-                            v-validate.initial="{ max_value: max }"
+                            v-validate.initial="{ max_value: max  || Number.MAX_VALUE }"
                             :value="min"/>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                             type="number"
                             class="form-control input-sm"
                             :placeholder="$t('Reports.Max')"
-                            v-validate.initial="{ min_value: min }"
+                            v-validate.initial="{ min_value: min || Number.MIN_VALUE }"
                             name="max"
                             @input="inputChange"
                             :value="max"/>
@@ -97,7 +97,7 @@
             </div>
         </FilterBlock>
 
-        <template v-if="question != null && question.supportConditions">
+        <template v-if="question != null && question.SupportConditions">
             <FilterBlock :title="$t('Reports.ConditionQuestion')">
                 <Typeahead
                     control-id="condition"
@@ -112,7 +112,7 @@
                     :label="$t('Reports.PivotView')"
                     name="pivot"
                     :value="query.pivot"
-                    @input="checkedChange"/>
+                    @input="pivotChanged" />
 
                 <ul class="list-group small"
                     v-if="!query.pivot">
@@ -120,8 +120,8 @@
                         class="list-group-item pointer"
                         v-for="answer in condition.Answers"
                         :key="answer.Answer"
-                        :class="{ 'list-group-item-success': isSelectedAnswer(answer.answer)}"
-                        @click="selectConditionAnswer(answer.answer)">{{answer.answer}}. {{answer.text}}</li>
+                        :class="{ 'list-group-item-success': isSelectedAnswer(answer.Answer)}"
+                        @click="selectConditionAnswer(answer.Answer)">{{answer.Answer}}. {{answer.Text}}</li>
                 </ul>
             </template>
         </template>
@@ -134,7 +134,9 @@ import routeSync from '~/shared/routeSync'
 import {xor, find, assign, isEqual, chain, isNumber, isUndefined, filter} from 'lodash'
 
 export default {
-    mixins: [routeSync],
+    mixins: [
+        routeSync,
+    ],
 
     data() {
         return {
@@ -154,8 +156,8 @@ export default {
     },
 
     watch: {
-        filter(filter) {
-            this.$emit('input', filter)
+        filter(value) {
+            this.$emit('input', value)
         },
 
         'query.name'(to) {
@@ -248,7 +250,7 @@ export default {
             this.onChange(query => {
                 query.questionId = id == null ? null : id.name
 
-                if (id != null && !id.supportConditions) {
+                if (id != null && !id.SupportConditions) {
                     query.conditionId = null
                 } else {
                     query.conditionId = null
@@ -267,12 +269,23 @@ export default {
             })
         },
 
+        pivotChanged(value) {
+            this.onChange(query => {
+                query.pivot = value
+            })
+        },
+
         isSelectedAnswer(conditionAnswerKey) {
             return find(this.selectedAnswers, a => a == conditionAnswerKey) != null
         },
 
         selectConditionAnswer(answer) {
             this.selectedAnswers = xor(this.selectedAnswers, [answer])
+
+            this.onChange(query => {
+                query.ans = this.selectedAnswers
+                console.log(query)
+            })
         },
     },
 
@@ -282,7 +295,7 @@ export default {
 
             const filter = assign(
                 {
-                    questionnaireId: this.questionnaire == null ? null : this.questionnaire.id,
+                    questionnaireId: this.questionnaire == null ? null : this.questionnaire.Id,
                     questionnaire: this.questionnaire,
                     version: this.version,
                     question: this.question,
@@ -325,11 +338,11 @@ export default {
 
         questionnaireList() {
             return chain(this.questionnaires)
-                .orderBy(['title'], ['asc'])
+                .orderBy(['Title'], ['asc'])
                 .map(q => {
                     return {
-                        key: q.id,
-                        value: q.title,
+                        key: q.Id,
+                        value: q.Title,
                     }
                 })
                 .uniqWith(isEqual)
@@ -338,12 +351,12 @@ export default {
 
         questionnaireVersionsList() {
             var val = chain(this.questionnaires)
-                .filter(c => this.selectedQuestionnaire != null && this.selectedQuestionnaire.key == c.id)
-                .orderBy(['title', 'version'], ['asc', 'asc'])
+                .filter(c => this.selectedQuestionnaire != null && this.selectedQuestionnaire.key == c.Id)
+                .orderBy(['Title', 'Version'], ['asc', 'asc'])
                 .map(q => {
                     return {
-                        key: q.version,
-                        value: `ver. ${q.version}`,
+                        key: q.Version,
+                        value: `ver. ${q.Version}`,
                     }
                 })
                 .uniqWith(isEqual)
@@ -354,12 +367,12 @@ export default {
 
         questionsList() {
             function getValue(question) {
-                let result = `[${question.variableName}]`
+                let result = `[${question.VariableName}]`
 
                 if (question.label) {
-                    result += ' ' + question.label + '\r\n' + question.questionText
+                    result += ' ' + question.Label + '\r\n' + question.QuestionText
                 } else {
-                    result += ' ' + question.questionText
+                    result += ' ' + question.QuestionText
                 }
 
                 return result
@@ -368,11 +381,11 @@ export default {
             const questions = chain(this.questions)
                 .map(q => {
                     return {
-                        key: q.id,
-                        name: q.variableName,
-                        supportConditions: q.supportConditions,
+                        key: q.Id,
+                        name: q.VariableName,
+                        supportConditions: q.SupportConditions,
                         value: getValue(q),
-                        breadcrumbs: q.breadcrumbs,
+                        breadcrumbs: q.Breadcrumbs,
                     }
                 })
                 .value()
@@ -390,24 +403,24 @@ export default {
             if (this.selectedQuestionnaire == null) return null
 
             return find(this.questionnaires, q => {
-                const key = q.id
+                const key = q.Id
                 return key == this.selectedQuestionnaire.key
             })
         },
 
         question() {
             if (this.selectedQuestion == null) return null
-            return find(this.questions, {id: this.selectedQuestion.key})
+            return find(this.questions, { Id: this.selectedQuestion.key })
         },
 
         condition() {
             if (this.selectedCondition == null) return null
-            return find(this.questions, {id: this.selectedCondition.key})
+            return find(this.questions, { Id: this.selectedCondition.key })
         },
 
         conditionAnswers() {
             if (this.condition == null) return []
-            return filter(this.condition.answers, ans => this.isSelectedAnswer(ans.answer))
+            return filter(this.condition.Answers, ans => this.isSelectedAnswer(ans.Answer))
         },
 
         // drop down

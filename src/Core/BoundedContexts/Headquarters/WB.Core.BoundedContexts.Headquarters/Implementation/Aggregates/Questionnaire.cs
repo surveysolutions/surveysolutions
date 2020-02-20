@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
-        private readonly IAuthorizedUser authorizedUser;
         private readonly IReusableCategoriesStorage categoriesStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -40,7 +39,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IFileSystemAccessor fileSystemAccessor, 
             IPlainStorageAccessor<TranslationInstance> translations,
-            IAuthorizedUser authorizedUser,
             IReusableCategoriesStorage categoriesStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
@@ -48,7 +46,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
             this.fileSystemAccessor = fileSystemAccessor;
             this.translations = translations;
-            this.authorizedUser = authorizedUser;
             this.categoriesStorage = categoriesStorage;
         }
 
@@ -70,7 +67,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 command.QuestionnaireVersion,
                 isSupportAssignments: true,
                 isSupportExportVariables: true,
-                comment: command.Comment);
+                comment: command.Comment,
+                userId: command.CreatedBy);
         }
 
         public void CloneQuestionnaire(CloneQuestionnaire command)
@@ -99,7 +97,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 command.NewQuestionnaireVersion,
                 questionnaireBrowseItem.AllowAssignments,
                 questionnaireBrowseItem.AllowExportVariables,
-                comment: command.Comment);
+                comment: command.Comment,
+                userId: command.UserId);
         }
 
         private void CloneCategories(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion) =>
@@ -134,7 +133,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             long questionnaireVersion,
             bool isSupportAssignments,
             bool isSupportExportVariables, 
-            string comment)
+            string comment,
+            Guid userId)
         {
             var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
             
@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.questionnaireBrowseItemStorage.Store(
                 new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus,
-                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment, this.authorizedUser.Id),
+                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment, userId),
                 projectionId);
         }
 

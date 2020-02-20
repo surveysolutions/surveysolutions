@@ -24,6 +24,7 @@ using WB.UI.Shared.Enumerator.OfflineSync.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
+using GoogleApiAvailability = Android.Gms.Common.GoogleApiAvailability;
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
@@ -354,14 +355,13 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         /// <returns></returns>
         private bool CheckPlayServices()
         {
-            GoogleApiAvailability apiAvailability = GoogleApiAvailability.Instance;
-            int resultCode = apiAvailability.IsGooglePlayServicesAvailable(this);
-            if (resultCode == ConnectionResult.Success) return true;
+            var resultCode = ViewModel.GoogleApiService.GetPlayServicesConnectionStatus();
+            if (resultCode == GoogleApiConnectionStatus.Success) return true;
 
-            if (apiAvailability.IsUserResolvableError(resultCode))
+            if (ViewModel.GoogleApiService.CanResolvePlayServicesErrorByUser(resultCode))
             {
                 this.ViewModel.ShowSynchronizationError(UIResources.OfflineSync_InstallPlayServices);
-                this.ViewModel.UserInteractionService.ShowGoogleApiErrorDialog(resultCode,
+                this.ViewModel.GoogleApiService.ShowGoogleApiErrorDialog(resultCode,
                     RequestCodeRecoverPlayServices);
             }
             else

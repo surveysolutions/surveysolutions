@@ -72,9 +72,7 @@
             mutliRowSelect
             :selectableId="'userId'"
             @selectedRowsChanged="rows => selectedInterviewers = rows"
-            :addParamsToRequest="addParamsToRequest"
-            :contextMenuItems="contextMenuItems"
-            :supportContextMenu="model.showContextMenu">
+            :addParamsToRequest="addParamsToRequest">
             <div class="panel panel-table"
                 v-if="selectedInterviewers.length">
                 <div class="panel-body">
@@ -214,20 +212,6 @@ export default {
         moveToAnotherTeam() {
             this.$refs.interviewersMoveToOtherTeam.moveToAnotherTeam()
         },
-        contextMenuItems({rowData, rowIndex}) {
-            if (!this.model.showContextMenu) return null
-
-            const self = this
-            const menu = []
-            menu.push({
-                name: self.$t('Users.ImpersonateAsUser'),
-                callback: () => {
-                    const link = self.model.impersonateUrl + '?personName=' + rowData.userName
-                    window.open(link, '_blank')
-                },
-            })
-            return menu
-        },
     },
     computed: {
         model() {
@@ -283,6 +267,7 @@ export default {
                     name: 'CreationDate',
                     className: 'changed-recently',
                     title: this.$t('Pages.Interviewers_CreationDateTitle'),
+                    tooltip: this.$t('Pages.Interviewers_CreationDateTooltip'),
                     render: function(data, type, row) {
                         var localDate = moment.utc(data).local()
                         return localDate.format(DateFormats.dateTimeInList)
@@ -305,6 +290,7 @@ export default {
                     name: 'SupervisorName',
                     className: 'changed-recently',
                     title: this.$t('Pages.Interviewers_SupervisorTitle'),
+                    tooltip: this.$t('Pages.Interviewers_SupervisorTooltip'),
                     orderable: false,
                 })
             }
@@ -314,6 +300,7 @@ export default {
                 name: 'EnumeratorVersion',
                 className: 'changed-recently',
                 title: this.$t('Pages.Interviewers_InterviewerVersion'),
+                tooltip: this.$t('Pages.Interviewers_InterviewerVersionTooltip'),
                 defaultContent: this.$t('Pages.Interviewers_InterviewerNeverConnected'),
                 orderable: true,
                 createdCell: function(td, cellData, rowData, row, col) {
@@ -328,6 +315,7 @@ export default {
                 name: 'TrafficUsed',
                 className: 'type-numeric',
                 title: this.$t('Pages.InterviewerProfile_TotalTrafficUsed'),
+                tooltip: this.$t('Pages.InterviewerProfile_TotalTrafficUsedTooltip'),
                 orderable: false,
                 render: function(data, type, row) {
                     var formattedKB = data.toLocaleString()

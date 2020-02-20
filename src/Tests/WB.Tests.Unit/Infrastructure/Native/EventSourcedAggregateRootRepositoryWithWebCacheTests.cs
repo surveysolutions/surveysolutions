@@ -10,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
-using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
@@ -18,36 +17,6 @@ namespace WB.Tests.Unit.Infrastructure.Native
 {
     public class EventSourcedAggregateRootRepositoryWithWebCacheTests
     {
-        [Test]
-        public void on_evict_should_not_call_cached_remove_method_twice()
-        {
-            var eventStore = new Mock<IEventStore>();
-            var domainRepo = new Mock<IDomainRepository>();
-
-            CommonMetrics.StateFullInterviewsCount.Set(0);
-            domainRepo
-                .Setup(dr => dr.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()))
-                .Returns<Type, Guid, IEnumerable<CommittedEvent>>((type, id, ce) => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id));
-
-            var repo = GetRepository(eventStore: eventStore.Object, domainRepository: domainRepo.Object);
-
-            repo.GetLatest(typeof(IEventSourcedAggregateRoot), Guid.NewGuid());
-            var initialGaugeValue = CommonMetrics.StateFullInterviewsCount.Value;
-            repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g1);
-            
-            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(initialGaugeValue + 1));
-
-            var entity = repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g2);
-            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(initialGaugeValue + 2));
-            Assert.NotNull(entity);
-
-            repo.Evict(Id.g1);
-            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(initialGaugeValue + 1));
-
-            repo.Evict(Id.g1);
-            Assert.That(CommonMetrics.StateFullInterviewsCount.Value, Is.EqualTo(initialGaugeValue + 1), "Should not decrease interviews counter");
-        }
-
         [Test]
         public void should_evict_from_cache_if_aggregate_root_is_dirty()
         {
@@ -67,7 +36,6 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 ServiceLocator.Current,
                 new Stub.StubAggregateLock());
 
-            CommonMetrics.StateFullInterviewsCount.Set(0);
             var entity = repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g1);
 
             Assert.IsNotNull(entity);

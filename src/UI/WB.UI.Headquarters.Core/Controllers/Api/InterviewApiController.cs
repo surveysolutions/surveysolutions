@@ -159,13 +159,13 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public InterviewSummaryForMapPointView InterviewSummaryForMapPoint(InterviewSummaryForMapPointViewModel data)
+        public InterviewSummaryForMapPointView InterviewSummaryForMapPoint([FromBody]InterviewSummaryForMapPointViewModel data)
         {
             return data == null ? null : GetInterviewSummaryForMapPointView(data.InterviewId);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
-        public InterviewSummaryForMapPointView[] InterviewSummaryForMapPoints(InterviewSummaryForMapPointsViewModel data)
+        public InterviewSummaryForMapPointView[] InterviewSummaryForMapPoints([FromBody]InterviewSummaryForMapPointsViewModel data)
         {
             return data?.InterviewIds?.Select(GetInterviewSummaryForMapPointView).ToArray();
         }

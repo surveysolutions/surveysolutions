@@ -40,9 +40,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
-        public int GetPrecessStepsCount()
+        public bool IsNeedProcessing()
         {
-            return attachmentToProcess.Count *  2;
+            return attachmentToProcess.Count > 0;
         }
 
         public async Task DownloadFromDesignerAsync(IProgress<int> progress)

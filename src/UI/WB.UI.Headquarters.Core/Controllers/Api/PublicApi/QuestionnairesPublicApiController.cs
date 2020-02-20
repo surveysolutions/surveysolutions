@@ -12,13 +12,15 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Route("api/v1/questionnaires")]
+    [PublicApiJson]
     public class QuestionnairesPublicApiController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;

@@ -236,7 +236,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private async Task<string> RenderActionResultToString(string viewName, object model)
         {
-            string webRoot = new Uri(this.Request.Scheme + "://" + this.Request.Host).ToString().TrimEnd('/');
+            string webRoot = new Uri($"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}").ToString().TrimEnd('/');
             var routeData = new Microsoft.AspNetCore.Routing.RouteData();
             routeData.DataTokens.Add("area", "Pdf");
             routeData.Values.Add("controller", "Pdf");

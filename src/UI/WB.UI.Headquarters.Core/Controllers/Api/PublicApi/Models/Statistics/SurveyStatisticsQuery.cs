@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+﻿using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models.Statistics
@@ -49,6 +50,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models.Statistics
         /// <summary>
         /// List of condition question answers to filter on
         /// </summary>
+        [FromQuery(Name = "condition[]")]
         public long[] Condition { get; set; }
 
         /// <summary>

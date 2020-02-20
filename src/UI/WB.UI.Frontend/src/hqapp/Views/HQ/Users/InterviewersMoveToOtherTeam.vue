@@ -1,6 +1,7 @@
 <template>
     <div>
         <Confirm
+            id="move-interviewer-confirmation"
             ref="move"
             :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', {names: this.formatNames(this.interviewers)})"
             slot="modals"
@@ -8,7 +9,7 @@
             <div class="alert">
                 <Typeahead
                     ref="supervisorControl"
-                    control-id="supervisor"
+                    control-id="supervisorToAssign"
                     fuzzy
                     data-vv-name="supervisor"
                     data-vv-as="supervisor"
@@ -80,7 +81,7 @@
                                 <span class="interviewer">
                                     <a
                                         target="_blank"
-                                        :href="$config.model.interviewerProfileUrl + '/' + interviewer.userId"
+                                        :href="$config.model.interviewerProfile + '/' + interviewer.userId"
                                         :v-text="interviewer.userName"
                                         :class="{'text-danger' : interviewer.inProgress }">{{interviewer.userName}}</a>
                                 </span>

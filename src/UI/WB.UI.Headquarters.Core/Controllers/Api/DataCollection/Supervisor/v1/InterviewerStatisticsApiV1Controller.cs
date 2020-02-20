@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
         [HttpPost]
         [Route("api/supervisor/v1/interviewerStatistics")]
-        public IActionResult Post(InterviewerSyncStatisticsApiView statistics)
+        public IActionResult Post([FromBody]InterviewerSyncStatisticsApiView statistics)
         {
             var deviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(statistics.InterviewerId);
             deviceInfo.Statistics = new SyncStatistics

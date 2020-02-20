@@ -22,7 +22,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         {
             if (call.Response != null && !call.IsSucceeded)
             {
-                return string.Format("Request to {0} failed with status code {1} ({2}).",
+                return string.Format("Request {0} {1} failed with status code {2} ({3}).",
+                    call.Request.Method,
                     call.Request.RequestUri.AbsoluteUri,
                     (int)call.Response.StatusCode,
                     call.Response.ReasonPhrase);

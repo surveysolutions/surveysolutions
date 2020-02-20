@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -105,12 +106,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     var questionnaire = this.GetQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
-                    var question = questionnaire?.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
-                    if (question?.Answers == null)
-                        return;
-
-                    var optionStrings = answers.Select(answerValue => question.Answers.First(x => decimal.Parse(x.AnswerValue) == answerValue).AnswerText)
-                                       .ToList();
+                    var optionStrings = questionnaire.GetOptionsForQuestion(questionId, null, null, null)
+                        .Where(x => answers.Contains(x.Value)).Select(x => x.Title);
 
                     interview.AnswerFeaturedQuestion(questionId, string.Join(",", optionStrings));
                 }
@@ -151,10 +148,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return interviewSummary;
         }
 
-        private QuestionnaireDocument GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
-        {
-            return this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
-        }
+        private IQuestionnaire GetQuestionnaire(Guid questionnaireId, long questionnaireVersion) =>
+            this.questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), null);
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
         {
@@ -265,9 +260,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
             var questionnaire = GetQuestionnaire(state.QuestionnaireId, state.QuestionnaireVersion);
-            DateTimeQuestion question = questionnaire.Find<DateTimeQuestion>(@event.Payload.QuestionId);
             string answerString = @event.Payload.Answer.ToString(DateTimeFormat.DateFormat);
-            if (question?.IsTimestamp == true)
+            if (questionnaire.IsTimestampQuestion(@event.Payload.QuestionId))
             {
                 answerString = @event.Payload.Answer.ToString(DateTimeFormat.DateWithTimeFormat);
             }
@@ -372,7 +366,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                             if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionFromDto.Id))
                             {
                                 var questionnaire = GetQuestionnaire(interview.QuestionnaireId, interview.QuestionnaireVersion);
-                                var questionType = questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == questionFromDto.Id).QuestionType;
+                                var questionType = questionnaire.GetQuestionType(questionFromDto.Id);
                                 if (questionType == QuestionType.SingleOption)
                                 {
                                     decimal[] answer = { Convert.ToDecimal(questionFromDto.Answer) };

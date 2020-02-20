@@ -180,6 +180,10 @@ export default {
             dotsCount: 0,
         }
     },
+    mounted() {
+        if (this.$config.model.errorMessage)
+            this.errorMessage = this.$config.model.errorMessage
+    },
     methods: {
         formatDate(date) {
             return new moment(date).format(DateFormats.dateTime)
@@ -190,6 +194,7 @@ export default {
         async startImport() {
             this.isImporting = true
             this.progressPercent = 0
+            this.errorMessage = ''
 
             var formData = new FormData(this.$refs.importingForm)
             var currentStatus = await this.$http.post(this.$route.fullPath, formData)
@@ -207,6 +212,7 @@ export default {
 
                 if (currentStatus.data.status.importError) {
                     this.errorMessage = currentStatus.data.status.importError
+                    break
                 }
                 
                 await this.timeout(1000)
@@ -215,7 +221,7 @@ export default {
                 if (this.dotsCount > 3)
                     this.dotsCount = 1
 
-                currentStatus = await this.$http.get(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.questionnaireId)
+                currentStatus = await this.$http.get(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.processId)
             } 
 
             if (currentStatus.data.status.status == 'Error') {
@@ -224,6 +230,7 @@ export default {
 
             if (currentStatus.data.redirectUrl) {
                 window.location.replace(currentStatus.data.redirectUrl)
+                return
             }
 
             this.dotsCount = 0

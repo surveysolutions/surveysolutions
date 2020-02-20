@@ -9,6 +9,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -20,6 +22,8 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
     internal class InterviewStatisticsReportDenormalizerTests : InterviewFactorySpecification
     {
         private QuestionnaireDocument questionnaire;
+        private IQuestionnaire plainQuestionnaire;
+
         private InterviewStatisticsReportDenormalizer denormalizer;
 
         internal enum Relation { Head = 1, Spouse, Child }
@@ -50,6 +54,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
                     Create.Entity.SingleOptionQuestion(sexQuestion, variable: "sex", answers:  GetAnswersFromEnum<Sex>())
                 })
             );
+            this.plainQuestionnaire = new PlainQuestionnaire(this.questionnaire, 1, null, new SubstitutionService());
 
             interviewId = Guid.NewGuid();
 
@@ -62,7 +67,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_multy_answer_given_should_insert_into_database()
         {
-            var summary = new InterviewSummary(questionnaire)
+            var summary = new InterviewSummary(plainQuestionnaire)
             {
                 InterviewId = interviewId,
                 Status = InterviewStatus.Completed,
@@ -96,7 +101,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_new_answer_given_should_insert_into_database()
         {
-            var summary = new InterviewSummary(questionnaire)
+            var summary = new InterviewSummary(plainQuestionnaire)
             {
                 InterviewId = interviewId,
                 Status = InterviewStatus.Completed,
@@ -128,7 +133,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_answer_disabled_should_not_generate_report_for_disabled_answers()
         {
-            var summary = new InterviewSummary(questionnaire)
+            var summary = new InterviewSummary(plainQuestionnaire)
             {
                 InterviewId = interviewId,
                 Status = InterviewStatus.Completed,
@@ -171,7 +176,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_answer_removed_should_not_generate_report_for_removed_answers()
         {
-            var summary = new InterviewSummary(questionnaire)
+            var summary = new InterviewSummary(plainQuestionnaire)
             {
                 InterviewId = interviewId,
                 Status = InterviewStatus.Completed,
@@ -213,7 +218,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_numeric_answers_applied()
         {
-            var summary = new InterviewSummary(questionnaire)
+            var summary = new InterviewSummary(plainQuestionnaire)
             {
                 InterviewId = interviewId,
                 Status = InterviewStatus.Completed,

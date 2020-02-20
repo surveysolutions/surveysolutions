@@ -142,9 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 try
                 {
-                    var sendEmailTask = emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml, interviewEmail.MessageText);
-
-                    var emailId = sendEmailTask.Result;
+                    var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml, interviewEmail.MessageText);
 
                     invitationService.MarkInvitationAsReminded(invitationId, emailId);
                 }

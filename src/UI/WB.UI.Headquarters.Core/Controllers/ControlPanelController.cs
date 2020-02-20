@@ -1,12 +1,16 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -22,16 +26,22 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAuthorizedUser authorizedUser;
         private readonly ITabletInformationService tabletInformationService;
         private readonly UserManager<HqUser> users;
+        private readonly ICommandService commandService;
+        private readonly ILogger<ControlPanelController> logger;
 
         public ControlPanelController(IUserViewFactory userViewFactory, 
             IAuthorizedUser authorizedUser,
             ITabletInformationService tabletInformationService, 
-            UserManager<HqUser> users)
+            UserManager<HqUser> users,
+            ICommandService commandService,
+            ILogger<ControlPanelController> logger)
         {
             this.userViewFactory = userViewFactory;
             this.authorizedUser = authorizedUser;
             this.tabletInformationService = tabletInformationService;
             this.users = users;
+            this.commandService = commandService;
+            this.logger = logger;
         }
 
         public ActionResult Index() => View();
@@ -86,16 +96,23 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public async Task<ActionResult> TabletInfos(IFormFile file)
         {
-            if (file != null && file.Length > 0)
+            try
             {
-                using var ms = new MemoryStream();
-                await using (var readStream = file.OpenReadStream())
-                    await readStream.CopyToAsync(ms);
+                if (file != null && file.Length > 0)
+                {
+                    using var ms = new MemoryStream();
+                    await using (var readStream = file.OpenReadStream())
+                        await readStream.CopyToAsync(ms);
 
-                this.tabletInformationService.SaveTabletInformation(
-                    content: ms.ToArray(),
-                    androidId: @"manual-restore",
-                    user: this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id)));
+                    this.tabletInformationService.SaveTabletInformation(
+                        content: ms.ToArray(),
+                        androidId: @"manual-restore",
+                        user: this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id)));
+                }
+            }
+            catch (Exception exception)
+            {
+                this.logger.LogError($"Exception on tablet info uploading: {file?.Name}", exception);
             }
 
             return RedirectToAction("TabletInfos");
@@ -158,6 +175,25 @@ namespace WB.UI.Headquarters.Controllers
                 Model = model,
                 ModelState = this.ModelState.ErrorsToJsonResult()
             });
+        }
+
+        [HttpGet]
+        [ActivePage(MenuItem.Administration_ReevaluateInterview)]
+        public IActionResult ReevaluateInterview() => this.View("Index");
+
+        [HttpPost]
+        public IActionResult ReevaluateInterview(Guid id)
+        {
+            try
+            {
+                this.commandService.Execute(new ReevaluateInterview(id, this.authorizedUser.Id));
+                return this.Ok();
+            }
+            catch (Exception exception)
+            {
+                this.logger.LogError($"Exception while reevaluatng: {id}", exception);
+                return this.UnprocessableEntity(exception);
+            }
         }
     }
 }

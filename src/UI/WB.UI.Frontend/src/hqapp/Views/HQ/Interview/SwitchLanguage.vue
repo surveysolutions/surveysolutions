@@ -1,13 +1,11 @@
 <template>
     <select ref="select"
         v-model="currentLanguage">
-        <option :value="null">
-            {{$store.state.webinterview.originalLanguageName}}
-        </option>
+        <option :value="null"
+            v-html="$store.state.webinterview.originalLanguageName" />
         <option :key="language.OriginalLanguageName"
-            v-for="language in $store.state.webinterview.languages">
-            {{ language }}
-        </option>
+            v-for="language in $store.state.webinterview.languages"
+            v-html="language" />
     </select>
 </template>
 <script>

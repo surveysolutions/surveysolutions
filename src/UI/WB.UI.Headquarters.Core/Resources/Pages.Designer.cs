@@ -133,6 +133,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Control panel.
+        /// </summary>
+        public static string Admin_ControlPanelLinkTitle {
+            get {
+                return ResourceManager.GetString("Admin_ControlPanelLinkTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Broken.
         /// </summary>
         public static string Admin_InterviewPackages_Broken {
@@ -354,6 +363,51 @@ namespace WB.UI.Headquarters.Resources {
         public static string Admin_InterviewPackages_Type {
             get {
                 return ResourceManager.GetString("Admin_InterviewPackages_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reevaluate.
+        /// </summary>
+        public static string Admin_Reevaluate {
+            get {
+                return ResourceManager.GetString("Admin_Reevaluate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter valid GUID value.
+        /// </summary>
+        public static string Admin_Reevaluate_InterviewId_Invalid {
+            get {
+                return ResourceManager.GetString("Admin_Reevaluate_InterviewId_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview id is required.
+        /// </summary>
+        public static string Admin_Reevaluate_InterviewId_Required {
+            get {
+                return ResourceManager.GetString("Admin_Reevaluate_InterviewId_Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview reevaluated successfully.
+        /// </summary>
+        public static string Admin_Reevaluate_Success {
+            get {
+                return ResourceManager.GetString("Admin_Reevaluate_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview id.
+        /// </summary>
+        public static string Admin_ReevaluateInterview_InterviewId {
+            get {
+                return ResourceManager.GetString("Admin_ReevaluateInterview_InterviewId", resourceCulture);
             }
         }
         
@@ -601,20 +655,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create user.
-        /// </summary>
-        public static string CreateUser {
-            get {
-                return ResourceManager.GetString("CreateUser", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create admin.
         /// </summary>
         public static string CreateAdmin {
             get {
                 return ResourceManager.GetString("CreateAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create user.
+        /// </summary>
+        public static string CreateUser {
+            get {
+                return ResourceManager.GetString("CreateUser", resourceCulture);
             }
         }
         
@@ -3279,6 +3333,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string QuestionnaireNameVersionFirst {
             get {
                 return ResourceManager.GetString("QuestionnaireNameVersionFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reevaluate interview.
+        /// </summary>
+        public static string ReevaluateInterview {
+            get {
+                return ResourceManager.GetString("ReevaluateInterview", resourceCulture);
             }
         }
         

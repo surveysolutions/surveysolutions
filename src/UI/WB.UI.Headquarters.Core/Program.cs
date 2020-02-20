@@ -39,8 +39,10 @@ namespace WB.UI.Headquarters
                     var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "log.log");
                     var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "verbose.log");
 
-                    loggerConfig.MinimumLevel.Debug()
+                    loggerConfig
+                        //.MinimumLevel.Debug()
                         .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                        .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
                         .Enrich.FromLogContext()
                         .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day,
                             restrictedToMinimumLevel: LogEventLevel.Warning)
@@ -48,6 +50,8 @@ namespace WB.UI.Headquarters
                             restrictedToMinimumLevel: LogEventLevel.Verbose, retainedFileCountLimit: 2);
                     if (host.HostingEnvironment.IsDevelopment())
                     {
+                        // To debug logitems source add {SourceContext} to output template
+                        // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
                         loggerConfig.WriteTo.Console();
                     }
                 })
