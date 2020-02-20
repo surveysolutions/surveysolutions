@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
@@ -27,7 +28,7 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Route("api/v1/interviews")]
-    [Authorize(Roles = "ApiUser, Administrator")]
+    [PublicApiJson]
     public class InterviewsPublicApiController : ControllerBase
     {
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
@@ -80,6 +81,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="page">Page number (starting from 1)</param>
         /// <returns></returns>
         [HttpGet]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public InterviewApiView InterviewsFiltered(Guid? questionnaireId = null, long? questionnaireVersion = null,
             InterviewStatus? status = null, Guid? interviewId = null, int pageSize = 10, int page = 1)
         {
@@ -104,6 +106,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
         [HttpGet]
         [Route("{id:guid}")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewApiDetails> Get(Guid id)
         {
             var interview = this.statefulInterviewRepository.Get(id.ToString());
@@ -120,6 +123,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <returns></returns>
         [HttpGet]
         [Route("{id:guid}/stats")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewApiStatistics> Stats(Guid id)
         {
             var interview = this.statefulInterviewRepository.Get(id.ToString());
@@ -163,6 +167,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         [HttpGet]
         [Route("{id:guid}/history")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewHistoryView> InterviewHistory(Guid id)
         {
             var interview = this.interviewHistoryViewFactory.Load(id);
@@ -185,7 +190,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment-by-variable/{variable}")]
-        [Authorize(Roles = "Supervisor, Interviewer, ApiUser, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
         public ActionResult CommentByVariable(Guid id, string variable, RosterVector rosterVector, string comment)
         {
             var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
@@ -210,7 +215,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment/{questionId}")]
-        [Authorize(Roles = "Supervisor, Interviewer, ApiUser, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
         public ActionResult CommentByIdentity(Guid id, string questionId, string comment)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -242,7 +247,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target responsible was not found or it is not an interviewer</response>
         [HttpPatch]
         [Route("{id:guid}/assign")]
-        public ActionResult Assign(Guid id, AssignChangeApiModel request)
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        public ActionResult Assign(Guid id, [FromBody] AssignChangeApiModel request)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
@@ -268,6 +274,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be approved</response>
         [HttpPatch]
         [Route("{id:guid}/approve")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult Approve(Guid id, string comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -286,6 +293,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be rejected</response>
         [HttpPatch]
         [Route("{id:guid}/reject")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult Reject(Guid id, string comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -304,6 +312,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be approved</response>
         [HttpPatch]
         [Route("{id:guid}/hqapprove")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult HQApprove(Guid id, string comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -322,6 +331,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be rejected</response>
         [HttpPatch]
         [Route("{id:guid}/hqreject")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult HQReject(Guid id, string comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -340,6 +350,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be rejected</response>
         [HttpPatch]
         [Route("{id:guid}/hqunapprove")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult HQUnapprove(Guid id, string comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -358,7 +369,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
-        public ActionResult PostAssignSupervisor(Guid id, AssignChangeApiModel request)
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        public ActionResult PostAssignSupervisor(Guid id, [FromBody]  AssignChangeApiModel request)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
@@ -383,6 +395,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be deleted</response>
         [HttpDelete]
         [Route("{id:guid}")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult Delete(Guid id)
         {
             var q = this.GetQuestionnaireIdForInterview(id);

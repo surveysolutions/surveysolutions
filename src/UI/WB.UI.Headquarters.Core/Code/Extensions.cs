@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
@@ -99,6 +100,29 @@ namespace WB.UI.Headquarters.Code
             {
                 session.Remove(key);
             }
+        }
+
+        public static string MapPath(this IWebHostEnvironment hostingEnvironment, string path) =>
+            Path.Combine(hostingEnvironment.ContentRootPath, "wwwroot", path);
+
+        public static bool IsJsonRequest(this HttpRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            return request.Headers != null && request.Headers["Accept"].Any(x => x.Contains("application/json"));
+        }
+        public static string Capitalize(this string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            if (Char.IsUpper(input[0])) return input;
+
+            return string.Create(input.Length, input, (resultSpan, originalSource) =>
+            {
+                originalSource.AsSpan().CopyTo(resultSpan);
+                resultSpan[0] = Char.ToUpper(resultSpan[0]);
+            });
         }
     }
 }

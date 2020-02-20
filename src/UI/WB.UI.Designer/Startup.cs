@@ -31,6 +31,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.CommonWeb;
+using WB.UI.Designer.HealthChecks;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
@@ -180,6 +181,8 @@ namespace WB.UI.Designer
             services.AddTransient<IQuestionnaireHelper, QuestionnaireHelper>();
             services.AddTransient<IDomainRepository, DomainRepository>();
             services.AddScoped<ILoggedInUser, LoggedInUser>();
+
+            //services.AddHostedService<FontInstalledCheck>(); // Fails in docker
 
             services.Configure<CompilerSettings>(Configuration.GetSection("CompilerSettings"));
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));

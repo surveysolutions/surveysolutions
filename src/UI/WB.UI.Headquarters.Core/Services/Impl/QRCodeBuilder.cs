@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using ZXing.QrCode;
+using SkiaSharp;
+using SkiaSharp.QrCode.Image;
 
 namespace WB.UI.Headquarters.Services.Impl
 {
@@ -11,33 +12,13 @@ namespace WB.UI.Headquarters.Services.Impl
             if (string.IsNullOrWhiteSpace(content))
                 return string.Empty;
 
-            var qrWriter = new ZXing.BarcodeWriterPixelData
-            {
-                Format = ZXing.BarcodeFormat.QR_CODE,
-                Options = new QrCodeEncodingOptions { Height = height, Width = width, Margin = margin}
-            };
+            // generate QRCode
+            var qrCode = new QrCode(content, new Vector2Slim(height, width), SKEncodedImageFormat.Png);
 
-            var pixelData = qrWriter.Write(content);
-            
-            using (var bitmap = new System.Drawing.Bitmap(pixelData.Width, pixelData.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
-            using (var ms = new MemoryStream())
-            {
-                var bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, pixelData.Width, pixelData.Height),
-                   System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                try
-                {
-                    System.Runtime.InteropServices.Marshal.Copy(pixelData.Pixels, 0, bitmapData.Scan0,
-                       pixelData.Pixels.Length);
-                }
-                finally
-                {
-                    bitmap.UnlockBits(bitmapData);
-                }
-                
-                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-
-                return Convert.ToBase64String(ms.ToArray());
-            }
+            // output to file
+            using var output = new MemoryStream();
+            qrCode.GenerateImage(output);
+            return Convert.ToBase64String(output.ToArray());
         }
     }
 }

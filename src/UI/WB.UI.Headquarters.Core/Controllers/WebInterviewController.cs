@@ -54,7 +54,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICaptchaProvider captchaProvider;
         private readonly IAssignmentsService assignments;
-        private readonly IConnectionLimiter connectionLimiter;
         private readonly IPauseResumeQueue pauseResumeQueue;
         private readonly IInvitationService invitationService;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
@@ -109,7 +108,6 @@ namespace WB.UI.Headquarters.Controllers
             IWebInterviewConfigProvider configProvider,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IConnectionLimiter connectionLimiter,
             IUserViewFactory usersRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
@@ -128,7 +126,6 @@ namespace WB.UI.Headquarters.Controllers
             this.configProvider = configProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.connectionLimiter = connectionLimiter;
             this.usersRepository = usersRepository;
             this.keyGenerator = keyGenerator;
             this.captchaProvider = captchaProvider;
@@ -307,23 +304,28 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
-            model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
+            model.ServerUnderLoad = false;
 
             return this.View(model);
         }
 
+        public class SendLinkModel
+        {
+            public string InterviewId { get;set; }
+            public string Email { get; set; }
+        }
 
         [HttpPost]
-        public async Task<IActionResult> EmailLink(string interviewId, string email)
+        public async Task<IActionResult> EmailLink([FromBody]SendLinkModel data)
         {
-            var assignmentId = interviewSummary.GetById(interviewId)?.AssignmentId ?? 0;
+            var assignmentId = interviewSummary.GetById(data.InterviewId)?.AssignmentId ?? 0;
             var assignment = assignments.GetAssignment(assignmentId);
 
-            int invitationId = invitationService.CreateInvitationForPublicLink(assignment, interviewId);
+            int invitationId = invitationService.CreateInvitationForPublicLink(assignment, data.InterviewId);
 
             try
             {
-                await invitationMailingService.SendResumeAsync(invitationId, assignment, email);
+                await invitationMailingService.SendResumeAsync(invitationId, assignment, data.Email);
                 if (Request.Cookies[AskForEmail] != null)
                 {
                     Response.Cookies.Delete(AskForEmail);
@@ -333,7 +335,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (EmailServiceException e)
             {
-                invitationService.InvitationWasNotSent(invitationId, assignmentId, email, e.Message);
+                invitationService.InvitationWasNotSent(invitationId, assignmentId, data.Email, e.Message);
                 return this.Json("fail");
             }
         }
@@ -351,13 +353,6 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
-
-            if (!this.connectionLimiter.CanConnect())
-            {
-                var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, null);
-                model.ServerUnderLoad = true;
-                return this.View("Start", model);
-            }
 
             if (!string.IsNullOrWhiteSpace(assignment.Password))
             {

@@ -3,6 +3,8 @@ using FluentAssertions;
 
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryTests;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryViewFactoryTests
@@ -14,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel = new InterviewSummary(questionnaireDocument);
+        public void BecauseOf() => viewModel = new InterviewSummary(new PlainQuestionnaire(questionnaireDocument, 1, null, new SubstitutionService()));
 
         [NUnit.Framework.Test] public void should_view_model_not_be_null () =>
             viewModel.Should().NotBeNull();

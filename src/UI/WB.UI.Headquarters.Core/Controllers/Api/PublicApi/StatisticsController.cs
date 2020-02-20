@@ -27,6 +27,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Sanitizer;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.PublicApi.Models.Statistics;
 using WB.UI.Headquarters.Code;
@@ -38,6 +39,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     /// </summary>
     [Authorize(Roles = "ApiUser, Administrator, Supervisor, Headquarter")]
     [Route(@"api/v1/statistics")]
+    [PublicApiJson]
     public class StatisticsController : ControllerBase
     {
         private readonly ISurveyStatisticsReport surveyStatisticsReport;

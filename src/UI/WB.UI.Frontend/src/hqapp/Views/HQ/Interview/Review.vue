@@ -10,7 +10,7 @@
                     :show-foldback-button-as-hamburger="false" />
                 <section class="questionnaire details-interview">
                     <Interview :interviewId="interviewId"
-                        review
+                        mode="review"
                         @connected="connected" />
                 </section>
             </div>

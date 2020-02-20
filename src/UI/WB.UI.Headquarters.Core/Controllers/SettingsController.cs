@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Admin;
 using WB.UI.Headquarters.Models.CompanyLogo;

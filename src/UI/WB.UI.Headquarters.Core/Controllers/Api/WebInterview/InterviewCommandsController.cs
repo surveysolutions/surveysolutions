@@ -21,7 +21,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     [ApiNoCache]
     [WebInterviewAuthorize(InterviewIdQueryString = "interviewId")]
     [Route("api/webinterview/commands")]
-    [WebInterviewObserverNotAllowed]
+    [Enumerator.Native.WebInterview.ObserverNotAllowed]
     public class InterviewCommandsController : CommandsController
     {
         private readonly IAuthorizedUser authorizedUser;
@@ -50,82 +50,82 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         }
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("changeLanguage")]
         public override IActionResult ChangeLanguage(Guid interviewId, [FromBody]ChangeLanguageRequest request) => base.ChangeLanguage(interviewId, request);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerTextQuestion")]
         public override IActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest) => base.AnswerTextQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerTextListQuestion")]
         public override IActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest) => base.AnswerTextListQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerGpsQuestion")]
         public override IActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest) => base.AnswerGpsQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerDateQuestion")]
         public override IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest) => base.AnswerDateQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerSingleOptionQuestion")]
         public override IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerSingleOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerLinkedSingleOptionQuestion")]
         public override IActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest< decimal[]> answerRequest) => base.AnswerLinkedSingleOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerLinkedMultiOptionQuestion")]
         public override IActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest) => base.AnswerLinkedMultiOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerMultiOptionQuestion")]
         public override IActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest) => base.AnswerMultiOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerYesNoQuestion")]
         public override IActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest) => base.AnswerYesNoQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerIntegerQuestion")]
         public override IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerIntegerQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerDoubleQuestion")]
         public override IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest) => base.AnswerDoubleQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("answerQRBarcodeQuestion")]
         public override IActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest) => base.AnswerQRBarcodeQuestion(interviewId, answerRequest);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("removeAnswer")]
         public override IActionResult RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("sendNewComment")]
         public override IActionResult SendNewComment(Guid interviewId, [FromBody]NewCommentRequest request) => base.SendNewComment(interviewId, request);
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("completeInterview")]
         public override IActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
         {
@@ -140,7 +140,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         }
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("approve")]
         public IActionResult Approve(Guid interviewId, [FromBody]ApproveInterviewRequest approveInterviewRequest)
         {
@@ -165,7 +165,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         }
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("reject")]
         public IActionResult Reject(Guid interviewId, [FromBody]RejectInterviewRequest rejectInterviewRequest)
         {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         }
 
         [HttpPost]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         [Route("resolveComment")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
@@ -228,7 +228,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpPost]
         [Route("setFlag")]
-        [WebInterviewObserverNotAllowed]
+        [Enumerator.Native.WebInterview.ObserverNotAllowed]
         public IActionResult SetFlag(Guid interviewId, [FromBody] SetFlagRequest request)
         {
             this.interviewFactory.SetFlagToQuestion(interviewId, Identity.Parse(request.Identity), request.HasFlag);

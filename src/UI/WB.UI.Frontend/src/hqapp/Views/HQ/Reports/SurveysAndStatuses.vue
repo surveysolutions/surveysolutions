@@ -4,7 +4,7 @@
         :subtitle="$t('Pages.SurveysAndStatuses_HeadquartersDescription')"
         :hasFilter="true">
         <div slot="subtitle">
-            <p v-if="questionnaireId">
+            <p v-if="questionnaireId != null">
                 <a :href="$config.model.selfUrl">{{$t('Reports.ToAllQuestionnaires')}}</a>
             </p>
         </div>
@@ -93,10 +93,12 @@ export default {
                     className: 'without-break changed-recently',
                     name: 'QuestionnaireTitle',
                     render(data, type, row) {
+                        if (!data) {
+                            return self.$t('Strings.AllQuestionnaires')
+                        }
+
                         if(self.questionnaireId != null) {
-                            if (!data) {
-                                return self.$t('Strings.AllQuestionnaires')
-                            }
+                           
                             return escape(data)
                         }
 
@@ -239,6 +241,12 @@ export default {
         },
         questionnaireId() {
             return this.$route.query.questionnaireId
+        },
+        queryString() {
+            return {
+                questionnaireId: this.questionnaireId,
+                responsible: this.responsibleName,
+            }
         },
     },
 }

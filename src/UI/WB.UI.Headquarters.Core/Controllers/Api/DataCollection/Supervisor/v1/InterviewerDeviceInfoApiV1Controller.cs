@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
         [HttpPost]
         [Route("api/supervisor/v1/interviewerTabletInfos")]
-        public async Task<IActionResult> Post(DeviceInfoApiView info)
+        public async Task<IActionResult> Post([FromBody]DeviceInfoApiView info)
         {
             if (info == null)
                 return this.BadRequest("Server cannot accept empty package content.");

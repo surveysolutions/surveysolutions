@@ -1,23 +1,23 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     class QuestionnaireImportStatuses : IQuestionnaireImportStatuses
     {
-        private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireImportResult> statuses = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireImportResult>();
+        private readonly ConcurrentDictionary<Guid, QuestionnaireImportResult> statuses = new ConcurrentDictionary<Guid, QuestionnaireImportResult>();
 
-        public QuestionnaireImportResult GetStatus(QuestionnaireIdentity questionnaireId)
+        public QuestionnaireImportResult GetStatus(Guid processId)
         {
-            if (statuses.TryGetValue(questionnaireId, out QuestionnaireImportResult status))
+            if (statuses.TryGetValue(processId, out QuestionnaireImportResult status))
                 return status;
             return null;
         }
 
-        public QuestionnaireImportResult GetOrAdd(QuestionnaireIdentity questionnaireId, QuestionnaireImportResult valueToAdd)
+        public QuestionnaireImportResult StartNew(Guid processId, QuestionnaireImportResult valueToAdd)
         {
-            var questionnaireImportResult = statuses.GetOrAdd(questionnaireId, valueToAdd);
+            var questionnaireImportResult = statuses.GetOrAdd(processId, valueToAdd);
             return questionnaireImportResult;
         }
     }

@@ -30,9 +30,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.reusableCategoriesStorage = reusableCategoriesStorage;
             this.logger = logger;
         }
-        public int GetPrecessStepsCount()
+        public bool IsNeedProcessing()
         {
-            return (questionnaire.Categories?.Count ?? 0) * 2;
+            return questionnaire.Categories?.Count > 0;
         }
 
         public async Task DownloadFromDesignerAsync(IProgress<int> progress)

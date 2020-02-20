@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +12,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Headquarters.Filters;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers.Api

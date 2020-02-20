@@ -87,8 +87,15 @@
             </FilterBlock>
         </Filters>
 
+        <div class="clearfix">
+            <div class="col-sm-8">
+                <h4 v-html="selectedQuestionnaireTitle" />
+            </div>
+        </div>
+        
         <DataTables
             ref="table"
+            v-if="mounted"
             :tableOptions="tableOptions"
             :addParamsToRequest="addParamsToRequest"
             @ajaxComplete="onTableReload"
@@ -102,6 +109,7 @@
 
 <script>
 import moment from 'moment'
+import momentDuration from 'moment-duration-format'
 import routeSync from '~/shared/routeSync'
 import { find } from 'lodash'
 
@@ -110,6 +118,7 @@ export default {
 
     data() {
         return {
+            mounted: false,
             questionnaireId: null,
             questionnaireVersion: null,
             reportTypeId: null,
@@ -134,11 +143,15 @@ export default {
         }
 
         if (this.query.reportType) {
-            this.reportTypeId = find(this.model.reportTypes, {key: this.query.reportType})
+            this.reportTypeId = find(this.model.reportTypes, {key: this.query.reportType})          
+            if(this.reportTypeId == null) {
+                this.reportTypeId = this.model.reportTypes[0]
+            }
         } else if (this.reportTypeId == null && this.model.reportTypes.length > 0) {
             var index = this.model.reportTypes
             this.reportTypeId = this.model.reportTypes[0]
         }
+
 
         if (this.query.columnCount) {
             this.overTheLast = find(this.model.overTheLasts, {key: this.query.columnCount})
@@ -159,21 +172,30 @@ export default {
         }
 
         this.loadReportData()
+        this.mounted = true
     },
+    
     methods: {
-        loadReportData() {
+        loadReportData(reloadPage = false) {
+            if(reloadPage) return // reload will happen when route change
             if (this.$refs.table) {
                 this.$refs.table.reload()
             }
         },
+
+        routeUpdated(route) {
+            window.location.reload()
+        },
+
         prepareColumns() {
             var self = this
             var columns = []
+
             columns.push({
                 data: 'responsibleName',
                 name: 'Responsible',
                 title: self.model.responsibleColumnName,
-                orderable: true,
+                orderable: false,
                 render: function(data, type, row) {
                     if (data == undefined || row.DT_RowClass == 'total-row') {
                         if (self.model.supervisorId) {
@@ -194,20 +216,20 @@ export default {
 
             const count = self.columnsCount
             for (let i = 0; i < count; i++) {
-                //const date = this.dateTimeRanges[i];
                 const index = i
                 columns.push({
-                    class: 'type-numeric',
-                    title: `<span id="date${index}"></span>`, //moment(date.to).format(this.dateFormat),
-                    data: '', //date.from,
-                    name: '', //date.from,
+                    class: 'type-numeric short-row',
+                    title: '',
+                    data: '',
+                    name: `date_${index}`,
                     orderable: false,
+
                     render: function(data, type, row) {
                         if (row.quantityByPeriod) {
                             var quantity = row.quantityByPeriod[index]
                             return self.renderQuantityValue(quantity)
                         }
-                        if (row.quantityByPeriod) {
+                        if (row.speedByPeriod) {
                             var speed = row.speedByPeriod[index]
                             return self.renderSpeedValue(speed)
                         }
@@ -215,6 +237,7 @@ export default {
                     },
                 })
             }
+            
             columns.push({
                 data: 'average',
                 name: 'Average',
@@ -224,7 +247,7 @@ export default {
                     if (row.quantityByPeriod) {
                         return self.renderQuantityValue(data)
                     }
-                    if (row.quantityByPeriod) {
+                    if (row.speedByPeriod) {
                         return self.renderSpeedValue(data)
                     }
                     return '-'
@@ -234,12 +257,12 @@ export default {
                 data: 'total',
                 name: 'Total',
                 title: this.$t('PeriodicStatusReport.Total'),
-                orderable: true,
+                orderable: false,
                 render: function(data, type, row) {
                     if (row.quantityByPeriod) {
                         return self.renderQuantityValue(data)
                     }
-                    if (row.quantityByPeriod) {
+                    if (row.speedByPeriod) {
                         return self.renderSpeedValue(data)
                     }
                     return '-'
@@ -248,13 +271,24 @@ export default {
 
             this.columns = columns
         },
+
         updateDateColumnsInfo() {
-            for (let i = 0; i < this.dateTimeRanges.length; i++) {
-                const dateRange = this.dateTimeRanges[i]
-                const column = this.columns[i + 1]
-                const date = moment(dateRange.to).format(this.dateFormat)
-                column.title = date
-                document.getElementById(`date${i}`).textContent = date
+
+            const table = this.$refs.table.table
+
+            for (let i = 0; i < this.columns.length; i++) {
+                const column = table.column(`date_${i}:name`)
+
+                const dateRange = (i >= this.dateTimeRanges.length) ? null : this.dateTimeRanges[i]
+                if(dateRange) {
+                    column.visible(true)
+                    const header = column.header()
+                    const date = moment(dateRange.to).format(this.dateFormat)
+                    header.title = date
+                    header.textContent = date
+                } else {
+                    column.visible(false)
+                }
             }
         },
         renderQuantityValue(value) {
@@ -266,29 +300,31 @@ export default {
         renderSpeedValue(value) {
             if (value == null) return '-'
 
-            var formatedValue = moment.duration(value, 'minutes').format('D[d] H[h] mm[m]')
-            return `<span>${formatedValue}</span>`
+            const duration = moment.duration(value, 'minutes')
+            const formated = duration.format('D[d] H[h] mm[m]')
+            return `<span>${formated}</span>`
         },
         reportTypeSelected(option) {
             this.reportTypeId = option
+
             this.onChange(query => {
                 query.reportType = this.reportTypeId.key
             })
-            this.loadReportData()
+            this.loadReportData(true)
         },
         questionnaireSelected(option) {
             this.questionnaireId = option
             this.onChange(query => {
                 query.questionnaireId = (this.questionnaireId || {}).key
             })
-            this.loadReportData()
+            this.loadReportData(true)
         },
         questionnaireVersionSelected(option) {
             this.questionnaireVersion = option
             this.onChange(query => {
                 query.questionnaireVersion = (this.questionnaireVersion || {}).key
             })
-            this.loadReportData()
+            this.loadReportData(true)
         },
         periodSelected(option) {
             this.period = option
@@ -307,16 +343,18 @@ export default {
                 query.columnCount = (this.overTheLast || {}).key
             })
             this.prepareColumns()
-            this.loadReportData()
+            this.loadReportData(true)
         },
+
         overTheLastSelected(option) {
             this.overTheLast = option
             this.onChange(query => {
                 query.columnCount = (this.overTheLast || {}).key
             })
             this.prepareColumns()
-            this.loadReportData()
+            this.loadReportData(true)
         },
+
         addParamsToRequest(requestData) {
             requestData.questionnaireId = (this.questionnaireId || {}).key
             requestData.questionnaireVersion = (this.questionnaireVersion || {}).key
@@ -357,6 +395,14 @@ export default {
         onTableReload(data) {
             this.dateTimeRanges = data.dateTimeRanges || []
             this.updateDateColumnsInfo()
+        },
+    },
+    watch: { 
+        selectedDate(to) {
+            this.onChange(query => {
+                query.from = to
+            })
+            
         },
     },
     computed: {
@@ -428,12 +474,20 @@ export default {
 
                     if (date != null && date != self.from) {
                         self.from = date
-                        self.loadReportData()
+                        self.loadReportData(true)
                     }
                 },
             }
         },
+
+        selectedQuestionnaireTitle() {
+            const name = this.questionnaireId == null ? this.$t('Common.AllQuestionnaires') : this.questionnaireId.value
+            const version = this.questionnaireVersion == null? this.$t('Common.AllVersions') : this.questionnaireVersion.value
+            return `${name}, ${version}`
+        },
+
         tableOptions() {
+
             if (this.columns.length == 0) {
                 this.prepareColumns()
             }
@@ -447,7 +501,7 @@ export default {
                     contentType: 'application/json',
                 },
                 responsive: false,
-                order: [[0, 'asc']],
+                ordering: false,
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },

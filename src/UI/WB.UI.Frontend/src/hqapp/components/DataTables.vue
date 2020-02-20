@@ -29,12 +29,12 @@
             v-if="exportable">
             {{$t("Pages.DownloadReport")}}
             <a target="_blank"
-                v-bind:href="this.export.excel">
-                XLSX
+                v-bind:href="this.export.excel"
+                v-html="'XLSX'">
             </a>,
             <a target="_blank"
-                v-bind:href="this.export.csv">
-                CSV
+                v-bind:href="this.export.csv"
+                v-html="'CSV'">
             </a>
             {{$t("Pages.Or")}}
             <a target="_blank"
@@ -53,7 +53,7 @@ import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import 'jquery-highlight'
 import './datatable.plugins'
-import {template, debounce, includes, without} from 'lodash'
+import {template, debounce, includes, without, assign} from 'lodash'
 
 $.fn.dataTable.ext.errMode = function(a, b, c, d) {
     // swallow all errors for production
@@ -221,7 +221,7 @@ export default {
                 }
             }
 
-            var options = $.extend(optionsFromProperties, this.tableOptions)
+            var options = assign(optionsFromProperties, this.tableOptions)
 
             var baseCreatedRow = options.createdRow
             options.createdRow = (row, data, dataIndex) => {
@@ -306,6 +306,18 @@ export default {
                 }
             }
 
+            var baseHeaderCallback = options.headerCallback
+            options.headerCallback = thead => {
+                if (baseHeaderCallback != undefined) baseHeaderCallback(thead)
+
+                for (let i = 0; i < options.columns.length; i++) {
+                    $(thead)
+                        .find('th')
+                        .eq(i)
+                        .attr('title', options.columns[i].tooltip)
+                }
+            }
+
             if (shouldDestroy && this.table != null) {
                 this.table.destroy()
                 $(this.$refs.header).empty()
@@ -325,7 +337,7 @@ export default {
 
             this.table.on('preXhr.dt', (e, diff, edit) => {
                 self.table.rows().deselect()
-                $(self.table.rows)
+                $(self.$refs.table)
                     .find('.checkbox-filter')
                     .prop('checked', false)
             })

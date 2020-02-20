@@ -191,10 +191,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             var sessionFactory = cfg.BuildSessionFactory();
 
-            MetricsRegistry.Instance.RegisterOnDemandCollectors(
-                new NHibernateStatsCollector("", sessionFactory)
-            );
-
             return sessionFactory;
         }
 

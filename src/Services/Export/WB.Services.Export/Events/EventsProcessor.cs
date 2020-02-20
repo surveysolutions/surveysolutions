@@ -38,7 +38,7 @@ namespace WB.Services.Export.Events
         private int pageSize;
 
         long? maximumSequenceToQuery;
-        private const double BatchSizeMultiplier = 1;
+        private const double ExpectedBatchDurationInSeconds = 2;
 
         private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
@@ -46,6 +46,7 @@ namespace WB.Services.Export.Events
             if (tenantDbContext.Database.IsNpgsql())
             {
                 await tenantDbContext.CheckSchemaVersionAndMigrate(cancellationToken);
+                await tenantDbContext.SetContextSchema(cancellationToken);
             }
         }
 
@@ -65,7 +66,7 @@ namespace WB.Services.Export.Events
 
             var runningAverage = new SimpleRunningAverage(15); // running average window size
 
-            var eventsProducer = new BlockingCollection<EventsFeed>(1);
+            var eventsProducer = new BlockingCollection<EventsFeed>(2);
 
             var eventsReader = Task.Run(() => EventsReaderWorker(token, sequenceToStartFrom, eventsProducer), token);
 
@@ -116,9 +117,9 @@ namespace WB.Services.Export.Events
                 // in events/second
                 var thisBatchProcessingSpeed = feed.Events.Count / executionTrack.Elapsed.TotalSeconds;
 
-                // setting next batch size to be equal average processing speed * multiplier
+                // setting next batch size to be equal average processing speed per second * expected duration
                 var size = (int)runningAverage.Add(thisBatchProcessingSpeed);
-                pageSize = (int)(size * BatchSizeMultiplier);
+                pageSize = (int)(size * ExpectedBatchDurationInSeconds);
 
                 // estimation by average processing speed, seconds
                 var estimatedAverage = runningAverage.Eta(totalEventsToRead - eventsProcessed);
@@ -163,7 +164,7 @@ namespace WB.Services.Export.Events
                     apiTrack.Restart();
 
                     // just to make sure that we will not query too much data while skipping deleted questionnaires
-                    var amount = Math.Min((int)(readingAvg.Average * BatchSizeMultiplier), pageSize);
+                    var amount = Math.Min((int)(readingAvg.Average * ExpectedBatchDurationInSeconds), pageSize);
 
                     var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
                     apiTrack.Stop();

@@ -77,29 +77,29 @@
             <div ref="tooltip">
                 <div class="row-fluid">
                     <strong>{{$t("Common.InterviewKey")}}:</strong>
-                    &nbsp;{{selectedTooltip.InterviewKey}}
+                    &nbsp;{{selectedTooltip.interviewKey}}
                 </div>
                 <div class="row-fluid">
                     <strong>{{$t("Common.Responsible")}}:</strong>
-                    &nbsp;{{selectedTooltip.InterviewerName}}
+                    &nbsp;{{selectedTooltip.interviewerName}}
                 </div>
                 <div class="row-fluid">
                     <strong>{{$t("Users.Supervisor")}}:</strong>
-                    &nbsp;{{selectedTooltip.SupervisorName}}
+                    &nbsp;{{selectedTooltip.supervisorName}}
                 </div>
                 <div class="row-fluid">
                     <strong>{{$t("Common.Status")}}:</strong>
-                    &nbsp;{{selectedTooltip.LastStatus}}
+                    &nbsp;{{selectedTooltip.lastStatus}}
                 </div>
                 <div class="row-fluid">
                     <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>
-                    &nbsp;{{selectedTooltip.LastUpdatedDate}}
+                    &nbsp;{{selectedTooltip.lastUpdatedDate}}
                 </div>
                 <div class="row-fluid"
                     style="white-space:nowrap;">
                     <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
                     <a
-                        v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.InterviewId)"
+                        v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)"
                         target="_blank">{{$t("MapReport.details")}}</a>
                 </div>
             </div>
@@ -457,20 +457,21 @@ export default {
                     const response = await this.api.InteriewSummaryUrl(interviewId)
                     const data = response.data
 
-                    if (data == undefined || data == null) return
+                    if (data != null) {
 
-                    data['InterviewId'] = interviewId
+                        data['interviewId'] = interviewId
 
-                    self.selectedTooltip = data
+                        self.selectedTooltip = data
 
-                    Vue.nextTick(function() {
-                        self.infoWindow.setContent($(self.$refs.tooltip).html())
-                        self.infoWindow.setPosition(event.latLng)
-                        self.infoWindow.setOptions({
-                            pixelOffset: new google.maps.Size(0, -30),
+                        Vue.nextTick(function() {
+                            self.infoWindow.setContent($(self.$refs.tooltip).html())
+                            self.infoWindow.setPosition(event.latLng)
+                            self.infoWindow.setOptions({
+                                pixelOffset: new google.maps.Size(0, -30),
+                            })
+                            self.infoWindow.open(self.map)
                         })
-                        self.infoWindow.open(self.map)
-                    })
+                    }
                 }
             })
 

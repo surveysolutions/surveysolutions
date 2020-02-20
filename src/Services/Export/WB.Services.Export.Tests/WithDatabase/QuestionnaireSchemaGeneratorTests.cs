@@ -38,7 +38,7 @@ namespace WB.Services.Export.Tests.WithDatabase
                 b => { b.MigrationsHistoryTable("__migrations", tenant.SchemaName());});
             var db = new TenantDbContext(ctx, connectionOptions, optionsBuilder.Options, Mock.Of<ILogger<TenantDbContext>>());
             var generator = new QuestionnaireSchemaGenerator(ctx, db, new DatabaseSchemaCommandBuilder(),
-                  new NullLogger<DatabaseSchemaService>(), connectionOptions);
+                  new NullLogger<DatabaseSchemaService>());
 
             using (var tr = db.Database.BeginTransaction())
             {

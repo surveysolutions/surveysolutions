@@ -57,10 +57,15 @@ export default {
             })
 
             if (!isEqual(this.$route.query, query)) {
-                this.$router.push({ query }).catch(() => { })
+                this.$router.push({ query })
+                    .catch(() => { })
+                    .then(r => {
+                        if (this.routeUpdated) {
+                            this.routeUpdated(r)
+                        }
+                    })
             }
         },
-
 
         checkedChange(value, el) {
             this.onChange(q => {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Documents;
@@ -7,14 +8,26 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Enumerator.Native.Questionnaire.Impl;
+using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire.Impl;
+using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using QuestionAnswer = WB.Core.BoundedContexts.Headquarters.Views.Interview.QuestionAnswer;
 
@@ -23,6 +36,53 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     [TestFixture]
     internal class InterviewSummaryEventHandlerUpdateAnswerTest
     {
+        [Test]
+        public void
+            Update_When_event_with_answer_on_featured_question_with_reusable_categories_published_Then_answer_value_be_equal_selected_option_text()
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(Id.g2, 1);
+            var questionId = Guid.Parse("10000000000000000000000000000000");
+            var categoriesId = Id.g1;
+            var answerText = "answer text";
+
+            var savedInterviewSummary = CreateInterviewSummaryQuestions(new QuestionAnswer
+            {
+                Questionid = questionId
+            });
+
+            savedInterviewSummary.QuestionnaireId = questionnaireIdentity.QuestionnaireId;
+            savedInterviewSummary.QuestionnaireVersion = questionnaireIdentity.Version;
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(
+                children: Create.Entity.SingleOptionQuestion(questionId, categoryId: categoriesId));
+            questionnaireDocument.Categories.Add(Create.Entity.Categories(categoriesId));
+
+            var reusableCategoriesStorage = Create.Storage.InMemoryPlainStorage<ReusableCategoricalOptions>();
+            reusableCategoriesStorage.Store(new []
+            {
+                Create.Entity.ReusableCategoricalOptions(questionnaireIdentity, categoriesId, 1, answerText)
+            });
+
+            var questionnaireStorage = new HqQuestionnaireStorage(Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                Mock.Of<ITranslationStorage>(),
+                Mock.Of<IQuestionnaireTranslator>(),
+                Mock.Of<IReadSideRepositoryWriter<QuestionnaireCompositeItem, int>>(), 
+                Mock.Of<INativeReadSideStorage<QuestionnaireCompositeItem, int>>(), 
+                new QuestionnaireQuestionOptionsRepository(), 
+                Create.Service.SubstitutionService(),
+                Create.Service.ExpressionStatePrototypeProvider(),
+                new ReusableCategoriesFillerIntoQuestionnaire(new ReusableCategoriesStorage(reusableCategoriesStorage)));
+            questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
+
+            var interviewSummaryEventHandler = new InterviewSummaryDenormalizer(Mock.Of<IUserViewFactory>(), questionnaireStorage);
+
+            var updatedInterviewSummary =
+                interviewSummaryEventHandler.Update(savedInterviewSummary,
+                    this.CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, 1)));
+
+            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer, Is.EqualTo(answerText));
+        }
+
         [Test]
         public void
             Update_When_event_with_answer_on_featured_question_with_options_published_Then_answer_value_be_equal_selected_option_text()
@@ -42,7 +102,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var interviewSummaryEventHandler =
                 CreateInterviewSummaryEventHandlerFunctional(
                     Create.Entity.QuestionnaireDocument(savedInterviewSummary.QuestionnaireId, children:
-                        Create.Entity.Question(questionId: questionId, answers: Create.Entity.Answer(answerText, 1))));
+                        Create.Entity.SingleQuestion(questionId, options: new List<Answer>(new []{Create.Entity.Answer(answerText, 1)}))));
 
              var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
@@ -68,7 +128,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(Create.Entity.QuestionnaireDocument(savedInterviewSummary.QuestionnaireId, children:
-                        Create.Entity.Question(questionId: questionId, answers: new[] { Create.Entity.Answer("1", 1), Create.Entity.Answer("3", 3), Create.Entity.Answer("8", 8) })));
+                        Create.Entity.SingleQuestion(questionId, options: new List<Answer> { Create.Entity.Answer("1", 1), Create.Entity.Answer("3", 3), Create.Entity.Answer("8", 8) })));
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
@@ -218,9 +278,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         protected static InterviewSummaryDenormalizer CreateInterviewSummaryEventHandlerFunctional(QuestionnaireDocument questionnaire = null)
         {
+            PlainQuestionnaire plainQuestionnaire =
+                Create.Entity.PlainQuestionnaire(questionnaire ?? Create.Entity.QuestionnaireDocument(), 1,
+                    questionOptionsRepository: Create.Storage.QuestionnaireQuestionOptionsRepository());
+
             return new InterviewSummaryDenormalizer(
                 new Mock<IUserViewFactory>().Object,
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaire));
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == plainQuestionnaire));
         }
 
         protected static InterviewSummary CreateInterviewSummaryQuestions(params QuestionAnswer[] questions)

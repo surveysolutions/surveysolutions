@@ -10,9 +10,8 @@
             <dt v-if="question.Label">
                 {{ $t("Reports.QuestionLabel") }}:
             </dt>
-            <dd v-if="question.Label">
-                {{question.Label}}
-            </dd>
+            <dd v-if="question.Label"
+                v-html="question.Label" />
             <dt>{{ $t("Reports.QuestionText") }}:</dt>
             <dd>{{question.QuestionText}}</dd>
         </dl>

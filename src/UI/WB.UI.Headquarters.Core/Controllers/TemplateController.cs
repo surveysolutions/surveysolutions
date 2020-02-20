@@ -125,10 +125,9 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Route("Template/ImportStatus/{id}")]
-        public ActionResult ImportStatus(string id)
+        public ActionResult ImportStatus(Guid id)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-            var result = this.importService.GetStatus(questionnaireIdentity);
+            var result = this.importService.GetStatus(id);
             if (result == null)
                 return NotFound();
 
@@ -140,16 +139,17 @@ namespace WB.UI.Headquarters.Controllers
             if (result == null)
                 return NotFound();
 
-            if (result.Status == QuestionnaireImportStatus.MigrateAssignments)
-            {
-                return Ok(new ImportStatusModel()
-                {
-                    Status = result,
-                    RedirectUrl = Url.Action("UpgradeProgress", "SurveySetup", new { id = result.MigrateAssignmentProcessId.Value }),
-                });
-            }
             if (result.Status == QuestionnaireImportStatus.Finished)
             {
+                if (result.ShouldMigrateAssignments)
+                {
+                    return Ok(new ImportStatusModel()
+                    {
+                        Status = result,
+                        RedirectUrl = Url.Action("UpgradeProgress", "SurveySetup", new {id = result.ProcessId}),
+                    });
+                }
+
                 return Ok(new ImportStatusModel()
                 {
                     Status = result,

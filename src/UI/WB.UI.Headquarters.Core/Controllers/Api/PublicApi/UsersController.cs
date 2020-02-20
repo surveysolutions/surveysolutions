@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Authorize(Roles = "ApiUser, Administrator")]
     [Route("api/v1")]
+    [PublicApiJson]
     public class UsersController : ControllerBase
     {
         private readonly IUserViewFactory usersFactory;

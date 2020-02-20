@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.API;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
@@ -22,6 +23,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     /// </summary>
     [Authorize(Roles = "ApiUser, Administrator")]
     [Route(@"api/v1/export")]
+    [PublicApiJson]
     public class ExportController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;

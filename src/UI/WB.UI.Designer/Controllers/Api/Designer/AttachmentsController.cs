@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -47,6 +46,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("thumbnail/{id:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
         public IActionResult Thumbnail(Guid id, int size)
         {

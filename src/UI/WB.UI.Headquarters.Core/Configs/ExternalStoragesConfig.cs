@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace WB.UI.Shared.Web.Configuration
+namespace WB.UI.Headquarters.Configs
 {
     public class ExternalStoragesConfig : ConfigurationSection
     {

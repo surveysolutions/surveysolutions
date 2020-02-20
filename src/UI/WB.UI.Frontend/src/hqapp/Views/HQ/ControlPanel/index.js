@@ -5,6 +5,7 @@ import AppUpdates from './AppUpdates'
 import CreateAdmin from './CreateAdmin'
 import InterviewPackages from './InterviewPackages'
 import ChangePassword from './ChangePassword'
+import ReevaluateInterview from './ReevaluateInterview'
 
 export default class MapComponent {
     get routes() {
@@ -36,6 +37,10 @@ export default class MapComponent {
                     {
                         path: 'ResetPrivilegedUserPassword',
                         component: ChangePassword,
+                    },
+                    {
+                        path: 'ReevaluateInterview',
+                        component: ReevaluateInterview,
                     },
                 ],
             },
