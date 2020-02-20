@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Converters;
+using Prometheus;
 using Serilog;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -52,6 +53,7 @@ using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.HealthChecks;
+using WB.UI.Headquarters.Metrics;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Shared.Web.Configuration;
@@ -311,6 +313,7 @@ namespace WB.UI.Headquarters
             });
 
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
+            services.AddMetrics();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -330,6 +333,8 @@ namespace WB.UI.Headquarters
             }
 
             InitModules(env);
+
+            app.UseMetrics(Configuration);
 
             app.UseStaticFiles();
             app.UseSerilogRequestLogging();

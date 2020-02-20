@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Caching;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -31,11 +32,11 @@ namespace WB.UI.WebTester.Services.Implementation
 
         protected override TimeSpan Expiration { get; }
 
-        protected override void CacheItemRemoved(string key)
+        protected override void CacheItemRemoved(string key, CacheEntryRemovedReason reason)
         {
             var interviewId = Guid.Parse(key.Substring(CachePrefix.Length));
             notify.Evict(interviewId);
-            base.CacheItemRemoved(key);
+            base.CacheItemRemoved(key, reason);
         }
     }
 }
