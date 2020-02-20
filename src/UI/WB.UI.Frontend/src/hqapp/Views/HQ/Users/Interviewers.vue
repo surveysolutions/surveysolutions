@@ -164,16 +164,14 @@ export default {
             this.allInterviewers = data.data
         },
         async archiveInterviewersAsync(isArchive) {            
-            await this.$http.post(this.model.archiveUsersUrl, {
+            var response = await this.$http.post(this.model.archiveUsersUrl, {
                 archive: isArchive,
                 userIds: this.selectedInterviewers,
-            }).then(
-                function(response) 
-                {
-                    if(!response.data.isSuccess)
-                        toastr.warning(response.data.domainException)
-                }
-            )
+            })
+            
+            if(!response.data.isSuccess)
+                toastr.warning(response.data.domainException)
+            
             this.loadData()            
         },
         archiveInterviewers() {
