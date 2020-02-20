@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using Humanizer;
 using Main.Core.Events;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -171,7 +172,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var exceptionTypes = Enum.GetValues(typeof(InterviewDomainExceptionType))
                 .OfType<InterviewDomainExceptionType>()
-                .Select(x => new ComboboxOptionModel($"{(int) x}", x.ToString()))
+                .Select(x => new ComboboxOptionModel($"{(int) x}", x.Humanize()))
                 .ToArray();
 
             return new ComboboxModel(exceptionTypes, exceptionTypes.Length);
