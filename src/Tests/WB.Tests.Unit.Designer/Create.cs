@@ -74,6 +74,7 @@ using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -1633,5 +1634,36 @@ namespace WB.Tests.Unit.Designer
 
         public static DeleteCategories DeleteCategories(Guid questionnaireId, Guid responsibleId, Guid categoriesId) =>
             new DeleteCategories(questionnaireId, responsibleId, categoriesId);
+
+        public static CopyPastePreProcessor CopyPastePreProcessor(ICategoriesService categoriesService) =>
+            new CopyPastePreProcessor(categoriesService);
+
+        public static ICategoriesService CategoriesService(DesignerDbContext dbContext = null,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null,
+            ICategoriesExportService categoriesExportService = null,
+            ICategoriesExtractFactory categoriesExtractFactory = null)
+            => new CategoriesService(dbContext ?? Mock.Of<DesignerDbContext>(),
+                questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                categoriesExportService ?? Mock.Of<ICategoriesExportService>(),
+                categoriesExtractFactory ?? Mock.Of<ICategoriesExtractFactory>());
+
+        public static CategoriesRow CategoriesRow(string id, string text, string parentId, int rowId) => new CategoriesRow
+        {
+            Id = id,
+            ParentId = parentId,
+            Text = text,
+            RowId = rowId
+        };
+
+        public static CategoriesInstance CategoriesInstance(Guid questionnaireId, Guid categoriesId, int value,
+            string text = null, int sortIndex = 0) =>
+            new CategoriesInstance
+            {
+                QuestionnaireId = questionnaireId,
+                CategoriesId = categoriesId,
+                Value = value,
+                Text = text,
+                SortIndex = sortIndex
+            };
     }
 }

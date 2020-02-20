@@ -1862,7 +1862,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.CheckDepthInvariants(targetToPasteIn, entityToInsert);
 
-            this.CopyElementInTree(pasteAfter.EntityId, entityToInsert, targetToPasteIn, targetIndex);
+            this.CopyElementInTree(pasteAfter.EntityId, entityToInsert, targetToPasteIn, targetIndex, pasteAfter.SourceDocument);
         }
 
         public void PasteInto(PasteInto pasteInto)
@@ -1879,7 +1879,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.CheckDepthInvariants(targetToPasteIn, entityToInsert);
 
-            this.CopyElementInTree(pasteInto.EntityId, entityToInsert, targetToPasteIn, targetIndex);
+            this.CopyElementInTree(pasteInto.EntityId, entityToInsert, targetToPasteIn, targetIndex, pasteInto.SourceDocument);
         }
 
         private void CheckDepthInvariants(IComposite targetToPasteIn, IComposite entityToInsert)
@@ -1916,85 +1916,111 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        internal void CopyElementInTree(Guid pasteItemId, IComposite entityToInsert, IComposite targetToPasteIn, int targetIndex)
+        internal void CopyElementInTree(Guid pasteItemId, IComposite entityToInsert, IComposite targetToPasteIn, int targetIndex, QuestionnaireDocument sourceQuestionnaire)
         {
-            var entityToInsertAsQuestion = entityToInsert as IQuestion;
-            if (entityToInsertAsQuestion != null)
+            switch (entityToInsert)
             {
-                if (targetToPasteIn.PublicKey == this.Id)
-                    throw new QuestionnaireException(string.Format(ExceptionMessages.CantPasteQuestion));
-
-                var question = (AbstractQuestion)entityToInsertAsQuestion.Clone();
-                question.PublicKey = pasteItemId;
-                this.innerDocument.Insert(targetIndex, question, targetToPasteIn.PublicKey);
-                return;
+                case IQuestion entityToInsertAsQuestion:
+                    this.CopyQuestion(pasteItemId, targetToPasteIn, targetIndex, entityToInsertAsQuestion, sourceQuestionnaire);
+                    break;
+                case IStaticText entityToInsertAsStaticText:
+                    this.CopyStaticText(pasteItemId, targetToPasteIn, targetIndex, entityToInsertAsStaticText);
+                    break;
+                case IGroup entityToInsertAsGroup:
+                    this.CopyGroup(pasteItemId, entityToInsert, targetToPasteIn, targetIndex, entityToInsertAsGroup, sourceQuestionnaire);
+                    break;
+                case IVariable entityToInsertAsVariable:
+                    this.CopyVariable(pasteItemId, targetToPasteIn, targetIndex, entityToInsertAsVariable);
+                    break;
+                default:
+                    throw new QuestionnaireException(string.Format(ExceptionMessages.UnknownTypeCantBePaste));
             }
+        }
 
-            var entityToInsertAsStaticText = entityToInsert as IStaticText;
-            if (entityToInsertAsStaticText != null)
+        private void CopyVariable(Guid pasteItemId, IComposite targetToPasteIn, int targetIndex, IVariable entityToInsertAsVariable)
+        {
+            if (targetToPasteIn.PublicKey == this.Id)
+                throw new QuestionnaireException(string.Format(ExceptionMessages.VariableCantBePaste));
+
+            var variable = (Variable) entityToInsertAsVariable.Clone();
+            variable.PublicKey = pasteItemId;
+            this.innerDocument.Insert(targetIndex, variable, targetToPasteIn.PublicKey);
+        }
+
+        private void CopyGroup(Guid pasteItemId, IComposite entityToInsert, IComposite targetToPasteIn, int targetIndex,
+            IGroup entityToInsertAsGroup, QuestionnaireDocument sourceQuestionnaire)
+        {
+            //roster as chapter is forbidden
+            if (entityToInsertAsGroup.IsRoster && (targetToPasteIn.PublicKey == this.Id))
+                throw new QuestionnaireException(string.Format(ExceptionMessages.RosterCantBePaste));
+
+            //roster, group, chapter
+            Dictionary<Guid, Guid> replacementIdDictionary = (entityToInsert).TreeToEnumerable(x => x.Children)
+                .ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
+            replacementIdDictionary[entityToInsert.PublicKey] = pasteItemId;
+
+            var clonedGroup = entityToInsertAsGroup.Clone();
+            clonedGroup.TreeToEnumerable(x => x.Children).ForEach(c =>
             {
-                if (targetToPasteIn.PublicKey == this.Id)
-                    throw new QuestionnaireException(string.Format(ExceptionMessages.StaticTextCantBePaste));
-
-                var staticText = (StaticText)entityToInsertAsStaticText.Clone();
-                staticText.PublicKey = pasteItemId;
-                this.innerDocument.Insert(targetIndex, staticText, targetToPasteIn.PublicKey);
-                return;
-            }
-
-            var entityToInsertAsGroup = entityToInsert as IGroup;
-            if (entityToInsertAsGroup != null)
-            {
-                //roster as chapter is forbidden
-                if (entityToInsertAsGroup.IsRoster && (targetToPasteIn.PublicKey == this.Id))
-                    throw new QuestionnaireException(string.Format(ExceptionMessages.RosterCantBePaste));
-
-                //roster, group, chapter
-                Dictionary<Guid, Guid> replacementIdDictionary = (entityToInsert).TreeToEnumerable(x => x.Children).ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
-                replacementIdDictionary[entityToInsert.PublicKey] = pasteItemId;
-
-                var clonedGroup = entityToInsertAsGroup.Clone();
-                clonedGroup.TreeToEnumerable(x => x.Children).ForEach(c =>
+                switch (c)
                 {
-                    switch (c)
-                    {
-                        case Group g:
-                            g.PublicKey = replacementIdDictionary[g.PublicKey];
-                            g.RosterSizeQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterSizeQuestionId);
-                            g.RosterTitleQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterTitleQuestionId);
-                            break;
-                        case IQuestion q:
-                            ((AbstractQuestion)q).PublicKey = replacementIdDictionary[q.PublicKey];
-                            q.CascadeFromQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.CascadeFromQuestionId);
-                            q.LinkedToQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToQuestionId);
-                            q.LinkedToRosterId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToRosterId);
-                            break;
-                        case Variable v:
-                            v.PublicKey = replacementIdDictionary[v.PublicKey];
-                            break;
-                        case StaticText st:
-                            st.PublicKey = replacementIdDictionary[st.PublicKey];
-                            break;
-                    }
-                });
-                this.innerDocument.Insert(targetIndex, clonedGroup, targetToPasteIn.PublicKey);
-                return;
-            }
+                    case Group g:
+                        g.PublicKey = replacementIdDictionary[g.PublicKey];
+                        g.RosterSizeQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterSizeQuestionId);
+                        g.RosterTitleQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterTitleQuestionId);
+                        break;
+                    case IQuestion q:
+                        ((AbstractQuestion) q).PublicKey = replacementIdDictionary[q.PublicKey];
+                        q.CascadeFromQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.CascadeFromQuestionId);
+                        q.LinkedToQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToQuestionId);
+                        q.LinkedToRosterId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToRosterId);
+                        this.CopyCategories(q, sourceQuestionnaire);
+                        break;
+                    case Variable v:
+                        v.PublicKey = replacementIdDictionary[v.PublicKey];
+                        break;
+                    case StaticText st:
+                        st.PublicKey = replacementIdDictionary[st.PublicKey];
+                        break;
+                }
+            });
+            this.innerDocument.Insert(targetIndex, clonedGroup, targetToPasteIn.PublicKey);
+        }
 
-            var entityToInsertAsVariable = entityToInsert as IVariable;
-            if (entityToInsertAsVariable != null)
-            {
-                if (targetToPasteIn.PublicKey == this.Id)
-                    throw new QuestionnaireException(string.Format(ExceptionMessages.VariableCantBePaste));
+        private void CopyStaticText(Guid pasteItemId, IComposite targetToPasteIn, int targetIndex,
+            IStaticText entityToInsertAsStaticText)
+        {
+            if (targetToPasteIn.PublicKey == this.Id)
+                throw new QuestionnaireException(string.Format(ExceptionMessages.StaticTextCantBePaste));
 
-                var variable = (Variable)entityToInsertAsVariable.Clone();
-                variable.PublicKey = pasteItemId;
-                this.innerDocument.Insert(targetIndex, variable, targetToPasteIn.PublicKey);
+            var staticText = (StaticText) entityToInsertAsStaticText.Clone();
+            staticText.PublicKey = pasteItemId;
+            this.innerDocument.Insert(targetIndex, staticText, targetToPasteIn.PublicKey);
+        }
 
-                return;
-            }
+        private void CopyQuestion(Guid pasteItemId, IComposite targetToPasteIn, int targetIndex,
+            IQuestion entityToInsertAsQuestion, QuestionnaireDocument sourceQuestionnaire)
+        {
+            if (targetToPasteIn.PublicKey == this.Id)
+                throw new QuestionnaireException(string.Format(ExceptionMessages.CantPasteQuestion));
 
-            throw new QuestionnaireException(string.Format(ExceptionMessages.UnknownTypeCantBePaste));
+            var question = (AbstractQuestion) entityToInsertAsQuestion.Clone();
+            question.PublicKey = pasteItemId;
+
+            this.CopyCategories(entityToInsertAsQuestion, sourceQuestionnaire);
+
+            this.innerDocument.Insert(targetIndex, question, targetToPasteIn.PublicKey);
+        }
+
+        private void CopyCategories(IQuestion entityToInsertAsQuestion, QuestionnaireDocument sourceQuestionnaire)
+        {
+            if (!(entityToInsertAsQuestion is ICategoricalQuestion categoricalQuestion)) return;
+            if (!categoricalQuestion.CategoriesId.HasValue) return;
+
+            var sourceCategories = sourceQuestionnaire.Categories.Find(x => x.Id == categoricalQuestion.CategoriesId);
+
+            if (!this.innerDocument.Categories.Exists(x => x.Id == categoricalQuestion.CategoriesId.Value))
+                this.innerDocument.Categories.Add(sourceCategories);
         }
 
         #endregion
