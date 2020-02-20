@@ -2016,11 +2016,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (!(entityToInsertAsQuestion is ICategoricalQuestion categoricalQuestion)) return;
             if (!categoricalQuestion.CategoriesId.HasValue) return;
+            if (this.innerDocument.Categories.Exists(x => x.Id == categoricalQuestion.CategoriesId.Value)) return;
 
             var sourceCategories = sourceQuestionnaire.Categories.Find(x => x.Id == categoricalQuestion.CategoriesId);
-
-            if (!this.innerDocument.Categories.Exists(x => x.Id == categoricalQuestion.CategoriesId.Value))
-                this.innerDocument.Categories.Add(sourceCategories);
+            this.innerDocument.Categories.Add(sourceCategories);
         }
 
         #endregion
