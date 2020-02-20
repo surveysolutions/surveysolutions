@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
@@ -45,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserImportService userImportService;
         private readonly IMoveUserToAnotherTeamService moveUserToAnotherTeamService;
         private readonly IUserArchiveService userArchiveService;
-        private readonly ILogger logger;
+        private readonly ILogger<UsersApiController> logger;
 
         public UsersApiController(
             IAuthorizedUser authorizedUser,
@@ -58,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers
             IUserImportService userImportService, 
             IMoveUserToAnotherTeamService moveUserToAnotherTeamService,
             IUserArchiveService userArchiveService,
-            ILogger logger)
+            ILogger<UsersApiController> logger)
         {
             this.authorizedUser = authorizedUser;
             this.usersFactory = usersFactory;
@@ -267,8 +268,8 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (Exception e)
             {
-                logger.Error("Archive user error:", e);
-                return new CommandApiController.JsonCommandResponse() { IsSuccess = false, DomainException = "Error occured" };
+                logger.Log(LogLevel.Error, $"Archive status change error for users ({string.Join(',', request.UserIds)}):", e);
+                return new CommandApiController.JsonCommandResponse() { IsSuccess = false, DomainException = "Error occurred" };
             }
 
             return new CommandApiController.JsonCommandResponse() {IsSuccess = true};
