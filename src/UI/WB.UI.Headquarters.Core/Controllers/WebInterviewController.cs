@@ -428,6 +428,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect(generateUrl);
         }
 
+        [HttpGet]
+        [Route("Continue/{id}")]
         public IActionResult Continue(string id)
         {
             var invitation = this.invitationService.GetInvitationByToken(id);
