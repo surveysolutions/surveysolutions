@@ -336,7 +336,17 @@ namespace WB.UI.Headquarters
 
             app.UseMetrics(Configuration);
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    if (!env.IsDevelopment())
+                    {
+                        ctx.Context.Response.Headers.Add("Cache-Control", "public, max-age=31536000");
+                    }
+                }
+            });
+
             app.UseSerilogRequestLogging();
             app.UseUnderConstruction();
             
