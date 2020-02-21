@@ -5,6 +5,7 @@ using Dapper;
 using Microsoft.Extensions.Logging;
 using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Infrastructure.Native.Monitoring;
 
@@ -12,13 +13,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
     public class BrokenPackagesStatsCollector : IOnDemandCollector
     {
-        private readonly ISessionFactory sessionFactory;
+        private readonly IServiceLocator serviceLocator;
         private readonly ILogger<BrokenPackagesStatsCollector> logger;
         private readonly Stopwatch throttle = new Stopwatch();
 
-        public BrokenPackagesStatsCollector(ISessionFactory sessionFactory, ILogger<BrokenPackagesStatsCollector> logger)
+        public BrokenPackagesStatsCollector(IServiceLocator serviceLocator, ILogger<BrokenPackagesStatsCollector> logger)
         {
-            this.sessionFactory = sessionFactory;
+            
+            this.serviceLocator = serviceLocator;
             this.logger = logger;
             throttle.Start();
         }
@@ -36,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 try
                 {
-                    using var session = sessionFactory.OpenStatelessSession();
+                    using var session = serviceLocator.GetInstance<ISessionFactory>().OpenStatelessSession();
 
                     var packages = from bip in session.Query<BrokenInterviewPackage>()
                         group bip by bip.ExceptionType into g
