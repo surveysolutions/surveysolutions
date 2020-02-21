@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters
                 .UseSerilog((host, loggerConfig) =>
                 {
                     var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "headquarters.log");
-                    var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", ""headquarters.verbose.log");
+                    var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "headquarters.verbose.log");
 
                     loggerConfig
                         //.MinimumLevel.Debug()
