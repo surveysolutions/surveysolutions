@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
     [Authorize(Roles = "Administrator, Headquarter")]
+    [Route("api/{controller}/{action}/{id?}")]
     public class LinksExportController : ControllerBase
     {
         private readonly ISampleWebInterviewService sampleWebInterviewService;
