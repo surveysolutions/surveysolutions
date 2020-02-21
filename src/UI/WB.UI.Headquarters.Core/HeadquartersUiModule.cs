@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IApplicationRestarter, ApplicationRestarter>();
-            registry.Bind<IAudioProcessingService, AudioProcessingService>();
+            registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
             services.Bind<ICaptchaService, WebCacheBasedCaptchaService>();
             registry.Bind<IWebInterviewInterviewEntityFactory, HqWebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
