@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -12,11 +13,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
     public class BrokenPackagesStatsCollector : IOnDemandCollector
     {
         private readonly ISessionFactory sessionFactory;
+        private readonly ILogger<BrokenPackagesStatsCollector> logger;
         private readonly Stopwatch throttle = new Stopwatch();
 
-        public BrokenPackagesStatsCollector(ISessionFactory sessionFactory)
+        public BrokenPackagesStatsCollector(ISessionFactory sessionFactory, ILogger<BrokenPackagesStatsCollector> logger)
         {
             this.sessionFactory = sessionFactory;
+            this.logger = logger;
             throttle.Start();
         }
 
@@ -31,11 +34,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             {
                 if (throttle.Elapsed <= TimeSpan.FromSeconds(30)) return;
 
-                using (var session = sessionFactory.OpenStatelessSession())
+                try
                 {
+                    using var session = sessionFactory.OpenStatelessSession();
+
                     var packages = from bip in session.Query<BrokenInterviewPackage>()
-                       group bip by bip.ExceptionType into g
-                       select new { Type = g.Key, Count = g.Count() };
+                        group bip by bip.ExceptionType into g
+                        select new { Type = g.Key, Count = g.Count() };
 
                     foreach (var type in Enum.GetValues(typeof(InterviewDomainExceptionType)))
                     {
@@ -60,6 +65,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         DatabaseTableRowsCount.Labels(data.name).Set(data.rows);
                         DatabaseTableSize.Labels(data.name).Set(data.size);
                     }
+                }
+                catch(Exception e)
+                {
+                    this.logger.LogError(e, "Unable to collect broken packages information");
                 }
 
                 throttle.Restart();

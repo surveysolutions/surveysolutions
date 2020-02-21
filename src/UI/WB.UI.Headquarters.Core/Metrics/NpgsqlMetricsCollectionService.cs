@@ -34,14 +34,16 @@ namespace WB.UI.Headquarters.Metrics
                 case "busy-connections":
                     CommonMetrics.NpgsqlConnections.Labels("busy").Set(Convert.ToSingle(eventPayload["Count"]));
                     break;
-                case "":
+                case "connection-pools":
                     CommonMetrics.NpgsqlConnectionsPoolCount.Set(Convert.ToSingle(eventPayload["Count"]));
                     break;
                 case "bytes-written-per-second":
-                    CommonMetrics.NpgsqlDataCounter.Labels("write").Inc(Convert.ToSingle(eventPayload["Increment"]));
+                    var written = Convert.ToSingle(eventPayload["Increment"]);
+                    if (written > 0) CommonMetrics.NpgsqlDataCounter.Labels("write").Inc(written);
                     break;
                 case "bytes-read-per-second":
-                    CommonMetrics.NpgsqlDataCounter.Labels("read").Inc(Convert.ToSingle(eventPayload["Increment"]));
+                    var read = Convert.ToSingle(eventPayload["Increment"]);
+                    if(read > 0 ) CommonMetrics.NpgsqlDataCounter.Labels("read").Inc(read);
                     break;
             }
         }
@@ -50,7 +52,7 @@ namespace WB.UI.Headquarters.Metrics
         {
             if (eventSource.Name.Equals("Npgsql", StringComparison.OrdinalIgnoreCase))
             {
-                EnableEvents(eventSource, EventLevel.LogAlways, EventKeywords.All, new Dictionary<string, string>
+                EnableEvents(eventSource, EventLevel.Verbose, EventKeywords.None, new Dictionary<string, string>
                 {
                     {"EventCounterIntervalSec", "1"}
                 });
