@@ -322,5 +322,117 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(targetCategories, Has.Exactly(2).Items);
             Assert.That(sourceCategories, Is.EqualTo(targetCategories));
         }
+
+        [Test]
+        public void when_process_past_into_and_group_with_2_categorical_questions_with_the_same_reusable_categories_when_reusable_categories_should_be_copied_only_once()
+        {
+            // arrange
+            var categoriesId = Id.g2;
+            var categoricalQuestion1Id = Id.g3;
+            var categoricalQuestion2Id = Id.g6;
+            var groupId = Id.g7;
+            var rosterId = Id.g8;
+            var sourceQuestionnaireId = Id.g1;
+            var targetQuestionnaireId = Id.g4;
+
+            var sourceQuestionnaire = Create.QuestionnaireDocument(sourceQuestionnaireId,
+                Create.Group(groupId, children: new IComposite[]
+                {
+                    Create.SingleOptionQuestion(categoricalQuestion1Id, categoriesId: categoriesId),
+                    Create.FixedRoster(rosterId,
+                        children: new[]
+                        {
+                            Create.SingleOptionQuestion(categoricalQuestion2Id, categoriesId: categoriesId)
+
+                        })
+                }));
+            sourceQuestionnaire.Categories.Add(Create.Categories(categoriesId, "cat"));
+
+            var db = Create.InMemoryDbContext();
+            db.CategoriesInstances.AddRange(
+                new[]
+                {
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2)
+                });
+            db.SaveChanges();
+            
+            var categoriesService = Create.CategoriesService(db);
+            var processor = Create.CopyPastePreProcessor(categoriesService);
+            // act
+            var pasteInto = new PasteInto(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                sourceQuestionnaireId,
+                groupId,
+                Guid.NewGuid(), 
+                Guid.NewGuid()) {SourceDocument = sourceQuestionnaire};
+
+            processor.Process(Create.Questionnaire(Guid.NewGuid(), Create.QuestionnaireDocument(targetQuestionnaireId)), pasteInto);
+            db.SaveChanges();
+            // assert
+            var sourceCategories1 = categoriesService.GetCategoriesById(sourceQuestionnaireId, categoriesId).ToArray();
+            var targetCategories1 = categoriesService.GetCategoriesById(targetQuestionnaireId, categoriesId).ToArray();
+            
+            Assert.That(sourceCategories1, Has.Exactly(2).Items);
+            Assert.That(targetCategories1, Has.Exactly(2).Items);
+            Assert.That(sourceCategories1, Is.EqualTo(targetCategories1));
+        }
+
+        [Test]
+        public void when_process_past_after_and_group_with_2_categorical_questions_with_the_same_reusable_categories_when_reusable_categories_should_be_copied_only_once()
+        {
+            // arrange
+            var categoriesId = Id.g2;
+            var categoricalQuestion1Id = Id.g3;
+            var categoricalQuestion2Id = Id.g6;
+            var groupId = Id.g7;
+            var rosterId = Id.g8;
+            var sourceQuestionnaireId = Id.g1;
+            var targetQuestionnaireId = Id.g4;
+
+            var sourceQuestionnaire = Create.QuestionnaireDocument(sourceQuestionnaireId,
+                Create.Group(groupId, children: new IComposite[]
+                {
+                    Create.SingleOptionQuestion(categoricalQuestion1Id, categoriesId: categoriesId),
+                    Create.FixedRoster(rosterId,
+                        children: new[]
+                        {
+                            Create.SingleOptionQuestion(categoricalQuestion2Id, categoriesId: categoriesId)
+
+                        })
+                }));
+            sourceQuestionnaire.Categories.Add(Create.Categories(categoriesId, "cat"));
+
+            var db = Create.InMemoryDbContext();
+            db.CategoriesInstances.AddRange(
+                new[]
+                {
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2)
+                });
+            db.SaveChanges();
+            
+            var categoriesService = Create.CategoriesService(db);
+            var processor = Create.CopyPastePreProcessor(categoriesService);
+            // act
+            var pasteAfter = new PasteAfter(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                sourceQuestionnaireId,
+                groupId,
+                Guid.NewGuid()) {SourceDocument = sourceQuestionnaire};
+
+            processor.Process(Create.Questionnaire(Guid.NewGuid(), Create.QuestionnaireDocument(targetQuestionnaireId)), pasteAfter);
+            db.SaveChanges();
+            // assert
+            var sourceCategories1 = categoriesService.GetCategoriesById(sourceQuestionnaireId, categoriesId).ToArray();
+            var targetCategories1 = categoriesService.GetCategoriesById(targetQuestionnaireId, categoriesId).ToArray();
+            
+            Assert.That(sourceCategories1, Has.Exactly(2).Items);
+            Assert.That(targetCategories1, Has.Exactly(2).Items);
+            Assert.That(sourceCategories1, Is.EqualTo(targetCategories1));
+        }
     }
 }
