@@ -12,14 +12,14 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
         public Task OnConnected(Hub hub)
         {
             var mode = GetMode(hub);
-            CommonMetrics.WebInterviewOpenConnection.Labels(mode).Inc();
+            CommonMetrics.WebInterviewConnection.Labels("open", mode).Inc();
             return Task.CompletedTask;
         }
 
         public Task OnDisconnected(Hub hub, Exception exception)
         {
             var mode = GetMode(hub);
-            CommonMetrics.WebInterviewCloseConnection.Labels(mode).Inc();
+            CommonMetrics.WebInterviewConnection.Labels("close", mode).Inc();
             return Task.CompletedTask;
         }
 
