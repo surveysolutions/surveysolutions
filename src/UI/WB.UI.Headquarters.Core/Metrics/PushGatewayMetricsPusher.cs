@@ -37,7 +37,12 @@ namespace WB.UI.Headquarters.Metrics
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            return pusher.StopAsync();
+            if(pusher != null)
+            {
+                return pusher.StopAsync();
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
