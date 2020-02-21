@@ -62,32 +62,38 @@
                             id="PhoneNumber"/>
                     </form-group>
                     <p v-if="!isOwnProfile && lockMessage != null">{{lockMessage}}</p>
-                    <form-group v-if="!isOwnProfile">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            id="IsLocked"
-                            name="IsLocked"
-                            type="checkbox"
-                            v-model="isLockedByHeadquarters"/>
-                        <label for="IsLocked"
-                            style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{$t('FieldsAndValidations.IsLockedFieldName')}}
-                        </label>
+                    <form-group v-if="!isOwnProfile" 
+                        :error="modelState['IsLockedByHeadquarters']">
+                        <div>
+                            <input
+                                class="checkbox-filter single-checkbox"
+                                id="IsLocked"
+                                name="IsLocked"
+                                type="checkbox"
+                                v-model="isLockedByHeadquarters"/>
+                            <label for="IsLocked"
+                                style="font-weight: bold">
+                                <span class="tick"></span>
+                                {{$t('FieldsAndValidations.IsLockedFieldName')}}
+                            </label>
+                        </div>
                     </form-group>
-                    <form-group v-if="!isOwnProfile && canLockBySupervisor">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            data-val="true"
-                            id="IsLockedBySupervisor"
-                            name="IsLockedBySupervisor"
-                            type="checkbox"
-                            v-model="isLockedBySupervisor"/>
-                        <label for="IsLockedBySupervisor"
-                            style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
-                        </label>
+                    <form-group v-if="!isOwnProfile && canLockBySupervisor" 
+                        :error="modelState['IsLockedBySupervisor']">
+                        <div>
+                            <input
+                                class="checkbox-filter single-checkbox"
+                                data-val="true"
+                                id="IsLockedBySupervisor"
+                                name="IsLockedBySupervisor"
+                                type="checkbox"
+                                v-model="isLockedBySupervisor"/>
+                            <label for="IsLockedBySupervisor"
+                                style="font-weight: bold">
+                                <span class="tick"></span>
+                                {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
+                            </label>
+                        </div>
                     </form-group>
                 </div>
 
