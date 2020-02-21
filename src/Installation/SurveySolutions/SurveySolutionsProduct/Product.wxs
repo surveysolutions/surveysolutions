@@ -277,7 +277,7 @@
                   <RegistryValue Type="string" Name="Install Path" Value="INSTALLFOLDER"></RegistryValue>
               </RegistryKey>
           </Component>
-        <Directory Id="INSTALLSITEFOLDER" Name="Site" >
+        <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D">
             <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes" >
                 <iis:WebAppPool
                     Id="AppSurveySolutions"
@@ -332,7 +332,7 @@
                                 Name="SurveySolutionsExport"
                                 Start="install"
                                 Stop="both"
-                                Remove="both"
+                                Remove="both" 
                                 Wait="yes"></ServiceControl>
             </Component>
         </Directory>
