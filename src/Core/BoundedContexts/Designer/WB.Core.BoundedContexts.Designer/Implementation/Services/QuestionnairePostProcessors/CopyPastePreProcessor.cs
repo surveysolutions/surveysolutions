@@ -32,23 +32,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private void CopyCategories(QuestionnaireDocument sourceQuestionnaire, Guid sourceItemId, Guid targetQuestionnaireId)
         {
             var categoricalQuestion = sourceQuestionnaire.Find<ICategoricalQuestion>(sourceItemId);
-            if (categoricalQuestion != null)
-                this.CopyCategories(sourceQuestionnaire, categoricalQuestion, targetQuestionnaireId);
+            if (categoricalQuestion?.CategoriesId != null)
+                this.CloneCategories(sourceQuestionnaire.PublicKey, categoricalQuestion.CategoriesId.Value, targetQuestionnaireId);
 
             var group = sourceQuestionnaire.Find<IGroup>(sourceItemId);
-            ((IComposite) @group)?.TreeToEnumerable(x => x.Children).OfType<ICategoricalQuestion>()
-                .ForEach(x => CopyCategories(sourceQuestionnaire, x, targetQuestionnaireId));
+            ((IComposite) @group)?.TreeToEnumerable(x => x.Children)
+                .OfType<ICategoricalQuestion>()
+                .Where(x => x.CategoriesId.HasValue)
+                .Select(x => x.CategoriesId.Value)
+                .ToHashSet()
+                .ForEach(categoryId => CloneCategories(sourceQuestionnaire.PublicKey, categoryId, targetQuestionnaireId));
         }
 
-        private void CopyCategories(QuestionnaireDocument sourceQuestionnaire, ICategoricalQuestion categoricalQuestion, Guid targetQuestionnaireId)
+        private void CloneCategories(Guid questionnaireId, Guid categoriesId, Guid targetQuestionnaireId)
         {
-            if (categoricalQuestion?.CategoriesId == null) return;
+            if (this.categoriesService.GetCategoriesById(targetQuestionnaireId, categoriesId).Any()) return;
 
-            if (this.categoriesService.GetCategoriesById(targetQuestionnaireId, categoricalQuestion.CategoriesId.Value)
-                .Any()) return;
-
-            this.categoriesService.CloneCategories(sourceQuestionnaire.PublicKey,
-                categoricalQuestion.CategoriesId.Value, targetQuestionnaireId, categoricalQuestion.CategoriesId.Value);
+            this.categoriesService.CloneCategories(questionnaireId,
+                categoriesId, targetQuestionnaireId, categoriesId);
         }
     }
 }
