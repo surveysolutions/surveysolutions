@@ -17,7 +17,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
     public class AudioProcessingService : IAudioProcessingService
     {
         private readonly ILogger<AudioProcessingService> logger;
-        private bool audioEncoderStarted = false;
+        private readonly bool audioEncoderStarted = false;
 
         private const string MimeType = @"audio/m4a";
 
@@ -27,14 +27,18 @@ namespace WB.Enumerator.Native.WebInterview.Services
             try
             {
                 MediaFoundationApi.Startup();
-                // single thread to process all audio compression requests
-                // if there is need to process audio in more then one queue - duplicate line below
-                Task.Factory.StartNew(AudioCompressionQueueProcessor);
                 audioEncoderStarted = true;
             }
             catch (Exception e)
             {
                 this.logger.LogWarning(e, "Failed to start audio encoder. Web interview audio questions will not be ");
+            }
+            finally
+            {
+                // single thread to process all audio compression requests
+                // if there is need to process audio in more then one queue - duplicate line below
+
+                Task.Factory.StartNew(AudioCompressionQueueProcessor);
             }
         }
 
