@@ -29,13 +29,13 @@ namespace WB.UI.Headquarters.Metrics
             switch (eventPayload["Name"])
             {
                 case "idle-connections":
-                    CommonMetrics.NpgsqlConnections.Labels("idle").Set(Convert.ToSingle(eventPayload["Count"]));
+                    CommonMetrics.NpgsqlConnections.Labels("idle").Set(Convert.ToSingle(eventPayload["Mean"]));
                     break;
                 case "busy-connections":
-                    CommonMetrics.NpgsqlConnections.Labels("busy").Set(Convert.ToSingle(eventPayload["Count"]));
+                    CommonMetrics.NpgsqlConnections.Labels("busy").Set(Convert.ToSingle(eventPayload["Mean"]));
                     break;
                 case "connection-pools":
-                    CommonMetrics.NpgsqlConnectionsPoolCount.Set(Convert.ToSingle(eventPayload["Count"]));
+                    CommonMetrics.NpgsqlConnectionsPoolCount.Set(Convert.ToSingle(eventPayload["Mean"]));
                     break;
                 case "bytes-written-per-second":
                     var written = Convert.ToSingle(eventPayload["Increment"]);
