@@ -266,6 +266,7 @@
         <ComponentRef Id="DIRTOINSTALLPath"/>
         <ComponentRef Id="cmpAppPool"/>
         <ComponentRef Id="SiteConfigPreserve"/>
+        <ComponentRef Id="WebConfigComponent"/>
         <ComponentRef Id="ServiceConfigPreserve"/>
         <ComponentRef Id="ExportServiceComponent"/>
     </ComponentGroup>
@@ -299,7 +300,16 @@
             <Component Id="SiteConfigPreserve"  Guid="035F0D52-04C7-4DB4-A9C7-C447F405CAAA" NeverOverwrite="yes">
                 <File Id="SiteConfigFile" Source="appsettings.production.ini" PatchIgnore="yes"/>
             </Component>
+            <!-- File structure has changed-->
+            <!-- To preserve Web.config not to be deleted on update from old file structure-->
+            <!-- Manual component with particular Guid is created-->
+            <!-- Should be excluded from harvested results-->
+            <!--{A8797EB0-B4A6-5793-BAA6-8DDAB4D6616B}-->
 
+            <Component Id="WebConfigComponent" Guid="{A8797EB0-B4A6-5793-BAA6-8DDAB4D6616B}" >
+                <File Id="WebConfigFile" Source="$(var.HarvestDir)\Site\Web.config" />
+            </Component>
+          
         </Directory>
         <Directory Id="EXPORTSERVICEFOLDER" Name="ExportService">
             <!--creating components to track files to delete on uninstall-->
