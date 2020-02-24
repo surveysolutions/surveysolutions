@@ -63,6 +63,7 @@ namespace WB.UI.Headquarters
                     c.AddIniFile("appsettings.cloud.ini", true, true);
                     c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
                     c.AddIniFile("appsettings.Production.ini", true, true);
+                    c.AddEnvironmentVariables("HQ_");
                     c.AddCommandLine(args);
 
                     if(hostingContext.HostingEnvironment.IsDevelopment())
