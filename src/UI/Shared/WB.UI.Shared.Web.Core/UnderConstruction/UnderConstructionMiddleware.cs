@@ -20,7 +20,8 @@ namespace WB.UI.Shared.Web.UnderConstruction
         {
             if (underConstructionInfo.Status != UnderConstructionStatus.Finished)
             {
-                if (!context.Request.Path.Value.StartsWith("/UnderConstruction"))
+                if (!context.Request.Path.StartsWithSegments("/UnderConstruction")
+                && !context.Request.Path.StartsWithSegments("/.hc"))
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.ServiceUnavailable;
                     context.Response.Headers.Add("Retry-After", "30");
