@@ -9,6 +9,7 @@ using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -293,6 +295,10 @@ namespace WB.UI.Headquarters
                 options.Password.RequiredLength = passwordOptions.RequiredLength;
                 options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
             });
+
+            services.AddHealthChecks()
+                .AddCheck<HeadquartersStartupCheck>("under_construction_check", HealthStatus.Unhealthy)
+                .AddCheck<DatabaseConnectionCheck>("database_connection_check");
         }
 
         private static void AddCompression(IServiceCollection services)
@@ -388,10 +394,14 @@ namespace WB.UI.Headquarters
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapVersionEndpoint();
+                
+                endpoints.MapHealthChecks(".hc", new HealthCheckOptions
+                {
+                    AllowCachingResponses = false
+                });
                 endpoints.MapDefaultControllerRoute();
 
-                endpoints.MapHub<WebInterview>("interview",
-                    options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
+                endpoints.MapHub<WebInterview>("interview");
             });
         }
 
