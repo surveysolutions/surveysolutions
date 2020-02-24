@@ -58,7 +58,6 @@ namespace WB.UI.Headquarters
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureAppConfiguration((hostingContext, c) =>
                 {
-                    c.Sources.Clear();
                     c.AddIniFile("appsettings.ini", false, true);
                     c.AddIniFile("appsettings.DEV_DEFAULTS.ini", true, true);
                     c.AddIniFile("appsettings.cloud.ini", true, true);
