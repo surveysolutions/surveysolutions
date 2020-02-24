@@ -58,6 +58,7 @@ using WB.UI.Headquarters.Metrics;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.UnderConstruction;
@@ -337,7 +338,7 @@ namespace WB.UI.Headquarters
             InitModules(env);
 
             app.UseMetrics(Configuration);
-
+            
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -386,6 +387,7 @@ namespace WB.UI.Headquarters
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapVersionEndpoint();
                 endpoints.MapDefaultControllerRoute();
 
                 endpoints.MapHub<WebInterview>("interview",
