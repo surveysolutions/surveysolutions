@@ -527,6 +527,9 @@ export default {
                 },
                 deferLoading: 0,
                 order: [[defaultSortIndex, 'desc']],
+                columnDefs: [
+                    { 'width': '30px', 'targets': 0 },
+                ],
                 columns,
                 ajax: {url: this.config.api.assignments, type: 'GET'},
                 select: {
