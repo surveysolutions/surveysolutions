@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Prometheus;
 using Serilog;
@@ -205,6 +206,7 @@ namespace WB.UI.Headquarters
             {
                 //j.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
                 j.SerializerSettings.Converters.Add(new StringEnumConverter());
+                j.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
 
             services.AddDistributedMemoryCache();
