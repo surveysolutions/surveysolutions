@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace WB.Infrastructure.Native.Monitoring
 {
@@ -30,9 +31,13 @@ namespace WB.Infrastructure.Native.Monitoring
             return this;
         }
 
+        public IEnumerable<string[]> AllLabels => this.counter.GetAllLabelValues();
+        public double Value => this.labels == null ? this.counter.Value : this.counter.Labels(labels).Value;
+
         public interface ICounter
         {
             void Inc(double amount = 1);
+            double Value { get; }
         }
     }
 }

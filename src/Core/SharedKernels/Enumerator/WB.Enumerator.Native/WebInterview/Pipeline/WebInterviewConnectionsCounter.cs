@@ -19,7 +19,7 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
         public Task OnDisconnected(Hub hub, Exception exception)
         {
             var mode = GetMode(hub);
-            CommonMetrics.WebInterviewConnection.Labels("close", mode).Inc();
+            CommonMetrics.WebInterviewConnection.Labels("closed", mode).Inc();
             return Task.CompletedTask;
         }
 

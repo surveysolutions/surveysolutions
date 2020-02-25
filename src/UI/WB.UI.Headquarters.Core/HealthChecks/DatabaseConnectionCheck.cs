@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.HealthChecks
                 return HealthCheckResult.Unhealthy("Error during DB call", e);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy("Connection to Database completed");
         }
     }
 }

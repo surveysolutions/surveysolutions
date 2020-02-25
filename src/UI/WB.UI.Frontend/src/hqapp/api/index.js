@@ -12,15 +12,15 @@ class QuestionnaireApi {
     async List() {
         const result = []
         let offset = 1
-        
-        while(offset > 0){
-            const response = await this.http.get(this.base, { params: { limit: 40, offset}})
+
+        while (offset > 0) {
+            const response = await this.http.get(this.base, { params: { limit: 40, offset } })
             const data = response.data
             offset = data.Offset + 1
-            
+
             data.Questionnaires.forEach(q => result.push(q))
 
-            if(data.Questionnaires == null || data.Questionnaires.length == 0) break
+            if (data.Questionnaires == null || data.Questionnaires.length == 0) break
         }
 
         return result
@@ -28,7 +28,7 @@ class QuestionnaireApi {
 
     Delete() {
         var self = this
-        return this.http.post('api/QuestionnairesApi/DeleteQuestionnaire', 
+        return this.http.post('api/QuestionnairesApi/DeleteQuestionnaire',
             { questionnaireId: self.questionnaireId, version: self.version })
     }
 
@@ -64,7 +64,7 @@ class MapsReport {
         this.http = http
     }
 
-    async GpsQuestionsByQuestionnaire(questionnaireId, version){ 
+    async GpsQuestionsByQuestionnaire(questionnaireId, version) {
         return await this.http.get(`api/ReportDataApi/QuestionInfo/${questionnaireId}?version=${version}`)
     }
 
@@ -73,7 +73,7 @@ class MapsReport {
     }
 
     async InteriewSummaryUrl(interviewId) {
-        var response = await this.http.post('api/InterviewApi/InterviewSummaryForMapPoint', 
+        var response = await this.http.post('api/InterviewApi/InterviewSummaryForMapPoint',
             {
                 interviewId,
             })
@@ -87,7 +87,7 @@ class MapsReport {
 }
 
 class Users {
-    constructor(http){
+    constructor(http) {
         this.http = http
     }
 
@@ -103,7 +103,7 @@ class Users {
 }
 
 class Reports {
-    constructor(http, basePath){
+    constructor(http, basePath) {
         this.http = http
         this.basePath = basePath
     }
@@ -116,7 +116,7 @@ class Reports {
         return new MapsReport(this.http)
     }
 
-    Chart({questionnaireId, version, from, to}) {
+    Chart({ questionnaireId, version, from, to }) {
         return this.http.post('api/ReportDataApi/ChartStatistics', {
             templateId: questionnaireId,
             templateVersion: version,
@@ -144,7 +144,7 @@ class AssignmentsApi {
     setAudioSettings(assignmentId, isEnabled) {
         var url = `${this.base}/${assignmentId}/recordAudio`
 
-        return this.http.patch(url,  {enabled: isEnabled})
+        return this.http.patch(url, { enabled: isEnabled })
     }
 
     async quantitySettings(assignmentId) {
@@ -155,7 +155,7 @@ class AssignmentsApi {
 
         return responseData
     }
-    
+
     changeQuantity(assignmentId, targetQuantity) {
         var url = `${this.base}/${assignmentId}/changeQuantity`
         return this.http({
@@ -187,7 +187,7 @@ class WebInterviewSettingsApi {
 
     updateEmailTemplate(questionnaireId, type, subject, message, passwordDescription, linkText) {
         var url = `${this.base}/${questionnaireId}/emailTemplate`
-        return this.http.post(url, { type: type, subject: subject, message: message, passwordDescription: passwordDescription, linkText:linkText })
+        return this.http.post(url, { type: type, subject: subject, message: message, passwordDescription: passwordDescription, linkText: linkText })
     }
 
     updatePageMessage(questionnaireId, titleType, titleText, messageType, messageText) {
@@ -205,14 +205,14 @@ class WebInterviewSettingsApi {
         return this.http.post(url, { isEnabled: isEnabled });
     }*/
 
-    updateAdditionalSettings(questionnaireId, 
-        isEnabledSpamProtection, 
+    updateAdditionalSettings(questionnaireId,
+        isEnabledSpamProtection,
         reminderAfterDaysIfNoResponse,
         reminderAfterDaysIfPartialResponse,
         singleResponse) {
         var url = `${this.base}/${questionnaireId}/additionalSettings`
-        return this.http.post(url, { 
-            spamProtection: isEnabledSpamProtection, 
+        return this.http.post(url, {
+            spamProtection: isEnabledSpamProtection,
             reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse,
             reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse,
             singleResponse: singleResponse,
@@ -245,7 +245,7 @@ class ExportSettings {
         return this.http.get(`${this.base}/ExportSettings`)
     }
 
-    regenPassword(){
+    regenPassword() {
         return this.http.post(`${this.base}/RegeneratePassword`)
     }
 }
@@ -265,6 +265,14 @@ class ControlPanel {
     getApkInfos() {
         return this.http.get(`${this.base}/AppUpdates`)
     }
+
+    getHealthResult() {
+        return this.http.get(`${this.base}/GetHealthResult`)
+    }
+
+    getMetricsState() {
+        return this.http.get(`${this.base}/GetMetricsState`)
+    }
 }
 
 class AdminSettings {
@@ -277,17 +285,18 @@ class AdminSettings {
         return this.http.get(`${this.base}/GlobalNoticeSettings`)
     }
     setGlobalNotice(val) {
-        return this.http.post(`${this.base}/GlobalNoticeSettings`, {GlobalNotice: val})
+        return this.http.post(`${this.base}/GlobalNoticeSettings`, { GlobalNotice: val })
     }
     getProfileSettings() {
         return this.http.get(`${this.base}/ProfileSettings`)
     }
     setProfileSettings(allowInterviewerUpdateProfile) {
-        return this.http.post(`${this.base}/ProfileSettings`, {allowInterviewerUpdateProfile: allowInterviewerUpdateProfile})
+        return this.http.post(`${this.base}/ProfileSettings`, { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile })
     }
-    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled){
-        return this.http.post(`${this.base}/InterviewerSettings`, 
-            { interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled, 
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled) {
+        return this.http.post(`${this.base}/InterviewerSettings`,
+            {
+                interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
                 notificationsEnabled: isDeviceNotificationsEnabled,
             })
     }
@@ -298,7 +307,7 @@ class AdminSettings {
         return this.http.get(`${this.base}/WebInterviewSettings`)
     }
     setWebInterviewSettings(allowEmails) {
-        return this.http.post(`${this.base}/WebInterviewSettings`, {allowEmails: allowEmails})
+        return this.http.post(`${this.base}/WebInterviewSettings`, { allowEmails: allowEmails })
     }
 }
 
@@ -307,7 +316,7 @@ class HttpUtil {
         var name = 'CSRF-TOKEN='
         var decodedCookie = decodeURIComponent(document.cookie)
         var ca = decodedCookie.split(';')
-        for(var i = 0; i <ca.length; i++) {
+        for (var i = 0; i < ca.length; i++) {
             var c = ca[i]
             while (c.charAt(0) == ' ') {
                 c = c.substring(1)
@@ -360,7 +369,7 @@ class HqApiClient {
 
 /*  the Plugin */
 export default {
-    install: function(vue) {
+    install: function (vue) {
         const instance = new HqApiClient(vue.$config.basePath)
 
         // /*  expose a global API method  */
