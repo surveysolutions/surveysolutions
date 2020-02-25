@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("{id:guid}/{version:long?}")]
         [Authorize(Roles = "ApiUser, Administrator")]
-        public QuestionnaireApiView Questionnaires(Guid id, long? version = null, int limit = 10, int offset = 1)
+        public QuestionnaireApiView Questionnaires(Guid id, [FromRoute]long? version = null, int limit = 10, int offset = 1)
         {
             var input = new QuestionnaireBrowseInputModel
             {
