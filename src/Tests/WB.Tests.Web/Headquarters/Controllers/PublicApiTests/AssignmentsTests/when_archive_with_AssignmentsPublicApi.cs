@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_return_404_for_non_existing_assignment()
         {
-            var result = this.controller.ChangeQuantity(101, null);
+            var result = this.controller.ChangeQuantity(101, -1);
             Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
         }
 
