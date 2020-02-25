@@ -234,11 +234,8 @@
                         id="newQuantity"
                         placeholder="1"
                         :disabled="!canEditQuantity"/>
-
-                    <p
-                        v-for="error in errors.collect('editedQuantity')"
-                        :key="error"
-                        class="text-danger">{{error}}</p>
+                    <span
+                        class="text-danger">{{ errors.first('editedQuantity') }}</span>                    
                 </div>
             </form>
             <div class="modal-footer">
@@ -258,7 +255,7 @@
 
 <script>
 import * as toastr from 'toastr'
-import { isEqual, map, join, assign, findIndex } from 'lodash'
+import { isEqual, map, join, assign, findIndex, includes } from 'lodash'
 import moment from 'moment'
 import {DateFormats} from '~/shared/helpers'
 
