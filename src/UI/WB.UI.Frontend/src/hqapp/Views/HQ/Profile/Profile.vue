@@ -3,7 +3,7 @@
     <HqLayout :hasFilter="false"
         :hasRow="false"
         :mainClass="'enumerators'">
-        <div slot="headers">
+        <template slot="headers">
             <ol class="breadcrumb"
                 v-if="!this.$config.model.authorizedUser.isInterviewer">
                 <li>
@@ -12,8 +12,7 @@
                 </li>
             </ol>
             <h1>
-                <span
-                    v-if="this.$config.model.fullModel.isArchived"
+                <span v-if="this.$config.model.fullModel.isArchived"
                     class="badge">{{$t('Common.Archived')}}</span>
                 {{$t('Pages.InterviewerProfile_AssignedToFormat', { interviewer: this.$config.model.fullModel.interviewerName, supervisor: this.$config.model.fullModel.supervisorName}) }}
             </h1>
@@ -31,12 +30,12 @@
                         v-if="!this.$config.model.fullModel.isArchived"
                         :href="this.$config.model.api.manageUrl">{{$t('Pages.InterviewerProfile_Info')}}</a>
                     <form
-                        v-if="this.$config.model.fullModel.isArchived && $config.model.fullModel.isHeadquarters"
-                        :action="this.$config.model.api.unarhiveUrl"
+                        v-if="this.$config.model.fullModel.isArchived && $config.model.authorizedUser.isHeadquarters"
                         method="post">
                         <input class="btn btn-success"
-                            type="submit"
-                            :value="$t('Pages.Unarchive')" />
+                            type="button"
+                            :value="$t('Pages.Unarchive')" 
+                            @click="unArchive"/>
                     </form>
                 </li>
                 <li v-if="!this.$config.model.authorizedUser.isInterviewer">
@@ -59,7 +58,7 @@
                         :src="this.$config.model.fullModel.qrCodeAsBase64String"/>
                 </a>
             </figure>
-        </div>
+        </template>
         <div class="row">
             <div class="col-sm-12">
                 <div class="interviews-information clearfix">
@@ -512,6 +511,12 @@ export default {
         this.initializeTrafficUsage()
     },
     methods: {
+        async unArchive() {
+            const response = await this.$http.patch(this.$config.model.api.unarhiveUrl)
+            if(response.status == 200) {
+                window.location.reload()
+            }
+        },
         formatDate(d) {
             return moment.utc(d).format(DateFormats.dateTime)
         },
