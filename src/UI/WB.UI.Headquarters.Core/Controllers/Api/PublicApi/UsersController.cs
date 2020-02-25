@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
@@ -104,8 +104,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("users/{id}/archive")]
         public async Task<ActionResult> Archive(string id)
         {
-            Guid userGuid;
-            if (!Guid.TryParse(id, out userGuid))
+            if (!Guid.TryParse(id, out var userGuid))
             {
                 return this.BadRequest();
             }
@@ -117,7 +116,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return StatusCode((int) HttpStatusCode.NotAcceptable);
+                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
             if (user.IsSupervisor())
@@ -156,7 +155,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return StatusCode((int) HttpStatusCode.NotAcceptable);
+                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
             await this.userManager.UnarchiveUsersAsync(new[] { userGuid });
@@ -177,7 +176,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             DateTime startDate = start ?? DateTime.UtcNow.AddDays(-7);
             DateTime endDate = end ?? startDate.AddDays(7);
 
-            var records = auditLogService.GetRecords(id, startDate, endDate, showErrorMessage: false);
+            var records = auditLogService.GetRecords(id, startDate, endDate);
             return records.Select(record => new AuditLogRecordApiView()
             {
                 Time = record.Time,
