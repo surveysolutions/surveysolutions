@@ -1,4 +1,9 @@
-﻿namespace WB.Infrastructure.Native.Monitoring
+﻿using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using Prometheus;
+
+namespace WB.Infrastructure.Native.Monitoring
 {
     public static class CommonMetrics
     {
