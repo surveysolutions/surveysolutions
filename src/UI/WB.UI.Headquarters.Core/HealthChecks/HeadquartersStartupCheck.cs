@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.HealthChecks
         {
             if (underConstructionInfo.Status == UnderConstructionStatus.Finished)
             {
-                return Task.FromResult(HealthCheckResult.Healthy());
+                return Task.FromResult(HealthCheckResult.Healthy("All services initialized"));
             }
 
             if (underConstructionInfo.Status == UnderConstructionStatus.Error)
