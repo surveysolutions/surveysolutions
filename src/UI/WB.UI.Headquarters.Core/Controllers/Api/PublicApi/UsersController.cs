@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
