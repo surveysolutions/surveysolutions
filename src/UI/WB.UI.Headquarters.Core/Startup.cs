@@ -297,7 +297,9 @@ namespace WB.UI.Headquarters
             });
 
             services.AddHealthChecks()
-                .AddCheck<HeadquartersStartupCheck>("under_construction_check", HealthStatus.Unhealthy)
+                .AddCheck<HeadquartersStartupCheck>("under_construction_check", HealthStatus.Unhealthy, tags: new[] {"ready"})
+                .AddCheck<ExportServiceCheck>("export_service_check")
+                .AddCheck<BrokenPackagesCheck>("broken_packages_check")
                 .AddCheck<DatabaseConnectionCheck>("database_connection_check");
         }
 

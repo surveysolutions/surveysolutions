@@ -1,4 +1,6 @@
-﻿namespace WB.Infrastructure.Native.Monitoring
+﻿using System.Collections.Generic;
+
+namespace WB.Infrastructure.Native.Monitoring
 {
     public class Gauge : Gauge.IGauge
     {
@@ -10,7 +12,9 @@
             this.gauge = Prometheus.Metrics.CreateGauge(name, help, labelNames);
         }
 
-        public double Value => this.gauge.Value;
+        public IEnumerable<string[]> AllLabels => this.gauge.GetAllLabelValues();
+
+        public double Value => this.labels == null ? this.gauge.Value : this.gauge.Labels(labels).Value;
 
         public void Inc(double amount = 1)
         {
@@ -59,6 +63,7 @@
             void Inc(double amount = 1);
             void Dec(double amount = 1);
             void Set(double amount);
+            double Value { get; }
         }
     }
 }
