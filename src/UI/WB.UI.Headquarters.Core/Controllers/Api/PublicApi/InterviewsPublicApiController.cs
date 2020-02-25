@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
@@ -191,7 +192,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("{id:guid}/comment-by-variable/{variable}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
-        public ActionResult CommentByVariable(Guid id, string variable, RosterVector rosterVector, string comment)
+        public ActionResult CommentByVariable(Guid id, [Required]string variable, int[] rosterVector, [Required]string comment)
         {
             var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
 
@@ -216,7 +217,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("{id:guid}/comment/{questionId}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
-        public ActionResult CommentByIdentity(Guid id, string questionId, string comment)
+        public ActionResult CommentByIdentity(Guid id, [Required]string questionId, [Required]string comment)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
