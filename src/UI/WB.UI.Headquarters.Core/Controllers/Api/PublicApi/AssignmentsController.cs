@@ -27,6 +27,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Exceptions;
@@ -418,7 +419,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/changeQuantity")]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
-        public ActionResult<AssignmentDetails> ChangeQuantity(int id, [FromBody] int? quantity)
+        public ActionResult<AssignmentDetails> ChangeQuantity(int id, [FromBody] int quantity)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
@@ -426,14 +427,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
-            if (!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
+            if (assignment.WebMode == true)
                 return StatusCode(StatusCodes.Status406NotAcceptable, Assignments.WebMode);
 
             commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, quantity));
             this.auditLog.AssignmentSizeChanged(id, quantity);
 
             var changedAssignment = assignmentsStorage.GetAssignment(id);
-            return this.mapper.Map<AssignmentDetails>(changedAssignment);
+            var assignmentDetails = this.mapper.Map<AssignmentDetails>(changedAssignment);
+            assignmentDetails.Quantity = quantity; // quantity changed in other transaction and is not visible from this unit of work.
+            return assignmentDetails;
         }
 
         /// <summary>

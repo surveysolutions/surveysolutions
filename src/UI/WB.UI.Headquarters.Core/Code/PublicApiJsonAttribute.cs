@@ -1,5 +1,4 @@
 ﻿using System.Buffers;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -9,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.UI.Shared.Web.Controllers;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Headquarters.Code
 {
     public class PublicApiJsonAttribute : ActionFilterAttribute
     {
