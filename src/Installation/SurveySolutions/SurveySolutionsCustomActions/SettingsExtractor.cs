@@ -29,7 +29,8 @@ namespace SurveySolutionsCustomActions
             {
                 ConnectionString = navigator.SelectSingleNode("/configuration/connectionStrings/add/@connectionString")?.Value,
                 BaseURL = navigator.SelectSingleNode("/configuration/appSettings/add[@key='BaseUrl']/@value")?.Value,
-                TenantName = navigator.SelectSingleNode("/configuration/appSettings/add[@key='Storage.S3.Prefix']/@value")?.Value
+                TenantName = navigator.SelectSingleNode("/configuration/appSettings/add[@key='Storage.S3.Prefix']/@value")?.Value,
+                DesignerAddress = navigator.SelectSingleNode("/configuration/appSettings/add[@key='DesignerAddress']/@value")?.Value
             };
 
             return config;
