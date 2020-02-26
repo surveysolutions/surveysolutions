@@ -11,7 +11,7 @@ using WB.UI.Headquarters.Configs;
 
 namespace WB.UI.Headquarters.Metrics
 {
-    public static class UseExtensions
+    public static class UseMetricsExtensions
     {
         public static void AddMetrics(this IServiceCollection services)
         {
@@ -30,6 +30,8 @@ namespace WB.UI.Headquarters.Metrics
 
             MetricsRegistry.Instance.RegisterOnDemandCollectors(collectors.ToArray());
 
+            app.UseMiddleware<HeadquartersHttpMetricsMiddleware>();
+          
             if (metricsConfig.UseMetricsEndpoint)
             {
                 app.UseMetricServer();

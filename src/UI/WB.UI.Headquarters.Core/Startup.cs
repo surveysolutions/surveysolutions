@@ -345,8 +345,6 @@ namespace WB.UI.Headquarters
 
             InitModules(env);
 
-            app.UseMetrics(Configuration);
-            
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -357,6 +355,9 @@ namespace WB.UI.Headquarters
                     }
                 }
             });
+
+            // make sure we do not track static files requests
+            app.UseMetrics(Configuration);
 
             app.UseSerilogRequestLogging();
             app.UseUnderConstruction();
