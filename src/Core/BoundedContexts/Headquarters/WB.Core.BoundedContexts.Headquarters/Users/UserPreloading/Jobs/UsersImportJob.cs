@@ -2,61 +2,64 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.Infrastructure.Domain;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 {
     [DisallowConcurrentExecution]
     internal class UsersImportJob : IJob
     {
-        private readonly IServiceLocator serviceLocator;
-        private readonly ILogger logger;
+        private readonly IInScopeExecutor inScopeExecutor;
+        private readonly ILogger<UsersImportJob> logger;
+        private readonly IUserImportService userImportService;
         private readonly ISystemLog systemLog;
 
-        public UsersImportJob(IServiceLocator serviceLocator, ILogger logger, ISystemLog systemLog)
+        public UsersImportJob(IInScopeExecutor inScopeExecutor, 
+            ILogger<UsersImportJob> logger, 
+            IUserImportService userImportService,
+            ISystemLog systemLog)
         {
-            this.serviceLocator = serviceLocator;
+            this.inScopeExecutor = inScopeExecutor;
             this.logger = logger;
+            this.userImportService = userImportService;
             this.systemLog = systemLog;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            logger.Info("User import job: Started");
-
             var sw = new Stopwatch();
             sw.Start();
 
             await ImportUsersAsync();
 
             sw.Stop();
-            logger.Info($"User import job: Finished. Elapsed time: {sw.Elapsed}");
+            logger.LogInformation("User import job: Finished. Elapsed time: {elapsed}", sw.Elapsed);
         }
 
         private async Task ImportUsersAsync()
         {
             try
             {
-                var userImportService = this.serviceLocator.GetInstance<IUserImportService>();
-
                 var userToImport = userImportService.GetUserToImport();
                 if (userToImport == null) return;
 
                 do
                 {
-                    await this.CreateUserOrUnarchiveAndUpdateAsync(userToImport);
+                    await this.inScopeExecutor.ExecuteAsync(async (serviceLocator) =>
+                    {
+                        await CreateUserOrUnarchiveAndUpdateAsync(userToImport, serviceLocator);
 
-                    userImportService.RemoveImportedUser(userToImport);
+                        userImportService.RemoveImportedUser(userToImport);
 
-                    userToImport = userImportService.GetUserToImport();
-
+                        userToImport = userImportService.GetUserToImport();
+                    });
                 } while (userToImport != null);
 
                 var completeStatus = userImportService.GetImportCompleteStatus();
@@ -66,11 +69,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
             }
             catch (Exception ex)
             {
-                logger.Error($"User import job: FAILED. Reason: {ex.Message} ", ex);
+                logger.LogError(ex, "User import job: FAILED");
             }
         }
 
-        private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate)
+        private static async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate, IServiceLocator serviceLocator)
         {
             var userManager = serviceLocator.GetInstance<UserManager<HqUser>>();
             var userRepository = serviceLocator.GetInstance<IUserRepository>();

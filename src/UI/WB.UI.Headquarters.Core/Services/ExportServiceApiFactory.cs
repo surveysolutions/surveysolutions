@@ -32,12 +32,6 @@ namespace WB.UI.Headquarters.Services
 
         public IExportServiceApi CreateClient()
         {
-            string key = null;
-
-            //var localRunner = ctx.Get<ILocalExportServiceRunner>();
-            //localRunner.Run();
-            key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
-
             var baseUrl = headquarterOptions.Value.BaseUrl;
 
             if (string.IsNullOrWhiteSpace(baseUrl))
@@ -51,6 +45,8 @@ namespace WB.UI.Headquarters.Services
                     baseUrl = $"{request.Scheme}://{request.Host}{"/"}";
                 }
             }
+
+            string key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
 
             var http = new HttpClient
             {

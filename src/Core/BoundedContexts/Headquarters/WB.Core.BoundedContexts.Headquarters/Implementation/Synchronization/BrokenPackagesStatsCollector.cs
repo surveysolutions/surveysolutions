@@ -77,15 +77,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
         }
         
-        private static readonly Gauge BrokenPackagesCount = new Gauge(
+        public static readonly Gauge BrokenPackagesCount = new Gauge(
             "wb_broken_packages_count",
             "Amount of broken packages on server", "type");
 
-        private static readonly Gauge DatabaseTableRowsCount = new Gauge(
+        public static readonly Gauge DatabaseTableRowsCount = new Gauge(
             "wb_table_estimated_rows_count",
             "Amount of rows in table", "table");
 
-        private static readonly Gauge DatabaseTableSize = new Gauge(
+        public static readonly Gauge DatabaseTableSize = new Gauge(
             "wb_table_estimated_size_bytes",
             "Size of the table in bytes", "table");
     }
