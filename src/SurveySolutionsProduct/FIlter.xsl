@@ -9,7 +9,7 @@
         </xsl:copy>
     </xsl:template>
 
-    <!--Match and ignore .exe files-->
+    <!--Match and ignore WB.Services.Export.Host.exe files-->
     <xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Source, 'WB.Services.Export.Host.exe')]" use="@Id"/>
     <xsl:template match="wix:Component[key('exe-search', @Id)]"/>
     <xsl:template match="wix:ComponentRef[key('exe-search', @Id)]"/>
@@ -18,4 +18,10 @@
     <xsl:key name="config-search" match="wix:Component[contains(wix:File/@Source, 'Web.config')]" use="@Id"/>
     <xsl:template match="wix:Component[key('config-search', @Id)]"/>
     <xsl:template match="wix:ComponentRef[key('config-search', @Id)]"/>
+
+    <!--Match and ignore .apk files-->
+    <xsl:key name="config-search" match="wix:Component[contains(wix:File/@Source, '.apk')]" use="@Id"/>
+    <xsl:template match="wix:Component[key('config-search', @Id)]"/>
+    <xsl:template match="wix:ComponentRef[key('config-search', @Id)]"/>
+
 </xsl:stylesheet>

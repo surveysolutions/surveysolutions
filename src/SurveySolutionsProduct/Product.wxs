@@ -267,6 +267,9 @@
         <ComponentRef Id="cmpAppPool"/>
         <ComponentRef Id="SiteConfigPreserve"/>
         <ComponentRef Id="WebConfigComponent"/>
+        <ComponentRef Id="SupervisorTabletAppComponent"/>
+        <ComponentRef Id="InterviewerTabletAppFileComponent"/>
+        <ComponentRef Id="InterviewerExtTabletAppFileComponent"/>
         <ComponentRef Id="ServiceConfigPreserve"/>
         <ComponentRef Id="ExportServiceComponent"/>
     </ComponentGroup>
@@ -309,8 +312,18 @@
             <Component Id="WebConfigComponent" Guid="{A8797EB0-B4A6-5793-BAA6-8DDAB4D6616B}" >
                 <File Id="WebConfigFile" Source="$(var.HarvestDir)\Site\Web.config" />
             </Component>
-          
-        </Directory>
+            <Directory Id="ClientDir" Name="Client" ><!--ComponentGuidGenerationSeed="3D5CE555EFCA7A55E056D72F05ACC3EA"-->
+                <Component Id="SupervisorTabletAppComponent" Guid="{6F925AE1-CEC5-5136-AFA1-AABF551E5CB4}" >
+                    <File Id="SupervisorTabletAppFile" Source="$(var.HarvestDir)\Site\Client\Supervisor.apk" />
+                </Component>
+                <Component Id="InterviewerTabletAppFileComponent" Guid="{351A10CC-06E0-5206-83DF-A303F81276C6}" >
+                    <File Id="InterviewerTabletAppFile" Source="$(var.HarvestDir)\Site\Client\WBCapi.apk" />
+                </Component>
+                <Component Id="InterviewerExtTabletAppFileComponent" Guid="{57CA85FE-D0B4-575D-9626-661C2211EC83}" >
+                    <File Id="InterviewerExtTabletAppFile" Source="$(var.HarvestDir)\Site\Client\WBCapi.Ext.apk" />
+                </Component>
+            </Directory>
+            </Directory>
         <Directory Id="EXPORTSERVICEFOLDER" Name="ExportService">
             <!--creating components to track files to delete on uninstall-->
             <Component Id="ServiceConfigPreserve" Guid="035F0D52-04C7-4DB4-A9C7-C447F405CAAB" NeverOverwrite="yes">
@@ -335,8 +348,12 @@
                         FirstFailureActionType='restart'
                         SecondFailureActionType='restart'
                         ThirdFailureActionType='restart'
-                        RestartServiceDelayInSeconds='30'
+                        RestartServiceDelayInSeconds='30' 
                         ResetPeriodInDays='1'/>
+                    <ServiceConfig 
+                        DelayedAutoStart="yes" 
+                        OnInstall="yes" 
+                        OnReinstall ="yes" />
                 </ServiceInstall>
                 <ServiceControl Id="ExportServiceControl"
                                 Name="SurveySolutionsExport"
