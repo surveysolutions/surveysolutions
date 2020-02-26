@@ -268,17 +268,53 @@ namespace WB.UI.Headquarters.Controllers.Api
             await MetricsRegistry.Update();
             var result = new List<MetricState>();
 
-            result.Add(new MetricState("Events count", BrokenPackagesStatsCollector.DatabaseTableRowsCount.Labels("events").Value.ToString()));
-            result.Add(new MetricState("Events size", BrokenPackagesStatsCollector.DatabaseTableSize.Labels("events").Value.Bytes().Humanize("0.00")));
+            var cpuUsage = await GetCpuUsage();
+            result.Add(new MetricState("CPU Usage", cpuUsage.ToStr("0.##%")));
             result.Add(new MetricState("Working Memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.00")));
 
-            var open = CommonMetrics.WebInterviewConnection.GetSummForLabels("open", "*");
-            var closed = CommonMetrics.WebInterviewConnection.GetSummForLabels("closed", "*");
-            result.Add(new MetricState("Web interview connections", (open - closed).ToString(CultureInfo.InvariantCulture)));
+            result.Add(new MetricState("Events count", BrokenPackagesStatsCollector.DatabaseTableRowsCount.Labels("events").Value.ToString("N0", CultureInfo.InvariantCulture)));
+            result.Add(new MetricState("Events size", BrokenPackagesStatsCollector.DatabaseTableSize.Labels("events").Value.Bytes().Humanize("0.00")));
+
+            // web interview
+            var connections = CommonMetrics.WebInterviewConnection.GetDiffForLabels(OpenConnectionsLabel, ClosedConnectionsLabel);
+            result.Add(new MetricState("Web interview connections", "connection".ToQuantity(connections)));
+
+            // npgsql
+            var idle = CommonMetrics.NpgsqlConnections.GetSummForLabels(IdleDbConnectionsLabel);
+            var busy = CommonMetrics.NpgsqlConnections.GetSummForLabels(BusyDbConnectionsLabel);
+
+            result.Add(new MetricState("Database connections", $"Busy: {busy}, Idle: {idle}"));
+
+            // ReSharper disable once UseStringInterpolation
+            result.Add(new MetricState("Database Data usage", string.Format("Read: {0}, Write: {1}",
+                CommonMetrics.NpgsqlDataCounter.GetSummForLabels(ReadDbdataLabel).Bytes().Humanize("0.00"),
+                CommonMetrics.NpgsqlDataCounter.GetSummForLabels(WriteDbdataLabel).Bytes().Humanize("0.00"))));
+         
             return result;
         }
 
-        public class MetricState
+        private async ValueTask<double> GetCpuUsage()
+        {
+            var process = Process.GetCurrentProcess();
+            var sw = Stopwatch.StartNew();
+            var time = process.TotalProcessorTime;
+            await Task.Delay(1000);
+            process.Refresh();
+            var time2 = process.TotalProcessorTime;
+            sw.Stop();
+
+            return (time2 - time).TotalSeconds / sw.Elapsed.TotalSeconds / Environment.ProcessorCount;
+        }
+
+        private static readonly string[] OpenConnectionsLabel = {"open"};
+        private static readonly string[] ClosedConnectionsLabel = { "closed" };
+        private static readonly string[] IdleDbConnectionsLabel = {"idle"};
+        private static readonly string[] BusyDbConnectionsLabel = { "busy" };
+        private static readonly string[] ReadDbdataLabel = {"read"};
+        private static readonly string[] WriteDbdataLabel = { "write" };
+        
+
+        public struct MetricState
         {
             public MetricState(string name, string value)
             {
