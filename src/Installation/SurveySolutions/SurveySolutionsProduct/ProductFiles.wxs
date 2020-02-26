@@ -3,6 +3,7 @@
     <Fragment>
         <DirectoryRef Id="INSTALLFILESFOLDER">
             <Directory Id="dirAC9381ECDA1BE1937C13321880076889" Name="ExportService" />
+            <Directory Id="dirBC2EE47B4B5C4027A43DC102365B0F4A" Name="Site" />
         </DirectoryRef>
     </Fragment>
     <Fragment>
@@ -11,6 +12,15 @@
                 <File Id="fil25D2DFE319EC4D2D13DDFD3D2EE36094" KeyPath="yes" Source="$(var.HarvestDir)\New Text Document.txt" />
             </Component>
             
+            
+            
+            
+            
         </ComponentGroup>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirBC2EE47B4B5C4027A43DC102365B0F4A">
+            <Directory Id="dirFC8F3DC338DF6CB3E24C13F12C969075" Name="Client" />
+        </DirectoryRef>
     </Fragment>
 </Wix>
