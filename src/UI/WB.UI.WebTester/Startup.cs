@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Shared.Web.Controllers;
+using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.Versions;
 using WB.UI.WebTester.Infrastructure;
@@ -124,6 +125,7 @@ namespace WB.UI.WebTester
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapVersionEndpoint();
                 endpoints.MapHealthChecks(".hc");
 
                 endpoints.MapDefaultControllerRoute();
