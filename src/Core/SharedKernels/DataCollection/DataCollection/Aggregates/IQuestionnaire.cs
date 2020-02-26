@@ -313,5 +313,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string ApplyMarkDownTransformation(string text);
 
         GeometryType? GetQuestionGeometryType(Guid questionId);
+        int GetEntityIdMapValue(Guid entityId);
     }
 }

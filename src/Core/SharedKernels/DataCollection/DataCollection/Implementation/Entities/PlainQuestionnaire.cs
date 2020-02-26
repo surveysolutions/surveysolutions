@@ -1916,5 +1916,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             return question.Properties.GeometryType;
         }
+
+        public int GetEntityIdMapValue(Guid entityId)
+        {
+            return innerDocument.EntitiesIdMap[entityId];
+        }
     }
 }
