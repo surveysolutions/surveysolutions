@@ -296,11 +296,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
-            var questionnaire = questionnaireStorage.GetQuestionnaireDocument(view.QuestionnaireId, view.QuestionnaireVersion);
-            var question = questionnaire.Find<DateTimeQuestion>(@event.Payload.QuestionId);
+            var questionnaire = questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(view.QuestionnaireId, view.QuestionnaireVersion), null);
+            var isTimestampQuestion = questionnaire.IsTimestampQuestion(@event.Payload.QuestionId);
 
             DateTime answer = @event.Payload.Answer;
-            if (question.IsTimestamp)
+            if (isTimestampQuestion)
             {
                 if (@event.Payload.OriginDate.HasValue)
                 {
@@ -310,7 +310,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
-                this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(answer, isTimestamp: question.IsTimestamp),
+                this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(answer, isTimestamp: isTimestampQuestion),
                     @event.Payload.RosterVector));
 
             return view;

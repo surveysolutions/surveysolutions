@@ -1,41 +1,49 @@
 ﻿using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 {
     internal class SurveyStatisticsReport : ISurveyStatisticsReport
     {
         private readonly IInterviewReportDataRepository interviewReportDataRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public SurveyStatisticsReport(IInterviewReportDataRepository interviewReportDataRepository)
+        public SurveyStatisticsReport(IInterviewReportDataRepository interviewReportDataRepository, IQuestionnaireStorage questionnaireStorage)
         {
             this.interviewReportDataRepository = interviewReportDataRepository;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
-        public ReportView GetReport(SurveyStatisticsReportInputModel input)
+        public ReportView GetReport(QuestionnaireIdentity questionnaireIdentity, SurveyStatisticsReportInputModel input)
         {
-            var question = input.Question;
+            var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            var questionType = questionnaire.GetQuestionType(input.QuestionId);
+
             ReportView reportView;
-            if (question.QuestionType == QuestionType.Numeric)
+            if (questionType == QuestionType.Numeric)
             {
                 var specialValuesData = this.interviewReportDataRepository.GetCategoricalReportData(
                     new GetCategoricalReportParams(
                         input.QuestionnaireId,
                         input.QuestionnaireVersion,
                         input.ShowTeamMembers,
-                        input.Question.PublicKey,
+                        input.QuestionId,
                         input.TeamLeadId,
-                        input.ConditionalQuestion?.PublicKey,
+                        input.ConditionalQuestionId,
                         input.Condition)
                 );
 
-                var categoricalData = new CategoricalReportViewBuilder(question.Answers, specialValuesData);
+                var questionOptions = questionnaire.GetOptionsForQuestion(input.QuestionId, null, null, null).ToList();
+                var categoricalData = new CategoricalReportViewBuilder(questionOptions, specialValuesData);
 
                 var numericalData = this.interviewReportDataRepository.GetNumericalReportData(
                     input.QuestionnaireId,input.QuestionnaireVersion,
-                    input.Question.PublicKey,
+                    input.QuestionId,
                     input.TeamLeadId,
                     input.ShowTeamMembers,
                     input.MinAnswer ?? Int64.MinValue, input.MaxAnswer ?? Int64.MaxValue);
@@ -45,14 +53,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 
                 reportView = numericReport.Merge(specialValuesReport);
             }
-            else if (input.Pivot && input.ConditionalQuestion != null)
+            else if (input.Pivot && input.ConditionalQuestionId.HasValue)
             {
                 var queryResult = this.interviewReportDataRepository.GetCategoricalPivotData(input.TeamLeadId, 
                     input.QuestionnaireId, input.QuestionnaireVersion,
-                    input.Question.PublicKey, input.ConditionalQuestion.PublicKey);
+                    input.QuestionId, input.ConditionalQuestionId.Value);
 
-                var report = new CategoricalPivotReportViewBuilder(input.Question, 
-                    input.ConditionalQuestion, 
+                var report = new CategoricalPivotReportViewBuilder(questionnaire,
+                    input.QuestionId,
+                    input.ConditionalQuestionId.Value, 
                     queryResult);
 
                 reportView = report.AsReportView();
@@ -64,12 +73,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                         input.QuestionnaireId, 
                         input.QuestionnaireVersion,
                         input.ShowTeamMembers,
-                        input.Question.PublicKey,
+                        input.QuestionId,
                         input.TeamLeadId, 
-                        input.Condition != null ? input.ConditionalQuestion?.PublicKey : null,
+                        input.Condition != null ? input.ConditionalQuestionId : null,
                         input.Condition));
 
-                var report = new CategoricalReportViewBuilder(question.Answers, queryResult);
+                var questionOptions = questionnaire.GetOptionsForQuestion(input.QuestionId, null, null, null).ToList();
+                var report = new CategoricalReportViewBuilder(questionOptions, queryResult);
                 reportView = report.AsReportView();
             }
 
