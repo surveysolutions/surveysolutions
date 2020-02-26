@@ -5,11 +5,15 @@
                 <div class="panel"
                     :class="panelStatus">
                     <div class="panel-heading">
-                        <h3>Health check results</h3>
+                        <h3 v-if="report == null">
+                            Waiting for health check
+                        </h3>
+                        <h3 v-else>
+                            Health status: {{report.status}}
+                        </h3>
                     </div>
                     <div class="panel-body">            
-                        <ul class="list-group"> 
-                        
+                        <ul class="list-group">                        
                             <a class="list-group-item"
                                 v-for="entry in entries"
                                 :key="entry.name"
@@ -30,7 +34,9 @@
                         <h3>Server status</h3>
                     </div>
                     <div class="panel-body">
-                        <ul class="list-group">                         
+                        <ul class="list-group">
+                            <li v-if="metrics.length == 0"
+                                class="list-group-item">Loading...</li>
                             <li class="list-group-item"
                                 v-for="metric in metrics"
                                 :key="metric.name">
@@ -51,6 +57,7 @@ export default {
         return {
             report: null,
             metrics: [],
+            errors: [],
         }
     },
     mounted() {
