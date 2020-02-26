@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +29,8 @@ namespace WB.UI.Headquarters.Code.Authentication
             {
                 opt.LoginPath = "/Account/LogOn";
                 opt.AccessDeniedPath = "/Error/401";
+                opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+
                 opt.ForwardDefaultSelector = ctx =>
                 {
                     if (ctx.Request.Headers.ContainsKey(HeaderNames.Authorization))
