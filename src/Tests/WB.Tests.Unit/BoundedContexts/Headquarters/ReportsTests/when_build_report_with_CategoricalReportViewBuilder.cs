@@ -4,6 +4,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
@@ -11,7 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
     [TestFixture]
     public class when_build_report_with_CategoricalReportViewBuilder
     {
-        private List<Answer> answers;
+        private List<CategoricalOption> answers;
         private List<GetCategoricalReportItem> rows;
         private readonly string firstTeamLead = Id.g1.ToString();
         private readonly string secondTeamLead = Id.g2.ToString();
@@ -29,11 +30,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
         [SetUp]
         public void Context()
         {
-            this.answers = new List<Answer>
+            this.answers = new List<CategoricalOption>
             {
-                Create.Entity.Answer("New York", answerNewYork),
-                Create.Entity.Answer("Washington", answerWashington),
-                Create.Entity.Answer("Rural", answerRural)
+                Create.Entity.CategoricalOption("New York", answerNewYork),
+                Create.Entity.CategoricalOption("Washington", answerWashington),
+                Create.Entity.CategoricalOption("Rural", answerRural)
             };
 
             GetCategoricalReportItem CreateRowItem(string teamLead, string responsible, int answer, long count)

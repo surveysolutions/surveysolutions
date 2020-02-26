@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
@@ -25,24 +26,21 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             public const int QA = 1; public const int Dev = 2;
         }
 
-        private IQuestion SexQuestion;
+        private IQuestionnaire questionnaire;
+        private Guid SexQuestion = Id.g1;
+        private Guid PositionQuestion = Id.g2;
 
-
-        private IQuestion PositionQuestion;
         public List<GetReportCategoricalPivotReportItem> GetPivotDataResponse { get; set; }
         private ReportView report;
 
         [OneTimeSetUp]
         public void Context()
         {
-            SexQuestion = PrepareQuestion(nameof(Sex),
-                (Sex.Male, nameof(Sex.Male)),
-                (Sex.Female, nameof(Sex.Female)));
-
-            PositionQuestion = PrepareQuestion(
-                nameof(Position),
-                (Position.Dev, nameof(Position.Dev)),
-                (Position.QA, nameof(Position.QA)));
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                PrepareQuestion(SexQuestion, nameof(Sex), (Sex.Male, nameof(Sex.Male)), (Sex.Female, nameof(Sex.Female))),
+                PrepareQuestion(PositionQuestion, nameof(Position), (Position.Dev, nameof(Position.Dev)), (Position.QA, nameof(Position.QA)))
+            );
+            questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
 
             GetPivotDataResponse = new List<GetReportCategoricalPivotReportItem>
             {
@@ -52,8 +50,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             };
 
             var builder = new CategoricalPivotReportViewBuilder(
-                columnQuestion: PositionQuestion, 
-                rowsQuestion: SexQuestion, 
+                questionnaire,
+                columnQuestionId: PositionQuestion, 
+                rowsQuestionId: SexQuestion, 
                 items: GetPivotDataResponse);
 
             this.report = builder.AsReportView();
@@ -86,8 +85,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
         {
             Assert.That(this.report.Columns[0], Is.EqualTo("variable"));
 
-            Assert.That(this.report.Columns[1], Is.EqualTo(PositionQuestion.Answers[0].AsColumnName()));
-            Assert.That(this.report.Columns[2], Is.EqualTo(PositionQuestion.Answers[1].AsColumnName()));
+            var options = questionnaire.GetOptionsForQuestion(PositionQuestion, null, null, null).ToList();
+            Assert.That(this.report.Columns[1], Is.EqualTo(options[0].AsColumnName()));
+            Assert.That(this.report.Columns[2], Is.EqualTo(options[1].AsColumnName()));
         }
         
         private void AssertExactlyOneRowInData(params object[] row)
@@ -107,18 +107,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
         private GetReportCategoricalPivotReportItem NewItem(int row, int column, long count)
             => Create.Entity.GetReportCategoricalPivotReportItem(row, column, count);
 
-        private static IQuestion PrepareQuestion(string name, params (int id, string text)[] answers)
+        private static IQuestion PrepareQuestion(Guid questionId, string name, params (int id, string text)[] answers)
         {
-            return Mock.Of<IQuestion>(q => 
-                q.StataExportCaption == name &&
-                q.Answers == answers
-                    .Select(a => new Answer
-                        {
-                            AnswerText = a.text, AnswerCode = a.id
-                        }
-                    )
-                    .ToList()
-            );
+            return Create.Entity.SingleOptionQuestion(questionId, 
+                variable: name, 
+                answers: answers.Select(a => new Answer
+                    {
+                        AnswerText = a.text,
+                        AnswerCode = a.id
+                    }
+                )
+                .ToList());
         }
     }
 }
