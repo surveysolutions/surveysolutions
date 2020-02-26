@@ -6,12 +6,14 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
@@ -203,12 +205,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="model"></param>
         /// <response code="400">User cannot be created</response>
-        /// <response code="200">Created user id</response>
+        /// <response code="200">User created</response>
         [HttpPost]
         [Route("users")]
-        [ProducesResponseType(400, Type = typeof(Dictionary<string, string>))]
-        public async Task<ActionResult> Register([FromBody]RegisterUserModel model)
+        public async Task<ActionResult<UserCreationResult>> Register([FromBody]RegisterUserModel model)
         {
+            var result = new UserCreationResult();
             if (ModelState.IsValid)
             {
                 var createdUserRole = model.Role;
@@ -241,7 +243,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     if (addResult.Succeeded)
                     {
                         this.systemLog.UserCreated(createdUserRole, model.UserName);
-                        return Ok(createdUser.Id);
+                        result.UserId = createdUser.Id.FormatGuid();
+                        return Ok(result);
                     }
                     else
                     {
@@ -262,7 +265,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }
             }
 
-            return BadRequest(ModelState);
+            foreach (var modelState in ModelState.Values) {
+                foreach (ModelError error in modelState.Errors) {
+                    result.Errors.Add(error.ErrorMessage);
+                }
+            }
+
+            return BadRequest(result);
         }
     }
 }
