@@ -29,7 +29,8 @@ namespace SurveySolutionsCustomActions
                 sb.AppendLine("[Apks]");
                 sb.AppendLine("ClientApkPath=Client");
                 sb.AppendLine("[Designer]");
-                sb.AppendLine("DesignerAddress = https://designer.mysurvey.solutions");
+                var designerAddress = config?.DesignerAddress ?? "https://designer.mysurvey.solutions";
+                sb.AppendLine("DesignerAddress={designerAddress}");
                 sb.AppendLine("[DataExport]");
                 sb.AppendLine("ExportServiceUrl=http://localhost:5000");
                 sb.AppendLine("[ConnectionStrings]");
@@ -64,6 +65,8 @@ namespace SurveySolutionsCustomActions
 
                 sb.AppendLine("Port=5000");
                 sb.AppendLine();
+                sb.AppendLine("[ExportSettings]");
+                sb.AppendLine("DirectoryPath=..\\Data_Site\\ExportServiceData");
                 sb.AppendLine("[ConnectionStrings]");
 
                 var config = new SettingsExtractor().GetPreviousConfiguration(session);
