@@ -69,8 +69,7 @@ namespace WB.Services.Export.Host
             }
 
             healthChecksBuilder
-                .AddCheck<EfCoreHealthCheck>("EF migrations")
-                .AddDbContextCheck<JobContext>("Database");
+                .AddCheck<EfCoreHealthCheck>("EF migrations");
 
             services.Configure(Configuration);
 
