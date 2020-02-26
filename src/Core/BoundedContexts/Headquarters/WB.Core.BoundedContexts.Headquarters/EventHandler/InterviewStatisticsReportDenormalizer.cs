@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 delete.AddRange(state.StatisticsReport.Where(row => 
                     row.RosterVector == identity.RosterVector.AsString() 
-                    && row.EntityId == questionnaire.EntitiesIdMap[identity.Id]));
+                    && row.EntityId == questionnaire.GetEntityIdMapValue(identity.Id)));
             }
 
             foreach (var item in delete)
@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                     foreach (var questionId in eligibleQuestionIds)
                     {
-                        yield return (rosterVector, questionnaire.EntitiesIdMap[questionId]);
+                        yield return (rosterVector, questionnaire.GetEntityIdMapValue(questionId));
                     }
                 }
             }
@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (!IsEligibleQuestion(questionnaire, questionId)) return;
             
             (int interviewId, string rosterVector, int entityId) key =
-                (state.Id, rv.AsString(), questionnaire.EntitiesIdMap[questionId]);
+                (state.Id, rv.AsString(), questionnaire.GetEntityIdMapValue(questionId));
 
             var entity = state.StatisticsReport.SingleOrDefault(x =>
                                       x.RosterVector == key.rosterVector
@@ -206,7 +206,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 var entity = summary.StatisticsReport.SingleOrDefault(x =>
                     x.RosterVector == identity.RosterVector.AsString()
-                    && x.EntityId == questionnaire.EntitiesIdMap[identity.Id]);
+                    && x.EntityId == questionnaire.GetEntityIdMapValue(identity.Id));
 
                 if(entity == null) continue;
                 
