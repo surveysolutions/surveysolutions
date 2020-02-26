@@ -7,8 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +21,11 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Sanitizer;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.PublicApi.Models.Statistics;
 using WB.UI.Headquarters.Code;
@@ -91,19 +89,19 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var questionsList = this.interviewReportDataRepository
                 .QuestionsForQuestionnaireWithData(questionnaireId, version);
             
-            string[] GetBreadcrumbs(IComposite entity, QuestionnaireDocument questionnaire)
+            string[] GetBreadcrumbs(Guid entityId, IQuestionnaire questionnaire)
             {
-                List<IGroup> parents = new List<IGroup>();
-                var parent = (IGroup)entity.GetParent();
-                while (parent != null && parent != questionnaire)
+                List<Guid> parents = new List<Guid>();
+                var parent = questionnaire.GetParentGroup(entityId);
+                while (parent != null)
                 {
-                    parents.Add(parent);
-                    parent = (IGroup)parent.GetParent();
+                    parents.Add(parent.Value);
+                    parent = questionnaire.GetParentGroup(parent.Value);
                 }
 
                 parents.Reverse();
 
-                return parents.Select(x => x.Title + (x.IsRoster ? @" * " : "")).ToArray();
+                return parents.Select(x => questionnaire.GetGroupTitle(x) + (questionnaire.IsRosterGroup(x) ? @" * " : "")).ToArray();
             }
 
             var parsedQuestionList = questionsList
@@ -117,29 +115,32 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 select g.OrderByDescending(o => o.identity.Version).First();
 
             return sortedList
-                .Select<(Guid questionId, QuestionnaireIdentity identity), (IQuestion q, QuestionnaireDocument doc)>(item =>
+                .Select<(Guid questionId, QuestionnaireIdentity identity), (Guid questionId, IQuestionnaire doc)>(item =>
                 {
-                    var doc = this.questionnaireStorage.GetQuestionnaireDocument(item.identity);
-                    return (doc.Find<IQuestion>(item.questionId), doc);
+                    var doc = this.questionnaireStorage.GetQuestionnaire(item.identity, null);
+                    return (item.questionId, doc);
                 })
-                .Select(item => new QuestionDto
+                .Select(item =>
                 {
-                    Answers = item.q.Answers.Select(a => new QuestionAnswerView
+                    var questionType = item.doc.GetQuestionType(item.questionId);
+
+                    return new QuestionDto
                     {
-                        Answer = (int)a.GetParsedValue(),
-                        Text = a.AnswerText,
-                        Column = a.AsColumnName()
-                    }).ToList(),
-                    Breadcrumbs = GetBreadcrumbs(item.q, item.doc),
-                    Id = item.q.PublicKey,
-                    Type = item.q.QuestionType.ToString(),
-                    VariableName = item.q.StataExportCaption,
-                    Label = item.q.VariableLabel,
-                    HasTotal = item.q.QuestionType == QuestionType.SingleOption
-                               || item.q.QuestionType == QuestionType.MultyOption,
-                    SupportConditions = item.q.QuestionType == QuestionType.SingleOption 
-                                        || item.q.QuestionType == QuestionType.MultyOption,
-                    QuestionText = item.q.QuestionText.RemoveHtmlTags().Replace(@"%rostertitle%", @"[...]")
+                        Answers = item.doc.GetOptionsForQuestion(item.questionId, null, null, null).Select(a => new QuestionAnswerView
+                        {
+                            Answer = a.Value,
+                            Text = a.Title,
+                            Column = a.AsColumnName()
+                        }).ToList(),
+                        Breadcrumbs = GetBreadcrumbs(item.questionId, item.doc),
+                        Id = item.questionId,
+                        Type = questionType.ToString(),
+                        VariableName = item.doc.GetQuestionVariableName(item.questionId),
+                        Label = item.doc.GetQuestionExportDescription(item.questionId),
+                        HasTotal = questionType == QuestionType.SingleOption || questionType == QuestionType.MultyOption,
+                        SupportConditions = questionType == QuestionType.SingleOption || questionType == QuestionType.MultyOption,
+                        QuestionText = item.doc.GetQuestionTitle(item.questionId).RemoveHtmlTags().Replace(@"%rostertitle%", @"[...]")
+                    };
                 })
                 .ToList();
         }
@@ -210,7 +211,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return ReturnEmptyResult(query);
             }
 
-            QuestionnaireDocument questionnaire;
+            QuestionnaireIdentity questionnaireIdentity;
 
             if (query.Version == null)
             {
@@ -218,53 +219,50 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     .Where(q => q.QuestionnaireId.FormatGuid() == query.QuestionnaireId)
                     .ToList();
 
-                var questionnaireId = allQuestionnaires.OrderByDescending(q => q.Version).First();
-
-                questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId);
+                questionnaireIdentity = allQuestionnaires.OrderByDescending(q => q.Version).First();
             }
             else
             {
-                questionnaire =
-                    this.questionnaireStorage.GetQuestionnaireDocument(Guid.Parse(query.QuestionnaireId),
-                        query.Version.Value);
-
+                questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse(query.QuestionnaireId), query.Version.Value);
             }
 
-            IQuestion GetQuestionByGuidOrStataCaption(string inputVar)
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            Guid? GetQuestionIdByGuidOrStataCaption(string inputVar)
             {
                 return Guid.TryParse(inputVar, out Guid entityId)
-                    ? questionnaire.Find<IQuestion>(entityId)
-                    : questionnaire.Find<IQuestion>(q => q.StataExportCaption == inputVar).FirstOrDefault();
+                    ? (questionnaire.IsQuestion(entityId) ? entityId : (Guid?) null)
+                    : questionnaire.GetQuestionIdByVariable(inputVar);
             }
 
             if (string.IsNullOrWhiteSpace(query.Question))
                 return ReturnEmptyResult(query);
 
-            var question = GetQuestionByGuidOrStataCaption(query.Question);
+            var questionId = GetQuestionIdByGuidOrStataCaption(query.Question);
 
-            if (question == null) return ReturnEmptyResult(query);
+            if (questionId == null) return ReturnEmptyResult(query);
 
-            if (question.LinkedToQuestionId != null
-                || question.LinkedToRosterId != null)
+            if (questionnaire.IsQuestionLinked(questionId.Value)
+                || questionnaire.IsQuestionLinkedToRoster(questionId.Value))
             {
                 return NotFound(
                     $"Cannot build report for Single Question that linked to roster or other questions");
             }
 
-            var conditionalQuestion = GetQuestionByGuidOrStataCaption(query.ConditionalQuestion);
+            var conditionalQuestionId = GetQuestionIdByGuidOrStataCaption(query.ConditionalQuestion);
 
             var inputModel = new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = query.QuestionnaireId,
                 QuestionnaireVersion = query.Version,
-                Question = question,
+                QuestionId = questionId.Value,
                 ShowTeamMembers = query.ExpandTeams,
                 PageSize = query.exportType == null ? query.PageSize : int.MaxValue,
                 Page = query.exportType == null ? query.PageIndex : 1,
                 MinAnswer = query.Min,
                 MaxAnswer = query.Max,
                 Condition = query.Condition,
-                ConditionalQuestion = conditionalQuestion,
+                ConditionalQuestionId = conditionalQuestionId,
                 Columns = query?.ColummnsList?.Select(c => c.Name)?.ToArray(),
                 Pivot = query.Pivot,
                 Orders = query.ToOrderRequestItems(),
@@ -279,11 +277,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var stopwatch = Stopwatch.StartNew();
 
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-            var report = this.surveyStatisticsReport.GetReport(inputModel);
-            report.Name = $"[ {question.StataExportCaption} ] {question.VariableLabel ?? string.Empty}";
+            var report = this.surveyStatisticsReport.GetReport(questionnaireIdentity, inputModel);
+
+            var stataExportCaption = questionnaire.GetQuestionVariableName(questionId.Value);
+            var variableLabel = questionnaire.GetQuestionExportDescription(questionId.Value);
+
+            report.Name = $"[ {stataExportCaption} ] {variableLabel ?? string.Empty}";
 
             stopwatch.Stop();
-            var reportTimeToMonitor = question.QuestionType + (conditionalQuestion != null ? @"_filtered" : "");
+            var reportTimeToMonitor = questionnaire.GetQuestionType(questionId.Value) + (conditionalQuestionId != null ? @"_filtered" : "");
             reportQueryCounter.Labels(reportTimeToMonitor).Inc();
             reportQueryTimeGauge
                 .Labels(reportTimeToMonitor)
@@ -296,7 +298,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             return CreateReportResponse(query.exportType.Value, report,
-                $"{questionnaire.Title} (ver. {query.Version}) {question.StataExportCaption}");
+                $"{questionnaire.Title} (ver. {query.Version}) {stataExportCaption}");
 
         }      
 

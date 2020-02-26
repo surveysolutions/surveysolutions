@@ -90,12 +90,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             if (questionnaire.HasQuestion(variableName.Value))
             {
-                var question = questionnaire.GetQuestionByVariable(variableName.Value);
-                var questionType = question.QuestionType;
+                var questionId = questionnaire.GetQuestionIdByVariable(variableName.Value).Value;
+                var questionOptions = questionnaire.GetOptionsForQuestion(questionId, null, null, null);
+                var questionType = questionnaire.GetQuestionType(questionId);
 
                 if (questionType == QuestionType.Numeric)
                 {
-                    if(question.Answers.Count > 0 || !questionnaire.IsQuestionInteger(question.PublicKey))
+                    if(questionOptions.Any() || !questionnaire.IsQuestionInteger(questionId))
                         return true;
                 }
 
@@ -694,9 +695,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var questionVariable = compositeColumn[0];
             var sortIndex = compositeColumn[1];
 
-            var question = questionnaire.GetQuestionByVariable(questionVariable);
+            var questionId = questionnaire.GetQuestionIdByVariable(questionVariable);
+            if (questionId == null)
+                return false;
 
-            return question?.QuestionType == QuestionType.TextList && !int.TryParse(sortIndex, out _);
+            var questionType = questionnaire.GetQuestionType(questionId.Value);
+            return questionType == QuestionType.TextList && !int.TryParse(sortIndex, out _);
         }
 
         private bool CategoricalMultiQuestion_OptionNotFound(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
@@ -706,12 +710,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             if (compositeColumn.Length < 2) return false;
 
-            var question = questionnaire.GetQuestionByVariable(compositeColumn[0]);
-            var optionCode = compositeColumn[1].Replace("n", "-");
+            var questionId = questionnaire.GetQuestionIdByVariable(compositeColumn[0]);
+            if (questionId == null)
+                return false;
 
-            return question?.QuestionType == QuestionType.MultyOption && 
-                   !question.LinkedToQuestionId.HasValue && !question.LinkedToRosterId.HasValue &&
-                   question.Answers.All(x => x.AnswerValue != optionCode);
+            var optionCode = compositeColumn[1].Replace("n", "-");
+            var questionType = questionnaire.GetQuestionType(questionId.Value);
+            var isQuestionLinked = questionnaire.IsQuestionLinked(questionId.Value);
+            var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionId.Value);
+            var options = questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null);
+
+            return questionType == QuestionType.MultyOption && 
+                   !isQuestionLinked && !isLinkedToRoster &&
+                   options.All(x => x.Value.ToString() != optionCode);
         }
 
         private bool RosterInstanceCode_InvalidCode(AssignmentRosterInstanceCode answer, IQuestionnaire questionnaire)
@@ -742,9 +753,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool RosterInstanceCode_NoParsed(AssignmentRosterInstanceCode answer) => !answer.Code.HasValue;
 
         private bool CategoricalSingle_OptionNotFound(AssignmentCategoricalSingleAnswer answer, IQuestionnaire questionnaire)
-            => !string.IsNullOrWhiteSpace(answer.Value) &&
-               (!answer.OptionCode.HasValue || (questionnaire.GetQuestionByVariable(answer.VariableName)?.Answers
-                                                ?.All(x => x.AnswerValue != answer.Value) ?? false));
+        {
+            if (string.IsNullOrWhiteSpace(answer.Value))
+                return false;
+
+            if (!answer.OptionCode.HasValue)
+                return true;
+
+            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
+            if (questionId == null)
+                return false;
+
+            var options = questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null);
+            return (options?.All(x => x.Value.ToString() != answer.Value) ?? false);
+        }
 
         private bool Text_HasInvalidMask(AssignmentTextAnswer answer, IQuestionnaire questionnaire)
         {
