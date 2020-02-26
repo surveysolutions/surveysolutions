@@ -198,13 +198,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
-            var question = questionnaire.GetQuestionByVariable(variable);
+            var questionId = questionnaire.GetQuestionIdByVariable(variable);
 
-            if (question == null)
-                return StatusCode(StatusCodes.Status406NotAcceptable,
-                    "Question was not found.");
+            if (questionId == null)
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Question was not found.");
 
-            return this.CommentAnswer(id, Identity.Create(question.PublicKey, rosterVector), comment);
+            return this.CommentAnswer(id, Identity.Create(questionId.Value, rosterVector), comment);
         }
 
         /// <summary>

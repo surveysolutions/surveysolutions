@@ -239,12 +239,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string VariableName => this.innerDocument.VariableName;
         public Type ExpressionStorageType { get; set; }
 
-        public IQuestion GetQuestionByVariable(string variable)
-        {
-            var questionId = this.GetQuestionIdByVariable(variable);
-            return !questionId.HasValue ? null : this.GetQuestion(questionId.Value);
-        }
-
         public bool HasQuestion(Guid questionId) => this.GetQuestion(questionId) != null;
 
         public bool HasGroup(Guid groupId) => this.GetGroup(groupId) != null;
@@ -349,6 +343,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
 
         public string GetQuestionVariableName(Guid questionId) => this.GetQuestionOrThrow(questionId).StataExportCaption;
+
+        public string GetQuestionExportDescription(Guid questionId) => this.GetQuestionOrThrow(questionId).VariableLabel;
 
         public string GetGroupTitle(Guid groupId) => this.GetGroupOrThrow(groupId).Title;
 
@@ -1914,5 +1910,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
                 return transform;
             });
+
+        public GeometryType? GetQuestionGeometryType(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            return question.Properties.GeometryType;
+        }
     }
 }
