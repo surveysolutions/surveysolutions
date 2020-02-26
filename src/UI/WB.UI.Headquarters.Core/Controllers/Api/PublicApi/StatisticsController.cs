@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var stopwatch = Stopwatch.StartNew();
 
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-            var report = this.surveyStatisticsReport.GetReport(questionnaireIdentity, inputModel);
+            var report = this.surveyStatisticsReport.GetReport(questionnaire, inputModel);
 
             var stataExportCaption = questionnaire.GetQuestionVariableName(questionId.Value);
             var variableLabel = questionnaire.GetQuestionExportDescription(questionId.Value);
