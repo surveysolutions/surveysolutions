@@ -91,12 +91,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (questionnaire.HasQuestion(variableName.Value))
             {
                 var questionId = questionnaire.GetQuestionIdByVariable(variableName.Value).Value;
-                var questionOptions = questionnaire.GetOptionsForQuestion(questionId, null, null, null);
                 var questionType = questionnaire.GetQuestionType(questionId);
 
                 if (questionType == QuestionType.Numeric)
                 {
-                    if(questionOptions.Any() || !questionnaire.IsQuestionInteger(questionId))
+                    var questionOptions = questionnaire.GetOptionsForQuestion(questionId, null, null, null);
+                    if (questionOptions.Any() || !questionnaire.IsQuestionInteger(questionId))
                         return true;
                 }
 
@@ -715,14 +715,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 return false;
 
             var optionCode = compositeColumn[1].Replace("n", "-");
-            var questionType = questionnaire.GetQuestionType(questionId.Value);
-            var isQuestionLinked = questionnaire.IsQuestionLinked(questionId.Value);
-            var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionId.Value);
-            var options = questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null);
 
-            return questionType == QuestionType.MultyOption && 
-                   !isQuestionLinked && !isLinkedToRoster &&
-                   options.All(x => x.Value.ToString() != optionCode);
+            return questionnaire.GetQuestionType(questionId.Value) == QuestionType.MultyOption && 
+                   !questionnaire.IsQuestionLinked(questionId.Value) && !questionnaire.IsQuestionLinkedToRoster(questionId.Value) &&
+                   questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null).All(x => x.Value.ToString() != optionCode);
         }
 
         private bool RosterInstanceCode_InvalidCode(AssignmentRosterInstanceCode answer, IQuestionnaire questionnaire)

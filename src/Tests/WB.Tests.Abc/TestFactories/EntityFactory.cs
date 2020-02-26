@@ -2525,5 +2525,14 @@ namespace WB.Tests.Abc.TestFactories
             Value = value,
             SortIndex = sortIndex ?? 0
         };
+
+        public CategoricalOption CategoricalOption(string title, int value)
+        {
+            return new CategoricalOption()
+            {
+                Title = title,
+                Value = value,
+            };
+        }
     }
 }

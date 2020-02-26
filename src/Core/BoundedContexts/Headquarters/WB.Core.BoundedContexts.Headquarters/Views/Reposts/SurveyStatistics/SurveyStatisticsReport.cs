@@ -3,6 +3,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -11,17 +12,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
     internal class SurveyStatisticsReport : ISurveyStatisticsReport
     {
         private readonly IInterviewReportDataRepository interviewReportDataRepository;
-        private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public SurveyStatisticsReport(IInterviewReportDataRepository interviewReportDataRepository, IQuestionnaireStorage questionnaireStorage)
+        public SurveyStatisticsReport(IInterviewReportDataRepository interviewReportDataRepository)
         {
             this.interviewReportDataRepository = interviewReportDataRepository;
-            this.questionnaireStorage = questionnaireStorage;
         }
 
-        public ReportView GetReport(QuestionnaireIdentity questionnaireIdentity, SurveyStatisticsReportInputModel input)
+        public ReportView GetReport(IQuestionnaire questionnaire, SurveyStatisticsReportInputModel input)
         {
-            var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
             var questionType = questionnaire.GetQuestionType(input.QuestionId);
 
             ReportView reportView;

@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -22,6 +23,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
     internal class SurveyStatisticsReportTests : InterviewFactorySpecification
     {
         private QuestionnaireDocument questionnaire;
+        private IQuestionnaire plainQuestionnaire;
         private readonly Guid relationQuestion = Id.g1;
         private readonly Guid sexQuestion = Id.g2;
         private readonly Guid dwellingQuestion = Id.g3;
@@ -44,6 +46,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
                     Create.Entity.SingleOptionQuestion(sexQuestion, variable: "sex", answers:  GetAnswersFromEnum<Sex>())
                 })
             );
+            this.plainQuestionnaire = Create.Entity.PlainQuestionnaire(this.questionnaire, 1);
 
             PrepareQuestionnaire(questionnaire, 1);
 
@@ -81,13 +84,12 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         [Test]
         public void Categorical_report_by_sex()
         {
-            var question = this.questionnaire.Find<SingleQuestion>(sexQuestion);
-
-            var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
-            {
-                QuestionnaireId = questionnaire.PublicKey.FormatGuid(), QuestionnaireVersion = 1,
-                Question = question
-            });
+            var report = this.reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
+                {
+                    QuestionnaireId = questionnaire.PublicKey.FormatGuid(), QuestionnaireVersion = 1,
+                    QuestionId = sexQuestion
+                });
 
             // there is 4 males ,4 females in total 8
             Assert.That(report.Data[0], Is.EqualTo(new object[] { teamLeadName, null, 4, 4, 8 }));
@@ -96,13 +98,12 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         [Test]
         public void Categorical_report_by_relation()
         {
-            var question = this.questionnaire.Find<SingleQuestion>(relationQuestion);
-
-            var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = this.reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
                 QuestionnaireVersion = 1,
-                Question = question
+                QuestionId = relationQuestion
             });
 
             // there is 4 heads, 3 spouses and 1 child in total 8
@@ -112,16 +113,15 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         [Test]
         public void Categorical_report_by_sex_with_condition_by_relation()
         {
-            var question = this.questionnaire.Find<SingleQuestion>(sexQuestion);
-
-            var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = this.reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
                 QuestionnaireVersion = 1,
-                ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(relationQuestion),
+                ConditionalQuestionId = relationQuestion,
                 Condition = new[] { (long)Relation.Spouse },
-                Question = question
-            });
+                QuestionId = sexQuestion
+                });
 
             // there is 1 male and 2 female spouses, in total there is 3 spouses
             Assert.That(report.Data[0], Is.EqualTo(new object[] { teamLeadName, null, 1, 2, 3 }));
@@ -130,12 +130,13 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         [Test]
         public void PivotReport_report_proper_data()
         {
-            var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = this.reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
                 QuestionnaireVersion = 1,
-                ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(relationQuestion),
-                Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
+                ConditionalQuestionId = relationQuestion,
+                QuestionId = sexQuestion,
                 Pivot = true
             });
 
@@ -157,12 +158,13 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
                                                  ExpectedResult = new object[] {    4,      4,     8 })]
         public object[] Should_be_able_to_condition_report_by_non_roster_variable(params Dwelling[] condition)
         {
-            var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = this.reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
                 QuestionnaireVersion = 1,
-                ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(dwellingQuestion),
-                Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
+                ConditionalQuestionId = dwellingQuestion,
+                QuestionId = sexQuestion,
                 Condition = condition.Select(c => (long) c).ToArray()
             });
 
@@ -172,12 +174,13 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         [Test]
         public void Should_be_able_to_build_pivot_report_by_non_roster_variable()
         {
-            var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = this.reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
                 QuestionnaireVersion = 1,
-                ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(dwellingQuestion),
-                Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
+                ConditionalQuestionId = dwellingQuestion,
+                QuestionId = sexQuestion,
                 Pivot = true
             });
 
@@ -198,7 +201,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             var interviewId = Guid.NewGuid();
 
-            var summary = new InterviewSummary(new PlainQuestionnaire(questionnaire, 1, null, new SubstitutionService()))
+            var summary = new InterviewSummary(plainQuestionnaire)
             {
                 InterviewId = interviewId,
                 Status = InterviewStatus.Completed,

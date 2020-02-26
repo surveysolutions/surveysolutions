@@ -75,11 +75,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
         [Test]
         public void should_get_numeric_report_for_numeric_variable()
         {
-            this.Subject.GetReport(new SurveyStatisticsReportInputModel
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(Id.g1)
+            ));
+
+            this.Subject.GetReport(plainQuestionnaire, new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = Id.g1.FormatGuid(),
-                Question = Mock.Of<IQuestion>(q =>
-                    q.QuestionType == QuestionType.Numeric && q.Answers == new List<Answer>())
+                QuestionId = Id.g1
             });
 
             Mock.Get(this.interviewReportDataRepository).Verify(r => r.GetNumericalReportData(
@@ -96,14 +99,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
         [Test]
         public void should_get_pivot_report_for_categorical_in_pivot()
         {
-            this.Subject.GetReport(new SurveyStatisticsReportInputModel
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.SingleOptionQuestion(Id.g1, answers: new List<Answer>()),
+                Create.Entity.SingleOptionQuestion(Id.g2, answers: new List<Answer>())
+            ));
+
+            this.Subject.GetReport(plainQuestionnaire, new SurveyStatisticsReportInputModel
             {
                 Pivot = true,
-                QuestionnaireId = Create.Entity.QuestionnaireIdentity().QuestionnaireId.FormatGuid(),
-                Question = Mock.Of<IQuestion>(q =>
-                    q.QuestionType == QuestionType.SingleOption && q.Answers == new List<Answer>()),
-                ConditionalQuestion = Mock.Of<IQuestion>(q =>
-                    q.QuestionType == QuestionType.SingleOption && q.Answers == new List<Answer>())
+                QuestionId = Id.g1,
+                ConditionalQuestionId = Id.g2
             });
 
             Mock.Get(this.interviewReportDataRepository).Verify(r => r.GetCategoricalPivotData(
@@ -115,14 +120,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
         [Test]
         public void should_get_categorical_report_for_categorical()
         {
-            this.Subject.GetReport(new SurveyStatisticsReportInputModel
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.SingleOptionQuestion(Id.g1, answers: new List<Answer>()),
+                Create.Entity.SingleOptionQuestion(Id.g2, answers: new List<Answer>())
+            ));
+
+            this.Subject.GetReport(plainQuestionnaire, new SurveyStatisticsReportInputModel
             {
                 Pivot = false,
-                QuestionnaireId = Create.Entity.QuestionnaireIdentity().QuestionnaireId.FormatGuid(),
-                Question = Mock.Of<IQuestion>(q =>
-                    q.QuestionType == QuestionType.SingleOption && q.Answers == new List<Answer>()),
-                ConditionalQuestion = Mock.Of<IQuestion>(q =>
-                    q.QuestionType == QuestionType.SingleOption && q.Answers == new List<Answer>())
+                QuestionId = Id.g1,
+                ConditionalQuestionId = Id.g2
             });
 
             Mock.Get(this.interviewReportDataRepository)
