@@ -15,7 +15,9 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc.Storage;
+using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
@@ -37,7 +39,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             return new UsersController(
                 userViewViewFactory ?? Mock.Of<IUserViewFactory>(),
                 Mock.Of<IUserArchiveService>(),
-                Mock.Of<IAuditLogService>());
+                Mock.Of<IAuditLogService>(),
+                Create.Service.UserManager(),
+                Mock.Of<IUnitOfWork>(),
+                Mock.Of<ISystemLog>());
         }
 
         protected static QuestionnairesPublicApiController CreateQuestionnairesController(
