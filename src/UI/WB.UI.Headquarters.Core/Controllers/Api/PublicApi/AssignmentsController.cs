@@ -355,7 +355,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/assign")]
         [Authorize(Roles = "ApiUser, Administrator")]
-        [Route("")]
         public async Task<ActionResult<AssignmentDetails>> Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
         {
             var assignment = assignmentsStorage.GetAssignment(id);

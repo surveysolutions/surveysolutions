@@ -244,7 +244,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="request">Responsible id or responsible name</param>
         /// <response code="200">Interview was reassigned</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Target responsible was not found or it is not an interviewer</response>
+        /// <response code="406">Target responsible was not found or it is not an interviewer of interview cannot be reassigned. Check response for reason description</response>
         [HttpPatch]
         [Route("{id:guid}/assign")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
@@ -364,9 +364,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
         /// <param name="request"></param>
-        /// <response code="200">Interview was deleted</response>
+        /// <response code="200">Interview was assigned to supervisor</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
+        /// <response code="406">Target responsible was not found or it is not a supervisor of interview cannot be reassigned. Check response for reason description</response>
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
