@@ -6,8 +6,8 @@ using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {

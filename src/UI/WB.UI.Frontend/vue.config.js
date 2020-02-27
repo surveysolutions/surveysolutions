@@ -109,7 +109,9 @@ module.exports = {
     pages,
 
     transpileDependencies: [
-        'autonumeric'
+        'autonumeric',
+        'vue-page-title',
+        '@google/markerclustererplus'
     ],
 
     chainWebpack: config => {

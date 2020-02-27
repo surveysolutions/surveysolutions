@@ -121,8 +121,8 @@ export default {
         },
         rootSections(state) {
             /* tslint:disable:no-string-literal */
-            if (state.panels['null']) {
-                return state.panels['null']
+            if (state.panels['undefined']) {
+                return state.panels['undefined']
             }
             /* tslint:enable:no-string-literal */
 

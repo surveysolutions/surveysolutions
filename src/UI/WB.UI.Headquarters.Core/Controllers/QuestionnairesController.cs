@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Controllers
                 Comment = browseItem.Comment
             };
 
-            if (browseItem.ImportedBy.HasValue)
+            if (browseItem.ImportedBy.HasValue && browseItem.ImportedBy != Guid.Empty)
             {
                 var user = this.userViewFactory.GetUser(browseItem.ImportedBy.Value);
                 if (user != null)

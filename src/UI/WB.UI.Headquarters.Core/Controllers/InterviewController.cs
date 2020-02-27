@@ -161,8 +161,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var area = interview.GetAreaQuestion(identity)?.GetAnswer()?.Value;
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            var geometryType = questionnaire.GetQuestionByVariable(questionnaire.GetQuestionVariableName(identity.Id)).Properties
-                .GeometryType;
+            var geometryType = questionnaire.GetQuestionGeometryType(identity.Id);
 
             return this.View(new GeographyPreview() { AreaAnswer = area, Geometry = geometryType ?? GeometryType.Polygon });
         }

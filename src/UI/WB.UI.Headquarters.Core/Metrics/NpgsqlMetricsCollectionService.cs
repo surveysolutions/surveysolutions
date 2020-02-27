@@ -29,19 +29,21 @@ namespace WB.UI.Headquarters.Metrics
             switch (eventPayload["Name"])
             {
                 case "idle-connections":
-                    CommonMetrics.NpgsqlConnections.Labels("idle").Set(Convert.ToSingle(eventPayload["Count"]));
+                    CommonMetrics.NpgsqlConnections.Labels("idle").Set(Convert.ToSingle(eventPayload["Mean"]));
                     break;
                 case "busy-connections":
-                    CommonMetrics.NpgsqlConnections.Labels("busy").Set(Convert.ToSingle(eventPayload["Count"]));
+                    CommonMetrics.NpgsqlConnections.Labels("busy").Set(Convert.ToSingle(eventPayload["Mean"]));
                     break;
-                case "":
-                    CommonMetrics.NpgsqlConnectionsPoolCount.Set(Convert.ToSingle(eventPayload["Count"]));
+                case "connection-pools":
+                    CommonMetrics.NpgsqlConnectionsPoolCount.Set(Convert.ToSingle(eventPayload["Mean"]));
                     break;
                 case "bytes-written-per-second":
-                    CommonMetrics.NpgsqlDataCounter.Labels("write").Inc(Convert.ToSingle(eventPayload["Increment"]));
+                    var written = Convert.ToSingle(eventPayload["Increment"]);
+                    if (written > 0) CommonMetrics.NpgsqlDataCounter.Labels("write").Inc(written);
                     break;
                 case "bytes-read-per-second":
-                    CommonMetrics.NpgsqlDataCounter.Labels("read").Inc(Convert.ToSingle(eventPayload["Increment"]));
+                    var read = Convert.ToSingle(eventPayload["Increment"]);
+                    if(read > 0 ) CommonMetrics.NpgsqlDataCounter.Labels("read").Inc(read);
                     break;
             }
         }
@@ -50,7 +52,7 @@ namespace WB.UI.Headquarters.Metrics
         {
             if (eventSource.Name.Equals("Npgsql", StringComparison.OrdinalIgnoreCase))
             {
-                EnableEvents(eventSource, EventLevel.LogAlways, EventKeywords.All, new Dictionary<string, string>
+                EnableEvents(eventSource, EventLevel.Verbose, EventKeywords.None, new Dictionary<string, string>
                 {
                     {"EventCounterIntervalSec", "1"}
                 });

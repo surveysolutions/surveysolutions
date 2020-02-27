@@ -37,6 +37,7 @@ using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Authentication;
+using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Services;
 
@@ -64,10 +65,8 @@ namespace WB.UI.Designer
 
             services.AddSession(options =>
             {
-                // Set a short timeout for easy testing.
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
                 options.Cookie.HttpOnly = true;
-                // Make the session cookie essential
                 options.Cookie.IsEssential = true;
             });
 
@@ -208,7 +207,7 @@ namespace WB.UI.Designer
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseExceptional();
-
+          
             if (!env.IsDevelopment())
             {
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
@@ -275,6 +274,8 @@ namespace WB.UI.Designer
 
             app.UseEndpoints(routes =>
             {
+                routes.MapVersionEndpoint();
+
                 routes.MapControllerRoute(
                     name: "areaRoute",
                     pattern: "{area:exists}/{controller}/{action}/{id?}",

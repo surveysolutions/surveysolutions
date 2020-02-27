@@ -56,6 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             Roles = new List<HqRole>();
             Logins = new List<HqUserLogin>();
             DeviceSyncInfos = new HashSet<DeviceSyncInfo>();
+            Profile = new HqUserProfile();
         }
 
         public virtual HqUserProfile Profile { get; set; }

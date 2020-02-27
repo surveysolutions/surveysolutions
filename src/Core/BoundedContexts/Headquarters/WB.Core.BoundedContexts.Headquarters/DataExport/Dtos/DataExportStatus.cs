@@ -1,5 +1,8 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
+﻿using System.Text.Json.Serialization;
+
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum DataExportStatus
     {
         NotStarted = 1,
