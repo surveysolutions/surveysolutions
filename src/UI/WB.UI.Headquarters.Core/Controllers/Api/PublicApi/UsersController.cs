@@ -219,6 +219,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("users")]
         public async Task<ActionResult<UserCreationResult>> Register([FromBody]RegisterUserModel model)
         {
+            if ((int)model.Role == 1)
+            {
+                return BadRequest("Creation of administrator is not allowed");
+            }
+
             var result = new UserCreationResult();
             if (ModelState.IsValid)
             {
