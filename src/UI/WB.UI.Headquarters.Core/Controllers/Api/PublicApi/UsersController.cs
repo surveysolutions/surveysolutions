@@ -154,6 +154,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">User id cannot be parsed</response>
         /// <response code="404">User with provided id does not exist</response>
         /// <response code="406">User is not an interviewer or supervisor</response>
+        /// <response code="409">User cannot be unarchived</response>
         [HttpPatch]
         [Route("users/{id}/unarchive")]
         public async Task<ActionResult> UnArchive(string id)
@@ -174,7 +175,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
-            await this.archiveService.UnarchiveUsersAsync(new[] { userGuid });
+            try
+            {
+                await this.archiveService.UnarchiveUsersAsync(new[] { userGuid });
+            }
+            catch (UserArchiveException e)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+            }
+
             return this.Ok();
         }
 
