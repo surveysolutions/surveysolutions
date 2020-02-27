@@ -33,6 +33,9 @@ namespace SurveySolutionsCustomActions
                 sb.AppendLine($"DesignerAddress={designerAddress}");
                 sb.AppendLine("[DataExport]");
                 sb.AppendLine("ExportServiceUrl=http://localhost:5000");
+                sb.AppendLine("[FileStorage]");
+                sb.AppendLine("AppData=..\\Data_Site");
+                sb.AppendLine("TempData=..\\Data_Site");
                 sb.AppendLine("[ConnectionStrings]");
 
                 var connectionStr = config?.ConnectionString ?? 
