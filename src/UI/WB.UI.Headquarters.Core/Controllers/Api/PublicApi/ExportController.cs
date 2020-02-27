@@ -240,7 +240,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return Redirect(result.Redirect);
             }
 
-            return File(result.Data, "application/zip");
+            return File(result.Data, "application/zip", result.FileName);
         }
 
         public class StartNewExportResult
