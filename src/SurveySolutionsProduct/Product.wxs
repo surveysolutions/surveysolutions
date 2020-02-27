@@ -351,6 +351,7 @@
                 <ServiceInstall Id="ExportServiceInstall"
                                 Name="SurveySolutionsExport"
                                 DisplayName="Survey Solutions Export Service"
+                                Description="Provides Export functionality for Survey Solutions Platform"
                                 Type="ownProcess"
                                 Start="auto"
                                 ErrorControl="normal">
