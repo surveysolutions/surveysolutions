@@ -9,6 +9,7 @@ using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +18,9 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Prometheus;
 using Serilog;
@@ -57,6 +60,7 @@ using WB.UI.Headquarters.Metrics;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.UnderConstruction;
@@ -148,9 +152,9 @@ namespace WB.UI.Headquarters
         {
             var schedulerSection = this.Configuration.GetSection("Scheduler");
 
-            return new QuartzModule(typeof(M201905151013_AddQuartzTables).Assembly, 
-                typeof(M201905151013_AddQuartzTables).Namespace, 
-                schedulerSection["InstanceId"], 
+            return new QuartzModule(typeof(M201905151013_AddQuartzTables).Assembly,
+                typeof(M201905151013_AddQuartzTables).Namespace,
+                schedulerSection["InstanceId"],
                 schedulerSection["IsClustered"].ToBool(false));
         }
 
@@ -189,7 +193,7 @@ namespace WB.UI.Headquarters
                 synchronizationSettings,
                 new TrackingSettings(trackingSection.WebInterviewPauseResumeGraceTimespan),
                 externalStoragesSettings: externalStoragesSettings,
-                fileSystemEmailServiceSettings: 
+                fileSystemEmailServiceSettings:
                     new FileSystemEmailServiceSettings(false, null, null, null, null, null),
                 syncPackagesJobSetting: new SyncPackagesProcessorBackgroundJobSetting(true, syncPackageSection.SynchronizationInterval, syncPackageSection.SynchronizationBatchCount, syncPackageSection.SynchronizationParallelExecutorsCount)
             );
@@ -205,6 +209,7 @@ namespace WB.UI.Headquarters
             {
                 //j.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
                 j.SerializerSettings.Converters.Add(new StringEnumConverter());
+                j.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
 
             services.AddDistributedMemoryCache();
@@ -237,7 +242,7 @@ namespace WB.UI.Headquarters
             services.AddHeadquartersHealthCheck();
 
             FileStorageModule.Setup(services, Configuration);
-            
+
             AddCompression(services);
 
             services.AddMvc(mvc =>
@@ -277,9 +282,9 @@ namespace WB.UI.Headquarters
             {
                 services.AddHostedService<QuartzHostedService>();
             }
-            
+
             var passwordOptions = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
-            
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Default Password settings.
@@ -290,6 +295,12 @@ namespace WB.UI.Headquarters
                 options.Password.RequiredLength = passwordOptions.RequiredLength;
                 options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
             });
+
+            services.AddHealthChecks()
+                .AddCheck<HeadquartersStartupCheck>("under_construction_check", tags: new[] { "ready" })
+                .AddCheck<ExportServiceCheck>("export_service_check")
+                .AddCheck<BrokenPackagesCheck>("broken_packages_check")
+                .AddCheck<DatabaseConnectionCheck>("database_connection_check");
         }
 
         private static void AddCompression(IServiceCollection services)
@@ -328,18 +339,27 @@ namespace WB.UI.Headquarters
                     {
                         appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
                     });
-                
+
                 app.UseHsts();
             }
 
-            InitModules(env);
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    if (!env.IsDevelopment())
+                    {
+                        ctx.Context.Response.Headers.Add("Cache-Control", "public, max-age=31536000");
+                    }
+                }
+            });
 
+            // make sure we do not track static files requests
             app.UseMetrics(Configuration);
 
-            app.UseStaticFiles();
             app.UseSerilogRequestLogging();
             app.UseUnderConstruction();
-            
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -374,11 +394,29 @@ namespace WB.UI.Headquarters
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapVersionEndpoint();
+
+                endpoints.MapHealthChecks(".hc", new HealthCheckOptions { AllowCachingResponses = false });
+
+                // split readiness probe from live health checks
+                // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-3.1#separate-readiness-and-liveness-probes
+                endpoints.MapHealthChecks(".hc/ready", new HealthCheckOptions
+                {
+                    AllowCachingResponses = false, 
+                    ResultStatusCodes =
+                    {
+                        // return Server Unavailable on Degraded status
+                        [HealthStatus.Degraded] = 503
+                    },
+                    Predicate = c => c.Tags.Contains("ready")
+                });
+
                 endpoints.MapDefaultControllerRoute();
 
-                endpoints.MapHub<WebInterview>("interview",
-                    options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
+                endpoints.MapHub<WebInterview>("interview");
             });
+
+            InitModules(env);
         }
 
         private void InitModules(IWebHostEnvironment env)

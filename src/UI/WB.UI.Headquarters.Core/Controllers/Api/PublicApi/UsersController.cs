@@ -1,34 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.UI.Headquarters.API;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
-    [Authorize(Roles = "ApiUser, Administrator")]
+    [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
     [Route("api/v1")]
     [PublicApiJson]
     public class UsersController : ControllerBase
     {
         private readonly IUserViewFactory usersFactory;
-        private readonly IUserArchiveService userManager;
+        private readonly IUserArchiveService archiveService;
         private readonly IAuditLogService auditLogService;
+        private readonly UserManager<HqUser> userManager;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ISystemLog systemLog;
 
         public UsersController(IUserViewFactory usersFactory,
-            IUserArchiveService userManager,
-            IAuditLogService auditLogService)
+            IUserArchiveService archiveService,
+            IAuditLogService auditLogService,
+            UserManager<HqUser> userManager, IUnitOfWork unitOfWork,
+            ISystemLog systemLog)
         {
             this.usersFactory = usersFactory;
-            this.userManager = userManager;
+            this.archiveService = archiveService;
             this.auditLogService = auditLogService;
+            this.userManager = userManager;
+            this.unitOfWork = unitOfWork;
+            this.systemLog = systemLog;
         }
 
         /// <summary>
@@ -104,8 +120,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("users/{id}/archive")]
         public async Task<ActionResult> Archive(string id)
         {
-            Guid userGuid;
-            if (!Guid.TryParse(id, out userGuid))
+            if (!Guid.TryParse(id, out var userGuid))
             {
                 return this.BadRequest();
             }
@@ -117,16 +132,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return StatusCode((int) HttpStatusCode.NotAcceptable);
+                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
             if (user.IsSupervisor())
             {
-                await this.userManager.ArchiveSupervisorAndDependentInterviewersAsync(userGuid);
+                await this.archiveService.ArchiveSupervisorAndDependentInterviewersAsync(userGuid);
             }
             else
             {
-                await this.userManager.ArchiveUsersAsync(new[] { userGuid });
+                await this.archiveService.ArchiveUsersAsync(new[] { userGuid });
             }
             return this.Ok();
         }
@@ -139,6 +154,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">User id cannot be parsed</response>
         /// <response code="404">User with provided id does not exist</response>
         /// <response code="406">User is not an interviewer or supervisor</response>
+        /// <response code="409">User cannot be unarchived</response>
         [HttpPatch]
         [Route("users/{id}/unarchive")]
         public async Task<ActionResult> UnArchive(string id)
@@ -156,10 +172,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return StatusCode((int) HttpStatusCode.NotAcceptable);
+                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
-            await this.userManager.UnarchiveUsersAsync(new[] { userGuid });
+            try
+            {
+                await this.archiveService.UnarchiveUsersAsync(new[] { userGuid });
+            }
+            catch (UserArchiveException e)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+            }
+
             return this.Ok();
         }
 
@@ -177,12 +201,86 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             DateTime startDate = start ?? DateTime.UtcNow.AddDays(-7);
             DateTime endDate = end ?? startDate.AddDays(7);
 
-            var records = auditLogService.GetRecords(id, startDate, endDate, showErrorMessage: false);
+            var records = auditLogService.GetRecords(id, startDate, endDate);
             return records.Select(record => new AuditLogRecordApiView()
             {
                 Time = record.Time,
                 Message = record.Message,
             }).ToArray();
+        }
+
+        /// <summary>
+        /// Creates new user with specified role.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <response code="400">User cannot be created</response>
+        /// <response code="200">User created</response>
+        [HttpPost]
+        [Route("users")]
+        public async Task<ActionResult<UserCreationResult>> Register([FromBody]RegisterUserModel model)
+        {
+            var result = new UserCreationResult();
+            if (ModelState.IsValid)
+            {
+                var createdUserRole = model.Role;
+                if (createdUserRole == UserRoles.Interviewer && string.IsNullOrWhiteSpace(model.Supervisor))
+                {
+                    ModelState.AddModelError(nameof(model.Supervisor), "Supervisor name is required for interviewer creation");
+                    return BadRequest(ModelState);
+                }
+
+                var createdUser = new HqUser
+                {
+                    UserName = model.UserName.Trim(),
+                    NormalizedUserName = model.UserName.Trim().ToUpper(),
+                    FullName = model.FullName,
+                    PhoneNumber = model.PhoneNumber,
+                    Email = model.Email,
+                    NormalizedEmail = model.Email?.Trim().ToUpper()
+                };
+                var creationResult = await this.userManager.CreateAsync(createdUser, model.Password);
+
+                if (creationResult.Succeeded)
+                {
+                    if (createdUserRole == UserRoles.Interviewer)
+                    {
+                        var supervisorId = (await userManager.FindByNameAsync(model.Supervisor)).Id;
+                        createdUser.Profile.SupervisorId = supervisorId;
+                    }
+
+                    var addResult = await userManager.AddToRoleAsync(createdUser, model.Role.ToString());
+                    if (addResult.Succeeded)
+                    {
+                        this.systemLog.UserCreated(createdUserRole, model.UserName);
+                        result.UserId = createdUser.Id.FormatGuid();
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        unitOfWork.DiscardChanges();
+                        foreach (var creationResultError in addResult.Errors)
+                        {
+                            ModelState.AddModelError(creationResultError.Code, creationResultError.Description);
+                        }
+                    }
+                }
+                else
+                {
+                    unitOfWork.DiscardChanges();
+                    foreach (var creationResultError in creationResult.Errors)
+                    {
+                        ModelState.AddModelError(creationResultError.Code, creationResultError.Description);
+                    }
+                }
+            }
+
+            foreach (var modelState in ModelState.Values) {
+                foreach (ModelError error in modelState.Errors) {
+                    result.Errors.Add(error.ErrorMessage);
+                }
+            }
+
+            return BadRequest(result);
         }
     }
 }

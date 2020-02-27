@@ -227,7 +227,7 @@ export default {
                     title: self.$t('Assignments.Details_Column'),
                     width: '50%',
                     render(data, type, row) {
-                        switch (row.action) {
+                        switch (row.Action) {
                         case 'Created': {
                             let createdText = self.$t('Assignments.Action_Created_Responsible', {
                                 responsible: data.Responsible,
@@ -257,7 +257,7 @@ export default {
                             return result
                         }
                         case 'QuantityChanged':
-                            if (data.quantity == null) {
+                            if (data.Quantity == null) {
                                 return self.$t('Assignments.Action_QuantityChanged_To_Unlimited')
                             }
                             return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.Quantity})

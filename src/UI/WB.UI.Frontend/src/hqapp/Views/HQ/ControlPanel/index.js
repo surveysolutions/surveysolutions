@@ -1,11 +1,11 @@
-import Configuration from './Configuration'
-import ControlPanelLayout from './ControlPanelLayout'
-import TabletInfos from './TabletInfos'
-import AppUpdates from './AppUpdates'
-import CreateAdmin from './CreateAdmin'
-import InterviewPackages from './InterviewPackages'
-import ChangePassword from './ChangePassword'
-import ReevaluateInterview from './ReevaluateInterview'
+const ControlPanelLayout = () => import( /*  webpackChunkName: "controlpanel" */ './ControlPanelLayout')
+const TabletInfos = () => import( /*  webpackChunkName: "controlpanel" */ './TabletInfos')
+const AppUpdates = () => import( /*  webpackChunkName: "controlpanel" */ './AppUpdates')
+const CreateAdmin = () => import( /*  webpackChunkName: "controlpanel" */ './CreateAdmin')
+const InterviewPackages = () => import( /*  webpackChunkName: "controlpanel" */ './InterviewPackages')
+const ChangePassword = () => import( /*  webpackChunkName: "controlpanel" */ './ChangePassword')
+const ReevaluateInterview = () => import( /*  webpackChunkName: "controlpanel" */ './ReevaluateInterview')
+const Dashboard = () => import( /*  webpackChunkName: "controlpanel" */ './Dashboard')
 
 export default class MapComponent {
     get routes() {
@@ -16,7 +16,7 @@ export default class MapComponent {
                 children: [
                     {
                         path: 'Configuration',
-                        component: Configuration,
+                        component: () => import(/* webpackChunkName: "controlpanel" */'./Configuration'),
                     },
                     {
                         path: 'TabletInfos',
@@ -41,6 +41,10 @@ export default class MapComponent {
                     {
                         path: 'ReevaluateInterview',
                         component: ReevaluateInterview,
+                    },
+                    {
+                        path: '',
+                        component: Dashboard,
                     },
                 ],
             },

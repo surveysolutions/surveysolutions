@@ -279,16 +279,41 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
 
-            currentUser.Email = editModel.Email;
-            currentUser.FullName = editModel.PersonName;
-            currentUser.PhoneNumber = editModel.PhoneNumber;
-            currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
-            currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+            if (currentUser.IsArchived)
+            {
+                if(currentUser.FullName != editModel.PersonName)
+                    this.ModelState.AddModelError(nameof(EditUserModel.PersonName), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
 
-            var updateResult = await this.userRepository.UpdateAsync(currentUser);
+                if (currentUser.Email != editModel.Email)
+                    this.ModelState.AddModelError(nameof(EditUserModel.Email), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
 
-            if (!updateResult.Succeeded)
-                this.ModelState.AddModelError(nameof(EditUserModel.Email), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
+                if (currentUser.PhoneNumber != editModel.PhoneNumber)
+                    this.ModelState.AddModelError(nameof(EditUserModel.PhoneNumber), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+
+                if (currentUser.IsLockedByHeadquaters != editModel.IsLockedByHeadquarters)
+                    this.ModelState.AddModelError(nameof(EditUserModel.IsLockedByHeadquarters), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+
+                if (currentUser.IsLockedBySupervisor != editModel.IsLockedBySupervisor)
+                    this.ModelState.AddModelError(nameof(EditUserModel.IsLockedBySupervisor), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+                
+                if(this.ModelState.IsValid)
+                    this.ModelState.AddModelError(nameof(EditUserModel.PersonName), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                currentUser.Email = editModel.Email;
+                currentUser.FullName = editModel.PersonName;
+                currentUser.PhoneNumber = editModel.PhoneNumber;
+                currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
+                currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+
+                var updateResult = await this.userRepository.UpdateAsync(currentUser);
+
+                if (!updateResult.Succeeded)
+                    this.ModelState.AddModelError(nameof(EditUserModel.Email),
+                        string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
+            }
 
             return this.ModelState.ErrorsToJsonResult();
         }
