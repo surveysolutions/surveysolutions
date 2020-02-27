@@ -336,7 +336,7 @@
             <Component Id='StopService' Guid='4229CEE8-BBA2-4F02-AD3D-A9ED064FDACE' KeyPath='yes'>
                 <ServiceControl Id='StopServiceControl' 
                                 Name='SurveySolutionsExport' 
-                                Stop='uninstall' 
+                                Stop='both' 
                                 Wait='yes'/>
             </Component>
 
