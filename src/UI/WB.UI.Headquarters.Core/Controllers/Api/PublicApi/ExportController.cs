@@ -32,19 +32,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IExportSettings exportSettings;
         private readonly ISystemLog auditLog;
+        private readonly IExportFileNameService exportFileNameService;
 
         public ExportController(
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDataExportStatusReader dataExportStatusReader,
             IExportServiceApi exportServiceApi,
             IExportSettings exportSettings,
-            ISystemLog auditLog)
+            ISystemLog auditLog,
+            IExportFileNameService exportFileNameService)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.dataExportStatusReader = dataExportStatusReader;
             this.exportServiceApi = exportServiceApi;
             this.exportSettings = exportSettings;
             this.auditLog = auditLog;
+            this.exportFileNameService = exportFileNameService;
         }
 
         /// <summary>
@@ -222,9 +225,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 var ddiArchiveResponse = await exportServiceApi.GetDdiArchive(questionnaireIdentity.ToString(),
                     archivePassword);
 
+                var fileNameForDdiByQuestionnaire = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireIdentity);
+
                 var content = await ddiArchiveResponse.ReadAsByteArrayAsync();
 
-                return File(content, "application/zip");
+                return File(content, "application/zip", fileNameForDdiByQuestionnaire);
             }
 
             var result = await this.dataExportStatusReader.GetDataArchive(
