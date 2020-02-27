@@ -257,7 +257,7 @@ export default {
                             return result
                         }
                         case 'QuantityChanged':
-                            if (data.quantity == null) {
+                            if (data.Quantity == null) {
                                 return self.$t('Assignments.Action_QuantityChanged_To_Unlimited')
                             }
                             return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.Quantity})
