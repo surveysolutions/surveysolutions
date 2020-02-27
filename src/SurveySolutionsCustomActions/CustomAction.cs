@@ -30,7 +30,7 @@ namespace SurveySolutionsCustomActions
                 sb.AppendLine("ClientApkPath=Client");
                 sb.AppendLine("[Designer]");
                 var designerAddress = config?.DesignerAddress ?? "https://designer.mysurvey.solutions";
-                sb.AppendLine("DesignerAddress={designerAddress}");
+                sb.AppendLine($"DesignerAddress={designerAddress}");
                 sb.AppendLine("[DataExport]");
                 sb.AppendLine("ExportServiceUrl=http://localhost:5000");
                 sb.AppendLine("[ConnectionStrings]");
