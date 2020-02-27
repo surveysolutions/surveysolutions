@@ -95,14 +95,8 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.Questionnaires)]
-        public IActionResult UpgradeProgress(Guid id)
+        public IActionResult UpgradeProgress()
         {
-            var progress = this.upgradeService.Status(id);
-            if (progress == null)
-            {
-                return NotFound();
-            }
-
             return View(new
             {
                 ProgressUrl = Url.Action("Status", "AssignmentsUpgradeApi"),
