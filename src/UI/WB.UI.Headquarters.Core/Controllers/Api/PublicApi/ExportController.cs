@@ -123,8 +123,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id}/cancel")]
-        public async Task<ActionResult> CancelProcess(string id, [FromQuery]DataExportFormat exportType, 
-            [FromQuery]ExportInterviewStatus? status = null, [FromQuery]DateTime? from = null, [FromQuery]DateTime? to = null)
+        public async Task<ActionResult> CancelProcess(string id, 
+            DataExportFormat exportType, 
+            [FromQuery]ExportInterviewStatus? status = null, 
+            [FromQuery]DateTime? from = null, 
+            [FromQuery]DateTime? to = null)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return StatusCode(StatusCodes.Status400BadRequest, @"Invalid questionnaire identity");
