@@ -1656,7 +1656,7 @@ namespace WB.Tests.Unit.Designer
         };
 
         public static CategoriesInstance CategoriesInstance(Guid questionnaireId, Guid categoriesId, int value,
-            string text = null, int sortIndex = 0) =>
+            int sortIndex = 0, string text = null) =>
             new CategoriesInstance
             {
                 QuestionnaireId = questionnaireId,
