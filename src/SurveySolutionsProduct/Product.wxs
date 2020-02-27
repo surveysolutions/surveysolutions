@@ -358,7 +358,7 @@
                         FirstFailureActionType='restart'
                         SecondFailureActionType='restart'
                         ThirdFailureActionType='restart'
-                        RestartServiceDelayInSeconds='30' 
+                        RestartServiceDelayInSeconds="60"
                         ResetPeriodInDays='1'/>
                     <ServiceConfig 
                         DelayedAutoStart="yes" 
