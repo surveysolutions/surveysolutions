@@ -64,8 +64,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [ProducesResponseType(200, Type = typeof(StartNewExportResult))]
         public async Task<ActionResult<StartNewExportResult>> StartProcess(string id,
             DataExportFormat exportType,
-            ExportInterviewStatus? status = null,
-            DateTime? from = null, DateTime? to = null)
+            [FromQuery]ExportInterviewStatus? status = null,
+            [FromQuery]DateTime? from = null, 
+            [FromQuery]DateTime? to = null)
         {
             long jobId;
             switch (exportType)
@@ -119,7 +120,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id}/cancel")]
-        public async Task<ActionResult> CancelProcess(string id, DataExportFormat exportType, ExportInterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        public async Task<ActionResult> CancelProcess(string id, [FromQuery]DataExportFormat exportType, 
+            [FromQuery]ExportInterviewStatus? status = null, [FromQuery]DateTime? from = null, [FromQuery]DateTime? to = null)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return StatusCode(StatusCodes.Status400BadRequest, @"Invalid questionnaire identity");
@@ -155,7 +157,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route(@"{exportType}/{id}/details")]
         public async Task<ActionResult<ExportDetails>> ProcessDetails(string id, 
             DataExportFormat exportType, 
-            ExportInterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+            [FromQuery]ExportInterviewStatus? status = null, [FromQuery]DateTime? from = null, [FromQuery]DateTime? to = null)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return StatusCode(StatusCodes.Status400BadRequest, @"Invalid questionnaire identity");
@@ -205,7 +207,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">Questionnaire id is malformed</response>
         [HttpGet]
         [Route(@"{exportType}/{id}")]
-        public async Task<ActionResult> Get(string id, DataExportFormat exportType, ExportInterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        public async Task<ActionResult> Get(string id, DataExportFormat exportType, 
+            [FromQuery]ExportInterviewStatus? status = null, 
+            [FromQuery]DateTime? from = null, 
+            [FromQuery]DateTime? to = null)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return StatusCode(StatusCodes.Status400BadRequest, @"Invalid questionnaire identity");
