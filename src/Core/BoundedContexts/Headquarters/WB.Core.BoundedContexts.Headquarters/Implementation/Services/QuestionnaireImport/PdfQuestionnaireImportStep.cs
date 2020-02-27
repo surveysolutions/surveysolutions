@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private async Task RequestToGeneratePdf(Action incrementProgress)
         {
-            this.logger.Error($"Requesting pdf generator to start working for questionnaire {questionnaire.PublicKey}");
+            this.logger.Info($"Requesting pdf generator to start working for questionnaire {questionnaire.PublicKey}");
 
             await designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId);
             incrementProgress.Invoke();
@@ -81,18 +81,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return await designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId);
             });
 
-            this.logger.Error("Loading pdf for default language");
+            this.logger.Info("Loading pdf for default language");
 
             var pdfFile = await designerApi.DownloadPdf(questionnaireIdentity.QuestionnaireId);
             incrementProgress.Invoke();
 
             pdfFiles.Add(questionnaireIdentity.ToString(), new QuestionnairePdf { Content = pdfFile.Content });
 
-            this.logger.Error($"PDF for questionnaire stored {questionnaireIdentity}");
+            this.logger.Debug($"PDF for questionnaire stored {questionnaireIdentity}");
 
             foreach (var translation in questionnaire.Translations)
             {
-                this.logger.Error($"loading pdf for translation {translation}");
+                this.logger.Info($"loading pdf for translation {translation}");
 
                 await pdfRetry.ExecuteAsync(async () =>
                 {
@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 incrementProgress.Invoke();
 
                 pdfFiles.Add($"{translation.Id.FormatGuid()}_{questionnaireIdentity}", new QuestionnairePdf { Content = pdfTranslated.Content });
-                this.logger.Error($"PDF for questionnaire stored {questionnaireIdentity} translation {translation.Id}, {translation.Name}");
+                this.logger.Debug($"PDF for questionnaire stored {questionnaireIdentity} translation {translation.Id}, {translation.Name}");
             }
         }
 
@@ -115,6 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 this.pdfStorage.Store(pdfFile.Value, pdfFile.Key);
             }
+
             progress.Report(100);
         }
     }
