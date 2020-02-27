@@ -28,8 +28,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             db.CategoriesInstances.AddRange(
                 new[]
                 {
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2)
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2, 2)
                 });
             db.SaveChanges();
             
@@ -72,8 +72,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             db.CategoriesInstances.AddRange(
                 new[]
                 {
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2)
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2, 2)
                 });
             db.SaveChanges();
             
@@ -129,10 +129,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             db.CategoriesInstances.AddRange(
                 new[]
                 {
-                    Create.CategoriesInstance(sourceQuestionnaireId, categories1Id, 1),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categories1Id, 2),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categories2Id, 100),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categories2Id, 200)
+                    Create.CategoriesInstance(sourceQuestionnaireId, categories1Id, 1, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categories1Id, 2, 2),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categories2Id, 100, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categories2Id, 200, 2)
                 });
             db.SaveChanges();
             
@@ -195,10 +195,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             db.CategoriesInstances.AddRange(
                 new[]
                 {
-                    Create.CategoriesInstance(sourceQuestionnaireId, categories1Id, 1),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categories1Id, 2),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categories2Id, 100),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categories2Id, 200)
+                    Create.CategoriesInstance(sourceQuestionnaireId, categories1Id, 1, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categories1Id, 2, 2),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categories2Id, 100, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categories2Id, 200, 2)
                 });
             db.SaveChanges();
             
@@ -248,8 +248,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             db.CategoriesInstances.AddRange(
                 new[]
                 {
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2)
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2, 2)
                 });
             db.SaveChanges();
             
@@ -294,8 +294,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             db.CategoriesInstances.AddRange(
                 new[]
                 {
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2)
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2, 2)
                 });
             db.SaveChanges();
             
@@ -352,8 +352,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             db.CategoriesInstances.AddRange(
                 new[]
                 {
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2)
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2, 2)
                 });
             db.SaveChanges();
             
@@ -408,8 +408,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             db.CategoriesInstances.AddRange(
                 new[]
                 {
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1),
-                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2)
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 1, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, categoriesId, 2, 2)
                 });
             db.SaveChanges();
             
