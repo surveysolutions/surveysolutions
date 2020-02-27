@@ -298,8 +298,6 @@ export default {
         },
     },
     mounted() {
-        var self = this
-
         Vue.nextTick(() => {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
