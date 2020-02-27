@@ -512,10 +512,16 @@ export default {
     },
     methods: {
         async unArchive() {
-            const response = await this.$http.patch(this.$config.model.api.unarhiveUrl)
-            if(response.status == 200) {
-                window.location.reload()
-            }
+            var self = this
+            await this.$http.patch(this.$config.model.api.unarhiveUrl).then(
+                response => {
+                    window.location.reload()
+                },
+                e => {
+                    if (e.response.data) toastr.error(e.response.data)
+                    else toastr.error(self.$t('Pages.GlobalSettings_UnhandledExceptionMessage'))
+                }
+            )
         },
         formatDate(d) {
             return moment.utc(d).format(DateFormats.dateTime)
