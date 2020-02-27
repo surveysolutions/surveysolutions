@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
@@ -48,11 +48,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersRemoved> @event)
         {
-            var questionnaire =
-                questionnaireStorage.GetQuestionnaireDocument(state.QuestionnaireId, state.QuestionnaireVersion);
+            var questionnaire = GetQuestionnaire(state.QuestionnaireId, state.QuestionnaireVersion);
 
             List<Identity> questions = @event.Payload.Questions
-                .Where(q => IsEligibleQuestion(questionnaire.Find<IQuestion>(q.Id)))
+                .Where(q => IsEligibleQuestion(questionnaire, q.Id))
                 .ToList();
 
             List<InterviewStatisticsReportRow> delete = new List<InterviewStatisticsReportRow>();
@@ -61,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 delete.AddRange(state.StatisticsReport.Where(row => 
                     row.RosterVector == identity.RosterVector.AsString() 
-                    && row.EntityId == questionnaire.EntitiesIdMap[identity.Id]));
+                    && row.EntityId == questionnaire.GetEntityIdMapValue(identity.Id)));
             }
 
             foreach (var item in delete)
@@ -74,19 +73,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<RosterInstancesRemoved> @event)
         {
-            var questionnaire = questionnaireStorage.GetQuestionnaireDocument(state.QuestionnaireId, state.QuestionnaireVersion);
+            var questionnaire = GetQuestionnaire(state.QuestionnaireId, state.QuestionnaireVersion);
 
             IEnumerable<(string rv, int entityId)> ToDelete()
             {
                 foreach (var instance in @event.Payload.Instances)
                 {
                     var rosterVector = new RosterVector(instance.OuterRosterVector).ExtendWithOneCoordinate((int)instance.RosterInstanceId).AsString();
-                    var roster = questionnaire.Find<Group>(instance.GroupId);
-                    var questions = roster.Children.OfType<IQuestion>().Where(IsEligibleQuestion).ToArray();
+                    var questionsIds = questionnaire.GetChildQuestions(instance.GroupId);
+                    var eligibleQuestionIds = questionsIds.Where(id => IsEligibleQuestion(questionnaire, id)).ToArray();
 
-                    foreach (var question in questions)
+                    foreach (var questionId in eligibleQuestionIds)
                     {
-                        yield return (rosterVector, questionnaire.EntitiesIdMap[question.PublicKey]);
+                        yield return (rosterVector, questionnaire.GetEntityIdMapValue(questionId));
                     }
                 }
             }
@@ -149,12 +148,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return state;
         }
 
-        private bool IsEligibleQuestion(IQuestion question)
+        private bool IsEligibleQuestion(IQuestionnaire questionnaire, Guid questionId)
         {
-            if (question.CascadeFromQuestionId != null) return false;
-            if (question.LinkedToQuestionId != null || question.LinkedToRosterId != null) return false;
-            if (question.IsFilteredCombobox == true) return false;
-            if (question is SingleQuestion || question is NumericQuestion || question is MultyOptionsQuestion) return true;
+            if (questionnaire.IsQuestionCascading(questionId)) return false;
+            if (questionnaire.IsQuestionLinked(questionId) || questionnaire.IsQuestionLinkedToRoster(questionId)) return false;
+            if (questionnaire.IsQuestionFilteredCombobox(questionId)) return false;
+
+            var questionType = questionnaire.GetQuestionType(questionId);
+            if (questionType == QuestionType.SingleOption || questionType == QuestionType.Numeric || questionType == QuestionType.MultyOption) return true;
             return false;
         }
 
@@ -162,15 +163,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             Guid questionId, RosterVector rv, StatisticsReportType type = StatisticsReportType.Categorical,
             params decimal[] answer)
         {
-            var questionnaire =
-                questionnaireStorage.GetQuestionnaireDocument(state.QuestionnaireId, state.QuestionnaireVersion);
+            var questionnaire = GetQuestionnaire(state.QuestionnaireId, state.QuestionnaireVersion);
 
-            var question = questionnaire.Find<IQuestion>(questionId);
-
-            if (!IsEligibleQuestion(question)) return;
+            if (!IsEligibleQuestion(questionnaire, questionId)) return;
             
             (int interviewId, string rosterVector, int entityId) key =
-                (state.Id, rv.AsString(), questionnaire.EntitiesIdMap[questionId]);
+                (state.Id, rv.AsString(), questionnaire.GetEntityIdMapValue(questionId));
 
             var entity = state.StatisticsReport.SingleOrDefault(x =>
                                       x.RosterVector == key.rosterVector
@@ -198,23 +196,27 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private void UpdateQuestionEnablement(InterviewSummary summary, bool enabled, Identity[] questionIds)
         {
-            var questionnaire =
-                questionnaireStorage.GetQuestionnaireDocument(summary.QuestionnaireId, summary.QuestionnaireVersion);
+            var questionnaire = GetQuestionnaire(summary.QuestionnaireId, summary.QuestionnaireVersion);
 
             List<Identity> questions = questionIds
-                .Where(q => IsEligibleQuestion(questionnaire.Find<IQuestion>(q.Id)))
+                .Where(q => IsEligibleQuestion(questionnaire, q.Id))
                 .ToList();
             
             foreach (var identity in questions)
             {
                 var entity = summary.StatisticsReport.SingleOrDefault(x =>
                     x.RosterVector == identity.RosterVector.AsString()
-                    && x.EntityId == questionnaire.EntitiesIdMap[identity.Id]);
+                    && x.EntityId == questionnaire.GetEntityIdMapValue(identity.Id));
 
                 if(entity == null) continue;
                 
                 entity.IsEnabled = enabled;
             }
+        }
+
+        private IQuestionnaire GetQuestionnaire(Guid questionnaireId, long version)
+        {
+            return questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(questionnaireId, version), null);
         }
     }
 }

@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Humanizer;
 using Main.Core.Events;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
@@ -20,6 +26,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Models.ComponentModels;
@@ -43,6 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly IInterviewBrokenPackagesService brokenPackagesService;
+        private readonly HealthCheckService healthCheckService;
 
         public ControlPanelApiController(IConfiguration configuration,
             ITabletInformationService tabletInformationService,
@@ -51,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             IAndroidPackageReader androidPackageReader,
             IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory,
             IJsonAllTypesSerializer serializer,
-            IInterviewBrokenPackagesService brokenPackagesService)
+            IInterviewBrokenPackagesService brokenPackagesService, HealthCheckService healthCheckService)
         {
             this.configuration = configuration;
             this.tabletInformationService = tabletInformationService;
@@ -61,6 +69,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.brokenInterviewPackagesViewFactory = brokenInterviewPackagesViewFactory;
             this.serializer = serializer;
             this.brokenPackagesService = brokenPackagesService;
+            this.healthCheckService = healthCheckService;
         }
 
 
@@ -244,6 +253,76 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             this.brokenPackagesService.PutReason(request.PackageIds, request.ErrorType);
             return this.Ok();
+        }
+        
+        [HttpGet]
+        public async Task<HealthReport> GetHealthResult(CancellationToken token)
+        {
+            var report = await healthCheckService.CheckHealthAsync(c => !c.Tags.Contains("ready"), token);
+            return report;
+        }
+
+        [HttpGet]
+        public async Task<List<MetricState>> GetMetricsState(CancellationToken token)
+        {
+            await MetricsRegistry.Update();
+            var result = new List<MetricState>();
+
+            var cpuUsage = await GetCpuUsage();
+            result.Add(new MetricState("CPU Usage", cpuUsage.ToStr("0.##%")));
+            result.Add(new MetricState("Working Memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.00")));
+
+            result.Add(new MetricState("Events count", BrokenPackagesStatsCollector.DatabaseTableRowsCount.Labels("events").Value.ToString("N0", CultureInfo.InvariantCulture)));
+            result.Add(new MetricState("Events size", BrokenPackagesStatsCollector.DatabaseTableSize.Labels("events").Value.Bytes().Humanize("0.00")));
+
+            // web interview
+            var connections = CommonMetrics.WebInterviewConnection.GetDiffForLabels(OpenConnectionsLabel, ClosedConnectionsLabel);
+            result.Add(new MetricState("Web interview connections", "connection".ToQuantity(connections)));
+
+            // npgsql
+            var idle = CommonMetrics.NpgsqlConnections.GetSummForLabels(IdleDbConnectionsLabel);
+            var busy = CommonMetrics.NpgsqlConnections.GetSummForLabels(BusyDbConnectionsLabel);
+
+            result.Add(new MetricState("Database connections", $"Busy: {busy}, Idle: {idle}"));
+
+            // ReSharper disable once UseStringInterpolation
+            result.Add(new MetricState("Database Data usage", string.Format("Read: {0}, Write: {1}",
+                CommonMetrics.NpgsqlDataCounter.GetSummForLabels(ReadDbdataLabel).Bytes().Humanize("0.00"),
+                CommonMetrics.NpgsqlDataCounter.GetSummForLabels(WriteDbdataLabel).Bytes().Humanize("0.00"))));
+         
+            return result;
+        }
+
+        private async ValueTask<double> GetCpuUsage()
+        {
+            var process = Process.GetCurrentProcess();
+            var sw = Stopwatch.StartNew();
+            var time = process.TotalProcessorTime;
+            await Task.Delay(1000);
+            process.Refresh();
+            var time2 = process.TotalProcessorTime;
+            sw.Stop();
+
+            return (time2 - time).TotalSeconds / sw.Elapsed.TotalSeconds / Environment.ProcessorCount;
+        }
+
+        private static readonly string[] OpenConnectionsLabel = {"open"};
+        private static readonly string[] ClosedConnectionsLabel = { "closed" };
+        private static readonly string[] IdleDbConnectionsLabel = {"idle"};
+        private static readonly string[] BusyDbConnectionsLabel = { "busy" };
+        private static readonly string[] ReadDbdataLabel = {"read"};
+        private static readonly string[] WriteDbdataLabel = { "write" };
+        
+
+        public struct MetricState
+        {
+            public MetricState(string name, string value)
+            {
+                Name = name;
+                Value = value;
+            }
+            public string Name { get;  }
+            public string Value { get; }
         }
 
         public class ReprocessSelectedBrokenPackagesRequestView

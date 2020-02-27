@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,8 +16,8 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Logging;
 using WB.UI.Shared.Web.Controllers;
+using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.Versions;
 using WB.UI.WebTester.Infrastructure;
@@ -49,7 +48,6 @@ namespace WB.UI.WebTester
             services.AddSession();
             services.AddResponseCaching();
             services.AddResponseCompression();
-            services.AddLogging();
             services.AddSignalR()
                 .AddNewtonsoftJsonProtocol();
             services.Configure<TesterConfiguration>(this.Configuration);
@@ -127,6 +125,7 @@ namespace WB.UI.WebTester
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapVersionEndpoint();
                 endpoints.MapHealthChecks(".hc");
 
                 endpoints.MapDefaultControllerRoute();

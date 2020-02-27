@@ -1,4 +1,6 @@
-﻿using Prometheus;
+﻿using System.IO;
+using System.Threading.Tasks;
+using Prometheus;
 
 namespace WB.Infrastructure.Native.Monitoring
 {
@@ -20,6 +22,11 @@ namespace WB.Infrastructure.Native.Monitoring
                     collector.UpdateMetrics();
                 }
             });
+        }
+
+        public static Task Update()
+        {
+            return Metrics.DefaultRegistry.CollectAndExportAsTextAsync(Stream.Null);
         }
     }
 }

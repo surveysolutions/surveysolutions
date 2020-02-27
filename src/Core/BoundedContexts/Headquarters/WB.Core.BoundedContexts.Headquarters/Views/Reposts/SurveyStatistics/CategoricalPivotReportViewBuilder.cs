@@ -1,29 +1,37 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 {
     public class CategoricalPivotReportViewBuilder
     {
-        private readonly IQuestion columnQuestion;
-        private readonly IQuestion rowsQuestion;
+        private readonly IQuestionnaire questionnaire;
+        private readonly Guid columnQuestionId;
+        private readonly Guid rowsQuestionId;
         private readonly List<GetReportCategoricalPivotReportItem> items;
 
-        public CategoricalPivotReportViewBuilder(IQuestion columnQuestion, IQuestion rowsQuestion, List<GetReportCategoricalPivotReportItem> items)
+        public CategoricalPivotReportViewBuilder(IQuestionnaire questionnaire, Guid columnQuestionId, Guid rowsQuestionId, List<GetReportCategoricalPivotReportItem> items)
         {
-            this.columnQuestion = columnQuestion;
-            this.rowsQuestion = rowsQuestion;
+            this.questionnaire = questionnaire;
+            this.columnQuestionId = columnQuestionId;
+            this.rowsQuestionId = rowsQuestionId;
             this.items = items ?? new List<GetReportCategoricalPivotReportItem>();
         }
 
         public ReportView AsReportView()
         {
-            var columnAnswers = GetAnswersIndex(columnQuestion);
-            var rowsAnswers = GetAnswersIndex(rowsQuestion);
+            var columnOptions = questionnaire.GetOptionsForQuestion(columnQuestionId, null, null, null).ToList();
+            var rowsOptions = questionnaire.GetOptionsForQuestion(rowsQuestionId, null, null, null).ToList();
+
+            var columnAnswers = GetAnswersIndex(columnOptions);
+            var rowsAnswers = GetAnswersIndex(rowsOptions);
 
             var report = new ReportView();
 
@@ -31,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             {
                 yield return "variable";
 
-                foreach (var answer in columnQuestion.Answers)
+                foreach (var answer in columnOptions)
                 {
                     yield return answer.AsColumnName();
                 }
@@ -41,11 +49,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             
             IEnumerable<string> GetHeaders()
             {
-                yield return rowsQuestion.VariableLabel ?? rowsQuestion.StataExportCaption;
+                yield return questionnaire.GetQuestionExportDescription(rowsQuestionId) ?? questionnaire.GetQuestionVariableName(rowsQuestionId);
 
-                foreach (var answer in columnQuestion.Answers)
+                foreach (var answer in columnOptions)
                 {
-                    yield return answer.AnswerText;
+                    yield return answer.Title;
                 }
 
                 yield return Strings.Total;
@@ -61,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 report.Totals[i] = 0L;
             }
 
-            report.Data = new object[rowsQuestion.Answers.Count][];
+            report.Data = new object[rowsOptions.Count][];
 
             foreach (var kv in rowsAnswers)
             {
@@ -105,14 +113,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             return report;
         }
 
-        private SortedDictionary<long, (int index, string text)> GetAnswersIndex(IQuestion question)
+        private SortedDictionary<long, (int index, string text)> GetAnswersIndex(List<CategoricalOption> options)
         {
             var rowIndexMap = new SortedDictionary<long, (int index, string text)>();
 
-            for (var index = 0; index < question.Answers.Count; index++)
+            for (var index = 0; index < options.Count; index++)
             {
-                var answer = question.Answers[index];
-                rowIndexMap.Add((long) answer.GetParsedValue(), (index, answer.AnswerText));
+                var answer = options[index];
+                rowIndexMap.Add((long) answer.Value, (index, answer.Title));
             }
 
             return rowIndexMap;

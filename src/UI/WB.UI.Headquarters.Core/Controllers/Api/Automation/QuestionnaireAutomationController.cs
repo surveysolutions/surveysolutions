@@ -1,18 +1,16 @@
-﻿
-using System;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Headquarters.Services;
-using WB.UI.Headquarters.Services.Impl;
 
-namespace WB.UI.Headquarters.API.Automation
+namespace WB.UI.Headquarters.Controllers.Api.Automation
 {
     [Authorize(Roles = "Administrator")]
     [Route("api/QuestionnaireAutomation")]
@@ -20,14 +18,14 @@ namespace WB.UI.Headquarters.API.Automation
     {
         private readonly IDesignerUserCredentials designerUserCredentials;
         private readonly IQuestionnaireImportService importService;
-        private readonly IAssignmentsUpgradeService upgradeService;
+        private readonly IAssignmentsUpgrader upgradeService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAuthorizedUser user;
 
         public QuestionnaireAutomationController(
             IDesignerUserCredentials designerUserCredentials,
             IQuestionnaireImportService importService,
-            IAssignmentsUpgradeService upgradeService,
+            IAssignmentsUpgrader upgradeService,
             IQuestionnaireStorage questionnaireStorage,
 
             IAuthorizedUser user)
@@ -50,8 +48,7 @@ namespace WB.UI.Headquarters.API.Automation
             });
 
             var result = await this.importService.Import(request.QuestionnaireId, null, false, request.Comment,
-                Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(this.Request)
-                , includePdf: false);
+                Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(this.Request), includePdf: false);
 
             if (result.Status == QuestionnaireImportStatus.Finished)
             {
@@ -62,7 +59,7 @@ namespace WB.UI.Headquarters.API.Automation
 
                     var processId = Guid.NewGuid();
                     var sourceQuestionnaireId = new QuestionnaireIdentity(questionnaireId, version);
-                    this.upgradeService.EnqueueUpgrade(processId, this.user.Id, sourceQuestionnaireId, result.Identity);
+                    this.upgradeService.Upgrade(processId, this.user.Id, sourceQuestionnaireId, result.Identity, CancellationToken.None);
                 }
 
                 return result.Identity;

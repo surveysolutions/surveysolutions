@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
@@ -191,19 +192,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("{id:guid}/comment-by-variable/{variable}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
-        public ActionResult CommentByVariable(Guid id, string variable, RosterVector rosterVector, string comment)
+        public ActionResult CommentByVariable(Guid id, [Required]string variable, int[] rosterVector, [Required]string comment)
         {
             var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
-            var question = questionnaire.GetQuestionByVariable(variable);
+            var questionId = questionnaire.GetQuestionIdByVariable(variable);
 
-            if (question == null)
-                return StatusCode(StatusCodes.Status406NotAcceptable,
-                    "Question was not found.");
+            if (questionId == null)
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Question was not found.");
 
-            return this.CommentAnswer(id, Identity.Create(question.PublicKey, rosterVector), comment);
+            return this.CommentAnswer(id, Identity.Create(questionId.Value, rosterVector), comment);
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("{id:guid}/comment/{questionId}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
-        public ActionResult CommentByIdentity(Guid id, string questionId, string comment)
+        public ActionResult CommentByIdentity(Guid id, [Required]string questionId, [Required]string comment)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
@@ -244,7 +244,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="request">Responsible id or responsible name</param>
         /// <response code="200">Interview was reassigned</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Target responsible was not found or it is not an interviewer</response>
+        /// <response code="406">Target responsible was not found or it is not an interviewer of interview cannot be reassigned. Check response for reason description</response>
         [HttpPatch]
         [Route("{id:guid}/assign")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
@@ -364,9 +364,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
         /// <param name="request"></param>
-        /// <response code="200">Interview was deleted</response>
+        /// <response code="200">Interview was assigned to supervisor</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
+        /// <response code="406">Target responsible was not found or it is not a supervisor of interview cannot be reassigned. Check response for reason description</response>
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]

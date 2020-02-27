@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Char = System.Char;
+using WB.UI.Headquarters.Code.SwaggerCustomization;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -34,7 +30,9 @@ namespace WB.UI.Headquarters.Code
                     Type = SecuritySchemeType.Http,
                     Scheme = "basic"
                 });
-
+                c.ParameterFilter<XmsEnumParameterFilter>();
+                c.OperationFilter<XmsEnumOperationFilter>();
+                c.SchemaFilter<XmsEnumSchemaFilter>();
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -84,6 +82,8 @@ namespace WB.UI.Headquarters.Code
                     return result;
                 });
             });
+
+            services.AddSwaggerGenNewtonsoftSupport();
         }
 
         public static void UseHqSwaggerUI(this IApplicationBuilder appBuilder)
@@ -95,22 +95,4 @@ namespace WB.UI.Headquarters.Code
         }
     }
 
-    public class CapitalizedCaseSchemaFilter : ISchemaFilter
-    {
-        public void Apply(OpenApiSchema schema, SchemaFilterContext context)
-        {
-            if (schema.Properties == null) return;
-            if (schema.Properties.Count == 0) return;
-
-            var keys = schema.Properties.Keys;
-            var newProperties = new Dictionary<string, OpenApiSchema>();
-
-            foreach (var key in keys)
-            {
-                newProperties[key.Capitalize()] = schema.Properties[key];
-            }
-
-            schema.Properties = newProperties;
-        }
-    }
 }

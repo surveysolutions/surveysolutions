@@ -7,30 +7,39 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NAudio.MediaFoundation;
 using NAudio.Wave;
-using StackExchange.Exceptional;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class AudioProcessingService : IAudioProcessingService
     {
-        private readonly ILogger logger;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly ILogger<AudioProcessingService> logger;
+        private readonly bool audioEncoderStarted = false;
 
         private const string MimeType = @"audio/m4a";
 
-        public AudioProcessingService(ILogger logger, IHttpContextAccessor httpContextAccessor)
+        public AudioProcessingService(ILogger<AudioProcessingService> logger)
         {
             this.logger = logger;
-            this.httpContextAccessor = httpContextAccessor;
-            MediaFoundationApi.Startup();
-            // single thread to process all audio compression requests
-            // if there is need to process audio in more then one queue - duplicate line below
-            Task.Factory.StartNew(AudioCompressionQueueProcessor);
+            try
+            {
+                MediaFoundationApi.Startup();
+                audioEncoderStarted = true;
+            }
+            catch (Exception e)
+            {
+                this.logger.LogWarning(e, "Failed to start audio encoder. Web interview audio questions will not be ");
+            }
+            finally
+            {
+                // single thread to process all audio compression requests
+                // if there is need to process audio in more then one queue - duplicate line below
+
+                Task.Factory.StartNew(AudioCompressionQueueProcessor);
+            }
         }
 
         public Task<AudioFileInformation> CompressAudioFileAsync(byte[] bytes)
@@ -53,6 +62,17 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     audioResult.Duration = wavFile.TotalTime;
 
+                    if (!audioEncoderStarted)
+                    {
+                        return new AudioFileInformation
+                        {
+                            Binary = audio,
+                            Duration = audioResult.Duration,
+                            Hash = CalculateHash(audio),
+                            MimeType = "audio/wav"
+                        };
+                    }
+
                     const int desiredBitRate = 64 * 1024;
                     MediaFoundationEncoder.EncodeToAac(wavFile, tempFile,  desiredBitRate);
                 }
@@ -64,8 +84,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
             catch (Exception ex)
             {
-                logger.Error("Error on compress audio", ex);
-                ex.Log(httpContextAccessor.HttpContext);
+                logger.LogError(ex, "Error on compress audio");
 
                 audioResult.MimeType = @"audio/wav";
                 audioResult.Binary = audio;
@@ -87,7 +106,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             Thread.CurrentThread.Name = "Audio compression queue";
             var sw = new Stopwatch();
-            var hashBuilder = new StringBuilder();
 
             foreach (var job in audioCompressionQueue.GetConsumingEnumerable())
             {
@@ -96,15 +114,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     sw.Restart();
                     var result = CompressData(job.bytes);
 
-                    var hashBytes = SHA1.Create().ComputeHash(result.Binary);
-                    hashBuilder.Clear();
-
-                    foreach (var @byte in hashBytes.Take(4))
-                    {
-                        hashBuilder.Append(@byte.ToString(@"x2"));
-                    }
-
-                    result.Hash = hashBuilder.ToString();
+                    var resultHash = CalculateHash(result.Binary);
+                    result.Hash = resultHash;
                     job.task.SetResult(result);
                 }
                 catch (Exception e)
@@ -118,6 +129,20 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     audtioFilesProcessingTime.Inc(sw.Elapsed.TotalSeconds);
                 }
             }
+        }
+
+        private static string CalculateHash(byte[] data)
+        {
+            StringBuilder result = new StringBuilder();
+            var hashBytes = SHA1.Create().ComputeHash(data);
+
+            foreach (var @byte in hashBytes.Take(4))
+            {
+                result.Append(@byte.ToString(@"x2"));
+            }
+
+            var resultHash = result.ToString();
+            return resultHash;
         }
 
         // instrumentation

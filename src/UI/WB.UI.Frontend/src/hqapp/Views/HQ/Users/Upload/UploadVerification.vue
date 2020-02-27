@@ -30,13 +30,14 @@
                         ref="uploader"
                         v-show="false"
                         :accept="allowedFileExtensions"
+                        :value="selectedFileName"
                         type="file"
                         @change="onFileChange"
                         class="btn btn-default btn-lg btn-action-questionnaire"/>
                     <button
                         type="button"
                         class="btn btn-success"
-                        @click="$refs.uploader.click()">{{$t('UploadUsers.ReUploadTabFile')}}</button>
+                        @click="selectFile">{{$t('UploadUsers.ReUploadTabFile')}}</button>
                     <router-link
                         class="btn btn-link"
                         :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
@@ -52,6 +53,11 @@ import * as toastr from 'toastr'
 import {isEmpty} from 'lodash'
 
 export default {
+    data: function() {
+        return {
+            selectedFileName: null,
+        }
+    },
     computed: {
         config() {
             return this.$config.model
@@ -67,6 +73,10 @@ export default {
         },
     },
     methods: {
+        selectFile(){
+            this.selectedFileName = null
+            this.$refs.uploader.click()
+        },
         onFileChange(e) {
             const files = e.target.files || e.dataTransfer.files
 
