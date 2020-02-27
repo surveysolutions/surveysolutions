@@ -19,6 +19,8 @@
                         ref="table"
                         :tableOptions="tableOptions"
                         :noSearch="true"
+                        :noPaging="false"
+                        @ajaxComplete="historyTableReload"
                         :wrapperClass=" { 'table-wrapper': true }"></DataTables>
                 </div>
 
@@ -199,6 +201,7 @@ export default {
 
         tableOptions() {
             var self = this
+
             const columns = [
                 {
                     data: 'Action',
@@ -281,16 +284,34 @@ export default {
                 columns,
                 ordering: false,
                 ajax: {
+                    //url: `${this.$hq.basePath}api/v1/assignments/${this.model.id}/history`,
+                    url: `${this.$hq.basePath}api/assignmentsApi/history?id=${this.model.id}`,
+                    type: 'GET',
+                    contentType: 'application/json',
+                    /*dataSrc: function ( responseJson ) {
+                        responseJson.recordsTotal = responseJson.RecordsFiltered
+                        return responseJson.History
+                    },
+                    dataSrc: 'History',*/
+                },
+                /*{ 
                     url: `${this.$hq.basePath}api/v1/assignments/${this.model.id}/history`,
                     type: 'GET',
                     dataSrc: 'History',
-                },
+                },*/
             }
 
             return tableOptions
         },
     },
+    methods: {
+        historyTableReload(data) {
+            $(this.$refs.table).deferLoading = data.RecordsTotal
+        },
+    },
     mounted() {
+        var self = this
+
         Vue.nextTick(() => {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,12 +8,14 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
 
@@ -32,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IAssignmentPasswordGenerator passwordGenerator;
         private readonly ICommandService commandService;
         private readonly IAssignmentFactory assignmentFactory;
+        private readonly IUserRepository userManager;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -43,7 +47,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             IStatefulInterviewRepository interviews, 
             IAssignmentPasswordGenerator passwordGenerator,
             ICommandService commandService,
-            IAssignmentFactory assignmentFactory)
+            IAssignmentFactory assignmentFactory,
+            IUserRepository userManager)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -56,6 +61,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.passwordGenerator = passwordGenerator;
             this.commandService = commandService;
             this.assignmentFactory = assignmentFactory;
+            this.userManager = userManager;
         }
         
         [HttpGet]
@@ -238,6 +244,35 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.invitationService.CreateInvitationForWebInterview(assignment);
 
             return this.Ok();
+        }
+
+        [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+        public async Task<ActionResult<DataTableResponse<AssignmentHistoryItem>>> History(DataTableRequest dataTableRequest, [FromQuery] int id)
+        {
+            var assignment = this.assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            if (this.authorizedUser.IsSupervisor && assignment.ResponsibleId != this.authorizedUser.Id)
+            {
+                var responsible = await this.userManager.FindByIdAsync(assignment.ResponsibleId);
+                if (!responsible.IsInRole(UserRoles.Interviewer))
+                    return Forbid();
+                if (responsible.Profile.SupervisorId != this.authorizedUser.Id)
+                    return Forbid();
+            }
+
+            AssignmentHistory result = await this.assignmentViewFactory.LoadHistoryAsync(assignment.PublicKey, dataTableRequest.Start, dataTableRequest.Length);
+            var dataTableResponse = new DataTableResponse<AssignmentHistoryItem>()
+            {
+                RecordsTotal = result.RecordsFiltered,
+                Data = result.History,
+            };
+
+            return dataTableResponse;
         }
 
         public class CreateAssignmentRequest
