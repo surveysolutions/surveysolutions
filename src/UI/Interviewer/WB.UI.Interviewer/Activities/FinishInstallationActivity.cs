@@ -6,7 +6,6 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Java.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -68,6 +67,12 @@ namespace WB.UI.Interviewer.Activities
             this.ViewModel.UserName = username;
             this.ViewModel.Password = password;
             this.ViewModel.SignInCommand.ExecuteAsync();
+        }
+
+        [Export("EnableWifi")]
+        public override void EnableWifi()
+        {
+            base.EnableWifi();
         }
     }
 }

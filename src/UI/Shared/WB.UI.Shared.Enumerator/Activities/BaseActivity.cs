@@ -1,3 +1,5 @@
+using Android.Content;
+using Android.Net.Wifi;
 using Android.OS;
 using Android.Support.Graphics.Drawable;
 using Android.Views;
@@ -98,6 +100,23 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 // ignore if we can get info about RAM and Disk
             }
+        }
+
+        public virtual void EnableWifi()
+        {
+            if (GetSystemService(Context.WifiService) is WifiManager wifi)
+            {
+                wifi.SetWifiEnabled(true);
+                
+                while (true)
+                {
+                    System.Threading.Thread.Sleep(5000);
+                    if (wifi.ConnectionInfo.SSID != null)
+                    {
+                        break;
+                    }
+                }
+            };
         }
     }
 }

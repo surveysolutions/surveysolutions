@@ -57,5 +57,11 @@ namespace WB.UI.Supervisor.Activities
             this.ViewModel.Password = password;
             this.ViewModel.SignInCommand.ExecuteAsync();
         }
+
+        [Export("EnableWifi")]
+        public override void EnableWifi()
+        {
+            base.EnableWifi();
+        }
     }
 }
