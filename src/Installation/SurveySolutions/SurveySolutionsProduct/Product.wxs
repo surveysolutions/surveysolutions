@@ -371,10 +371,10 @@
                                 Start="install"
                                 Stop="both"
                                 Remove="both" 
-                                Wait="yes"></ServiceControl>
+                                Wait="no"></ServiceControl>
             </Component>
         </Directory>
-        </Directory>
+      </Directory>
     </DirectoryRef>
   </Fragment>
   <Fragment>
