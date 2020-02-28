@@ -719,7 +719,7 @@ export default {
             if (this.editedQuantity == null || this.editedQuantity === '') {
                 targetQuantity = 1
             } else if (this.editedQuantity == -1) {
-                targetQuantity = null
+                targetQuantity = -1
             } else {
                 targetQuantity = this.editedQuantity
             }
