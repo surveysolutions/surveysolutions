@@ -1,7 +1,8 @@
 param(
 #      [string]$cmd,
       [string]$HQSourcePath, 
-	  [switch]$noDestCleanup)
+	  [switch]$noDestCleanup,
+	  [INT]   $BuildNumber)
 
 $ErrorActionPreference = "Stop"
 
@@ -71,7 +72,8 @@ Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse
 #Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
-$version = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName).FileVersion
+$versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
+$version = $newVersion = "{0}.{1}.{2}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart, $BuildNumber
 #    [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 
 setupExportService "$HQsitePath\ExportService\appsettings.json"
