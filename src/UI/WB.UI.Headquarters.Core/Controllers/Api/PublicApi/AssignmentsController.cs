@@ -418,7 +418,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/changeQuantity")]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
-        public ActionResult<AssignmentDetails> ChangeQuantity(int id, [FromBody] int? quantity)
+        public ActionResult<AssignmentDetails> ChangeQuantity(int id, [FromBody] int quantity)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
