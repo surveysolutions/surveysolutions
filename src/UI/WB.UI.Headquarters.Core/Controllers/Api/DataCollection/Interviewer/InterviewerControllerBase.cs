@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -70,6 +71,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpGet]
         [Route("")]
+        [WriteToSyncLog(SynchronizationLogType.GetApk)]
         public virtual IActionResult Get()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
@@ -81,6 +83,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpGet]
         [Route("extended")]
+        [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
         public virtual IActionResult GetExtended()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
@@ -92,6 +95,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpGet]
         [Route("patch/{deviceVersion:int}")]
+        [WriteToSyncLog(SynchronizationLogType.GetApkPatch)]
         public virtual IActionResult Patch(int deviceVersion)
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
@@ -103,6 +107,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpGet]
         [Route("extended/patch/{deviceVersion:int}")]
+        [WriteToSyncLog(SynchronizationLogType.GetExtendedApkPatch)]
         public virtual IActionResult PatchExtended(int deviceVersion)
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
@@ -144,6 +149,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         [Authorize(Roles = "Interviewer")]
         [HttpGet]
         [Route("compatibility/{deviceid}/{deviceSyncProtocolVersion}")]
+        [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         public virtual IActionResult CheckCompatibility(string deviceId, int deviceSyncProtocolVersion, string tenantId = null)
         {
             int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
