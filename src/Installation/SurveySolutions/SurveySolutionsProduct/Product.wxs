@@ -13,6 +13,8 @@
              UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
+    <Property Id="MSIRESTARTMANAGERCONTROL" Value="Disable"/>
+
     <!--<util:CloseApplication Id="CloseExportService" 
                            CloseMessage="yes" 
                            Timeout="20" 
