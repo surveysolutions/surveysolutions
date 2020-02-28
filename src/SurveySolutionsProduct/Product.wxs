@@ -212,6 +212,7 @@
       <Custom Action="WriteSiteSettings" After="InstallFiles" >
           <![CDATA[NOT Installed]]>
       </Custom>
+      <DeleteServices>NOT UPGRADINGPRODUCTCODE</DeleteServices>
     </InstallExecuteSequence>
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
