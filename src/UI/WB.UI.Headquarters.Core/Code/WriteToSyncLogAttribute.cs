@@ -231,6 +231,10 @@ namespace WB.UI.Headquarters.Code
                             var assignmentId = context.GetActionArgumentOrDefault<int>("id", 0);
                             logItem.Log = SyncLogMessages.AssignmentReceivedByTablet.FormatString(assignmentId);
                             break;
+                        case SynchronizationLogType.DownloadReusableCategories:
+                            var categoriesId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
+                            logItem.Log = SyncLogMessages.DownloadReusableCategories.FormatString(categoriesId);
+                            break;
                         default:
                             throw new ArgumentException(nameof(logAction));
                     }
@@ -249,8 +253,6 @@ namespace WB.UI.Headquarters.Code
                     logger.Error($"Error updating sync log on action '{this.logAction}'.", exception);
                 }
             }
-
-
         }
 
         private string GetInterviewsLogMessage(ActionExecutingContext executingContext, ActionExecutedContext context)
