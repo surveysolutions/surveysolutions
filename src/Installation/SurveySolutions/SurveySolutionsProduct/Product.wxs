@@ -21,7 +21,7 @@
                            Target="WB.Services.Export.Host.exe" />
 
     <!--Will override all files-->
-    <Property Id="REINSTALLMODE" Value="amus" />
+    <Property Id="REINSTALLMODE" Value="emus" />
 
     <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
     <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
@@ -217,7 +217,7 @@
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
                   AllowDowngrades="no"
-                  Schedule="afterInstallInitialize"/>
+                  Schedule="afterInstallExecute"/>
 
     <!--AllowSameVersionUpgrades ="yes"-->
     
@@ -342,7 +342,7 @@
                                 Wait='yes'/>
             </Component>-->
 
-            <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B000-1F22B2B48F74">
+            <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B0AA-1F22B2B48F74">
                 <!--Reference file to register service-->
                 <!--Should be excluded from harvested results-->
                 <!-- xsl transformation Filter.xsl cleans file after harvesting-->
