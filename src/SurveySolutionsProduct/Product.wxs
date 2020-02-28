@@ -217,7 +217,9 @@
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
                   AllowDowngrades="no"
                   Schedule="afterInstallExecute"
-                  AllowSameVersionUpgrades ="yes"/>
+                  />
+
+    <!--AllowSameVersionUpgrades ="yes"-->
     
     <!--preserves settings-->
 
