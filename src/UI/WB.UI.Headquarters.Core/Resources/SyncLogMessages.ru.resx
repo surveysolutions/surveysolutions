@@ -266,4 +266,7 @@
   <data name="AssignmentReceivedByTablet" xml:space="preserve">
     <value>Задание &lt;b&gt;{0}&lt;/b&gt; получено и сохранено устройством</value>
   </data>
+  <data name="DownloadReusableCategories" xml:space="preserve">
+    <value>Загрузка списка категорий {0}</value>
+  </data>
 </root>

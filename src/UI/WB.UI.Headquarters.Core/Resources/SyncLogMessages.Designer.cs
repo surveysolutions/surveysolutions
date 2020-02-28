@@ -151,6 +151,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reusable category {0} downloading.
+        /// </summary>
+        public static string DownloadReusableCategories {
+            get {
+                return ResourceManager.GetString("DownloadReusableCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;b&gt;[EMPTY DEVICE]&lt;/b&gt;.
         /// </summary>
         public static string EmptyDevice {
