@@ -221,8 +221,8 @@
   </data>
   <data name="ApkRequested" xml:space="preserve">
     <value>New application file requested</value>
-  </data>  
-   <data name="SupervisorApkRequested" xml:space="preserve">
+  </data>
+  <data name="SupervisorApkRequested" xml:space="preserve">
     <value>New Supervisor application file requested</value>
   </data>
   <data name="ExtendedApkRequested" xml:space="preserve">
@@ -245,8 +245,11 @@
   </data>
   <data name="CheckObsoleteInterviews" xml:space="preserve">
     <value>Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;</value>
-  </data>  
+  </data>
   <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
     <value>Check for duplicated interview. Interview: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+  <data name="AssignmentReceivedByTablet" xml:space="preserve">
+    <value>Assignment &lt;b&gt;{0}&lt;/b&gt; received and stored by device</value>
   </data>
 </root>

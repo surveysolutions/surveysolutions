@@ -44,6 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 
         [HttpPost]
         [Route("{id:int}/Received")]
+        [WriteToSyncLog(SynchronizationLogType.AssignmentReceived)]
         public override IActionResult Received(int id) => base.Received(id);
     }
 }
