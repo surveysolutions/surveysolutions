@@ -51,6 +51,7 @@
     <Content Include="img\WixUIDialogBmp.bmp" />
     <Content Include="img\WixUIExclamationIco.bmp" />
     <Content Include="img\WixUIInfoIco.bmp" />
+    <Content Include="img\WixUIInfoIco.ico" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
