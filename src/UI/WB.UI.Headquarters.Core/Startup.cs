@@ -11,7 +11,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -22,7 +21,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Prometheus;
 using Serilog;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -59,7 +57,6 @@ using WB.UI.Headquarters.HealthChecks;
 using WB.UI.Headquarters.Metrics;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
-using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.LoggingIntegration;
@@ -295,12 +292,6 @@ namespace WB.UI.Headquarters
                 options.Password.RequiredLength = passwordOptions.RequiredLength;
                 options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
             });
-
-            services.AddHealthChecks()
-                .AddCheck<HeadquartersStartupCheck>("under_construction_check", tags: new[] { "ready" })
-                .AddCheck<ExportServiceCheck>("export_service_check")
-                .AddCheck<BrokenPackagesCheck>("broken_packages_check")
-                .AddCheck<DatabaseConnectionCheck>("database_connection_check");
         }
 
         private static void AddCompression(IServiceCollection services)

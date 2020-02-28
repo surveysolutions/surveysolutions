@@ -11,5 +11,6 @@
         public static Gauge NpgsqlConnections = new Gauge("npgsql_connections_current", "Number of connections managed by Npgsql (idle/busy)", "type");
         public static Gauge NpgsqlConnectionsPoolCount = new Gauge("npgsql_connection_pools_current", "Number of connection pools managed by Npgsql");
         public static Counter NpgsqlDataCounter = new Counter("npgsql_data_total_bytes", "Amount of byte read/write by Npgsql", "direction");
+        public static Counter ExceptionsOccur = new Counter("wb_exceptions_total_count", "Total number of exceptions happen on site during it's life time");
     }
 }
