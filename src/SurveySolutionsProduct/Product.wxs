@@ -15,12 +15,12 @@
 
     <Property Id="MSIRESTARTMANAGERCONTROL" Value="Disable"/>
 
-    <!--<util:CloseApplication Id="CloseExportService" 
+    <util:CloseApplication Id="CloseExportService" 
                            CloseMessage="yes" 
                            Timeout="20" 
                            RebootPrompt="no" 
                            TerminateProcess="3" 
-                           Target="WB.Services.Export.Host.exe" />-->
+                           Target="WB.Services.Export.Host.exe" />
 
     <!--Will override all files-->
     <Property Id="REINSTALLMODE" Value="emus" />
@@ -374,7 +374,7 @@
                                 Name="SurveySolutionsExport"
                                 Start="install"
                                 Stop="both"
-                                Remove="both" 
+                                Remove="uninstall" 
                                 Wait="no"></ServiceControl>
             </Component>
         </Directory>
