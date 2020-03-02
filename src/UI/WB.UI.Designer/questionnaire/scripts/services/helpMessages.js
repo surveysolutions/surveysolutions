@@ -25,6 +25,7 @@
                 defaultDate: $i18next.t('HelpDefaultDate'),
                 rosterDisplayMode: $i18next.t('HelpRosterDisplayMode'),
                 attachmentName: $i18next.t('HelpAttachmentName'),
+                customRosterTitle: $i18next.t('HelpCustomTitle'),
                 doNotExport: $i18next.t('HelpDoNotExport')
             };
 
