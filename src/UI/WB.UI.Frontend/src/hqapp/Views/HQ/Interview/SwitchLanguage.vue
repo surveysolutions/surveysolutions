@@ -22,7 +22,7 @@ export default {
         $(this.$refs.select).selectpicker('refresh')
     },
     mounted() {
-        this.currentLanguage = this.$store.state.webinterview.currentLanguage
+        this.currentLanguage = this.$store.state.webinterview.currentLanguage || null
         this.$watch('currentLanguage', this.changeLanguage)
     },
 }
