@@ -15,8 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
-
-namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
+namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronization
 {
     internal class when_synchronizing_interview_events_but_interview_was_reassigned_to_supervisor_in_other_team : InterviewTestsContext
     {
