@@ -430,6 +430,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom title.
+        /// </summary>
+        public static string CustomRosterTitle {
+            get {
+                return ResourceManager.GetString("CustomRosterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New roster.
         /// </summary>
         public static string DefaultNewRoster {
@@ -912,6 +921,15 @@ namespace WB.UI.Designer.Resources {
         public static string HelpConditionExpression {
             get {
                 return ResourceManager.GetString("HelpConditionExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows to override template for roster button and provide custom text for %rostertitle%.
+        /// </summary>
+        public static string HelpCustomTitle {
+            get {
+                return ResourceManager.GetString("HelpCustomTitle", resourceCulture);
             }
         }
         
