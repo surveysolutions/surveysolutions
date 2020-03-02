@@ -50,8 +50,11 @@ namespace WB.UI.Headquarters.Code.Authentication
                         {
                             ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         }
+                        else
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
 
-                        ctx.Response.Redirect(ctx.RedirectUri);
                         return Task.CompletedTask;
                     },
                     OnRedirectToAccessDenied = ctx =>
@@ -60,8 +63,11 @@ namespace WB.UI.Headquarters.Code.Authentication
                         {
                             ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
                         }
+                        else
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
 
-                        ctx.Response.Redirect(ctx.RedirectUri);
                         return Task.CompletedTask;
                     }
                 };
