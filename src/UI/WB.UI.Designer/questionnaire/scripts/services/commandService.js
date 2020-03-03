@@ -477,7 +477,8 @@
                     hideIfDisabled: incomingRoster.hideIfDisabled,
                     variableName: incomingRoster.variableName,
                     displayMode: incomingRoster.displayMode,
-                    isRoster: true
+                    isRoster: true,
+                    customRosterTitle: incomingRoster.customRosterTitle
                 };
 
                 switch (incomingRoster.type) {

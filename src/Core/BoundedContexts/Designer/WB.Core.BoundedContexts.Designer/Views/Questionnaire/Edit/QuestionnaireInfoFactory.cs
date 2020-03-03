@@ -251,6 +251,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 HideIfDisabled = roster.HideIfDisabled,
                 VariableName = roster.VariableName,
                 DisplayMode = roster.DisplayMode,
+                CustomRosterTitle = roster.CustomRosterTitle,
                 DisplayModes = Enum.GetValues(typeof(RosterDisplayMode)).Cast<RosterDisplayMode>().ToArray(),
 
                 Type = rosterType,

@@ -864,7 +864,8 @@ namespace WB.Tests.Unit.Designer
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
-            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection,
+            bool customRosterTitle = false)
         {
             var id = rosterId ?? Guid.NewGuid();
             Group group = Create.Group(
@@ -894,6 +895,7 @@ namespace WB.Tests.Unit.Designer
 
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
+            group.CustomRosterTitle = customRosterTitle;
 
             return group;
         }
@@ -1135,7 +1137,7 @@ namespace WB.Tests.Unit.Designer
                 FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
-                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode);
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode, false);
 
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, 
                 string name, string expression, string label = null, Guid? userId = null, bool doNotExport = false)
