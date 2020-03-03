@@ -24,6 +24,8 @@ namespace Main.Core.Entities.SubEntities
 
         RosterDisplayMode DisplayMode { get; }
 
+        bool CustomRosterTitle { get; }
+
         void ReplaceChildEntityById(Guid id, IComposite newEntity);
     }
 }
