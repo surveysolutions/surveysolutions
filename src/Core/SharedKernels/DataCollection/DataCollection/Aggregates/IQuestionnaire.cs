@@ -272,6 +272,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
         bool IsSubSection(Guid groupId);
         bool IsVariable(Guid id);
+        bool HasCustomRosterTitle(Guid id);
         IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId);
 
         IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId);
