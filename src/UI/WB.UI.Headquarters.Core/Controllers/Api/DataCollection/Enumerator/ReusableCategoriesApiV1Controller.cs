@@ -4,10 +4,12 @@ using System.Net;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Enumerator.v1
 {
@@ -25,6 +27,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Enumerator.v1
 
         [HttpGet]
         [Route("api/enumerator/v1/categories/{id}")]
+        [WriteToSyncLog(SynchronizationLogType.DownloadReusableCategories)]
         public virtual ActionResult<List<ReusableCategoriesDto>> Get(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -83,22 +81,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.assignmentsUpgradeService = assignmentsUpgradeService;
         }
 
-        List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, QuestionnaireImportResult importResult, IDesignerApi designerApi, bool includePdf)
-        {
-            var questionnaireImportSteps = new List<IQuestionnaireImportStep>()
-            {
-                new AttachmentsQuestionnaireImportStep(questionnaireDocument, designerApi, attachmentContentService),
-                new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, translationManagementService, logger),
-                new LookupTablesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, lookupTablesStorage, logger),
-                new CategoriesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, reusableCategoriesStorage, logger),
-            };
-
-            if (includePdf)
-                questionnaireImportSteps.Add(new PdfQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, pdfStorage, logger));
-
-            return questionnaireImportSteps;
-        }
-
         public QuestionnaireImportResult GetStatus(Guid processId)
         {
             return questionnaireImportStatuses.GetStatus(processId);
@@ -158,6 +140,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return await bgTask;
 
             return questionnaireImportResult;
+        }
+
+        private List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, QuestionnaireImportResult importResult, IDesignerApi designerApi, bool includePdf)
+        {
+            var questionnaireImportSteps = new List<IQuestionnaireImportStep>()
+            {
+                new AttachmentsQuestionnaireImportStep(questionnaireDocument, designerApi, attachmentContentService),
+                new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, translationManagementService, logger),
+                new LookupTablesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, lookupTablesStorage, logger),
+                new CategoriesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, reusableCategoriesStorage, logger),
+            };
+
+            if (includePdf)
+                questionnaireImportSteps.Add(new PdfQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, pdfStorage, logger));
+
+            return questionnaireImportSteps;
         }
 
         private void MigrateAssignmentsIfNeed(Guid userId, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom, QuestionnaireImportResult result)
@@ -272,7 +270,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     });
                 questionnaireProgress.Report(95);
 
-                this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
+                this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity, userId, userName);
                 questionnaireProgress.Report(100);
 
                 questionnaireImportResult.ProgressPercent = 100;

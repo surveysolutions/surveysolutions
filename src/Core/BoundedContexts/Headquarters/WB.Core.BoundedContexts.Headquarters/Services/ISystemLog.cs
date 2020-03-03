@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using System;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -8,12 +9,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
     {
         void ExportStared(string processName, DataExportFormat format);
         void QuestionnaireDeleted(string title, QuestionnaireIdentity questionnaire);
-        void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire);
+        void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, Guid userId, string userName);
         void UserCreated(UserRoles role, string userName);
         void AssignmentSizeChanged(int id, int? quantity);
         void ExportEncryptionChanged(bool enabled);
         void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName);
-        void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion);
+        void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion, Guid userId, string userName);
         void EmailProviderWasChanged(string previousProvider, string currentProvider);
         void UsersImported(int importedSupervisors, int importedInterviewers, string responsible);
         void AssignmentsImported(long assignmentsCount, string questionnaireTitle, long questionnaireVersion,
