@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.Modularity;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Shared.Web.Controllers
 {
+    [NoTransaction]
     public class UnderConstructionController : Controller
     {
         private readonly UnderConstructionInfo underConstructionInfo;
