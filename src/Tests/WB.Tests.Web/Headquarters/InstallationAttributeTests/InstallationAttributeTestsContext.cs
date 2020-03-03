@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
 using Amazon.Runtime.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,18 +17,24 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
 {
     internal class InstallationAttributeTestsContext
     {
-        protected static InstallationFilter CreateInstallationAttribute(IUserRepository userRepository = null)
+        protected static InstallationFilter CreateInstallationAttribute()
         {
-            var installationAttribute = new InstallationFilter(userRepository ?? Create.Storage.UserRepository());
+            var installationAttribute = new InstallationFilter();
             InstallationFilter.Installed = false;
             return installationAttribute;
         }
 
-        protected static ActionExecutingContext CreateFilterContext(ControllerBase specifiedController = null)
+        protected static ActionExecutingContext CreateFilterContext(ControllerBase specifiedController = null, IUserRepository userRepository = null)
         {
+            var defaultHttpContext = new DefaultHttpContext();
+
+            var serviceContainer = new ServiceContainer();
+            serviceContainer.AddService(typeof(IUserRepository), userRepository ?? Create.Storage.UserRepository());
+            defaultHttpContext.RequestServices = serviceContainer;
+
             return new ActionExecutingContext(new ActionContext
                 {
-                    HttpContext = new DefaultHttpContext(),
+                    HttpContext = defaultHttpContext,
                     RouteData = new RouteData(),
                     ActionDescriptor = new ActionDescriptor()
                 }, 
