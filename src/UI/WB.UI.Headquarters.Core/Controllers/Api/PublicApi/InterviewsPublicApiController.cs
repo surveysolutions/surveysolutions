@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,7 +20,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
@@ -77,7 +75,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="questionnaireId">Questionnaire id if filtering by this field is required</param>
         /// <param name="questionnaireVersion">Questionnaire id if filtering by this field is required</param>
         /// <param name="status">Filtering by interview status</param>
-        /// <param name="interviewId">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="interviewId">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="page">Page number (starting from 1)</param>
         /// <returns></returns>
@@ -104,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Gets all the answers for given interview
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         [HttpGet]
         [Route("{id:guid}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
@@ -184,9 +182,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Leave a comment on a question using questionnaire variable name and roster vector
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
-        /// <param name="variable">Variable name. This is the variable name for a question in Designer or in an export file.</param>
-        /// <param name="rosterVector">Roster row. In simple rosters, the row code. In nested rosters, an array of row codes: first, the row code of the parent(s); followed by the row code of the target child roster (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1). For variables not in rosters, this parameter may be left blank.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
+        /// <param name="variable">Variable name. This is the variable name for a question in Designer or in an export file</param>
+        /// <param name="rosterVector">Roster row. In simple rosters, the row code. In nested rosters, an array of row codes: first, the row code of the parent(s); followed by the row code of the target child roster (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1). For variables not in rosters, this parameter may be left blank</param>
         /// <param name="comment">Comment. Comment to be posted to the chosen question </param>
         /// <returns></returns>
         [HttpPost]
@@ -209,8 +207,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Leave a comment on a question
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
-        /// <param name="questionId">Question Id. Identifier of the question constructed as follows. First, take the question GUID from the JSON version of the questionnaire. Then, remove all dashes. If the question is not in a roster, use this as the question Id. If the question is in a roster, append its address to the question Id using the following pattern : [questionId]_#-#-#, where [questionId] is the question GUID without dashes, # represents the row code of each roster from the top level of the questionnaire to the current question, and only the needed number of row codes is used (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1).</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
+        /// <param name="questionId">Question Id. Identifier of the question constructed as follows. First, take the question GUID from the JSON version of the questionnaire. Then, remove all dashes. If the question is not in a roster, use this as the question Id. If the question is in a roster, append its address to the question Id using the following pattern : [questionId]_#-#-#, where [questionId] is the question GUID without dashes, # represents the row code of each roster from the top level of the questionnaire to the current question, and only the needed number of row codes is used (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1)</param>
         /// <param name="comment">Comment. Comment to be posted to the chosen question </param>
         /// <returns></returns>
         [HttpPost]
@@ -240,11 +238,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Assigns interview to interviewer
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="request">Responsible id or responsible name</param>
         /// <response code="200">Interview was reassigned</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Target responsible was not found or it is not an interviewer of interview cannot be reassigned. Check response for reason description</response>
+        /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assign")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
@@ -267,7 +265,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Approves interview 
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="comment">Approval comment</param>
         /// <response code="200">Interview was approved</response>
         /// <response code="404">Interview was not found</response>
@@ -286,7 +284,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Rejects interview as supervisor
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="comment">Rejection comment</param>
         /// <response code="200">Interview was rejected</response>
         /// <response code="404">Interview was not found</response>
@@ -305,7 +303,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Approves interview as headquarters
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="comment">Rejection comment</param>
         /// <response code="200">Interview was approved</response>
         /// <response code="404">Interview was not found</response>
@@ -324,7 +322,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Rejects interview as headquarters
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="comment">Rejection comment</param>
         /// <response code="200">Interview was rejected</response>
         /// <response code="404">Interview was not found</response>
@@ -343,7 +341,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Rejects interview from Approved by headquarters status
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="comment">Rejection comment</param>
         /// <response code="200">Interview was rejected</response>
         /// <response code="404">Interview was not found</response>
@@ -362,7 +360,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Assigns supervisor
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="request"></param>
         /// <response code="200">Interview was assigned to supervisor</response>
         /// <response code="404">Interview was not found</response>
@@ -389,7 +387,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Deletes interview 
         /// </summary>
-        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <response code="200">Interview was deleted</response>
         /// <response code="404">Interview was not found</response>
         /// <response code="406">Target interview was in status that was not ready to be deleted</response>

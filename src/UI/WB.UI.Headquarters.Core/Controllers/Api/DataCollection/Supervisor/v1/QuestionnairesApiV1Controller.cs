@@ -21,14 +21,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
 
         public QuestionnairesApiV1Controller(
-            IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor,
+            IQuestionnaireAssemblyAccessor assemblyAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository) : base(
             questionnaireStorage: questionnaireStorage,
             questionnaireRepository: questionnaireRepository,
-            questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
+            assemblyAccessor: assemblyAccessor,
             questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
             serializer: serializer)
         {
