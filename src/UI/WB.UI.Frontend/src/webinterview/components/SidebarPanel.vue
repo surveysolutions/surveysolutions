@@ -58,7 +58,12 @@ export default {
             }
         },
         title() {
-            return this.panel.title + (this.panel.isRoster ? (this.panel.rosterTitle ? ` - ${this.panel.rosterTitle}` :' - [...]') : '')
+            if (this.panel.hasCustomRosterTitle || !this.panel.isRoster) {
+                return this.panel.title
+            }
+
+            const rosterTitle = this.panel.rosterTitle || '[...]'
+            return `${this.panel.title} - ${rosterTitle}`
         },
         to() {
             if (this.panel.to) {
