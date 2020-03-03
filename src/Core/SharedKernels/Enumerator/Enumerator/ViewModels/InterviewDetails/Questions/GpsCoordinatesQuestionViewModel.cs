@@ -29,19 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public GpsLocation Answer
         {
             get => this.answer;
-            set
-            {
-                this.SetProperty(ref this.answer, value);
-                this.LocationInfo = value == null
-                    ? null
-                    : new NavigationModel($"{value.Latitude}, {value.Longitude}", $"https://www.google.com/maps?q={value.Latitude},{value.Longitude}");
-            }
-        }
-
-        private NavigationModel locationInfo;
-        public NavigationModel LocationInfo {
-            get => this.locationInfo;
-            set => this.SetProperty(ref this.locationInfo, value);
+            set => this.SetProperty(ref this.answer, value);
         }
 
         public bool ShowLocationOnMap => this.settings.ShowLocationOnMap &&
@@ -49,10 +37,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
+        public IMvxCommand NavigateToMapsCommand => new MvxCommand(
+            () => this.externalAppLauncher.LaunchMapsWithTargetLocation(this.Answer.Latitude, this.Answer.Longitude));
 
         private readonly Guid userId;
         private readonly ILogger logger;
         private readonly IGoogleApiService googleApiService;
+        private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
         private readonly IViewModelEventRegistry liteEventRegistry;
@@ -79,7 +70,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             IViewModelEventRegistry liteEventRegistry,
             ILogger logger,
-            IGoogleApiService googleApiService)
+            IGoogleApiService googleApiService,
+            IExternalAppLauncher externalAppLauncher)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
@@ -93,6 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry = liteEventRegistry;
             this.logger = logger;
             this.googleApiService = googleApiService;
+            this.externalAppLauncher = externalAppLauncher;
         }
 
         public Identity Identity => this.questionIdentity;
