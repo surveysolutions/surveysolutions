@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Filters
 
         public void OnResultExecuting(ResultExecutingContext filterContext)
         {
-            if (filterContext.Result is ViewResult viewResult)
+            if (filterContext.Result is ViewResult)
             {
                 //respect scope
                 var plainKeyValueStorage = filterContext.HttpContext.RequestServices.GetRequiredService<IPlainKeyValueStorage<GlobalNotice>>();
@@ -24,9 +24,6 @@ namespace WB.UI.Headquarters.Filters
                 ((Controller)filterContext.Controller).ViewBag.GlobalNotice = 
                     string.IsNullOrEmpty(globalNotice?.Message) ? null : globalNotice.Message;
             }
-           
         }
-
-
     }
 }
