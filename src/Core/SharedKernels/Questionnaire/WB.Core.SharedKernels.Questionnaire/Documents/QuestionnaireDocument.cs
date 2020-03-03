@@ -145,6 +145,8 @@ namespace Main.Core.Documents
         // Map of question id to database stored 'questionnaire_entities'.id
         public Dictionary<Guid, int> EntitiesIdMap { get; set; }
 
+        public bool CustomRosterTitle => false;
+
         public void Insert(int index, IComposite c, Guid? parentId)
         {
             if (!parentId.HasValue || this.PublicKey == parentId)
