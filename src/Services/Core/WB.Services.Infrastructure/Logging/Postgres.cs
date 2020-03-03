@@ -26,9 +26,9 @@ namespace WB.Services.Infrastructure.Logging
         private bool tableCreated = false;
         
         private static readonly Policy RetryPolicy = 
-            Policy.Handle<NpgsqlException>(e => e.IsTransient)
+            Policy.Handle<NpgsqlException>()
                 .Or<SocketException>()
-                .WaitAndRetryForever(i => TimeSpan.FromSeconds(i < 10 ? i * i : 100));
+                .WaitAndRetry(10, i => TimeSpan.FromSeconds(i));
         
         public Postgres(string connectionString, string schema, string tableName, LogEventLevel minLevel)
         {
