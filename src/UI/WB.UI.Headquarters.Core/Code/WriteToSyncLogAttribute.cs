@@ -44,214 +44,201 @@ namespace WB.UI.Headquarters.Code
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            Exception actionException = null;
-            ActionExecutedContext actionExecutedContext = null;
+            var actionExecutedContext = await next();
+            IServiceProvider currentContextScope = context.HttpContext.RequestServices;
+
+            IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory =
+                currentContextScope.GetRequiredService<IQuestionnaireBrowseViewFactory>();
+
+            var questionnaireStorage = currentContextScope.GetRequiredService<IQuestionnaireStorage>();
+            var answerSerializer = currentContextScope.GetRequiredService<IInterviewAnswerSerializer>();
+            var userToDeviceService = currentContextScope.GetRequiredService<IUserToDeviceService>();
+
             try
             {
-                actionExecutedContext = await next();
-            }
-            catch (Exception e)
-            {
-                actionException = e;
-                throw;
-            }
-            finally
-            {
-                IServiceProvider currentContextScope = context.HttpContext.RequestServices;
-
-                IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory =
-                    currentContextScope.GetRequiredService<IQuestionnaireBrowseViewFactory>();
-
-                var questionnaireStorage = currentContextScope.GetRequiredService<IQuestionnaireStorage>();
-                var answerSerializer = currentContextScope.GetRequiredService<IInterviewAnswerSerializer>();
-                var userToDeviceService = currentContextScope.GetRequiredService<IUserToDeviceService>();
-
-                try
+                var userIdentity = context.HttpContext.User;
+                var userId = userIdentity.UserId();
+                var logItem = new SynchronizationLogItem
                 {
-                    var userIdentity = context.HttpContext.User;
-                    var userId = userIdentity.UserId();
-                    var logItem = new SynchronizationLogItem
-                    {
-                        DeviceId = userId.HasValue ? userToDeviceService.GetLinkedDeviceId(userId.Value) : null,
-                        InterviewerId = userId ?? Guid.Empty,
-                        InterviewerName = userIdentity.UserName() ?? string.Empty,
-                        LogDate = DateTime.UtcNow,
-                        Type = this.logAction,
-                        ActionExceptionType = actionException?.GetType().Name,
-                        ActionExceptionMessage = actionException?.Message
-                    };
+                    DeviceId = userId.HasValue ? userToDeviceService.GetLinkedDeviceId(userId.Value) : null,
+                    InterviewerId = userId ?? Guid.Empty,
+                    InterviewerName = userIdentity.UserName() ?? string.Empty,
+                    LogDate = DateTime.UtcNow,
+                    Type = this.logAction,
+                    ActionExceptionType = actionExecutedContext.Exception?.GetType().Name,
+                    ActionExceptionMessage = actionExecutedContext.Exception?.Message
+                };
 
-                    Guid? idAsGuid = Guid.TryParse(context.GetActionArgumentOrDefault<string>("id", string.Empty),
-                        out var parsedId) ? parsedId : context.GetActionArgumentOrDefault<Guid?>("id", null);
+                Guid? idAsGuid = Guid.TryParse(context.GetActionArgumentOrDefault<string>("id", string.Empty),
+                    out var parsedId) ? parsedId : context.GetActionArgumentOrDefault<Guid?>("id", null);
 
-                    var responseStatusCode = actionExecutedContext?.HttpContext.Response.StatusCode;
-                    switch (this.logAction)
-                    {
-                        case SynchronizationLogType.CanSynchronize:
-                            logItem.DeviceId = context.GetActionArgumentOrDefault<string>("deviceId", string.Empty);
-                            if (responseStatusCode == StatusCodes.Status200OK)
-                                logItem.Log = SyncLogMessages.CanSynchronize;
-                            else if (responseStatusCode == StatusCodes.Status426UpgradeRequired)
-                            {
-                                var version = context.GetActionArgumentOrDefault("version", context.GetActionArgumentOrDefault("deviceSyncProtocolVersion", -1));
-                                logItem.Log = SyncLogMessages.DeviceUpdateRequired.FormatString(version);
-                            }
-                            else if (responseStatusCode == StatusCodes.Status403Forbidden)
-                                logItem.Log = SyncLogMessages.DeviceRelinkRequired;
-                            break;
-                        case SynchronizationLogType.HasInterviewerDevice:
-                            logItem.Log = string.IsNullOrEmpty(logItem.DeviceId) ? SyncLogMessages.DeviceCanBeAssignedToInterviewer : SyncLogMessages.InterviewerHasDevice;
-                            break;
-                        case SynchronizationLogType.LinkToDevice:
-                            logItem.DeviceId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
-                            logItem.Log = SyncLogMessages.LinkToDevice;
-                            break;
-                        case SynchronizationLogType.GetInterviewer:
-                            logItem.Log = this.GetInterviewerLogMessage(context, actionExecutedContext);
-                            break;
-                        case SynchronizationLogType.GetCensusQuestionnaires:
-                            logItem.Log = this.GetQuestionnairesLogMessage(actionExecutedContext, questionnaireBrowseItemFactory);
-                            break;
-                        case SynchronizationLogType.GetQuestionnaire:
-                            logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaire, context, questionnaireBrowseItemFactory);
-                            break;
-                        case SynchronizationLogType.QuestionnaireProcessed:
-                            logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireProcessed, context, questionnaireBrowseItemFactory);
-                            break;
-                        case SynchronizationLogType.GetQuestionnaireAssembly:
-                            logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAssembly, context, questionnaireBrowseItemFactory);
-                            break;
-                        case SynchronizationLogType.QuestionnaireAssemblyProcessed:
-                            logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireAssemblyProcessed, context, questionnaireBrowseItemFactory);
-                            break;
-                        case SynchronizationLogType.GetInterviewPackage:
-                            logItem.Log = SyncLogMessages.GetInterviewPackage.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
-                            logItem.InterviewId = idAsGuid;
-                            break;
-                        case SynchronizationLogType.InterviewPackageProcessed:
-                            logItem.Log = SyncLogMessages.InterviewPackageProcessed.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
-                            logItem.InterviewId = idAsGuid;
-                            break;
-                        case SynchronizationLogType.GetInterviews:
-                            logItem.Log = this.GetInterviewsLogMessage(context, actionExecutedContext);
-                            break;
-                        case SynchronizationLogType.GetInterview:
-                            logItem.Log = SyncLogMessages.GetInterview.FormatString(idAsGuid);
-                            logItem.InterviewId = idAsGuid;
-                            break;
-                        case SynchronizationLogType.InterviewProcessed:
-                            logItem.Log = SyncLogMessages.InterviewProcessed.FormatString(idAsGuid);
-                            logItem.InterviewId = idAsGuid;
-                            break;
-                        case SynchronizationLogType.GetQuestionnaireAttachments:
-                            logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAttachments, context, questionnaireBrowseItemFactory);
-                            break;
-                        case SynchronizationLogType.GetAttachmentContent:
-                            logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
-                            break;
-                        case SynchronizationLogType.PostInterview:
-                            Guid? interviewId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
-                            logItem.Log = SyncLogMessages.PostPackage.FormatString(interviewId.HasValue ? GetInterviewLink(interviewId.Value, context) : UnknownStringArgumentValue);
-                            logItem.InterviewId = interviewId;
-                            break;
-                        case SynchronizationLogType.PostPackage:
-                            var packageId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
-                            logItem.Log = SyncLogMessages.PostPackage.FormatString(GetInterviewLink(packageId, context), packageId);
-                            logItem.InterviewId = packageId;
-                            break;
-                        case SynchronizationLogType.GetTranslations:
-                            var questionnaireId = context.GetActionArgumentOrDefault<string>("id", null);
-                            if (questionnaireId != null)
-                            {
-                                var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
-                                var questionnaireInfo = questionnaireBrowseItemFactory.GetById(questionnaireIdentity);
-                                logItem.Log = SyncLogMessages.GetTranslations.FormatString(questionnaireInfo.Title, questionnaireInfo.Version);
-                            }
-                            else
-                            {
-                                logItem.Log = SyncLogMessages.GetTranslations.FormatString(UnknownStringArgumentValue,
-                                    UnknownStringArgumentValue);
-                            }
-                            break;
-                        case SynchronizationLogType.InterviewerLogin:
-                            var success = responseStatusCode == StatusCodes.Status200OK;
-                            logItem.Log = success
-                                ? SyncLogMessages.InterviewerLoggedIn
-                                : SyncLogMessages.InterviewerFailedToLogin;
-                            break;
-                        case SynchronizationLogType.GetAssignmentsList:
-                            logItem.Log = GetAssignmentsLogMessage(actionExecutedContext, questionnaireStorage);
-                            break;
-                        case SynchronizationLogType.GetAssignment:
-                            logItem.Log = GetAssignmentLogMessage(actionExecutedContext, answerSerializer, questionnaireStorage);
-                            break;
-                        case SynchronizationLogType.GetMapList:
-                            logItem.Log = this.GetMapListLogMessage(actionExecutedContext);
-                            break;
-                        case SynchronizationLogType.GetMap:
-                            logItem.Log = SyncLogMessages.GetMap.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
-                            break;
-                        case SynchronizationLogType.GetApk:
-                            logItem.Log = SyncLogMessages.ApkRequested;
-                            break;
-                        case SynchronizationLogType.GetSupervisorApk:
-                            logItem.Log = SyncLogMessages.SupervisorApkRequested;
-                            break;
-                        case SynchronizationLogType.GetExtendedApk:
-                            logItem.Log = SyncLogMessages.ExtendedApkRequested;
-                            break;
-                        case SynchronizationLogType.GetApkPatch:
-                            logItem.Log = SyncLogMessages.PatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
-                            break;
-                        case SynchronizationLogType.GetSupervisorApkPatch:
-                            logItem.Log = SyncLogMessages.SupervisorPatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
-                            break;
-                        case SynchronizationLogType.GetExtendedApkPatch:
-                            logItem.Log = SyncLogMessages.ExtendedPatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
-                            break;
-                        case SynchronizationLogType.GetInterviewV3:
-                            logItem.Log = SyncLogMessages.GetInterviewPackageV3.FormatString(idAsGuid.HasValue ? GetInterviewLink(idAsGuid.Value, context) : "Null interview id");
-                            logItem.InterviewId = idAsGuid;
-                            break;
-                        case SynchronizationLogType.PostInterviewV3:
-                            Guid? intId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
-                            logItem.Log = SyncLogMessages.PostPackageV3.FormatString(intId.HasValue ? GetInterviewLink(intId.Value, context) : UnknownStringArgumentValue);
-                            logItem.InterviewId = intId;
-                            break;
-                        case SynchronizationLogType.CheckObsoleteInterviews:
-                            var request = context.GetActionArgumentOrDefault("knownPackages", new List<ObsoletePackageCheck>());
-                            logItem.Log = string.Format(SyncLogMessages.CheckObsoleteInterviews, JsonConvert.SerializeObject(request, Formatting.Indented));
-                            break;
-                        case SynchronizationLogType.CheckIsPackageDuplicated:
-                            var duplicatedPackageCheckId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
-                            logItem.Log = SyncLogMessages.CheckIsPackageDuplicatedFormat.FormatString(duplicatedPackageCheckId.ToString());
-                            logItem.InterviewId = duplicatedPackageCheckId;
-                            break;
-                        case SynchronizationLogType.AssignmentReceived:
-                            var assignmentId = context.GetActionArgumentOrDefault<int>("id", 0);
-                            logItem.Log = SyncLogMessages.AssignmentReceivedByTablet.FormatString(assignmentId);
-                            break;
-                        case SynchronizationLogType.DownloadReusableCategories:
-                            var categoriesId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
-                            logItem.Log = SyncLogMessages.DownloadReusableCategories.FormatString(categoriesId);
-                            break;
-                        default:
-                            throw new ArgumentException(nameof(logAction));
-                    }
-
-                    messagesTotal.Labels(this.logAction.ToString()).Inc();
-
-                    this.inScopeExecutor.Execute(locator =>
-                    {
-                        var s = locator.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>();
-                        s.Store(logItem, Guid.NewGuid());
-                    });
-                }
-                catch (Exception exception)
+                var responseStatusCode = actionExecutedContext?.HttpContext.Response.StatusCode;
+                switch (this.logAction)
                 {
-                    ILogger logger = (currentContextScope.GetService(typeof(ILoggerProvider)) as ILoggerProvider).GetFor<WriteToSyncLogAttribute>();
-                    logger.Error($"Error updating sync log on action '{this.logAction}'.", exception);
+                    case SynchronizationLogType.CanSynchronize:
+                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("deviceId", string.Empty);
+                        if (responseStatusCode == StatusCodes.Status200OK)
+                            logItem.Log = SyncLogMessages.CanSynchronize;
+                        else if (responseStatusCode == StatusCodes.Status426UpgradeRequired)
+                        {
+                            var version = context.GetActionArgumentOrDefault("version", context.GetActionArgumentOrDefault("deviceSyncProtocolVersion", -1));
+                            logItem.Log = SyncLogMessages.DeviceUpdateRequired.FormatString(version);
+                        }
+                        else if (responseStatusCode == StatusCodes.Status403Forbidden)
+                            logItem.Log = SyncLogMessages.DeviceRelinkRequired;
+                        break;
+                    case SynchronizationLogType.HasInterviewerDevice:
+                        logItem.Log = string.IsNullOrEmpty(logItem.DeviceId) ? SyncLogMessages.DeviceCanBeAssignedToInterviewer : SyncLogMessages.InterviewerHasDevice;
+                        break;
+                    case SynchronizationLogType.LinkToDevice:
+                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
+                        logItem.Log = SyncLogMessages.LinkToDevice;
+                        break;
+                    case SynchronizationLogType.GetInterviewer:
+                        logItem.Log = this.GetInterviewerLogMessage(context, actionExecutedContext);
+                        break;
+                    case SynchronizationLogType.GetCensusQuestionnaires:
+                        logItem.Log = this.GetQuestionnairesLogMessage(actionExecutedContext, questionnaireBrowseItemFactory);
+                        break;
+                    case SynchronizationLogType.GetQuestionnaire:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaire, context, questionnaireBrowseItemFactory);
+                        break;
+                    case SynchronizationLogType.QuestionnaireProcessed:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireProcessed, context, questionnaireBrowseItemFactory);
+                        break;
+                    case SynchronizationLogType.GetQuestionnaireAssembly:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAssembly, context, questionnaireBrowseItemFactory);
+                        break;
+                    case SynchronizationLogType.QuestionnaireAssemblyProcessed:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireAssemblyProcessed, context, questionnaireBrowseItemFactory);
+                        break;
+                    case SynchronizationLogType.GetInterviewPackage:
+                        logItem.Log = SyncLogMessages.GetInterviewPackage.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
+                        logItem.InterviewId = idAsGuid;
+                        break;
+                    case SynchronizationLogType.InterviewPackageProcessed:
+                        logItem.Log = SyncLogMessages.InterviewPackageProcessed.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
+                        logItem.InterviewId = idAsGuid;
+                        break;
+                    case SynchronizationLogType.GetInterviews:
+                        logItem.Log = this.GetInterviewsLogMessage(context, actionExecutedContext);
+                        break;
+                    case SynchronizationLogType.GetInterview:
+                        logItem.Log = SyncLogMessages.GetInterview.FormatString(idAsGuid);
+                        logItem.InterviewId = idAsGuid;
+                        break;
+                    case SynchronizationLogType.InterviewProcessed:
+                        logItem.Log = SyncLogMessages.InterviewProcessed.FormatString(idAsGuid);
+                        logItem.InterviewId = idAsGuid;
+                        break;
+                    case SynchronizationLogType.GetQuestionnaireAttachments:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAttachments, context, questionnaireBrowseItemFactory);
+                        break;
+                    case SynchronizationLogType.GetAttachmentContent:
+                        logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
+                        break;
+                    case SynchronizationLogType.PostInterview:
+                        Guid? interviewId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
+                        logItem.Log = SyncLogMessages.PostPackage.FormatString(interviewId.HasValue ? GetInterviewLink(interviewId.Value, context) : UnknownStringArgumentValue);
+                        logItem.InterviewId = interviewId;
+                        break;
+                    case SynchronizationLogType.PostPackage:
+                        var packageId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
+                        logItem.Log = SyncLogMessages.PostPackage.FormatString(GetInterviewLink(packageId, context), packageId);
+                        logItem.InterviewId = packageId;
+                        break;
+                    case SynchronizationLogType.GetTranslations:
+                        var questionnaireId = context.GetActionArgumentOrDefault<string>("id", null);
+                        if (questionnaireId != null)
+                        {
+                            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
+                            var questionnaireInfo = questionnaireBrowseItemFactory.GetById(questionnaireIdentity);
+                            logItem.Log = SyncLogMessages.GetTranslations.FormatString(questionnaireInfo.Title, questionnaireInfo.Version);
+                        }
+                        else
+                        {
+                            logItem.Log = SyncLogMessages.GetTranslations.FormatString(UnknownStringArgumentValue,
+                                UnknownStringArgumentValue);
+                        }
+                        break;
+                    case SynchronizationLogType.InterviewerLogin:
+                        var success = responseStatusCode == StatusCodes.Status200OK;
+                        logItem.Log = success
+                            ? SyncLogMessages.InterviewerLoggedIn
+                            : SyncLogMessages.InterviewerFailedToLogin;
+                        break;
+                    case SynchronizationLogType.GetAssignmentsList:
+                        logItem.Log = GetAssignmentsLogMessage(actionExecutedContext, questionnaireStorage);
+                        break;
+                    case SynchronizationLogType.GetAssignment:
+                        logItem.Log = GetAssignmentLogMessage(actionExecutedContext, answerSerializer, questionnaireStorage);
+                        break;
+                    case SynchronizationLogType.GetMapList:
+                        logItem.Log = this.GetMapListLogMessage(actionExecutedContext);
+                        break;
+                    case SynchronizationLogType.GetMap:
+                        logItem.Log = SyncLogMessages.GetMap.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
+                        break;
+                    case SynchronizationLogType.GetApk:
+                        logItem.Log = SyncLogMessages.ApkRequested;
+                        break;
+                    case SynchronizationLogType.GetSupervisorApk:
+                        logItem.Log = SyncLogMessages.SupervisorApkRequested;
+                        break;
+                    case SynchronizationLogType.GetExtendedApk:
+                        logItem.Log = SyncLogMessages.ExtendedApkRequested;
+                        break;
+                    case SynchronizationLogType.GetApkPatch:
+                        logItem.Log = SyncLogMessages.PatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
+                        break;
+                    case SynchronizationLogType.GetSupervisorApkPatch:
+                        logItem.Log = SyncLogMessages.SupervisorPatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
+                        break;
+                    case SynchronizationLogType.GetExtendedApkPatch:
+                        logItem.Log = SyncLogMessages.ExtendedPatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
+                        break;
+                    case SynchronizationLogType.GetInterviewV3:
+                        logItem.Log = SyncLogMessages.GetInterviewPackageV3.FormatString(idAsGuid.HasValue ? GetInterviewLink(idAsGuid.Value, context) : "Null interview id");
+                        logItem.InterviewId = idAsGuid;
+                        break;
+                    case SynchronizationLogType.PostInterviewV3:
+                        Guid? intId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
+                        logItem.Log = SyncLogMessages.PostPackageV3.FormatString(intId.HasValue ? GetInterviewLink(intId.Value, context) : UnknownStringArgumentValue);
+                        logItem.InterviewId = intId;
+                        break;
+                    case SynchronizationLogType.CheckObsoleteInterviews:
+                        var request = context.GetActionArgumentOrDefault("knownPackages", new List<ObsoletePackageCheck>());
+                        logItem.Log = string.Format(SyncLogMessages.CheckObsoleteInterviews, JsonConvert.SerializeObject(request, Formatting.Indented));
+                        break;
+                    case SynchronizationLogType.CheckIsPackageDuplicated:
+                        var duplicatedPackageCheckId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
+                        logItem.Log = SyncLogMessages.CheckIsPackageDuplicatedFormat.FormatString(duplicatedPackageCheckId.ToString());
+                        logItem.InterviewId = duplicatedPackageCheckId;
+                        break;
+                    case SynchronizationLogType.AssignmentReceived:
+                        var assignmentId = context.GetActionArgumentOrDefault<int>("id", 0);
+                        logItem.Log = SyncLogMessages.AssignmentReceivedByTablet.FormatString(assignmentId);
+                        break;
+                    case SynchronizationLogType.DownloadReusableCategories:
+                        var categoriesId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
+                        logItem.Log = SyncLogMessages.DownloadReusableCategories.FormatString(categoriesId);
+                        break;
+                    default:
+                        throw new ArgumentException(nameof(logAction));
                 }
+
+                messagesTotal.Labels(this.logAction.ToString()).Inc();
+
+                this.inScopeExecutor.Execute(locator =>
+                {
+                    var s = locator.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>();
+                    s.Store(logItem, Guid.NewGuid());
+                });
+            }
+            catch (Exception exception)
+            {
+                ILogger logger = (currentContextScope.GetService(typeof(ILoggerProvider)) as ILoggerProvider).GetFor<WriteToSyncLogAttribute>();
+                logger.Error($"Error updating sync log on action '{this.logAction}'.", exception);
             }
         }
 
