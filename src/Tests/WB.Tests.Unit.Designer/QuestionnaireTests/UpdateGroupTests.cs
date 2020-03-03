@@ -1,9 +1,7 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -21,7 +19,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // act
             questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: notEmptyNewTitle, variableName: null, rosterSizeQuestionId: null,
-                description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
+                description: null, condition: null, hideIfDisabled: false, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
 
             // assert
             Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupPublicKey).Title, Is.EqualTo(notEmptyNewTitle));
@@ -39,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             TestDelegate act = () =>
             {
                 questionnaire.UpdateGroup(notExistingGroupPublicKey, responsibleId: responsibleId, title: null, variableName: null, rosterSizeQuestionId: null,
-                    description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
+                    description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
             };
 
             // assert
@@ -57,7 +56,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // act
             questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: "group text", variableName: null, rosterSizeQuestionId: null,
-                description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
+                description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
 
             // assert
             Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupPublicKey).PublicKey, Is.EqualTo(groupPublicKey));
@@ -74,7 +73,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // act
             questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: groupText, variableName: null, rosterSizeQuestionId: null,
-                description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
+                description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question,
+                rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
 
             // assert
             Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupPublicKey).Title, Is.EqualTo(groupText));
@@ -91,7 +91,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // act
             questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: "text of a group", variableName: null, rosterSizeQuestionId: null,
-                description: null, condition: conditionExpression, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
+                description: null, condition: conditionExpression, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question,
+                rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
 
             // assert
             Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupPublicKey).ConditionExpression, Is.EqualTo(conditionExpression));
@@ -108,7 +109,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // act
             questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null,
-                description: description, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
+                description: description, condition: null, hideIfDisabled: false, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
 
             // assert
             Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupPublicKey).Description, Is.EqualTo(description));
@@ -126,70 +128,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             TestDelegate act =
                 () =>
                     questionnaire.UpdateGroup(groupPublicKey, responsibleId: Guid.NewGuid(), title: "Title", variableName: null, rosterSizeQuestionId: null,
-                        description: description, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
+                        description: description, condition: null, hideIfDisabled: false, isRoster: false,
+                        rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
-        }
-
-        [Test]
-        public void NewUpdateGroup_When_Group_Have_Condition_With_Reference_To_Existing_Question_Variable_Then_DomainException_should_NOT_be_thrown()
-        {
-            // arrange
-            Guid groupId = Guid.NewGuid();
-            Guid responsibleId = Guid.NewGuid();
-            string aliasForExistingQuestion = "q2";
-            string expression = string.Format("[{0}] > 0", aliasForExistingQuestion);
-
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(expression) == new[] { aliasForExistingQuestion });
-
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
-                groupId: groupId, expressionProcessor: expressionProcessor);
-
-            AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, aliasForExistingQuestion);
-
-            // act
-            TestDelegate act =
-                () =>
-                    questionnaire.UpdateGroup(
-                        groupId: groupId,
-                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, 
-                        condition: expression, hideIfDisabled: false,
-                        isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
-
-            // assert
-            Assert.DoesNotThrow(act);
-        }
-
-        [Test]
-        public void NewUpdateGroup_When_Group_Have_Condition_With_Reference_To_Existing_Question_Id_Then_DomainException_should_NOT_be_thrown()
-        {
-            // arrange
-            Guid questionId = Guid.NewGuid();
-            Guid groupId = Guid.NewGuid();
-            Guid responsibleId = Guid.NewGuid();
-            string expression = string.Format("[{0}] > 0", questionId);
-
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(expression) == new[] { questionId.ToString() });
-
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
-                groupId: groupId, expressionProcessor: expressionProcessor);
-
-            AddQuestion(questionnaire, questionId, groupId, responsibleId, QuestionType.Text, "q1");
-
-            // act
-            TestDelegate act =
-                () =>
-                    questionnaire.UpdateGroup(
-                        groupId: groupId,
-                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, 
-                        condition: expression, hideIfDisabled: false,
-                        isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
-
-            // assert
-            Assert.DoesNotThrow(act);
         }
     }
 }
