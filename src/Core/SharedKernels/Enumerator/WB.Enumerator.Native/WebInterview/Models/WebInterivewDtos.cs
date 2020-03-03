@@ -241,7 +241,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
     public class InterviewGroupOrRosterInstance : InterviewEntity
     {
         public bool IsRoster { set; get; }
+
         public string RosterTitle { get; set; }
+
         public GroupStatus Status { get; set; }
 
         public Validity Validity { get; set; } = new Validity();
@@ -301,6 +303,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
         public bool Current { get; set; }
         public bool IsRoster { get; set; }
+        public bool HasCustomRosterTitle { get; set; }
     }
 
     public class DropdownItem
