@@ -36,6 +36,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public DynamicTextViewModel GroupTitle { get; }
 
         private string rosterInstanceTitle;
+
+        private bool hasCustomTitle;
+
         public string RosterInstanceTitle
         {
             get { return this.rosterInstanceTitle; }
@@ -104,7 +107,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview, questionnaire);
 
             this.GroupTitle.Init(interviewId, entityIdentity);
-            this.RosterInstanceTitle = statefulInterview.GetRosterTitle(entityIdentity);
+            this.hasCustomTitle = questionnaire.HasCustomRosterTitle(entityIdentity.Id);
+            this.RosterInstanceTitle = hasCustomTitle ? statefulInterview.GetRosterTitle(entityIdentity) : null; 
             
             if (groupWithAnswersToMonitor != null)
             {
@@ -129,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            if (!this.isRoster) return;
+            if (!this.isRoster || this.hasCustomTitle) return;
 
             var rosterIdentity = RosterInstance.CreateFromIdentity(this.Identity);
             var changedInstance = @event.ChangedInstances.SingleOrDefault(x => rosterIdentity.Equals(x.RosterInstance));
