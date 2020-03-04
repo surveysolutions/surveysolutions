@@ -38,7 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             if (levelScopeVector.Length != 0)
             {
                 yield return ServiceColumns.InterviewId;
-                yield return ServiceColumns.Key;
             }
         }
 
