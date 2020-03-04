@@ -157,4 +157,8 @@
   <data name="Overview" xml:space="preserve">
     <value>Обзор</value>
   </data>
+  <data name="ShowQuestionnaireDetails" xml:space="preserve">
+      <value>Показать детали опросника</value>
+      <comment>Показать детали опросника</comment>
+  </data>
 </root>
