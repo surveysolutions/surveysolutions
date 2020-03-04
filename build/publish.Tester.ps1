@@ -2,8 +2,8 @@ param([string]$VersionName = $null,
 [INT]$VersionCode,
 [string]$BuildConfiguration='Release',
 [string]$KeystorePassword = $null,
-[string]$KeystoreName,
-[string]$KeystoreAlias)
+[string]$KeystoreName = 'WBCapiTester.keystore',
+[string]$KeystoreAlias = 'Tester')
 
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
