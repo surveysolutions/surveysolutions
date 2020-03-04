@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -41,12 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public string RosterInstanceTitle
         {
-            get { return this.rosterInstanceTitle; }
-            set
-            {
-                this.rosterInstanceTitle = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.rosterInstanceTitle;
+            set => this.RaiseAndSetIfChanged(ref rosterInstanceTitle, value);
         }
 
         private readonly IViewModelEventRegistry eventRegistry;

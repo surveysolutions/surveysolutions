@@ -43,7 +43,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
 
             var textQuestionIdentity = Create.Entity.Identity(sourceOfLinkedQuestionId, Create.Entity.RosterVector(1));
 
-            var textQuestionViewModel = Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository);
+            var textQuestionViewModel = Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository, questionnaireStorage: 
+                Create.Storage.QuestionnaireStorage(questionnaireDocument));
             textQuestionViewModel.Init(this.interview.Id.ToString(), textQuestionIdentity, Create.Other.NavigationState());
 
             //act
