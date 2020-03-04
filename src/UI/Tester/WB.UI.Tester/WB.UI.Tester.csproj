@@ -55,6 +55,7 @@
     <DebugType>full</DebugType>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <Optimize>true</Optimize>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>3</WarningLevel>
