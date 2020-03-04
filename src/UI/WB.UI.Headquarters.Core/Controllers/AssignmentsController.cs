@@ -189,6 +189,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Questionnaire = new
                 {
+                    Id = questionnaireIdentity.ToString(),
                     Version = questionnaireIdentity.Version,
                     Title = questionnaireInfo?.Title,
                     IdentifyingQuestions = sampleUploadView.IdentifyingQuestions,
