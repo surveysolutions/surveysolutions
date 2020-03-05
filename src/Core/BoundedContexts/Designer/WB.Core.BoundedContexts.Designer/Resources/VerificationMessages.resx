@@ -778,10 +778,10 @@
     <value>Questions have the same categories. Use reusable categories instead</value>
   </data>
   <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
-      <value>Matrix roster allows to use only simple categorical questions: combobox, cascading or yes/no modes are not allowed.</value>
+    <value>Matrix roster allows to use only simple categorical questions: combobox, cascading or yes/no modes are not allowed.</value>
   </data>
   <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-      <value>Matrix mode allowed only for rosters with no more than {0} question(s).</value>
+    <value>Matrix mode allowed only for rosters with no more than {0} question(s).</value>
   </data>
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
     <value>Matrix roster has to contain no supervisor or identifying questions.</value>
@@ -794,5 +794,11 @@
   </data>
   <data name="WB0302" xml:space="preserve">
     <value>Substitution cannot reference items from same roster level.</value>
+  </data>
+  <data name="WB0303_MatrixRosterCannotHaveCustomTitle" xml:space="preserve">
+    <value>Matrix roster cannot have custom roster title</value>
+  </data>
+  <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
+    <value>Table roster cannot have custom roster title</value>
   </data>
 </root>
