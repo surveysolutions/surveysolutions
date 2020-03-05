@@ -384,4 +384,7 @@
   <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
     <value>Additional info</value>
   </data>
+  <data name="VariableExcludedFromExport" xml:space="preserve">
+    <value>This variable is excluded from the exported data</value>
+  </data>
 </root>

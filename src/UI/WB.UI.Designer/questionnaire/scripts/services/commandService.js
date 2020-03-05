@@ -440,7 +440,8 @@
                         expression: variable.expression,
                         name: variable.variable,
                         type: variable.type,
-                        label: variable.label
+                        label: variable.label,
+                        doNotExport: variable.doNotExport
                     }
                 }
 

@@ -57,4 +57,19 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>
