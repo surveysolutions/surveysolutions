@@ -58,6 +58,7 @@ namespace WB.UI.Headquarters.Metrics
             catch (Exception)
             {
                 CommonMetrics.ExceptionsOccur.Inc();
+                throw;
             }
         }
     }
