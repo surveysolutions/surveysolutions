@@ -185,7 +185,7 @@ namespace WB.UI.Shared.Enumerator.Services
         public string BackupFolder { get; }
 
         public string RestoreFolder { get; }
-        public string BandwidthTestUri { get; } = @"Dependencies/img/logo.png";
+        public string BandwidthTestUri { get; } = @".hc";
 
         public string InstallationFilePath => Application.Context.PackageManager
             .GetInstalledApplications(PackageInfoFlags.MetaData)
