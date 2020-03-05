@@ -39,6 +39,7 @@
 
 import { entityDetails } from '../mixins'
 import Vue from 'vue'
+import moment from 'moment'
 
 class GpsAnswer {
     constructor(latitude,
@@ -94,10 +95,13 @@ export default {
             })
         },
         onPositionDetermined(position, questionId) {
-            console.log('onPositionDetermined')
             this.$store.dispatch('answerGpsQuestion', {
                 identity: questionId,
-                answer: new GpsAnswer(position.coords.latitude, position.coords.longitude, position.coords.accuracy, position.coords.altitude, position.timestamp),
+                answer: new GpsAnswer(position.coords.latitude,
+                    position.coords.longitude,
+                    position.coords.accuracy,
+                    position.coords.altitude,
+                    new moment().valueOf()),
             }).then(() => {
                 this.isInProgress = false
                 this.$store.dispatch('fetchProgress', -1)
