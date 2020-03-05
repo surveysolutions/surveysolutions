@@ -4,7 +4,6 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using Plugin.Geolocator.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -26,37 +25,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
-        private const string GoogleUrl = "https://www.google.com";
         private GpsLocation answer;
         public GpsLocation Answer
         {
             get => this.answer;
-            set
-            {
-                this.SetProperty(ref this.answer, value);
-                this.LocationInfo = value == null
-                    ? null
-                    : new NavigationModel($"{value.Latitude}, {value.Longitude}", $"{GoogleUrl}/maps?q={value.Latitude},{value.Longitude}");
-            }
-        }
-
-        private NavigationModel locationInfo;
-        public NavigationModel LocationInfo {
-            get => this.locationInfo;
-            set => this.SetProperty(ref this.locationInfo, value);
+            set => this.SetProperty(ref this.answer, value);
         }
 
         public bool ShowLocationOnMap => this.settings.ShowLocationOnMap &&
-                                         this.googleApiService.GetPlayServicesConnectionStatus() == GoogleApiConnectionStatus.Success &&
-                                         this.networkService.IsHostReachable(GoogleUrl);
+                                         this.googleApiService.GetPlayServicesConnectionStatus() == GoogleApiConnectionStatus.Success;
 
         public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
+        public IMvxCommand NavigateToMapsCommand => new MvxCommand(
+            () => this.externalAppLauncher.LaunchMapsWithTargetLocation(this.Answer.Latitude, this.Answer.Longitude));
 
         private readonly Guid userId;
         private readonly ILogger logger;
         private readonly IGoogleApiService googleApiService;
-        private readonly INetworkService networkService;
+        private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
         private readonly IViewModelEventRegistry liteEventRegistry;
@@ -84,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IViewModelEventRegistry liteEventRegistry,
             ILogger logger,
             IGoogleApiService googleApiService,
-            INetworkService networkService)
+            IExternalAppLauncher externalAppLauncher)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
@@ -98,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry = liteEventRegistry;
             this.logger = logger;
             this.googleApiService = googleApiService;
-            this.networkService = networkService;
+            this.externalAppLauncher = externalAppLauncher;
         }
 
         public Identity Identity => this.questionIdentity;

@@ -28,14 +28,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.QuestionnaireDeleted, $"(ver. {questionnaire.Version}) {title}", "deleted");
         }
 
-        public void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire)
+        public void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, Guid userId, string importUserName)
         {
-            this.Append(LogEntryType.QuestionnaireImported, $"(ver. {questionnaire.Version}) {title}", "imported");
+            this.Append(LogEntryType.QuestionnaireImported, $"(ver. {questionnaire.Version}) {title}", "imported",
+                responsibleName: importUserName,
+                responsibleUserId: userId);
         }
 
-        public void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion)
+        public void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion, Guid userId, string userName)
         {
-            this.Append(LogEntryType.AssignmentsUpgradeStarted, "Assignments", "Upgrade", $"From (ver. {fromVersion}) to (ver. {toVersion}) {title}");
+            this.Append(LogEntryType.AssignmentsUpgradeStarted, "Assignments", "Upgrade",
+                $"From (ver. {fromVersion}) to (ver. {toVersion}) {title}",
+                responsibleName: userName,
+                responsibleUserId: userId);
         }
 
         public void EmailProviderWasChanged(string previousProvider, string currentProvider)
@@ -47,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             => this.Append(LogEntryType.UsersImported, "Users", "Import",
                 $"User {responsibleName} created {importedSupervisors + importedInterviewers} users in batch mode, " +
                 $"of which {importedInterviewers} are interviewers and {importedSupervisors} supervisors",
-                responsibleName:responsibleName);
+                responsibleName: responsibleName);
 
         public void AssignmentsImported(long assignmentsCount, string questionnaireTitle, long questionnaireVersion,
             int firstAssignmentId, int lastAssignmentId, string responsibleName)
@@ -92,10 +97,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.UserMovedToAnotherTeam, $"User {interviewerName}", "moved", $"From team {previousSupervisorName}' to {newSupervisorName}");
         }
 
-        private void Append(LogEntryType type, string target, string action, string args = null, string responsibleName = null)
+        private void Append(LogEntryType type, string target, string action, string args = null, string responsibleName = null, Guid? responsibleUserId = null)
         {
-            AppendLogEntry(this.authorizedUser.Id, responsibleName ?? this.authorizedUser.UserName,
-                type, $"{target}: {action}; {args ?? string.Empty}");
+            AppendLogEntry(responsibleUserId ?? this.authorizedUser.Id,
+                responsibleName ?? this.authorizedUser.UserName,
+                type,
+                $"{target}: {action}; {args ?? string.Empty}");
         }
 
         private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log)

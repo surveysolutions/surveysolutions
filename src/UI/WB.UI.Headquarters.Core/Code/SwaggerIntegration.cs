@@ -91,6 +91,7 @@ namespace WB.UI.Headquarters.Code
             appBuilder.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Survey Solutions API V1");
+                c.RoutePrefix = "apidocs";
             });
         }
     }

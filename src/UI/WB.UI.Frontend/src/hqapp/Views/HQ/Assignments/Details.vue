@@ -19,6 +19,7 @@
                         ref="table"
                         :tableOptions="tableOptions"
                         :noSearch="true"
+                        :noPaging="false"
                         :wrapperClass=" { 'table-wrapper': true }"></DataTables>
                 </div>
 
@@ -199,6 +200,7 @@ export default {
 
         tableOptions() {
             var self = this
+
             const columns = [
                 {
                     data: 'Action',
@@ -283,7 +285,12 @@ export default {
                 ajax: {
                     url: `${this.$hq.basePath}api/v1/assignments/${this.model.id}/history`,
                     type: 'GET',
-                    dataSrc: 'History',
+                    contentType: 'application/json',
+                    dataSrc: function ( responseJson ) {
+                        responseJson.recordsTotal = responseJson.RecordsFiltered
+                        responseJson.recordsFiltered = responseJson.RecordsFiltered 
+                        return responseJson.History
+                    },
                 },
             }
 

@@ -5,31 +5,33 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     public abstract class QuestionnairesControllerBase : ControllerBase
     {
         protected readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyAccessor assemblyAccessor;
         protected readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
         private readonly ISerializer serializer;
 
         protected QuestionnairesControllerBase(
-            IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor,
+            IQuestionnaireAssemblyAccessor assemblyAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer, 
             IQuestionnaireStorage questionnaireStorage, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository)
         {
-            this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
+            this.assemblyAccessor = assemblyAccessor;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
             this.questionnaireStorage = questionnaireStorage;
@@ -43,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return allQuestionnaireIdentities;
         }
 
+        [WriteToSyncLog(SynchronizationLogType.GetQuestionnaireAttachments)]
         public virtual ActionResult<List<string>> GetAttachments(Guid id, int version)
         {
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
@@ -55,6 +58,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return attachmentIds;
         }
 
+        [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
         public virtual ActionResult<QuestionnaireApiView> Get(Guid id, int version, long contentVersion)
         {
             var questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
@@ -79,17 +83,20 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return resultValue;
         }
         
+        [WriteToSyncLog(SynchronizationLogType.GetQuestionnaireAssembly)]
         public virtual IActionResult GetAssembly(Guid id, int version)
         {
-            if (!this.questionnareAssemblyFileAccessor.IsQuestionnaireAssemblyExists(id, version))
+            if (!this.assemblyAccessor.IsQuestionnaireAssemblyExists(id, version))
                 return NotFound();
 
-            var data = this.questionnareAssemblyFileAccessor.GetAssemblyAsByteArray(id, version);
+            var data = this.assemblyAccessor.GetAssemblyAsByteArray(id, version);
             return File(data, "application/octet-stream");
         }
 
+        [WriteToSyncLog(SynchronizationLogType.QuestionnaireProcessed)]
         public virtual IActionResult LogQuestionnaireAsSuccessfullyHandled(Guid id, int version) => NoContent();
 
+        [WriteToSyncLog(SynchronizationLogType.QuestionnaireAssemblyProcessed)]
         public virtual IActionResult LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version) => NoContent();
     }
 }
