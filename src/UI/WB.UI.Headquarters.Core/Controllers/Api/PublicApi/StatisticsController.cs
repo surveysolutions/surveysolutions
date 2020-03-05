@@ -230,6 +230,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             Guid? GetQuestionIdByGuidOrStataCaption(string inputVar)
             {
+                if (string.IsNullOrEmpty(inputVar))
+                    return null;
                 return Guid.TryParse(inputVar, out Guid entityId)
                     ? (questionnaire.IsQuestion(entityId) ? entityId : (Guid?) null)
                     : questionnaire.GetQuestionIdByVariable(inputVar);

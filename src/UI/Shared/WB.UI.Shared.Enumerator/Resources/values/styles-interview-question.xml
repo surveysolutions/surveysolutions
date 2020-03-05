@@ -367,6 +367,10 @@
     <item name="android:layout_height">wrap_content</item>
   </style>
 
+  <style name="Interview_Question_RecordedAnswer_Link" parent="Interview_Question_RecordedAnswer">
+      <item name="android:textColor">@color/btn_default</item>
+  </style>
+
   <style name="Interview_Question_RecordedAnswer" parent="Interview_Question_Instruction_Details">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
