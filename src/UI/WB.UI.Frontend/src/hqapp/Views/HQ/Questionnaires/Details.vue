@@ -164,7 +164,6 @@ export default {
                 return this.recordAudioSend()
         },
         async recordAudioSend() {
-            console.info(this.audioAudit)
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
                 .AudioAudit(this.audioAudit)
             if(response.status !== 204) 
