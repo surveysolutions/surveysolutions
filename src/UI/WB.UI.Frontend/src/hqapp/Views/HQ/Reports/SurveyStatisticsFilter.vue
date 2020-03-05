@@ -284,7 +284,6 @@ export default {
 
             this.onChange(query => {
                 query.ans = this.selectedAnswers
-                console.log(query)
             })
         },
     },
