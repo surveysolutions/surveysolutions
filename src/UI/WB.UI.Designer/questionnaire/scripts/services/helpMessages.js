@@ -24,7 +24,8 @@
                 combobox: $i18next.t('HelpCombobox'),
                 defaultDate: $i18next.t('HelpDefaultDate'),
                 rosterDisplayMode: $i18next.t('HelpRosterDisplayMode'),
-                attachmentName: $i18next.t('HelpAttachmentName')
+                attachmentName: $i18next.t('HelpAttachmentName'),
+                doNotExport: $i18next.t('HelpDoNotExport')
             };
 
             helpService.getHelpMessage = function(key) {

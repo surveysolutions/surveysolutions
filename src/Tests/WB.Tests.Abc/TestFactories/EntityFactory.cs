@@ -1390,10 +1390,10 @@ namespace WB.Tests.Abc.TestFactories
         public ValidationCondition WarningCondition(string expression = "self != null", string message = "warning about unanswered question") 
             => this.ValidationCondition(expression, message, ValidationSeverity.Warning);
 
-        public Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
+        public Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2", bool doNotExport = false)
             => new Variable(
                 id ?? Guid.NewGuid(),
-                new VariableData(type, variableName, expression, null));
+                new VariableData(type, variableName, expression, null, doNotExport));
 
         public VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
             => new VariableValueLabel(value, label);

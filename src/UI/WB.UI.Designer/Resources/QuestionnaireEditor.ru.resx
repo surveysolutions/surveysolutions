@@ -1427,4 +1427,10 @@
   <data name="DeleteConfirmCategories" xml:space="preserve">
       <value>Вы уверены, что хотите удалить категории "{{trimmedTitle}}"? Источник категорий для зависимых категориальных вопросов будет сброшен в категории определенные пользователем</value>
   </data>
+  <data name="HelpDoNotExport" xml:space="preserve">
+    <value>Не экспортировать значение этой переменной</value>
+  </data>
+  <data name="VariableNoExport" xml:space="preserve">
+    <value>Не экспортировать</value>
+  </data>
 </root>

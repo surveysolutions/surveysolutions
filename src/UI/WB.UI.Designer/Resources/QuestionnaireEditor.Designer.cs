@@ -925,6 +925,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mark this variable to be excluded from the exported data..
+        /// </summary>
+        public static string HelpDoNotExport {
+            get {
+                return ResourceManager.GetString("HelpDoNotExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A logical expression that is calculated depending on the answers on the other questions..
         /// </summary>
         public static string HelpExpression {
@@ -3769,6 +3778,15 @@ namespace WB.UI.Designer.Resources {
         public static string VariableName {
             get {
                 return ResourceManager.GetString("VariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not export.
+        /// </summary>
+        public static string VariableNoExport {
+            get {
+                return ResourceManager.GetString("VariableNoExport", resourceCulture);
             }
         }
         
