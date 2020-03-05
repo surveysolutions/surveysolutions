@@ -105,8 +105,8 @@
                 $scope.loadGroup();
             } else {
                 $rootScope.$on('questionnaireLoaded', function () {
-                    $scope.loadGroup();
-
+                    if ($state.current.name === "questionnaire.chapter.group")
+                        $scope.loadGroup();
                 });
             }
 
