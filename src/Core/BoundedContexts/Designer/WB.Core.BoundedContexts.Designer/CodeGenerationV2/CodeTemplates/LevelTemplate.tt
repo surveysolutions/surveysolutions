@@ -8,164 +8,173 @@
 <#@ import namespace="WB.Core.SharedKernels.DataCollection.Portable" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-	internal partial class <#=Model.ClassName#> : LevelFunctions, <#=typeof(IInterviewLevel).Name#>, <#=typeof(IIndexedInterviewLevel).Name#>
-	{
-		
-		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Storage.ClassName #> storage) 
-		{
-			this._storage = storage;
-			this.Quest = new QuestionnaireRandom(storage.state.Properties);
-			this.RosterVector = rosterVector;
-			this.Identity = new Identity(IdOf.<#=Model.Variable#>, this.RosterVector);
+    internal partial class <#=Model.ClassName#> : LevelFunctions, <#=typeof(IInterviewLevel).Name#>, <#=typeof(IIndexedInterviewLevel).Name#>
+    {
+        
+        public <#=Model.ClassName#>(RosterVector rosterVector, <#= Storage.ClassName #> storage) 
+        {
+            this._storage = storage;
+            this.Quest = new QuestionnaireRandom(storage.state.Properties);
+            this.RosterVector = rosterVector;
+            this.Identity = new Identity(IdOf.<#=Model.Variable#>, this.RosterVector);
 
 <#
-	foreach (var method in Storage.GetEnablementConditions(Model.ClassName)) 
+    foreach (var method in Storage.GetEnablementConditions(Model.ClassName)) 
     {
 #>            
-			enablementConditions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+            enablementConditions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
-	}
+    }
 #>
 <#
-	foreach (var methodGroup in Storage.GetValidationConditions(Model.ClassName)) 
+    foreach (var methodGroup in Storage.GetValidationConditions(Model.ClassName)) 
     {
 #>
-			validationConditions.Add(IdOf.<#=methodGroup.Key#>, new Func<bool>[] { <#=string.Join(",",  methodGroup.Value)#> });
+            validationConditions.Add(IdOf.<#=methodGroup.Key#>, new Func<bool>[] { <#=string.Join(",",  methodGroup.Value)#> });
 <# 
-	}
+    }
 #>
 <#
-	foreach (var method in Storage.GetVariableExpressions(Model.ClassName)) 
-    {
-#>            
-			variableExpressions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
-<# 
-	}
-#>
-<#
-	foreach (var method in Storage.GetCategoricalOptionsFilters(Model.ClassName)) 
+    foreach (var method in Storage.GetVariableExpressions(Model.ClassName)) 
     {
 #>            
-			categoricalFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+            variableExpressions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
-	}
+    }
 #>
 <#
-	foreach (var method in Storage.GetLinkedFilters(Model.ClassName)) 
+    foreach (var method in Storage.GetCategoricalOptionsFilters(Model.ClassName)) 
     {
 #>            
-			linkedFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+            categoricalFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
-	}
+    }
 #>
-		}
+<#
+    foreach (var method in Storage.GetLinkedFilters(Model.ClassName)) 
+    {
+#>            
+            linkedFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+<# 
+    }
+#>
+        }
 
-		public Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity)
-		{
-			if (!linkedFilters.ContainsKey(identity.Id))
-				return null;
-			
-			return linkedFilters[identity.Id];
-		}
+        public Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity)
+        {
+            if (linkedFilters.TryGetValue(identity.Id, out var result))
+            {
+                return result;
+            }
 
-		public Func<bool> GetConditionExpression(Identity identity)
-		{
-			if (!enablementConditions.ContainsKey(identity.Id))
-				return null;
-			
-			return enablementConditions[identity.Id];
-		}
+            return null;
+        }
 
-		public Func<bool>[] GetValidationExpressions(Identity identity)
-		{
-			if (!validationConditions.ContainsKey(identity.Id))
-				return null;
-			
-			return validationConditions[identity.Id];
-		}
+        public Func<bool> GetConditionExpression(Identity identity)
+        {
+            if (enablementConditions.TryGetValue(identity.Id, out var result))
+            {
+                return result;
+            }
 
-		public Func<object> GetVariableExpression(Identity identity)
-		{
-			if (!variableExpressions.ContainsKey(identity.Id))
-				return null;
-			
-			return variableExpressions[identity.Id];
-		}
+            return null;
+        }
 
-		public Func<int, bool> GetCategoricalFilter(Identity identity)
-		{
-			if (!categoricalFilters.ContainsKey(identity.Id))
-				return null;
-			
-			return categoricalFilters[identity.Id];
-		}
+        public Func<bool>[] GetValidationExpressions(Identity identity)
+        {
+            if (validationConditions.TryGetValue(identity.Id, out var result))
+            {
+                return result;
+            }
 
-		private readonly Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
-		private readonly Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();
-		private readonly Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
-		private readonly Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
-		private readonly Dictionary<Guid, Func<object>> variableExpressions = new Dictionary<Guid, Func<object>>();
+            return null;
+        }
 
-		private readonly <#= Storage.ClassName #> _storage;
+        public Func<object> GetVariableExpression(Identity identity)
+        {
+            if (variableExpressions.TryGetValue(identity.Id, out var result))
+            {
+                return result;
+            }
 
-		private <#=typeof(IInterviewStateForExpressions).Name#> _state => _storage.state;
+            return null;
+        }
 
-		private <#=typeof(IInterviewPropertiesForExpressions).Name#> properties => _state.Properties;
+        public Func<int, bool> GetCategoricalFilter(Identity identity)
+        {
+            if (categoricalFilters.TryGetValue(identity.Id, out var result))
+            {
+                return result;
+            }
 
-		public RosterVector RosterVector { get; private set; }
+            return null;
+        }
 
-		public Identity Identity  { get; private set; }
+        private readonly Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
+        private readonly Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();
+        private readonly Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+        private readonly Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
+        private readonly Dictionary<Guid, Func<object>> variableExpressions = new Dictionary<Guid, Func<object>>();
 
-		public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
+        private readonly <#= Storage.ClassName #> _storage;
 
-		public int @rowindex => _state.GetRosterIndex(Identity);
+        private <#=typeof(IInterviewStateForExpressions).Name#> _state => _storage.state;
 
-		public string @rowname => _state.GetRosterTitle(Identity);
-		
-		public int RowCode => @rowcode;
+        private <#=typeof(IInterviewPropertiesForExpressions).Name#> properties => _state.Properties;
+
+        public RosterVector RosterVector { get; private set; }
+
+        public Identity Identity  { get; private set; }
+
+        public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
+
+        public int @rowindex => _state.GetRosterIndex(Identity);
+
+        public string @rowname => _state.GetRosterTitle(Identity);
+        
+        public int RowCode => @rowcode;
 
         public int RowIndex => @rowindex;
 
-		// backward compatibility		
-
-		private QuestionnaireRandom Quest;		
+        // backward compatibility
+        private QuestionnaireRandom Quest;		
 <#
-	foreach (var question in Model.Questions) 
+    foreach (var question in Model.Questions) 
     {
 #>        public <#=question.TypeName#> <#=question.Variable#> => _state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, <#=
-			question.RosterScope.Length > 0 ? "RosterVector.Take(" + question.RosterScope.Length + ")" : "RosterVector.Empty" #>);
+            question.RosterScope.Length > 0 ? "RosterVector.Take(" + question.RosterScope.Length + ")" : "RosterVector.Empty" #>);
 <# 
-	}
+    }
 #>
 <#
-	foreach (var variable in Model.Variables) 
+    foreach (var variable in Model.Variables) 
     {
 #>        public <#=variable.TypeName#> <#=variable.Variable#> => _state.GetVariable<<#=variable.TypeName#>>(IdOf.<#=variable.Variable#>, <#=
-			variable.RosterScope.Length > 0 ? "RosterVector.Take(" + variable.RosterScope.Length + ")" : "RosterVector.Empty" #>);
+            variable.RosterScope.Length > 0 ? "RosterVector.Take(" + variable.RosterScope.Length + ")" : "RosterVector.Empty" #>);
 <# 
-	}
+    }
 #>
 <#
-	foreach (var roster in Model.Rosters) 
+    foreach (var roster in Model.Rosters) 
     {
 #>        public RostersCollection<<#=roster.ClassName#>> <#=roster.Variable#> => _storage.GetLevels<<#=roster.ClassName#>>(IdOf.<#=roster.Variable#>, <#=roster.RosterScope.Length == 1? "null" : "Identity"#>);
 <# 
-	}
+    }
 #>
 <#
-	foreach (var table in Storage.LookupTables) 
+    foreach (var table in Storage.LookupTables) 
     {
 #>        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => LookupTables.<#= table.TableName #>;
 <# 
-	}
+    }
 #>
 <#
-	foreach (var section in Model.Sections) 
+    foreach (var section in Model.Sections) 
     {
 #>        public Section <#=section.Variable#> => _state.GetSection(IdOf.<#=section.Variable#>, <#=
-			section.RosterScope.Length > 0 ? "RosterVector.Take(" + section.RosterScope.Length + ")" : "RosterVector.Empty" #>);
+            section.RosterScope.Length > 0 ? "RosterVector.Take(" + section.RosterScope.Length + ")" : "RosterVector.Empty" #>);
 <# 
-	}
+    }
 #>
 
-	}
+    }

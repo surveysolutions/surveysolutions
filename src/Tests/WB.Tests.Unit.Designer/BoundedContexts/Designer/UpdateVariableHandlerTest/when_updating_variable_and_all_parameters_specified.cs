@@ -21,7 +21,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
                 type: variableType,
                 name: variableName,
                 expression: variableExpression,
-                userId: responsibleId
+                userId: responsibleId,
+                doNotExport: true
                 );
             BecauseOf();
         }
@@ -45,6 +46,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
         [NUnit.Framework.Test] public void should_contains_variable_with_Expression_specified () =>
             questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Expression.Should().Be(variableExpression);
 
+        [NUnit.Framework.Test]
+        public void should_contains_variable_with_DoNotExport_specified() =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).DoNotExport.Should().Be(true);
 
         private static UpdateVariable command;
         private static Questionnaire questionnaire;

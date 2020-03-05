@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
         string Name { get; set; }
         string Expression { get; set; }
         string Label { get; set; }
+        bool DoNotExport { get; set; }
     }
 }
