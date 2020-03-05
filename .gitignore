@@ -127,3 +127,5 @@ src/UI/WB.UI.Designer/wwwroot
 /src/UI/WB.UI.Headquarters.Core/Views/Shared/_EmptyLayout.cshtml
 /src/UI/WB.UI.Headquarters.Core/App_Data/
 /src/UI/WB.UI.Headquarters.Core/AppData
+
+/src/Installation/SurveySolutions/.vagrant
