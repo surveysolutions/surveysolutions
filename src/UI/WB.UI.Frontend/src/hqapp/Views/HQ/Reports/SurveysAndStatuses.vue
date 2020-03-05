@@ -33,6 +33,7 @@
 </template>
 <script>
 
+import {formatNumber} from './helpers'
 import routeSync from '~/shared/routeSync'
 import { escape } from 'lodash'
 
@@ -72,10 +73,10 @@ export default {
         getLinkToInterviews(data, row, status) {
             const value = escape(data)
             if (value == 0)
-                return '0'
+                return '<span>0</span>'
             const responsibleName = (this.responsible || {}).value
-            const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
-            return `<a href=${url}>${value}</a>`
+            const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion || ''}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
+            return `<a href=${url}>${formatNumber(value)}</a>`
         },
     },
     watch: {
