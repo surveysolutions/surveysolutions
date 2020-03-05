@@ -43,6 +43,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
         [HttpPost]
         [Route("{id:int}/Received")]
+        [WriteToSyncLog(SynchronizationLogType.AssignmentReceived)]
         public override IActionResult Received(int id) => base.Received(id);
     }
 }

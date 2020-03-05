@@ -12,8 +12,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
         public void should_return_404_result()
         {
             var users = Abc.Create.Storage.UserRepository(Create.Entity.HqUser(role: UserRoles.Administrator));
-            var attribute = CreateInstallationAttribute(users);
-            var actionExecutingContext = CreateFilterContext(Create.Controller.InstallController());
+            var attribute = CreateInstallationAttribute();
+            var actionExecutingContext = CreateFilterContext(Create.Controller.InstallController(), users);
             
             attribute.OnActionExecuting(actionExecutingContext);
 

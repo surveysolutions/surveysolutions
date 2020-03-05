@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Main.Core.Entities.SubEntities;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
     public class RegisterUserModel
     {
         [Required]
-        public UserRoles Role { get; set; }
+        public Roles Role { get; set; }
 
         [Required]
         public string UserName { get; set; }
@@ -24,5 +23,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 
         [Description("Login of supervisor for registered interviewer")]
         public string Supervisor { get; set; }
+
+        public Main.Core.Entities.SubEntities.UserRoles GetDomainRole()
+        {
+            return (Main.Core.Entities.SubEntities.UserRoles) Role;
+        }
     }
 }

@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 {
@@ -18,14 +20,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
     public class QuestionnairesApiV2Controller : QuestionnairesControllerBase
     {
         public QuestionnairesApiV2Controller(
-            IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor,
+            IQuestionnaireAssemblyAccessor assemblyAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository) : base(
                 questionnaireStorage: questionnaireStorage,
                 questionnaireRepository: questionnaireRepository,
-                questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
+                assemblyAccessor: assemblyAccessor,
                 questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
                 serializer: serializer)
         {
@@ -33,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 
         [HttpGet]
         [Route("census")]
+        [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
         public ActionResult<List<QuestionnaireIdentity>> Census()
         {
             return Ok(new List<QuestionnaireIdentity>());

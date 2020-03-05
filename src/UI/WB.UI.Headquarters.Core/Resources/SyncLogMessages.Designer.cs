@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment &lt;b&gt;{0}&lt;/b&gt; received and stored by device.
+        /// </summary>
+        public static string AssignmentReceivedByTablet {
+            get {
+                return ResourceManager.GetString("AssignmentReceivedByTablet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start synchronization.
         /// </summary>
         public static string CanSynchronize {
@@ -138,6 +147,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string DeviceUpdateRequired {
             get {
                 return ResourceManager.GetString("DeviceUpdateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reusable category {0} downloading.
+        /// </summary>
+        public static string DownloadReusableCategories {
+            get {
+                return ResourceManager.GetString("DownloadReusableCategories", resourceCulture);
             }
         }
         

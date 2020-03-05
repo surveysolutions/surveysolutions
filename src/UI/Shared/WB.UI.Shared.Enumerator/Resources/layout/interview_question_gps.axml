@@ -17,11 +17,16 @@
             style="@style/Interview_Question_GPS_Map"
             map:mapType="hybrid"
             map:liteMode="true"/>
-        <include layout="@layout/interview_question__remove_button_recorded" />
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          local:MvxBind="Visible ShowLocationOnMap">
+          <include layout="@layout/interview_question__remove_button_recorded" />
+        </LinearLayout>
       </TableRow>
       <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
-        <TextView style="@style/Interview_Question_RecordedAnswer"
-          local:MvxBind="Hyperlink LocationInfo" />
+        <TextView style="@style/Interview_Question_RecordedAnswer_Link"
+          local:MvxBind="Text Format('{0}, {1}', Answer.Latitude, Answer.Longitude); Click NavigateToMapsCommand;" />
 
         <LinearLayout 
           android:layout_width="wrap_content"

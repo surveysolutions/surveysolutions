@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -7,8 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
@@ -213,16 +210,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Creates new user with specified role.
         /// </summary>
         /// <param name="model"></param>
-        /// <response code="400">User cannot be created</response>
-        /// <response code="200">User created</response>
+        /// <response code="400">User cannot be created.</response>
+        /// <response code="200">Created user id.</response>
         [HttpPost]
         [Route("users")]
         public async Task<ActionResult<UserCreationResult>> Register([FromBody]RegisterUserModel model)
         {
             var result = new UserCreationResult();
+            var createdUserRole = model.GetDomainRole();
+
+            if (createdUserRole == UserRoles.Administrator)
+            {
+                ModelState.AddModelError(nameof(model.Role), "Administrator user can not be created with api");
+            }
+
             if (ModelState.IsValid)
             {
-                var createdUserRole = model.Role;
                 if (createdUserRole == UserRoles.Interviewer && string.IsNullOrWhiteSpace(model.Supervisor))
                 {
                     ModelState.AddModelError(nameof(model.Supervisor), "Supervisor name is required for interviewer creation");

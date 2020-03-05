@@ -81,7 +81,10 @@ export default {
         values: Array,
         noSearch: Boolean,
         noClear: Boolean,
-        disabled: Boolean,
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
         fuzzy: {
             type: Boolean,
             default: false,
@@ -108,6 +111,10 @@ export default {
             else {
                 this.options.splice(0, this.options.length)
             }
+        },
+        disabled(val){
+            if(val) this.fetchOptions()
+            else this.clear()
         },
     },
     data() {
@@ -136,7 +143,7 @@ export default {
 
         jqEl.on('shown.bs.dropdown', () => {
             focusTo.focus()
-            this.fetchOptions(this.searchTerm)
+            this.fetchOptions()
         })
 
         jqEl.on('hidden.bs.dropdown', () => {
@@ -154,9 +161,7 @@ export default {
             keys: ['value'],
         }
 
-        if(this.selectFirst || this.selectedKey != null || this.selectedValue != null) {
-            this.fetchOptions(this.searchTerm, this.selectedKey, this.selectedValue, this.selectFirst)
-        }
+        this.fetchOptions()
     },
 
     methods: {
@@ -178,58 +183,59 @@ export default {
             }
         },
 
-        fetchOptions(filter = '', selectedKey = null, selectedValue = null, selectFirst = false) {
+        fetchOptions() {
             if (this.values) {
-                if (filter != '') {
-                    const fuse = new Fuse(this.values, this.fuseOptions)
-                    this.options = this.setOptions(fuse.search(filter), false)
-                } else {
-                    this.options = this.setOptions(this.values)
-                }
-
-                if(selectedKey != null) {
-                    this.selectByKey(selectedKey)
-                }
-                else if (selectedValue != null) {
-                    this.selectByValue(selectedValue)
-                }
-                else if (selectFirst) {
-                    this.selectOption(this.options[0].item)
-                }
-
+                this.fetchLocalOptions()
                 return
             }
 
             this.isLoading = true
             const requestParams = assign(
-                { query: filter, cache: false},
+                { query: this.searchTerm, cache: false},
                 this.ajaxParams
             )
-
+            let self = this
             return this.$http
                 .get(this.fetchUrl, { params: requestParams })
                 .then(response => {
                     if(response != null && response.data != null) {
-                        this.options = this.setOptions(response.data.options || [])
+                        self.options = self.setOptions(response.data.options || [])
 
-                        if (this.options.length > 0) {
-                            if(selectedKey != null) {
-                                this.selectByKey(selectedKey)
+                        if (self.options.length > 0) {
+                            if(self.selectedKey != null) {
+                                self.selectByKey(self.selectedKey)
                             }
-                            else if (selectedValue != null) {
-                                this.selectByValue(selectedValue)
+                            else if (self.selectedValue != null) {
+                                self.selectByValue(self.selectedValue)
                             }
-                            else if (selectFirst) {
-                                this.selectOption(this.options[0].item)
+                            else if (self.selectFirst && self.value == null) {
+                                self.selectOption(self.options[0].item)
                             }
                         }
                     }
 
-                    this.isLoading = false
+                    self.isLoading = false
                 })
-                .catch(() => (this.isLoading = false))
+                .catch(() => (self.isLoading = false))
         },
+        fetchLocalOptions(){
+            if (this.searchTerm != '') {
+                const fuse = new Fuse(this.values, this.fuseOptions)
+                this.options = this.setOptions(fuse.search(this.searchTerm), false)
+            } else {
+                this.options = this.setOptions(this.values)
+            }
 
+            if(this.selectedKey != null) {
+                this.selectByKey(this.selectedKey)
+            }
+            else if (this.selectedValue != null) {
+                this.selectByValue(this.selectedValue)
+            }
+            else if (this.selectFirst && this.value == null) {
+                this.selectOption(this.options[0].item)
+            }
+        },
         setOptions(values, wrap = true) {
             if (wrap == false) return values
 
@@ -261,7 +267,8 @@ export default {
             }
         },        
         updateOptionsList(e) {
-            this.fetchOptions(e.target.value)
+            this.searchTerm = e.target.value
+            this.fetchOptions()
         },
         highlight(option, searchTerm) {
             if (option.matches == null) {
