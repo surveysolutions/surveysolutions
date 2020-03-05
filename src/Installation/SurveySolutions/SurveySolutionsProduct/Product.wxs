@@ -372,6 +372,7 @@
                 </ServiceInstall>
                 <ServiceControl Id="ExportServiceControl"
                                 Name="SurveySolutionsExport"
+                                Start="install"
                                 Stop="both"
                                 Remove="uninstall" 
                                 Wait="no"></ServiceControl>
