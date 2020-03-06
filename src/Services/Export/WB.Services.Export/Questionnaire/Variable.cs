@@ -46,6 +46,8 @@ namespace WB.Services.Export.Questionnaire
                 return columnName;
             }
         }
+
+        public bool IsExportable => DoNotExport == false;
     }
 
     public enum VariableType

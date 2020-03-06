@@ -50,7 +50,7 @@ namespace WB.Services.Export.Interview
 
                     yield return groupInterviewEntity;
 
-                    foreach (var groupChild in @group.Children)
+                    foreach (var groupChild in @group.Children.Where(c => c.IsExportable))
                     {
                         if (groupChild is Question question)
                         {
