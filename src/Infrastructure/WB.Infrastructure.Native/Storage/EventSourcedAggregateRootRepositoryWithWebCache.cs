@@ -23,7 +23,7 @@ namespace WB.Infrastructure.Native.Storage
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
 
-        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, 
+        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore,
             IInMemoryEventStore inMemoryEventStore,
             EventBusSettings eventBusSettings,
             IDomainRepository repository,
@@ -75,8 +75,21 @@ namespace WB.Infrastructure.Native.Storage
                 CommonMetrics.StatefullInterviewCacheMiss.Inc();
                 return null;
             }
-            
-            bool isDirty = cachedAggregate.HasUncommittedChanges() || eventStore.GetLastEventSequence(aggregateId) != cachedAggregate.Version; 
+
+            var isDirtyCacheCheckKey = "Cache_" + aggregateId.FormatGuid();
+            if (!(Cache.Get(isDirtyCacheCheckKey) is bool isDirtyCached))
+            {
+                bool isDirtyFromDb = eventStore.IsDirty(aggregateId, cachedAggregate.Version);
+                Cache.Add(new CacheItem(isDirtyCacheCheckKey, isDirtyFromDb),
+                    new CacheItemPolicy
+                    {
+                        AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(2)
+                    });
+                isDirtyCached = isDirtyFromDb;
+            }
+
+
+            bool isDirty = cachedAggregate.HasUncommittedChanges() || isDirtyCached;
 
             if (isDirty)
             {
@@ -97,7 +110,7 @@ namespace WB.Infrastructure.Native.Storage
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
         {
             var key = Key(aggregateRoot.EventSourceId);
-            
+
             Cache.Set(key, aggregateRoot, new CacheItemPolicy
             {
                 RemovedCallback = OnUpdateCallback,
@@ -113,7 +126,7 @@ namespace WB.Infrastructure.Native.Storage
         }
 
         protected virtual string Key(Guid id) => "aggregateRoot_" + id;
-        
+
         protected virtual void CacheItemRemoved(string key, CacheEntryRemovedReason reason)
         {
             CommonMetrics.StatefullInterviewEvicted.Labels(reason.ToString()).Inc();
