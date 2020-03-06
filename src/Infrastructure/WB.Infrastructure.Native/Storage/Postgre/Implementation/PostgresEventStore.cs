@@ -82,7 +82,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public int? GetLastEventSequence(Guid id)
         {
             return this.sessionProvider.Session.Connection.ExecuteScalar<int?>(
-                $"SELECT MAX(eventsequence) as eventsourceid FROM {tableNameWithSchema} WHERE eventsourceid=@sourceId", 
+                $"SELECT MAX(eventsequence) as eventsourceid FROM {tableNameWithSchema} WHERE eventsourceid=@sourceId",
                 new { sourceId = id });
         }
 
@@ -203,16 +203,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 $@"select MAX(eventsequence) from {tableNameWithSchema} where
                                         eventsourceid = @eventSourceId
                                         and eventtype = ANY(@eventTypes)
-                                        limit 1", new { eventSourceId, eventTypes = typeNames} );
+                                        limit 1", new { eventSourceId, eventTypes = typeNames });
         }
 
-    
+
         public IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize)
         {
             // fix for KP-13687
             var sessionConnection = this.sessionProvider.Session.Connection;
             sessionConnection.Execute($"lock table {tableNameWithSchema} in SHARE mode");
-            
+
             var rawEventsData = sessionConnection
                 .Query<RawEvent>
                 ($@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text 
@@ -304,6 +304,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     typedEvent
                 );
             }
+        }
+
+        public bool IsDirty(Guid eventSourceId, long lastKnownEventSequence)
+        {
+            return this.sessionProvider.Session.Connection.ExecuteScalar<int?>(
+                $"SELECT 1 FROM {tableNameWithSchema} WHERE eventsourceid=@sourceId AND eventsequence=@next",
+                new
+                {
+                    sourceId = eventSourceId,
+                    next = lastKnownEventSequence + 1
+                }) == 1;
         }
     }
 }

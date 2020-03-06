@@ -592,6 +592,10 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 ExistsOnHq = 1
             };
 
+        public bool IsDirty(Guid eventSourceId, long lastKnownEventSequence)
+        {
+            return GetLastEventSequence(eventSourceId) == lastKnownEventSequence;
+        }
 
         private interface IEventSerializer
         {
