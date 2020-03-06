@@ -88,9 +88,7 @@ namespace WB.Infrastructure.Native.Storage
                 isDirtyCached = isDirtyFromDb;
             }
 
-
             bool isDirty = cachedAggregate.HasUncommittedChanges() || isDirtyCached;
-
             if (isDirty)
             {
                 Evict(aggregateId);
