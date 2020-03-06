@@ -76,19 +76,7 @@ namespace WB.Infrastructure.Native.Storage
                 return null;
             }
 
-            var isDirtyCacheCheckKey = "Cache_" + aggregateId.FormatGuid();
-            if (!(Cache.Get(isDirtyCacheCheckKey) is bool isDirtyCached))
-            {
-                bool isDirtyFromDb = eventStore.IsDirty(aggregateId, cachedAggregate.Version);
-                Cache.Add(new CacheItem(isDirtyCacheCheckKey, isDirtyFromDb),
-                    new CacheItemPolicy
-                    {
-                        AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(2)
-                    });
-                isDirtyCached = isDirtyFromDb;
-            }
-
-            bool isDirty = cachedAggregate.HasUncommittedChanges() || isDirtyCached;
+            bool isDirty = cachedAggregate.HasUncommittedChanges() || eventStore.IsDirty(aggregateId, cachedAggregate.Version);
             if (isDirty)
             {
                 Evict(aggregateId);
