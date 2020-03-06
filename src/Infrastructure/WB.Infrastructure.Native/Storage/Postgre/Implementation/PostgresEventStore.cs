@@ -141,7 +141,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return result;
         }
 
-        private static void ValidateStreamVersion(UncommittedEventStream eventStream, ISession connection)
+        private void ValidateStreamVersion(UncommittedEventStream eventStream, ISession connection)
         {
             void AppendEventSourceParameter(IDbCommand command)
             {
@@ -167,17 +167,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
             else
             {
-                using (var validateVersionCommand = connection.Connection.CreateCommand())
-                {
-                    validateVersionCommand.CommandText =
-                        $"SELECT MAX(eventsequence) FROM {tableNameWithSchema} WHERE eventsourceid = :sourceId";
-                    AppendEventSourceParameter(validateVersionCommand);
-
-                    var storedLastSequence = validateVersionCommand.ExecuteScalar() as int?;
-                    if (storedLastSequence != eventStream.InitialVersion)
-                        throw new InvalidOperationException(
-                            $"Unexpected stream version. Expected {eventStream.InitialVersion}. Actual {storedLastSequence}. EventSourceId: {eventStream.SourceId}");
-                }
+                if (this.IsDirty(eventStream.SourceId, eventStream.InitialVersion))
+                    throw new InvalidOperationException(
+                        $"Unexpected stream version. Expected {eventStream.InitialVersion}. EventSourceId: {eventStream.SourceId}");
             }
         }
 
