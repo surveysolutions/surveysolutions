@@ -536,6 +536,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var variable = questionnaire.Find<Variable>(entityId);
+            
+            if (!variable.IsExportable) return;
+
             var tableName = questionnaire.DatabaseStructure.GetDataTableName(entityId);
             var columnName = variable.ColumnName;
             var columnType = GetPostgresSqlTypeForVariable(variable);
@@ -563,6 +566,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
+
+            if (!entity.IsExportable) return;
+
             var tableName = questionnaire.DatabaseStructure.GetEnablementDataTableName(entityId);
             var columnName = ResolveColumnNameForEnablement(entity);
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, isEnabled, NpgsqlDbType.Boolean);
@@ -575,6 +581,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
+            if (!entity.IsExportable) return;
 
             var tableName = questionnaire.DatabaseStructure.GetValidityDataTableName(entityId);
             var columnName = (entity as Question)?.ColumnName 
