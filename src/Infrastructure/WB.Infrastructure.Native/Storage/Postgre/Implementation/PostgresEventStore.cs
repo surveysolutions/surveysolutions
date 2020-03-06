@@ -23,7 +23,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly IEventTypeResolver eventTypeResolver;
 
         private static int BatchSize = 4096;
-        private static string tableNameWithSchema;
+        private readonly string tableNameWithSchema;
         private readonly string tableName;
         private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
@@ -167,9 +167,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
             else
             {
-                if (this.IsDirty(eventStream.SourceId, eventStream.InitialVersion))
+                var eventsFromDb = connection.Connection.Query<int>($"SELECT eventsequence FROM {tableNameWithSchema} " +
+                    $"WHERE eventsourceid = :sourceId AND (eventsequence=:sequence OR eventsequence=:sequence + 1) ORDER BY eventsequence",
+                    new
+                    {
+                        sourceId = eventStream.SourceId,
+                        sequence = eventStream.InitialVersion
+                    }).ToList();
+                if(eventsFromDb.Count != 1 || eventsFromDb[0] != eventStream.InitialVersion)
+                {
                     throw new InvalidOperationException(
                         $"Unexpected stream version. Expected {eventStream.InitialVersion}. EventSourceId: {eventStream.SourceId}");
+                }
             }
         }
 
