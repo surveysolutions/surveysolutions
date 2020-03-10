@@ -483,4 +483,7 @@ Contact support for assistance.</value>
   <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
     <value>Save new</value>
   </data>
+  <data name="PickLocation" xml:space="preserve">
+    <value>Pick from map</value>
+  </data>
 </root>
