@@ -269,7 +269,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var result = new List<MetricState>();
 
             var cpuUsage = await GetCpuUsage();
-            result.Add(new MetricState("CPU Usage", cpuUsage.ToStr("0.##%")));
+            result.Add(new MetricState("CPU Usage", cpuUsage.ToStr("0.##%") + " on " + "vCPU".ToQuantity(Environment.ProcessorCount)));
             result.Add(new MetricState("Working Memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.00")));
 
             result.Add(new MetricState("Events count", BrokenPackagesStatsCollector.DatabaseTableRowsCount.Labels("events").Value.ToString("N0", CultureInfo.InvariantCulture)));
@@ -303,7 +303,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var time2 = process.TotalProcessorTime;
             sw.Stop();
 
-            return (time2 - time).TotalSeconds / sw.Elapsed.TotalSeconds / Environment.ProcessorCount;
+            return (time2 - time).TotalSeconds / sw.Elapsed.TotalSeconds;
         }
 
         private static readonly string[] OpenConnectionsLabel = {"open"};

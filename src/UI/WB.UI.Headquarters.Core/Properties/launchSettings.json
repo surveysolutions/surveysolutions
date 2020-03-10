@@ -21,8 +21,8 @@
     },
     "WB.UI.Headquarters.Core": {
       "commandName": "Project",
-      "launchUrl": "https://localhost:5000",
       "launchBrowser": true,
+      "launchUrl": "https://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
