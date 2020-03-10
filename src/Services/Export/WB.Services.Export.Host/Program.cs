@@ -150,6 +150,7 @@ namespace WB.Services.Export.Host
                     web.UseStartup<Startup>();
                     web.ConfigureAppConfiguration(c =>
                     {
+                        c.AddIniFile("appsettings.ini", false, true);
                         c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
                         c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
 
