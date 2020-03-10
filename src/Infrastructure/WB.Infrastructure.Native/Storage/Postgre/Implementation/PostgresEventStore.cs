@@ -22,21 +22,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IEventTypeResolver eventTypeResolver;
 
-        private readonly string tableNameWithSchema;
-        private readonly string tableName;
+        private const string tableNameWithSchema = "events.events";
         private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
         private readonly IUnitOfWork sessionProvider;
 
-        public PostgresEventStore(PostgreConnectionSettings connectionSettings,
-            IEventTypeResolver eventTypeResolver,
+        public PostgresEventStore(IEventTypeResolver eventTypeResolver,
             IUnitOfWork sessionProvider)
         {
             this.eventTypeResolver = eventTypeResolver;
             this.sessionProvider = sessionProvider;
-
-            this.tableName = "events";
-            tableNameWithSchema = connectionSettings.SchemaName + "." + this.tableName;
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
