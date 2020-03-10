@@ -22,7 +22,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IEventTypeResolver eventTypeResolver;
 
-        private static int BatchSize = 4096;
         private readonly string tableNameWithSchema;
         private readonly string tableName;
         private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
@@ -42,42 +41,21 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
         {
-            int processed = 0;
-            IEnumerable<CommittedEvent> batch;
-            do
-            {
-                batch = this.ReadBatch(id, minVersion, processed).ToList();
-                foreach (var @event in batch)
-                {
-                    processed++;
-                    yield return @event;
-                }
-            } while (batch.Any());
-        }
-
-        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
-            => this.Read(id, minVersion);
-
-        private IEnumerable<CommittedEvent> ReadBatch(Guid id, int minVersion, int processed)
-        {
             var rawEvents = sessionProvider.Session.Connection.Query<RawEvent>(
-                $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
-                $"FROM {tableNameWithSchema} " +
-                $"WHERE eventsourceid= @sourceId AND eventsequence >= @minVersion " +
-                $"ORDER BY eventsequence LIMIT @batchSize OFFSET @processed",
-                new
-                {
-                    sourceId = id,
-                    minVersion = minVersion,
-                    batchSize = BatchSize,
-                    processed = processed
-                }, buffered: true);
+                 $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                 $"FROM {tableNameWithSchema} " +
+                 $"WHERE eventsourceid= @sourceId AND eventsequence >= @minVersion " +
+                 $"ORDER BY eventsequence",
+                 new { sourceId = id, minVersion }, buffered: true);
 
             foreach (var committedEvent in ToCommittedEvent(rawEvents))
             {
                 yield return committedEvent;
             }
         }
+
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+            => this.Read(id, minVersion);
 
         public int? GetLastEventSequence(Guid id)
         {
