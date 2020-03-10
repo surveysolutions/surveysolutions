@@ -153,10 +153,12 @@
             <div class="form-group" ng-hide="activeQuestion.isCascade == true">
                 <label class="wb-label" for="optionsFilterExpression" ng-i18next="QuestionFilter"></label>
                 <div class="pseudo-form-control">
-                    <div id="optionsFilterExpression" ng-if="activeQuestion.isLinked" 
+                    <div id="optionsFilterExpression" ng-if="activeQuestion.isLinked && activeQuestion.linkedToEntity.type != 'textlist'" 
                          ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" 
-                         ng-model="activeQuestion.linkedFilterExpression"></div>                    
-                    <div id="optionsFilterExpression" ng-else ui-ace="{ onLoad : aceLoadedForOtionFilter, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.optionsFilterExpression"></div>
+                         ng-model="activeQuestion.linkedFilterExpression"></div>
+                    <div id="optionsFilterExpression" ng-else 
+                         ui-ace="{ onLoad : aceLoadedForOtionFilter, require: ['ace/ext/language_tools'] }" 
+                         ng-model="activeQuestion.optionsFilterExpression"></div>
                 </div>
             </div>
         </script>

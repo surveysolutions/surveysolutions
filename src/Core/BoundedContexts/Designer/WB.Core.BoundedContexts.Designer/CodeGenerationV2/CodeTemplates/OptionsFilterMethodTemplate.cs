@@ -82,14 +82,7 @@ using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
             
             #line default
             #line hidden
-            this.Write("(");
-            
-            #line 32 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.OptionCodeType));
-            
-            #line default
-            #line hidden
-            this.Write(" optioncode)\r\n\t\t{\r\n\t\t\tvar self = ");
+            this.Write("(int optioncode)\r\n\t\t{\r\n\t\t\tvar self = ");
             
             #line 34 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));

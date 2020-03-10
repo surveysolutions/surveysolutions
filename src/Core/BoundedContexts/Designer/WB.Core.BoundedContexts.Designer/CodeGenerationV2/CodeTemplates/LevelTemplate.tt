@@ -116,8 +116,6 @@
 
 		public Identity Identity  { get; private set; }
 
-		public RosterVector @optioncode => this.RosterVector;
-
 		public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
 
 		public int @rowindex => _state.GetRosterIndex(Identity);
