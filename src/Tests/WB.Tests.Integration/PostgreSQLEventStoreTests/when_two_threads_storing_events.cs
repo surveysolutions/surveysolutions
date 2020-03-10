@@ -178,11 +178,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             sessionProvider.Setup(x => x.Session)
                 .Returns(Mock.Of<ISession>(i => i.Connection == connection));
 
-            return new PostgresEventStore(new PostgreConnectionSettings
-            {
-                ConnectionString = connectionStringBuilder.ConnectionString,
-                SchemaName = schemaName
-            }, eventTypeResolver, sessionProvider.Object);
+            return new PostgresEventStore(eventTypeResolver, sessionProvider.Object);
         }
     }
 }
