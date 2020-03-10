@@ -59,6 +59,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         {
             var user = await this.userViewFactory.FindByNameAsync(userLogin.Username);
 
+            if (user == null)
+                return Unauthorized();
+
             var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
             if (signInResult.IsLockedOut)
             {
