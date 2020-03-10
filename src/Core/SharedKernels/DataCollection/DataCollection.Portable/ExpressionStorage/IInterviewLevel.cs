@@ -9,7 +9,6 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity);
         Func<object> GetVariableExpression(Identity identity);
         Func<int, bool> GetCategoricalFilter(Identity identity);
-        Func<RosterVector, bool> GetLinkedCategoricalFilter(Identity identity);
     }
 
     public interface IIndexedInterviewLevel
