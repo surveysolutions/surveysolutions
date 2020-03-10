@@ -11,6 +11,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -405,6 +407,12 @@ namespace WB.UI.Headquarters
                 endpoints.MapDefaultControllerRoute();
 
                 endpoints.MapHub<WebInterview>("interview");
+
+                // obsolete since all interviewers will be 20.03 and higher
+                endpoints.MapGet("/Dependencies/img/logo.png", async context =>
+                {
+                    await context.Response.WriteAsync("Ok");
+                });
             });
 
             InitModules(env);
