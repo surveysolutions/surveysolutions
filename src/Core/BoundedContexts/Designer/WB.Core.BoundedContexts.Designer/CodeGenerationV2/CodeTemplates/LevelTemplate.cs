@@ -326,8 +326,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 
 		public Identity Identity  { get; private set; }
 
-		public RosterVector @optioncode => this.RosterVector;
-
 		public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
 
 		public int @rowindex => _state.GetRosterIndex(Identity);
@@ -343,7 +341,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 		private QuestionnaireRandom Quest;		
 ");
             
-            #line 134 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 132 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
 
 	foreach (var question in Model.Questions) 
     {
@@ -353,42 +351,42 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public ");
             
-            #line 137 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 135 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 137 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 135 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
             
             #line default
             #line hidden
             this.Write(" => _state.GetAnswer<");
             
-            #line 137 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 135 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
             
             #line default
             #line hidden
             this.Write(">(IdOf.");
             
-            #line 137 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 135 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 137 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 135 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.RosterScope.Length > 0 ? "RosterVector.Take(" + question.RosterScope.Length + ")" : "RosterVector.Empty"));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 139 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 137 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
  
 	}
 
@@ -396,7 +394,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 142 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 140 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
 
 	foreach (var variable in Model.Variables) 
     {
@@ -406,42 +404,42 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public ");
             
-            #line 145 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 143 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.TypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 145 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 143 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.Variable));
             
             #line default
             #line hidden
             this.Write(" => _state.GetVariable<");
             
-            #line 145 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 143 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.TypeName));
             
             #line default
             #line hidden
             this.Write(">(IdOf.");
             
-            #line 145 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 143 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 145 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 143 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.RosterScope.Length > 0 ? "RosterVector.Take(" + variable.RosterScope.Length + ")" : "RosterVector.Empty"));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 147 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 145 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
  
 	}
 
@@ -449,7 +447,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 150 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 148 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
 
 	foreach (var roster in Model.Rosters) 
     {
@@ -459,42 +457,42 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public RostersCollection<");
             
-            #line 153 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 151 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.ClassName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 153 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 151 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.Variable));
             
             #line default
             #line hidden
             this.Write(" => _storage.GetLevels<");
             
-            #line 153 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 151 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.ClassName));
             
             #line default
             #line hidden
             this.Write(">(IdOf.");
             
-            #line 153 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 151 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 153 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 151 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.RosterScope.Length == 1? "null" : "Identity"));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 154 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 152 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
  
 	}
 
@@ -502,7 +500,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 157 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 155 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
 
 	foreach (var table in Storage.LookupTables) 
     {
@@ -512,28 +510,28 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public static Dictionary<int, ");
             
-            #line 160 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 158 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 160 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 158 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
             
             #line default
             #line hidden
             this.Write(" => LookupTables.");
             
-            #line 160 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 158 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 161 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 159 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
  
 	}
 
@@ -541,7 +539,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 164 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 162 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
 
 	foreach (var section in Model.Sections) 
     {
@@ -551,28 +549,28 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public Section ");
             
-            #line 167 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 165 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(section.Variable));
             
             #line default
             #line hidden
             this.Write(" => _state.GetSection(IdOf.");
             
-            #line 167 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 165 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(section.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 167 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 165 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(section.RosterScope.Length > 0 ? "RosterVector.Take(" + section.RosterScope.Length + ")" : "RosterVector.Empty"));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 169 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            #line 167 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
  
 	}
 
