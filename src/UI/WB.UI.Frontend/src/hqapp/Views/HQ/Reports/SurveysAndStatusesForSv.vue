@@ -69,9 +69,11 @@ export default {
             }
         },
         getLinkToInterviews(data, row, status) {
+            if(data == 0)
+                return `<span>${data}</span>`
             const responsibleName = (this.responsible || {}).value
-            const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
-            return `<a href=${url}>${escape(data)}</a>`
+            const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion || ''}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
+            return `<a href=${url}>${escape(formatNumber(data))}</a>`
         },
     },
     watch: {
