@@ -326,8 +326,8 @@ export default {
                 data: {
                     userId: self.userInfo.userId,
                     personName: self.personName,
-                    email: self.email,
-                    phoneNumber: self.phoneNumber,
+                    email: self.email == '' ? null : self.email,
+                    phoneNumber: self.phoneNumber == '' ? null : self.phoneNumber,
                     isLockedByHeadquarters: self.isLockedByHeadquarters,
                     isLockedBySupervisor: self.isLockedBySupervisor,
                 },
