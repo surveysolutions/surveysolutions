@@ -386,7 +386,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
                 if (sourceQuestion.QuestionType == QuestionType.TextList)
                 {
-                    if (!string.IsNullOrEmpty(linkedQuestion.Properties.OptionsFilterExpression))
+                    if (!string.IsNullOrEmpty(linkedQuestion.LinkedFilterExpression))
                     {
                         yield return LinkedToTextListQuestionDoesNotSupportFilters(linkedQuestion);
                     }
