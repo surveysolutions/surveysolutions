@@ -837,6 +837,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pick from map.
+        /// </summary>
+        public static string PickLocation {
+            get {
+                return ResourceManager.GetString("PickLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{progress}}% Complete.
         /// </summary>
         public static string ProgressText {
