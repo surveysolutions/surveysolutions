@@ -235,7 +235,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, 
+                Version = 28, 
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -248,6 +248,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         HasQuestionnaire = questionnaire => questionnaire.Find<IGroup>(q => q.DisplayMode == RosterDisplayMode.Matrix).Any(),
                         Description = "Roster with Matrix display mode"
                     }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, 
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire =>  questionnaire.Find<ICategoricalQuestion>(question => !string.IsNullOrEmpty(question.Properties.OptionsFilterExpression)).Any(),
+                        Description = "Option filter for categorical questions"
+                    },
                 }
             },
         };
