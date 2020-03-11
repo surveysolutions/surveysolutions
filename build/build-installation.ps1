@@ -11,23 +11,6 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 Add-Type -AssemblyName System.Web.Extensions
-function setupExportService($exportSettingsPath) {
-    $parser = New-Object Web.Script.Serialization.JavaScriptSerializer
-    $exportSettings = $parser.DeserializeObject((Get-Content $exportSettingsPath -raw))
-    
-    $exportSettings.ConnectionStrings.DefaultConnection = "Provided by HQ"
-    $exportSettings.Storage.S3.Enabled = $false
-
-    if($exportSettings.ExportSettings -eq $null) {
-        $exportSettings.ExportSettings = @{
-
-        }
-    }
-
-    $exportSettings.ExportSettings.DirectoryPath = "..\Data_Site\ExportServiceData"
-
-    $exportSettings | ConvertTo-Json -Depth 100 | set-content $exportSettingsPath
-}
 
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
@@ -75,8 +58,6 @@ $file = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -
 $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
 $version = $newVersion = "{0}.{1}.{2}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart, $BuildNumber
 #    [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
-
-setupExportService "$HQsitePath\ExportService\appsettings.json"
 
 # Cleaning up slack configuration section from config
 #  $hqConfig = "$HQsitePath\Web.config"

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Fragment>
-        <PackageGroup Id='ActivateIisFeatures'>
+	<Fragment>    
+        <PackageGroup Id='ActivateIisFeatures'>                  
             <ExePackage Id='IIS_Manage'
                         DisplayName='Installing IIS'
-                        PerMachine='yes'
-                        SourceFile='C:\windows\SysNative\dism.exe'
-                        InstallCommand='/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-ManagementService /FeatureName:IIS-HttpCompressionDynamic'>
+                        PerMachine="yes"                        
+                        Name="prepare.iis.bat"
+                        SourceFile='.\prepare.iis.bat'
+                        Vital='no'
+                        >
             </ExePackage>
         </PackageGroup>
     </Fragment>

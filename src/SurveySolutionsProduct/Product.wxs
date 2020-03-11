@@ -50,7 +50,7 @@
     <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
     <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions">
       <RegistrySearch Id="SurveySolutionsPath"
-                      Type="directory"
+                      Type="raw"
                       Root="HKLM"
                       Key="SOFTWARE\World Bank\Survey Solutions"
                       Name="Install Path"
@@ -284,7 +284,7 @@
         <Directory Id="INSTALLFILESFOLDER" ComponentGuidGenerationSeed='89476A2E-683D-404D-9D97-505222766D04'>
           <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
               <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
-                  <RegistryValue Type="string" Name="Install Path" Value="INSTALLFOLDER"></RegistryValue>
+                  <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
               </RegistryKey>
           </Component>
         <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D">
