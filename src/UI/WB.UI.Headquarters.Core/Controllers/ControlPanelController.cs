@@ -195,5 +195,11 @@ namespace WB.UI.Headquarters.Controllers
                 return this.UnprocessableEntity(exception);
             }
         }
+
+        [HttpGet]
+        public IActionResult RaiseException()
+        {
+            throw new ArgumentException("Test exception");
+        }
     }
 }
