@@ -12,5 +12,7 @@
         }
 
         public string Origin { get; private set; }
+
+        public int HumainIdMaxValue { get; set; }
     }
 }
