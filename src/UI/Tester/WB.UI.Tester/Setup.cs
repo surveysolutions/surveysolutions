@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Autofac;
 using Autofac.Extras.MvvmCross;
+using Autofac.Features.ResolveAnything;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
 using MvvmCross.Plugin;
@@ -12,6 +14,7 @@ using MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
@@ -23,6 +26,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Shared.Enumerator.Utils;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
@@ -66,8 +70,6 @@ namespace WB.UI.Tester
                ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
                : AndroidPathUtils.GetPathToExternalDirectory();
 
-            AutofacKernel kernel = new AutofacKernel();
-
             this.modules = new IModule[]
             {
                 new NcqrsModule(),
@@ -79,12 +81,21 @@ namespace WB.UI.Tester
                 new TesterUIModule(),
                 new EnumeratorSharedKernelModule()
             };
-            kernel.Load(this.modules);
+            
+            ContainerBuilder builder = new ContainerBuilder();
+            builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+            foreach (var module in modules)
+            {
+                builder.RegisterModule(module.AsAutofac());
+            }
+            builder.RegisterModule(new EnumeratorLoggingModule());
 
-            var container = kernel.ContainerBuilder.Build();
+            builder.RegisterType<NLogLogger>().As<ILogger>();
+
+            var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
-            return new AutofacMvxIocProvider(kernel.Container);
+            return new AutofacMvxIocProvider(container);
         }
 
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
