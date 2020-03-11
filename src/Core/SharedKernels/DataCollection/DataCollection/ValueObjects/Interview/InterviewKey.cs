@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
@@ -13,7 +15,27 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 
         public override string ToString()
         {
-            return this.RawValue.ToString("00-00-00-00");
+            string nonFormattedId = this.RawValue.ToString("D");
+            if(nonFormattedId.Length < 8) // old interview key generator used 8 digits and appended leading 00-00 values. Want to keep such behaviour
+            {
+                string missingZeros = new string('0', 8 - nonFormattedId.Length);
+                nonFormattedId = missingZeros + nonFormattedId;
+            }
+
+            StringBuilder resultBuilder = new StringBuilder();
+
+            int charsPrepended = 0;
+            for (int i = nonFormattedId.Length - 1; i >= 0; i--)
+            {
+                resultBuilder.Insert(0, nonFormattedId[i]);
+                charsPrepended++;
+                if (i != 0 && charsPrepended % 2 == 0)
+                {
+                    resultBuilder.Insert(0, '-');
+                }
+            }
+
+            return resultBuilder.ToString();
         }
 
         public static InterviewKey Parse(string value)
