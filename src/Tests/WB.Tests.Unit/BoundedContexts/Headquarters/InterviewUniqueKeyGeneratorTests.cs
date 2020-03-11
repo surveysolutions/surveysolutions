@@ -68,14 +68,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         [Test]
         public void should_throw_on_failed_to_get_key()
         {
-            var randomSource = new Mock<IRandomValuesSource>();
-            randomSource.Setup(x => x.Next(99_99_99_99))
-                .Returns(5);
+            var randomSource = Create.Service.RandomValuesSource(5);
 
             var summaries = new TestInMemoryWriter<InterviewSummary>();
             summaries.Store(Create.Entity.InterviewSummary(key: new InterviewKey(5).ToString()), "id1");
 
-            var generator = GetGenerator(summaries, randomSource.Object);
+            var generator = GetGenerator(summaries, randomSource);
 
             // Act
             TestDelegate act = () => generator.Get();
