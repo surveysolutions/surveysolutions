@@ -336,6 +336,8 @@ namespace WB.UI.Headquarters
                 app.UseHsts();
             }
 
+            app.UseMiddleware<ExceptionHandler>();
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>

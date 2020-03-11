@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
+    [AllowAnonymous]
     [Route("error")]
     public class ErrorController : Controller
     {
