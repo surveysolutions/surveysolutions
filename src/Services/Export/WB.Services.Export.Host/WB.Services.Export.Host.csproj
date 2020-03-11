@@ -31,16 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
-
-  <Content Update="appsettings.Development.ini">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-  </Content>    
-
-  <Content Update="appsettings.ini">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-
+    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">
+      <DependentUpon>appsettings.ini</DependentUpon>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -68,12 +62,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\WB.Services.Scheduler\WB.Services.Scheduler.csproj" />
     <ProjectReference Include="..\WB.Services.Export\WB.Services.Export.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appsettings.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
