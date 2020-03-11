@@ -428,17 +428,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return options;
         }
 
-        public void CalculateLinkedToListOptions(bool updateAnswerOnOptionChange = true)
+        public int[] GetCalculatedLinkedToListOptions()
         {
-            if (!this.IsLinkedToListQuestion) return;
+            if (!this.IsLinkedToListQuestion) return null;
             var linkedToListQuestion = this.AsLinkedToList;
 
             var refQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
-           
-            var options = (refQuestion?.IsDisabled() ?? false)
-                ? EmptyArray<int>.Value
-                : ((InterviewTreeTextListQuestion)refQuestion?.InterviewQuestion)?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? EmptyArray<int>.Value;
 
+            return refQuestion?.IsDisabled() ?? false
+                ? EmptyArray<int>.Value
+                : ((InterviewTreeTextListQuestion) refQuestion?.InterviewQuestion)?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? EmptyArray<int>.Value;
+        }
+
+        public void UpdateLinkedToListOptionsAndUpdateAnswerIfNeeded(int[] options, bool updateAnswerOnOptionChange = true)
+        {
             var previousOptions = this.AsLinkedToList.Options;
             this.AsLinkedToList.SetOptions(options);
 
@@ -457,16 +460,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             else
             {
                 var previousAnswer = this.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().CheckedValues;
-                var exsitingAnswerOptions = previousAnswer.Where(x => options.Contains(x)).ToArray();
+                var exitingAnswerOptions = previousAnswer.Where(options.Contains).ToArray();
 
-                if (exsitingAnswerOptions.Length == 0)
+                if (exitingAnswerOptions.Length == 0)
                 {
                     this.InterviewQuestion.RemoveAnswer();
                     return;
                 }
 
-                if (exsitingAnswerOptions.Length < previousAnswer.Count)
-                    this.GetAsInterviewTreeMultiOptionLinkedToListQuestion().SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(exsitingAnswerOptions));
+                if (exitingAnswerOptions.Length < previousAnswer.Count)
+                    this.GetAsInterviewTreeMultiOptionLinkedToListQuestion().SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(exitingAnswerOptions));
             }
         }
 
