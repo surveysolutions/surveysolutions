@@ -25,7 +25,11 @@ namespace WB.UI.Shared.Web.Exceptions
             catch (Exception e)
             {
                 logger.Fatal("Unhandled exception", e);
-                context.Response.Redirect("/error/500");
+
+                if (!context.Request.Path.StartsWithSegments("/api"))
+                    context.Response.Redirect("/error/500");
+                else
+                    throw;
             }
         }
     }
