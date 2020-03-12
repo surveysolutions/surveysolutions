@@ -23,7 +23,7 @@
                     data-vv-name="questionnaireVersion"
                     data-vv-as="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
-                    :disabled="questionnaireId == null "
+                    :disabled="questionnaireId == null"
                     :value="questionnaireVersion"
                     :values="questionnaireId == null ? [] : questionnaireId.versions"
                     v-on:selected="questionnaireVersionSelected"/>
@@ -1084,7 +1084,10 @@ export default {
         reloadTable() {
             this.isLoading = true
             this.selectedRows.splice(0, this.selectedRows.length)
-            this.$refs.table.reload(self.reloadTable)
+            
+            if (this.$refs.table) {
+                this.$refs.table.reload()
+            }
         },
         reloadTableAndSaveRoute() {
             this.reloadTable()
