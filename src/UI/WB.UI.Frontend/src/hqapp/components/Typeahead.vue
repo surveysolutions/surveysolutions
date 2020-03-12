@@ -113,8 +113,10 @@ export default {
             }
         },
         disabled(val){
-            if(val) this.fetchOptions()
-            else this.clear()
+            if(val) 
+                this.clear()
+            else 
+                this.fetchOptions()
         },
     },
     data() {
