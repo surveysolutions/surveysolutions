@@ -136,6 +136,7 @@ namespace WB.Infrastructure.Native.Storage
             this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
                 var key = Key(aggregateId);
+                this.dirtyCheckedAggregateRoots.Remove(aggregateId);
 
                 if (Cache.Remove(key) != null)
                 {
