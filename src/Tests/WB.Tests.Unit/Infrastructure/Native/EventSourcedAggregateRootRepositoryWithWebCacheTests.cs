@@ -18,6 +18,13 @@ namespace WB.Tests.Unit.Infrastructure.Native
     public class EventSourcedAggregateRootRepositoryWithWebCacheTests
     {
         [Test]
+        public void should_not_throw_when_evicted_from_empty_repository()
+        {
+            var repo = GetRepository();
+            repo.Evict(Guid.NewGuid());
+        }
+
+        [Test]
         public void should_evict_from_cache_if_aggregate_root_is_dirty()
         {
             var eventStore = new Mock<IEventStore>();
