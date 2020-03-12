@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Concurrent;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Runtime.Caching;
 using System.Threading;
 using Ncqrs.Domain.Storage;
@@ -22,6 +21,7 @@ namespace WB.Infrastructure.Native.Storage
         private readonly EventBusSettings eventBusSettings;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
+        private readonly HashSet<Guid> dirtyCheckedAggregateRoots;
 
         public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore,
             IInMemoryEventStore inMemoryEventStore,
@@ -36,6 +36,7 @@ namespace WB.Infrastructure.Native.Storage
             this.eventBusSettings = eventBusSettings;
             this.serviceLocator = serviceLocator;
             this.aggregateLock = aggregateLock;
+            this.dirtyCheckedAggregateRoots = new HashSet<Guid>();
         }
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
@@ -76,7 +77,19 @@ namespace WB.Infrastructure.Native.Storage
                 return null;
             }
 
-            bool isDirty = cachedAggregate.HasUncommittedChanges() || eventStore.IsDirty(aggregateId, cachedAggregate.Version);
+            bool dbContainsNewEvents = false;
+
+            if (!this.dirtyCheckedAggregateRoots.Contains(aggregateId))
+            {
+                dbContainsNewEvents = eventStore.IsDirty(aggregateId, cachedAggregate.Version);
+
+                if (!dbContainsNewEvents)
+                {
+                    this.dirtyCheckedAggregateRoots.Add(aggregateId);
+                }
+            }
+
+            bool isDirty = cachedAggregate.HasUncommittedChanges() || dbContainsNewEvents;
             if (isDirty)
             {
                 Evict(aggregateId);
