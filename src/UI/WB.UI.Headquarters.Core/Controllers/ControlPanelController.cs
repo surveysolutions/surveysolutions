@@ -197,7 +197,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        public IActionResult RaiseException()
+        public IActionResult RaiseException(int? id = null)
         {
             throw new ArgumentException("Test exception");
         }
