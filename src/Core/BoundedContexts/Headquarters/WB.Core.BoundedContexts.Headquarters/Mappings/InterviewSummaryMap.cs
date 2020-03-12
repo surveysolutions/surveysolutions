@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     collection.Key(key => key.Column("interview_id"));
                     collection.OrderBy(x => x.Position);
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                    collection.Lazy(CollectionLazy.NoLazy);
+                    //collection.Lazy(CollectionLazy.NoLazy);
                     collection.Inverse(true);
                 },
                 rel => rel.OneToMany());
