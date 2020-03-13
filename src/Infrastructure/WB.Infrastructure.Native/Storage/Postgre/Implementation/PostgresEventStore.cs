@@ -22,8 +22,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IEventTypeResolver eventTypeResolver;
 
-        private static int BatchSize = 4096;
-        private static string tableNameWithSchema;
+        private readonly string tableNameWithSchema;
         private readonly string tableName;
         private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
@@ -42,36 +41,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
         {
-            int processed = 0;
-            IEnumerable<CommittedEvent> batch;
-            do
-            {
-                batch = this.ReadBatch(id, minVersion, processed).ToList();
-                foreach (var @event in batch)
-                {
-                    processed++;
-                    yield return @event;
-                }
-            } while (batch.Any());
-        }
-
-        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
-            => this.Read(id, minVersion);
-
-        private IEnumerable<CommittedEvent> ReadBatch(Guid id, int minVersion, int processed)
-        {
             var rawEvents = sessionProvider.Session.Connection.Query<RawEvent>(
-                $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
-                $"FROM {tableNameWithSchema} " +
-                $"WHERE eventsourceid= @sourceId AND eventsequence >= @minVersion " +
-                $"ORDER BY eventsequence LIMIT @batchSize OFFSET @processed",
-                new
-                {
-                    sourceId = id,
-                    minVersion = minVersion,
-                    batchSize = BatchSize,
-                    processed = processed
-                }, buffered: true);
+                 $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                 $"FROM {tableNameWithSchema} " +
+                 $"WHERE eventsourceid= @sourceId AND eventsequence >= @minVersion " +
+                 $"ORDER BY eventsequence",
+                 new { sourceId = id, minVersion }, buffered: true);
 
             foreach (var committedEvent in ToCommittedEvent(rawEvents))
             {
@@ -79,10 +54,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+            => this.Read(id, minVersion);
+
         public int? GetLastEventSequence(Guid id)
         {
             return this.sessionProvider.Session.Connection.ExecuteScalar<int?>(
-                $"SELECT MAX(eventsequence) as eventsourceid FROM {tableNameWithSchema} WHERE eventsourceid=@sourceId", 
+                $"SELECT MAX(eventsequence) as eventsourceid FROM {tableNameWithSchema} WHERE eventsourceid=@sourceId",
                 new { sourceId = id });
         }
 
@@ -141,7 +119,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return result;
         }
 
-        private static void ValidateStreamVersion(UncommittedEventStream eventStream, ISession connection)
+        private void ValidateStreamVersion(UncommittedEventStream eventStream, ISession connection)
         {
             void AppendEventSourceParameter(IDbCommand command)
             {
@@ -167,16 +145,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
             else
             {
-                using (var validateVersionCommand = connection.Connection.CreateCommand())
+                var eventsFromDb = connection.Connection.Query<int>($"SELECT eventsequence FROM {tableNameWithSchema} " +
+                    $"WHERE eventsourceid = :sourceId AND (eventsequence=:sequence OR eventsequence=:sequence + 1) ORDER BY eventsequence",
+                    new
+                    {
+                        sourceId = eventStream.SourceId,
+                        sequence = eventStream.InitialVersion
+                    }).ToList();
+                if(eventsFromDb.Count != 1 || eventsFromDb[0] != eventStream.InitialVersion)
                 {
-                    validateVersionCommand.CommandText =
-                        $"SELECT MAX(eventsequence) FROM {tableNameWithSchema} WHERE eventsourceid = :sourceId";
-                    AppendEventSourceParameter(validateVersionCommand);
-
-                    var storedLastSequence = validateVersionCommand.ExecuteScalar() as int?;
-                    if (storedLastSequence != eventStream.InitialVersion)
-                        throw new InvalidOperationException(
-                            $"Unexpected stream version. Expected {eventStream.InitialVersion}. Actual {storedLastSequence}. EventSourceId: {eventStream.SourceId}");
+                    throw new InvalidOperationException(
+                        $"Unexpected stream version. Expected {eventStream.InitialVersion}. EventSourceId: {eventStream.SourceId}");
                 }
             }
         }
@@ -203,16 +182,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 $@"select MAX(eventsequence) from {tableNameWithSchema} where
                                         eventsourceid = @eventSourceId
                                         and eventtype = ANY(@eventTypes)
-                                        limit 1", new { eventSourceId, eventTypes = typeNames} );
+                                        limit 1", new { eventSourceId, eventTypes = typeNames });
         }
 
-    
+
         public IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize)
         {
             // fix for KP-13687
             var sessionConnection = this.sessionProvider.Session.Connection;
             sessionConnection.Execute($"lock table {tableNameWithSchema} in SHARE mode");
-            
+
             var rawEventsData = sessionConnection
                 .Query<RawEvent>
                 ($@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text 
@@ -304,6 +283,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     typedEvent
                 );
             }
+        }
+
+        public bool IsDirty(Guid eventSourceId, long lastKnownEventSequence)
+        {
+            return this.sessionProvider.Session.Connection.ExecuteScalar<int?>(
+                $"SELECT 1 FROM {tableNameWithSchema} WHERE eventsourceid=@sourceId AND eventsequence=@next",
+                new
+                {
+                    sourceId = eventSourceId,
+                    next = lastKnownEventSequence + 1
+                }) == 1;
         }
     }
 }
