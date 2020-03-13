@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.ValueObjects
 
             string formatted = key.ToString();
 
-            Assert.That(formatted, Is.EqualTo("1-00-00-31-11"));
+            Assert.That(formatted, Is.EqualTo("01-00-00-31-11"));
         }
     }
 }
