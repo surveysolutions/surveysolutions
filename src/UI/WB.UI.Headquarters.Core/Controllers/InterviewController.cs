@@ -82,11 +82,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
 
-            if (this.authorizedUser.IsSupervisor)
-            {
-                this.pauseResumeQueue.EnqueueOpenBySupervisor(new OpenInterviewBySupervisorCommand(id, this.authorizedUser.Id));
-            }
-
             ViewBag.SpecificPageCaption = interviewSummary.Key;
             ViewBag.ExcludeMarkupSpecific = true;
 

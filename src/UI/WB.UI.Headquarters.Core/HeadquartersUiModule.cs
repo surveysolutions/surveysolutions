@@ -15,8 +15,10 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.WebInterview.Pipeline;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Controllers.Services;
@@ -56,6 +58,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.Bind<IViewRenderService, ViewRenderService>();
             registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
+            registry.Bind<IPipelineModule, PauseResumePipelineModule>();
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {

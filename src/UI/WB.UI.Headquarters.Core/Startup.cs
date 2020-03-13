@@ -331,6 +331,7 @@ namespace WB.UI.Headquarters
                     appBuilder =>
                     {
                         appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
+                        appBuilder.UseExceptionHandler("/error/500");
                     });
 
                 app.UseHsts();
