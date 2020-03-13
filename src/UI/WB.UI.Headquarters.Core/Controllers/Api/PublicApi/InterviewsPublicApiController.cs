@@ -364,7 +364,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="request"></param>
         /// <response code="200">Interview was assigned to supervisor</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Target responsible was not found or it is not a supervisor of interview cannot be reassigned. Check response for reason description</response>
+        /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
