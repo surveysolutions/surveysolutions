@@ -258,7 +258,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire =>  questionnaire.Find<ICategoricalQuestion>(question => !string.IsNullOrEmpty(question.Properties.OptionsFilterExpression)).Any(),
-                        Description = "Option filter for categorical questions"
+                        Description = "Option filter for categorical linked to list questions"
                     },
                 }
             },
