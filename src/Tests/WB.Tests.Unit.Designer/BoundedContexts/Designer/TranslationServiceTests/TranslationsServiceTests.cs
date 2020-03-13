@@ -478,6 +478,59 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
         }
 
+        [Test]
+        public void when_storing_translations_from_excel_file_with_existing_categories_but_in_different_cases_then_should_not_throw_Exception()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid sectionId = Id.g1;
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var categoriesName = "myCat";
+
+            byte[] fileStream = CreateExcel(new Dictionary<string, string[][]>
+            {
+                {
+                    "Translations", new[]
+                    {
+                        new[]
+                        {
+                            "Entity Id", "Variable", "Type", "Index", "Original text", "Translation"
+                        },
+                        new[]
+                        {
+                            sectionId.ToString("N"), "", "Title", "New Section", "Перевод"
+                        }
+                    }
+                },
+                {
+                    $"@@@_{categoriesName.ToLower()}", new[]
+                    {
+                        new[]
+                        {
+                            "Index", "Original text", "Translation"
+                        },
+                        new[]
+                        {
+                            "1$1", "original text", "translation"
+                        }
+                    }
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId, Create.Group(sectionId));
+            questionnaire.Categories.Add(Create.Categories(name: categoriesName));
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            //assert
+            Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
+        }
+
         private byte[] GetEmbendedFileContent(string fileName)
         {
             var testType = typeof(TranslationsServiceTests);
