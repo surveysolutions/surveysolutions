@@ -10,6 +10,8 @@
     <Name>SurveySolutionsBootstrap</Name>
     <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.1.0.0</SurveySolutionsVersion>
     <OutputName>SurveySolutions.$(SurveySolutionsVersion)</OutputName>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -33,6 +35,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bundle.wxs" />
+    <Compile Include="IISChecker.wxs" />
+    <Compile Include="NetCoreChecker.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
@@ -50,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="img\" />
-    <Folder Include="redist" />
+    <Folder Include="resources" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SurveySolutionsProduct\SurveySolutions.wixproj">
@@ -65,7 +69,7 @@
   <ItemGroup>
     <Content Include="img\logo-50.bmp" />
     <Content Include="img\logo-50.png" />
-    <Content Include="redist\ndp48-web.exe" />
+    <Content Include="prepare.iis.bat" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />

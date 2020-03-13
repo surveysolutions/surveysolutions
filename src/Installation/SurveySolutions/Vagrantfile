@@ -1,0 +1,31 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# PLEASE TAKE NOTE THAT VAGRANT BY DEFAULT WILL USE C: disk
+# Windows Server require very much space to work
+# `Setx VAGRANT_HOME "d:/VM/vagrant"`` # for example to set another dir
+# REMEMBER TO RELOAD TERMINAL so that settings are applied
+
+ENV["VAGRANT_DOTFILE_PATH"] = "d:/vm/.installator"
+
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  config.vm.box = "gusztavvargadr/windows-server"
+  config.vm.provider "hyperv"
+  
+  
+  config.vm.define "installator" do |web|
+    web.vm.provider "hyperv" do |vb|
+      vb.cpus = 4 
+      vb.memory = 4096 # 4 GB
+    
+    end
+end
+
+
+end
