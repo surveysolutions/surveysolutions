@@ -11,8 +11,8 @@ namespace WB.UI.Headquarters.Metrics
     public class HeadquartersHttpMetricsMiddleware
     {
         private readonly RequestDelegate next;
-        private readonly Gauge httpInProgress = Prometheus.Metrics.CreateGauge("http_requests_in_progress", "Number or requests in progress", "system");
-        private readonly Histogram httpRequestsDuration = Prometheus.Metrics.CreateHistogram("http_requests_duration_seconds", "Duration of http requests per tracking system", "system");
+        public static readonly Gauge HttpInProgress = Prometheus.Metrics.CreateGauge("http_requests_in_progress", "Number or requests in progress", "system");
+        public static readonly Histogram HttpRequestsDuration = Prometheus.Metrics.CreateHistogram("http_requests_duration_seconds", "Duration of http requests per tracking system", "system");
         
         public HeadquartersHttpMetricsMiddleware(RequestDelegate next)
         {
@@ -48,8 +48,8 @@ namespace WB.UI.Headquarters.Metrics
             // all other requests
             else subsystem[0] = "other";
 
-            using var inprogress = httpInProgress.Labels(subsystem).TrackInProgress();
-            using var timer = this.httpRequestsDuration.Labels(subsystem).NewTimer();
+            using var inprogress = HttpInProgress.Labels(subsystem).TrackInProgress();
+            using var timer = HttpRequestsDuration.Labels(subsystem).NewTimer();
 
             try
             {
