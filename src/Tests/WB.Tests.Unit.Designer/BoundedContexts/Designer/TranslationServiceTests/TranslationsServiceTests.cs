@@ -531,7 +531,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
         }
 
-
         private byte[] GetEmbendedFileContent(string fileName)
         {
             var testType = typeof(TranslationsServiceTests);

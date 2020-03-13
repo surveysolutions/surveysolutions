@@ -1,32 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
+    [AllowAnonymous]
+    [NoTransaction]
     [Route("error")]
     public class ErrorController : Controller
     {
         [Route("404")]
-        public new IActionResult NotFound()
-        {
-            return View();
-        }
+        public new IActionResult NotFound() => View("NotFound");
 
         [Route("401")]
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
+        public IActionResult AccessDenied() => View("AccessDenied");
 
         [Route("403")]
-        public IActionResult Forbidden()
-        {
-            return this.View();
-        }
+        public IActionResult Forbidden() => this.View("Forbidden");
 
         [Route("500")]
-        public IActionResult Error()
+        public IActionResult UnhandledException() => this.View("UnhandledException");
+
+        [Route("{statusCode}")]
+
+        public IActionResult Error(int? statusCode = null)
         {
-            return this.View();
+            if (statusCode.HasValue)
+            {
+                switch (statusCode.Value)
+                {
+                    case 401: return AccessDenied();
+                    case 403: return Forbidden();
+                    case 404: return NotFound();
+                    case 500: return UnhandledException();
+                }
+            }
+            return UnhandledException();
         }
     }
 }
