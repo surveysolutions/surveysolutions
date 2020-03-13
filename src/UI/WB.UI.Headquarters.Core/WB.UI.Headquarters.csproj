@@ -97,4 +97,19 @@
     </Content>
     <EmbeddedResource Include="wwwroot\**\*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\WebInterviewUI.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\WebInterviewUI.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
