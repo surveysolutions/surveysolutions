@@ -210,7 +210,11 @@ namespace WB.UI.Designer
           
             if (!env.IsDevelopment())
             {
-                app.UseStatusCodePagesWithReExecute("/error/{0}");
+                app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
+                    appBuilder =>
+                    {
+                        appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
+                    });
             }
 
             if (!env.IsDevelopment())
