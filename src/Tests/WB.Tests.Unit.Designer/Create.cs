@@ -410,10 +410,11 @@ namespace WB.Tests.Unit.Designer
             bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false, List<Answer> answersList = null,
             string title = "test",
             bool isCombobox = false,
+            string optionsFilterExpression = null,
             params decimal[] answers)
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            return new MultyOptionsQuestion("Question MO")
+            var multipleOptionsQuestion = new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = publicKey,
                 StataExportCaption = GetNameForEntity("multi_option", publicKey),
@@ -427,8 +428,10 @@ namespace WB.Tests.Unit.Designer
                 YesNoView = isYesNo,
                 Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList(),
                 QuestionText = title,
-                IsFilteredCombobox = isCombobox
+                IsFilteredCombobox = isCombobox,
             };
+            multipleOptionsQuestion.Properties.OptionsFilterExpression = optionsFilterExpression;
+            return multipleOptionsQuestion;
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
@@ -905,10 +908,11 @@ namespace WB.Tests.Unit.Designer
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null,
             decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false,
             string linkedFilterExpression = null, Guid? linkedToRosterId = null, List<Answer> answers = null,
-            bool isPrefilled = false, bool isComboBox = false, bool showAsList = false, Guid? categoriesId = null)
+            bool isPrefilled = false, bool isComboBox = false, bool showAsList = false, Guid? categoriesId = null,
+            string optionsFilterExpression = null)
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            return new SingleQuestion
+            var singleOptionQuestion = new SingleQuestion
             {
                 PublicKey = publicKey,
                 StataExportCaption = variable ?? GetNameForEntity("single_option", publicKey),
@@ -928,6 +932,8 @@ namespace WB.Tests.Unit.Designer
                 QuestionScope = scope,
                 CategoriesId = categoriesId
             };
+            singleOptionQuestion.Properties.OptionsFilterExpression = optionsFilterExpression;
+            return singleOptionQuestion;
         }
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
@@ -1181,6 +1187,10 @@ namespace WB.Tests.Unit.Designer
             public static PasteAfter PasteAfter(Guid questionnaireId, Guid entityId, Guid itemToPasteAfterId, 
                 Guid sourceQuestionnaireId, Guid sourceItemId, Guid responsibleId) 
                 => new PasteAfter(questionnaireId, entityId, itemToPasteAfterId, sourceQuestionnaireId, sourceItemId, responsibleId);
+
+            public static PasteInto PasteInto(Guid questionnaireId, Guid entityId, 
+                Guid sourceQuestionnaireId, Guid sourceItemId, Guid targetParentId, Guid responsibleId) 
+                => new PasteInto(questionnaireId, entityId, sourceQuestionnaireId, sourceItemId, targetParentId, responsibleId);
 
             public static DeleteGroup DeleteGroup(Guid questionnaireId, Guid groupId)
                 => new DeleteGroup(questionnaireId, groupId, Guid.NewGuid());
