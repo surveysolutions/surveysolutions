@@ -6,8 +6,15 @@
     ViewBag.Title = Common.CreateNewAssignment;
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+@inject IOptions<WB.UI.Headquarters.Configs.GoogleMapsConfig> googleMapsConfig;
 
 @section Scripts{
     @Html.RenderHqConfig(Model)
+
+    <script async
+            defer
+            src="@googleMapsConfig.Value.ApiBaseUrl/maps/api/js?key=@googleMapsConfig.Value.ApiKey"></script>
 }
 <div id="vueApp"></div>
+
+

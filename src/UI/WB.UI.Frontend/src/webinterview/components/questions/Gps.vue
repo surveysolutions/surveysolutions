@@ -28,6 +28,13 @@
                         @click="answerGpsQuestion">
                         {{ $t('WebInterviewUI.GPSRecord') }}
                     </button>
+
+                    <button type="button"
+                        :disabled="!$me.acceptAnswer && $me.pickLocationAllowed"
+                        class="btn btn-default btn-lg btn-action-questionnaire"
+                        @click="pickLocation">
+                        {{ $t('WebInterviewUI.PickLocation') }}
+                    </button>
                 </div>
                 <wb-lock />
             </div>
@@ -39,6 +46,8 @@
 
 import { entityDetails } from '../mixins'
 import Vue from 'vue'
+import moment from 'moment'
+import box from 'bootbox'
 
 class GpsAnswer {
     constructor(latitude,
@@ -60,6 +69,7 @@ export default {
     data() {
         return {
             isInProgress: false,
+            pickedLocation: null,
         }
     },
     computed: {
@@ -94,10 +104,13 @@ export default {
             })
         },
         onPositionDetermined(position, questionId) {
-            console.log('onPositionDetermined')
             this.$store.dispatch('answerGpsQuestion', {
                 identity: questionId,
-                answer: new GpsAnswer(position.coords.latitude, position.coords.longitude, position.coords.accuracy, position.coords.altitude, position.timestamp),
+                answer: new GpsAnswer(position.coords.latitude,
+                    position.coords.longitude,
+                    position.coords.accuracy,
+                    position.coords.altitude,
+                    new moment().valueOf()),
             }).then(() => {
                 this.isInProgress = false
                 this.$store.dispatch('fetchProgress', -1)
@@ -128,6 +141,82 @@ export default {
             this.markAnswerAsNotSavedWithMessage(message)
             this.$store.dispatch('fetchProgress', -1)
             this.isInProgress = false
+        },
+        pickLocation() {
+            var self = this
+
+            box.dialog({ 
+                title: self.$t('WebInterviewUI.PickLocation'),
+                message: '<div id="locationPicker"><div style="height: 400px;" id="map_canvas"></div></div>',
+                size: 'large',
+                onShow: () => {
+                    self.pickedLocation = null
+                    var latlng = new google.maps.LatLng(-34.397, 150.644)
+                    
+                    var mapOptions = 
+                    {
+                        zoom: 14,
+                        center:latlng,
+                        streetViewControl: false,
+                    }
+                    const map = new google.maps.Map(
+                        document.getElementById('map_canvas'), mapOptions)
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition((position) => {
+                            var pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                            }
+                            map.setCenter(pos)
+                        })
+                    }
+                    var pushpin = null
+                    google.maps.event.addListener(map, 'click', function(event) {
+                        placeMarker(event.latLng)
+                        self.pickedLocation = {
+                            latitude: pushpin.position.lat(),
+                            longitude: pushpin.position.lng(),
+                        }
+                        if (event.placeId) {
+                            event.stop() // prevent showing information about place
+                        }
+                    })
+
+                    function placeMarker(location) {
+                        if (pushpin == null)
+                        {
+                            pushpin = new google.maps.Marker({
+                                position: location,
+                                map: map,
+                            }) 
+                        }
+                        else {
+                            pushpin.setPosition(location) 
+                        }
+                    }
+                },
+                buttons: {
+                    ok: {
+                        label: self.$t('Common.Ok'),
+                        assName: 'btn-success',
+                        callback: () => {
+                            if(self.pickedLocation) {
+                                self.onPositionDetermined({
+                                    coords: {
+                                        latitude: self.pickedLocation.latitude,
+                                        longitude: self.pickedLocation.longitude,
+                                    },
+                                }, this.id) 
+                            }
+                        },
+                    },
+                    cancel: {
+                        label: self.$t('Common.Cancel'),
+                        className: 'btn-danger',
+                    },
+                },
+            })
         },
     },
 }

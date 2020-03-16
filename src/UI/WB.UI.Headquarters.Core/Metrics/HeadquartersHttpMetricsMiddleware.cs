@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Prometheus;
+using WB.Infrastructure.Native.Monitoring;
+using Gauge = Prometheus.Gauge;
+using Histogram = Prometheus.Histogram;
 
 namespace WB.UI.Headquarters.Metrics
 {
@@ -46,7 +50,16 @@ namespace WB.UI.Headquarters.Metrics
 
             using var inprogress = httpInProgress.Labels(subsystem).TrackInProgress();
             using var timer = this.httpRequestsDuration.Labels(subsystem).NewTimer();
-            await next(context);
+
+            try
+            {
+                await next(context);
+            }
+            catch (Exception)
+            {
+                CommonMetrics.ExceptionsOccur.Inc();
+                throw;
+            }
         }
     }
 }

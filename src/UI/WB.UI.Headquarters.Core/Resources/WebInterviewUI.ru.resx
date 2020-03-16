@@ -473,4 +473,7 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
     <value>Сохранить новый</value>
   </data>
+  <data name="PickLocation" xml:space="preserve">
+    <value>Указать на карте</value>
+  </data>
 </root>
