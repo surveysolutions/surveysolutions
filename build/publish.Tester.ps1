@@ -2,6 +2,7 @@ param([string]$VersionName = $null,
 [INT]$VersionCode,
 [string]$BuildConfiguration='Release',
 [string]$KeystorePassword = $null,
+[string]$branch = "master",
 [string]$KeystoreName = 'WBCapiTester.keystore',
 [string]$KeystoreAlias = 'Tester')
 
@@ -12,9 +13,19 @@ $AndroidProject = "src\UI\Tester\WB.UI.Tester\WB.UI.Tester.csproj"
 
 $PathToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
 
+$versionString = (GetVersionString 'src')
+
+Log-Block "Update project version" {
+    UpdateProjectVersion $VersionCode -ver $versionString -branch $branch
+    Write-Host "##teamcity[setParameter name='system.VersionString' value='$versionString']"
+}
+
+
 & (GetPathToMSBuild) -restore $AndroidProject -t:SignAndroidPackage `
     -p:Configuration=$BuildConfiguration `
     -p:AndroidKeyStore=True `
+    -p:VersionCode=$VersionCode `
+    -p:GIT_BRANCH=$branch `
     -p:AndroidSigningKeyStore=$PathToKeystore `
     -p:AndroidSigningStorePass=$KeystorePassword `
     -p:AndroidSigningKeyAlias=$KeystoreAlias `
