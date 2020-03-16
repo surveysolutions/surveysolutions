@@ -318,7 +318,7 @@
                         command.linkedFilterExpression = question.linkedFilterExpression;
                         command.yesNoView = question.yesNoView;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
-                        command.options = !_.isEmpty(command.linkedToEntityId) || command.isFilteredCombobox ? null : question.options;
+                        command.options = !_.isEmpty(command.linkedToEntityId) ? null : question.options;
                         command.categoriesId = question.categoriesId;
                         break;
                     case "Numeric":
