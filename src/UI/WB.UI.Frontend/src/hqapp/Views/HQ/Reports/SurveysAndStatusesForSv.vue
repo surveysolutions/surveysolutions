@@ -225,6 +225,12 @@ export default {
         questionnaireId() {
             return this.$route.query.questionnaireId
         },
+        queryString() {
+            return {
+                questionnaireId: this.questionnaireId,
+                responsible: this.responsibleName,
+            }
+        },
     },
 }
 </script>
