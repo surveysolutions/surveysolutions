@@ -163,7 +163,7 @@ export default {
             keys: ['value'],
         }
 
-        this.fetchOptions()
+        this.fetchOptions(this.searchTerm || this.selectedValue)
     },
 
     methods: {
@@ -185,7 +185,7 @@ export default {
             }
         },
 
-        fetchOptions() {
+        fetchOptions(query) {
             if (this.values) {
                 this.fetchLocalOptions()
                 return
@@ -196,10 +196,9 @@ export default {
             const self = this
             const selectedKey = self.selectedKey
             const selectedValue = self.selectedValue
-            const query = this.searchTerm
 
             const requestParams = assign(
-                { query: query, cache: false},
+                { query: query || this.searchTerm, cache: false},
                 this.ajaxParams
             )
             return this.$http
