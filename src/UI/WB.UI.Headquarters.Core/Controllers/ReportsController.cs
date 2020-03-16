@@ -64,7 +64,7 @@ namespace WB.UI.Headquarters.Controllers
             var model = new SurveysAndStatusesModel();
             model.DataUrl = Url.Action("SupervisorSurveysAndStatusesReport", "ReportDataApi");
             model.InterviewsUrl = Url.Action("Index", "Interviews");
-            model.ResponsiblesUrl = Url.Action("AsigneeInterviewersBySupervisor", "Teams");
+            model.ResponsiblesUrl = Url.Action("AsigneeInterviewersBySupervisor", "UsersTypeahead");
             model.SelfUrl = Url.Action("SurveysAndStatusesForSv");
 
             return this.View(model);
