@@ -192,11 +192,16 @@ export default {
             }
 
             this.isLoading = true
+
+            const self = this
+            const selectedKey = self.selectedKey
+            const selectedValue = self.selectedValue
+            const query = this.searchTerm
+
             const requestParams = assign(
-                { query: this.searchTerm, cache: false},
+                { query: query, cache: false},
                 this.ajaxParams
             )
-            let self = this
             return this.$http
                 .get(this.fetchUrl, { params: requestParams })
                 .then(response => {
@@ -204,11 +209,11 @@ export default {
                         self.options = self.setOptions(response.data.options || [])
 
                         if (self.options.length > 0) {
-                            if(self.selectedKey != null) {
-                                self.selectByKey(self.selectedKey)
+                            if(selectedKey != null) {
+                                self.selectByKey(selectedKey)
                             }
-                            else if (self.selectedValue != null) {
-                                self.selectByValue(self.selectedValue)
+                            else if (selectedValue != null) {
+                                self.selectByValue(selectedValue)
                             }
                             else if (self.selectFirst && self.value == null) {
                                 self.selectOption(self.options[0].item)
