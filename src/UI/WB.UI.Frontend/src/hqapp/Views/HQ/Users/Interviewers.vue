@@ -27,7 +27,7 @@
                     :placeholder="$t('Common.AllSupervisors')"
                     :value="supervisor"
                     :fetch-url="$config.model.supervisorsUrl"
-                    :selectedValue="query.supervisor"
+                    :selectedValue="this.query.supervisor"
                     v-on:selected="supervisorSelected"/>
             </FilterBlock>
 
