@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public InterviewStatus? InterviewStatus { get;  set; }
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public DataExportStatus ProcessStatus { get; set; }
+        public DataExportJobStatus JobStatus { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public bool IsRunning { get; set; }
