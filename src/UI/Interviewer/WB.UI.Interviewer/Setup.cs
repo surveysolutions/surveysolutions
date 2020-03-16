@@ -141,7 +141,7 @@ namespace WB.UI.Interviewer
             {
                 builder.RegisterModule(module.AsAutofac());
             }
-            builder.RegisterModule(new InterviewerLoggingModule());
+            builder.RegisterModule(new EnumeratorLoggingModule());
 
             builder.RegisterType<NLogLogger>().As<ILogger>();
 
