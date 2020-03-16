@@ -70,6 +70,7 @@ namespace WB.Services.Export.Host.Jobs
                 BeginDate = job.StartAt,
                 IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
                 Status = status,
+                JobStatus = (DataExportJobStatus)job.Status,
                 ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0"),
                 Error = hasError
                     ? new DateExportProcessError

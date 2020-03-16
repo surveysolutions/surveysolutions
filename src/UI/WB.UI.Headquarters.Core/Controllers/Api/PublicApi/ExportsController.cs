@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -76,7 +77,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 : (InterviewStatus) request.InterviewStatus;
 
             var result = await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
-                (DataExportFormat) request.ExportType, interviewStatus, request.From, request.To, password, null, null);
+                (DataExportFormat) request.ExportType, interviewStatus, request.From, request.To, password,
+                request.AccessToken, (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType);
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {request.InterviewStatus.ToString() ?? ""}",
@@ -104,13 +106,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Get list of export processes
         /// </summary>
+        /// <param name="exportType">Format of export data to download</param>
+        /// <param name="interviewStatus">Status of exported interviews</param>
+        /// <param name="questionnaireIdentity">Questionnaire id</param>
+        /// <param name="exportStatus">Status of export process</param>
+        /// <param name="hasFile">Has export process file to download</param>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ExportProcess>>> GetExports()
+        public async Task<ActionResult<IEnumerable<ExportProcess>>> GetExports(ExportType? exportType,
+            ExportInterviewType? interviewStatus, string questionnaireIdentity, ExportStatus? exportStatus,
+            bool? hasFile)
         {
-            var allJobIds = await this.exportServiceApi.GetAllJobsList();
-            var allJobs = await this.exportServiceApi.GetJobsStatuses(allJobIds.ToArray());
+            var status = interviewStatus == ExportInterviewType.All ? null : (InterviewStatus?) interviewStatus;
 
-            return this.Ok(allJobs.Select(ToExportProcess));
+            var filteredProcesses = await this.exportServiceApi.GetJobsByQuery((DataExportFormat?) exportType,
+                status, questionnaireIdentity, (DataExportJobStatus?) exportStatus, hasFile);
+
+            return this.Ok(filteredProcesses.Select(ToExportProcess));
         }
 
         /// <summary>
@@ -126,6 +137,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (exportProcess == null) return NotFound();
 
             await this.exportServiceApi.DeleteProcess(id);
+
+            exportProcess = await this.dataExportStatusReader.GetProcessStatus(id);
 
             return this.Ok(ToExportProcess(exportProcess));
         }
@@ -157,7 +170,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 var fileNameForDdiByQuestionnaire =
                     this.exportFileNameService.GetFileNameForDdiByQuestionnaire(exportProcess.QuestionnaireIdentity);
 
-                var content = await ddiArchiveResponse.ReadAsByteArrayAsync();
+                var content = await ddiArchiveResponse.ReadAsStreamAsync();
 
                 return File(content, "application/zip", fileNameForDdiByQuestionnaire);
             }
@@ -173,27 +186,34 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     : File(result.Data, "application/zip", result.FileName);
         }
 
-        private ExportProcess ToExportProcess(DataExportProcessView exportProcess) => new ExportProcess
+        private ExportProcess ToExportProcess(DataExportProcessView exportProcess)
         {
-            JobId = exportProcess.Id,
-            QuestionnaireId = exportProcess.QuestionnaireIdentity.ToString(),
-            From = exportProcess.FromDate,
-            To = exportProcess.ToDate,
-            StartDate = exportProcess.BeginDate,
-            ExportStatus = (ExportStatus) exportProcess.ProcessStatus,
-            Progress = exportProcess.Progress,
-            ExportType = (ExportType)exportProcess.Format,
-            ETA = exportProcess.TimeEstimation,
-            Error = exportProcess.Error?.Message,
-            InterviewStatus = exportProcess.InterviewStatus == null
-                ? ExportInterviewType.All
-                : (ExportInterviewType) exportProcess.InterviewStatus,
-            Links = new ExportJobLinks
+            var process = new ExportProcess
             {
-                Cancel = Url.Action("CancelExports", new {id = exportProcess.Id}),
-                Download = Url.Action("GetExportFile", new {id = exportProcess.Id})
-            }
-        };
+                JobId = exportProcess.Id,
+                QuestionnaireId = exportProcess.QuestionnaireIdentity.ToString(),
+                From = exportProcess.FromDate,
+                To = exportProcess.ToDate,
+                StartDate = exportProcess.BeginDate,
+                ExportStatus = (ExportStatus) exportProcess.JobStatus,
+                Progress = exportProcess.Progress,
+                ExportType = (ExportType) exportProcess.Format,
+                ETA = exportProcess.TimeEstimation,
+                Error = exportProcess.Error?.Message,
+                InterviewStatus = exportProcess.InterviewStatus == null
+                    ? ExportInterviewType.All
+                    : (ExportInterviewType) exportProcess.InterviewStatus
+            };
+
+            if (exportProcess.IsRunning || exportProcess.HasFile)
+                process.Links = new ExportJobLinks();
+            if (exportProcess.IsRunning)
+                process.Links.Cancel = Url.Action("CancelExports", new {id = exportProcess.Id});
+            if (exportProcess.HasFile)
+                process.Links.Download = Url.Action("GetExportFile", new {id = exportProcess.Id});
+
+            return process;
+        }
 
         public class CreateExportProcess
         {
@@ -202,6 +222,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             public ExportInterviewType InterviewStatus { get; set; }
             public DateTime? From { get; set; }
             public DateTime? To { get; set; }
+            public string AccessToken { get; set; }
+            public ExternalStorageType? StorageType { get; set; }
         }
 
         public class ExportProcess : CreateExportProcess
@@ -224,22 +246,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public enum ExportType
         {
             Tabular = 1,
-            STATA,
-            SPSS,
-            Binary,
-            DDI,
-            Paradata
+            STATA = 2,
+            SPSS = 3,
+            Binary = 4,
+            DDI = 5,
+            Paradata = 6
         }
 
         public enum ExportStatus
         {
-            NotStarted = 1,
-            Queued = 2,
-            Running = 3,
-            Compressing = 4,
-            Finished = 5,
-            FinishedWithError = 6,
-            Preparing = 7
+            Created = 0,
+            Running = 1,
+            Completed = 2,
+            Fail = 3,
+            Canceled = 4
         }
 
         public enum ExportInterviewType
@@ -254,6 +274,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             RejectedByHeadquarters = 125,
             ApprovedByHeadquarters = 130
+        }
+
+        public enum ExternalStorageType
+        {
+            Dropbox = 1,
+            OneDrive = 2,
+            GoogleDrive = 3
         }
     }
 }
