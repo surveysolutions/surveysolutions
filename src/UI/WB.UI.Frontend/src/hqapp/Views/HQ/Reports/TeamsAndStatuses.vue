@@ -163,7 +163,9 @@ export default {
         },
 
         getLinkToInterviews(data, row, interviewStatus) {
-            const formatedNumber = formatNumber(data)
+            const formatedNumber = isNumber(data)
+                ? formatNumber(data)
+                : data
 
             if (data === 0 || row.DT_RowClass === 'total-row') {
                 return isNumber(data)
