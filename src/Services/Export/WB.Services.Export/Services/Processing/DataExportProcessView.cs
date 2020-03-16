@@ -16,6 +16,7 @@ namespace WB.Services.Export.Services.Processing
         public InterviewStatus? InterviewStatus { get; set; }
         public string QuestionnaireId { get; set; }
         public DataExportStatus ProcessStatus { get; set; }
+        public DataExportJobStatus JobStatus { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public bool IsRunning { get; set; }
