@@ -390,7 +390,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult SupervisorSurveysAndStatusesReport(Guid? id = null,[FromQuery]ReportDataApiController.SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
+        public IActionResult SupervisorSurveysAndStatusesReport([FromQuery]SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
         {
             var teamLeadName = this.authorizedUser.UserName;
             var input = new SurveysAndStatusesReportInputModel
@@ -400,7 +400,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 PageSize = filter.PageSize,
                 Orders = filter.ToOrderRequestItems(),
                 ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName,
-                QuestionnaireId = id
+                QuestionnaireId = filter.QuestionnaireId
             };
 
             if (!string.IsNullOrEmpty(exportType))
