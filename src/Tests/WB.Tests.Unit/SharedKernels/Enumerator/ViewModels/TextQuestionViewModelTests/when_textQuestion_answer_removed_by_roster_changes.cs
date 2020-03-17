@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
 
             //act
             this.interview.AnswerMultipleOptionsQuestion(interviewerId, rosterQuestionId, Create.Entity.RosterVector(), DateTime.UtcNow, new int[0]);
-            textQuestionViewModel.Handle(new AnswersRemoved(new [] { textQuestionIdentity}, DateTime.UtcNow));
+            textQuestionViewModel.Handle(new AnswersRemoved(null, new [] { textQuestionIdentity}, DateTime.UtcNow));
 
             //assert
             Assert.That(textQuestionViewModel.Answer, Is.Empty);
