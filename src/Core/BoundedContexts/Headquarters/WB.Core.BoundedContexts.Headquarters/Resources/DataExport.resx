@@ -273,6 +273,9 @@
   <data name="DataExport_QueuedOn" xml:space="preserve">
     <value>Queued on {{date}}</value>
   </data>
+  <data name="DataExport_CompletedOn" xml:space="preserve">
+    <value>Completed on {{date}}</value>
+  </data>
   <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
     <value>{{title}} (ver. {{version}})</value>
   </data>
