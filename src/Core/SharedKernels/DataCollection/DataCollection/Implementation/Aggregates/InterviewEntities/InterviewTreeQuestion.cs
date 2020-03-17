@@ -430,14 +430,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public int[] GetCalculatedLinkedToListOptions()
         {
-            if (!this.IsLinkedToListQuestion) return null;
+            if (!this.IsLinkedToListQuestion) return Array.Empty<int>();
             var linkedToListQuestion = this.AsLinkedToList;
 
             var refQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
 
             return refQuestion?.IsDisabled() ?? false
-                ? EmptyArray<int>.Value
-                : ((InterviewTreeTextListQuestion) refQuestion?.InterviewQuestion)?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? EmptyArray<int>.Value;
+                ? Array.Empty<int>()
+                : ((InterviewTreeTextListQuestion) refQuestion?.InterviewQuestion)?.GetAnswer()?.Rows
+                  .Select(x => x.Value).ToArray() ?? Array.Empty<int>();
         }
 
         public void UpdateLinkedToListOptionsAndUpdateAnswerIfNeeded(int[] options, bool updateAnswerOnOptionChange = true)
