@@ -3,6 +3,12 @@
         :title="$t('Pages.SurveysAndStatuses_Overview')"
         :subtitle="$t('Pages.SurveysAndStatuses_SupervisorDescription')"
         :hasFilter="true">
+        <div slot="subtitle">
+            <p v-if="questionnaireId != null">
+                <a id="lnkBackToQuestionnaires"
+                    :href="$config.model.selfUrl">{{$t('Reports.ToAllQuestionnaires')}}</a>
+            </p>
+        </div>
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.SurveysAndStatuses_InterviewerTitle')">
                 <Typeahead
@@ -16,10 +22,6 @@
                     :fetch-url="$config.model.responsiblesUrl"/>
             </FilterBlock>
         </Filters>
-
-        <p v-if="questionnaireId">
-            <a :href="$config.model.selfUrl">{{$t('Reports.ToAllQuestionnaires')}}</a>
-        </p>
 
         <DataTables
             ref="table"
@@ -98,7 +100,7 @@ export default {
                             return escape(data)
                         }
                         
-                        return `<a href=${window.location}?questionnaireId=${row.questionnaireId}>${escape(data)}</a>`
+                        return `<a href=${self.$config.model.selfUrl}?questionnaireId=${row.questionnaireId}>${escape(data)}</a>`
                     },
                 },
                 {
@@ -224,6 +226,12 @@ export default {
         },
         questionnaireId() {
             return this.$route.query.questionnaireId
+        },
+        queryString() {
+            return {
+                questionnaireId: this.questionnaireId,
+                responsible: this.responsibleName,
+            }
         },
     },
 }

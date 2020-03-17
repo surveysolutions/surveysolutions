@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public long ProcessId { get; set; }
 
         public DateTime BeginDate { get;  set; }
+        public DateTime? EndDate { get; set; }
         public DateTime LastUpdateDate { get;  set; }
         public int Progress { get;  set; }
         public DataExportType Type { get;  set; }
@@ -36,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public long Id { get; set; }
 
         public DateTime BeginDate { get;  set; }
+        public DateTime? EndDate { get; set; }
         public DateTime LastUpdateDate { get;  set; }
         public int Progress { get;  set; }
         public DataExportType Type { get;  set; }

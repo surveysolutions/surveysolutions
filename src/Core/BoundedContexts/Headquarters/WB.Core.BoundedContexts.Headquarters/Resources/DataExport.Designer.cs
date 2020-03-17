@@ -196,6 +196,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Completed on {{date}}.
+        /// </summary>
+        public static string DataExport_CompletedOn {
+            get {
+                return ResourceManager.GetString("DataExport_CompletedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Destination: {{dest}}.
         /// </summary>
         public static string DataExport_Destination {
