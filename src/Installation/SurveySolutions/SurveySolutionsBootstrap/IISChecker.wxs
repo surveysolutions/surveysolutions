@@ -7,8 +7,7 @@
                         PerMachine="yes"                        
                         Name="prepare.iis.bat"
                         SourceFile='.\prepare.iis.bat'
-                        Vital='no'
-                        >
+                        Vital='yes'>
             </ExePackage>
         </PackageGroup>
     </Fragment>
