@@ -9,8 +9,8 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
     <LangVersion>latest</LangVersion>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
-    <PublishSingleFile>true</PublishSingleFile>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishSingleFile>false</PublishSingleFile>
+    <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
