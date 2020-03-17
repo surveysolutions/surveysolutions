@@ -7,6 +7,8 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 
 namespace WB.Tests.Integration.InterviewTests
@@ -189,6 +191,146 @@ namespace WB.Tests.Integration.InterviewTests
             Assert.That(results.LinkedOptionsChanged, Is.Not.Null);
             Assert.That(results.LinkedOptionsChanged.ChangedLinkedQuestions.Single().Options.Length, Is.EqualTo(1));
             Assert.That(results.LinkedOptionsChanged.ChangedLinkedQuestions.Single().QuestionId.Id, Is.EqualTo(multiOptionQuestionId));
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        [Test]
+        public void when_answering_multi_question_linked_to_list_then_question_dependent_on_linked_to_list_with_filter_should_show_only_answered_options()
+        {
+            var userId = Id.g1;
+
+            var questionnaireId = Id.g2;
+            var linkedToListId = Id.g3;
+            var linkedToListFilteredId = Id.g4;
+            var listQuestionId = Id.g5;
+
+            int[] GetOptionsFromLinkedToListFilteredQuestion(StatefulInterview interview) =>
+                interview.GetMultiOptionLinkedToListQuestion(Create.Identity(linkedToListFilteredId)).Options;
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                SetUp.MockedServiceLocator();
+
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.TextListQuestion(listQuestionId, variable: "list"),
+                    Create.Entity.MultipleOptionsQuestion(linkedToListId, variable: "linkedtolist",
+                        linkedToQuestionId: listQuestionId),
+                    Create.Entity.MultipleOptionsQuestion(linkedToListFilteredId,
+                        linkedToQuestionId: listQuestionId, variable: "linkedtolistfiltered", linkedFilterExpression: "linkedtolist.Contains(@optioncode)")
+                );
+
+                var interview = SetupStatefullInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
+
+                var whenListIsEmpty = GetOptionsFromLinkedToListFilteredQuestion(interview);
+
+                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.UtcNow, new[]
+                {
+                    new Tuple<decimal, string>(1, "1"), 
+                    new Tuple<decimal, string>(2, "2"), 
+                    new Tuple<decimal, string>(3, "3"), 
+                    new Tuple<decimal, string>(4, "4"), 
+                });
+
+                var whenListHas4Answers = GetOptionsFromLinkedToListFilteredQuestion(interview);
+
+                interview.AnswerMultipleOptionsQuestion(userId, linkedToListId, RosterVector.Empty,
+                    DateTime.Now, new[] {1, 3});
+
+                var whenLinkedToListHas2Options = GetOptionsFromLinkedToListFilteredQuestion(interview);
+
+                interview.AnswerMultipleOptionsQuestion(userId, linkedToListId, RosterVector.Empty,
+                    DateTime.Now, new[] {3});
+
+                var whenLinkedToListRemoved1Option = GetOptionsFromLinkedToListFilteredQuestion(interview);
+
+                return new
+                {
+                    whenListIsEmpty, 
+                    whenListHas4Answers, 
+                    whenLinkedToListHas2Options,
+                    whenLinkedToListRemoved1Option
+                };
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.whenListIsEmpty, Is.Empty);
+            Assert.That(results.whenListHas4Answers, Is.Empty);
+            Assert.That(results.whenLinkedToListHas2Options, Is.EqualTo(new[] {1, 3}));
+            Assert.That(results.whenLinkedToListRemoved1Option, Is.EqualTo(new[] {3}));
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        [Test]
+        public void when_answering_single_question_linked_to_list_then_question_dependent_on_linked_to_list_with_filter_should_show_only_answered_options()
+        {
+            var userId = Id.g1;
+
+            var questionnaireId = Id.g2;
+            var linkedToListId = Id.g3;
+            var linkedToListFilteredId = Id.g4;
+            var listQuestionId = Id.g5;
+
+            int[] GetOptionsFromLinkedToListFilteredQuestion(StatefulInterview interview) =>
+                interview.GetSingleOptionLinkedToListQuestion(Create.Identity(linkedToListFilteredId)).Options;
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                SetUp.MockedServiceLocator();
+
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.TextListQuestion(listQuestionId, variable: "list"),
+                    Create.Entity.MultipleOptionsQuestion(linkedToListId, variable: "linkedtolist",
+                        linkedToQuestionId: listQuestionId),
+                    Create.Entity.SingleOptionQuestion(linkedToListFilteredId,
+                        linkedToQuestionId: listQuestionId, variable: "linkedtolistfiltered", linkedFilterExpression: "linkedtolist.Contains(@optioncode)")
+                );
+
+                var interview = SetupStatefullInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
+
+                var whenListIsEmpty = GetOptionsFromLinkedToListFilteredQuestion(interview);
+
+                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.UtcNow, new[]
+                {
+                    new Tuple<decimal, string>(1, "1"), 
+                    new Tuple<decimal, string>(2, "2"), 
+                    new Tuple<decimal, string>(3, "3"), 
+                    new Tuple<decimal, string>(4, "4"), 
+                });
+
+                var whenListHas4Answers = GetOptionsFromLinkedToListFilteredQuestion(interview);
+
+                interview.AnswerMultipleOptionsQuestion(userId, linkedToListId, RosterVector.Empty,
+                    DateTime.Now, new[] {1, 3});
+
+                var whenLinkedToListHas2Options = GetOptionsFromLinkedToListFilteredQuestion(interview);
+
+                interview.AnswerMultipleOptionsQuestion(userId, linkedToListId, RosterVector.Empty,
+                    DateTime.Now, new[] {3});
+
+                var whenLinkedToListRemoved1Option = GetOptionsFromLinkedToListFilteredQuestion(interview);
+
+                return new
+                {
+                    whenListIsEmpty, 
+                    whenListHas4Answers, 
+                    whenLinkedToListHas2Options,
+                    whenLinkedToListRemoved1Option
+                };
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.whenListIsEmpty, Is.Empty);
+            Assert.That(results.whenListHas4Answers, Is.Empty);
+            Assert.That(results.whenLinkedToListHas2Options, Is.EqualTo(new[] {1, 3}));
+            Assert.That(results.whenLinkedToListRemoved1Option, Is.EqualTo(new[] {3}));
 
             appDomainContext.Dispose();
             appDomainContext = null;
