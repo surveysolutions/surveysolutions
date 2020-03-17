@@ -67,7 +67,9 @@ namespace WB.Services.Export.Host.Jobs
             args.Status = new DataExportProcessStatus
             {
                 TimeEstimation = eta == null ? (TimeSpan?) null : TimeSpan.Parse(eta),
-                BeginDate = job.StartAt,
+                CreatedDate = job.CreatedAt,
+                BeginDate = job.StartAt ?? job.CreatedAt,
+                EndDate = job.EndAt,
                 IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
                 Status = status,
                 JobStatus = (DataExportJobStatus)job.Status,

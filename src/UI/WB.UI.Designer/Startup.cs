@@ -239,7 +239,7 @@ namespace WB.UI.Designer
                 app.UseStaticFiles(new StaticFileOptions
                 {
                     RequestPath = "/js/app",
-                    FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"\questionnaire\scripts"),
+                    FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"/questionnaire/scripts"),
                     OnPrepareResponse = ctx =>
                     {
                         // remove cache
