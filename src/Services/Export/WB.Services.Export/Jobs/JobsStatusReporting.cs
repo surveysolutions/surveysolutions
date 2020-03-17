@@ -33,7 +33,6 @@ namespace WB.Services.Export.Jobs
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IExternalArtifactsStorage externalArtifactsStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
-        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public JobsStatusReporting(IDataExportProcessesService dataExportProcessesService,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
@@ -47,7 +46,6 @@ namespace WB.Services.Export.Jobs
             this.fileSystemAccessor = fileSystemAccessor;
             this.externalArtifactsStorage = externalArtifactsStorage;
             this.exportFileAccessor = exportFileAccessor;
-            this.questionnaireStorage = questionnaireStorage;
         }
 
         public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId, TenantInfo tenant)
@@ -58,7 +56,6 @@ namespace WB.Services.Export.Jobs
 
             var dataExportProcessView = ToDataExportProcessView(process);
             var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
-            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
 
             var exportSettings = new ExportSettings
             {
@@ -77,7 +74,6 @@ namespace WB.Services.Export.Jobs
             dataExportProcessView.DataFileLastUpdateDate = exportFileInfo.LastUpdateDate;
             dataExportProcessView.FileSize = exportFileInfo.FileSize;
             dataExportProcessView.HasFile = exportFileInfo.HasFile;
-            dataExportProcessView.Title = questionnaire.Title;
             dataExportProcessView.DataDestination = process.StorageType.HasValue 
                 ? process.StorageType.Value.ToString() 
                 : "File";
@@ -98,7 +94,6 @@ namespace WB.Services.Export.Jobs
 
                 var dataExportProcessView = ToDataExportProcessView(process);
                 var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
-                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
 
                 var exportSettings = new ExportSettings
                 {
@@ -113,11 +108,10 @@ namespace WB.Services.Export.Jobs
                 dataExportProcessView.HasFile = false;
 
                 var exportFileInfo = await GetExportFileInfo(exportSettings);
-
+                
                 dataExportProcessView.DataFileLastUpdateDate = exportFileInfo.LastUpdateDate;
                 dataExportProcessView.FileSize = exportFileInfo.FileSize;
                 dataExportProcessView.HasFile = exportFileInfo.HasFile;
-                dataExportProcessView.Title = questionnaire.Title;
                 dataExportProcessView.DataDestination = process.StorageType.HasValue
                     ? process.StorageType.Value.ToString()
                     : "File";
@@ -139,8 +133,7 @@ namespace WB.Services.Export.Jobs
                 .Select(ToDataExportProcessView).ToArray();
 
             var exports = new List<DataExportView>();
-            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireIdentity);
-
+            
             foreach (var supportedDataExport in this.supportedDataExports)
             {
                 var exportSettings = new ExportSettings
@@ -161,10 +154,7 @@ namespace WB.Services.Export.Jobs
             return new DataExportStatusView(
                 questionnaireId: questionnaireIdentity.Id,
                 dataExports: exports,
-                runningDataExportProcesses: allProcesses.Where(p => p.IsRunning).ToArray())
-            {
-                Title = questionnaire.Title
-            };
+                runningDataExportProcesses: allProcesses.Where(p => p.IsRunning).ToArray());
         }
 
         private async Task<DataExportView> CreateDataExportView(
@@ -228,7 +218,9 @@ namespace WB.Services.Export.Jobs
                 Id = dataExportProcessDetails.ProcessId,
                 IsRunning = status.IsRunning,
                 DataExportProcessId = dataExportProcessDetails.NaturalId,
-                BeginDate = status.BeginDate ?? DateTime.MinValue,
+                BeginDate = status.BeginDate ?? status.CreatedDate,
+                EndDate = status.EndDate,
+                JobStatus = status.JobStatus,
                 LastUpdateDate = status.LastUpdateDate,
                 Progress = status.ProgressInPercents,
                 TimeEstimation = status.TimeEstimation,

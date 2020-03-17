@@ -4,8 +4,11 @@
             <div class="format-data"
                 :class="data.format">
                 <div class="gray-text-row">
-                    <b>#{{data.id}}</b>
-                    {{$t('DataExport.DataExport_QueuedOn', { date: data.beginDate }) }}
+                    <b>#{{data.id}} </b>
+                    <span v-if="!isCompleted">
+                        {{$t('DataExport.DataExport_QueuedOn', { date: data.beginDate }) }}</span>
+                    <span v-else>
+                        {{$t('DataExport.DataExport_CompletedOn', { date: data.endDate }) }}</span>
                 </div>
                 <div class="h3 mb-05"
                     v-if="data.questionnaireIdentity != null">
@@ -41,7 +44,7 @@
                     <span class="success-text status">{{data.processStatus}}</span>
                     <div class="cancelable-progress">
                         <div class="progress"
-                            v-if="data.progress > 0">
+                            v-if="isRunning">
                             <div
                                 class="progress-bar"
                                 role="progressbar"
@@ -166,6 +169,12 @@ export default {
         },
         canRegenerate() {
             return this.data.dataDestination == 'File'
+        },
+        isRunning() {
+            return this.data.jobStatus == 'Running'
+        },
+        isCompleted() {
+            return this.data.jobStatus == 'Completed' || this.data.jobStatus == 'Canceled' || this.data.jobStatus == 'Fail'
         },
     },
     watch: {},
