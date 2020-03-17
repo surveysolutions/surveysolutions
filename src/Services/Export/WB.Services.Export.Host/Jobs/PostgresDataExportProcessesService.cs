@@ -67,9 +67,12 @@ namespace WB.Services.Export.Host.Jobs
             args.Status = new DataExportProcessStatus
             {
                 TimeEstimation = eta == null ? (TimeSpan?) null : TimeSpan.Parse(eta),
-                BeginDate = job.StartAt,
+                CreatedDate = job.CreatedAt,
+                BeginDate = job.StartAt ?? job.CreatedAt,
+                EndDate = job.EndAt,
                 IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
                 Status = status,
+                JobStatus = (DataExportJobStatus) job.Status,
                 ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0"),
                 Error = hasError
                     ? new DateExportProcessError
