@@ -67,7 +67,10 @@ namespace WB.Tests.Abc.TestFactories
             => new AnswersDeclaredValid(new Identity[]{}, originDate?? DateTimeOffset.Now);
 
         public AnswersRemoved AnswersRemoved(params Identity[] questions)
-            => new AnswersRemoved(questions, DateTime.UtcNow);
+            => new AnswersRemoved(null, questions, DateTime.UtcNow);
+
+        public AnswersRemoved AnswersRemoved(Guid userId, params Identity[] questions)
+            => new AnswersRemoved(userId, questions, DateTime.UtcNow);
 
         public ChangedVariable ChangedVariable(Identity variableIdentity, object value)
             => new ChangedVariable(variableIdentity, value);
