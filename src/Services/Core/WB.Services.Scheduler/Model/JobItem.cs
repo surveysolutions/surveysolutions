@@ -96,8 +96,6 @@ namespace WB.Services.Scheduler.Model
 
         private void Apply(FailJobEvent ev)
         {
-            this.EndAt = DateTime.UtcNow;
-
             switch (ev.Exception)
             {
                 case HttpRequestException http when http.InnerException is SocketException:
@@ -123,6 +121,7 @@ namespace WB.Services.Scheduler.Model
                     break;
             }
 
+            this.EndAt = DateTime.UtcNow;
             this.Status = JobStatus.Fail;
             this.Error = ev.Exception.ToStringDemystified();
             this.ErrorType = JobError.Unexpected.ToString();
