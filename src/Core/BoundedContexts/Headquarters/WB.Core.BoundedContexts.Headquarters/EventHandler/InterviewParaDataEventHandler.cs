@@ -340,7 +340,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersRemoved> @event)
         {
-            @event.Payload.Questions.ForEach(e => this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, null,
+            @event.Payload.Questions.ForEach(e => this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, 
+                @event.Payload.UserId,
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.RemoveTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(e.Id, e.RosterVector)));
