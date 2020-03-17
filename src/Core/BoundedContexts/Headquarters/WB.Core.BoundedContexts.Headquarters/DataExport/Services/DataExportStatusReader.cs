@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IExportFileNameService exportFileNameService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAssignmentsService assignmentsService;
-        
+
         // TODO: Restore SLACK notifications
         //private readonly ISlackApiClient slackApiClient;
         private readonly ILogger logger;
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IExportFileNameService exportFileNameService,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsService assignmentsService,
-            
+
             // TODO: Restore SLACK notifications
             // ISlackApiClient slackApiClient,
             ILoggerProvider loggerProvider)
@@ -97,46 +98,35 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 return null;
             }
 
-            if (processView.Error != null)
-            {
-                switch (processView.Error.Type)
-                {
-                    case DataExportError.Canceled: processView.Error.Message = Resources.DataExport.Error_Canceled; break;
-                    case DataExportError.NotEnoughExternalStorageSpace: processView.Error.Message = Resources.DataExport.Error_NotEnoughExternalStorageSpace; break;
-                    default: processView.Error.Message = Resources.DataExport.Error_Unhandled; break;
-                }
-            }
+            FillProcessViewMissingData(processView);
 
             processView.Id = id;
             return processView;
+        }
+
+        private void FillProcessViewMissingData(DataExportProcessView processView)
+        {
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(processView.QuestionnaireIdentity, null);
+            processView.Title = questionnaire.Title;
+            
+            if (processView.Error != null)
+            {
+                processView.Error.Message = processView.Error.Type switch
+                {
+                    DataExportError.Canceled => Resources.DataExport.Error_Canceled,
+                    DataExportError.NotEnoughExternalStorageSpace => Resources.DataExport.Error_NotEnoughExternalStorageSpace,
+                    _ => Resources.DataExport.Error_Unhandled
+                };
+            }
         }
 
         public async Task<List<DataExportProcessView>> GetProcessStatuses(long[] ids)
         {
             var processViews = await this.exportServiceApi.GetJobsStatuses(ids);
 
-            foreach (var processView in processViews)
+            foreach (var processView in processViews.Where(p => p != null))
             {
-                if (processView == null)
-                {
-                    return null;
-                }
-
-                if (processView.Error != null)
-                {
-                    switch (processView.Error.Type)
-                    {
-                        case DataExportError.Canceled:
-                            processView.Error.Message = Resources.DataExport.Error_Canceled;
-                            break;
-                        case DataExportError.NotEnoughExternalStorageSpace:
-                            processView.Error.Message = Resources.DataExport.Error_NotEnoughExternalStorageSpace;
-                            break;
-                        default:
-                            processView.Error.Message = Resources.DataExport.Error_Unhandled;
-                            break;
-                    }
-                }
+                FillProcessViewMissingData(processView);
             }
 
             return processViews;
@@ -164,6 +154,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 {
                     return new DataExportStatusView() { Success = false };
                 }
+
+
 
                 // TODO: Restore SLACK notifications
                 //await slackApiClient.SendMessageAsync(new SlackFatalMessage
