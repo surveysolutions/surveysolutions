@@ -668,12 +668,13 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire");
 
-        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", string label = null)
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", 
+            string label = null, bool doNotExport = false)
         {
             var publicKey = id ?? Guid.NewGuid();
             var name = variableName ?? GetNameForEntity("var", publicKey);
             return new Variable(publicKey: publicKey, 
-                variableData: new VariableData(type: type, name: name, expression: expression, label: label));
+                variableData: new VariableData(type: type, name: name, expression: expression, label: label, doNotExport: doNotExport));
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
@@ -866,7 +867,8 @@ namespace WB.Tests.Unit.Designer
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
-            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection,
+            bool customRosterTitle = false)
         {
             var id = rosterId ?? Guid.NewGuid();
             Group group = Create.Group(
@@ -896,6 +898,7 @@ namespace WB.Tests.Unit.Designer
 
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
+            group.CustomRosterTitle = customRosterTitle;
 
             return group;
         }
@@ -1140,11 +1143,13 @@ namespace WB.Tests.Unit.Designer
                 FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
-                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode);
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode, false);
 
-            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, string label = null, Guid? userId = null)
+            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, 
+                string name, string expression, string label = null, Guid? userId = null, bool doNotExport = false)
             {
-                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, label));
+                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, 
+                    new VariableData(type, name, expression, label, doNotExport));
             }
 
             public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, 
@@ -1224,9 +1229,12 @@ namespace WB.Tests.Unit.Designer
                     isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: options);
             }
 
-            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, string label = null, int? index =null)
+            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, 
+                Guid responsibleId, string name = null, string expression = null, 
+                VariableType variableType = VariableType.String, string label = null, int? index =null, bool doNotExport = false)
             {
-                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression, label), responsibleId, parentId, index);
+                return new AddVariable(questionnaireId, entityId, 
+                    new VariableData(variableType, name, expression, label, doNotExport), responsibleId, parentId, index);
             }
 
             public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", string variable = "questionnaire", bool isPublic = false, bool isResponsibleAdmin = false)

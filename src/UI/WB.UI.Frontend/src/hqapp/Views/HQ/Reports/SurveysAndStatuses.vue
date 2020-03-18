@@ -5,7 +5,8 @@
         :hasFilter="true">
         <div slot="subtitle">
             <p v-if="questionnaireId != null">
-                <a :href="$config.model.selfUrl">{{$t('Reports.ToAllQuestionnaires')}}</a>
+                <a id="lnkBackToQuestionnaires"
+                    :href="$config.model.selfUrl">{{$t('Reports.ToAllQuestionnaires')}}</a>
             </p>
         </div>
         <Filters slot="filters">
@@ -215,6 +216,7 @@ export default {
                 columns.splice(1, 0, 
                     {
                         data: 'questionnaireVersion',
+                        name: 'QuestionnaireVersion',
                         className: 'type-numeric version centered-italic',
                         title: this.$t('Reports.TemplateVersion'),
                     })

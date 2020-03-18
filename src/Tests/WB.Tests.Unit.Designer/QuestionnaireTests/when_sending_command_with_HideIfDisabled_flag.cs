@@ -113,7 +113,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     VariableLabel = "variableLabel9", HideIfDisabled = true}, 
                     scope: QuestionScope.Interviewer,  validationConditions: new List<ValidationCondition>(), maxAnswerCount: 30));
 
-            questionnaire.UpdateGroup(hideIfDisabled: true, groupId: groupId, responsibleId: responsibleId, title: "title", variableName: "groupVarName", condition: null, description: null, rosterSizeQuestionId: null, isRoster: true, rosterFixedTitles: new FixedRosterTitleItem[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2"), }, rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
+            questionnaire.UpdateGroup(hideIfDisabled: true, groupId: groupId, responsibleId: responsibleId,
+                title: "title", variableName: "groupVarName", 
+                condition: null, description: null, rosterSizeQuestionId: null,
+                isRoster: true, rosterFixedTitles: new FixedRosterTitleItem[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2"), }, rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, 
+                customRosterTitle: false);
         }
 
 

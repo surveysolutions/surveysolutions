@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -23,20 +22,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public DynamicTextViewModel(
             IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
-            ISubstitutionService substitutionService)
+            ISubstitutionService substitutionService,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.eventRegistry = eventRegistry;
             this.interviewRepository = interviewRepository;
             this.substitutionService = substitutionService;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         private string interviewId;
         protected Identity identity;
-        private bool isRoster;
+        private bool shouldAppendRosterTitle;
 
         private bool isInstructions = false;
 
@@ -64,7 +66,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.identity = entityIdentity;
 
             var interview = this.interviewRepository.Get(this.interviewId);
-            this.isRoster = interview.GetRoster(this.identity) != null;
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            this.shouldAppendRosterTitle = questionnaire.IsRosterGroup(this.identity.Id) &&
+                !questionnaire.HasCustomRosterTitle(this.identity.Id);
 
             this.UpdateText();
 
@@ -104,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            if (!this.isRoster) return;
+            if (!this.shouldAppendRosterTitle) return;
 
             if (!@event.ChangedInstances.Any(x => x.RosterInstance.GetIdentity().Equals(this.identity)))
                 return;
@@ -124,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 var titleText = interview.GetBrowserReadyTitleHtml(this.identity) ?? "";
 
-                this.HtmlText = this.isRoster
+                this.HtmlText = this.shouldAppendRosterTitle
                     ? $"{titleText} - {interview.GetRosterTitle(this.identity) ?? this.substitutionService.DefaultSubstitutionText}"
                     : titleText;
             }

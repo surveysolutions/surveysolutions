@@ -167,7 +167,7 @@ namespace WB.Services.Export.Interview
         {
             List<string> columnsCollector = new List<string>();
 
-            foreach (var questionnaireEntity in @group.Children)
+            foreach (var questionnaireEntity in @group.Children.Where(c => c.IsExportable))
             {
                 if (questionnaireEntity is Question question)
                 {

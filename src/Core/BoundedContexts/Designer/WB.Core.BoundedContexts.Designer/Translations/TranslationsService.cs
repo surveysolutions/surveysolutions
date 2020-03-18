@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 ? worksheetName.TrimStart(TranslationExcelOptions.CategoriesWorksheetPreffix)
                 : null;
             var categoriesId = isCategoriesWorksheet
-                ? questionnaire.Categories.Single(x => x.Name == categoriesWorksheetName).Id
+                ? questionnaire.Categories.Single(x => x.Name.ToLower() == categoriesWorksheetName).Id
                 : (Guid?) null;
 
             var translationErrors = (isCategoriesWorksheet

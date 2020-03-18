@@ -11,5 +11,6 @@ namespace WB.Services.Export.Questionnaire
 
         IQuestionnaireEntity GetParent();
         void SetParent(IQuestionnaireEntity parent);
+        bool IsExportable { get { return true; } }
     }
 }

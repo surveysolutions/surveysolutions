@@ -755,9 +755,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
-            string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
-            bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId,
-            RosterDisplayMode displayMode)
+            string title,string variableName, 
+            Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
+            bool isRoster, 
+            RosterSizeSourceType rosterSizeSource, 
+            FixedRosterTitleItem[] rosterFixedTitles, 
+            Guid? rosterTitleQuestionId,
+            RosterDisplayMode displayMode,
+            bool customRosterTitle)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -791,6 +796,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     groupToUpdate.FixedRosterTitles = fixedTitles;
                     groupToUpdate.RosterTitleQuestionId = rosterTitleQuestionId;
                     groupToUpdate.IsRoster = true;
+                    groupToUpdate.CustomRosterTitle = customRosterTitle;
                 });
             }
             else

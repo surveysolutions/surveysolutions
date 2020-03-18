@@ -4,9 +4,9 @@ using Autofac.Core;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Shared.Enumerator.Services.Logging;
 
-namespace WB.UI.Interviewer.ServiceLocation
+namespace WB.UI.Shared.Enumerator
 {
-    public class InterviewerLoggingModule : Module
+    public class EnumeratorLoggingModule : Module
     {
         private static void OnComponentPreparing(object sender, PreparingEventArgs e)
         {
