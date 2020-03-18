@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
@@ -106,6 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
         private readonly ICategoriesService categoriesService;
+        private readonly IFindReplaceService findReplaceService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private int affectedByReplaceEntries;
 
@@ -117,7 +119,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IAttachmentService attachmentService,
             ITranslationsService translationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
-            ICategoriesService categoriesService)
+            ICategoriesService categoriesService,
+            IFindReplaceService findReplaceService)
         {
             this.clock = clock;
             this.lookupTableService = lookupTableService;
@@ -125,6 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.translationService = translationService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
             this.categoriesService = categoriesService;
+            this.findReplaceService = findReplaceService;
         }
 
         #region Questionnaire command handlers
@@ -227,284 +231,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.IsDeleted = true;
         }
 
-        public IEnumerable<QuestionnaireEntityReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
+        public IEnumerable<QuestionnaireEntityReference> FindAllTexts(string searchFor, bool matchCase,
+            bool matchWholeWord, bool useRegex)
         {
-            Regex searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord, useRegex);
-            IEnumerable<IComposite> allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
-            foreach (var questionnaireItem in allEntries)
-            {
-                var title = questionnaireItem.GetTitle();
-                var variable = questionnaireItem.GetVariable();
-
-                if (MatchesSearchTerm(variable, searchRegex) || questionnaireItem.PublicKey.ToString().Equals(searchFor, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableName);
-                }
-                if (MatchesSearchTerm(title, searchRegex))
-                {
-                    yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Title);
-                }
-                
-                var question = questionnaireItem as IQuestion;
-                if (question != null)
-                {
-                    if (question.Answers != null && !(question.IsFilteredCombobox.GetValueOrDefault() || question.CascadeFromQuestionId.HasValue))
-                    {
-                        for (int i = 0; i < question.Answers.Count; i++)
-                        {
-                            if (MatchesSearchTerm(question.Answers[i].AnswerText, searchRegex))
-                            {
-                                yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option, i);
-                            }
-                        }
-                    }
-
-                    if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex) || MatchesSearchTerm(question.LinkedFilterExpression, searchRegex))
-                    {
-                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
-                    }
-
-                    if (MatchesSearchTerm(question.Instructions, searchRegex) || MatchesSearchTerm(question.Instructions, searchRegex))
-                    {
-                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Instructions);
-                    }
-                }
-
-                var group = questionnaireItem as IGroup;
-                if (group != null)
-                {
-                    if (group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
-                    {
-                        for (int i = 0; i < group.FixedRosterTitles.Length; i++)
-                        {
-                            if (MatchesSearchTerm(group.FixedRosterTitles[i].Title, searchRegex))
-                            {
-                                yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.FixedRosterItem, i);
-                            }
-                        }
-                    }
-                }
-
-                var conditional = questionnaireItem as IConditional;
-                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
-                {
-                    yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.EnablingCondition);
-                }
-
-                var validatable = questionnaireItem as IValidatable;
-                if (validatable != null)
-                {
-                    for (int i = 0; i < validatable.ValidationConditions.Count; i++)
-                    {
-                        if(MatchesSearchTerm(validatable.ValidationConditions[i].Expression, searchRegex))
-                        {
-                            yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationExpression, i);
-                        }
-                        if (MatchesSearchTerm(validatable.ValidationConditions[i].Message, searchRegex))
-                        {
-                            yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationMessage, i);
-                        }
-                    }
-                }
-
-                var questionnaireVariable = questionnaireItem as IVariable;
-                if (questionnaireVariable != null)
-                {
-                    if (MatchesSearchTerm(questionnaireVariable.Label, searchRegex))
-                    {
-                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableLabel);
-                    }
-
-                    if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
-                    {
-                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableContent);
-                    }
-                }
-
-                var staticText = questionnaireItem as IStaticText;
-                if (staticText != null && MatchesSearchTerm(staticText.AttachmentName, searchRegex))
-                {
-                    yield return QuestionnaireEntityReference.CreateFrom(staticText, QuestionnaireVerificationReferenceProperty.AttachmentName);
-                }
-            }
-
-            foreach (var macro in this.innerDocument.Macros.OrderBy(x => x.Value.Name))
-            {
-                if (MatchesSearchTerm(macro.Value.Content, searchRegex))
-                {
-                    yield return QuestionnaireEntityReference.CreateForMacro(macro.Key);
-                }
-            }
-        }
-
-        private static Regex BuildSearchRegex(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
-        {
-            RegexOptions options = RegexOptions.Compiled | RegexOptions.CultureInvariant;
-            if (!matchCase)
-            {
-                options |= RegexOptions.IgnoreCase;
-            }
-            string encodedSearchPattern = useRegex ? searchFor : Regex.Escape(searchFor);
-            string pattern = matchWholeWord ? $@"\b{encodedSearchPattern}\b" : encodedSearchPattern;
-
-            Regex searchRegex = new Regex(pattern, options);
-            return searchRegex;
-        }
-
-        private static bool MatchesSearchTerm(string target, Regex searchRegex)
-        {
-            if (target.IsNullOrEmpty()) return false;
-
-            return searchRegex.IsMatch(target);
-        }
-
-        private static string ReplaceUsingSearchTerm(string target, Regex searchFor, string replaceWith)
-        {
-            return searchFor.Replace(target, replaceWith);
+            return findReplaceService.FindAll(this.innerDocument, searchFor, matchCase, matchWholeWord, useRegex);
         }
 
         public void ReplaceTexts(ReplaceTextsCommand command)
         {
             ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
-            this.affectedByReplaceEntries = 0;
-            var searchRegex = BuildSearchRegex(command.SearchFor, command.MatchCase, command.MatchWholeWord, command.UseRegex);
-            foreach (var questionnaireItem in allEntries)
-            {
-                bool replacedAny = false;
-                var title = questionnaireItem.GetTitle();
-                if (MatchesSearchTerm(title, searchRegex))
-                {
-                    replacedAny = true;
-                    questionnaireItem.SetTitle(ReplaceUsingSearchTerm(title, searchRegex, command.ReplaceWith));
-                }
-
-                var variableName = questionnaireItem.GetVariable();
-                if (MatchesSearchTerm(variableName, searchRegex))
-                {
-                    replacedAny = true;
-                    questionnaireItem.SetVariable(ReplaceUsingSearchTerm(variableName, searchRegex, command.ReplaceWith));
-                }
-
-                var conditional = questionnaireItem as IConditional;
-                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
-                {
-                    replacedAny = true;
-                    string newCondition = ReplaceUsingSearchTerm(conditional.ConditionExpression, searchRegex, command.ReplaceWith);
-                    conditional.ConditionExpression = newCondition;
-                }
-
-                var validatable = questionnaireItem as IValidatable;
-                if (validatable != null)
-                {
-                    foreach (var validationCondition in validatable.ValidationConditions)
-                    {
-                        if (MatchesSearchTerm(validationCondition.Expression, searchRegex))
-                        {
-                            replacedAny = true;
-                            string newValidationCondition = ReplaceUsingSearchTerm(validationCondition.Expression, searchRegex, command.ReplaceWith);
-                            validationCondition.Expression = newValidationCondition;
-                        }
-                        if (MatchesSearchTerm(validationCondition.Message, searchRegex))
-                        {
-                            replacedAny = true;
-                            string newMessage = ReplaceUsingSearchTerm(validationCondition.Message, searchRegex, command.ReplaceWith);
-                            validationCondition.Message = newMessage;
-                        }
-                    }
-                }
-
-                var questionnaireVariable = questionnaireItem as IVariable;
-                if (questionnaireVariable != null)
-                {
-                    if (MatchesSearchTerm(questionnaireVariable.Label, searchRegex))
-                    {
-                        replacedAny = true;
-                        questionnaireVariable.Label = ReplaceUsingSearchTerm(questionnaireVariable.Label, searchRegex, command.ReplaceWith);
-                    }
-
-                    if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
-                    {
-                        replacedAny = true;
-                        questionnaireVariable.Expression = ReplaceUsingSearchTerm(questionnaireVariable.Expression, searchRegex, command.ReplaceWith);
-                    }
-                }
-
-                var question = questionnaireItem as IQuestion;
-                if (question != null)
-                {
-                    if (question.Answers != null && !(question.IsFilteredCombobox.GetValueOrDefault() || question.CascadeFromQuestionId.HasValue))
-                    {
-                        foreach (var questionAnswer in question.Answers)
-                        {
-                            if (MatchesSearchTerm(questionAnswer.AnswerText, searchRegex))
-                            {
-                                replacedAny = true;
-                                questionAnswer.AnswerText = ReplaceUsingSearchTerm(questionAnswer.AnswerText, searchRegex, command.ReplaceWith);
-                            }
-                        }
-                    }
-
-                    if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex))
-                    {
-                        replacedAny = true;
-                        question.Properties.OptionsFilterExpression = ReplaceUsingSearchTerm(question.Properties.OptionsFilterExpression, searchRegex, command.ReplaceWith);
-                    }
-
-                    if (MatchesSearchTerm(question.LinkedFilterExpression, searchRegex))
-                    {
-                        replacedAny = true;
-                        question.LinkedFilterExpression = ReplaceUsingSearchTerm(question.LinkedFilterExpression, searchRegex, command.ReplaceWith);
-                    }
-
-                    if (MatchesSearchTerm(question.Instructions, searchRegex))
-                    {
-                        replacedAny = true;
-                        question.Instructions = ReplaceUsingSearchTerm(question.Instructions, searchRegex, command.ReplaceWith);
-                    }
-                }
-
-                var group = questionnaireItem as IGroup;
-                if (group != null)
-                {
-                    if (group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
-                    {
-                        foreach (var fixedRosterTitle in group.FixedRosterTitles)
-                        {
-                            if (MatchesSearchTerm(fixedRosterTitle.Title, searchRegex))
-                            {
-                                replacedAny = true;
-                                fixedRosterTitle.Title = ReplaceUsingSearchTerm(fixedRosterTitle.Title, searchRegex, command.ReplaceWith);
-                            }
-                        }
-                    }
-                }
-
-                var staticText = questionnaireItem as IStaticText;
-                if (staticText != null)
-                {
-                    if (MatchesSearchTerm(staticText.AttachmentName, searchRegex))
-                    {
-                        replacedAny = true;
-                        staticText.AttachmentName = ReplaceUsingSearchTerm(staticText.AttachmentName, searchRegex, command.ReplaceWith);
-                    }
-                }
-
-                if (replacedAny)
-                {
-                    this.affectedByReplaceEntries++;
-                }
-            }
-
-            foreach (var macro in this.innerDocument.Macros.Values)
-            {
-                if (MatchesSearchTerm(macro.Content, searchRegex))
-                {
-                    this.affectedByReplaceEntries++;
-                    macro.Content = ReplaceUsingSearchTerm(macro.Content, searchRegex, command.ReplaceWith);
-                }
-            }
+            this.affectedByReplaceEntries = findReplaceService.ReplaceTexts(this.innerDocument, command.ResponsibleId,
+                command.SearchFor, command.ReplaceWith, command.MatchCase, command.MatchWholeWord, command.UseRegex);
         }
 
         public int GetLastReplacedEntriesCount()

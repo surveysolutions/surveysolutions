@@ -604,7 +604,8 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnaireHistoryVersionsService historyVersionsService = null)
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnaireHistoryVersionsService historyVersionsService = null,
+            IFindReplaceService findReplaceService = null)
         {
             return new Questionnaire(
                 Mock.Of<IClock>(),
@@ -612,7 +613,8 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
                 historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
-                Mock.Of<ICategoriesService>());
+                Mock.Of<ICategoriesService>(),
+                findReplaceService ?? Mock.Of<IFindReplaceService>());
         }
 
 
