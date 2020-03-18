@@ -67,8 +67,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
-    <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">
+    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest"/>
+    <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never">
       <DependentUpon>appsettings.ini</DependentUpon>
     </Content>
   </ItemGroup>
@@ -96,20 +96,5 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
     <EmbeddedResource Include="wwwroot\**\*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resources\WebInterviewUI.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>WebInterviewUI.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\WebInterviewUI.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 </Project>
