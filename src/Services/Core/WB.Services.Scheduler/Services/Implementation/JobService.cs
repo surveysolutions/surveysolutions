@@ -33,44 +33,41 @@ namespace WB.Services.Scheduler.Services.Implementation
         {
             logger.LogTrace("Adding new job {jobTag}", job.Tag);
 
-            using (var tr = await db.Database.BeginTransactionAsync())
-            {
-                await db.AcquireXactLockAsync(lock_add_value);
+            await using var tr = await db.Database.BeginTransactionAsync();
+            await db.AcquireXactLockAsync(lock_add_value);
 
-                var existingJob = await db.Jobs
-                    .Where(j =>
-                        job.Tenant == j.Tenant
-                        && j.Tag == job.Tag
-                        && (j.Status == JobStatus.Running || j.Status == JobStatus.Created))
-                    .FirstOrDefaultAsync();
+            var existingJob = await db.Jobs
+                .Where(j =>
+                    job.Tenant == j.Tenant
+                    && j.Tag == job.Tag
+                    && (j.Status == JobStatus.Running || j.Status == JobStatus.Created))
+                .FirstOrDefaultAsync();
 
-                if (existingJob != null) return existingJob;
+            if (existingJob != null) return existingJob;
 
-                job.CreatedAt = DateTime.UtcNow;
+            job.CreatedAt = DateTime.UtcNow;
 
-                var newItem = await db.Jobs.AddAsync(job);
-                await db.SaveChangesAsync();
-                logger.LogTrace("Added new job with id: {jobId}- {jobTag}", newItem.Entity.Id,  job.Tag);
+            var newItem = await db.Jobs.AddAsync(job);
+            await db.SaveChangesAsync();
+            logger.LogTrace("Added new job with id: {jobId}- {jobTag}", newItem.Entity.Id,  job.Tag);
 
-                tr.Commit();
+            tr.Commit();
 
-                return newItem.Entity;
-            }
+            return newItem.Entity;
         }
 
         public async Task<JobItem> GetFreeJobAsync(CancellationToken token = default)
         {
-            using (var tr = await db.Database.BeginTransactionAsync(token))
-            {
-                await db.AcquireXactLockAsync(lock_add_value);
+            await using var tr = await db.Database.BeginTransactionAsync(token);
+            await db.AcquireXactLockAsync(lock_add_value);
 
-                var running = JobStatus.Running.ToString().ToLowerInvariant();
-                var created = JobStatus.Created.ToString().ToLowerInvariant();
-                var maxPerTenant = jobSettings.Value.WorkerCountPerTenant;
+            var running = JobStatus.Running.ToString().ToLowerInvariant();
+            var created = JobStatus.Created.ToString().ToLowerInvariant();
+            var maxPerTenant = jobSettings.Value.WorkerCountPerTenant;
                 
-                var schema = jobSettings.Value.SchemaName;
+            var schema = jobSettings.Value.SchemaName;
 
-                var newQuery = $@"WITH running_jobs_per_queue AS (
+            var newQuery = $@"WITH running_jobs_per_queue AS (
                           select tenant, count(1) AS running_jobs 
                           from {schema}.jobs
                           where (status = '{running}') -- running                            
@@ -91,20 +88,19 @@ namespace WB.Services.Scheduler.Services.Implementation
                         for update skip locked
                         limit 1";
 
-                var jobId = await db.Database.GetDbConnection().QuerySingleOrDefaultAsync<long>(newQuery);
-                var job = await db.Jobs.FindAsync(jobId);
+            var jobId = await db.Database.GetDbConnection().QuerySingleOrDefaultAsync<long>(newQuery);
+            var job = await db.Jobs.FindAsync(jobId);
                
-                if (job != null)
-                {
-                    job.Start(jobSettings.Value.WorkerId);
-                    db.Jobs.Update(job);
-                }
-
-                await db.SaveChangesAsync(token);
-
-                tr.Commit();
-                return job;
+            if (job != null)
+            {
+                job.Start(jobSettings.Value.WorkerId);
+                db.Jobs.Update(job);
             }
+
+            await db.SaveChangesAsync(token);
+
+            tr.Commit();
+            return job;
         }
         
         public async Task<bool> HasMostRecentFinishedJobIdWithSameTag(long jobId, TenantInfo tenant)
@@ -121,24 +117,32 @@ namespace WB.Services.Scheduler.Services.Implementation
             return hasMoreRecentJob;
         }
 
-        public async Task<JobItem> GetJobAsync(long id)
+        public ValueTask<JobItem> GetJobAsync(long id)
         {
-            return await db.Jobs.FindAsync(id);
+            return db.Jobs.FindAsync(id);
         }
 
-        public async Task<JobItem> GetJobAsync(TenantInfo tenant, string tag, params JobStatus[] statuses)
+        public Task<List<JobItem>> GetJobsAsync(long[] ids)
         {
-            return await db.Jobs
-                .Where(j => j.Tenant == tenant.Id.Id && j.Tag == tag
-                    && (statuses.Length == 0 || statuses.Contains(j.Status))
-                            )
+            return db.Jobs.Where(j => ids.Contains(j.Id)).ToListAsync();
+        }
+
+        public Task<JobItem> GetJobAsync(TenantInfo tenant, string tag)
+        {
+            return db.Jobs
+                .Where(j => j.Tenant == tenant.Id.Id && j.Tag == tag)
                 .FirstOrDefaultAsync();
         }
 
-        public Task<List<JobItem>> GetAllJobsAsync(TenantInfo tenant, params JobStatus[] statuses)
+        public Task<List<JobItem>> GetAllJobsAsync(TenantInfo tenant)
         {
-            return db.Jobs.Where(j => j.Tenant == tenant.Id.Id
-                                      && (statuses.Length == 0 || statuses.Contains(j.Status)))
+            return db.Jobs.Where(j => j.Tenant == tenant.Id.Id).ToListAsync();
+        }
+
+        public Task<List<JobItem>> GetRunningOrQueuedJobs(TenantInfo tenant)
+        {
+            return db.Jobs.Where(j => j.Tenant == tenant.Id.Id &&
+                                      j.Status == JobStatus.Created || j.Status == JobStatus.Running)
                 .ToListAsync();
         }
     }

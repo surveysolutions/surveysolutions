@@ -19,10 +19,10 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class StudyType {
+    public class StudyType {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.StudyType", typeof(StudyType).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Administrative Records.
         /// </summary>
-        internal static string AdministrativeRecords {
+        public static string AdministrativeRecords {
             get {
                 return ResourceManager.GetString("AdministrativeRecords", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Agricultural Census.
         /// </summary>
-        internal static string AgriculturalCensus {
+        public static string AgriculturalCensus {
             get {
                 return ResourceManager.GetString("AgriculturalCensus", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Agricultural Survey.
         /// </summary>
-        internal static string AgriculturalSurvey {
+        public static string AgriculturalSurvey {
             get {
                 return ResourceManager.GetString("AgriculturalSurvey", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Child Labor Survey.
         /// </summary>
-        internal static string ChildLaborSurvey {
+        public static string ChildLaborSurvey {
             get {
                 return ResourceManager.GetString("ChildLaborSurvey", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Core Welfare Indicators Questionnaire.
         /// </summary>
-        internal static string CoreWelfareIndicatorsQuestionnaire {
+        public static string CoreWelfareIndicatorsQuestionnaire {
             get {
                 return ResourceManager.GetString("CoreWelfareIndicatorsQuestionnaire", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Demographic and Health Survey.
         /// </summary>
-        internal static string DemographicAndHealthSurvey {
+        public static string DemographicAndHealthSurvey {
             get {
                 return ResourceManager.GetString("DemographicAndHealthSurvey", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enterprise Census.
         /// </summary>
-        internal static string EnterpriseCensus {
+        public static string EnterpriseCensus {
             get {
                 return ResourceManager.GetString("EnterpriseCensus", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enterprise Survey.
         /// </summary>
-        internal static string EnterpriseSurvey {
+        public static string EnterpriseSurvey {
             get {
                 return ResourceManager.GetString("EnterpriseSurvey", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Household Health Survey.
         /// </summary>
-        internal static string HouseholdHealthSurvey {
+        public static string HouseholdHealthSurvey {
             get {
                 return ResourceManager.GetString("HouseholdHealthSurvey", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Household Survey.
         /// </summary>
-        internal static string HouseholdSurvey {
+        public static string HouseholdSurvey {
             get {
                 return ResourceManager.GetString("HouseholdSurvey", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Informal Sector Survey.
         /// </summary>
-        internal static string InformalSectorSurvey {
+        public static string InformalSectorSurvey {
             get {
                 return ResourceManager.GetString("InformalSectorSurvey", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Integrated Survey.
         /// </summary>
-        internal static string IntegratedSurvey {
+        public static string IntegratedSurvey {
             get {
                 return ResourceManager.GetString("IntegratedSurvey", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Labor Force Survey.
         /// </summary>
-        internal static string LaborForceSurvey {
+        public static string LaborForceSurvey {
             get {
                 return ResourceManager.GetString("LaborForceSurvey", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Living Standards Measurement Study.
         /// </summary>
-        internal static string LivingStandardsMeasurementStudy {
+        public static string LivingStandardsMeasurementStudy {
             get {
                 return ResourceManager.GetString("LivingStandardsMeasurementStudy", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Multiple Indicator Cluster Survey.
         /// </summary>
-        internal static string MultipleIndicatorClusterSurvey {
+        public static string MultipleIndicatorClusterSurvey {
             get {
                 return ResourceManager.GetString("MultipleIndicatorClusterSurvey", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Population and Housing Census.
         /// </summary>
-        internal static string PopulationAndHousingCensus {
+        public static string PopulationAndHousingCensus {
             get {
                 return ResourceManager.GetString("PopulationAndHousingCensus", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Price Survey.
         /// </summary>
-        internal static string PriceSurvey {
+        public static string PriceSurvey {
             get {
                 return ResourceManager.GetString("PriceSurvey", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Priority Survey.
         /// </summary>
-        internal static string PrioritySurvey {
+        public static string PrioritySurvey {
             get {
                 return ResourceManager.GetString("PrioritySurvey", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sample Frame.
         /// </summary>
-        internal static string SampleFrame {
+        public static string SampleFrame {
             get {
                 return ResourceManager.GetString("SampleFrame", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Service Provision Assessments.
         /// </summary>
-        internal static string ServiceProvisionAssessments {
+        public static string ServiceProvisionAssessments {
             get {
                 return ResourceManager.GetString("ServiceProvisionAssessments", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Socio Economic / Monitoring Survey.
         /// </summary>
-        internal static string SocioEconomicMonitoringSurvey {
+        public static string SocioEconomicMonitoringSurvey {
             get {
                 return ResourceManager.GetString("SocioEconomicMonitoringSurvey", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Statistical Info and Monitoring Prog..
         /// </summary>
-        internal static string StatisticalInfoAndMonitoringProg {
+        public static string StatisticalInfoAndMonitoringProg {
             get {
                 return ResourceManager.GetString("StatisticalInfoAndMonitoringProg", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to World Fertility Survey.
         /// </summary>
-        internal static string WorldFertilitySurvey {
+        public static string WorldFertilitySurvey {
             get {
                 return ResourceManager.GetString("WorldFertilitySurvey", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to World Health Survey.
         /// </summary>
-        internal static string WorldHealthSurvey {
+        public static string WorldHealthSurvey {
             get {
                 return ResourceManager.GetString("WorldHealthSurvey", resourceCulture);
             }

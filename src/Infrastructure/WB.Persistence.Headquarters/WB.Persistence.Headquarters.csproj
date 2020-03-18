@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>netstandard2</TargetFramework>
+      <TargetFramework>netstandard2.1</TargetFramework>
       <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
       <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
       <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -34,10 +34,10 @@
       <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Dapper" Version="2.0.4" />
+      <PackageReference Include="Dapper" Version="2.0.30" />
       <PackageReference Include="FluentMigrator" Version="3.2.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-      <PackageReference Include="Npgsql" Version="4.0.10" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <PackageReference Include="Npgsql" Version="4.1.3.1" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />

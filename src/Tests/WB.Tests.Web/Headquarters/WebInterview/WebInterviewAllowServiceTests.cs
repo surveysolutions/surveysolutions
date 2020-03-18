@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {

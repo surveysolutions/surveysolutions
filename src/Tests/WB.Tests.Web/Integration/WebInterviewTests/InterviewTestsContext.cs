@@ -1,4 +1,4 @@
-﻿namespace WB.Tests.Integration.WebInterviewTests
+﻿namespace WB.Tests.Web.Integration.WebInterviewTests
 {
     public class InterviewTestsContext
     {

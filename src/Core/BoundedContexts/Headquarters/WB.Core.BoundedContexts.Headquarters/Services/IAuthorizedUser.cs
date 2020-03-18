@@ -15,8 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
         Guid Id { get; }
         string UserName { get; }
-        string DeviceId { get; }
-        UserRoles Role { get; }
     }
 
     public static class AuthorizedUserHelpers

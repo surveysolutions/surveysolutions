@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 msg.ReplyTo = new EmailAddress(settings.ReplyAddress);
 
             msg.AddTo(new EmailAddress(to));
-            var response = await client.SendEmailAsync(msg);
+            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
             if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Accepted || response.StatusCode == HttpStatusCode.NoContent)
             {
                 var headers = response.DeserializeResponseHeaders(response.Headers);
@@ -156,7 +156,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
 
                 try
                 {
-                    var response = await client.SendEmailAsync(sendRequest);
+                    var response = await client.SendEmailAsync(sendRequest).ConfigureAwait(false);
                     return response.MessageId;
                 }
                 catch (AggregateException ae)

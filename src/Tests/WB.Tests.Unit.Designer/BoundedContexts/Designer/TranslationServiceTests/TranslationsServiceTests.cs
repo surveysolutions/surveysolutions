@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
 {
@@ -262,7 +263,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var categoriesName = "mycat";
 
 
-            byte[] fileStream = CreateExcel(categoriesName, new[]
+            byte[] fileStream = CreateExcelWithCategories(categoriesName, new[]
             {
                 new[]
                 {
@@ -305,7 +306,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var categoriesName = "mycat";
 
 
-            byte[] fileStream = CreateExcel(categoriesName, new[]
+            byte[] fileStream = CreateExcelWithCategories(categoriesName, new[]
             {
                 new[]
                 {
@@ -425,6 +426,111 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(translationInstance.TranslationIndex, Is.EqualTo("1$1"));
         }
 
+        [Test]
+        public void when_storing_translations_from_excel_file_with_not_existing_categories_then_should_not_throw_InvalidFileException()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid sectionId = Id.g1;
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var categoriesName = "mycat";
+
+            byte[] fileStream = CreateExcel(new Dictionary<string, string[][]>
+            {
+                {
+                    "Translations", new[]
+                    {
+                        new[]
+                        {
+                            "Entity Id", "Variable", "Type", "Index", "Original text", "Translation"
+                        },
+                        new[]
+                        {
+                            sectionId.ToString("N"), "", "Title", "New Section", "Перевод"
+                        }
+                    }
+                },
+                {
+                    $"@@@_{categoriesName}", new[]
+                    {
+                        new[]
+                        {
+                            "Index", "Original text", "Translation"
+                        },
+                        new[]
+                        {
+                            "1$1", "original text", "translation"
+                        }
+                    }
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId, Create.Group(sectionId));
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            //assert
+            Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
+        }
+
+        [Test]
+        public void when_storing_translations_from_excel_file_with_existing_categories_but_in_different_cases_then_should_not_throw_Exception()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid sectionId = Id.g1;
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var categoriesName = "myCat";
+
+            byte[] fileStream = CreateExcel(new Dictionary<string, string[][]>
+            {
+                {
+                    "Translations", new[]
+                    {
+                        new[]
+                        {
+                            "Entity Id", "Variable", "Type", "Index", "Original text", "Translation"
+                        },
+                        new[]
+                        {
+                            sectionId.ToString("N"), "", "Title", "New Section", "Перевод"
+                        }
+                    }
+                },
+                {
+                    $"@@@_{categoriesName.ToLower()}", new[]
+                    {
+                        new[]
+                        {
+                            "Index", "Original text", "Translation"
+                        },
+                        new[]
+                        {
+                            "1$1", "original text", "translation"
+                        }
+                    }
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId, Create.Group(sectionId));
+            questionnaire.Categories.Add(Create.Categories(name: categoriesName));
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            //assert
+            Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
+        }
+
         private byte[] GetEmbendedFileContent(string fileName)
         {
             var testType = typeof(TranslationsServiceTests);
@@ -443,21 +549,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var listOfData = data.ToList();
             listOfData.Insert(0, new[] {"Index", "Original text", "Translation"});
 
-            return CreateExcel(categoriesName, listOfData.ToArray());
+            return CreateExcelWithCategories(categoriesName, listOfData.ToArray());
         }
 
-        private static byte[] CreateExcel(string categoriesName, string[][] data)
+        private static byte[] CreateExcelWithCategories(string categoriesName, string[][] data)
+            => CreateExcel(new Dictionary<string, string[][]> {{$"@@@_{categoriesName}", data}});
+
+        private static byte[] CreateExcel(Dictionary<string,string[][]>  datas)
         {
-            using (ExcelPackage package = new ExcelPackage())
+            using ExcelPackage package = new ExcelPackage();
+
+            foreach (var data in datas)
             {
-                var worksheet = package.Workbook.Worksheets.Add($"@@@_{categoriesName}");
+                var worksheet = package.Workbook.Worksheets.Add(data.Key);
 
-                for (var row = 0; row < data.Length; row++)
-                for (var column = 0; column < data[row].Length; column++)
-                    worksheet.Cells[row + 1, column + 1].Value = data[row][column];
-
-                return package.GetAsByteArray();
+                for (var row = 0; row < data.Value.Length; row++)
+                for (var column = 0; column < data.Value[row].Length; column++)
+                    worksheet.Cells[row + 1, column + 1].Value = data.Value[row][column];    
             }
+
+            return package.GetAsByteArray();
         }
     }
 }

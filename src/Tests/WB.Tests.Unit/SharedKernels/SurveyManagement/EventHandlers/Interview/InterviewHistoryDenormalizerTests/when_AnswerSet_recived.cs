@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -18,7 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             {
                 Create.Entity.DateTimeQuestion(questionId, isTimestamp: false)
             });
-            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(questionnaireDocument);
+            IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
+            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(plainQuestionnaire);
 
             answerEvents = new List<IEvent>();
             answerEvents.Add(new TextQuestionAnswered(userId, questionId, new decimal[]{1,2}, DateTime.Now, "hi"));

@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using NHibernate;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Infrastructure.Native.Monitoring;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -20,7 +21,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     [Localizable(false)]
     public class PostgresEventStore : IHeadquartersEventStore
     {
-        private readonly PostgreConnectionSettings connectionSettings;
         private readonly IEventTypeResolver eventTypeResolver;
 
         private static int BatchSize = 4096;
@@ -34,7 +34,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             IEventTypeResolver eventTypeResolver,
             IUnitOfWork sessionProvider)
         {
-            this.connectionSettings = connectionSettings;
             this.eventTypeResolver = eventTypeResolver;
             this.sessionProvider = sessionProvider;
 
@@ -138,6 +137,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
 
                 writer.Complete();
+                CommonMetrics.EventsCreatedCount.Inc(result.Count);
             }
 
             return result;

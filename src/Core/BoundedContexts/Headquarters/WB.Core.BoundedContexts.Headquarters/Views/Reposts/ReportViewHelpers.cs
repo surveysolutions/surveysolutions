@@ -4,15 +4,16 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
 {
     public static class ReportViewHelpers
     {
-        public static string AsColumnName(this Answer a)
+        public static string AsColumnName(this CategoricalOption a)
         {
             // to be possible to use as unique id
-            return "col_" + ((int)a.GetParsedValue()).ToString().Replace("-", "_");
+            return "col_" + a.Value.ToString().Replace("-", "_");
         }
 
         public static ReportView ApplyOrderAndPaging(this ReportView report,

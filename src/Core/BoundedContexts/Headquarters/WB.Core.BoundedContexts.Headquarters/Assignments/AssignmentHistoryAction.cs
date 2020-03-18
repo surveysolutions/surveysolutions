@@ -1,5 +1,8 @@
+using System.Text.Json.Serialization;
+
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum AssignmentHistoryAction
     {
         Unknown = 0,

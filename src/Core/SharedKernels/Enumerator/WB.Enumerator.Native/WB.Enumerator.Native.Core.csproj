@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
@@ -25,15 +25,22 @@
     <ProjectReference Include="..\..\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.1.1" />
-    <PackageReference Include="Dapper" Version="2.0.4" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.12" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.18" />
     <PackageReference Include="NAudio" Version="1.9.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.1.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="**\*.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Resources\WebInterview.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -41,28 +48,13 @@
       <DependentUpon>WebInterview.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Update="Resources\WebInterview.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WebInterview.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.fr.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.ar.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.es.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.ka.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.ru.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\WebInterview.zh.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
+
+
 </Project>

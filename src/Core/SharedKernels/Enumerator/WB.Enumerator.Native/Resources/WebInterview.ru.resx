@@ -364,4 +364,8 @@
   <data name="EnterPasswordText" xml:space="preserve">
     <value>Эта ссылка защищена паролем, который распространяется вместе со ссылкой. Пожалуйста введите его</value>
   </data>
+  <data name="InvalidPassword" xml:space="preserve">
+      <value>Неправильный пароль</value>
+      <comment>Неправильный пароль</comment>
+  </data>
 </root>

@@ -40,6 +40,8 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
             "/p:VersionCode=$VersionCode"
             "/p:ApkOutputPath=$([System.IO.Path]::GetFullPath($OutFileName))"
             "/restore"
+            "/m:1"
+            "/p:XamarinBuildDownloadAllowUnsecure=true"
 
             if(-not $NoCleanUp.IsPresent) {
                 '/t:Clean;SignAndroidPackage;MoveApkFile'

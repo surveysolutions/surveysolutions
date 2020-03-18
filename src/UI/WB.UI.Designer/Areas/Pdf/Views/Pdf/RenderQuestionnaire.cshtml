@@ -16,12 +16,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    @*is passed as get param along with other on pdf generation and exceeds 2K limit for unicode*@
-    <title>@*@(questionnaire.Title.Length < 70 ? questionnaire.Title : questionnaire.Title.Substring(0, 70))*@</title>
-    <!-- pdf:css -->
-    <link rel='stylesheet' href='@Url.ContentAbsolute("~/css/pdf.css")'>
-    <!-- endinject -->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	@*is passed as get param along with other on pdf generation and exceeds 2K limit for unicode*@
+	<title>@*@(questionnaire.Title.Length < 70 ? questionnaire.Title : questionnaire.Title.Substring(0, 70))*@</title>
+	<!-- pdf:css -->
+	<link rel='stylesheet' href='@Html.ContentAbsolute("~/css/pdf.css")'>
+	<!-- endinject -->
 </head>
 <body>
 	<header>
@@ -74,8 +74,8 @@
 			</ul>
 		</div>
 		<div class="column_header">
-			<a href="https://solutions.worldbank.org/" target="_blank" class="logo">
-				<img src="@Url.ContentAbsolute("~/images/pdf_logo.png")" alt="Survey Solutions" />
+			<a href="https://mysurvey.solutions/" target="_blank" class="logo">
+				<img src="@Html.ContentAbsolute("~/images/suso-logo-dark.svg")" alt="Survey Solutions" />
 			</a>
 		</div>
 
@@ -332,7 +332,7 @@
 	<article>
 		@foreach (var sectionId in questionnaire.SectionIds)
 		{
-        <section class="section">
+        <section class="section" style="page-break-before: always">
             <div class="section_header">
                 <h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
                 @{ var group = questionnaire.Find<Group>(sectionId);}
@@ -568,8 +568,8 @@
 		<h2 id="legend_appendix">@PdfStrings.Legend</h2>
 		<section>
 			<h3>@PdfStrings.PdfLegend</h3>
-			<img src="@Url.ContentAbsolute("~/images/pdf-question-legend.png")" />
-			<img src="@Url.ContentAbsolute("~/images/pdf-roster-legend.png")" />
+			<img src="@Html.ContentAbsolute("~/images/pdf-question-legend.png")" />
+			<img src="@Html.ContentAbsolute("~/images/pdf-roster-legend.png")" />
 		</section>
 	</article>
 </body>

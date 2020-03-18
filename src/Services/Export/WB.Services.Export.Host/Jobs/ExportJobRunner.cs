@@ -23,6 +23,7 @@ namespace WB.Services.Export.Host.Jobs
         {
             var jobArg = JsonConvert.DeserializeObject<DataExportProcessArgs>(arg);
             jobArg.ProcessId = ctx.Job.Id;
+            jobArg.ShouldDropTenantSchema = ctx.Job.ShouldDropTenantSchema;
             return this.exportJob.ExecuteAsync(jobArg, token);
         }
     }

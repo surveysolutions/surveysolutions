@@ -47,9 +47,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
             foreach (var hyperlink in hyperlinks)
                 onReplace.Invoke(hyperlink);
 
-            var writer = new StringWriter();
+            using var writer = new StringWriter();
             doc.Save(writer);
-
             return writer.ToString();
         }
 
@@ -130,10 +129,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return nearestInterviewEntity;
         }
 
-        private string GenerateInterviewUrl(string action, Guid interviewId, string virtualDirectoryName,
-            Identity sectionId = null, Identity scrollTo = null)
-            => this.virtualPathService.GetAbsolutePath(
-                $@"~/{virtualDirectoryName}/{interviewId.FormatGuid()}/{action}{(sectionId == null ? "" : $@"/{sectionId}")}{(scrollTo == null ? "" : $"#{scrollTo}")}");
+        private string GenerateInterviewUrl(string action, Guid interviewId, string virtualDirectoryName, Identity sectionId = null, Identity scrollTo = null)
+        {
+            var relativeUrl = $@"~/{virtualDirectoryName}/{interviewId.FormatGuid()}/{action}{(sectionId == null ? "" : $@"/{sectionId}")}{(scrollTo == null ? "" : $"#{scrollTo}")}";
+            return this.virtualPathService.GetAbsolutePath(relativeUrl);
+        }
 
         private string GenerateAttachmentUrl(Guid interviewId, string attachmentContentId)
             => this.virtualPathService.GetAbsolutePath($"~/api/WebInterviewResources/Content?interviewId={interviewId.FormatGuid()}&contentId={attachmentContentId}");

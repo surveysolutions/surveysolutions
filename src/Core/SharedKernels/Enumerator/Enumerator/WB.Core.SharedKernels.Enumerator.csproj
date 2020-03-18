@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -15,24 +15,16 @@
     <Compile Remove="Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    
-    
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
-    
-    
-    
-    
     <PackageReference Include="Autofac" Version="4.9.4" />
-    <PackageReference Include="Humanizer.Core" Version="2.7.2" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="6.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.4.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.1" />
+    <PackageReference Include="Humanizer.Core" Version="2.7.9" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.4.2" />
+    <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="6.4.2" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.4.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.13" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.13" />
-    <PackageReference Include="System.Reactive" Version="4.1.6" />
+    <PackageReference Include="System.Reactive" Version="4.3.2" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
   </ItemGroup>
   <ItemGroup>
@@ -43,111 +35,14 @@
     <ProjectReference Include="..\..\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Humanizer">
-      <HintPath>..\..\..\..\..\packages\Humanizer.Core.2.2.0\lib\netstandard1.0\Humanizer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
       <HintPath>..\..\..\..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Update="Properties\EnumeratorUIResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\UIResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.ar.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.es.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.fr.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.id.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.ka.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.km.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.pt.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.resx">
+       <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>EnumeratorUIResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.ro.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.ru.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.th.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.uk.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.vi.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.zh.resx">
-      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.ar.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.es.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.fr.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.id.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.ka.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.km.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.pt.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.ro.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.ru.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.th.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.uk.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.vi.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.zh.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

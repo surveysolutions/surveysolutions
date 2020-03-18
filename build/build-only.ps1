@@ -13,7 +13,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\functions.ps1"
 
-$ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
+$ProjectHeadquarters = 'src\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj'
 $ProjectWebTester = 'src\UI\WB.UI.WebTester\WB.UI.WebTester.csproj'
 $MainSolution = 'src\WB without Xamarin.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
@@ -41,38 +41,20 @@ New-Item $artifactsFolder -Type Directory -Force | Out-Null
 
 try {
 
-    $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
+   # $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
 
-    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
+    $buildSuccessful = $true # BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
     if ($buildSuccessful) { 
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force | Out-Null
 
         if($nostatic -eq $False){
-            BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
-                Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ Deps'
+        
+            BuildStaticContent "WB.UI.Frontend" "src\UI\WB.UI.Frontend" @("build") | % { if (-not $_) {
+                Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for WB.UI.FrontEnd'
                 Exit 
-            }}
-
-            BuildStaticContent "Hq App" "src\UI\Headquarters\WB.UI.Headquarters\HqApp" | % { if (-not $_) {
-                Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ App'
-                Exit 
-            } else {
-                Move-Item ".\dist\stats.html" "$artifactsFolder\stats\HqApp.html" -ErrorAction SilentlyContinue
-                Move-Item ".\dist\shared_vendor.stats.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
-                New-Item "$artifactsFolder\coverage" -Type Directory -Force
-                Move-Item ".\.coverage" "$artifactsFolder\coverage\hqapp" -ErrorAction SilentlyContinue
             }}
             
-            CreateZip "$artifactsFolder\stats" "$artifactsFolder\stats.zip"
-            CreateZip "$artifactsFolder\coverage" "$artifactsFolder\coverage.zip"
-
-            Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
-            Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
-        }
-
-        Log-Block "Run configuration transformations" {
-            RunConfigTransform $ProjectHeadquarters $BuildConfiguration
         }
 
         if($noandroid.IsPresent -eq $False) 
@@ -118,15 +100,11 @@ try {
         }
 
         Log-Block "Building HQ web package and support tool" {
-            BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
-
-            if($nosupport.IsPresent -eq $False) {
-                BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
-            }
+            BuildAspNetCoreWebPackage $ProjectHeadquarters $BuildConfiguration $BuildNumber $branch
         }
-
+        
         "BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch" | Write-Verbose
-        BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch | ForEach-Object { if (-not $_) { Exit 1 } }
+        BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch
         
         Log-Block "Collecting/building artifacts" {
             AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"

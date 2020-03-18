@@ -1,6 +1,4 @@
-﻿using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-
-namespace WB.Core.BoundedContexts.Headquarters.Repositories
+﻿namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
     internal class DbConfiguration
     {

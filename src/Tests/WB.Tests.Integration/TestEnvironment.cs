@@ -1,12 +1,43 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 namespace WB.Tests.Integration
 {
     internal static class TestEnvironment
     {
+        private static List<string> projectsInSolution = null;
+
+        public static IEnumerable<string> GetAllProjectsInSolution()
+        {
+            if (projectsInSolution == null)
+            {
+                var slnFolder = GetSolutionFolderPath();
+                var sln = Path.Combine(slnFolder, "WB.sln");
+                var content = File.ReadAllLines(sln);
+                projectsInSolution = content.Where(c => c.Contains(".csproj", StringComparison.OrdinalIgnoreCase))
+                    .Select(l => Regex.Match(l, @"[^""]*\.csproj"))
+                    .Where(m => m.Success)
+                    .Select(m => Path.Combine(slnFolder, m.Value)).ToList();
+            }
+
+            return projectsInSolution;
+        }
+
+        public static IEnumerable<string> GetAllFilesInSolution(string mask)
+        {
+            var projects = GetAllProjectsInSolution();
+            return projects
+                .SelectMany(p =>
+                {
+                    var dir = new FileInfo(p).Directory.FullName;
+                    return Directory.EnumerateFiles(dir, mask, SearchOption.AllDirectories);
+                }).ToList();
+        }
+
         public static IEnumerable<string> GetAllFilesFromSourceFolder(string relativePath, params string[] masks)
         {
             var sourceFolder = GetSourcePath(relativePath);

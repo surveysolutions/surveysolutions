@@ -1694,6 +1694,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewReceivedByDevice();
 
             var questionnaire = this.GetQuestionnaireOrThrow();
             var sourceInterview = GetChangedTree();

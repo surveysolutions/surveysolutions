@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,8 +18,6 @@ using Microsoft.Extensions.FileProviders;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
-using StackExchange.Exceptional;
-using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -29,26 +25,30 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.DependencyInjection;
-using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.CommonWeb;
+using WB.UI.Designer.HealthChecks;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
 using WB.UI.Designer.Services;
+using WB.UI.Shared.Web.Authentication;
+using WB.UI.Shared.Web.Diagnostics;
+using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer
 {
     public class Startup
     {
         internal const string WebTesterCorsPolicy = "_webTester";
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             this.hostingEnvironment = hostingEnvironment;
             Configuration = configuration;
@@ -65,10 +65,8 @@ namespace WB.UI.Designer
 
             services.AddSession(options =>
             {
-                // Set a short timeout for easy testing.
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
                 options.Cookie.HttpOnly = true;
-                // Make the session cookie essential
                 options.Cookie.IsEssential = true;
             });
 
@@ -127,8 +125,8 @@ namespace WB.UI.Designer
 
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc()                    
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(options =>
+                .SetCompatibilityVersion(CompatibilityVersion.Latest)
+                .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
@@ -151,24 +149,7 @@ namespace WB.UI.Designer
                 });
             });
 
-            // this code need to run lazy load KnownStoreTypes property
-            if (!ErrorStore.KnownStoreTypes.Contains(typeof(PostgreSqlErrorStore)))
-                ErrorStore.KnownStoreTypes.Add(typeof(PostgreSqlErrorStore));
-
-            services.AddExceptional(Configuration.GetSection("Exceptional"), config =>
-            {
-                config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
-
-                config.LogFilters.Header.Add("Authorization", "***");
-                config.LogFilters.Form.Add("Password", "***");
-                config.LogFilters.Form.Add("ConfirmPassword", "***");
-
-                if (config.Store.Type == "PostgreSql")
-                {
-                    config.Store.TableName = "\"logs\".\"Errors\"";
-                    config.Store.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
-                }
-            });
+            services.AddDatabaseStoredExceptional(hostingEnvironment, Configuration);
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
@@ -195,10 +176,12 @@ namespace WB.UI.Designer
             });
             services.Configure<MailSettings>(Configuration.GetSection("Mail"));
             services.AddTransient<IEmailSender, MailSender>();
-            services.AddTransient<IViewRenderingService, ViewRenderingService>();
+            services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IQuestionnaireHelper, QuestionnaireHelper>();
             services.AddTransient<IDomainRepository, DomainRepository>();
             services.AddScoped<ILoggedInUser, LoggedInUser>();
+
+            //services.AddHostedService<FontInstalledCheck>(); // Fails in docker
 
             services.Configure<CompilerSettings>(Configuration.GetSection("CompilerSettings"));
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));
@@ -224,10 +207,14 @@ namespace WB.UI.Designer
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseExceptional();
-
+          
             if (!env.IsDevelopment())
             {
-                app.UseStatusCodePagesWithReExecute("/error/{0}");
+                app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
+                    appBuilder =>
+                    {
+                        appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
+                    });
             }
 
             if (!env.IsDevelopment())
@@ -252,7 +239,7 @@ namespace WB.UI.Designer
                 app.UseStaticFiles(new StaticFileOptions
                 {
                     RequestPath = "/js/app",
-                    FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"\questionnaire\scripts"),
+                    FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"/questionnaire/scripts"),
                     OnPrepareResponse = ctx =>
                     {
                         // remove cache
@@ -286,16 +273,22 @@ namespace WB.UI.Designer
 
             app.UseHealthChecks("/.hc");
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Questionnaire}/{action=My}/{id?}"
-                );
+            app.UseRouting();
+            app.UseAuthorization();
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Questionnaire}/{action=Index}/{id?}");
+            app.UseEndpoints(routes =>
+            {
+                routes.MapVersionEndpoint();
+
+                routes.MapControllerRoute(
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller}/{action}/{id?}",
+                    defaults: new { action = "Index" });
+
+                routes.MapControllerRoute(
+                    name: "default", 
+                    pattern: "{controller=Questionnaire}/{action=Index}/{id?}");
+                routes.MapRazorPages();
             });
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);

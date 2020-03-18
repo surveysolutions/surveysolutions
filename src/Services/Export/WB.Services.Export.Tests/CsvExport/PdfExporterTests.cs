@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Dropbox.Api.TeamLog;
 using Moq;
@@ -49,7 +50,7 @@ namespace WB.Services.Export.Tests.CsvExport
                 fileSystem.Object);
 
             // Act
-            await service.ExportAsync(Create.Tenant(), questionnaire, "testPath");
+            await service.ExportAsync(Create.Tenant(), questionnaire, "testPath", CancellationToken.None);
 
             // Assert
             Assert.That(mockMainStream.ToArray(), Is.EquivalentTo(mainPdfFileFromHq), "Main pdf file should be written to export folder");

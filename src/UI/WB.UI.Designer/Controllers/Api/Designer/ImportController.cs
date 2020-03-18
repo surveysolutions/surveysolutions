@@ -31,12 +31,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IClassificationsStorage classificationsStorage;
         private readonly ICommandService commandService;
         private readonly IPublicFoldersStorage publicFoldersStorage;
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         public ImportController(IClassificationsStorage classificationsStorage, 
             ICommandService commandService, 
             IPublicFoldersStorage publicFoldersStorage,
-            IHostingEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment)
         {
             this.classificationsStorage = classificationsStorage;
             this.commandService = commandService;

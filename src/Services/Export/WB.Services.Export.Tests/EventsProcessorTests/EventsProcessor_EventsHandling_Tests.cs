@@ -106,7 +106,7 @@ namespace WB.Services.Export.Tests.EventsProcessorTests
 
         private class SkipSecondSequenceFilter : IEventsFilter
         {
-            public Task<List<Event>> FilterAsync(ICollection<Event> feed)
+            public Task<List<Event>> FilterAsync(ICollection<Event> feed, CancellationToken cancellationToken = default)
             {
                 var res = new List<Event>();
 

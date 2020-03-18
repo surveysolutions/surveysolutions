@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
@@ -46,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.Comment);
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(state.QuestionnaireId, null);
-            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
+            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToImmutableHashSet();
 
             var identifyingAnswers = @event.Payload.Answers
                 .Where(x => identifyingQuestionIds.Contains(x.Identity.Id))

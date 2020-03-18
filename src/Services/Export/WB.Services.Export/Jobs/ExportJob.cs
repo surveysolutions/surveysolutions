@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using WB.Services.Export.Events;
 using WB.Services.Export.ExportProcessHandlers;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Models;
 
@@ -13,22 +14,24 @@ namespace WB.Services.Export.Jobs
 {
     internal class ExportJob : IExportJob
     {
-        private readonly IServiceProvider serviceProvider;
+        private readonly ITenantContext tenantContext;
         private readonly IEventProcessor processor;
         private readonly IExportProcessHandler<DataExportProcessArgs> exportProcessHandler;
         private readonly ILogger<ExportJob> logger;
+        private readonly IQuestionnaireSchemaGenerator questionnaireSchemaGenerator;
 
-        public ExportJob(IServiceProvider serviceProvider,
+        public ExportJob(
+            ITenantContext tenantContext,
             IEventProcessor processor,
             ILogger<ExportJob> logger, 
-            IExportProcessHandler<DataExportProcessArgs> exportProcessHandler)
+            IExportProcessHandler<DataExportProcessArgs> exportProcessHandler, 
+            IQuestionnaireSchemaGenerator questionnaireSchemaGenerator)
         {
-            logger.LogTrace("Constructed instance of ExportJob");
-
-            this.serviceProvider = serviceProvider;
             this.processor = processor;
             this.logger = logger;
             this.exportProcessHandler = exportProcessHandler;
+            this.questionnaireSchemaGenerator = questionnaireSchemaGenerator;
+            this.tenantContext = tenantContext;
         }
 
         public async Task ExecuteAsync(DataExportProcessArgs pendingExportProcess, CancellationToken cancellationToken)
@@ -37,7 +40,13 @@ namespace WB.Services.Export.Jobs
 
             try
             {
-                serviceProvider.SetTenant(pendingExportProcess.ExportSettings.Tenant);
+                this.tenantContext.SetTenant(pendingExportProcess.ExportSettings.Tenant);
+
+                if (pendingExportProcess.ShouldDropTenantSchema)
+                {
+                    await questionnaireSchemaGenerator.DropTenantSchemaAsync(
+                        pendingExportProcess.ExportSettings.Tenant.Name, cancellationToken);
+                }
 
                 await processor.HandleNewEvents(pendingExportProcess.ProcessId, cancellationToken);
 

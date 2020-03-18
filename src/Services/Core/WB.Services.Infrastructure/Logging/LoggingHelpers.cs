@@ -10,6 +10,11 @@ namespace WB.Services.Infrastructure.Logging
 {
     public static class LoggingHelpers
     {
+        public static IDisposable LogContext(string key, object value)
+        {
+            return LogContext((key, value));
+        }
+
         public static IDisposable LogContext(params (string key, object value)[] properties)
         {
             var enrichers = properties.Select(p => (ILogEventEnricher)new PropertyEnricher(p.key, p.value)).ToArray();

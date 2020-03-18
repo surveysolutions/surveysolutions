@@ -2,9 +2,7 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
-using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Tests.Abc;
 

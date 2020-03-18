@@ -15,5 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.TabletInformation
         public DateTime CreationDate { get; set; }
 
         public long Size { get; set; }
+
+        public string DownloadUrl { get; set; }
     }
 }

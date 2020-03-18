@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;
+using WB.Services.Infrastructure.Logging;
 
 namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 {
@@ -31,31 +32,29 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         {
             Task.Run(async () =>
             {
+                using var ctx = LoggingHelpers.LogContext("workerId", "CancellationService");
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     var connectionString = configuration.GetConnectionString(options.Value.ConnectionName);
 
-                    using (var connection = new NpgsqlConnection(connectionString))
+                    await using var connection = new NpgsqlConnection(connectionString);
+                    await connection.OpenAsync(cancellationToken);
+                        
+                    connection.Notification += (conn, arg) =>
                     {
-                        await connection.OpenAsync(cancellationToken);
-                        
-                        connection.Notification += (conn, arg) =>
+                        if (long.TryParse(arg.Payload, out var jobId))
                         {
-                            if (long.TryParse(arg.Payload, out var jobId))
-                            {
-                                logger.LogDebug("Job cancellation acquired from DB. JobId: {jobId}", jobId);
-                                cancellationNotification.JobCancelled(jobId);
-                            }
-                        };
-                        
-                        await connection.ExecuteAsync($"LISTEN {cancellationNotification.Channel}");
-
-                        while (!cancellationToken.IsCancellationRequested)
-                        {
-                            await connection.WaitAsync(cancellationToken);
+                            logger.LogDebug("Job cancellation acquired from DB. JobId: {jobId}", jobId);
+                            cancellationNotification.JobCancelled(jobId);
                         }
-                    }
+                    };
+                        
+                    await connection.ExecuteAsync($"LISTEN {cancellationNotification.Channel}");
 
+                    while (!cancellationToken.IsCancellationRequested)
+                    {
+                        await connection.WaitAsync(cancellationToken);
+                    }
                 }
             }, cancellationToken);
             return Task.CompletedTask;

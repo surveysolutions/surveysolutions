@@ -186,11 +186,9 @@
     <Compile Include="Attributes\CamelCaseAttribute.cs" />
     <Compile Include="Compression\CompressionHandler.cs" />
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
-    <Compile Include="DataAnnotations\ServerSideOnlyRegularExpressionAttribute.cs" />
     <Compile Include="Extensions\ProgressiveDownload.cs" />
     <Compile Include="Extensions\ProgressiveDownloadHelpers.cs" />
     <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
-    <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
     <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
     <Compile Include="Modules\ApiControllerExtensions.cs" />
@@ -199,14 +197,11 @@
     <Compile Include="Slack\ISlackMessageThrottler.cs" />
     <Compile Include="Slack\SlackApiClient.cs" />
     <Compile Include="Slack\SlackApiConfiguration.cs" />
-    <Compile Include="Controllers\UnderConstructionController.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
-    <Compile Include="Attributes\NoTransactionAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />
     <Compile Include="Captcha\NoCaptchaProvider.cs" />
     <Compile Include="Captcha\HostedCaptchaProvider.cs" />
-    <Compile Include="Captcha\ICaptchaProvider.cs" />
     <Compile Include="Captcha\ReCaptchaProvider.cs" />
     <Compile Include="Captcha\Extensions.cs" />
     <Compile Include="Captcha\WebCacheBasedCaptchaService.cs" />
@@ -218,9 +213,6 @@
     <Compile Include="Configuration\IConfigurationManager.cs" />
     <Compile Include="Configuration\HqSecuritySection.cs" />
     <Compile Include="Controllers\BaseMessageDisplayController.cs" />
-    <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
-    <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />
-    <Compile Include="DataAnnotations\DataAnnotationsConfig.cs" />
     <Compile Include="Extensions\Alerts.cs" />
     <Compile Include="Extensions\ModelStateDictionaryHelper.cs" />
     <Compile Include="Extensions\LinkExtensions.cs" />
@@ -228,16 +220,11 @@
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Filters\ApiTransactionFilter.cs" />
     <Compile Include="Filters\TransactionFilter.cs" />
-    <Compile Include="Filters\UnderConstructionFilter.cs" />
-    <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
     <Compile Include="Filters\EnforceHttpsHandler.cs" />
-    <Compile Include="Filters\ITokenVerifier.cs" />
     <Compile Include="Filters\RequireSecureConnectionAttribute.cs" />
     <Compile Include="Filters\LocalOrDevelopmentAccessOnlyAttribute.cs" />
-    <Compile Include="Filters\ApiValidationAntiForgeryTokenAttribute.cs" />
     <Compile Include="Filters\NoCacheAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
-    <Compile Include="Implementation\Services\VirtualPathService.cs" />
     <Compile Include="Kernel\AutofacServiceLocatorFactory.cs" />
     <Compile Include="Kernel\AutofacWebKernel.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />
@@ -377,6 +364,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="MembershipProvider\Accounts\" />
     <Folder Include="Modules\NonWebRequest\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

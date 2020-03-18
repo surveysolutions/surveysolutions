@@ -20,7 +20,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Interviewer.Services;
@@ -31,7 +30,7 @@ using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer.Infrastructure
 {
-    public class InterviewerInfrastructureModule : IModule
+    public class  InterviewerInfrastructureModule : IModule
     {
         public void Load(IIocRegistry registry)
         {

@@ -64,9 +64,9 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Audio(string interviewId, string questionId, IFormFile file)
+        public async Task<ActionResult> Audio(string id, [FromForm] string questionId, [FromForm] IFormFile file)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(id);
 
             var questionIdentity = Identity.Parse(questionId);
             InterviewTreeQuestion question = interview.GetQuestion(questionIdentity);
@@ -105,7 +105,7 @@ namespace WB.UI.WebTester.Controllers
             }
             catch (Exception e)
             {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(interviewId), questionIdentity, e);
+                webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
                 //webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
                 throw;
             }
@@ -114,9 +114,9 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Image(string interviewId, string questionId, IFormFile file)
+        public async Task<ActionResult> Image(string id, [FromForm]  string questionId, [FromForm]  IFormFile file)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(id);
 
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
@@ -153,7 +153,7 @@ namespace WB.UI.WebTester.Controllers
             catch (Exception e)
             {
                 if (fileName != null)
-                    webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(interviewId), questionIdentity, e);
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
                 throw;
             }
 

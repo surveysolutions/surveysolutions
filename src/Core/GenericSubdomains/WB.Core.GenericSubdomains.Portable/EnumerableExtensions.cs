@@ -15,12 +15,7 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             yield return element;
         }
-
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source)
-        {
-            return new HashSet<T>(source);
-        }
-
+        
         public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IList<T> source)
             => source as ReadOnlyCollection<T>
             ?? new ReadOnlyCollection<T>(source);

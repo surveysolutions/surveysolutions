@@ -8,14 +8,12 @@ using Moq;
 using NUnit.Framework;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters
@@ -35,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             //act
             var exception = Assert.Catch<PreloadingException>(() => userImportService
-                .VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray());
+                .VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray());
 
             //assert
             Assert.That(exception, Is.Not.Null);
@@ -51,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             //act
             var exception = Assert.Catch<PreloadingException>(() => userImportService
-                .VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray());
+                .VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray());
 
             //assert
             Assert.That(exception, Is.Not.Null);
@@ -76,7 +74,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             //act
             var exception = Assert.Catch<PreloadingException>(() => userImportService
-                .VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray());
+                .VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray());
 
             //assert
             Assert.That(exception, Is.Not.Null);
@@ -104,7 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(userName));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -124,7 +122,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(userName), Create.Entity.UserToImport(userName));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(2, errors.Length);
@@ -155,7 +153,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(login: userName, supervisor: supervisorName));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -179,7 +177,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(userName, role: "supervisor"));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -199,7 +197,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(userName));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -209,22 +207,25 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             Assert.AreEqual(userName, errors[0].CellValue);
         }
 
-        [TestCase("")] //empty
-        [TestCase("Q11w")] //less 10 
-        [TestCase("QqQqQqQqQqQqQq")] //regexp
-        [TestCase("A1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890a1234567890")] //more 100
-        public void When_users_password_is_empty_Then_record_verification_error_with_code_PLU0006(string password)
+        [TestCase("", "PLU0021")] //empty
+        [TestCase("Q12wzyt#", "PLU0015")]  
+        [TestCase("Qwerty12345", "PLU0016")] 
+        [TestCase("QwertyQW$werty", "PLU0017")] 
+        [TestCase("QWE1TYQWWE$RTY", "PLU0018")] 
+        [TestCase("qw1erty$qwerty", "PLU0019")] 
+        [TestCase("qq1q$qqqqqqqqQ", "PLU0020")] 
+        public void When_users_password_is_empty_Then_record_verification_error_with_code_PLU0006(string password, string expectedCode)
         {
             //arrange
             var userImportService = CreateUserImportService(null,
                 Create.Entity.UserToImport(password: password));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0006", errors[0].Code);
+            Assert.That(errors, Has.Length.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo(expectedCode));
             Assert.AreEqual(2, errors[0].RowNumber);
             Assert.AreEqual("Password", errors[0].ColumnName);
             Assert.AreEqual(password, errors[0].CellValue);
@@ -240,7 +241,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(email: email));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -260,7 +261,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(phoneNumber: phoneNumber));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -280,7 +281,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(role: undefinedRole));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -301,7 +302,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(login: interviewerName, supervisor: supervisorName, role: "interviewer"));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -321,7 +322,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(login: interviewerName, role: "interviewer"));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -342,7 +343,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(login: supervisorName, supervisor: supervisorCellValue, role: "supervisor"));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -362,7 +363,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(fullName: fullName));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -382,7 +383,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(phoneNumber: phone));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -402,7 +403,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(fullName: fullName));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(1, errors.Length);
@@ -421,7 +422,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var service = Create.Service.UserImportService(csvReader: new CsvReader());
 
             // Act
-            TestDelegate act = () => service.VerifyAndSaveIfNoErrors(Encoding.UTF8.GetBytes(data), "file.txt").ToList();
+            TestDelegate act = () => service.VerifyAndSaveIfNoErrors(new MemoryStream(Encoding.UTF8.GetBytes(data)), "file.txt").ToList();
 
             // Assert
             Assert.DoesNotThrow(act); 

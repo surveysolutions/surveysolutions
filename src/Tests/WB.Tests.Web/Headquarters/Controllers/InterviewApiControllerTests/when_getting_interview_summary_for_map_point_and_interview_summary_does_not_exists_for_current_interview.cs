@@ -3,14 +3,17 @@ using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Controllers.Api;
 
-
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
+namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
 {
-    internal class when_getting_interview_summary_for_map_point_and_interview_summary_does_not_exists_for_current_interview : InterviewApiControllerTestsContext
+    internal class
+        when_getting_interview_summary_for_map_point_and_interview_summary_does_not_exists_for_current_interview :
+            InterviewApiControllerTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
             var interviewSummaryViewFactoryMock = new Mock<IInterviewSummaryViewFactory>();
             interviewSummaryViewFactoryMock.Setup(_ => _.Load(interviewId)).Returns(() => null);
 
@@ -20,9 +23,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
 
         public void BecauseOf() =>
             viewModel =
-                controller.InterviewSummaryForMapPoint(new InterviewSummaryForMapPointViewModel(){InterviewId = interviewId});
+                controller.InterviewSummaryForMapPoint(new InterviewSummaryForMapPointViewModel()
+                    {InterviewId = interviewId});
 
-        [NUnit.Framework.Test] public void should_view_model_be_null () =>
+        [NUnit.Framework.Test]
+        public void should_view_model_be_null() =>
             viewModel.Should().BeNull();
 
         private static InterviewApiController controller;

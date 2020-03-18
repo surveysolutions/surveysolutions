@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Commands;
-using NSubstitute;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;

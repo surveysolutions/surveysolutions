@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Storage
 {
-    class NoExternalFileSystemStorage : IExternalFileStorage
+    class NoExternalFileStorage : IExternalFileStorage
     {
         public bool IsEnabled()
         {

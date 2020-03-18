@@ -19,6 +19,6 @@ namespace WB.Services.Infrastructure.EventSourcing
 
     public interface IEventsFilter
     {
-        Task<List<Event>> FilterAsync(ICollection<Event> feed);
+        Task<List<Event>> FilterAsync(ICollection<Event> feed, CancellationToken cancellationToken = default);
     }
 }

@@ -1,0 +1,14 @@
+@import "variables";
+
+.validation-summary-errors ul
+{
+    list-style-type: none;
+}
+.control-label.required:before {
+    content: '*';
+    color: #DA4F49;
+    padding-right: 5px;
+}
+.field-validation-error {
+    color: $red_error
+}

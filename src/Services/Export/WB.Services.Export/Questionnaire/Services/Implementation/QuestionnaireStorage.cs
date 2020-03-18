@@ -44,14 +44,14 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                     return result;
                 }
 
-                var questionnaire = await this.tenantContext.Api.GetQuestionnaireAsync(questionnaireId);
+                var questionnaire = await this.tenantContext.Api.GetQuestionnaireAsync(questionnaireId, token);
 
                 if (questionnaire == null) return null;
                 questionnaire.QuestionnaireId = questionnaireId;
 
                 foreach (var category in questionnaire.Categories)
                 {
-                    category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id);
+                    category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
                 }
 
                 logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",

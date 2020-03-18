@@ -1,0 +1,47 @@
+﻿@using System.Web
+@using WB.Core.Infrastructure.Versions
+@using WB.Enumerator.Native.Resources
+@inject IProductVersion version
+@model WB.UI.WebTester.Controllers.InterviewPageModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Title</title>
+    <script>
+        window.CONFIG = {
+            id: '@Model.Id',
+            virtualPath:    '@Url.Content(@"~/WebTester/Interview")',
+            basePath: '@Url.Content(@"~/")',
+            imageUploadUri: '@Url.Content(@"~/multimedia/image")',
+            audioUploadUri: '@Url.Content(@"~/multimedia/audio")',
+            imageGetBase:   '@Url.Content(@"~/api/media")',
+            audioGet: '@Url.Content(@"~/Multimedia/AudioRecord")',
+            verboseLogging: false,
+            appVersion: '@(version.ToString())',
+            googleApiKey: '@Model.GoogleMapsKey',
+            googleMapsApiBaseUrl: 'https://maps.googleapis.com',
+            googleMapsBaseUrl: 'https://www.google.com',
+            inWebTesterMode: true,
+            reloadQuestionnaireUrl: '@Model.ReloadQuestionnaireUrl',
+            saveScenarioUrl: '@Model.SaveScenarioUrl',
+            getScenarioUrl: '@Model.GetScenarioUrl',
+            designerUrl: '@Model.DesignerUrl',
+            loadedMessage: '@TempData["Message"]',
+            customTexts: {
+                completeButton: "@Html.Raw(HttpUtility.JavaScriptStringEncode(WebInterview.Complete))",
+                noteToSupervisor: "@Html.Raw(HttpUtility.JavaScriptStringEncode(WebInterview.NoteForSupervisor))"
+            }
+        }
+        </script>
+    <locale component="webtester"></locale>
+</head>
+<body class="gray-background">
+
+@RenderSection("scripts", false)
+<div id="app"></div>
+@RenderSection("footer", false)
+</body>
+</html>

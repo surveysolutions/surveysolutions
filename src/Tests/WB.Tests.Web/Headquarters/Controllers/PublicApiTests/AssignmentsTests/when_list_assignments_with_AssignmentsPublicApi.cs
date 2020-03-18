@@ -1,10 +1,12 @@
 using System.Net;
-using System.Web.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
@@ -65,16 +67,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         }
 
         [Test]
-        public void should_throw_406_on_incorrect_sort_expression()
+        public async Task should_throw_406_on_incorrect_sort_expression()
         {
-            try
-            {
-                this.controller.List(new AssignmentsListFilter { Order = "Nonexisting" });
-            }
-            catch (HttpResponseException hre)
-            {
-                Assert.That(hre.Response.StatusCode, Is.EqualTo(HttpStatusCode.NotAcceptable));
-            }
+            var result = await this.controller.List(new AssignmentsListFilter { Order = "Nonexisting" });
+            Assert.That(result.Result, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status406NotAcceptable));
         }
     }
 }

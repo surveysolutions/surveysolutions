@@ -7,7 +7,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services

@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.Controllers.Api;
 using WB.UI.Headquarters.Models.Api;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments

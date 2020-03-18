@@ -32,19 +32,16 @@ namespace WB.Core.Infrastructure.DependencyInjection
             initModules.AddRange(modules);
         }
 
-        
         public Task InitAsync(IServiceProvider serviceProvider)
         {
-            var status = new UnderConstructionInfo();
-            this.services.AddSingleton(typeof(UnderConstructionInfo), sp => status);
-            
-            var initTask = Task.Run(async () => await InitModules(status, serviceProvider));
+            var initTask = Task.Run(async () => await InitModules(serviceProvider));
             return initTask;
         }
 
-        private async Task InitModules(UnderConstructionInfo status, IServiceProvider serviceProvider)
+        private async Task InitModules(IServiceProvider serviceProvider)
         {
-            status.Run();
+            var status = serviceProvider.GetService<UnderConstructionInfo>();
+            status?.Run();
 
             try
             {
@@ -53,21 +50,21 @@ namespace WB.Core.Infrastructure.DependencyInjection
                     var serviceLocatorLocal = scope.ServiceProvider.GetService<IServiceLocator>();
                     foreach (var module in initModules)
                     {
-                        status.ClearMessage();
+                        status?.ClearMessage();
                         await module.InitAsync(serviceLocatorLocal, status);
                     }
                 }
 
-                status.Finish();
+                status?.Finish();
             }
             catch (InitializationException ie)  when(ie.Subsystem == Subsystem.Database)
             {
-                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringRunningMigrations, ie);
+                status?.Error(Core.Infrastructure.Resources.Modules.ErrorDuringRunningMigrations, ie);
                 serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(ie, "Exception during running migrations");
             }
             catch(Exception e)
             {
-                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringSiteInitialization, e);
+                status?.Error(Core.Infrastructure.Resources.Modules.ErrorDuringSiteInitialization, e);
                 serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(e, "Exception during site initialization");
             }
         }

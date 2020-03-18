@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
@@ -9,21 +10,19 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -39,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 Mock.Of<IJsonAllTypesSerializer>(x => x.Deserialize<SyncItem>(It.IsAny<string>()) == new SyncItem() &&
                                           x.Deserialize<InterviewMetaInfo>(It.IsAny<string>()) == new InterviewMetaInfo { Status = 0 } &&
                                           x.Deserialize<AggregateRootEvent[]>(decompressedEvents) == new AggregateRootEvent[0]);
-            var syncSettings = Mock.Of<SyncSettings>(x => x.UseBackgroundJobForProcessingPackages == true);
+            var syncSettings = Mock.Of<SyncSettings>();
 
             brokenPackagesStorage = new TestPlainStorage<BrokenInterviewPackage>();
             packagesStorage = new TestPlainStorage<InterviewPackage>();
@@ -68,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IInterviewUniqueKeyGenerator>()).Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
 
             var users = new Mock<IUserRepository>();
-            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { /*SupervisorId = supervisorId*/ } }));
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { /*SupervisorId = supervisorId*/ } }));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
@@ -89,7 +88,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                     interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object,
                     syncSettings: syncSettings);
 
-            interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
+            interviewPackagesService.ProcessPackage(new InterviewPackage
                 {
                     InterviewId = Guid.Parse("11111111111111111111111111111111"),
                     QuestionnaireId = Guid.Parse("22222222222222222222222222222222"),
@@ -99,9 +98,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                     IsCensusInterview = false,
                     Events = "compressed serialized events"
                 });
-
-            interviewPackagesService.ProcessPackage("1");
-            
         }
         
         [Test]

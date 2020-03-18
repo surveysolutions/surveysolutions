@@ -23,8 +23,6 @@ namespace WB.Infrastructure.Native.Storage
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
 
-        private static readonly ConcurrentDictionary<string, bool> CacheCountTracker = new ConcurrentDictionary<string, bool>();
-
         public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, 
             IInMemoryEventStore inMemoryEventStore,
             EventBusSettings eventBusSettings,
@@ -72,8 +70,12 @@ namespace WB.Infrastructure.Native.Storage
 
         private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
         {
-            if (!(Cache.Get(Key(aggregateId)) is IEventSourcedAggregateRoot cachedAggregate)) return null;
-
+            if (!(Cache.Get(Key(aggregateId)) is IEventSourcedAggregateRoot cachedAggregate))
+            {
+                CommonMetrics.StatefullInterviewCacheMiss.Inc();
+                return null;
+            }
+            
             bool isDirty = cachedAggregate.HasUncommittedChanges() || eventStore.GetLastEventSequence(aggregateId) != cachedAggregate.Version; 
 
             if (isDirty)
@@ -84,6 +86,7 @@ namespace WB.Infrastructure.Native.Storage
 
             this.serviceLocator.InjectProperties(cachedAggregate);
 
+            CommonMetrics.StatefullInterviewCacheHit.Inc();
             return cachedAggregate;
         }
 
@@ -94,28 +97,26 @@ namespace WB.Infrastructure.Native.Storage
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
         {
             var key = Key(aggregateRoot.EventSourceId);
-
-            CacheCountTracker.AddOrUpdate(key, true, (k, old) => true);
-            CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
-
+            
             Cache.Set(key, aggregateRoot, new CacheItemPolicy
             {
                 RemovedCallback = OnUpdateCallback,
                 SlidingExpiration = Expiration
             });
+
+            CommonMetrics.StatefullInterviewCached.Inc();
         }
 
         private void OnUpdateCallback(CacheEntryRemovedArguments arguments)
         {
-            CacheItemRemoved(arguments.CacheItem.Key);
+            CacheItemRemoved(arguments.CacheItem.Key, arguments.RemovedReason);
         }
 
         protected virtual string Key(Guid id) => "aggregateRoot_" + id;
         
-        protected virtual void CacheItemRemoved(string key)
+        protected virtual void CacheItemRemoved(string key, CacheEntryRemovedReason reason)
         {
-            CacheCountTracker.TryRemove(key, out _);
-            CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
+            CommonMetrics.StatefullInterviewEvicted.Labels(reason.ToString()).Inc();
         }
 
         public void Evict(Guid aggregateId)
@@ -126,7 +127,7 @@ namespace WB.Infrastructure.Native.Storage
 
                 if (Cache.Remove(key) != null)
                 {
-                    CacheItemRemoved(key);
+                    CacheItemRemoved(key, CacheEntryRemovedReason.Evicted);
                 }
             });
         }

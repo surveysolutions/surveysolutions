@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Questionnaire;
-using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.ReusableCategoriesFillerIntoQuestionnaireTests

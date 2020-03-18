@@ -1,12 +1,15 @@
 ﻿using System;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 
 namespace WB.Services.Export.Services.Processing
 {
     public class DataExportProcessView
     {
+        public long Id { get; set; }
         public string DataExportProcessId { get; set; }
         public DateTime BeginDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
         public int Progress { get; set; }
         public DataExportType Type { get; set; }
@@ -23,5 +26,6 @@ namespace WB.Services.Export.Services.Processing
         public double FileSize { get; set; }
         public DateTime DataFileLastUpdateDate { get; set; }
         public string DataDestination { get; set; }
+        public DataExportJobStatus JobStatus { get; internal set; }
     }
 }

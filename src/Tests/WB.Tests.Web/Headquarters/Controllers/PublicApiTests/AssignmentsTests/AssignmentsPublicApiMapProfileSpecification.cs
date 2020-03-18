@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using It = Moq.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -9,8 +10,8 @@ using Moq;
 using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -120,7 +121,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
                 Profile = new HqUserProfile() { SupervisorId = Guid.NewGuid() },
             };
             supervisorUser.Roles.Add(supervisorRole);
-            usersRepository.Setup(x => x.FindByIdAsync(supervisorId)).Returns(Task.FromResult(supervisorUser));
+            usersRepository.Setup(x => x.FindByIdAsync(supervisorId, It.IsAny<CancellationToken>())).Returns(Task.FromResult(supervisorUser));
             EnumerableQuery<HqUser> allUsers = new EnumerableQuery<HqUser>(new[] { supervisorUser });
             usersRepository.Setup(x => x.Users).Returns(allUsers);
             return usersRepository.Object;

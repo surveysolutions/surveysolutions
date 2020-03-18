@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -11,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
         public static QuestionnaireIdentity GetQuestionnaireIdentity(
             this IQueryableReadSideRepositoryReader<InterviewSummary> summaries, string interviewId)
         {
-            var questionnaireIdentity = summaries.GetById(interviewId)?.QuestionnaireIdentity;
+            var questionnaireIdentity = summaries.Query(_ => _.Where(s => s.SummaryId == interviewId).Select(x => x.QuestionnaireIdentity).FirstOrDefault());
             if (questionnaireIdentity != null)
                 return QuestionnaireIdentity.Parse(questionnaireIdentity);
 

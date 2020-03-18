@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
@@ -10,6 +11,7 @@ namespace WB.Services.Export.Jobs
     public interface IJobsStatusReporting
     {
         Task<DataExportProcessView> GetDataExportStatusAsync(long processId, TenantInfo tenant);
+        Task<List<DataExportProcessView>> GetDataExportStatusesAsync(long[] processIds, TenantInfo tenant);
 
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             TenantInfo tenant,

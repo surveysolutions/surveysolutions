@@ -708,8 +708,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 var categories = this.categoriesService.GetCategoriesById(document.PublicKey, categoricalQuestion.CategoriesId.Value);
                 var parentCategories = this.categoriesService.GetCategoriesById(document.PublicKey, parentQuestion.CategoriesId.Value);
 
-                hasErrors = parentCategories.GroupJoin(categories, item => item.Id, item => item.ParentId,
-                    (pc, c) => c).Any(x => !x.Any());
+                hasErrors = !categories.All(child => parentCategories.Any(parent => child.ParentId == parent.Id));
             }
 
             return new EntityVerificationResult<IComposite>
