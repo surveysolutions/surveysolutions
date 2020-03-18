@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Refit;
 using WB.Services.Export.Assignment;
@@ -86,6 +87,13 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
 
             progress.Report(100);
+        }
+
+        public async Task ExportAllAsync(TenantInfo tenantInfo, string basePath, ExportProgress progress,
+            CancellationToken cancellationToken)
+        {
+            var allAssignments = await this.dbContext.Assignments.OrderBy(x => x.Id).Select(x => x.Id).ToListAsync(cancellationToken);
+            await this.ExportAsync(allAssignments, tenantInfo, basePath, progress, cancellationToken);
         }
 
         public void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)

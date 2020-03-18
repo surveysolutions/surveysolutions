@@ -162,6 +162,12 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(fileData[9], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "2", "headquarters", "3", "interviewer", "1", null, null, null }));
         }
 
+        [Test]
+        public async Task should_be_able_to_export_all()
+        {
+            await actionsExporter.ExportAllAsync(tenant, "", new ExportProgress(), CancellationToken.None);
+            Assert.That(fileData[1], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "1", "headquarters", "3", "supervisor", "2", null, null, "created" }));
+        }
 
         private static int AssignmentId = 77;
         private static readonly Guid headquarters = Id.g1;

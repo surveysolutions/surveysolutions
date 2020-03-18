@@ -11,6 +11,7 @@ namespace WB.Services.Export.CsvExport.Exporters
     public interface IAssignmentActionsExporter
     {
         Task ExportAsync(List<int> assignmentIdsToExport, TenantInfo tenantInfo, string basePath, ExportProgress progress, CancellationToken cancellationToken);
+        Task ExportAllAsync(TenantInfo tenantInfo, string basePath, ExportProgress progress, CancellationToken cancellationToken);
         void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string folderPath);
         string AssignmentActionsFileName { get; }
         DoExportFileHeader[] ActionFileColumns { get; }
