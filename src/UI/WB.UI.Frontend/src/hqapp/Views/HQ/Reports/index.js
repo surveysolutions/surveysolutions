@@ -66,6 +66,10 @@ export default class ReportComponent {
                 component: SpeedAndQuantity,
             },
             {
+                path: '/Reports/SpeedByInterviewers',
+                component: SpeedAndQuantity,
+            },
+            {
                 path: '/Reports/QuantityByInterviewers',
                 component: SpeedAndQuantity,
             },
