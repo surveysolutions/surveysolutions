@@ -33,11 +33,6 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class AssignmentViewItem
     {
-        public AssignmentViewItem()
-        {
-            IdentifyingQuestions = new List<AssignmentIdentifyingDataItem>();
-        }
-
         [DataMember] public int Id { get; set; }
 
         [DataMember] public Guid ResponsibleId { get; set; }
@@ -88,10 +83,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// </summary>
         [DataMember]
         public DateTime UpdatedAtUtc { get; set; }
-
-        [DataMember]
-        public List<AssignmentIdentifyingDataItem> IdentifyingQuestions { get; set; }
-
+        
         [DataMember]
         public string Email { get; set; }
 
