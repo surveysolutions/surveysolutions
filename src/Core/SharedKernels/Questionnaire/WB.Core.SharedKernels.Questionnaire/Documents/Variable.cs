@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
                 this.Name = variableData.Name;
                 this.Expression = variableData.Expression;
                 this.Label = variableData.Label;
+                this.DoNotExport = variableData.DoNotExport;
             }
         }
 
@@ -27,6 +28,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
         public VariableType Type { get; set; }
         public string Name { get; set; }
         public string Expression { get; set; }
+        public bool DoNotExport { get; set; }
 
         private ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
 

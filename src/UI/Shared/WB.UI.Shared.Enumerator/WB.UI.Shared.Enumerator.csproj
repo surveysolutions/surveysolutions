@@ -75,6 +75,7 @@
     <Compile Include="CustomControls\FixedMvxFilteringAdapter.cs" />
     <Compile Include="CustomControls\PdfViewFragment.cs" />
     <Compile Include="CustomServices\GoogleApiService.cs" />
+    <Compile Include="EnumeratorLoggingModule.cs" />
     <Compile Include="Migrations\Encrypt_Data.cs" />
     <Compile Include="Migrations\M201912091307_ChangeIdTypeInOptionViewTable.cs" />
     <Compile Include="Migrations\M202001291224_RemoveDuplicatedCategoriesInOptionViewTable.cs" />
@@ -2221,7 +2222,7 @@
       <Version>4.9.4</Version>
     </PackageReference>
     <PackageReference Include="Autofac.Extras.MvvmCross">
-      <Version>5.0.0</Version>
+      <Version>5.1.0</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core">
       <Version>2.7.9</Version>

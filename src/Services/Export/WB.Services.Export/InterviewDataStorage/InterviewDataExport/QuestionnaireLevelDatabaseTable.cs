@@ -47,6 +47,8 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
             foreach (var child in @group.Children)
             {
+                if (!child.IsExportable) continue;
+
                 switch (child)
                 {
                     case Question question:

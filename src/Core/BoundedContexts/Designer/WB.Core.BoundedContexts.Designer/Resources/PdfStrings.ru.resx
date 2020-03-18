@@ -386,4 +386,7 @@
     <value>описание опросника</value>
     <comment>описание опросника</comment>
   </data>
+  <data name="VariableExcludedFromExport" xml:space="preserve">
+    <value>Значение этой переменной исключено из экспортных данных</value>
+  </data>
 </root>

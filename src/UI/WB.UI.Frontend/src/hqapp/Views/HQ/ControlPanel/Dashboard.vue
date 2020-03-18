@@ -84,7 +84,7 @@ export default {
             const self = this
             this.$hq.ControlPanel.getHealthResult().then(response => {
                 self.report = response.data
-                setTimeout(this.getHealth, 5000)
+                setTimeout(this.getHealth, 1000)
             })
 
             this.$hq.ControlPanel.getMetricsState().then(response => {

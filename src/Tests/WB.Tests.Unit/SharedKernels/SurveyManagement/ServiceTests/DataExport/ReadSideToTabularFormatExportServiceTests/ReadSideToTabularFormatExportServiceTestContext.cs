@@ -47,32 +47,32 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             
 
             //aa
-            readSideToTabularFormatExportService.CreateHeaderStructureForPreloadingForQuestionnaire(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "");
+            readSideToTabularFormatExportService.CreateTemplateFilesForAdvancedPreloading(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "");
             
             //aaa
             Assert.That(rows.Count, Is.EqualTo(4));
             Assert.That(rows[0].First(), 
                 Is.EqualTo(new object[]
                 {
-                    ServiceColumns.InterviewId, "1", "a", "long__var", "sssys_irnd", ServiceColumns.Key, ServiceColumns.HasAnyError, ServiceColumns.InterviewStatus
+                    ServiceColumns.InterviewId, "1", "a"
                 }));
 
             Assert.That(rows[1].First(),
                 Is.EqualTo(new string[]
                 {
-                    "first_roster_level__id", "r1", "r2", "1", "a", "long__var", ServiceColumns.InterviewId, ServiceColumns.Key
+                    "first_roster_level__id", "r1", "r2", "1", "a", ServiceColumns.InterviewId
                 }));
 
             Assert.That(rows[2].First(), 
                 Is.EqualTo(new string[]
                 {
-                    "second_roster_level__id", "r1", "r2", "1", "a", "long__var", "first_roster_level__id", ServiceColumns.InterviewId, ServiceColumns.Key
+                    "second_roster_level__id", "r1", "r2", "1", "a", "first_roster_level__id", ServiceColumns.InterviewId
                 }));
 
             Assert.That(rows[3].First(),
                 Is.EqualTo(new string[]
                 {
-                    "third_roster_level__id", "r1", "r2", "1", "a", "long__var", "second_roster_level__id", "first_roster_level__id", ServiceColumns.InterviewId, ServiceColumns.Key
+                    "third_roster_level__id", "r1", "r2", "1", "a", "second_roster_level__id", "first_roster_level__id", ServiceColumns.InterviewId
                 }));
         }
     }

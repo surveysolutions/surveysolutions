@@ -210,7 +210,11 @@ namespace WB.UI.Designer
           
             if (!env.IsDevelopment())
             {
-                app.UseStatusCodePagesWithReExecute("/error/{0}");
+                app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
+                    appBuilder =>
+                    {
+                        appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
+                    });
             }
 
             if (!env.IsDevelopment())
@@ -235,7 +239,7 @@ namespace WB.UI.Designer
                 app.UseStaticFiles(new StaticFileOptions
                 {
                     RequestPath = "/js/app",
-                    FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"\questionnaire\scripts"),
+                    FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"/questionnaire/scripts"),
                     OnPrepareResponse = ctx =>
                     {
                         // remove cache

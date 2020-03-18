@@ -5,7 +5,9 @@
     <a class="item-body" id="{{item.itemId}}" ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})">
         <div class="item-text">
             <div class="icon icon-statictext"></div>
-            <span ng-bind-html="item.text | escape | highlight:search.searchText"></span>
+            <span ng-if="item.text" ng-bind-html="item.text | escape | highlight:search.searchText"></span>
+            <span ng-if="!item.text && item.attachmentName" ng-bind-html="'Attachment: ' + item.attachmentName | escape | highlight:search.searchText"></span>
+            <span ng-if="!item.text && !item.attachmentName" ng-bind-html="item.text | escape | highlight:search.searchText"></span>
         </div>
         <div class="qname-block">
             <div class="conditions-block">

@@ -154,6 +154,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             //aaa
             Assert.That(contentVersion, Is.EqualTo(29));
         }
+        
+        [Test]
+        public void should_return_29_when_custom_title_used()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                    Create.Roster(customRosterTitle: true)
+            );
+
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(29));
+        }
 
     }
 }

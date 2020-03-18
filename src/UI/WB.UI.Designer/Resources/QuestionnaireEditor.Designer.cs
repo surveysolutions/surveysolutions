@@ -430,6 +430,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom title.
+        /// </summary>
+        public static string CustomRosterTitle {
+            get {
+                return ResourceManager.GetString("CustomRosterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New roster.
         /// </summary>
         public static string DefaultNewRoster {
@@ -916,11 +925,29 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allows to override template for roster button and provide custom text for %rostertitle%.
+        /// </summary>
+        public static string HelpCustomTitle {
+            get {
+                return ResourceManager.GetString("HelpCustomTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This date will be shown as started date for selection on a tablet.
         /// </summary>
         public static string HelpDefaultDate {
             get {
                 return ResourceManager.GetString("HelpDefaultDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mark this variable to be excluded from the exported data..
+        /// </summary>
+        public static string HelpDoNotExport {
+            get {
+                return ResourceManager.GetString("HelpDoNotExport", resourceCulture);
             }
         }
         
@@ -3769,6 +3796,15 @@ namespace WB.UI.Designer.Resources {
         public static string VariableName {
             get {
                 return ResourceManager.GetString("VariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not export.
+        /// </summary>
+        public static string VariableNoExport {
+            get {
+                return ResourceManager.GetString("VariableNoExport", resourceCulture);
             }
         }
         

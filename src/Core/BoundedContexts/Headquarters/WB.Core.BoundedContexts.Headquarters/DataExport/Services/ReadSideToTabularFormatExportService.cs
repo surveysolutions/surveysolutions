@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
-        public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
+        public void CreateTemplateFilesForAdvancedPreloading(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireIdentity);
@@ -60,7 +60,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 var interviewLevelHeader = new List<string> {level.LevelIdColumnName};
 
-
                 if (level.IsTextListScope)
                 {
                     interviewLevelHeader.AddRange(level.ReferencedNames);
@@ -68,12 +67,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
                 {
-                    interviewLevelHeader.AddRange(headerItem.ColumnHeaders.Select(x=> x.Name));
-                }
+                    if (headerItem is ExportedVariableHeaderItem)
+                        continue;
 
-                if (level.LevelScopeVector.Length == 0)
-                {
-                    interviewLevelHeader.AddRange(ServiceColumns.SystemVariables.Values.Select(systemVariable => systemVariable.VariableExportColumnName));
+                    interviewLevelHeader.AddRange(headerItem.ColumnHeaders.Select(x=> x.Name));
                 }
 
                 interviewLevelHeader.AddRange(questionnaireExportStructure.GetAllParentColumnNamesForLevel(level.LevelScopeVector));

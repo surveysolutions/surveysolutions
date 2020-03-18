@@ -96,6 +96,7 @@
                     $rootScope.$emit('staticTextUpdated', {
                         itemId: $scope.activeStaticText.itemId,
                         text: $scope.activeStaticText.text,
+                        attachmentName: $scope.activeStaticText.attachmentName,
 
                         hasCondition: hasEnablementConditions($scope.activeStaticText),
                         hasValidation: hasValidations($scope.activeStaticText),

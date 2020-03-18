@@ -401,4 +401,7 @@
   <data name="InterviewerAssigned" xml:space="preserve">
     <value>статусе назначено на интервьюера</value>
   </data>
+  <data name="DataExport_CompletedOn" xml:space="preserve">
+    <value>Завершено: {{date}}</value>
+  </data>
 </root>

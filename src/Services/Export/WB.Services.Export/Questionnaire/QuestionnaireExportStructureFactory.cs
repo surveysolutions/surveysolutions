@@ -487,6 +487,8 @@ namespace WB.Services.Export.Questionnaire
 
             foreach (var groupChild in @group.Children)
             {
+                if (groupChild.IsExportable == false) continue;
+
                 if (groupChild is Question question)
                 {
                     if (this.IsQuestionMultiOption(question))
@@ -524,7 +526,7 @@ namespace WB.Services.Export.Questionnaire
                     continue;
                 }
 
-                if (groupChild is Variable variable)
+                if (groupChild is Variable variable && variable.DoNotExport == false)
                 {
                     if (supportVariables)
                         AddHeadersForVariable(headerStructureForLevel.HeaderItems, variable);

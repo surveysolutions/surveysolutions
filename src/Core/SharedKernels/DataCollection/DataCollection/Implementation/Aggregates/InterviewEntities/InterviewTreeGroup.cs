@@ -12,7 +12,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private bool isDisabled;
         private List<IInterviewTreeNode> children = new List<IInterviewTreeNode>();
 
-        protected InterviewTreeGroup(Identity identity, SubstitutionText title, IEnumerable<QuestionnaireItemReference> childrenReferences)
+        protected InterviewTreeGroup(Identity identity,
+            SubstitutionText title, 
+            IEnumerable<QuestionnaireItemReference> childrenReferences)
         {
             this.childEntitiesReferences = childrenReferences.ToList();
 

@@ -21,6 +21,7 @@
                 $scope.activeVariable.typeOptions = variable.typeOptions;
                 $scope.activeVariable.typeName = _.find($scope.activeVariable.typeOptions, { value: variable.type }).text;
                 $scope.activeVariable.label = variable.label;
+                $scope.activeVariable.doNotExport = variable.doNotExport || false
             };
 
             $scope.setType = function (type) {
@@ -39,7 +40,8 @@
                             itemId: $scope.activeVariable.itemId,
                             name: $scope.activeVariable.variable,
                             label: $scope.activeVariable.label,
-                            type: $scope.activeVariable.type
+                            type: $scope.activeVariable.type,
+                            doNotExport: $scope.activeVariable.doNotExport
                     });
                         if (_.isFunction(callback)) {
                             callback();
