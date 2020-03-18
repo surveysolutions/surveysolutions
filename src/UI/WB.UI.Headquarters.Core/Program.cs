@@ -36,8 +36,8 @@ namespace WB.UI.Headquarters
             Host.CreateDefaultBuilder(args)
                 .UseSerilog((host, loggerConfig) =>
                 {
-                    var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "log.log");
-                    var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "verbose.log");
+                    var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "headquarters.log");
+                    var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "headquarters.verbose.log");
 
                     loggerConfig
                         //.MinimumLevel.Debug()

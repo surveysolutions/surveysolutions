@@ -2094,5 +2094,23 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0302", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matrix roster cannot have custom roster title.
+        /// </summary>
+        public static string WB0303_MatrixRosterCannotHaveCustomTitle {
+            get {
+                return ResourceManager.GetString("WB0303_MatrixRosterCannotHaveCustomTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table roster cannot have custom roster title.
+        /// </summary>
+        public static string WB0304_TableRosterCannotHaveCustomTitle {
+            get {
+                return ResourceManager.GetString("WB0304_TableRosterCannotHaveCustomTitle", resourceCulture);
+            }
+        }
     }
 }

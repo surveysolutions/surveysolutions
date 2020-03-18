@@ -14,5 +14,17 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             questionnaire.ExpectNoError("WB0017");
         }
+
+
+        [Test]
+        public void should_not_produce_substitution_error_for_custom_title_rosters()
+        {
+            var questionniare = Create.QuestionnaireDocumentWithOneChapter(
+                Create.Roster(title: "roster %rostertitle%",
+                    customRosterTitle: true
+                ));
+
+            questionniare.ExpectNoError("WB0059");
+        }
     }
 }

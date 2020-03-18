@@ -10,7 +10,7 @@
 
 <div class="question-container" id="@questionnaire.GetItemRef(variable.PublicKey)">
     <div class="question">
-        <div class="question-title" ><div class="type">@PdfStrings.Variable</div></div>
+        <div class="question-title"><div class="type">@PdfStrings.Variable</div></div>
         <div class="common-info">
             <div class="variable-expression">
                 @questionnaire.GetVariableExpressionExcerpt(variable)
@@ -32,5 +32,11 @@
             </div>
             <div class="variable_name">@variable.Name</div>
         </div>
+        @if (variable.DoNotExport)
+        {
+            <div class="answer-editor common-info">
+                @PdfStrings.VariableExcludedFromExport
+            </div>
+        }
     </div>
 </div>

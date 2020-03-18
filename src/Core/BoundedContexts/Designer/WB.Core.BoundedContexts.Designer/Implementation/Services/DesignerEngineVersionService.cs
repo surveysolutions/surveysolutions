@@ -250,11 +250,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     }
                 }
             },
-            new QuestionnaireContentVersion
+             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, 
+                Version = ApiVersion.MaxQuestionnaireVersion,
                 NewFeatures = new []
                 {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire =>  questionnaire.GetAllGroups().Any(x => x.CustomRosterTitle),
+                        Description = "Custom roster title"
+                    },
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire =>  questionnaire.Find<ICategoricalQuestion>(question => !string.IsNullOrEmpty(question.Properties.OptionsFilterExpression)).Any(),

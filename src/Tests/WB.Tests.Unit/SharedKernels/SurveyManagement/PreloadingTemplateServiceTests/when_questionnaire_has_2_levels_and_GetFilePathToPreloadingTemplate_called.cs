@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
            result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_only_create_template_for_preload_once () =>
-            exportedDataFormatter.Verify(x => x.CreateHeaderStructureForPreloadingForQuestionnaire(new QuestionnaireIdentity(questionnaireId, 1), Moq.It.IsAny<string>()), Times.Once);
+            exportedDataFormatter.Verify(x => x.CreateTemplateFilesForAdvancedPreloading(new QuestionnaireIdentity(questionnaireId, 1), Moq.It.IsAny<string>()), Times.Once);
 
         private static AssignmentImportTemplateGenerator assignmentImportTemplateGenerator;
         private static string result;

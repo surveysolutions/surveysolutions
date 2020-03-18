@@ -80,6 +80,8 @@ namespace Main.Core.Entities.SubEntities
 
         public bool IsRoster { get; set; }
 
+        public bool CustomRosterTitle { get; set; }
+
         public Guid? RosterSizeQuestionId { get; set; }
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
@@ -179,6 +181,7 @@ namespace Main.Core.Entities.SubEntities
                 Title = this.Title,
                 VariableName = this.VariableName,
                 IsRoster = this.IsRoster,
+                CustomRosterTitle = this.CustomRosterTitle,
                 HideIfDisabled = this.HideIfDisabled,
                 DisplayMode = this.DisplayMode,
                 RosterSizeQuestionId = this.RosterSizeQuestionId,

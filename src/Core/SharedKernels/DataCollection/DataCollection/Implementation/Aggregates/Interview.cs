@@ -2215,7 +2215,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
                 }
             }
-            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
+            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer, responsibleId);
             this.ApplyProtectedAnswers(diff);
             this.ApplyPassiveEvents(diff); 
         }
@@ -2502,12 +2502,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ApplyRemoveAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions)
+        private void ApplyRemoveAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid userId)
         {
             var questionIdentittiesWithRemovedAnswer = diffByQuestions.Select(x => x.SourceNode.Identity).ToArray();
 
             if (questionIdentittiesWithRemovedAnswer.Any())
-                this.ApplyEvent(new AnswersRemoved(questionIdentittiesWithRemovedAnswer, DateTimeOffset.Now));
+                this.ApplyEvent(new AnswersRemoved(userId, questionIdentittiesWithRemovedAnswer, DateTimeOffset.Now));
         }
 
         private void ApplyRosterEvents(InterviewTreeRosterDiff[] diff)

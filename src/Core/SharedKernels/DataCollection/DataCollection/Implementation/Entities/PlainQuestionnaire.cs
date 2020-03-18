@@ -1921,5 +1921,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return innerDocument.EntitiesIdMap[entityId];
         }
+
+        public bool HasCustomRosterTitle(Guid id)
+        {
+            return this.GetGroup(id)?.CustomRosterTitle == true;
+        }
     }
 }

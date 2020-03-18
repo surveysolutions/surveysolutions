@@ -70,6 +70,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
                     var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, SidebarMapOptions);
+                    sidebar.HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(child.Identity.Id);
+
                     result.Groups.Add(sidebar);
                 }
 
@@ -328,6 +330,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (group != null)
             {
                 var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(group);
+                if (questionnaire.HasCustomRosterTitle(group.Identity.Id))
+                {
+                    result.RosterTitle = null;
+                }
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyGroupStateData(result, group, callerInterview, isReviewMode, questionnaire);

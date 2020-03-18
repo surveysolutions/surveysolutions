@@ -51,10 +51,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 
             if (this.substitutionService.ContainsRosterTitle(text))
             {
+                var rostersFromTop = questionnaire.GetRostersFromTopToSpecifiedEntity(identity.Id).ToList();
                 substitutionVariables.Add(new SubstitutionVariable
                 {
                     Name = this.substitutionService.RosterTitleSubstitutionReference,
-                    Id = questionnaire.GetRostersFromTopToSpecifiedEntity(identity.Id).Last()
+                    Id = rostersFromTop.Count > 0 ? rostersFromTop[rostersFromTop.Count - 1] : identity.Id
                 });
             }
             

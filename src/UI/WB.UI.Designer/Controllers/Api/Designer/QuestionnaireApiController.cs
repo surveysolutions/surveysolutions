@@ -105,7 +105,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 TypeOptions = variableView.TypeOptions,
                 Type = variableView.VariableData.Type,
                 breadcrumbs = variableView.Breadcrumbs,
-                label = variableView.VariableData.Label
+                label = variableView.VariableData.Label,
+                variableView.VariableData.DoNotExport
             });
 
             return result;
