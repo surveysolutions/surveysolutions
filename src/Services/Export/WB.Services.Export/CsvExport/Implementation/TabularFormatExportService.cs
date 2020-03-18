@@ -95,7 +95,11 @@ namespace WB.Services.Export.CsvExport.Implementation
 
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(questionnaireIdentity, status, fromDate, toDate);
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
-            var assignmentIdsToExport = new HashSet<int>(interviewsToExport.Where(x => x.AssignmentId.HasValue).Select(x => x.AssignmentId.Value)).ToList();
+
+            bool shouldExportAllAssignments = status == null && fromDate == null && toDate == null;
+            var assignmentIdsToExport =
+                shouldExportAllAssignments ? new List<int>() :
+                new HashSet<int>(interviewsToExport.Where(x => x.AssignmentId.HasValue).Select(x => x.AssignmentId.Value)).ToList();
 
             Stopwatch exportWatch = Stopwatch.StartNew();
 
@@ -104,7 +108,17 @@ namespace WB.Services.Export.CsvExport.Implementation
             await this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cancellationToken);
             await this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cancellationToken);
             await this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant,  exportDiagnosticsProgress, cancellationToken);
-            await this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath,  exportAssignmentActionsProgress, cancellationToken);
+
+            if (shouldExportAllAssignments)
+            {
+                await this.assignmentActionsExporter.ExportAllAsync(tenant, tempPath, exportAssignmentActionsProgress,
+                    cancellationToken);
+            }
+            else
+            {
+                await this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath,  exportAssignmentActionsProgress, cancellationToken);
+            }
+            
             await this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
 
             exportWatch.Stop();
