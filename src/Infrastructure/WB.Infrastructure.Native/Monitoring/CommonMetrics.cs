@@ -12,5 +12,8 @@
         public static Gauge NpgsqlConnectionsPoolCount = new Gauge("npgsql_connection_pools_current", "Number of connection pools managed by Npgsql");
         public static Counter NpgsqlDataCounter = new Counter("npgsql_data_total_bytes", "Amount of byte read/write by Npgsql", "direction");
         public static Counter ExceptionsOccur = new Counter("wb_exceptions_total_count", "Total number of exceptions happen on site during it's life time");
+
+        public static Counter InterviewsCreatedCount = new Counter("wb_interviews_created_total", "Total number of interviews created during app life time");
+        public static Counter EventsCreatedCount = new Counter("wb_events_created_total", "Total number of events created during app life time");
     }
 }
