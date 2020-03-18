@@ -42,6 +42,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             foreach (var assignmentAction in assignmentActions)
                 dbContext.Add(assignmentAction);
+            dbContext.Assignments.Add(new Assignment.Assignment() {Id = AssignmentId});
             dbContext.SaveChanges();
 
             Mock<ICsvWriter> csvWriterMock = new Mock<ICsvWriter>();
