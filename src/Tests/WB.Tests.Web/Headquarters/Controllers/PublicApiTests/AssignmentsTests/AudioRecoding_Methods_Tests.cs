@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -32,7 +30,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             var response = controller.AudioRecoding(15);
 
             // Assert
-            Assert.That(response.Enabled, Is.False);
+            Assert.That(response.Value.Enabled, Is.False);
         }
 
         [Test]
@@ -48,12 +46,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService);
 
             // Act
-            TestDelegate act = () => controller.AudioRecoding(15);
+            var result = controller.AudioRecoding(15);
 
             // Assert
-            Assert.That(act, Throws.Exception.InstanceOf<HttpResponseException>()
-                                             .With.Property(nameof(HttpResponseException.Response))
-                                             .With.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound));
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
@@ -73,7 +69,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             var response = controller.AudioRecodingPatch(15, new UpdateRecordingRequest{Enabled = true});
 
             // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
+            Assert.That(response, Is.InstanceOf<NoContentResult>());
             Mock.Get(commandService).Verify(c => c.Execute(It.Is<UpdateAssignmentAudioRecording>(a => a.PublicKey == assignment.PublicKey), null), Times.Once);
         }
     }

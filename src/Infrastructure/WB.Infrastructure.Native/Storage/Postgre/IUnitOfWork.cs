@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NHibernate;
 
 namespace WB.Infrastructure.Native.Storage.Postgre

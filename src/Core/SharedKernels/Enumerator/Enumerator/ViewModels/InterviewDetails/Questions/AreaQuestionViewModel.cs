@@ -125,8 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire =
                 this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            this.geometryType = questionnaire.GetQuestionByVariable(questionnaire.GetQuestionVariableName(entityIdentity.Id)).Properties
-                .GeometryType;
+            this.geometryType = questionnaire.GetQuestionGeometryType(entityIdentity.Id);
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);

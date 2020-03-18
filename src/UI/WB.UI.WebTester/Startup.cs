@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,13 +10,15 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Logging;
 using WB.UI.Shared.Web.Controllers;
+using WB.UI.Shared.Web.Diagnostics;
+using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.Versions;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
@@ -47,7 +48,6 @@ namespace WB.UI.WebTester
             services.AddSession();
             services.AddResponseCaching();
             services.AddResponseCompression();
-            services.AddLogging();
             services.AddSignalR()
                 .AddNewtonsoftJsonProtocol();
             services.Configure<TesterConfiguration>(this.Configuration);
@@ -55,6 +55,7 @@ namespace WB.UI.WebTester
 
             services.AddHealthChecks()
                 .AddCheck<DesignerConnectionCheck>("designer-connection");
+
         }
 
         // ConfigureContainer is where you can register things directly
@@ -66,7 +67,7 @@ namespace WB.UI.WebTester
             autofacKernel = new AutofacKernel(builder);
             autofacKernel.Load(
                 new NcqrsModule(),
-                new NLogLoggingModule(),
+                new SerilogLoggerModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
                 //new CaptchaModule("recaptcha"),
@@ -78,24 +79,18 @@ namespace WB.UI.WebTester
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var initTask = autofacKernel.InitCoreAsync(app.ApplicationServices.GetAutofacRoot(), false);
+            var initTask = autofacKernel.InitAsync(true);
+            initTask.Wait(TimeSpan.FromSeconds(5));
 
             if (!env.IsDevelopment())
             {
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
                 app.UseHttpsRedirection();
-                initTask.Wait();
+            }
 
-            }
-            else
-            {
-                initTask.Wait(TimeSpan.FromSeconds(10));
-            }
-            
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
             {
-                RequestPath = "/Content",
                 OnPrepareResponse = ctx =>
                 {
                     if (!env.IsDevelopment())
@@ -107,7 +102,7 @@ namespace WB.UI.WebTester
 
             app.UseCookiePolicy();
             app.UseSession();
-
+            app.UseSerilogRequestLogging();
             app.UseRequestLocalization(opt =>
             {
                 opt.DefaultRequestCulture = new RequestCulture("en-US");
@@ -128,25 +123,15 @@ namespace WB.UI.WebTester
 
             app.UseRouting();
 
-            app.UseEndpoints(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHealthChecks(".hc");
+                endpoints.MapVersionEndpoint();
+                endpoints.MapHealthChecks(".hc");
 
-                routes.MapControllerRoute("Section", "WebTester/Interview/{id:Guid}/Section/{sectionId:Guid}", 
-                    defaults: new { controller = "WebTester", action = "Section" });
+                endpoints.MapDefaultControllerRoute();
 
-                routes.MapControllerRoute("Interview", "WebTester/Interview/{id}/{*url}", new
-                {
-                    controller = "WebTester",
-                    action = "Interview"
-                });
-
-                routes.MapHub<WebInterview>("interview",
+                endpoints.MapHub<WebInterview>("interview",
                     options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
-
-                routes.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=WebTester}/{action=Index}/{id?}");
             });
           
         }

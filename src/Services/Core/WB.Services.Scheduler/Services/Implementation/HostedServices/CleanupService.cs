@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WB.Services.Infrastructure.Logging;
 
 namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 {
@@ -25,25 +26,31 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         {
             this.task = Task.Run(async () =>
             {
-                logger.LogTrace("Start cleaning of stale running jobs");
+                using var ctx = LoggingHelpers.LogContext("workerId", "Cleanup service");
+                logger.LogTrace("Start tracking of stale running jobs");
 
                 while (!cancellationToken.IsCancellationRequested)
                 { 
                     if (cancellationToken.IsCancellationRequested) break;
-                    
-                    using (var scope = this.serviceProvider.CreateScope())
-                    {
-                        var cleanup = scope.ServiceProvider.GetService<StaleJobCleanupService>();
-                        await cleanup.ExecuteAsync(cancellationToken);
-                    }
 
                     try
                     {
-                        await Task.Delay(TimeSpan.FromSeconds(options.Value.ClearStaleJobsInSeconds), cancellationToken);
+                        using (var scope = this.serviceProvider.CreateScope())
+                        {
+                            var cleanup = scope.ServiceProvider.GetService<StaleJobCleanupService>();
+                            await cleanup.ExecuteAsync(cancellationToken);
+                        }
+
+                        await Task.Delay(TimeSpan.FromSeconds(options.Value.ClearStaleJobsInSeconds),
+                            cancellationToken);
                     }
-                    catch (TaskCanceledException)
+                    catch (OperationCanceledException)
                     {
-                        logger.LogInformation("Cancellation received.");
+                        logger.LogInformation("CancellationToken cancel request received.");
+                    }
+                    catch (Exception e)
+                    {
+                        logger.LogError("Error while executing cleanup service", e);
                     }
                 }
             }, cancellationToken);

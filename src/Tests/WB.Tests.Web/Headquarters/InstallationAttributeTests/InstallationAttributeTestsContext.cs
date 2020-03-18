@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using Amazon.Runtime.Internal;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Routing;
 using Moq;
-using NSubstitute;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Tests.Abc;
 
 using WB.UI.Headquarters.Filters;
@@ -13,31 +17,30 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
 {
     internal class InstallationAttributeTestsContext
     {
-        protected static InstallationAttribute CreateInstallationAttribute()
+        protected static InstallationFilter CreateInstallationAttribute()
         {
-            var installationAttribute = new InstallationAttribute();
-            InstallationAttribute.Installed = false;
+            var installationAttribute = new InstallationFilter();
+            InstallationFilter.Installed = false;
             return installationAttribute;
         }
 
         protected static ActionExecutingContext CreateFilterContext(ControllerBase specifiedController = null, IUserRepository userRepository = null)
         {
-            var requestContext = new RequestContext(Mock.Of<HttpContextBase>(), new RouteData());
+            var defaultHttpContext = new DefaultHttpContext();
 
-            var controllerContext = new ControllerContext(requestContext,
-                specifiedController ?? Mock.Of<ControllerBase>());
+            var serviceContainer = new ServiceContainer();
+            serviceContainer.AddService(typeof(IUserRepository), userRepository ?? Create.Storage.UserRepository());
+            defaultHttpContext.RequestServices = serviceContainer;
 
-            var users = userRepository ?? Create.Storage.UserRepository();
-            
-            var dependencyResolver = Substitute.For<IDependencyResolver>();
-            dependencyResolver
-                .GetService<IUserRepository>()
-                .Returns(users);
-
-            DependencyResolver.SetResolver(dependencyResolver);
-
-            return new ActionExecutingContext(controllerContext, new Mock<ActionDescriptor>().Object,
-                new Dictionary<string, object>());
+            return new ActionExecutingContext(new ActionContext
+                {
+                    HttpContext = defaultHttpContext,
+                    RouteData = new RouteData(),
+                    ActionDescriptor = new ActionDescriptor()
+                }, 
+                new List<IFilterMetadata>(), 
+                new Dictionary<string, object>(), 
+                specifiedController);
         }
     }
 }

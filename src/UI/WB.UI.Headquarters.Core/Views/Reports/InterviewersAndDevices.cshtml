@@ -1,0 +1,14 @@
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Headquarters.Code
+
+@model WB.UI.Headquarters.Models.Reports.DevicesInterviewersModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.ActivePage = MenuItem.SurveyAndStatuses;
+    ViewBag.Title = Pages.InterviewersAndDevicesTitle;
+}
+
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>

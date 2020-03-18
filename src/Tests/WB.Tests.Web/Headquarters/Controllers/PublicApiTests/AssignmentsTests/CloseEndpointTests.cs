@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         public void should_return_404_when_assignment_not_found()
         {
             var httpResponseMessage = this.controller.Close(14);
-            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound));
+            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status404NotFound));
         }
 
         [Test]
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.SetupAssignment(assignment);
 
             var httpResponseMessage = this.controller.Close(assignment.Id);
-            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.Conflict));
+            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status409Conflict));
         }
 
         [Test]
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.SetupAssignment(assignment);
 
             var httpResponseMessage = this.controller.Close(assignment.Id);
-            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.Conflict));
+            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status409Conflict));
         }
 
         [Test]
@@ -50,7 +51,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             commandService.Verify(x => 
                 x.Execute(It.Is<UpdateAssignmentQuantity>(c => c.Quantity == 1 && c.PublicKey == assignment.PublicKey), null),
                 Times.Once);
-            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.OK));
+            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status200OK));
         }
     }
 }

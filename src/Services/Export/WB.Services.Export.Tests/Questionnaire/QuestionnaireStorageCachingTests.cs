@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -49,7 +50,7 @@ namespace WB.Services.Export.Tests.Questionnaire
             var qId = new QuestionnaireId(Guid.NewGuid() + "$1");
             var doc = Create.QuestionnaireDocument();
 
-            this.apiMock.Setup(a => a.GetQuestionnaireAsync(qId))
+            this.apiMock.Setup(a => a.GetQuestionnaireAsync(qId, It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(doc));
 
             await this.storage.GetQuestionnaireAsync(qId);
@@ -59,7 +60,7 @@ namespace WB.Services.Export.Tests.Questionnaire
             await this.storage.GetQuestionnaireAsync(qId);
             await this.storage.GetQuestionnaireAsync(qId);
 
-            this.apiMock.Verify(a => a.GetQuestionnaireAsync(qId), Times.Once,
+            this.apiMock.Verify(a => a.GetQuestionnaireAsync(qId, It.IsAny<CancellationToken>()), Times.Once,
                 "should query questionnaire from API on cold cache only once");
         }
     }

@@ -1,12 +1,10 @@
 ﻿#nullable enable
 using System;
-using System.Linq;
 using Dapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
-using WB.Services.Scheduler.Model;
 
 namespace WB.Services.Scheduler.Stats
 {

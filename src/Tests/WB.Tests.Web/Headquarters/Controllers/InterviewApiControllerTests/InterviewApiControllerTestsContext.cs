@@ -6,9 +6,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Tests.Abc;
-using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Controllers.Api;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
+namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
 {
     [NUnit.Framework.TestOf(typeof(InterviewApiController))]
     internal class InterviewApiControllerTestsContext
@@ -21,9 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
             return new InterviewApiController(
-                commandService ?? Mock.Of<ICommandService>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(), 
-                logger ?? Mock.Of<ILogger>(),
                 allInterviewsViewFactory ?? Stub<IAllInterviewsFactory>.WithNotEmptyValues,
                 teamInterviewViewFactory ?? Stub<ITeamInterviewsFactory>.WithNotEmptyValues,
                 changeStatusFactory ?? Stub<IChangeStatusFactory>.WithNotEmptyValues,

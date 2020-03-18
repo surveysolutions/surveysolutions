@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -11,9 +10,10 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using System.Collections.Generic;
-using NSubstitute;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -24,48 +24,44 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
     public class when_create_assignment_with_AssignmentsPublicApi : BaseAssignmentsControllerTest
     {
         [Test]
-        public void should_return_404_for_non_existing_responsibleUser()
+        public async Task should_return_404_for_non_existing_responsibleUser()
         {
-            Assert.ThrowsAsync(Is.TypeOf<HttpResponseException>()
-                    .And.Property(nameof(HttpResponseException.Response))
-                    .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound),
-                () => this.controller.Create(new CreateAssignmentApiRequest()
-                {
-                    Responsible = "any"
-                }));
+            var result = await this.controller.Create(new CreateAssignmentApiRequest()
+            {
+                Responsible = "any"
+            });
+            
+            Assert.That(result.Result, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status404NotFound));
         }
 
         [TestCase(UserRoles.Administrator)]
         [TestCase(UserRoles.Headquarter)]
         [TestCase(UserRoles.Observer)]
         [TestCase(UserRoles.ApiUser)]
-        public void should_return_406_for_non_interviewer_or_supervisor_assignee(UserRoles role)
+        public async Task should_return_406_for_non_interviewer_or_supervisor_assignee(UserRoles role)
         {
             this.SetupResponsibleUser(Create.Entity.HqUser(role: role));
 
-            Assert.ThrowsAsync(Is.TypeOf<HttpResponseException>()
-                    .And.Property(nameof(HttpResponseException.Response))
-                    .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotAcceptable),
-                () => this.controller.Create(new CreateAssignmentApiRequest
-                {
-                    Responsible = "any"
-                }));
+            var result = await this.controller.Create(new CreateAssignmentApiRequest
+            {
+                Responsible = "any"
+            });
+            
+            Assert.That(result.Result, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status406NotAcceptable));
         }
 
         [TestCase("bad_crafted_questionnarie_id")]
         [TestCase("f2250674-42e6-4756-b394-b86caa62225e$1")]
-        public void should_return_404_for_non_existing_questionnaire(string questionnaireId)
+        public async Task should_return_404_for_non_existing_questionnaire(string questionnaireId)
         {
             this.SetupResponsibleUser(Create.Entity.HqUser());
-
-            Assert.ThrowsAsync(Is.TypeOf<HttpResponseException>()
-                    .And.Property(nameof(HttpResponseException.Response))
-                    .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound),
-                () => this.controller.Create(new CreateAssignmentApiRequest
-                {
-                    QuestionnaireId = questionnaireId,
-                    Responsible = "any"
-                }));
+            var result = await this.controller.Create(new CreateAssignmentApiRequest
+            {
+                QuestionnaireId = questionnaireId,
+                Responsible = "any"
+            });
+            
+            Assert.That(result.Result, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status404NotFound));
         }
 
         [Test]
@@ -86,21 +82,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Setup(x => x.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()))
                 .Returns(new InterviewImportError("PL0011", "error"));
 
-            try
+            var response = await this.controller.Create(new CreateAssignmentApiRequest
             {
-                await this.controller.Create(new CreateAssignmentApiRequest
-                {
-                    QuestionnaireId = qid.ToString(),
-                    Responsible = "any"
-                });
-            }
-            catch (HttpResponseException hre)
-            {
-                Assert.That(hre.Response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-
-                var response = await hre.Response.Content.ReadAsAsync<CreateAssignmentResult>();
-                Assert.That(response.VerificationStatus.Errors, Has.Count.EqualTo(1));
-            }
+                QuestionnaireId = qid.ToString(),
+                Responsible = "any"
+            });
+            
+            Assert.That(response.Result, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status400BadRequest));
         }
 
         [Test]

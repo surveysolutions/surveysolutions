@@ -2,9 +2,9 @@
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.UI.Headquarters.Code.CommandTransformation;
+using WB.UI.Headquarters.Services.Impl;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.CommandTransformatorTests
+namespace WB.Tests.Web.Headquarters.CommandTransformatorTests
 {
     internal class CommandTransformatorTestsContext
     {

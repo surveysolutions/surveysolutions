@@ -1,7 +1,7 @@
-using System.Web.Mvc;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using WB.UI.Headquarters.Filters;
-
 
 namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttributeTests
 {
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
             return actionExecutingContext.Result as RedirectToRouteResult;
         }
 
-        private static InstallationAttribute attribute;
+        private static InstallationFilter attribute;
         private static ActionExecutingContext actionExecutingContext = CreateFilterContext();
     }
 }

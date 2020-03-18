@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
-using MvvmCross.IoC;
 using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.Services;

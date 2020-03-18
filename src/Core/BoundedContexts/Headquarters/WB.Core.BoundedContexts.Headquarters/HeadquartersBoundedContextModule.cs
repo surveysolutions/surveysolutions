@@ -1,141 +1,129 @@
-﻿using Ncqrs.Eventing.Storage;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Ncqrs.Eventing.Storage;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects;
+using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
+using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
+using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.EmailProviders;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
-using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.BoundedContexts.Headquarters.Services.Internal;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects;
-using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Modularity;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
+using WB.Core.Synchronization.MetaInfo;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Enumerator.Native.WebInterview;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
-using WB.Infrastructure.Native.Storage;
-using System.Net.Http;
-using System;
-using System.Net.Http.Headers;
-using System.Text;
-using WB.Core.BoundedContexts.Headquarters.Designer;
-using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
-using WB.Core.BoundedContexts.Headquarters.Implementation;
-using WB.Core.Infrastructure.Domain;
-using WB.Infrastructure.Native.Storage.Postgre;
-using ExportSettings = WB.Core.BoundedContexts.Headquarters.DataExport.ExportSettings;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters
-{   
+{
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class HeadquartersBoundedContextModule : IModule
     {
-        private readonly string currentFolderPath;
-        private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
-        private readonly int? interviewLimitCount;
-        private readonly string syncDirectoryName;
         private readonly ExternalStoragesSettings externalStoragesSettings;
         private readonly FileSystemEmailServiceSettings fileSystemEmailServiceSettings;
+        private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesJobSetting;
         private readonly UserPreloadingSettings userPreloadingSettings;
-        private readonly ExportSettings exportSettings;
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly SampleImportSettings sampleImportSettings;
         private readonly SyncSettings syncSettings;
         private readonly TrackingSettings trackingSettings;
 
-        public HeadquartersBoundedContextModule(string currentFolderPath,
-            SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
+        public HeadquartersBoundedContextModule(
             UserPreloadingSettings userPreloadingSettings,
-            ExportSettings exportSettings,
-            InterviewDataExportSettings interviewDataExportSettings,
             SampleImportSettings sampleImportSettings,
             SyncSettings syncSettings,
-            TrackingSettings trackingSettings, 
-            int? interviewLimitCount = null,
-            string syncDirectoryName = "SYNC",
+            TrackingSettings trackingSettings,
             ExternalStoragesSettings externalStoragesSettings = null,
-            FileSystemEmailServiceSettings fileSystemEmailServiceSettings = null)
+            FileSystemEmailServiceSettings fileSystemEmailServiceSettings = null,
+            SyncPackagesProcessorBackgroundJobSetting syncPackagesJobSetting = null)
         {
             this.userPreloadingSettings = userPreloadingSettings;
-            this.exportSettings = exportSettings;
-            this.interviewDataExportSettings = interviewDataExportSettings;
             this.sampleImportSettings = sampleImportSettings;
-            this.currentFolderPath = currentFolderPath;
-            this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
-            this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
-            this.syncDirectoryName = syncDirectoryName;
             this.externalStoragesSettings = externalStoragesSettings;
             this.fileSystemEmailServiceSettings = fileSystemEmailServiceSettings;
+            this.syncPackagesJobSetting = syncPackagesJobSetting;
             this.trackingSettings = trackingSettings;
         }
 
@@ -149,11 +137,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindAsSingleton<IInMemoryEventStore, InMemoryEventStore>();
             
             registry.BindToConstant(() => this.externalStoragesSettings);
-
+            
             registry.BindToConstant<SyncSettings>(() => this.syncSettings);
             registry.BindToConstant<TrackingSettings>(() => this.trackingSettings);
-
-            registry.BindToConstant<InterviewPreconditionsServiceSettings>(() => new InterviewPreconditionsServiceSettings(this.interviewLimitCount));
 
             registry.Bind<Questionnaire>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
@@ -162,17 +148,22 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IAndroidPackageReader, AndroidPackageReader>();
            
-            registry.BindWithConstructorArgument<IPreloadingTemplateService, AssignmentImportTemplateGenerator>("folderPath", this.currentFolderPath);
+            registry.Bind<IPreloadingTemplateService, AssignmentImportTemplateGenerator>();
             registry.Bind<IPreloadedDataVerifier, ImportDataVerifier>();
 
             registry.Bind<IExportFileNameService, ExportExportFileNameService>();
+            registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
+            registry.Bind<IAssignmentsImportService, AssignmentsImportService>();
+            registry.Bind<IAssignmentsImportFileConverter, AssignmentsImportFileConverter>();
+            registry.Bind<DeleteQuestionnaireJobScheduler>();
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
+            registry.Bind<IMoveUserToAnotherTeamService, MoveUserToAnotherTeamService>();
 
-            registry.BindWithConstructorArgument<IMapStorageService, MapFileStorageService>("folderPath", this.currentFolderPath);
+            registry.Bind<IMapStorageService, MapFileStorageService>();
 
             //commented because auto registered somewhere 
             //registry.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
@@ -182,14 +173,19 @@ namespace WB.Core.BoundedContexts.Headquarters
             //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<IInterviewStatisticsReportDenormalizer, InterviewStatisticsReportDenormalizer>();
+            registry.Bind<InterviewSummaryCompositeDenormalizer>();
+            registry.Bind<InterviewSummaryDenormalizer>();
+            registry.Bind<StatusChangeHistoryDenormalizerFunctional>();
+            registry.Bind<InterviewStatusTimeSpanDenormalizer>();
+            registry.Bind<InterviewGeoLocationAnswersDenormalizer>();
+            registry.Bind<InterviewExportedCommentariesDenormalizer>();
+            registry.Bind<CumulativeChartDenormalizer>();
+            registry.Bind<AssignmentDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
-            registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
-            registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
-            registry.Bind<IExportViewFactory, ExportViewFactory>();
+          
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
             registry.Bind<IAssemblyService, AssemblyService>();
-            registry.Bind<IExportSettings, Implementation.ExportSettings>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
             registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
             registry.Bind<IReusableCategoriesFillerIntoQuestionnaire, ReusableCategoriesFillerIntoQuestionnaire>();
@@ -214,7 +210,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
             registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
-            registry.Bind<IInterviewsToExportViewFactory, InterviewsToExportViewFactory>();
+            registry.Bind<IUserArchiveService, UserArchiveService>();
+            registry.Bind<IMoveUserToAnotherTeamService, MoveUserToAnotherTeamService>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();
@@ -230,13 +227,10 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
             registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();
 
-            registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => this.syncPackagesProcessorBackgroundJobSetting);
-            registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
-
             registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
 
-            registry.BindWithConstructorArgument<ITabletInformationService, FileBasedTabletInformationService>("parentFolder", this.currentFolderPath);
+            registry.Bind<ITabletInformationService, FileBasedTabletInformationService>();
 
             registry.BindAsSingleton<IPasswordHasher, PasswordHasher>(); 
 
@@ -246,6 +240,10 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
+            registry.Bind<InterviewCacheWarmupPreProcessor>();
+            registry.Bind<InterviewSummaryErrorsCountPostProcessor>();
+            registry.Bind<InterviewReceivedByInterviewerCommandValidator>();
+            registry.Bind<QuestionnaireValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
@@ -254,10 +252,10 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
 
             registry.Bind<ITranslationStorage, TranslationStorage>();
+            registry.Bind<ITranslationsExportService, TranslationsExportService>();
+            registry.Bind<ICategoriesExportService, CategoriesExportService >();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, HqQuestionnaireStorage>(); 
-
-            registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
            
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
@@ -268,18 +266,10 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindToConstant<SampleImportSettings>(() => sampleImportSettings);
 
-            registry.BindToConstant<InterviewDataExportSettings>(() => this.interviewDataExportSettings);
-            registry.BindToConstant<ExportSettings>(() => this.exportSettings);
-
-            registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
-         
-            registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
-            registry.Bind<ICsvWriterService, CsvWriterService>();
-            registry.Bind<ICsvWriter, CsvWriter>();
-            registry.Bind<ICsvReader, CsvReader>();
             
             registry.Bind<IRosterStructureService, RosterStructureService>();
             registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
+            registry.BindAsSingleton<IQuestionnaireImportStatuses, QuestionnaireImportStatuses>();
 
             registry.Bind<IWebInterviewConfigurator, WebInterviewConfigurator>();
             registry.Bind<IWebInterviewConfigProvider, WebInterviewConfigProvider>();
@@ -290,7 +280,10 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentViewFactory, AssignmentViewFactory>();
             registry.Bind<IAssignmentsService, AssignmentsService>();
             registry.Bind<ISystemLog, SystemLog>();
-            registry.Bind<IAuditLogReader, AuditLogReader>();
+            registry.Bind<IUserToDeviceService, UserToDeviceService>();
+            registry.Bind<IEncryptionService, RsaEncryptionService>();
+            registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
+            registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
             registry.Bind<IAuditLogFactory, AuditLogFactory>();
@@ -302,6 +295,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentFactory, AssignmentFactory>();
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
+            registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
+            registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
+            registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
+
+            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
+            registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
 
             registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
             
@@ -316,15 +315,38 @@ namespace WB.Core.BoundedContexts.Headquarters
             }
 
             registry.Bind<IInvitationService, InvitationService>();
-            registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
+            registry.Bind<ITokenGenerator, TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
+            registry.Bind<IUserImportService, UserImportService>();
 
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
-            registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
-            registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
+
+            registry.BindInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>();
+
+            registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => syncPackagesJobSetting);
+            registry.BindToConstant<AssignmentImportOptions>(() => new AssignmentImportOptions(15));
+            registry.Bind<AssignmentAggregateRoot>();
+            registry.Bind<AssignmentsVerificationTask>();
+            registry.Bind<AssignmentsImportTask>();
+            registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
+            registry.Bind<UsersImportTask>();
+            registry.Bind<PauseResumeJobScheduler>();
+            registry.Bind<UpgradeAssignmentJobScheduler>();
+            registry.Bind<SendInvitationsTask>();
+            registry.Bind<SendRemindersTask>();
+            registry.Bind<UpgradeAssignmentJob>();
+            registry.Bind<SyncPackagesReprocessorBackgroundJob>();
+            registry.Bind<UsersImportJob>();
+            registry.Bind<PauseResumeJob>();
+            registry.Bind<UsersImportJob>();
+            registry.Bind<AssignmentsImportJob>();
+            registry.Bind<SendInvitationsJob>();
+            registry.Bind<AssignmentsVerificationJob>();
+            registry.Bind<SendRemindersJob>();
+            registry.Bind<DeleteQuestionnaireJob>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
@@ -437,9 +459,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<HqRejectInterviewCommand>()
                     .SkipValidationFor<UnapproveByHeadquartersCommand>()
             );
-
-            CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
-            CommandRegistry.Configure<StatefulInterview, CreateInterview>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
 
             return Task.CompletedTask;
         }

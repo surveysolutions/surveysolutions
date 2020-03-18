@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
@@ -97,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 IsLockedByHQ = dbUser.IsLockedByHQ,
                 IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
                 CreationDate = dbUser.CreationDate,
-                Roles = dbUser.Roles.Select(x => x.Id.ToUserRole()).ToHashSet(),
+                Roles = dbUser.Roles.Select(x => x.Id.ToUserRole()).ToImmutableHashSet(),
                 SecurityStamp = dbUser.SecurityStamp,
                 Supervisor = dbUser.SupervisorId.HasValue
                     ? new UserLight(dbUser.SupervisorId.Value, this.userRepository.Users.FirstOrDefault(x => x.Id == dbUser.SupervisorId)?.UserName)
@@ -122,7 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 }).ToArray();
         }
 
-        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
+        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role)
         {
             var allUsers = ApplyFilter(this.userRepository.Users, searchBy, archived, role)
                 .Select(x => new InterviewersItem

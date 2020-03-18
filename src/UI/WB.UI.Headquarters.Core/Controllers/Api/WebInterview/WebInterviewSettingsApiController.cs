@@ -1,0 +1,193 @@
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.UI.Shared.Web.Services;
+
+namespace WB.UI.Headquarters.Controllers.Api.WebInterview
+{
+    [Route("api/v1/webInterviewSettings")]
+    [Authorize(Roles = "Administrator, Headquarter")]
+    [ResponseCache(NoStore = true)]
+    public class WebInterviewSettingsApiController : ControllerBase
+    {
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IVirtualPathService virtualPathService;
+        private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+
+
+        public WebInterviewSettingsApiController(
+            IWebInterviewConfigProvider webInterviewConfigProvider,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
+            IVirtualPathService virtualPathService)
+        {
+            this.webInterviewConfigProvider = webInterviewConfigProvider;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.virtualPathService = virtualPathService;
+        }
+
+        public class UpdatePageTemplateModel
+        {
+            [Required] public WebInterviewUserMessages TitleType { get; set; }
+            [Required] public string TitleText { get; set; }
+            [Required] public WebInterviewUserMessages MessageType { get; set; }
+            [Required] public string MessageText { get; set; }
+        }
+
+        [Route(@"{id}/pageTemplate")]
+        [HttpPost]
+        public IActionResult UpdatePageTemplate(string id, [FromBody]UpdatePageTemplateModel updateModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            config.CustomMessages[updateModel.TitleType] = updateModel.TitleText;
+            config.CustomMessages[updateModel.MessageType] = updateModel.MessageText;
+            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
+
+            return Ok();
+        }
+
+        public class UpdateEmailTemplateModel
+        {
+            [Required] public EmailTextTemplateType Type { get; set; }
+            [Required] public string Subject { get; set; }
+            [Required] public string Message { get; set; }
+            [Required] public string PasswordDescription { get; set; }
+            [Required] public string LinkText { get; set; }
+        }
+
+        [Route(@"{id}/emailTemplate")]
+        [HttpPost]
+        public IActionResult UpdateEmailTemplate(string id, [FromBody]UpdateEmailTemplateModel updateModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            config.EmailTemplates[updateModel.Type] = new EmailTextTemplate(updateModel.Subject, updateModel.Message, updateModel.PasswordDescription, updateModel.LinkText);
+            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
+
+            return Ok();
+        }
+
+        public class UpdatePageMessageModel
+        {
+            [Required] public WebInterviewUserMessages Type { get; set; }
+            [Required] public string Message { get; set; }
+        }
+
+        [Route(@"{id}/pageMessage")]
+        [HttpPost]
+        public IActionResult UpdatePageMessage(string id, [FromBody]UpdatePageMessageModel updateModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            config.CustomMessages[updateModel.Type] = updateModel.Message;
+            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
+
+            return Ok();
+        }
+
+
+        public class UpdateAdditionalSettingsModel
+        {
+            public bool SpamProtection { get; set; } 
+            public int? ReminderAfterDaysIfNoResponse { get; set; } 
+            public int? ReminderAfterDaysIfPartialResponse { get; set; } 
+            public bool SingleResponse { get; set; }
+        }
+
+        [Route(@"{id}/additionalSettings")]
+        [HttpPost]
+        public IActionResult UpdateAdditionalSettings(string id, [FromBody]UpdateAdditionalSettingsModel updateModel)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            config.UseCaptcha = updateModel.SpamProtection;
+            config.ReminderAfterDaysIfNoResponse = updateModel.ReminderAfterDaysIfNoResponse;
+            config.ReminderAfterDaysIfPartialResponse = updateModel.ReminderAfterDaysIfPartialResponse;
+            config.SingleResponse = updateModel.SingleResponse;
+
+            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
+
+            return Ok();
+        }
+
+        [Route(@"{id}/start")]
+        [HttpPost]
+        public IActionResult Start(string id)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            if (config.Started)
+                return Ok();
+
+            config.Started = true;
+            config.BaseUrl = this.virtualPathService.GetAbsolutePath("~/");
+            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
+
+            return Ok();
+        }
+
+        [Route(@"{id}/stop")]
+        [HttpPost]
+        public IActionResult Stop(string id)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            if (!config.Started)
+                return Ok();
+
+            config.Started = false;
+            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
+
+            return Ok();
+        }
+    }
+}

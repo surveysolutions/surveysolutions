@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -33,16 +33,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="12.1.2" />
-    <PackageReference Include="Dapper" Version="2.0.4" />
-    <PackageReference Include="EPPlus" Version="4.5.3.2" />
+    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="EPPlus" Version="4.5.3.3" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.217" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
-    <PackageReference Include="Markdig" Version="0.17.1" />
+    <PackageReference Include="Markdig" Version="0.18.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.3.1" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
-    <PackageReference Include="System.CodeDom" Version="4.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.1" />
+    <PackageReference Include="System.CodeDom" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
@@ -51,6 +51,7 @@
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <None Update="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -76,8 +77,6 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>OptionsFilterMethodTemplate.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -118,171 +117,62 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Country.resx</DependentUpon>
     </Compile>
-     <Compile Update="Resources\ExceptionMessages.Designer.cs">
+    <Compile Update="Resources\KindOfData.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ExceptionMessages.resx</DependentUpon>
+      <DependentUpon>KindOfData.resx</DependentUpon>
     </Compile>
-     <Compile Update="Resources\KindOfData.Designer.cs">
-       <DesignTime>True</DesignTime>
-       <AutoGen>True</AutoGen>
-       <DependentUpon>KindOfData.resx</DependentUpon>
-     </Compile>
-     <Compile Update="Resources\ModeOfDataCollection.Designer.cs">
-       <DesignTime>True</DesignTime>
-       <AutoGen>True</AutoGen>
-       <DependentUpon>ModeOfDataCollection.resx</DependentUpon>
-     </Compile>
-    <Compile Update="Resources\PdfStrings.Designer.cs">
+    <Compile Update="Resources\ModeOfDataCollection.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>PdfStrings.resx</DependentUpon>
+      <DependentUpon>ModeOfDataCollection.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Roster.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Roster.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\StudyType.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>StudyType.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\VerificationMessages.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>VerificationMessages.resx</DependentUpon>
-    </Compile>
-	<Compile Update="Resources\QuestionnaireEditor.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-    </Compile>
-	<Compile Update="Resources\Roster.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Roster.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
+
   <ItemGroup>
-	<EmbeddedResource Update="Resources\Common.ru.resx">
-	  <DependentUpon>Common.resx</DependentUpon>
-	  <Generator>ResXFileCodeGenerator</Generator>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\Common.resx">
-	  <Generator>ResXFileCodeGenerator</Generator>
-	  <LastGenOutput>Common.Designer.cs</LastGenOutput>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\Country.ru.resx">
-      <DependentUpon>Country.resx</DependentUpon>
-      <Generator></Generator>
-    </EmbeddedResource>
-	<EmbeddedResource Update="Resources\Country.resx">
-	  <Generator>ResXFileCodeGenerator</Generator>
-	  <LastGenOutput>Country.Designer.cs</LastGenOutput>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\ExceptionMessages.es.resx">
-	  <DependentUpon>ExceptionMessages.resx</DependentUpon>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\ExceptionMessages.fr.resx">
-	  <DependentUpon>ExceptionMessages.resx</DependentUpon>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\ExceptionMessages.zh.resx">
-	  <DependentUpon>ExceptionMessages.resx</DependentUpon>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\KindOfData.ru.resx">
-    <DependentUpon>KindOfData.resx</DependentUpon>
-	  <Generator>ResXFileCodeGenerator</Generator>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\KindOfData.resx">
-	  <Generator>ResXFileCodeGenerator</Generator>
-	  <LastGenOutput>KindOfData.Designer.cs</LastGenOutput>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\ModeOfDataCollection.ru.resx">
-    <DependentUpon>ModeOfDataCollection.resx</DependentUpon>
-	  <Generator>ResXFileCodeGenerator</Generator>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\ModeOfDataCollection.resx">
-	  <Generator>ResXFileCodeGenerator</Generator>
-	  <LastGenOutput>ModeOfDataCollection.Designer.cs</LastGenOutput>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\PdfStrings.es.resx">
-	  <DependentUpon>PdfStrings.resx</DependentUpon>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\PdfStrings.zh.resx">
-	  <DependentUpon>PdfStrings.resx</DependentUpon>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\QuestionnaireEditor.es.resx">
-	  <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\QuestionnaireEditor.fr.resx">
-	  <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\QuestionnaireEditor.zh.resx">
-	  <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\Roster.es.resx">
-	  <DependentUpon>Roster.resx</DependentUpon>
-	</EmbeddedResource>
-	<EmbeddedResource Update="Resources\Roster.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-	  <DependentUpon>Roster.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Roster.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\ExceptionMessages.resx">
-      <CustomToolNamespace></CustomToolNamespace>
+    <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\ExceptionMessages.ru.resx">
-      <Generator></Generator>
-	  <DependentUpon>ExceptionMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\PdfStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PdfStrings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\PdfStrings.ru.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-	   <DependentUpon>PdfStrings.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\QuestionnaireEditor.ru.resx">
-      <Generator></Generator>
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Roster.zh.resx">
-      <DependentUpon>Roster.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\StudyType.ru.resx">
-      <DependentUpon>StudyType.resx</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\StudyType.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>StudyType.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VerificationMessages.es.resx">
-      <DependentUpon>VerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VerificationMessages.fr.resx">
-      <DependentUpon>VerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VerificationMessages.ru.resx">
-      <Generator></Generator>
-      <DependentUpon>VerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VerificationMessages.resx">
-      <CustomToolNamespace></CustomToolNamespace>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VerificationMessages.zh.resx">
-      <DependentUpon>VerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
     <Folder Include="Services\WebTester\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Common.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Country.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Country.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\KindOfData.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>KindOfData.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ModeOfDataCollection.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ModeOfDataCollection.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Roster.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\StudyType.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StudyType.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

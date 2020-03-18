@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using MvvmCross.Base;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;

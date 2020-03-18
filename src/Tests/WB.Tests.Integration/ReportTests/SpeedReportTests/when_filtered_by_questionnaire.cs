@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.SpeedReportTests

@@ -1,0 +1,10 @@
+﻿@using WB.UI.Headquarters.Code
+@model WB.UI.Headquarters.Models.QuestionnaireDetailsModel
+@{
+    ViewBag.Title = string.Format(Pages.QuestionnaireNameVersionFirst, Model.Title, Model.Version);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>

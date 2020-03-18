@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation
@@ -20,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
         private readonly IEncryptionService encryptionService;
         private readonly string zipExtension = ".zip";
 
-        public FileBasedTabletInformationService(string parentFolder, 
+        public FileBasedTabletInformationService(
+            IOptions<FileStorageConfig> fileStorageOptions, 
             IFileSystemAccessor fileSystemAccessor,
             IArchiveUtils archiveUtils,
             IEncryptionService encryptionService)
@@ -29,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             this.archiveUtils = archiveUtils;
             this.encryptionService = encryptionService;
 
-            this.basePath = fileSystemAccessor.CombinePath(parentFolder, TabletInformationFolderName);
+            this.basePath = fileSystemAccessor.CombinePath(fileStorageOptions.Value.TempData, TabletInformationFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.basePath))
                 fileSystemAccessor.CreateDirectory(this.basePath);
         }

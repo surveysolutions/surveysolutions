@@ -1,29 +1,26 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 
 namespace WB.Services.Scheduler.Storage
 {
     public class EfCoreHealthCheck : IHealthCheck
     {
-        private readonly IOptions<JobSettings> jobSettings;
-        private readonly DbContextOptions<JobContext> contextOptions;
+        private readonly IServiceProvider serviceProvider;
 
-        public EfCoreHealthCheck(IOptions<JobSettings> jobSettings, DbContextOptions<JobContext> contextOptions)
+        public EfCoreHealthCheck(IServiceProvider serviceProvider)
         {
-            this.jobSettings = jobSettings;
-            this.contextOptions = contextOptions;
+            this.serviceProvider = serviceProvider;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
-            using (var db = new JobContext(contextOptions, jobSettings))
-            {
-                await db.Jobs.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-                return HealthCheckResult.Healthy();
-            }
+            await using var db = serviceProvider.GetRequiredService<JobContext>();
+            await db.Jobs.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            return HealthCheckResult.Healthy();
         }
     }
 }

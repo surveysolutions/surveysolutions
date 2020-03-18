@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
 {
@@ -25,14 +26,14 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         public IOptions<CaptchaConfig> CaptchaOptions { get; }
 
         private readonly UserManager<DesignerIdentityUser> userManager;
-        private readonly IViewRenderingService viewRenderingService;
+        private readonly IViewRenderService viewRenderingService;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
         private readonly IRecaptchaService recaptchaService;
 
         public RegisterModel(
             UserManager<DesignerIdentityUser> userManager,
-            IViewRenderingService viewRenderingService,
+            IViewRenderService viewRenderingService,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IRecaptchaService recaptchaService,
@@ -86,7 +87,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                if (this.CaptchaOptions.Value.IsReCaptchaEnabled)
+                if (this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha)
                 {
                     var recaptcha = await this.recaptchaService.Validate(Request);
                     if (!recaptcha.success)

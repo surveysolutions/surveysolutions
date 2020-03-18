@@ -1,66 +1,61 @@
-﻿namespace WB.Infrastructure.Native.Monitoring
+﻿using System.Collections.Generic;
+
+namespace WB.Infrastructure.Native.Monitoring
 {
-    public class Gauge
+    public class Gauge : Gauge.IGauge
     {
         private readonly Prometheus.Gauge gauge;
+        private string[] labels;
 
         public Gauge(string name, string help, params string[] labelNames)
         {
             this.gauge = Prometheus.Metrics.CreateGauge(name, help, labelNames);
         }
 
-        public double Value => this.gauge.Value;
+        public IEnumerable<string[]> AllLabels => this.gauge.GetAllLabelValues();
+
+        public double Value => this.labels == null ? this.gauge.Value : this.gauge.Labels(labels).Value;
 
         public void Inc(double amount = 1)
         {
-            gauge.Inc(amount);
+            if (labels == null)
+            {
+                gauge.Inc(amount);
+            }
+            else
+            {
+                gauge.Labels(labels).Inc(amount);
+            }
         }
 
         public void Dec(double amount = 1)
         {
-            gauge.Dec(amount);
+            if (labels == null)
+            {
+                gauge.Dec(amount);
+            }
+            else
+            {
+                gauge.Labels(labels).Dec(amount);
+            }
         }
 
         public void Set(double amount)
         {
-            gauge.Set(amount);
+            if (labels == null)
+            {
+                gauge.Set(amount);
+            }
+            else
+            {
+                gauge.Labels(labels).Set(amount);
+            }
         }
 
         public IGauge Labels(params string[] labels)
         {
-            return new ChildGauge(gauge, labels);
-        }
-
-        private struct ChildGauge : IGauge
-        {
-            private readonly Prometheus.Gauge gauge;
-            private readonly string[] labels;
-
-            public ChildGauge(Prometheus.Gauge gauge, string[] labels)
-            {
-                this.gauge = gauge;
-                this.labels = labels;
-
-                for (int i = 0; i < this.labels.Length; i++)
-                {
-                    if (this.labels[i] == null) this.labels[i] = "null";
-                }
-            }
-
-            public void Inc(double amount = 1)
-            {
-                this.gauge.Labels(labels).Inc(amount);
-            }
-
-            public void Dec(double amount = 1)
-            {
-                this.gauge.Labels(labels).Dec(amount);
-            }
-
-            public void Set(double amount)
-            {
-                gauge.Labels(labels).Set(amount);
-            }
+            this.labels = labels;
+            return this;
         }
 
         public interface IGauge
@@ -68,6 +63,7 @@
             void Inc(double amount = 1);
             void Dec(double amount = 1);
             void Set(double amount);
+            double Value { get; }
         }
     }
 }

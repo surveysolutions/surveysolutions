@@ -21,6 +21,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.InterviewDataStorage.Services;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
@@ -635,8 +636,8 @@ namespace WB.Services.Export.Tests
             if (withDefaultEventsFilter)
             {
                 var filerMock = new Mock<IEventsFilter>();
-                filerMock.Setup(c => c.FilterAsync(It.IsAny<List<Event>>()))
-                    .Returns<List<Event>>(Task.FromResult);
+                filerMock.Setup(c => c.FilterAsync(It.IsAny<List<Event>>(), It.IsAny<CancellationToken>()))
+                    .Returns<List<Event>, CancellationToken>((e,c) => Task.FromResult(e));
 
                 services.AddTransient(c => filerMock.Object);
             }
@@ -846,6 +847,17 @@ namespace WB.Services.Export.Tests
                 Id = value,
                 Text = title,
                 ParentId = parentId
+            };
+        }
+
+        public DataExportProcessArgs DataExportProcessArgs(string tenant = "testTenant")
+        {
+            return new DataExportProcessArgs
+            {
+                ExportSettings = new ExportSettings
+                {
+                    Tenant = new TenantInfo("", "", tenant)
+                }
             };
         }
     }

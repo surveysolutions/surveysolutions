@@ -170,7 +170,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             public CascadingOptionMap(): this(null, null) { }
             public CascadingOptionMap(Dictionary<string, (int value, int? parentValue)[]> allValuesByAllParents, List<QuestionnaireCategoricalOption> allImportedOptions)
             {
-                var nearestParentValues = allValuesByAllParents?.Values?.FirstOrDefault()?.Select(x => x.value)?.ToHashSet() ?? new HashSet<int>();
+                var values = allValuesByAllParents?.Values?.FirstOrDefault()?.Select(x => x.value);
+
+                var nearestParentValues = values == null ? new HashSet<int>() : new HashSet<int>(values);
 
                 Map(m => m.ParentValue).Index(2).TypeConverter(new ConvertToInt32AndCheckParentOptionValueOrThrow(nearestParentValues));
                 Map(m => m.ValueWithParentValues).Ignore().ConvertUsing(x =>

@@ -42,12 +42,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.webInterviewEmailRenderer = webInterviewEmailRenderer;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {
                 if (!emailService.IsConfigured())
-                    return Task.CompletedTask;
+                    return;
 
                 var questionnaires = invitationService.GetQuestionnairesWithInvitations().ToList();
                 
@@ -65,9 +65,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
                     var baseUrl = webInterviewConfig.BaseUrl;
                     
-                    SendNoResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo);
+                    await SendNoResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo);
 
-                    SendPartialResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo);
+                    await SendPartialResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo);
                 }
 
                 sw.Stop();
@@ -81,11 +81,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             {
                 this.logger.Error($"Reminders distribution job: FAILED. Reason: {ex.Message} ", ex);
             }
-
-            return Task.CompletedTask;
         }
 
-        private void SendPartialResponseReminder(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle, WebInterviewConfig webInterviewConfig, string baseUrl, ISenderInformation senderInfo)
+        private async Task SendPartialResponseReminder(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle, WebInterviewConfig webInterviewConfig, string baseUrl, ISenderInformation senderInfo)
         {
             if (!webInterviewConfig.ReminderAfterDaysIfPartialResponse.HasValue)
                 return;
@@ -94,10 +92,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse);
 
-            SendReminders(questionnaireTitle, baseUrl, invitationIdsToRemind, emailTemplate, senderInfo);
+            await SendReminders(questionnaireTitle, baseUrl, invitationIdsToRemind, emailTemplate, senderInfo);
         }
 
-        private void SendNoResponseReminder(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle, WebInterviewConfig webInterviewConfig, string baseUrl, ISenderInformation senderInfo)
+        private async Task SendNoResponseReminder(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle, WebInterviewConfig webInterviewConfig, string baseUrl, ISenderInformation senderInfo)
         {
             if (!webInterviewConfig.ReminderAfterDaysIfNoResponse.HasValue)
                 return;
@@ -106,10 +104,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_NoResponse);
 
-            SendReminders(questionnaireTitle, baseUrl, invitationIdsToRemind, emailTemplate, senderInfo);
+            await SendReminders(questionnaireTitle, baseUrl, invitationIdsToRemind, emailTemplate, senderInfo);
         }
 
-        private void SendReminders(string questionnaireTitle, string baseUrl, IEnumerable<int> invitationIdsToRemind,
+        private async Task SendReminders(string questionnaireTitle, string baseUrl, IEnumerable<int> invitationIdsToRemind,
             WebInterviewEmailTemplate emailTemplate, ISenderInformation senderInfo)
         {
             var surveyName = questionnaireTitle;
@@ -140,13 +138,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 };
                 emailParamsStorage.Store(emailParams, emailParamsId);
 
-                var interviewEmail = webInterviewEmailRenderer.RenderEmail(emailParams);
+                var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams);
 
                 try
                 {
-                    var sendEmailTask = emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml, interviewEmail.MessageText);
-
-                    var emailId = sendEmailTask.Result;
+                    var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml, interviewEmail.MessageText);
 
                     invitationService.MarkInvitationAsReminded(invitationId, emailId);
                 }

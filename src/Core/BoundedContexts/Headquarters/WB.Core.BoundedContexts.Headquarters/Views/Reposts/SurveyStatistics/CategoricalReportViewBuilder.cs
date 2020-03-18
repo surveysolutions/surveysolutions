@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 {
@@ -27,11 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         /// </summary>
         /// <param name="answers"></param>
         /// <param name="rows"></param>
-        public CategoricalReportViewBuilder(List<Answer> answers, IEnumerable<GetCategoricalReportItem> rows)
+        public CategoricalReportViewBuilder(List<CategoricalOption> answers, IEnumerable<GetCategoricalReportItem> rows)
         {
             answersIndexMap = GetAnswersMap(answers);
 
-            headersWithData = answers.Select(a => a.AnswerText);
+            headersWithData = answers.Select(a => a.Title);
             columnsWithData = answers.Select(a => a.AsColumnName());
 
             this.rows = rows?.ToArray() ?? Array.Empty<GetCategoricalReportItem>();
@@ -96,14 +96,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             return report;
         }
 
-        private Dictionary<long, int> GetAnswersMap(List<Answer> answers)
+        private Dictionary<long, int> GetAnswersMap(List<CategoricalOption> answers)
         {
             var result = new Dictionary<long, int>();
 
             for (var index = 0; index < answers.Count; index++)
             {
                 var answer = answers[index];
-                result.Add((long) answer.GetParsedValue(), index);
+                result.Add((long) answer.Value, index);
             }
 
             return result;

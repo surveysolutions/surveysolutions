@@ -1,7 +1,6 @@
 using System.Threading;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 

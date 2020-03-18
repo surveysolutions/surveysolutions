@@ -1,6 +1,5 @@
 ﻿using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;

@@ -19,10 +19,10 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ModeOfDataCollection {
+    public class ModeOfDataCollection {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.ModeOfDataCollection", typeof(ModeOfDataCollection).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to CAPI.
         /// </summary>
-        internal static string Capi {
+        public static string Capi {
             get {
                 return ResourceManager.GetString("Capi", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to CATI.
         /// </summary>
-        internal static string Cati {
+        public static string Cati {
             get {
                 return ResourceManager.GetString("Cati", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Face-to-Face.
         /// </summary>
-        internal static string FaceToFace {
+        public static string FaceToFace {
             get {
                 return ResourceManager.GetString("FaceToFace", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Focus Group.
         /// </summary>
-        internal static string FocusGroup {
+        public static string FocusGroup {
             get {
                 return ResourceManager.GetString("FocusGroup", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Internet.
         /// </summary>
-        internal static string Internet {
+        public static string Internet {
             get {
                 return ResourceManager.GetString("Internet", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mail.
         /// </summary>
-        internal static string Mail {
+        public static string Mail {
             get {
                 return ResourceManager.GetString("Mail", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Other.
         /// </summary>
-        internal static string Other {
+        public static string Other {
             get {
                 return ResourceManager.GetString("Other", resourceCulture);
             }

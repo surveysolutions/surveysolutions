@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             };
             emailParamsStorage.Store(emailParams, emailParamsId);
 
-            var interviewEmail = webInterviewEmailRenderer.RenderEmail(emailParams);
+            var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams);
             var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml.Trim(), interviewEmail.MessageText.Trim());
             invitationService.MarkInvitationAsSent(invitation.Id, emailId);
         }

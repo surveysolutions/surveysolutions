@@ -19,20 +19,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IEventStore eventStore;
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
 
         public InterviewHistoryFactory(
             IEventStore eventStore, 
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IUserViewFactory userReader,
-            InterviewDataExportSettings interviewDataExportSettings, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
             IQuestionnaireStorage questionnaireStorage)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
-            this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireStorage = questionnaireStorage;
         }
@@ -53,7 +50,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
             var interviewHistoryDenormalizer = new InterviewParaDataEventHandler(interviewHistoryReader, 
                 this.interviewSummaryReader, 
                 this.userReader, 
-                this.interviewDataExportSettings, 
                 this.questionnaireExportStructureStorage, 
                 this.questionnaireStorage);
 

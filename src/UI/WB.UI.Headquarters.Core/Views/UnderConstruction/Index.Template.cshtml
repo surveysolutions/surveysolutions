@@ -1,0 +1,78 @@
+﻿@using WB.UI.Shared.Web.Extensions
+@model WB.UI.Shared.Web.Controllers.UnderConstructionController.UnderConstructionModel
+@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html>
+<head class="under-construction-page">
+    <title>@Model.Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='refresh' content='30' />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @Html.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
+</head>
+<body style="display: block;" class="wide-navbar under-construction">
+    <header>
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid ">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                        <a class="logo" href='@Url.Content("~")'></a>
+                        <a class="brand-name" title="@MainMenu.Headquarters" href='@Url.Content("~")'>@MainMenu.Headquarters</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-offset-1 col-sm-9">
+                    <div class="page-header extra-margin-bottom">
+                        <h1>@Model.MainMessage</h1>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="gray-font extra-margin-bottom">
+                                    @*
+                                        @string.Format(UnderConstruction.ContactUsPhrase, $"<a href='#' class='gray-link-underline'>{UnderConstruction.ContactUsLinkText}</a>")
+                                    *@
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <div class="padding-left-100">
+                        <h2>@Model.SubMessage</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <partial name="Footer" />
+
+<script type='text/javascript'>
+    function checkStatus() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                if (xhr.responseText == '"Finished"')
+                    document.location.reload(true);
+                else
+                    setTimeout(function() { checkStatus() }, 5 * 1000);
+            }
+        }
+        xhr.open('GET', '@Url.Action("Status", "UnderConstruction")', true);
+        xhr.send(null);
+    }
+
+    checkStatus();
+</script>
+</body>
+</html>

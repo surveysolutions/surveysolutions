@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
@@ -94,100 +95,112 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             if (translationId == null) throw new ArgumentNullException(nameof(translationId));
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
-            using (MemoryStream stream = new MemoryStream(excelRepresentation))
+            using MemoryStream stream = new MemoryStream(excelRepresentation);
+
+            try
             {
-                try
+                using ExcelPackage package = new ExcelPackage(stream);
+
+                if (package.Workbook.Worksheets.Count == 0)
+                    throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);
+
+                var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+
+                var sheetsWithTranslation = package.Workbook.Worksheets
+                    .Where(x => x.Name == TranslationExcelOptions.WorksheetName ||
+                                x.Name.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix) ||
+                                (x.Name.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix) &&
+                                 questionnaire.Categories.Any(y =>
+                                     y.Name.ToLower() == x.Name.ToLower().TrimStart(TranslationExcelOptions.CategoriesWorksheetPreffix))))
+                    .ToList();
+
+                if (!sheetsWithTranslation.Any())
+                    throw new InvalidFileException(ExceptionMessages.TranslationWorksheetIsMissing);
+
+                var translationsWithHeaderMap = sheetsWithTranslation.Select(CreateHeaderMap).ToList();
+                var idsOfAllQuestionnaireEntities = questionnaire.Children.TreeToEnumerable(x => x.Children)
+                    .ToDictionary(composite => composite.PublicKey, x => x is Group);
+
+                var translationInstances = new List<TranslationInstance>();
+                foreach (var translationWithHeaderMap in translationsWithHeaderMap)
                 {
-                    using (ExcelPackage package = new ExcelPackage(stream))
-                    {
-                        if (package.Workbook.Worksheets.Count == 0)
-                        {
-                            throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);
-                        }
-
-                        var sheetsWithTranslation = package.Workbook.Worksheets
-                            .Where(x => x.Name == TranslationExcelOptions.WorksheetName ||
-                                        x.Name.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix) ||
-                                        x.Name.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix))
-                            .ToList();
-
-                        if (!sheetsWithTranslation.Any())
-                            throw new InvalidFileException(ExceptionMessages.TranslationWorksheetIsMissing);
-
-                        var translationsWithHeaderMap = sheetsWithTranslation.Select(CreateHeaderMap).ToList();
-
-                        var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
-                        var categories = questionnaire.Categories?
-                                             .ToDictionary(x => $"{TranslationExcelOptions.CategoriesWorksheetPreffix}{x.Name.ToLower()}".ToLower(), x => x.Id)
-                                         ?? new Dictionary<string, Guid>();
-
-                        var translationErrors = this.Verify(translationsWithHeaderMap, categories).Take(10).ToList();
-                        if (translationErrors.Any())
-                            throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors) { FoundErrors = translationErrors };
-
-                        Dictionary<Guid, bool> idsOfAllQuestionnaireEntities =
-                            questionnaire.Children.TreeToEnumerable(x => x.Children).ToDictionary(composite => composite.PublicKey, x=>x is Group);
-
-                        var translationInstances = new List<TranslationInstance>();
-                        foreach (var translationWithHeaderMap in translationsWithHeaderMap)
-                        {
-                            var worksheet = translationWithHeaderMap.Worksheet;
-                            var worksheetName = worksheet.Name.ToLower();
-                            var end = worksheet.Dimension.End.Row;
-
-                            for (int rowNumber = 2; rowNumber <= end; rowNumber++)
-                            {
-                                TranslationRow importedTranslation = GetExcelTranslation(translationWithHeaderMap, rowNumber);
-
-                                if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
-
-                                var translationInstance = categories.ContainsKey(worksheetName)
-                                    ? GetCategoriesTranslation(questionnaireId, translationId, categories,
-                                        worksheetName, importedTranslation)
-                                    : GetQuestionnaireTranslation(questionnaireId, translationId,
-                                        importedTranslation, idsOfAllQuestionnaireEntities);
-
-                                if(translationInstance == null) continue;
-
-                                translationInstances.Add(translationInstance);
-                            }
-                        }
-
-                        var uniqueTranslationInstances = translationInstances
-                            .Distinct(new TranslationInstance.IdentityComparer())
-                            .ToList();
-
-                        foreach (var translationInstance in uniqueTranslationInstances)
-                        {
-                            this.dbContext.TranslationInstances.Add(translationInstance);
-                        }
-
-                        this.dbContext.SaveChanges();
-                    }
+                    translationInstances.AddRange(GetWorksheetTranslations(translationWithHeaderMap,
+                        questionnaire, idsOfAllQuestionnaireEntities, questionnaireId, translationId));
                 }
-                catch (NullReferenceException e)
+
+                var uniqueTranslationInstances = translationInstances
+                    .Distinct(new TranslationInstance.IdentityComparer())
+                    .ToList();
+
+                foreach (var translationInstance in uniqueTranslationInstances)
                 {
-                    throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+                    this.dbContext.TranslationInstances.Add(translationInstance);
                 }
-                catch (InvalidDataException e)
-                {
-                    throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
-                }
-                catch (COMException e)
-                {
-                    throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
-                }
+
+                this.dbContext.SaveChanges();
+            }
+            catch (NullReferenceException e)
+            {
+                throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+            }
+            catch (InvalidDataException e)
+            {
+                throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+            }
+            catch (COMException e)
+            {
+                throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+            }
+        }
+
+        private IEnumerable<TranslationInstance> GetWorksheetTranslations(
+            TranslationsWithHeaderMap translationWithHeaderMap, QuestionnaireDocument questionnaire,
+            Dictionary<Guid, bool> idsOfAllQuestionnaireEntities, Guid questionnaireId, Guid translationId)
+        {
+            var worksheet = translationWithHeaderMap.Worksheet;
+            var worksheetName = worksheet.Name.ToLower();
+            var end = worksheet.Dimension.End.Row;
+
+            var isCategoriesWorksheet = worksheetName.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix);
+            var categoriesWorksheetName = isCategoriesWorksheet
+                ? worksheetName.TrimStart(TranslationExcelOptions.CategoriesWorksheetPreffix)
+                : null;
+            var categoriesId = isCategoriesWorksheet
+                ? questionnaire.Categories.Single(x => x.Name.ToLower() == categoriesWorksheetName).Id
+                : (Guid?) null;
+
+            var translationErrors = (isCategoriesWorksheet
+                ? this.VerifyCategories(translationWithHeaderMap)
+                : this.Verify(translationWithHeaderMap)).Take(10).ToList();
+
+            if (translationErrors.Any())
+                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors)
+                    {FoundErrors = translationErrors};
+
+            for (int rowNumber = 2; rowNumber <= end; rowNumber++)
+            {
+                TranslationRow importedTranslation = GetExcelTranslation(translationWithHeaderMap, rowNumber);
+
+                if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
+
+                var translationInstance = categoriesId.HasValue
+                    ? GetCategoriesTranslation(questionnaireId, translationId, categoriesId.Value, importedTranslation)
+                    : GetQuestionnaireTranslation(questionnaireId, translationId,
+                        importedTranslation, idsOfAllQuestionnaireEntities);
+
+                if (translationInstance != null)
+                    yield return translationInstance;
             }
         }
 
         private TranslationInstance GetCategoriesTranslation(Guid questionnaireId, Guid translationId,
-            Dictionary<string, Guid> categories, string worksheetName, TranslationRow importedTranslation) =>
+            Guid categoriesId, TranslationRow importedTranslation) =>
             new TranslationInstance
             {
                 Id = Guid.NewGuid(),
                 QuestionnaireId = questionnaireId,
                 TranslationId = translationId,
-                QuestionnaireEntityId = categories[worksheetName],
+                QuestionnaireEntityId = categoriesId,
                 Value = this.GetCleanedValue(TranslationType.Categories, false, importedTranslation.Translation),
                 TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
                 Type = TranslationType.Categories
@@ -249,23 +262,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 default:
                     return System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value, true));
             }
-        }
-
-        private IEnumerable<ImportValidationError> Verify(
-            IEnumerable<TranslationsWithHeaderMap> sheetsWithTranslation, Dictionary<string, Guid> categories)
-        {
-            var errors = new List<ImportValidationError>();
-            foreach (var worksheet in sheetsWithTranslation)
-            {
-                var validationErrors = (categories.ContainsKey(worksheet.Worksheet.Name.ToLower())
-                    ? this.VerifyCategories(worksheet)
-                    : this.Verify(worksheet)).Take(10).ToList();
-
-                errors.AddRange(validationErrors);
-                if (errors.Count >= 10)
-                    return errors;
-            }
-            return errors;
         }
 
         public void CloneTranslation(Guid questionnaireId, Guid translationId, Guid newQuestionnaireId, Guid newTranslationId)

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Autofac;
 using Autofac.Core;
 using Autofac.Core.Lifetime;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
@@ -10,6 +12,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
     {
         public AutofacModuleAdapter(IModule<IIocRegistry> module) : base(module)
         {
+            
         }
     }
 

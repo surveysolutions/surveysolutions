@@ -19,10 +19,10 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Roster {
+    public class Roster {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.Roster", typeof(Roster).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster: {0}.
         /// </summary>
-        internal static string RosterTitle {
+        public static string RosterTitle {
             get {
                 return ResourceManager.GetString("RosterTitle", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fixed set of items.
         /// </summary>
-        internal static string RosterType_Fixed {
+        public static string RosterType_Fixed {
             get {
                 return ResourceManager.GetString("RosterType_Fixed", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to List question.
         /// </summary>
-        internal static string RosterType_List {
+        public static string RosterType_List {
             get {
                 return ResourceManager.GetString("RosterType_List", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Multi-select question.
         /// </summary>
-        internal static string RosterType_Multi {
+        public static string RosterType_Multi {
             get {
                 return ResourceManager.GetString("RosterType_Multi", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Numeric question.
         /// </summary>
-        internal static string RosterType_Numeric {
+        public static string RosterType_Numeric {
             get {
                 return ResourceManager.GetString("RosterType_Numeric", resourceCulture);
             }

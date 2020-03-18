@@ -19,10 +19,10 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Country {
+    public class Country {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.Country", typeof(Country).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Aruba.
         /// </summary>
-        internal static string ABW {
+        public static string ABW {
             get {
                 return ResourceManager.GetString("ABW", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Afghanistan.
         /// </summary>
-        internal static string AFG {
+        public static string AFG {
             get {
                 return ResourceManager.GetString("AFG", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Africa.
         /// </summary>
-        internal static string AFR {
+        public static string AFR {
             get {
                 return ResourceManager.GetString("AFR", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Angola.
         /// </summary>
-        internal static string AGO {
+        public static string AGO {
             get {
                 return ResourceManager.GetString("AGO", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Anguilla.
         /// </summary>
-        internal static string AIA {
+        public static string AIA {
             get {
                 return ResourceManager.GetString("AIA", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Albania.
         /// </summary>
-        internal static string ALB {
+        public static string ALB {
             get {
                 return ResourceManager.GetString("ALB", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Andorra.
         /// </summary>
-        internal static string AND {
+        public static string AND {
             get {
                 return ResourceManager.GetString("AND", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Neth.Antilles.
         /// </summary>
-        internal static string ANT {
+        public static string ANT {
             get {
                 return ResourceManager.GetString("ANT", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to United Arab Emirates.
         /// </summary>
-        internal static string ARE {
+        public static string ARE {
             get {
                 return ResourceManager.GetString("ARE", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Argentina.
         /// </summary>
-        internal static string ARG {
+        public static string ARG {
             get {
                 return ResourceManager.GetString("ARG", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Armenia.
         /// </summary>
-        internal static string ARM {
+        public static string ARM {
             get {
                 return ResourceManager.GetString("ARM", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to American Samoa.
         /// </summary>
-        internal static string ASM {
+        public static string ASM {
             get {
                 return ResourceManager.GetString("ASM", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Antartica.
         /// </summary>
-        internal static string ATA {
+        public static string ATA {
             get {
                 return ResourceManager.GetString("ATA", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to French S.T..
         /// </summary>
-        internal static string ATF {
+        public static string ATF {
             get {
                 return ResourceManager.GetString("ATF", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Antigua and Barbuda.
         /// </summary>
-        internal static string ATG {
+        public static string ATG {
             get {
                 return ResourceManager.GetString("ATG", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Australia.
         /// </summary>
-        internal static string AUS {
+        public static string AUS {
             get {
                 return ResourceManager.GetString("AUS", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Austria.
         /// </summary>
-        internal static string AUT {
+        public static string AUT {
             get {
                 return ResourceManager.GetString("AUT", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Azerbaijan.
         /// </summary>
-        internal static string AZE {
+        public static string AZE {
             get {
                 return ResourceManager.GetString("AZE", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Burundi.
         /// </summary>
-        internal static string BDI {
+        public static string BDI {
             get {
                 return ResourceManager.GetString("BDI", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Belgium.
         /// </summary>
-        internal static string BEL {
+        public static string BEL {
             get {
                 return ResourceManager.GetString("BEL", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Benin.
         /// </summary>
-        internal static string BEN {
+        public static string BEN {
             get {
                 return ResourceManager.GetString("BEN", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Burkina Faso.
         /// </summary>
-        internal static string BFA {
+        public static string BFA {
             get {
                 return ResourceManager.GetString("BFA", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bangladesh.
         /// </summary>
-        internal static string BGD {
+        public static string BGD {
             get {
                 return ResourceManager.GetString("BGD", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bulgaria.
         /// </summary>
-        internal static string BGR {
+        public static string BGR {
             get {
                 return ResourceManager.GetString("BGR", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bahrain.
         /// </summary>
-        internal static string BHR {
+        public static string BHR {
             get {
                 return ResourceManager.GetString("BHR", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bahamas, The.
         /// </summary>
-        internal static string BHS {
+        public static string BHS {
             get {
                 return ResourceManager.GetString("BHS", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bosnia and Herzegovina.
         /// </summary>
-        internal static string BIH {
+        public static string BIH {
             get {
                 return ResourceManager.GetString("BIH", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Belarus.
         /// </summary>
-        internal static string BLR {
+        public static string BLR {
             get {
                 return ResourceManager.GetString("BLR", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Belize.
         /// </summary>
-        internal static string BLZ {
+        public static string BLZ {
             get {
                 return ResourceManager.GetString("BLZ", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bermuda.
         /// </summary>
-        internal static string BMU {
+        public static string BMU {
             get {
                 return ResourceManager.GetString("BMU", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bolivia.
         /// </summary>
-        internal static string BOL {
+        public static string BOL {
             get {
                 return ResourceManager.GetString("BOL", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Brazil.
         /// </summary>
-        internal static string BRA {
+        public static string BRA {
             get {
                 return ResourceManager.GetString("BRA", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Barbados.
         /// </summary>
-        internal static string BRB {
+        public static string BRB {
             get {
                 return ResourceManager.GetString("BRB", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Brunei.
         /// </summary>
-        internal static string BRN {
+        public static string BRN {
             get {
                 return ResourceManager.GetString("BRN", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bhutan.
         /// </summary>
-        internal static string BTN {
+        public static string BTN {
             get {
                 return ResourceManager.GetString("BTN", resourceCulture);
             }
@@ -378,7 +378,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bouvet Island.
         /// </summary>
-        internal static string BVT {
+        public static string BVT {
             get {
                 return ResourceManager.GetString("BVT", resourceCulture);
             }
@@ -387,7 +387,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Botswana.
         /// </summary>
-        internal static string BWA {
+        public static string BWA {
             get {
                 return ResourceManager.GetString("BWA", resourceCulture);
             }
@@ -396,7 +396,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Central African Republic.
         /// </summary>
-        internal static string CAF {
+        public static string CAF {
             get {
                 return ResourceManager.GetString("CAF", resourceCulture);
             }
@@ -405,7 +405,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Canada.
         /// </summary>
-        internal static string CAN {
+        public static string CAN {
             get {
                 return ResourceManager.GetString("CAN", resourceCulture);
             }
@@ -414,7 +414,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cocos Isld..
         /// </summary>
-        internal static string CCK {
+        public static string CCK {
             get {
                 return ResourceManager.GetString("CCK", resourceCulture);
             }
@@ -423,7 +423,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Switzerland.
         /// </summary>
-        internal static string CHE {
+        public static string CHE {
             get {
                 return ResourceManager.GetString("CHE", resourceCulture);
             }
@@ -432,7 +432,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Chile.
         /// </summary>
-        internal static string CHL {
+        public static string CHL {
             get {
                 return ResourceManager.GetString("CHL", resourceCulture);
             }
@@ -441,7 +441,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to China.
         /// </summary>
-        internal static string CHN {
+        public static string CHN {
             get {
                 return ResourceManager.GetString("CHN", resourceCulture);
             }
@@ -450,7 +450,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Côte d&apos;Ivoire.
         /// </summary>
-        internal static string CIV {
+        public static string CIV {
             get {
                 return ResourceManager.GetString("CIV", resourceCulture);
             }
@@ -459,7 +459,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cameroon.
         /// </summary>
-        internal static string CMR {
+        public static string CMR {
             get {
                 return ResourceManager.GetString("CMR", resourceCulture);
             }
@@ -468,7 +468,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Congo, Dem. Rep..
         /// </summary>
-        internal static string COD {
+        public static string COD {
             get {
                 return ResourceManager.GetString("COD", resourceCulture);
             }
@@ -477,7 +477,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Congo, Rep..
         /// </summary>
-        internal static string COG {
+        public static string COG {
             get {
                 return ResourceManager.GetString("COG", resourceCulture);
             }
@@ -486,7 +486,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cook Island.
         /// </summary>
-        internal static string COK {
+        public static string COK {
             get {
                 return ResourceManager.GetString("COK", resourceCulture);
             }
@@ -495,7 +495,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Colombia.
         /// </summary>
-        internal static string COL {
+        public static string COL {
             get {
                 return ResourceManager.GetString("COL", resourceCulture);
             }
@@ -504,7 +504,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Comoros.
         /// </summary>
-        internal static string COM {
+        public static string COM {
             get {
                 return ResourceManager.GetString("COM", resourceCulture);
             }
@@ -513,7 +513,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Republic of Cabo Verde.
         /// </summary>
-        internal static string CPV {
+        public static string CPV {
             get {
                 return ResourceManager.GetString("CPV", resourceCulture);
             }
@@ -522,7 +522,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Costa Rica.
         /// </summary>
-        internal static string CRI {
+        public static string CRI {
             get {
                 return ResourceManager.GetString("CRI", resourceCulture);
             }
@@ -531,7 +531,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cuba.
         /// </summary>
-        internal static string CUB {
+        public static string CUB {
             get {
                 return ResourceManager.GetString("CUB", resourceCulture);
             }
@@ -540,7 +540,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Christmas Island.
         /// </summary>
-        internal static string CXR {
+        public static string CXR {
             get {
                 return ResourceManager.GetString("CXR", resourceCulture);
             }
@@ -549,7 +549,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cayman Islands.
         /// </summary>
-        internal static string CYM {
+        public static string CYM {
             get {
                 return ResourceManager.GetString("CYM", resourceCulture);
             }
@@ -558,7 +558,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cyprus.
         /// </summary>
-        internal static string CYP {
+        public static string CYP {
             get {
                 return ResourceManager.GetString("CYP", resourceCulture);
             }
@@ -567,7 +567,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Czech Republic.
         /// </summary>
-        internal static string CZE {
+        public static string CZE {
             get {
                 return ResourceManager.GetString("CZE", resourceCulture);
             }
@@ -576,7 +576,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Germany.
         /// </summary>
-        internal static string DEU {
+        public static string DEU {
             get {
                 return ResourceManager.GetString("DEU", resourceCulture);
             }
@@ -585,7 +585,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Djibouti.
         /// </summary>
-        internal static string DJI {
+        public static string DJI {
             get {
                 return ResourceManager.GetString("DJI", resourceCulture);
             }
@@ -594,7 +594,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Dominica.
         /// </summary>
-        internal static string DMA {
+        public static string DMA {
             get {
                 return ResourceManager.GetString("DMA", resourceCulture);
             }
@@ -603,7 +603,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Denmark.
         /// </summary>
-        internal static string DNK {
+        public static string DNK {
             get {
                 return ResourceManager.GetString("DNK", resourceCulture);
             }
@@ -612,7 +612,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Dominican Republic.
         /// </summary>
-        internal static string DOM {
+        public static string DOM {
             get {
                 return ResourceManager.GetString("DOM", resourceCulture);
             }
@@ -621,7 +621,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Algeria.
         /// </summary>
-        internal static string DZA {
+        public static string DZA {
             get {
                 return ResourceManager.GetString("DZA", resourceCulture);
             }
@@ -630,7 +630,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Europe and Central Asia.
         /// </summary>
-        internal static string ECA {
+        public static string ECA {
             get {
                 return ResourceManager.GetString("ECA", resourceCulture);
             }
@@ -639,7 +639,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Ecuador.
         /// </summary>
-        internal static string ECU {
+        public static string ECU {
             get {
                 return ResourceManager.GetString("ECU", resourceCulture);
             }
@@ -648,7 +648,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Egypt, Arab Rep..
         /// </summary>
-        internal static string EGY {
+        public static string EGY {
             get {
                 return ResourceManager.GetString("EGY", resourceCulture);
             }
@@ -657,7 +657,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Eritrea.
         /// </summary>
-        internal static string ERI {
+        public static string ERI {
             get {
                 return ResourceManager.GetString("ERI", resourceCulture);
             }
@@ -666,7 +666,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to West. Sahara.
         /// </summary>
-        internal static string ESH {
+        public static string ESH {
             get {
                 return ResourceManager.GetString("ESH", resourceCulture);
             }
@@ -675,7 +675,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Spain.
         /// </summary>
-        internal static string ESP {
+        public static string ESP {
             get {
                 return ResourceManager.GetString("ESP", resourceCulture);
             }
@@ -684,7 +684,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Estonia.
         /// </summary>
-        internal static string EST {
+        public static string EST {
             get {
                 return ResourceManager.GetString("EST", resourceCulture);
             }
@@ -693,7 +693,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Ethiopia.
         /// </summary>
-        internal static string ETH {
+        public static string ETH {
             get {
                 return ResourceManager.GetString("ETH", resourceCulture);
             }
@@ -702,7 +702,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Finland.
         /// </summary>
-        internal static string FIN {
+        public static string FIN {
             get {
                 return ResourceManager.GetString("FIN", resourceCulture);
             }
@@ -711,7 +711,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fiji.
         /// </summary>
-        internal static string FJI {
+        public static string FJI {
             get {
                 return ResourceManager.GetString("FJI", resourceCulture);
             }
@@ -720,7 +720,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Falkland Isld..
         /// </summary>
-        internal static string FLK {
+        public static string FLK {
             get {
                 return ResourceManager.GetString("FLK", resourceCulture);
             }
@@ -729,7 +729,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to France.
         /// </summary>
-        internal static string FRA {
+        public static string FRA {
             get {
                 return ResourceManager.GetString("FRA", resourceCulture);
             }
@@ -738,7 +738,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Faeroe Isld..
         /// </summary>
-        internal static string FRO {
+        public static string FRO {
             get {
                 return ResourceManager.GetString("FRO", resourceCulture);
             }
@@ -747,7 +747,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Micronesia.
         /// </summary>
-        internal static string FSM {
+        public static string FSM {
             get {
                 return ResourceManager.GetString("FSM", resourceCulture);
             }
@@ -756,7 +756,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to France, Metrop..
         /// </summary>
-        internal static string FXX {
+        public static string FXX {
             get {
                 return ResourceManager.GetString("FXX", resourceCulture);
             }
@@ -765,7 +765,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Gabon.
         /// </summary>
-        internal static string GAB {
+        public static string GAB {
             get {
                 return ResourceManager.GetString("GAB", resourceCulture);
             }
@@ -774,7 +774,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to United Kingdom.
         /// </summary>
-        internal static string GBR {
+        public static string GBR {
             get {
                 return ResourceManager.GetString("GBR", resourceCulture);
             }
@@ -783,7 +783,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Georgia.
         /// </summary>
-        internal static string GEO {
+        public static string GEO {
             get {
                 return ResourceManager.GetString("GEO", resourceCulture);
             }
@@ -792,7 +792,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Ghana.
         /// </summary>
-        internal static string GHA {
+        public static string GHA {
             get {
                 return ResourceManager.GetString("GHA", resourceCulture);
             }
@@ -801,7 +801,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Gibraltar.
         /// </summary>
-        internal static string GIB {
+        public static string GIB {
             get {
                 return ResourceManager.GetString("GIB", resourceCulture);
             }
@@ -810,7 +810,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Guinea.
         /// </summary>
-        internal static string GIN {
+        public static string GIN {
             get {
                 return ResourceManager.GetString("GIN", resourceCulture);
             }
@@ -819,7 +819,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Guadeloupe.
         /// </summary>
-        internal static string GLP {
+        public static string GLP {
             get {
                 return ResourceManager.GetString("GLP", resourceCulture);
             }
@@ -828,7 +828,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Gambia, The.
         /// </summary>
-        internal static string GMB {
+        public static string GMB {
             get {
                 return ResourceManager.GetString("GMB", resourceCulture);
             }
@@ -837,7 +837,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Guinea-Bissau.
         /// </summary>
-        internal static string GNB {
+        public static string GNB {
             get {
                 return ResourceManager.GetString("GNB", resourceCulture);
             }
@@ -846,7 +846,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Equatorial Guinea.
         /// </summary>
-        internal static string GNQ {
+        public static string GNQ {
             get {
                 return ResourceManager.GetString("GNQ", resourceCulture);
             }
@@ -855,7 +855,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Greece.
         /// </summary>
-        internal static string GRC {
+        public static string GRC {
             get {
                 return ResourceManager.GetString("GRC", resourceCulture);
             }
@@ -864,7 +864,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Grenada.
         /// </summary>
-        internal static string GRD {
+        public static string GRD {
             get {
                 return ResourceManager.GetString("GRD", resourceCulture);
             }
@@ -873,7 +873,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Greenland.
         /// </summary>
-        internal static string GRL {
+        public static string GRL {
             get {
                 return ResourceManager.GetString("GRL", resourceCulture);
             }
@@ -882,7 +882,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Guatemala.
         /// </summary>
-        internal static string GTM {
+        public static string GTM {
             get {
                 return ResourceManager.GetString("GTM", resourceCulture);
             }
@@ -891,7 +891,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to French Guiana.
         /// </summary>
-        internal static string GUF {
+        public static string GUF {
             get {
                 return ResourceManager.GetString("GUF", resourceCulture);
             }
@@ -900,7 +900,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Guam.
         /// </summary>
-        internal static string GUM {
+        public static string GUM {
             get {
                 return ResourceManager.GetString("GUM", resourceCulture);
             }
@@ -909,7 +909,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Guyana.
         /// </summary>
-        internal static string GUY {
+        public static string GUY {
             get {
                 return ResourceManager.GetString("GUY", resourceCulture);
             }
@@ -918,7 +918,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Hong Kong SAR, China.
         /// </summary>
-        internal static string HKG {
+        public static string HKG {
             get {
                 return ResourceManager.GetString("HKG", resourceCulture);
             }
@@ -927,7 +927,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Heard / McDonald Isld.
         /// </summary>
-        internal static string HMD {
+        public static string HMD {
             get {
                 return ResourceManager.GetString("HMD", resourceCulture);
             }
@@ -936,7 +936,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Honduras.
         /// </summary>
-        internal static string HND {
+        public static string HND {
             get {
                 return ResourceManager.GetString("HND", resourceCulture);
             }
@@ -945,7 +945,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Croatia.
         /// </summary>
-        internal static string HRV {
+        public static string HRV {
             get {
                 return ResourceManager.GetString("HRV", resourceCulture);
             }
@@ -954,7 +954,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Haiti.
         /// </summary>
-        internal static string HTI {
+        public static string HTI {
             get {
                 return ResourceManager.GetString("HTI", resourceCulture);
             }
@@ -963,7 +963,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Hungary.
         /// </summary>
-        internal static string HUN {
+        public static string HUN {
             get {
                 return ResourceManager.GetString("HUN", resourceCulture);
             }
@@ -972,7 +972,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Indonesia.
         /// </summary>
-        internal static string IDN {
+        public static string IDN {
             get {
                 return ResourceManager.GetString("IDN", resourceCulture);
             }
@@ -981,7 +981,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to India.
         /// </summary>
-        internal static string IND {
+        public static string IND {
             get {
                 return ResourceManager.GetString("IND", resourceCulture);
             }
@@ -990,7 +990,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to British Indian Ocean Territory.
         /// </summary>
-        internal static string IOT {
+        public static string IOT {
             get {
                 return ResourceManager.GetString("IOT", resourceCulture);
             }
@@ -999,7 +999,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Ireland.
         /// </summary>
-        internal static string IRL {
+        public static string IRL {
             get {
                 return ResourceManager.GetString("IRL", resourceCulture);
             }
@@ -1008,7 +1008,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Iran, Islamic Rep..
         /// </summary>
-        internal static string IRN {
+        public static string IRN {
             get {
                 return ResourceManager.GetString("IRN", resourceCulture);
             }
@@ -1017,7 +1017,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Iraq.
         /// </summary>
-        internal static string IRQ {
+        public static string IRQ {
             get {
                 return ResourceManager.GetString("IRQ", resourceCulture);
             }
@@ -1026,7 +1026,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Iceland.
         /// </summary>
-        internal static string ISL {
+        public static string ISL {
             get {
                 return ResourceManager.GetString("ISL", resourceCulture);
             }
@@ -1035,7 +1035,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Israel.
         /// </summary>
-        internal static string ISR {
+        public static string ISR {
             get {
                 return ResourceManager.GetString("ISR", resourceCulture);
             }
@@ -1044,7 +1044,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Italy.
         /// </summary>
-        internal static string ITA {
+        public static string ITA {
             get {
                 return ResourceManager.GetString("ITA", resourceCulture);
             }
@@ -1053,7 +1053,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Jamaica.
         /// </summary>
-        internal static string JAM {
+        public static string JAM {
             get {
                 return ResourceManager.GetString("JAM", resourceCulture);
             }
@@ -1062,7 +1062,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Jerusalem.
         /// </summary>
-        internal static string JER {
+        public static string JER {
             get {
                 return ResourceManager.GetString("JER", resourceCulture);
             }
@@ -1071,7 +1071,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Jordan.
         /// </summary>
-        internal static string JOR {
+        public static string JOR {
             get {
                 return ResourceManager.GetString("JOR", resourceCulture);
             }
@@ -1080,7 +1080,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Japan.
         /// </summary>
-        internal static string JPN {
+        public static string JPN {
             get {
                 return ResourceManager.GetString("JPN", resourceCulture);
             }
@@ -1089,7 +1089,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Kazakhstan.
         /// </summary>
-        internal static string KAZ {
+        public static string KAZ {
             get {
                 return ResourceManager.GetString("KAZ", resourceCulture);
             }
@@ -1098,7 +1098,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Kenya.
         /// </summary>
-        internal static string KEN {
+        public static string KEN {
             get {
                 return ResourceManager.GetString("KEN", resourceCulture);
             }
@@ -1107,7 +1107,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Kyrgyz Republic.
         /// </summary>
-        internal static string KGZ {
+        public static string KGZ {
             get {
                 return ResourceManager.GetString("KGZ", resourceCulture);
             }
@@ -1116,7 +1116,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cambodia.
         /// </summary>
-        internal static string KHM {
+        public static string KHM {
             get {
                 return ResourceManager.GetString("KHM", resourceCulture);
             }
@@ -1125,7 +1125,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Kiribati.
         /// </summary>
-        internal static string KIR {
+        public static string KIR {
             get {
                 return ResourceManager.GetString("KIR", resourceCulture);
             }
@@ -1134,7 +1134,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to St.Kitts and Nevis.
         /// </summary>
-        internal static string KNA {
+        public static string KNA {
             get {
                 return ResourceManager.GetString("KNA", resourceCulture);
             }
@@ -1143,7 +1143,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Korea, Rep..
         /// </summary>
-        internal static string KOR {
+        public static string KOR {
             get {
                 return ResourceManager.GetString("KOR", resourceCulture);
             }
@@ -1152,7 +1152,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Kosovo.
         /// </summary>
-        internal static string KSV {
+        public static string KSV {
             get {
                 return ResourceManager.GetString("KSV", resourceCulture);
             }
@@ -1161,7 +1161,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Kuwait.
         /// </summary>
-        internal static string KWT {
+        public static string KWT {
             get {
                 return ResourceManager.GetString("KWT", resourceCulture);
             }
@@ -1170,7 +1170,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Latin America &amp; the Caribbean.
         /// </summary>
-        internal static string LAC {
+        public static string LAC {
             get {
                 return ResourceManager.GetString("LAC", resourceCulture);
             }
@@ -1179,7 +1179,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lao PDR.
         /// </summary>
-        internal static string LAO {
+        public static string LAO {
             get {
                 return ResourceManager.GetString("LAO", resourceCulture);
             }
@@ -1188,7 +1188,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lebanon.
         /// </summary>
-        internal static string LBN {
+        public static string LBN {
             get {
                 return ResourceManager.GetString("LBN", resourceCulture);
             }
@@ -1197,7 +1197,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Liberia.
         /// </summary>
-        internal static string LBR {
+        public static string LBR {
             get {
                 return ResourceManager.GetString("LBR", resourceCulture);
             }
@@ -1206,7 +1206,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Libya.
         /// </summary>
-        internal static string LBY {
+        public static string LBY {
             get {
                 return ResourceManager.GetString("LBY", resourceCulture);
             }
@@ -1215,7 +1215,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to St. Lucia.
         /// </summary>
-        internal static string LCA {
+        public static string LCA {
             get {
                 return ResourceManager.GetString("LCA", resourceCulture);
             }
@@ -1224,7 +1224,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Liechtenstein.
         /// </summary>
-        internal static string LIE {
+        public static string LIE {
             get {
                 return ResourceManager.GetString("LIE", resourceCulture);
             }
@@ -1233,7 +1233,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sri Lanka.
         /// </summary>
-        internal static string LKA {
+        public static string LKA {
             get {
                 return ResourceManager.GetString("LKA", resourceCulture);
             }
@@ -1242,7 +1242,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lesotho.
         /// </summary>
-        internal static string LSO {
+        public static string LSO {
             get {
                 return ResourceManager.GetString("LSO", resourceCulture);
             }
@@ -1251,7 +1251,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lithuania.
         /// </summary>
-        internal static string LTU {
+        public static string LTU {
             get {
                 return ResourceManager.GetString("LTU", resourceCulture);
             }
@@ -1260,7 +1260,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Luxembourg.
         /// </summary>
-        internal static string LUX {
+        public static string LUX {
             get {
                 return ResourceManager.GetString("LUX", resourceCulture);
             }
@@ -1269,7 +1269,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Latvia.
         /// </summary>
-        internal static string LVA {
+        public static string LVA {
             get {
                 return ResourceManager.GetString("LVA", resourceCulture);
             }
@@ -1278,7 +1278,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Macao.
         /// </summary>
-        internal static string MAC {
+        public static string MAC {
             get {
                 return ResourceManager.GetString("MAC", resourceCulture);
             }
@@ -1287,7 +1287,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Morocco.
         /// </summary>
-        internal static string MAR {
+        public static string MAR {
             get {
                 return ResourceManager.GetString("MAR", resourceCulture);
             }
@@ -1296,7 +1296,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Monaco.
         /// </summary>
-        internal static string MCO {
+        public static string MCO {
             get {
                 return ResourceManager.GetString("MCO", resourceCulture);
             }
@@ -1305,7 +1305,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Moldova.
         /// </summary>
-        internal static string MDA {
+        public static string MDA {
             get {
                 return ResourceManager.GetString("MDA", resourceCulture);
             }
@@ -1314,7 +1314,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Madagascar.
         /// </summary>
-        internal static string MDG {
+        public static string MDG {
             get {
                 return ResourceManager.GetString("MDG", resourceCulture);
             }
@@ -1323,7 +1323,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Maldives.
         /// </summary>
-        internal static string MDV {
+        public static string MDV {
             get {
                 return ResourceManager.GetString("MDV", resourceCulture);
             }
@@ -1332,7 +1332,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mexico.
         /// </summary>
-        internal static string MEX {
+        public static string MEX {
             get {
                 return ResourceManager.GetString("MEX", resourceCulture);
             }
@@ -1341,7 +1341,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Marshall Isld..
         /// </summary>
-        internal static string MHL {
+        public static string MHL {
             get {
                 return ResourceManager.GetString("MHL", resourceCulture);
             }
@@ -1350,7 +1350,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Macedonia, FYR.
         /// </summary>
-        internal static string MKD {
+        public static string MKD {
             get {
                 return ResourceManager.GetString("MKD", resourceCulture);
             }
@@ -1359,7 +1359,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mali.
         /// </summary>
-        internal static string MLI {
+        public static string MLI {
             get {
                 return ResourceManager.GetString("MLI", resourceCulture);
             }
@@ -1368,7 +1368,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Malta.
         /// </summary>
-        internal static string MLT {
+        public static string MLT {
             get {
                 return ResourceManager.GetString("MLT", resourceCulture);
             }
@@ -1377,7 +1377,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Myanmar.
         /// </summary>
-        internal static string MMR {
+        public static string MMR {
             get {
                 return ResourceManager.GetString("MMR", resourceCulture);
             }
@@ -1386,7 +1386,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Montenegro.
         /// </summary>
-        internal static string MNE {
+        public static string MNE {
             get {
                 return ResourceManager.GetString("MNE", resourceCulture);
             }
@@ -1395,7 +1395,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mongolia.
         /// </summary>
-        internal static string MNG {
+        public static string MNG {
             get {
                 return ResourceManager.GetString("MNG", resourceCulture);
             }
@@ -1404,7 +1404,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to N. Mariana Isld..
         /// </summary>
-        internal static string MNP {
+        public static string MNP {
             get {
                 return ResourceManager.GetString("MNP", resourceCulture);
             }
@@ -1413,7 +1413,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mozambique.
         /// </summary>
-        internal static string MOZ {
+        public static string MOZ {
             get {
                 return ResourceManager.GetString("MOZ", resourceCulture);
             }
@@ -1422,7 +1422,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mauritania.
         /// </summary>
-        internal static string MRT {
+        public static string MRT {
             get {
                 return ResourceManager.GetString("MRT", resourceCulture);
             }
@@ -1431,7 +1431,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Montserrat.
         /// </summary>
-        internal static string MSR {
+        public static string MSR {
             get {
                 return ResourceManager.GetString("MSR", resourceCulture);
             }
@@ -1440,7 +1440,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Martinique.
         /// </summary>
-        internal static string MTQ {
+        public static string MTQ {
             get {
                 return ResourceManager.GetString("MTQ", resourceCulture);
             }
@@ -1449,7 +1449,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mauritius.
         /// </summary>
-        internal static string MUS {
+        public static string MUS {
             get {
                 return ResourceManager.GetString("MUS", resourceCulture);
             }
@@ -1458,7 +1458,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Malawi.
         /// </summary>
-        internal static string MWI {
+        public static string MWI {
             get {
                 return ResourceManager.GetString("MWI", resourceCulture);
             }
@@ -1467,7 +1467,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Malaysia.
         /// </summary>
-        internal static string MYS {
+        public static string MYS {
             get {
                 return ResourceManager.GetString("MYS", resourceCulture);
             }
@@ -1476,7 +1476,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mayotte.
         /// </summary>
-        internal static string MYT {
+        public static string MYT {
             get {
                 return ResourceManager.GetString("MYT", resourceCulture);
             }
@@ -1485,7 +1485,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Namibia.
         /// </summary>
-        internal static string NAM {
+        public static string NAM {
             get {
                 return ResourceManager.GetString("NAM", resourceCulture);
             }
@@ -1494,7 +1494,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to New Caledonia.
         /// </summary>
-        internal static string NCL {
+        public static string NCL {
             get {
                 return ResourceManager.GetString("NCL", resourceCulture);
             }
@@ -1503,7 +1503,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Niger.
         /// </summary>
-        internal static string NER {
+        public static string NER {
             get {
                 return ResourceManager.GetString("NER", resourceCulture);
             }
@@ -1512,7 +1512,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Norfolk Isld..
         /// </summary>
-        internal static string NFK {
+        public static string NFK {
             get {
                 return ResourceManager.GetString("NFK", resourceCulture);
             }
@@ -1521,7 +1521,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nigeria.
         /// </summary>
-        internal static string NGA {
+        public static string NGA {
             get {
                 return ResourceManager.GetString("NGA", resourceCulture);
             }
@@ -1530,7 +1530,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nicaragua.
         /// </summary>
-        internal static string NIC {
+        public static string NIC {
             get {
                 return ResourceManager.GetString("NIC", resourceCulture);
             }
@@ -1539,7 +1539,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Niue.
         /// </summary>
-        internal static string NIU {
+        public static string NIU {
             get {
                 return ResourceManager.GetString("NIU", resourceCulture);
             }
@@ -1548,7 +1548,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Netherlands.
         /// </summary>
-        internal static string NLD {
+        public static string NLD {
             get {
                 return ResourceManager.GetString("NLD", resourceCulture);
             }
@@ -1557,7 +1557,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Norway.
         /// </summary>
-        internal static string NOR {
+        public static string NOR {
             get {
                 return ResourceManager.GetString("NOR", resourceCulture);
             }
@@ -1566,7 +1566,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nepal.
         /// </summary>
-        internal static string NPL {
+        public static string NPL {
             get {
                 return ResourceManager.GetString("NPL", resourceCulture);
             }
@@ -1575,7 +1575,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nauru.
         /// </summary>
-        internal static string NRU {
+        public static string NRU {
             get {
                 return ResourceManager.GetString("NRU", resourceCulture);
             }
@@ -1584,7 +1584,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to New Zealand.
         /// </summary>
-        internal static string NZL {
+        public static string NZL {
             get {
                 return ResourceManager.GetString("NZL", resourceCulture);
             }
@@ -1593,7 +1593,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Oman.
         /// </summary>
-        internal static string OMN {
+        public static string OMN {
             get {
                 return ResourceManager.GetString("OMN", resourceCulture);
             }
@@ -1602,7 +1602,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Pakistan.
         /// </summary>
-        internal static string PAK {
+        public static string PAK {
             get {
                 return ResourceManager.GetString("PAK", resourceCulture);
             }
@@ -1611,7 +1611,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Panama.
         /// </summary>
-        internal static string PAN {
+        public static string PAN {
             get {
                 return ResourceManager.GetString("PAN", resourceCulture);
             }
@@ -1620,7 +1620,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Pitcairn Island.
         /// </summary>
-        internal static string PCN {
+        public static string PCN {
             get {
                 return ResourceManager.GetString("PCN", resourceCulture);
             }
@@ -1629,7 +1629,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Peru.
         /// </summary>
-        internal static string PER {
+        public static string PER {
             get {
                 return ResourceManager.GetString("PER", resourceCulture);
             }
@@ -1638,7 +1638,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Philippines.
         /// </summary>
-        internal static string PHL {
+        public static string PHL {
             get {
                 return ResourceManager.GetString("PHL", resourceCulture);
             }
@@ -1647,7 +1647,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Palau.
         /// </summary>
-        internal static string PLW {
+        public static string PLW {
             get {
                 return ResourceManager.GetString("PLW", resourceCulture);
             }
@@ -1656,7 +1656,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Papua New Guinea.
         /// </summary>
-        internal static string PNG {
+        public static string PNG {
             get {
                 return ResourceManager.GetString("PNG", resourceCulture);
             }
@@ -1665,7 +1665,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Poland.
         /// </summary>
-        internal static string POL {
+        public static string POL {
             get {
                 return ResourceManager.GetString("POL", resourceCulture);
             }
@@ -1674,7 +1674,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Puerto Rico.
         /// </summary>
-        internal static string PRI {
+        public static string PRI {
             get {
                 return ResourceManager.GetString("PRI", resourceCulture);
             }
@@ -1683,7 +1683,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Korea, Dem. Rep..
         /// </summary>
-        internal static string PRK {
+        public static string PRK {
             get {
                 return ResourceManager.GetString("PRK", resourceCulture);
             }
@@ -1692,7 +1692,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Portugal.
         /// </summary>
-        internal static string PRT {
+        public static string PRT {
             get {
                 return ResourceManager.GetString("PRT", resourceCulture);
             }
@@ -1701,7 +1701,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Paraguay.
         /// </summary>
-        internal static string PRY {
+        public static string PRY {
             get {
                 return ResourceManager.GetString("PRY", resourceCulture);
             }
@@ -1710,7 +1710,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to West Bank and Gaza.
         /// </summary>
-        internal static string PSE {
+        public static string PSE {
             get {
                 return ResourceManager.GetString("PSE", resourceCulture);
             }
@@ -1719,7 +1719,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to French Polynesia.
         /// </summary>
-        internal static string PYF {
+        public static string PYF {
             get {
                 return ResourceManager.GetString("PYF", resourceCulture);
             }
@@ -1728,7 +1728,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Qatar.
         /// </summary>
-        internal static string QAT {
+        public static string QAT {
             get {
                 return ResourceManager.GetString("QAT", resourceCulture);
             }
@@ -1737,7 +1737,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Romania.
         /// </summary>
-        internal static string ROM {
+        public static string ROM {
             get {
                 return ResourceManager.GetString("ROM", resourceCulture);
             }
@@ -1746,7 +1746,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Russian Federation.
         /// </summary>
-        internal static string RUS {
+        public static string RUS {
             get {
                 return ResourceManager.GetString("RUS", resourceCulture);
             }
@@ -1755,7 +1755,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Rwanda.
         /// </summary>
-        internal static string RWA {
+        public static string RWA {
             get {
                 return ResourceManager.GetString("RWA", resourceCulture);
             }
@@ -1764,7 +1764,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Saudi Arabia.
         /// </summary>
-        internal static string SAU {
+        public static string SAU {
             get {
                 return ResourceManager.GetString("SAU", resourceCulture);
             }
@@ -1773,7 +1773,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Serbia and Montenegro.
         /// </summary>
-        internal static string SCG {
+        public static string SCG {
             get {
                 return ResourceManager.GetString("SCG", resourceCulture);
             }
@@ -1782,7 +1782,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sudan.
         /// </summary>
-        internal static string SDN {
+        public static string SDN {
             get {
                 return ResourceManager.GetString("SDN", resourceCulture);
             }
@@ -1791,7 +1791,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Senegal.
         /// </summary>
-        internal static string SEN {
+        public static string SEN {
             get {
                 return ResourceManager.GetString("SEN", resourceCulture);
             }
@@ -1800,7 +1800,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Singapore.
         /// </summary>
-        internal static string SGP {
+        public static string SGP {
             get {
                 return ResourceManager.GetString("SGP", resourceCulture);
             }
@@ -1809,7 +1809,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to S. Georgia &amp; S. Sandwich Isld..
         /// </summary>
-        internal static string SGS {
+        public static string SGS {
             get {
                 return ResourceManager.GetString("SGS", resourceCulture);
             }
@@ -1818,7 +1818,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to St. Helena.
         /// </summary>
-        internal static string SHN {
+        public static string SHN {
             get {
                 return ResourceManager.GetString("SHN", resourceCulture);
             }
@@ -1827,7 +1827,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Svalbard and Jan Mayen Islands.
         /// </summary>
-        internal static string SJM {
+        public static string SJM {
             get {
                 return ResourceManager.GetString("SJM", resourceCulture);
             }
@@ -1836,7 +1836,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Solomon Islands.
         /// </summary>
-        internal static string SLB {
+        public static string SLB {
             get {
                 return ResourceManager.GetString("SLB", resourceCulture);
             }
@@ -1845,7 +1845,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sierra Leone.
         /// </summary>
-        internal static string SLE {
+        public static string SLE {
             get {
                 return ResourceManager.GetString("SLE", resourceCulture);
             }
@@ -1854,7 +1854,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to El Salvador.
         /// </summary>
-        internal static string SLV {
+        public static string SLV {
             get {
                 return ResourceManager.GetString("SLV", resourceCulture);
             }
@@ -1863,7 +1863,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to San Marino.
         /// </summary>
-        internal static string SMR {
+        public static string SMR {
             get {
                 return ResourceManager.GetString("SMR", resourceCulture);
             }
@@ -1872,7 +1872,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Somalia.
         /// </summary>
-        internal static string SOM {
+        public static string SOM {
             get {
                 return ResourceManager.GetString("SOM", resourceCulture);
             }
@@ -1881,7 +1881,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to St. Pierre and Miquelon.
         /// </summary>
-        internal static string SPM {
+        public static string SPM {
             get {
                 return ResourceManager.GetString("SPM", resourceCulture);
             }
@@ -1890,7 +1890,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Serbia.
         /// </summary>
-        internal static string SRB {
+        public static string SRB {
             get {
                 return ResourceManager.GetString("SRB", resourceCulture);
             }
@@ -1899,7 +1899,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to South Sudan.
         /// </summary>
-        internal static string SSD {
+        public static string SSD {
             get {
                 return ResourceManager.GetString("SSD", resourceCulture);
             }
@@ -1908,7 +1908,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to São Tomé and Principe.
         /// </summary>
-        internal static string STP {
+        public static string STP {
             get {
                 return ResourceManager.GetString("STP", resourceCulture);
             }
@@ -1917,7 +1917,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Suriname.
         /// </summary>
-        internal static string SUR {
+        public static string SUR {
             get {
                 return ResourceManager.GetString("SUR", resourceCulture);
             }
@@ -1926,7 +1926,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Slovak Republic.
         /// </summary>
-        internal static string SVK {
+        public static string SVK {
             get {
                 return ResourceManager.GetString("SVK", resourceCulture);
             }
@@ -1935,7 +1935,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Slovenia.
         /// </summary>
-        internal static string SVN {
+        public static string SVN {
             get {
                 return ResourceManager.GetString("SVN", resourceCulture);
             }
@@ -1944,7 +1944,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sweden.
         /// </summary>
-        internal static string SWE {
+        public static string SWE {
             get {
                 return ResourceManager.GetString("SWE", resourceCulture);
             }
@@ -1953,7 +1953,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Swaziland.
         /// </summary>
-        internal static string SWZ {
+        public static string SWZ {
             get {
                 return ResourceManager.GetString("SWZ", resourceCulture);
             }
@@ -1962,7 +1962,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Seychelles.
         /// </summary>
-        internal static string SYC {
+        public static string SYC {
             get {
                 return ResourceManager.GetString("SYC", resourceCulture);
             }
@@ -1971,7 +1971,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Syrian Arab Republic.
         /// </summary>
-        internal static string SYR {
+        public static string SYR {
             get {
                 return ResourceManager.GetString("SYR", resourceCulture);
             }
@@ -1980,7 +1980,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Turks and Caicos Islands.
         /// </summary>
-        internal static string TCA {
+        public static string TCA {
             get {
                 return ResourceManager.GetString("TCA", resourceCulture);
             }
@@ -1989,7 +1989,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Chad.
         /// </summary>
-        internal static string TCD {
+        public static string TCD {
             get {
                 return ResourceManager.GetString("TCD", resourceCulture);
             }
@@ -1998,7 +1998,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Togo.
         /// </summary>
-        internal static string TGO {
+        public static string TGO {
             get {
                 return ResourceManager.GetString("TGO", resourceCulture);
             }
@@ -2007,7 +2007,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Thailand.
         /// </summary>
-        internal static string THA {
+        public static string THA {
             get {
                 return ResourceManager.GetString("THA", resourceCulture);
             }
@@ -2016,7 +2016,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Tajikistan.
         /// </summary>
-        internal static string TJK {
+        public static string TJK {
             get {
                 return ResourceManager.GetString("TJK", resourceCulture);
             }
@@ -2025,7 +2025,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Tokelau.
         /// </summary>
-        internal static string TKL {
+        public static string TKL {
             get {
                 return ResourceManager.GetString("TKL", resourceCulture);
             }
@@ -2034,7 +2034,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Turkmenistan.
         /// </summary>
-        internal static string TKM {
+        public static string TKM {
             get {
                 return ResourceManager.GetString("TKM", resourceCulture);
             }
@@ -2043,7 +2043,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Timor-Leste.
         /// </summary>
-        internal static string TLS {
+        public static string TLS {
             get {
                 return ResourceManager.GetString("TLS", resourceCulture);
             }
@@ -2052,7 +2052,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Tonga.
         /// </summary>
-        internal static string TON {
+        public static string TON {
             get {
                 return ResourceManager.GetString("TON", resourceCulture);
             }
@@ -2061,7 +2061,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Trinidad and Tobago.
         /// </summary>
-        internal static string TTO {
+        public static string TTO {
             get {
                 return ResourceManager.GetString("TTO", resourceCulture);
             }
@@ -2070,7 +2070,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Tunisia.
         /// </summary>
-        internal static string TUN {
+        public static string TUN {
             get {
                 return ResourceManager.GetString("TUN", resourceCulture);
             }
@@ -2079,7 +2079,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Turkey.
         /// </summary>
-        internal static string TUR {
+        public static string TUR {
             get {
                 return ResourceManager.GetString("TUR", resourceCulture);
             }
@@ -2088,7 +2088,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Tuvalu.
         /// </summary>
-        internal static string TUV {
+        public static string TUV {
             get {
                 return ResourceManager.GetString("TUV", resourceCulture);
             }
@@ -2097,7 +2097,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Taiwan.
         /// </summary>
-        internal static string TWN {
+        public static string TWN {
             get {
                 return ResourceManager.GetString("TWN", resourceCulture);
             }
@@ -2106,7 +2106,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Tanzania.
         /// </summary>
-        internal static string TZA {
+        public static string TZA {
             get {
                 return ResourceManager.GetString("TZA", resourceCulture);
             }
@@ -2115,7 +2115,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Uganda.
         /// </summary>
-        internal static string UGA {
+        public static string UGA {
             get {
                 return ResourceManager.GetString("UGA", resourceCulture);
             }
@@ -2124,7 +2124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Ukraine.
         /// </summary>
-        internal static string UKR {
+        public static string UKR {
             get {
                 return ResourceManager.GetString("UKR", resourceCulture);
             }
@@ -2133,7 +2133,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to US minor outlying Islands.
         /// </summary>
-        internal static string UMI {
+        public static string UMI {
             get {
                 return ResourceManager.GetString("UMI", resourceCulture);
             }
@@ -2142,7 +2142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Uruguay.
         /// </summary>
-        internal static string URY {
+        public static string URY {
             get {
                 return ResourceManager.GetString("URY", resourceCulture);
             }
@@ -2151,7 +2151,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to United States.
         /// </summary>
-        internal static string USA {
+        public static string USA {
             get {
                 return ResourceManager.GetString("USA", resourceCulture);
             }
@@ -2160,7 +2160,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Uzbekistan.
         /// </summary>
-        internal static string UZB {
+        public static string UZB {
             get {
                 return ResourceManager.GetString("UZB", resourceCulture);
             }
@@ -2169,7 +2169,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Holy See.
         /// </summary>
-        internal static string VAT {
+        public static string VAT {
             get {
                 return ResourceManager.GetString("VAT", resourceCulture);
             }
@@ -2178,7 +2178,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to St. Vincent &amp; Grenadines.
         /// </summary>
-        internal static string VCT {
+        public static string VCT {
             get {
                 return ResourceManager.GetString("VCT", resourceCulture);
             }
@@ -2187,7 +2187,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Venezuela, RB.
         /// </summary>
-        internal static string VEN {
+        public static string VEN {
             get {
                 return ResourceManager.GetString("VEN", resourceCulture);
             }
@@ -2196,7 +2196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to British Virgin Islands.
         /// </summary>
-        internal static string VGB {
+        public static string VGB {
             get {
                 return ResourceManager.GetString("VGB", resourceCulture);
             }
@@ -2205,7 +2205,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Virgin Isld. (British).
         /// </summary>
-        internal static string VGB1 {
+        public static string VGB1 {
             get {
                 return ResourceManager.GetString("VGB1", resourceCulture);
             }
@@ -2214,7 +2214,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Virgin Islands, U.S..
         /// </summary>
-        internal static string VIR {
+        public static string VIR {
             get {
                 return ResourceManager.GetString("VIR", resourceCulture);
             }
@@ -2223,7 +2223,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Vietnam.
         /// </summary>
-        internal static string VNM {
+        public static string VNM {
             get {
                 return ResourceManager.GetString("VNM", resourceCulture);
             }
@@ -2232,7 +2232,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Vanuatu.
         /// </summary>
-        internal static string VUT {
+        public static string VUT {
             get {
                 return ResourceManager.GetString("VUT", resourceCulture);
             }
@@ -2241,7 +2241,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Westbank and Gaza.
         /// </summary>
-        internal static string WBG {
+        public static string WBG {
             get {
                 return ResourceManager.GetString("WBG", resourceCulture);
             }
@@ -2250,7 +2250,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to World.
         /// </summary>
-        internal static string WLD {
+        public static string WLD {
             get {
                 return ResourceManager.GetString("WLD", resourceCulture);
             }
@@ -2259,7 +2259,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Wallis and Futuna.
         /// </summary>
-        internal static string WLF {
+        public static string WLF {
             get {
                 return ResourceManager.GetString("WLF", resourceCulture);
             }
@@ -2268,7 +2268,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Samoa.
         /// </summary>
-        internal static string WSM {
+        public static string WSM {
             get {
                 return ResourceManager.GetString("WSM", resourceCulture);
             }
@@ -2277,7 +2277,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Yemen, Rep..
         /// </summary>
-        internal static string YEM {
+        public static string YEM {
             get {
                 return ResourceManager.GetString("YEM", resourceCulture);
             }
@@ -2286,7 +2286,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to South Africa.
         /// </summary>
-        internal static string ZAF {
+        public static string ZAF {
             get {
                 return ResourceManager.GetString("ZAF", resourceCulture);
             }
@@ -2295,7 +2295,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Zambia.
         /// </summary>
-        internal static string ZMB {
+        public static string ZMB {
             get {
                 return ResourceManager.GetString("ZMB", resourceCulture);
             }
@@ -2304,7 +2304,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Zimbabwe.
         /// </summary>
-        internal static string ZWE {
+        public static string ZWE {
             get {
                 return ResourceManager.GetString("ZWE", resourceCulture);
             }

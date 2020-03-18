@@ -1,4 +1,6 @@
-﻿@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+﻿@using Main.Core.Entities.SubEntities
+@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@using WB.Core.SharedKernels.QuestionnaireEntities
 @model System.Guid
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
@@ -8,22 +10,22 @@
 {
     if (questionnaire.IsQuestion(child))
     {
-        @await Html.PartialAsync("_RenderQuestion", child);
+        @await Html.PartialAsync("_RenderQuestion", (IQuestion)child);
     }
     else if (questionnaire.IsRoster(child))
     {
-        @await Html.PartialAsync("_RenderRoster", child);
+        @await Html.PartialAsync("_RenderRoster", (IGroup)child);
     }
     else if (questionnaire.IsGroup(child))
     {
-        @await Html.PartialAsync("_RenderGroup", child);
+        @await Html.PartialAsync("_RenderGroup", (IGroup)child);
     }
     else if (questionnaire.IsStaticText(child))
     {
-        @await Html.PartialAsync("_RenderStaticText", child);
+        @await Html.PartialAsync("_RenderStaticText", (IStaticText)child);
     }
     else if (questionnaire.IsVariable(child))
     {
-        @await Html.PartialAsync("_RenderVariable", child);
+        @await Html.PartialAsync("_RenderVariable", (IVariable)child);
     }
 }

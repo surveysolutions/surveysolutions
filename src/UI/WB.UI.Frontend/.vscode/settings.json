@@ -1,0 +1,21 @@
+{
+    "search.exclude": {
+        "**/dist": true,
+        "**/locale": true
+    },
+    "eslint.alwaysShowStatus": true,
+    "eslint.lintTask.enable": true,
+    "vetur.format.enable": false,
+    "editor.formatOnSave": true,
+    "typescript.preferences.quoteStyle": "single",
+    "javascript.preferences.quoteStyle": "single",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "editor.detectIndentation": false,
+    "vetur.format.defaultFormatter.js": "prettier-eslint",
+    "vetur.format.defaultFormatter.html": "none",
+    "prettier.disableLanguages": [
+        ""
+    ]
+}

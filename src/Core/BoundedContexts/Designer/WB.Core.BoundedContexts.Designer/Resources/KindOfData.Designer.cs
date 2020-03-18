@@ -19,10 +19,10 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class KindOfData {
+    public class KindOfData {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.KindOfData", typeof(KindOfData).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Administrative records data [adm].
         /// </summary>
-        internal static string adm {
+        public static string adm {
             get {
                 return ResourceManager.GetString("adm", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Aggregate data [agg].
         /// </summary>
-        internal static string agg {
+        public static string agg {
             get {
                 return ResourceManager.GetString("agg", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Census/enumeration data [cen].
         /// </summary>
-        internal static string cen {
+        public static string cen {
             get {
                 return ResourceManager.GetString("cen", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Clinical data [cli].
         /// </summary>
-        internal static string cli {
+        public static string cli {
             get {
                 return ResourceManager.GetString("cli", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Event/transaction data [evn].
         /// </summary>
-        internal static string evn {
+        public static string evn {
             get {
                 return ResourceManager.GetString("evn", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Observation data/ratings [obs].
         /// </summary>
-        internal static string obs {
+        public static string obs {
             get {
                 return ResourceManager.GetString("obs", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Process-produced data [pro].
         /// </summary>
-        internal static string pro {
+        public static string pro {
             get {
                 return ResourceManager.GetString("pro", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sample survey data [ssd].
         /// </summary>
-        internal static string ssd {
+        public static string ssd {
             get {
                 return ResourceManager.GetString("ssd", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Time budget diaries [tbd].
         /// </summary>
-        internal static string tbd {
+        public static string tbd {
             get {
                 return ResourceManager.GetString("tbd", resourceCulture);
             }

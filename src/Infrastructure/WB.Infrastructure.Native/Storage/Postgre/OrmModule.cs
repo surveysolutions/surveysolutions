@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Humanizer;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
@@ -49,7 +50,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 status.Message = Modules.MigrateDb;
                 DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                     this.connectionSettings.PlainStorageSchemaName,
-                    this.connectionSettings.PlainStoreUpgradeSettings);
+                    this.connectionSettings.PlainStoreUpgradeSettings,
+                    serviceLocator.GetInstance<ILoggerProvider>());
 
                 status.ClearMessage();
             }
@@ -71,7 +73,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                     status.Message = Modules.MigrateDb;
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
-                        this.connectionSettings.ReadSideSchemaName, this.connectionSettings.ReadSideUpgradeSettings);
+                        this.connectionSettings.ReadSideSchemaName, this.connectionSettings.ReadSideUpgradeSettings,
+                        serviceLocator.GetInstance<ILoggerProvider>());
 
                     status.ClearMessage();
                 }
@@ -95,7 +98,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     status.Message = Modules.MigrateDb;
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                         this.connectionSettings.LogsSchemaName,
-                        this.connectionSettings.LogsUpgradeSettings);
+                        this.connectionSettings.LogsUpgradeSettings,
+                        serviceLocator.GetInstance<ILoggerProvider>());
 
                     status.ClearMessage();
                 }
@@ -119,7 +123,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     status.Message = Modules.MigrateDb;
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                         this.connectionSettings.UsersSchemaName,
-                        this.connectionSettings.UsersUpgradeSettings);
+                        this.connectionSettings.UsersUpgradeSettings,
+                        serviceLocator.GetInstance<ILoggerProvider>());
 
                     status.ClearMessage();
                 }
@@ -185,10 +190,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             cfg.SessionFactory().GenerateStatistics();
 
             var sessionFactory = cfg.BuildSessionFactory();
-
-            MetricsRegistry.Instance.RegisterOnDemandCollectors(
-                new NHibernateStatsCollector("", sessionFactory)
-            );
 
             return sessionFactory;
         }

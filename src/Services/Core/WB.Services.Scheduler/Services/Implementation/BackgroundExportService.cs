@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Npgsql;
+using Polly;
 
 namespace WB.Services.Scheduler.Services.Implementation
 {
@@ -25,13 +27,25 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            cts = new CancellationTokenSource();
-
             this.scope = this.serviceProvider.CreateScope();
+
+            cts = new CancellationTokenSource();
+            await Policy.Handle<NpgsqlException>(c => c.IsTransient)
+                .WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(i))
+                .ExecuteAsync(async ct =>
+                {
+                    if (ct.IsCancellationRequested) return;
+
+                    using var migrationScope = this.serviceProvider.CreateScope();
+                    await migrationScope.ServiceProvider.GetRequiredService<IJobContextMigrator>()
+                        .MigrateAsync(ct);
+                }, cancellationToken);
+
             this.backgroundServices = scope.ServiceProvider.GetServices<IHostedSchedulerService>();
 
             foreach (var backgroundService in backgroundServices)
             {
+                if(cancellationToken.IsCancellationRequested) return;
                 await backgroundService.StartAsync(cts.Token);
                 logger.LogInformation("Started background service: {name}", backgroundService.GetType().Name);
             }

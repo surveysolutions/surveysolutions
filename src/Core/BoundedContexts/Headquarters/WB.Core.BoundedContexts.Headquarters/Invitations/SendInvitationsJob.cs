@@ -84,8 +84,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 invitationService.EmailDistributionFailed();
                 this.logger.Error($"Invitations distribution job: FAILED. Reason: {ex.Message} ", ex);
             }
-
-            return;
         }
     }
 

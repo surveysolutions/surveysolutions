@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Maps;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using Microsoft.Extensions.Options;
+using OSGeo.GDAL;
+using OSGeo.OGR;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Storage;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
@@ -21,45 +28,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
-        private readonly IMapService mapPropertiesProvider;
+        private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
-
-        
         private readonly IExternalFileStorage externalFileStorage;
-
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
+
         private const string TempFolderName = "TempMapsData";
         private const string MapsFolderName = "MapsData";
         private readonly string path;
 
-        private readonly string[] permittedFileExtensions = { ".tpk", ".mmpk" };
-
         private readonly string mapsFolderPath;
 
-        public MapFileStorageService(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
+        public MapFileStorageService(
+            IFileSystemAccessor fileSystemAccessor, 
+            IOptions<FileStorageConfig> fileStorageConfig,
+            IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IPlainStorageAccessor<UserMap> userMapsStorage,
-            IMapService mapPropertiesProvider,
+            ISerializer serializer,
             IUserRepository userStorage,
             IExternalFileStorage externalFileStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
-
-            this.mapPropertiesProvider = mapPropertiesProvider;
-
             this.userMapsStorage = userMapsStorage;
+            this.serializer = serializer;
             this.userStorage = userStorage;
 
             this.externalFileStorage = externalFileStorage;
 
-            this.path = fileSystemAccessor.CombinePath(folderPath, TempFolderName);
+            this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
 
-            this.mapsFolderPath = fileSystemAccessor.CombinePath(folderPath, MapsFolderName);
+            this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
                 fileSystemAccessor.CreateDirectory(this.mapsFolderPath);
         }
@@ -79,30 +83,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             try
             {
-                var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(tempFile);
-                var mapItem = new MapBrowseItem()
-                {
-                    Id = mapFile.Name,
-                    ImportDate = DateTime.UtcNow,
-                    FileName = mapFile.Name,
-                    Size = mapFile.Size,
-
-                    Wkid = properties.Wkid,
-                    XMaxVal = properties.XMax,
-                    YMaxVal = properties.YMax,
-                    XMinVal = properties.XMin,
-                    YMinVal = properties.YMin,
-                    MaxScale = properties.MaxScale,
-                    MinScale = properties.MinScale
-                };
+                var mapItem = this.ToMapBrowseItem(tempFile, mapFile);
 
                 if (externalFileStorage.IsEnabled())
                 {
-                    using (FileStream file = File.OpenRead(tempFile))
-                    {
-                        var name = this.fileSystemAccessor.GetFileName(tempFile);
-                        await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip");
-                    }
+                    await using FileStream file = File.OpenRead(tempFile);
+                    var name = this.fileSystemAccessor.GetFileName(tempFile);
+                    await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip");
                 }
                 else
                 {
@@ -123,6 +110,126 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 if (this.fileSystemAccessor.IsDirectoryExists(pathToSave))
                     fileSystemAccessor.DeleteDirectory(pathToSave);
             }
+        }
+
+        private MapBrowseItem ToMapBrowseItem(string tempFile, ExtractedFile mapFile)
+        {
+            var item = new MapBrowseItem
+            {
+                Id = mapFile.Name,
+                ImportDate = DateTime.UtcNow,
+                FileName = mapFile.Name,
+                Size = mapFile.Size,
+                Wkid = 102100
+            };
+
+            void SetMapProperties(dynamic _, MapBrowseItem i)
+            {
+                i.Wkid = _.fullExtent.spatialReference.wkid;
+                i.XMaxVal = _.fullExtent.xmax;
+                i.XMinVal = _.fullExtent.xmin;
+                i.YMaxVal = _.fullExtent.ymax;
+                i.YMinVal = _.fullExtent.ymin;
+                i.MaxScale = _.maxScale;
+                i.MinScale = _.minScal;
+            };
+
+            switch (this.fileSystemAccessor.GetFileExtension(tempFile))
+            {
+                case ".tpk":
+                {
+                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "conf.cdi");
+                    if (unzippedFile != null)
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                        var envelope = doc["EnvelopeN"];
+                        item.Wkid = int.Parse(envelope["SpatialReference"]["WKID"].InnerText);
+                        item.XMaxVal = double.Parse(envelope["XMax"].InnerText);
+                        item.XMinVal = double.Parse(envelope["XMin"].InnerText);
+                        item.YMaxVal = double.Parse(envelope["YMax"].InnerText);
+                        item.YMinVal = double.Parse(envelope["YMin"].InnerText);
+                    }
+                    else
+                    {
+                        unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
+                        if (unzippedFile != null)
+                        {
+                            var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                            SetMapProperties(jsonObject.contents, item);
+                        }
+                    }
+                }
+                    break;
+                case ".mmpk":
+                {
+                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "iteminfo.xml");
+                    if (unzippedFile != null)
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                        var esriInfo = doc["ESRI_ItemInformation"];
+
+                        unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{esriInfo["name"].InnerText}.info");
+                        if (unzippedFile != null)
+                        {
+                            var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                            
+                            if (jsonObject?.maps?.Count > 0)
+                            {
+                                var mapName = jsonObject.maps[0];
+                                unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
+                                jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+
+                                item.Wkid = jsonObject.map.spatialReference.wkid;
+
+                                var extent = jsonObject.item.extent;
+
+                                item.XMinVal = extent[0][0];
+                                item.YMinVal = extent[0][1];
+                                item.XMaxVal = extent[1][0];
+                                item.YMaxVal = extent[1][1];
+
+                                var layers = jsonObject.map.baseMap.baseMapLayers;
+                                if (layers?.Count > 0)
+                                {
+                                    var layer = layers[0];
+
+                                    item.MaxScale = layer.maxScale;
+                                    item.MinScale = layer.minScale;
+                                }
+
+                            }
+                        }
+                    }
+                }
+                    break;
+                case ".tif":
+                {
+                    GdalConfiguration.ConfigureGdal();
+                    using (Dataset ds = Gdal.Open(tempFile, Access.GA_ReadOnly))
+                    using (SpatialReference sr = new SpatialReference(ds.GetProjection()))
+                    {
+                        if (sr.IsProjected() < 1)
+                            throw new ArgumentException(
+                                $"Geotiff is not projected. {this.fileSystemAccessor.GetFileName(tempFile)}");
+
+                        if (int.TryParse(sr.GetAuthorityCode(null), out var wkid))
+                            item.Wkid = wkid == 0 ? item.Wkid : wkid;
+
+                        double[] geoTransform = new double[6];
+                        ds.GetGeoTransform(geoTransform);
+
+                        item.XMinVal = geoTransform[0];
+                        item.YMaxVal = geoTransform[3];
+                        item.XMaxVal = item.XMinVal + geoTransform[1] * ds.RasterXSize;
+                        item.YMinVal = item.YMaxVal + geoTransform[5] * ds.RasterYSize;
+                    }
+                }
+                    break;
+            }
+
+            return item;
         }
 
         public async Task DeleteMap(string mapName)

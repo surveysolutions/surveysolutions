@@ -121,9 +121,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             interviewSummaryRepository.Store(interviewSummary, interviewSummary.SummaryId);
         }
 
-        protected void PrepareQuestionnaire(QuestionnaireDocument document, long questionnaireVersion = 1)
+        protected IQuestionnaireStorage PrepareQuestionnaire(QuestionnaireDocument document, long questionnaireVersion = 1)
         {
             var questionnaireItemsRepositoryLocal = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+
+            var reusableCategoriesFillerIntoQuestionnaire = new Mock<IReusableCategoriesFillerIntoQuestionnaire>();
+            reusableCategoriesFillerIntoQuestionnaire
+                .Setup(x => x.FillCategoriesIntoQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>(), It.IsAny<QuestionnaireDocument>()))
+                .Returns<QuestionnaireIdentity, QuestionnaireDocument>((identity, doc) => doc);
 
             var questionnaireStorageLocal = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(), 
@@ -133,10 +138,12 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Mock.Of<IQuestionOptionsRepository>(),
                 Mock.Of<ISubstitutionService>(),
                 Create.Service.ExpressionStatePrototypeProvider(),
-                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>());
+                reusableCategoriesFillerIntoQuestionnaire.Object);
 
             document.Id = document.PublicKey.FormatGuid();
             questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
+
+            return questionnaireStorageLocal;
         }
 
         protected InterviewFactory CreateInterviewFactory()

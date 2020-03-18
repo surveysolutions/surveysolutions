@@ -355,8 +355,8 @@
   </style>
 
   <style name="Interview_Question_GPS_Map">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">@dimen/Interview_Question_Answer_Media_height</item>
+    <item name="android:layout_width">@dimen/Interview_Sidebar_GpsQuestions_max_width</item>
+    <item name="android:layout_height">@dimen/Interview_Sidebar_GpsQuestions_max_height</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Question_InputButton_margin_Bottom</item>
     <item name="android:padding">2dp</item>
     <item name="android:background">@drawable/media_question_white_border</item>
@@ -365,6 +365,10 @@
   <style name="Interview_Attachment_Picture">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="Interview_Question_RecordedAnswer_Link" parent="Interview_Question_RecordedAnswer">
+      <item name="android:textColor">@color/btn_default</item>
   </style>
 
   <style name="Interview_Question_RecordedAnswer" parent="Interview_Question_Instruction_Details">

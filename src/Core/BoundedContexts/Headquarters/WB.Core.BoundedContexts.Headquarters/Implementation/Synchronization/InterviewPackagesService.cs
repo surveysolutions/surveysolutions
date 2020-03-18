@@ -2,22 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -59,14 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public void StoreOrProcessPackage(InterviewPackage interviewPackage)
         {
-            if (this.syncSettings.UseBackgroundJobForProcessingPackages)
-            {
-                this.interviewPackageStorage.Store(interviewPackage, null);
-            }
-            else
-            {
-                this.ProcessPackage(interviewPackage);
-            }
+            this.ProcessPackage(interviewPackage);
         }
 
         public virtual int QueueLength
@@ -98,15 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     ProcessAttemptsCount = brokenInterviewPackage.ReprocessAttemptsCount + 1
                 };
 
-                if (this.syncSettings.UseBackgroundJobForProcessingPackages)
-                {
-                    this.interviewPackageStorage.Store(interviewPackage, null);
-                }
-
-                else
-                {
-                    this.ProcessPackage(interviewPackage);
-                }
+                this.ProcessPackage(interviewPackage);
 
                 this.brokenInterviewPackageStorage.Remove(packageId);
             });

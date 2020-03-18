@@ -13,6 +13,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Events;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Ncqrs.Eventing;
 using NHibernate.Linq;
 using Quartz;
@@ -26,24 +28,23 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
-using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
-using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -195,13 +196,16 @@ namespace WB.Tests.Abc.TestFactories
                 eventStore ?? Mock.Of<IEventStore>(),
                 repository ?? Mock.Of<IDomainRepository>(),
                 new AggregateLock());
-
-        public EventSourcedAggregateRootRepositoryWithExtendedCache
-            EventSourcedAggregateRootRepositoryWithExtendedCache(
-                IEventStore eventStore = null, IDomainRepository repository = null)
-            => new EventSourcedAggregateRootRepositoryWithExtendedCache(
-                eventStore ?? Mock.Of<IEventStore>(),
-                repository ?? Mock.Of<IDomainRepository>());
+                
+        public EventSourcedAggregateRootRepositoryWithWebCache EventSourcedAggregateRootRepositoryWithWebCache(
+            IEventStore eventStore = null, IDomainRepository repository = null)
+            => new EventSourcedAggregateRootRepositoryWithWebCache(
+                eventStore ?? Mock.Of<IEventStore>(x => x.GetLastEventSequence(It.IsAny<Guid>()) == 0),
+                new InMemoryEventStore(), 
+                new EventBusSettings(), 
+                repository ?? Mock.Of<IDomainRepository>(),
+                Create.Service.ServiceLocatorService(),
+                new AggregateLock());
 
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
@@ -599,22 +603,34 @@ namespace WB.Tests.Abc.TestFactories
             IUserImportVerifier userImportVerifier = null,
             IAuthorizedUser authorizedUser = null,
             IUnitOfWork sessionProvider = null,
-            UsersImportTask usersImportTask = null)
+            UsersImportTask usersImportTask = null,
+            PasswordOptions passwordOptions = null)
         {
             var scheduler = new Mock<IScheduler>();
             scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Array.Empty<IJobExecutionContext>());
 
-            usersImportTask = usersImportTask ?? new UsersImportTask(scheduler.Object);
+            usersImportTask ??= new UsersImportTask(scheduler.Object);
+            
+            PasswordOptions defaultPasswordOptions = passwordOptions ?? new PasswordOptions
+            {
+                RequireDigit = true,
+                RequiredLength = 10,
+                RequireLowercase = true,
+                RequireUppercase = true,
+                RequiredUniqueChars = 5,
+                RequireNonAlphanumeric = true
+            };
 
-            userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
+            userPreloadingSettings ??= Create.Entity.UserPreloadingSettings();
             return new UserImportService(
                 userPreloadingSettings,
                 csvReader ?? Stub<ICsvReader>.WithNotEmptyValues,
                 importUsersProcessRepository ?? Stub<IPlainStorageAccessor<UsersImportProcess>>.WithNotEmptyValues,
                 importUsersRepository ?? Stub<IPlainStorageAccessor<UserToImport>>.WithNotEmptyValues,
                 userStorage ?? Stub<IUserRepository>.WithNotEmptyValues,
-                userImportVerifier ?? new UserImportVerifier(userPreloadingSettings),
+                userImportVerifier ?? new UserImportVerifier(userPreloadingSettings,
+                    Mock.Of<IOptions<IdentityOptions>>(x => x.Value == new IdentityOptions {Password = defaultPasswordOptions} )),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
                 sessionProvider ?? Stub<IUnitOfWork>.WithNotEmptyValues,
                 usersImportTask ?? Stub<UsersImportTask>.WithNotEmptyValues);
@@ -627,24 +643,26 @@ namespace WB.Tests.Abc.TestFactories
                      x.ReadHeader(It.IsAny<Stream>(), It.IsAny<string>()) == headers);
         }
 
-        public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
-            IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
-            IInterviewerVersionReader interviewerVersionReader = null,
-            IInterviewFactory interviewFactory = null,
-            IAuthorizedUser currentUser = null)
-        {
-            var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
-            return new InterviewerProfileFactory(
-                userManager ?? defaultUserManager,
-                interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
-                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
-                interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                currentUser ?? Mock.Of<IAuthorizedUser>(),
-                Mock.Of<IQRCodeHelper>(),
-                Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
-        }
+        // TODO: Core migration https://issues.mysurvey.solutions/youtrack/issue/KP-13523
+        //public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
+        //    IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
+        //    IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
+        //    IInterviewerVersionReader interviewerVersionReader = null,
+        //    IInterviewFactory interviewFactory = null,
+        //    IAuthorizedUser currentUser = null)
+        //{
+        //    // TODO: Core migration - fix
+        //    //var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
+        //    return new InterviewerProfileFactory(
+        //        null, //userManager ?? defaultUserManager,
+        //        interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+        //        deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
+        //        interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
+        //        interviewFactory ?? Mock.Of<IInterviewFactory>(),
+        //        currentUser ?? Mock.Of<IAuthorizedUser>(),
+        //        Mock.Of<IQRCodeHelper>(),
+        //        Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
+        //}
 
 
 
@@ -669,7 +687,7 @@ namespace WB.Tests.Abc.TestFactories
             var hqUser = Mock.Of<HqUser>(_ => _.Id == Id.gA
                                            && _.Profile == hqUserProfile);
             userRepositoryMock
-                .Setup(arg => arg.FindByIdAsync(It.IsAny<Guid>()))
+                .Setup(arg => arg.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(hqUser);
 
             return new InterviewPackagesService(
@@ -757,14 +775,12 @@ namespace WB.Tests.Abc.TestFactories
             sessionProvider = sessionProvider ?? Mock.Of<IUnitOfWork>(x => x.Session == session);
             userViewFactory = userViewFactory ?? Mock.Of<IUserViewFactory>();
 
-            return new AssignmentsImportService(userViewFactory,
-                verifier ?? ImportDataVerifier(),
+            return new AssignmentsImportService(verifier ?? ImportDataVerifier(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 sessionProvider,
                 importAssignmentsProcessRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentsImportProcess>>(),
                 importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
-                assignmentsStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>(),
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
                 Create.Service.AssignmentFactory(),
                 invitationService ?? Mock.Of<IInvitationService>(),
@@ -1134,7 +1150,7 @@ namespace WB.Tests.Abc.TestFactories
             return result.Object;
         }
         
-        public  WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog.IAuditLogService AuditLogService(
+        public  Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog.IAuditLogService AuditLogService(
             IAuditLogFactory auditLogFactory,
             IAuthorizedUser authorizedUser = null)
         {
@@ -1151,6 +1167,16 @@ namespace WB.Tests.Abc.TestFactories
         public IReusableCategoriesFillerIntoQuestionnaire ReusableCategoriesFillerIntoQuestionnaire(IReusableCategoriesStorage reusableCategoriesStorage)
         {
             return new ReusableCategoriesFillerIntoQuestionnaire(reusableCategoriesStorage);
+        }
+
+        public UserArchiveService UserArchiveService(IUserRepository userRepository)
+        {
+            return new UserArchiveService(userRepository, Mock.Of<ISystemLog>());
+        }
+        
+        public ISupportedVersionProvider SupportedVersionProvider()
+        {
+            return new SupportedVersionProvider(new InMemoryKeyValueStorage<QuestionnaireVersion>());
         }
     }
 

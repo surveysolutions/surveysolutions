@@ -1,8 +1,8 @@
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -18,45 +18,36 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_return_404_for_non_existing_assignment_on_details()
         {
-            Assert.Throws(Is.TypeOf<HttpResponseException>()
-                    .And.Property(nameof(HttpResponseException.Response))
-                    .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound),
-                () => this.controller.Details(101));
+            var result = this.controller.Details(101);
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
-        public void should_return_404_for_non_existing_assignment()
+        public async Task should_return_404_for_non_existing_assignment()
         {
-            Assert.ThrowsAsync(Is.TypeOf<HttpResponseException>()
-                    .And.Property(nameof(HttpResponseException.Response))
-                    .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound),
-                () => this.controller.Assign(101, null));
+            var result = await this.controller.Assign(101, null);
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
         }
         
         [Test]
-        public void should_return_404_for_non_existing_responsibleUser()
+        public async Task should_return_404_for_non_existing_responsibleUser()
         {
             this.SetupAssignment(new Assignment());
-
-            Assert.ThrowsAsync(Is.TypeOf<HttpResponseException>()
-                    .And.Property(nameof(HttpResponseException.Response))
-                    .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound),
-                () => this.controller.Assign(101, null));
+            var result = await this.controller.Assign(101, null);
+            Assert.That(result.Result, Has.Property("StatusCode").EqualTo(StatusCodes.Status404NotFound));
         }
 
         [TestCase(UserRoles.Administrator)]
         [TestCase(UserRoles.Headquarter)]
         [TestCase(UserRoles.Observer)]
         [TestCase(UserRoles.ApiUser)]
-        public void should_return_406_for_non_interviewer_supervisor_assignee(UserRoles role )
+        public async Task should_return_406_for_non_interviewer_supervisor_assignee(UserRoles role )
         {
             this.SetupAssignment(new Assignment());
             this.SetupResponsibleUser(Create.Entity.HqUser(role: role));
-            
-            Assert.ThrowsAsync(Is.TypeOf<HttpResponseException>()
-                    .And.Property(nameof(HttpResponseException.Response))
-                    .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotAcceptable),
-                () => this.controller.Assign(101, new AssignmentAssignRequest(){Responsible = "any"}));
+            var result = await this.controller.Assign(101, new AssignmentAssignRequest() {Responsible = "any"});
+
+            Assert.That(result.Result, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status406NotAcceptable));
         }
 
         [Test]

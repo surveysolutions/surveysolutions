@@ -3,7 +3,6 @@ using FluentAssertions;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;

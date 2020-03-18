@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -25,8 +26,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string VariableName { get; }
         Type ExpressionStorageType { get; set; }
         IReadOnlyList<Translation> Translations { get; }
-
-        IQuestion GetQuestionByVariable(string variable);
 
         bool HasQuestion(Guid questionId);
 
@@ -57,6 +56,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
+
+        string GetQuestionExportDescription(Guid questionId);
 
         string GetGroupTitle(Guid groupId);
 
@@ -310,5 +311,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetEntityVariableOrThrow(Guid id);
 
         string ApplyMarkDownTransformation(string text);
+
+        GeometryType? GetQuestionGeometryType(Guid questionId);
+        int GetEntityIdMapValue(Guid entityId);
     }
 }

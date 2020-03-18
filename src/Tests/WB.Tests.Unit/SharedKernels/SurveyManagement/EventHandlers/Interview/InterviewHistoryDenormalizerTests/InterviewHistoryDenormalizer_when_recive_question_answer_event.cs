@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -23,7 +24,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             {
                 Create.Entity.DateTimeQuestion(questionId, isTimestamp: true)
             });
-            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(questionnaireDocument);
+            IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
+            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(plainQuestionnaire);
             var interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(
                 questionnaire: CreateQuestionnaireExportStructure(questionId, variableName),
                 questionnaireStorage: questionnaireStorage);
@@ -56,7 +58,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             {
                 Create.Entity.DateTimeQuestion(questionId, isTimestamp: true)
             });
-            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(questionnaireDocument);
+            IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
+            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(plainQuestionnaire);
             var interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(
                 questionnaire: CreateQuestionnaireExportStructure(questionId, variableName),
                 questionnaireStorage: questionnaireStorage);
@@ -89,7 +92,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             {
                 Create.Entity.DateTimeQuestion(questionId, isTimestamp: false)
             });
-            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(questionnaireDocument);
+            IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
+            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(plainQuestionnaire);
             var interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(
                 questionnaire: CreateQuestionnaireExportStructure(questionId, variableName),
                 questionnaireStorage: questionnaireStorage);

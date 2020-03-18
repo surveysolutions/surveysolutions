@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     foreach (var loaderException in loaderExceptions)
                     {
                         exceptions.Add(loaderException);
-                        logger.Error("LoaderEcxeption found", loaderException);
+                        logger.Error("LoaderExeption found", loaderException);
                     }
                 }
 
@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     foreach (var loaderException in loaderExceptions)
                     {
                         exceptions.Add(loaderException);
-                        logger.Error("LoaderEcxeption found", loaderException);
+                        logger.Error("LoaderException found", loaderException);
                     }
                 }
 

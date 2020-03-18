@@ -1,0 +1,25 @@
+﻿@using System.Globalization
+@using WB.Core.Infrastructure.Versions
+@using WB.UI.Headquarters.Configs
+@using WB.UI.Headquarters.Services
+
+@inject IOptions<GoogleMapsConfig> googleMapsConfig
+@inject IProductVersion productVersion
+
+<script type="text/javascript">
+    window.CONFIG = @( new {
+        verboseMode = false,
+        googleApiKey = googleMapsConfig.Value.ApiKey,
+        googleMapsApiBaseUrl = googleMapsConfig.Value.ApiBaseUrl,
+        googleMapsBaseUrl = googleMapsConfig.Value.BaseUrl,
+        basePath = Url.Content(@"~/"),
+        imageGetBase = Url.Content("~/api/WebInterviewResources"),
+        audioGet = Url.Content("~/Resource/AudioRecord"),
+        appVersion = productVersion.ToString(),
+        supportedTransports = new [] { "webSockets", "longPolling"}
+    }.AsJsonValue());
+
+    if (typeof moment !== 'undefined') {
+        moment.locale('@CultureInfo.CurrentUICulture');
+    }
+</script>

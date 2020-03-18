@@ -7,7 +7,7 @@ namespace WB.Core.Infrastructure.Modularity
     {
         public void Run()
         {
-            Status = UnderConstructionStatus.Running;
+           Status = UnderConstructionStatus.Running;
         }
 
         public void Finish()
@@ -20,6 +20,7 @@ namespace WB.Core.Infrastructure.Modularity
             Status = UnderConstructionStatus.Error;
             Message = message;
             Exception = exception;
+            //AwaitingBlock.SetException(exception);
         }
 
         public UnderConstructionStatus Status { get; private set; } = UnderConstructionStatus.NotStarted;

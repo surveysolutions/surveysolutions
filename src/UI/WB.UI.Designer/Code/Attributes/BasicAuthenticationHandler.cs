@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http.Headers;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -8,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WB.UI.Shared.Web.Authentication;
 
 namespace WB.UI.Designer.Code.Attributes
 {
@@ -33,19 +32,9 @@ namespace WB.UI.Designer.Code.Attributes
                 return AuthenticateResult.NoResult();
 
             ClaimsPrincipal principal;
-            try 
+            try
             {
-                var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
-                var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-                var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':');
-                var username = credentials[0];
-                var password = credentials[1];
-                BasicCredentials creds = new BasicCredentials
-                {
-                    Username = username, 
-                    Password = password
-                };
-
+                var creds = Request.Headers.ParseBasicCredentials();
                 principal = await _userService.AuthenticateAsync(creds);
             } 
             catch (UnauthorizedException e)

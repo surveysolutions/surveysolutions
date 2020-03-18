@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
+using Polly;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Services.Implementation;
 using WB.Services.Scheduler.Storage;
@@ -93,8 +94,15 @@ namespace WB.Services.Scheduler.Tests
             catch { }
 
             await EnsurePublicSchemaExists(db.Database);
-            await db.Database.MigrateAsync();
-            await db.Database.ExecuteSqlRawAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
+            await Polly.Policy.Handle<Exception>()
+                .WaitAndRetryAsync(5, i => TimeSpan.FromSeconds(i))
+                .ExecuteAsync(async () =>
+                {
+                    await db.Database.MigrateAsync();
+                    await db.Database.ExecuteSqlRawAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
+                });
+
+            
         }
           
         private static async Task EnsurePublicSchemaExists(DatabaseFacade db)
@@ -106,7 +114,7 @@ namespace WB.Services.Scheduler.Tests
             catch { /* 
                     If DB is not created, then db.Database.MigrateAsync will create it with public schema
                     but if there is already created DB without public schema, them MigrateAsync will fail.
-                    So it's OK to fail here and om om om exception and fail later on Migrate if there is a 
+                    So it's OK to fail here and om om om exception and fail later on MigrateAsync if there is a 
                     problem with migrations or DB access
                  */ }
          }

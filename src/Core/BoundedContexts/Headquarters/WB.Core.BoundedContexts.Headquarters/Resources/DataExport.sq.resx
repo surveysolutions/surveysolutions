@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddToQueue" xml:space="preserve">
+    <value>Shto në radhë</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>të gjitha statuset</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Statusi Miratuar nga Zyra Qendrore</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Statusi Miratuar nga Supervizori </value>
+  </data>
+  <data name="BinaryData" xml:space="preserve">
+    <value>Të dhëna binare</value>
+  </data>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>Arkiv me të dhëna binare (p.sh., foto, audio)</value>
+  </data>
+  <data name="Bytes" xml:space="preserve">
+    <value>MB</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Përfunduar</value>
+  </data>
+  <data name="Compressing" xml:space="preserve">
+    <value>Po kompresohet </value>
+  </data>
+  <data name="ConfirmStop" xml:space="preserve">
+    <value>Jeni i sigurt që doni të ndaloni</value>
+  </data>
+  <data name="DataDestination" xml:space="preserve">
+    <value>Destinacioni i skedarit të eksportuar</value>
+  </data>
+  <data name="DataDestination_Dropbox" xml:space="preserve">
+    <value>Ngarko në Dropbox</value>
+  </data>
+  <data name="DataDestination_GoogleDrive" xml:space="preserve">
+    <value>Ngarko në Google Drive</value>
+  </data>
+  <data name="DataDestination_OneDrive" xml:space="preserve">
+    <value>Ngarko në OneDrive</value>
+  </data>
+  <data name="DataDestination_Zip" xml:space="preserve">
+    <value>Shkarko</value>
+  </data>
+  <data name="DataExport_Destination" xml:space="preserve">
+    <value>Destinacioni: {{dest}}</value>
+  </data>
+  <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+    <value>Skedari i eksportuar do të ngarkohet në Dropbox</value>
+  </data>
+  <data name="DataExport_Destination_File" xml:space="preserve">
+    <value>Skedari i eksportuar do të jetë i vlefshëm për shkarkim</value>
+  </data>
+  <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+    <value>Skedari i eksportuar do të ngarkohet në Google Drive</value>
+  </data>
+  <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+    <value>Skedari i eksportuar do të ngarkohet në OneDrive</value>
+  </data>
+  <data name="DataExport_FileLastUpdate" xml:space="preserve">
+    <value>Përditësimi i fundit: {{date}}</value>
+  </data>
+  <data name="DataExport_FileSize" xml:space="preserve">
+    <value>Madhësia e skedarit: {{size}} MB</value>
+  </data>
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>Skedari u gjenerua sërish</value>
+  </data>
+  <data name="DataExport_Header" xml:space="preserve">
+    <value>Zgjidh llojin dhe formatin e të dhënave që do të eksportohen</value>
+  </data>
+  <data name="DataExport_InterviewsStatus" xml:space="preserve">
+    <value>Intervista në {{status}}.</value>
+  </data>
+  <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+    <value>{{title}} (ver. {{version}})</value>
+  </data>
+  <data name="DataExport_QueuedOn" xml:space="preserve">
+    <value>Vendosur në radhë më {{date}}</value>
+  </data>
+  <data name="DataExport_Regenerate" xml:space="preserve">
+    <value>Gjenero sërish</value>
+  </data>
+  <data name="DataExport_RegenerateDesc" xml:space="preserve">
+    <value>Vendos në radhë eksportimin me parametra të njëjtë</value>
+  </data>
+  <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+    <value>Shërbimi i eksportit nuk është i disponueshëm</value>
+  </data>
+  <data name="DataExport_Title" xml:space="preserve">
+    <value>Eksportimi i të dhënave</value>
+  </data>
+  <data name="DataExportApi" xml:space="preserve">
+    <value>API për eksportimin e të dhënave</value>
+  </data>
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>Ju mund të konfiguroni eksportin automatik të të dhënave të mbledhura nga intervistat duke përdorur paktën e instrumenteve API për t’i përdorur për më shumë informacion dhe udhëzime:</value>
+  </data>
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>Referenca API për Eksportin e të Dhënave</value>
+  </data>
+  <data name="DataFormat" xml:space="preserve">
+    <value>Formati i të dhënave</value>
+  </data>
+  <data name="DataFormat_Spss" xml:space="preserve">
+    <value>Formati SPSS</value>
+  </data>
+  <data name="DataFormat_Stata" xml:space="preserve">
+    <value>Formati Stata 14</value>
+  </data>
+  <data name="DataFormat_Tab" xml:space="preserve">
+    <value>Të dhëna të ndara me tab </value>
+  </data>
+  <data name="DataType" xml:space="preserve">
+    <value>Lloji i të dhënave</value>
+  </data>
+  <data name="DataType_Binary" xml:space="preserve">
+    <value>Të dhënat binare. Arkiv me të dhëna binare (p.sh., foto, audio) </value>
+  </data>
+  <data name="DataType_Ddi" xml:space="preserve">
+    <value>DDI. Të dhënat e Data Documentation Initiative XML </value>
+  </data>
+  <data name="DataType_MainSurveyData" xml:space="preserve">
+    <value>Të dhënat kryesore të Anketës. Arkiva Zip me të dhënat kryesore të intervistave </value>
+  </data>
+  <data name="DataType_Paradata" xml:space="preserve">
+    <value>Paradata. Metadata të procesit të intervistimit (ngjarjet dhe koha)</value>
+  </data>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>Nuk u gjenerua</value>
+  </data>
+  <data name="DDI" xml:space="preserve">
+    <value>DDI</value>
+  </data>
+  <data name="DDIDescription" xml:space="preserve">
+    <value>Të dhënat e Data Documentation Initiative XML </value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Shkarko</value>
+  </data>
+  <data name="Dropbox" xml:space="preserve">
+    <value>Dropbox</value>
+  </data>
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>Veprimi i eksportimit u anulua nga përdoruesi.</value>
+  </data>
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>Memoria e ruajtjes së të dhënave në re nuk ka hapësirë të mjaftueshme. Ju lutemi, lironi hapësirë dhe vazhdoni punën ose zgjidhni një ofrues tjetër.</value>
+  </data>
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>Gjatë eksportit ndodhi një gabim i papritur. Na falni për shqetësimin. Ju lutemi, kontaktoni me ekipin mbështetës support@mysurvey.solutions.</value>
+  </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>Nuk mund të ndryshoni cilësimet e eksportit, pasi procesi i eksportimit është duke u ekzekutuar tashmë.</value>
+  </data>
+  <data name="export" xml:space="preserve">
+    <value>procesi i eksportimit</value>
+  </data>
+  <data name="ExportBtn" xml:space="preserve">
+    <value>Eksporto</value>
+  </data>
+  <data name="ExportExplanation" xml:space="preserve">
+    <value>Shtypja e butonit Gjenero krijon një arkiv të dhënash nga intervistat e vlefshme në server gjatë asaj kohe. Ora e krijimit të arkivit dhe madhësia e arkivit tregohen në tabelë. Arkivi i të dhënave krijuar së fundmi mund të shkarkohet duke shtypur butonin Shkarko. Shtyp butonin Krijo sërish, për të krijuar një arkiv të ri.</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>Diapazoni i eksportit:</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>Madhësia e skedarit</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filtro intervistat që do të eksportohen </value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>Formati</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>formati</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>Nga</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Gjenero</value>
+  </data>
+  <data name="GeneratedDataSets" xml:space="preserve">
+    <value>Grupet për eksportim të gjeneruara më parë </value>
+  </data>
+  <data name="GeneratedDataSets_Desc" xml:space="preserve">
+    <value>Të dhënat eksportohen në një arkiv zip, që përmban skedarë me të dhëna me përmbajtje dhe lloj të caktuar. Më poshtë është një listë e skedarëve të të dhënave të eksportuara më parë.</value>
+  </data>
+  <data name="Generating" xml:space="preserve">
+    <value>Po gjenerohet</value>
+  </data>
+  <data name="GoogleDrive" xml:space="preserve">
+    <value>Google Drive</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Status i caktuar për intervistuesin </value>
+  </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>Objektet në radhën e eksportimit:</value>
+  </data>
+  <data name="LastGeneratedTitle" xml:space="preserve">
+    <value>Krijuar më</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Data e përditësimit të fundit</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>Të Dhënat Kryesore të Anketës</value>
+  </data>
+  <data name="Metadata" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Emërtimi</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>Nuk ka të dhëna të vlefshme</value>
+  </data>
+  <data name="NoDataSets" xml:space="preserve">
+    <value>Nuk ka ende grupe të gjeneruara të të dhënave </value>
+  </data>
+  <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+  <data name="ParaData" xml:space="preserve">
+    <value>Paradata</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>Metadata mbi procesin e intervistës (ngjarjet dhe koha)</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Po përgatitet</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Vazhdon</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>I/e vendosur në radhë</value>
+  </data>
+  <data name="SaveBinaryDataTo" xml:space="preserve">
+    <value>Ruaj të dhënat binare në:</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Data e fillimit</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>Statusi i intervistave të eksportuara </value>
+  </data>
+  <data name="SurveyQuestionnaire" xml:space="preserve">
+    <value>Modeli i anketës</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>(version) Pyetësori i anketës</value>
+  </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>Format tabelar</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>Në</value>
+  </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>Format XML </value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>Arkiv Zip me të dhënat kryesore të intervistave </value>
+  </data>
+  <data name="ZipFile" xml:space="preserve">
+    <value>Skedar Zip</value>
+  </data>
+</root>

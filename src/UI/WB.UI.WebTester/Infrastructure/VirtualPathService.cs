@@ -1,5 +1,4 @@
-﻿using System.IO;
-using WB.UI.Shared.Web.Services;
+﻿using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.WebTester.Infrastructure
 {

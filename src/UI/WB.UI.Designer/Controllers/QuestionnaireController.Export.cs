@@ -31,13 +31,7 @@ namespace WB.UI.Designer.Controllers
 
             var questionnaireDocument = questionnaireView.Source;
 
-            string questionnaireJson = JsonConvert.SerializeObject(questionnaireDocument, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Formatting = Formatting.Indented
-            });
+            string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
 
             var output = new MemoryStream();
 

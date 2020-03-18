@@ -1,0 +1,30 @@
+{
+  "help": "https://go.microsoft.com/fwlink/?linkid=866610",
+  "root": true,
+  "dependentFileProviders": {
+    "add": {
+      "fileToFile": {
+        "add": {
+         
+        }
+      },
+      "pathSegment": {
+        "add": {
+          ".*": [
+            ".resx", 
+            ".ini"
+          ]
+        }
+      },
+      "extensionToExtension": {
+        "add": {
+          ".Designer.cs": [ ".resx" ],
+          ".designer.cs": [ ".resx" ],
+          ".cshtml": [
+              ".Template.cshtml"
+          ]
+        }
+      } 
+    }
+  }
+}

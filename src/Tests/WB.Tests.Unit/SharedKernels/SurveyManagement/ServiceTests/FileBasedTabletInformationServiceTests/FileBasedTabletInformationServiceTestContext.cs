@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTabletInformationServiceTests
@@ -30,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
             var archiveUtils = Mock.Of<IArchiveUtils>(x =>
                 x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()) == new Dictionary<string, long>());
 
-            return new FileBasedTabletInformationService(string.Empty, fileSystemAccessorMock.Object,
+            return new FileBasedTabletInformationService(Options.Create(new FileStorageConfig()), fileSystemAccessorMock.Object,
                 archiveUtils, Mock.Of<IEncryptionService>());
         }
 
@@ -39,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
             IArchiveUtils archiveUtils = null,
             IEncryptionService encryptionService = null) 
             => new FileBasedTabletInformationService(
-                "path to internal folder",
+                Options.Create(new FileStorageConfig()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
                 encryptionService ?? Mock.Of<IEncryptionService>());

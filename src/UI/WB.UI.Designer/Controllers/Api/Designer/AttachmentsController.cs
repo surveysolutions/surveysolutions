@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -23,10 +22,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private const int defaultImageSizeToScale = 156;
 
         private readonly IAttachmentService attachmentService;
-        private readonly IHostingEnvironment environment;
+        private readonly IWebHostEnvironment environment;
 
         public AttachmentsController(IAttachmentService attachmentService,
-            IHostingEnvironment environment)
+            IWebHostEnvironment environment)
         {
             this.attachmentService = attachmentService;
             this.environment = environment;
@@ -47,6 +46,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("thumbnail/{id:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
         public IActionResult Thumbnail(Guid id, int size)
         {
@@ -118,7 +118,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (!sizeToScale.HasValue) return source;
             using (var outputStream = new MemoryStream())
             {
-                using (Image<Rgba32> image = Image.Load(source, out var format))
+                using (Image image = Image.Load(source, out var format))
                 {
                     image.Mutate(ctx => ctx.Resize(sizeToScale.Value, sizeToScale.Value)); 
                     image.Save(outputStream, format); 
