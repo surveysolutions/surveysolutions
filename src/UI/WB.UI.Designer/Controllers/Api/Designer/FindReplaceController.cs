@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
@@ -24,7 +25,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("api/findReplace/findAll")]
-        public IActionResult FindAll(Guid id, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
+        public IActionResult FindAll(QuestionnaireRevision id, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             if (searchFor?.Length > SearchForAllowedLength)
             {
