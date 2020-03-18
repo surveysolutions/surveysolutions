@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Classifications;
+using WB.Tests.Integration.Core;
 
-namespace WB.Tests.Integration.Core
+namespace WB.Tests.Integration.Designer
 {
     [TestFixture]
     [TestOf(typeof(ClassificationsStorage))]

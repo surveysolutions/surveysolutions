@@ -2,6 +2,7 @@
 using System.Data;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.Impl;
 using WB.Core.GenericSubdomains.Portable.Services;

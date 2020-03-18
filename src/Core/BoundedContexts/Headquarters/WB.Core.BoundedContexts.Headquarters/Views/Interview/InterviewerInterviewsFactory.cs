@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return summary != null;
         }
 
-        public IEnumerable<InterviewInformation> GetInProgressInterviewsForSupervisor(Guid supervisorId)
+        public List<InterviewInformation> GetInProgressInterviewsForSupervisor(Guid supervisorId)
         {
             var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
@@ -141,7 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 PageSize = int.MaxValue
             }).Items.Where(questionnaire => questionnaire.IsDeleted);
 
-            var filteredInterviews = inProgressInterviews.Where(
+            List<InterviewInformation> filteredInterviews = inProgressInterviews.Where(
                     interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId 
                                                                                     && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
                                  && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))

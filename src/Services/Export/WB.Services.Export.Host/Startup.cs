@@ -1,8 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,8 +69,7 @@ namespace WB.Services.Export.Host
             }
 
             healthChecksBuilder
-                .AddCheck<EfCoreHealthCheck>("EF migrations")
-                .AddDbContextCheck<JobContext>("Database");
+                .AddCheck<EfCoreHealthCheck>("EF migrations");
 
             services.Configure(Configuration);
 
@@ -95,8 +92,7 @@ namespace WB.Services.Export.Host
             }
 
             app.UseMetricServer();
-            
-            app.StartScheduler();
+
             app.UseSchedulerMetrics();            
 
             app.UseRouting();

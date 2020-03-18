@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Quartz;
-using WB.Core.Infrastructure.Modularity;
-using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public class AsyncScopedJobDecorator : IJob
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly Type jobType;
 
-        public AsyncScopedJobDecorator(Type jobType)
+        public AsyncScopedJobDecorator(IServiceProvider serviceProvider, Type jobType)
         {
+            this.serviceProvider = serviceProvider;
             this.jobType = jobType;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
-            {
-                var job = serviceLocatorLocal.GetInstance(jobType) as IJob;
-                if (job == null)
-                    throw new ArgumentNullException(nameof(job));
+            using var scope = this.serviceProvider.CreateScope();
+            using var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+            var job = scope.ServiceProvider.GetService(jobType) as IJob;
+            if (job == null)
+                throw new ArgumentNullException(nameof(job));
 
-                await job.Execute(context);
-            });
+            await job.Execute(context);
+            uow.AcceptChanges();
         }
     }
 }

@@ -1,0 +1,25 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.Services
+@inject IAuthorizedUser authorizedUser
+@if (authorizedUser.IsObserving || ViewBag.GlobalNotice != null)
+{
+    <div class="panel view-mode">
+        @if (authorizedUser.IsObserving)
+        {
+            <div class="panel-heading panel-warning">
+                @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name))
+                <a asp-action="ReturnToObserver" asp-controller="Account">@Users.ClickToReturn</a>
+            </div>
+        }
+        @if (ViewBag.GlobalNotice != null)
+        {
+            <div class="panel-heading">
+                <div class="alerts">
+                    <div class="alert alert-info alert-dismissible text-center" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        @ViewBag.GlobalNotice
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

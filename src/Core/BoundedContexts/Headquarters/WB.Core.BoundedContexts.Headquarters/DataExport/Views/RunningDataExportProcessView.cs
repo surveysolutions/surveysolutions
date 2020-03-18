@@ -11,8 +11,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         { 
             this.QuestionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
         }
-        public string DataExportProcessId { get;  set; }
+
+        public long ProcessId { get; set; }
+
         public DateTime BeginDate { get;  set; }
+        public DateTime? EndDate { get; set; }
         public DateTime LastUpdateDate { get;  set; }
         public int Progress { get;  set; }
         public DataExportType Type { get;  set; }
@@ -31,8 +34,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             this.QuestionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
         }
 
-        public string DataExportProcessId { get;  set; }
+        public long Id { get; set; }
+
         public DateTime BeginDate { get;  set; }
+        public DateTime? EndDate { get; set; }
         public DateTime LastUpdateDate { get;  set; }
         public int Progress { get;  set; }
         public DataExportType Type { get;  set; }
@@ -40,6 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public InterviewStatus? InterviewStatus { get;  set; }
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public DataExportStatus ProcessStatus { get; set; }
+        public DataExportJobStatus JobStatus { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public bool IsRunning { get; set; }

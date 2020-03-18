@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Ncqrs.Eventing.Storage;
 using NLog;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -36,7 +37,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 DatabaseManagement.InitDatabase(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName);
 
                 status.Message = Modules.MigrateDb;
-                DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
+                DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings,
+                    serviceLocator.GetInstance<ILoggerProvider>());
 
                 status.ClearMessage();
             }

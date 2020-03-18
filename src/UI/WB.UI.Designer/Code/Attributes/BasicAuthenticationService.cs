@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Authentication;
 
 namespace WB.UI.Designer.Code.Attributes
 {

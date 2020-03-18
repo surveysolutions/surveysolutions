@@ -46,8 +46,8 @@ namespace WB.Services.Scheduler.Services.Implementation
 
                 try
                 {
-                    job.Cancel("Canceled due to inactivity");
-                    logger.LogInformation("Job #{jobId} '{jobTag}' marked as canceled due to inactivity", job.Id, job.Tag);
+                    job.ReEnqueue();
+                    logger.LogInformation("Job #{jobId} '{jobTag}' marked as {status} due to inactivity", job.Id, job.Tag, job.Status);
                 }
                 finally
                 {

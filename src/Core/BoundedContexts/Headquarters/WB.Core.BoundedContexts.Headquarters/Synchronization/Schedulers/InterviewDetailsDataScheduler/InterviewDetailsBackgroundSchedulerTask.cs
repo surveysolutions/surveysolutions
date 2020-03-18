@@ -20,32 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
 
         public async Task Configure()
         {
-            await RunSyncPackagesProcessorBackgroundJob();
             await RunSyncPackagesReprocessorBackgroundJob();
-        }
-
-        public async Task RunSyncPackagesProcessorBackgroundJob()
-        {
-            IJobDetail job = JobBuilder.Create<SyncPackagesProcessorBackgroundJob>()
-                .WithIdentity("Capi interview packages sync", "Synchronization")
-                .StoreDurably(true)
-                .Build();
-
-
-            if (this.syncPackagesProcessorBackgroundJobSetting.Enabled)
-            {
-                ITrigger trigger = TriggerBuilder.Create()
-                    .WithIdentity("Capi interview packages sync trigger", "Synchronization")
-                    .StartNow()
-                    .WithSimpleSchedule(x => x
-                        .WithIntervalInSeconds(this.syncPackagesProcessorBackgroundJobSetting.SynchronizationInterval)
-                        .RepeatForever())
-                    .Build();
-
-                await this.scheduler.ScheduleJob(job, trigger);
-            }
-
-            await this.scheduler.AddJob(job, true);
         }
 
         public async Task RunSyncPackagesReprocessorBackgroundJob()

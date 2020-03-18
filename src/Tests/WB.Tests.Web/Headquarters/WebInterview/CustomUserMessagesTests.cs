@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {

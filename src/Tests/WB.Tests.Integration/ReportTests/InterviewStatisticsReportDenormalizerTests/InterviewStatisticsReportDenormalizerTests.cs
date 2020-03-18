@@ -58,9 +58,9 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
 
             interviewId = Guid.NewGuid();
 
-            PrepareQuestionnaire(questionnaire, 1);
+            var questionnaireStorageLocal = PrepareQuestionnaire(questionnaire, 1);
 
-            this.denormalizer = new InterviewStatisticsReportDenormalizer(questionnaireStorage);
+            this.denormalizer = new InterviewStatisticsReportDenormalizer(questionnaireStorageLocal);
             this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork));
         }
 
@@ -87,11 +87,11 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             
             UnitOfWork.Session.Flush();
 
-            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-
-                Question = questionnaire.Find<MultyOptionsQuestion>(pastDwellingsMultyQuestion)
+                QuestionId = pastDwellingsMultyQuestion
             });
 
             AssertReportHasTotal(report, Dwelling.Barrack, 1);
@@ -120,11 +120,11 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             
             UnitOfWork.Session.Flush();
 
-            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-
-                Question = questionnaire.Find<SingleQuestion>(dwellingQuestion)
+                QuestionId = dwellingQuestion
             });
 
             AssertReportHasTotal(report, Dwelling.Barrack, 1);
@@ -155,19 +155,21 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
 
             UnitOfWork.Session.Flush();
 
-            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                Question = questionnaire.Find<SingleQuestion>(dwellingQuestion)
+                QuestionId = dwellingQuestion
             });
 
             AssertReportHasTotal(report, Dwelling.Hole, 0);
             UnitOfWork.Session.Flush();
 
-            report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            report = reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                Question = questionnaire.Find<SingleQuestion>(relationQuestion)
+                QuestionId = relationQuestion
             });
 
             AssertReportHasTotal(report, Relation.Child, 1);
@@ -198,18 +200,20 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
 
             UnitOfWork.Session.Flush();
 
-            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                Question = questionnaire.Find<SingleQuestion>(dwellingQuestion)
+                QuestionId = dwellingQuestion
             });
 
             AssertReportHasTotal(report, Dwelling.Hole, 0);
 
-            report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            report = reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                Question = questionnaire.Find<SingleQuestion>(relationQuestion)
+                QuestionId = relationQuestion
             });
 
             AssertReportHasTotal(report, Relation.Child, 1);
@@ -244,10 +248,11 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
 
             UnitOfWork.Session.Flush();
 
-            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            var report = reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                Question = questionnaire.Find<NumericQuestion>(numericIntQuestion)
+                QuestionId = numericIntQuestion
             });
 
             AssertReportHasTotal(report, "Count", 1);
@@ -261,10 +266,11 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             AssertReportHasTotal(report, "sum", 10);
 
 
-            report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            report = reporter.GetReport(plainQuestionnaire,
+                new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                Question = questionnaire.Find<NumericQuestion>(numericRealQuestion)
+                QuestionId = numericRealQuestion
             });
             
             AssertReportHasTotal(report, "Count", 1);

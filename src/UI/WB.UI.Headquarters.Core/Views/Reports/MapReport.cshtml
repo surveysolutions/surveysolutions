@@ -1,0 +1,15 @@
+﻿@using WB.UI.Headquarters.Code
+@using WB.UI.Headquarters.Configs
+@model object
+@inject IOptions<GoogleMapsConfig> options
+@{
+    ViewBag.Title = MapReport.MapReportTitle;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section Scripts{
+    <script type="text/javascript" 
+            src="@options.Value.BaseUrl/maps/api/js?key=@options.Value.ApiKey&sensor=false&libraries=visualization">
+    </script>
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>

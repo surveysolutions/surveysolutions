@@ -1,0 +1,15 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.UI.Headquarters.Code
+@using WB.UI.Headquarters.Configs
+@model WB.UI.Headquarters.Models.DataExport.NewExportModel
+@inject IOptions<GoogleMapsConfig> options
+@{
+    ViewBag.Title = DataExport.DataExport_Title;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>
+
+

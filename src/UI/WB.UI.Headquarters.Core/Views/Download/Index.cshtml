@@ -1,0 +1,10 @@
+﻿@using WB.UI.Headquarters.Code
+@model object
+@{
+    ViewBag.Title = Pages.DownloadPage_PageTitle;
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>

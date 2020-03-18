@@ -131,7 +131,6 @@
     <Compile Include="Migrations\AddTitleToOptionViewForSearching.cs" />
     <Compile Include="Migrations\UpdateAssignmentsWithInterviewsCount.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
-    <Compile Include="ServiceLocation\InterviewerLoggingModule.cs" />
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
     <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
     <Compile Include="Services\CheckForVersionUriProvider.cs" />
@@ -350,82 +349,82 @@
       <Version>5.0.0</Version>
     </PackageReference>
     <PackageReference Include="Esri.ArcGISRuntime" Condition="'$(ExcludeExtensions)' != 'True'">
-      <Version>100.6.0</Version>
+      <Version>100.7.0</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core.es">
-      <Version>2.7.2</Version>
+      <Version>2.7.9</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core.fr">
-      <Version>2.7.2</Version>
+      <Version>2.7.9</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core.id">
-      <Version>2.7.2</Version>
+      <Version>2.7.9</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core.it">
-      <Version>2.7.2</Version>
+      <Version>2.7.9</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core.pt">
-      <Version>2.7.2</Version>
+      <Version>2.7.9</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core.ru">
-      <Version>2.7.2</Version>
+      <Version>2.7.9</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core.zh-CN">
-      <Version>2.7.2</Version>
+      <Version>2.7.9</Version>
     </PackageReference>
     <PackageReference Include="Markdig">
-      <Version>0.17.1</Version>
+      <Version>0.18.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>2.5.0</Version>
+      <Version>2.6.4</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>2.5.0</Version>
+      <Version>2.6.4</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp">
-      <Version>4.6.0</Version>
+      <Version>4.7.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.Platforms">
-      <Version>2.2.2</Version>
+      <Version>3.1.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Win32.Primitives">
       <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Droid.Support.Core.Utils">
-      <Version>6.4.0</Version>
+      <Version>6.4.1</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Droid.Support.V7.AppCompat">
-      <Version>6.4.0</Version>
+      <Version>6.4.2</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Droid.Support.V7.RecyclerView">
-      <Version>6.4.0</Version>
+      <Version>6.4.2</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.Json">
-      <Version>6.4.0</Version>
+      <Version>6.4.2</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.Messenger">
-      <Version>6.4.0</Version>
+      <Version>6.4.2</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.Network">
-      <Version>6.4.0</Version>
+      <Version>6.4.2</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.PictureChooser">
-      <Version>6.4.0</Version>
+      <Version>6.4.2</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.ResourceLoader">
-      <Version>6.4.0</Version>
+      <Version>6.4.2</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.Visibility">
-      <Version>6.4.0</Version>
+      <Version>6.4.2</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.WebBrowser">
-      <Version>6.4.0</Version>
+      <Version>6.4.2</Version>
     </PackageReference>
     <PackageReference Include="NETStandard.Library">
       <Version>2.0.3</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.6.7</Version>
+      <Version>4.6.8</Version>
     </PackageReference>
     <PackageReference Include="PCLStorage">
       <Version>1.0.2</Version>
@@ -439,17 +438,14 @@
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.6.292</Version>
     </PackageReference>
-    <PackageReference Include="SQLitePCLRaw.bundle_green">
-      <Version>1.1.13</Version>
-    </PackageReference>
     <PackageReference Include="System.Collections.Immutable">
-      <Version>1.6.0</Version>
+      <Version>1.7.0</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel">
       <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="System.Threading.Tasks.Extensions">
-      <Version>4.5.2</Version>
+      <Version>4.5.3</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.DeviceInfo">
       <Version>4.1.1</Version>
@@ -581,7 +577,7 @@
       <Version>28.0.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Build.Download">
-      <Version>0.4.11</Version>
+      <Version>0.8.0</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Controls.SignaturePad">
       <Version>3.0.0</Version>

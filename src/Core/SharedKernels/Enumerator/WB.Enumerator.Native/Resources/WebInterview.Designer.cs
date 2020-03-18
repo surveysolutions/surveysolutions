@@ -524,6 +524,15 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wrong password.
+        /// </summary>
+        public static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The interview process requires an internet connection. No additional software is needed..
         /// </summary>
         public static string InvitationSmallText {

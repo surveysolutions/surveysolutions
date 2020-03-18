@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -20,15 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.4" />
-    <PackageReference Include="MvvmCross.Plugin.File" Version="6.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.Network" Version="6.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.4.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="MvvmCross.Plugin.File" Version="6.4.2" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.4.2" />
+    <PackageReference Include="MvvmCross.Plugin.Network" Version="6.4.2" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.4.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.13" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.13" />
-    <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.9.961" />
+    <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.11.982" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
@@ -39,16 +37,8 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Properties\InterviewerUIResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.resx">
+    <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

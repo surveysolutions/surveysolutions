@@ -55,9 +55,12 @@ namespace WB.Services.Export.Infrastructure
                     if (tenantContext.Tenant == null)
                         throw new ArgumentException($"{nameof(TenantDbContext)} cannot be resolved outside of configured ITenantContext");
 
-                    var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
-                    connectionStringBuilder.SearchPath = tenant;
-                    connectionStringBuilder.Enlist = false;
+                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection)
+                {
+                    Enlist = false,
+                    SearchPath = tenantContext.Tenant.SchemaName()
+                };
+
                     return connectionStringBuilder.ToString();
                 });
             });
@@ -78,7 +81,10 @@ namespace WB.Services.Export.Infrastructure
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseNpgsql(connectionString.Value,
-                    b => { b.MigrationsHistoryTable("__migrations", this.TenantContext.Tenant.SchemaName()); });
+                    b =>
+                    {
+                        b.MigrationsHistoryTable("__migrations", this.TenantContext.Tenant.SchemaName());
+                    });
             }
         }
 
@@ -91,7 +97,7 @@ namespace WB.Services.Export.Infrastructure
                 var meta = MetadataSet.Find(key);
                 if (meta == null)
                 {
-                    return MetadataSet.Add(new Metadata {Id = key, Value = "0"}).Entity;
+                    return MetadataSet.Add(new Metadata { Id = key, Value = "0" }).Entity;
                 }
 
                 return meta;
@@ -107,7 +113,7 @@ namespace WB.Services.Export.Infrastructure
                 var meta = MetadataSet.Find(key);
                 if (meta == null)
                 {
-                    return MetadataSet.Add(new Metadata {Id = key, Value = "0"}).Entity;
+                    return MetadataSet.Add(new Metadata { Id = key, Value = "0" }).Entity;
                 }
 
                 return meta;
@@ -189,7 +195,7 @@ namespace WB.Services.Export.Infrastructure
             {
                 var tables = await db.QueryAsync<string>(
                     "select tablename from pg_tables where schemaname= @schema",
-                    new {schema});
+                    new { schema });
 
                 foreach (var table in tables)
                 {

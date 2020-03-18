@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Unidecode.NET;
@@ -15,7 +16,7 @@ namespace WB.Services.Export.CsvExport.Exporters
     {
         Task ExportAsync(TenantInfo tenant,
             QuestionnaireDocument questionnaire,
-            string basePath);
+            string basePath, CancellationToken cancellationToken);
     }
 
     public class PdfExporter : IPdfExporter
@@ -35,7 +36,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         public async Task ExportAsync(TenantInfo tenant,
             QuestionnaireDocument questionnaire,
-            string basePath)
+            string basePath, CancellationToken cancellationToken)
         {
             var targetFolder = Path.Combine(basePath, "Pdf");
             IHeadquartersApi hqApi = tenantApi.For(tenant);
@@ -47,6 +48,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             try
             {
                 var mainPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId);
+                if (cancellationToken.IsCancellationRequested) return;
                 var mainFilePath = Path.Combine(targetFolder, targetFileName);
                 Directory.CreateDirectory(targetFolder);
                 using (var mainStream = this.fileSystemAccessor.OpenOrCreateFile(mainFilePath, false))
@@ -67,9 +69,10 @@ namespace WB.Services.Export.CsvExport.Exporters
                     this.logger.LogError(e, "Error while loading of PDF file {id}", questionnaire.QuestionnaireId);
                 }
             }
-
+            
             foreach (var translation in questionnaire.Translations)
             {
+                if (cancellationToken.IsCancellationRequested) return;
                 try
                 {
                     this.logger.LogDebug("Loading pdf for {questionnaire} {translationId}", questionnaire.QuestionnaireId, translation.Id);

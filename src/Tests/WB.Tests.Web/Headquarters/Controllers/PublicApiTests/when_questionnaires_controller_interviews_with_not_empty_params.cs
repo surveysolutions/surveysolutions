@@ -4,6 +4,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
@@ -25,10 +26,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             actionResult.Should().BeOfType<InterviewApiView>();
 
         [NUnit.Framework.Test] public void should_call_factory_load_once () =>
-            allInterviewsViewFactory.Verify(x => x.Load(Moq.It.IsAny<AllInterviewsInputModel>()), Times.Once());
+            allInterviewsViewFactory.Verify(x => x.Load(It.IsAny<AllInterviewsInputModel>()), Times.Once());
 
         private static InterviewApiView actionResult;
-        private static QuestionnairesController controller;
+        private static QuestionnairesPublicApiController controller;
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 1;

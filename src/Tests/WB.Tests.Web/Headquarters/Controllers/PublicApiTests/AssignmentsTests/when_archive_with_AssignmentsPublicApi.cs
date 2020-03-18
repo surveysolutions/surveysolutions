@@ -1,9 +1,6 @@
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Tests.Abc;
 
@@ -15,10 +12,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_return_404_for_non_existing_assignment()
         {
-            Assert.Throws(Is.TypeOf<HttpResponseException>()
-                    .And.Property(nameof(HttpResponseException.Response))
-                    .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound),
-                () => this.controller.ChangeQuantity(101, null));
+            var result = this.controller.ChangeQuantity(101, -1);
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -89,12 +90,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             if (questionnaire.HasQuestion(variableName.Value))
             {
-                var question = questionnaire.GetQuestionByVariable(variableName.Value);
-                var questionType = question.QuestionType;
+                var questionId = questionnaire.GetQuestionIdByVariable(variableName.Value).Value;
+                var questionType = questionnaire.GetQuestionType(questionId);
 
                 if (questionType == QuestionType.Numeric)
                 {
-                    if(question.Answers.Count > 0 || !questionnaire.IsQuestionInteger(question.PublicKey))
+                    var questionOptions = questionnaire.GetOptionsForQuestion(questionId, null, null, null);
+                    if (questionOptions.Any() || !questionnaire.IsQuestionInteger(questionId))
                         return true;
                 }
 
@@ -396,7 +398,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var enumerableRows = allRowsByAllFiles
                 .Where(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire))
                 .Select(x => x.InterviewIdValue.Value);
-            var allInterviewIdsFromMainFile = enumerableRows.ToHashSet();
+            var allInterviewIdsFromMainFile = enumerableRows.ToImmutableHashSet();
 
             var allInterviewsIdsFromFirstLevelRoster = allRowsByAllFiles
                 .Where(x => x.RosterInstanceCodes.Length == 1)
@@ -470,7 +472,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var enumerableVariables = numericRosterSizeQuestions
                 .SelectMany(questionnaire.GetRosterGroupsByRosterSizeQuestion)
                 .Select(questionnaire.GetRosterVariableName);
-            var rosterNamesByNumericRosters = enumerableVariables.ToHashSet();
+            var rosterNamesByNumericRosters = enumerableVariables.ToImmutableHashSet();
 
             var rowsByNumericRosters = allRowsByAllFiles.GroupBy(z => z.QuestionnaireOrRosterName)
                 .Where(x => rosterNamesByNumericRosters.Contains(x.Key));
@@ -693,9 +695,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var questionVariable = compositeColumn[0];
             var sortIndex = compositeColumn[1];
 
-            var question = questionnaire.GetQuestionByVariable(questionVariable);
+            var questionId = questionnaire.GetQuestionIdByVariable(questionVariable);
+            if (questionId == null)
+                return false;
 
-            return question?.QuestionType == QuestionType.TextList && !int.TryParse(sortIndex, out _);
+            var questionType = questionnaire.GetQuestionType(questionId.Value);
+            return questionType == QuestionType.TextList && !int.TryParse(sortIndex, out _);
         }
 
         private bool CategoricalMultiQuestion_OptionNotFound(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
@@ -705,12 +710,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             if (compositeColumn.Length < 2) return false;
 
-            var question = questionnaire.GetQuestionByVariable(compositeColumn[0]);
+            var questionId = questionnaire.GetQuestionIdByVariable(compositeColumn[0]);
+            if (questionId == null)
+                return false;
+
             var optionCode = compositeColumn[1].Replace("n", "-");
 
-            return question?.QuestionType == QuestionType.MultyOption && 
-                   !question.LinkedToQuestionId.HasValue && !question.LinkedToRosterId.HasValue &&
-                   question.Answers.All(x => x.AnswerValue != optionCode);
+            return questionnaire.GetQuestionType(questionId.Value) == QuestionType.MultyOption && 
+                   !questionnaire.IsQuestionLinked(questionId.Value) && !questionnaire.IsQuestionLinkedToRoster(questionId.Value) &&
+                   questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null).All(x => x.Value.ToString() != optionCode);
         }
 
         private bool RosterInstanceCode_InvalidCode(AssignmentRosterInstanceCode answer, IQuestionnaire questionnaire)
@@ -741,9 +749,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool RosterInstanceCode_NoParsed(AssignmentRosterInstanceCode answer) => !answer.Code.HasValue;
 
         private bool CategoricalSingle_OptionNotFound(AssignmentCategoricalSingleAnswer answer, IQuestionnaire questionnaire)
-            => !string.IsNullOrWhiteSpace(answer.Value) &&
-               (!answer.OptionCode.HasValue || (questionnaire.GetQuestionByVariable(answer.VariableName)?.Answers
-                                                ?.All(x => x.AnswerValue != answer.Value) ?? false));
+        {
+            if (string.IsNullOrWhiteSpace(answer.Value))
+                return false;
+
+            if (!answer.OptionCode.HasValue)
+                return true;
+
+            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
+            if (questionId == null)
+                return false;
+
+            var options = questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null);
+            return (options?.All(x => x.Value.ToString() != answer.Value) ?? false);
+        }
 
         private bool Text_HasInvalidMask(AssignmentTextAnswer answer, IQuestionnaire questionnaire)
         {

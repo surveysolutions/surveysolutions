@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     public interface IBrokenInterviewPackagesViewFactory
     {
-        BrokenInterviewPackagesView GetFilteredItems(BrokenInterviewPackageFilter filter);
+        BrokenInterviewPackagesView GetFilteredItems(InterviewPackageFilter filter);
         BrokenInterviewPackageExceptionTypesView GetExceptionTypes(int pageSize, string searchBy);
         BrokenInterviewPackage GetPackage(int id);
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
@@ -8,25 +7,16 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Internal;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shark.PdfConvert;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
 using WB.Core.BoundedContexts.Designer;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Pdf.Controllers
 {
@@ -76,26 +66,20 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         private readonly IOptions<PdfSettings> pdfSettings;
         private readonly ILogger logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IRazorViewEngine razorViewEngine;
-        private readonly IServiceProvider serviceProvider;
-        private readonly ITempDataProvider tempDataProvider;
+        private readonly IViewRenderService viewRenderingService;
 
         public PdfController(
             IPdfFactory pdfFactory, 
             ILogger<PdfController> logger,
             IFileSystemAccessor fileSystemAccessor,
-            IRazorViewEngine razorViewEngine,
-            IServiceProvider serviceProvider,
-            ITempDataProvider tempDataProvider,
-            IOptions<PdfSettings> pdfOptions)
+            IOptions<PdfSettings> pdfOptions, 
+            IViewRenderService viewRenderingService)
         {
             this.pdfFactory = pdfFactory;
             this.pdfSettings = pdfOptions;
+            this.viewRenderingService = viewRenderingService;
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.razorViewEngine = razorViewEngine;
-            this.serviceProvider = serviceProvider;
-            this.tempDataProvider = tempDataProvider;
         }
 
         protected IActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
@@ -222,8 +206,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
             var questionnaireHtml = RenderActionResultToString(nameof(RenderQuestionnaire), questionnaire).Result;
 
-            ControllerContext.RouteData.Routers.Add(AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
-            var pageFooterUrl = new UrlHelper(ControllerContext).Link("QuestionnaireFooter", new { });
+            var pageFooterUrl = Url.Link("QuestionnaireFooter", new { });
 
             Task.Factory.StartNew(() =>
             {
@@ -253,51 +236,12 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private async Task<string> RenderActionResultToString(string viewName, object model)
         {
-            var httpContext = new DefaultHttpContext
-            {
-                RequestServices = serviceProvider, 
-                Request =
-                {
-                    Host = this.Request.Host,
-                    IsHttps = this.Request.IsHttps,
-                    Scheme = this.Request.Scheme,
-                },
-            };
-
-            
-            var routeData = new RouteData();
-            routeData.Values.Add("area", "Pdf");
+            string webRoot = new Uri($"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}").ToString().TrimEnd('/');
+            var routeData = new Microsoft.AspNetCore.Routing.RouteData();
+            routeData.DataTokens.Add("area", "Pdf");
             routeData.Values.Add("controller", "Pdf");
-            routeData.Routers.Add(AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
-            
-            var actionContext = new ActionContext(httpContext, routeData, new ActionDescriptor() { RouteValues = new Dictionary<string, string>{{"area", "Pdf"}}});
-
-            using (var sw = new StringWriter())
-            {
-                var viewResult = razorViewEngine.FindView(actionContext, viewName, false);
-                if (viewResult.View == null)
-                {
-                    throw new ArgumentNullException($"{viewName} does not match any available view");
-                }
-
-                var viewDictionary = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
-                {
-                    Model = model
-                };
-
-                var viewContext = new ViewContext(
-                    actionContext,
-                    viewResult.View,
-                    viewDictionary,
-                    new TempDataDictionary(actionContext.HttpContext, tempDataProvider),
-                    sw,
-                    new HtmlHelperOptions()
-                );
-
-                await viewResult.View.RenderAsync(viewContext);
-
-                return sw.ToString();
-            }
+            routeData.Values.Add("area", "Pdf");
+            return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, routeData);
         }
 
         private string GetPathToWKHtmlToPdfExecutableOrThrow()

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Tests.Abc;
-
-using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
@@ -19,10 +19,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             var controller = CreateQuestionnairesController(questionnaireBrowseItems: new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
 
             // Act
-            var response = controller.RecordAudio(Guid.NewGuid(), 1, new RecordAudioRequest());
+            var response = (IStatusCodeActionResult)controller.RecordAudio(Guid.NewGuid(), 1, new RecordAudioRequest());
 
             // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            Assert.That(response.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         }
 
         [Test]
@@ -34,10 +34,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             var controller = CreateQuestionnairesController(questionnaireBrowseItems: questionnaires);
 
             // Act
-            var response = controller.RecordAudio(Id.gA, 1, new RecordAudioRequest());
+            var response = (IStatusCodeActionResult)controller.RecordAudio(Id.gA, 1, new RecordAudioRequest());
 
             // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            Assert.That(response.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         }
 
         [Test]
@@ -49,10 +49,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             var controller = CreateQuestionnairesController(questionnaireBrowseItems: questionnaires);
 
             // Act
-            var response = controller.RecordAudio(Id.gA, 1, new RecordAudioRequest());
+            var response = (IStatusCodeActionResult)controller.RecordAudio(Id.gA, 1, new RecordAudioRequest());
 
             // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            Assert.That(response.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         }
 
         [Test]
@@ -65,13 +65,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             var controller = CreateQuestionnairesController(questionnaireBrowseItems: questionnaires);
 
             // Act
-            var response = controller.RecordAudio(Id.gA, 1, new RecordAudioRequest
+            var response = (IStatusCodeActionResult)controller.RecordAudio(Id.gA, 1, new RecordAudioRequest
             {
                 Enabled = true
             });
 
             // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
+            Assert.That(response.StatusCode, Is.EqualTo(StatusCodes.Status204NoContent));
             Assert.That(questionnaireBrowseItem.IsAudioRecordingEnabled, Is.True);
         }
     }

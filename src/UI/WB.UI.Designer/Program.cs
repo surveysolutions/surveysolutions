@@ -4,6 +4,8 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
@@ -22,13 +24,15 @@ namespace WB.UI.Designer
             var verboseLog = Path.Combine(appRoot, "..", "logs", "verbose.log");
 
             Log.Logger = new LoggerConfiguration()
-                //.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+                
                 .Enrich.FromLogContext()
-                .WriteTo.Console()
+                .WriteTo.Console() //outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
                 .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day, 
                         restrictedToMinimumLevel: LogEventLevel.Warning)
                 .WriteTo.File(verboseLog, rollingInterval: RollingInterval.Day,
                         restrictedToMinimumLevel: LogEventLevel.Verbose, retainedFileCountLimit: 2)
+                
                 .CreateLogger();
 
             try

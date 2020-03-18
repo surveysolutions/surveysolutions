@@ -5,7 +5,7 @@ using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    internal interface IExportProcessHandler<TProcess> where TProcess: DataExportProcessArgs
+    public interface IExportProcessHandler<TProcess> where TProcess: DataExportProcessArgs
     {
         Task ExportDataAsync(TProcess process, CancellationToken cancellationToken);
     }

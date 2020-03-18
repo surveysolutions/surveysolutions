@@ -75,4 +75,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             }
         }
     }
+
+    public static class InScopeExecutorExtensions
+    {
+        public static async Task ExecuteAsync(this IInScopeExecutor executor,
+            Func<IServiceLocator, IUnitOfWork, Task> func)
+        {
+            await executor.ExecuteAsync(async (locator) =>
+            {
+                await func(locator, locator.GetInstance<IUnitOfWork>());
+            });
+        }
+    }
 }

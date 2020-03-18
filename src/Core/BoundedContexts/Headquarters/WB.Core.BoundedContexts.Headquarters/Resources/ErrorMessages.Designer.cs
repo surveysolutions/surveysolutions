@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ErrorMessages {
@@ -84,6 +84,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string Questionnaire_verification_failed {
             get {
                 return ResourceManager.GetString("Questionnaire_verification_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Another questionnaire is being imported to Headquarters now..
+        /// </summary>
+        public static string QuestionnaireAlreadyImporting {
+            get {
+                return ResourceManager.GetString("QuestionnaireAlreadyImporting", resourceCulture);
             }
         }
         

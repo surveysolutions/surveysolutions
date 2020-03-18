@@ -4,10 +4,8 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using NSubstitute;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -78,7 +76,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     nearbyConnection: Mock.Of<INearbyConnection>(x => x.Events == new Subject<INearbyEvent>()), 
                     restService: Mock.Of<IRestService>(), 
                     syncClient: Mock.Of<IOfflineSyncClient>(),
-                    userInteractionService: Mock.Of<IUserInteractionService>());
+                    userInteractionService: Mock.Of<IUserInteractionService>(),
+                    googleApiService: Mock.Of<IGoogleApiService>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();

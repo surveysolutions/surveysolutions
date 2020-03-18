@@ -12,6 +12,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
 using Moq;
+using NUnit.Framework;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters;
@@ -29,15 +30,14 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -1361,7 +1361,7 @@ namespace WB.Tests.Abc.TestFactories
             => new UserLight(userId ?? Guid.NewGuid(), "test");
 
         public UserToImport UserToImport(
-            string login = "test", string supervisor = "", string password = "P@$$w0rd", string email = "", string phoneNumber = "",
+            string login = "test", string supervisor = "", string password = "P@$$w0rd$", string email = "", string phoneNumber = "",
             string role = null, string fullName = null)
             => new UserToImport
             {
@@ -1378,7 +1378,6 @@ namespace WB.Tests.Abc.TestFactories
             => new UserPreloadingSettings(
                 10000, "^[a-zA-Z0-9_]{3,15}$",
                 @"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$",
-                "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$",
                 @"^(\+\s?)?((?<!\+.*)\(\+?\d+([\s\-\.]?\d+)?\)|\d+)([\s\-\.]?(\(\d+([\s\-\.]?\d+)?\)|\d+))*(\s?(x|ext\.?)\s?\d+)?$", 100, 15,
                 @"^[\p{L} '.-]+$");
 
@@ -1853,7 +1852,10 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
-        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Identity identity = null, string answer = null, string answerAsString = null)
+        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Identity identity = null, 
+            string answer = null,
+            string answerAsString = null,
+            string variable = null)
         {
             var result = new IdentifyingAnswer();
             
@@ -1862,6 +1864,7 @@ namespace WB.Tests.Abc.TestFactories
             dynamic.Identity = identity;
             dynamic.Answer = answer;
             dynamic.AnswerAsString = answerAsString;
+            dynamic.VariableName = variable;
             return result;
         }
 
@@ -1950,10 +1953,10 @@ namespace WB.Tests.Abc.TestFactories
 
             var exportViewFactory = new ExportViewFactory(
                 fileSystemAccessor.Object,
-                Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                 new RosterStructureService(),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
-            return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, new QuestionnaireIdentity(Guid.NewGuid(), 1));
+            return exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
         public AudioQuestion AudioQuestion(Guid qId, string variable)
@@ -2003,9 +2006,9 @@ namespace WB.Tests.Abc.TestFactories
                 changeValue, interviewId, eventSequence);
         }
 
-        public SyncSettings SyncSettings(bool useBackgroundJobForProcessingPackages = false)
+        public SyncSettings SyncSettings()
         {
-            return new SyncSettings("hq", useBackgroundJobForProcessingPackages);
+            return new SyncSettings("hq");
         }
 
         public InterviewTreeVariableDiff InterviewTreeVariableDiff(InterviewTreeVariable sourceVariable, InterviewTreeVariable targetVariable)
@@ -2522,5 +2525,14 @@ namespace WB.Tests.Abc.TestFactories
             Value = value,
             SortIndex = sortIndex ?? 0
         };
+
+        public CategoricalOption CategoricalOption(string title, int value)
+        {
+            return new CategoricalOption()
+            {
+                Title = title,
+                Value = value,
+            };
+        }
     }
 }

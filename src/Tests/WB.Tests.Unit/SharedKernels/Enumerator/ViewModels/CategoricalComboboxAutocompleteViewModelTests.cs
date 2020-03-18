@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using Moq;
 using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;

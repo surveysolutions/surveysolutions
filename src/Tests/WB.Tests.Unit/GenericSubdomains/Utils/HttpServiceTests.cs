@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -70,8 +69,8 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
 
             var testMessageHandler = new TestMessageHandler();
             var httpClient = new HttpClient(testMessageHandler);
-            IHttpClientFactory httpClientFactory = 
-                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+            var httpClientFactory = 
+                Mock.Of<Core.GenericSubdomains.Portable.Services.IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
             RestService service = Create.Service.RestService(httpClientFactory: httpClientFactory, restServiceSettings: settings);
 
             var hash = Convert.ToBase64String(MD5.Create().ComputeHash(

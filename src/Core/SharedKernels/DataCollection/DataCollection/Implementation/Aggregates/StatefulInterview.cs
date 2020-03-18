@@ -987,17 +987,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CloseBySupevisor(CloseInterviewBySupervisorCommand command)
         {
-            var invariants = new InterviewPropertiesInvariants(properties);
-            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
-
             ApplyEvent(new InterviewClosedBySupervisor(command.UserId, command.OriginDate));
         }
 
         public void OpenBySupevisor(OpenInterviewBySupervisorCommand command)
         {
-            var invariants = new InterviewPropertiesInvariants(properties);
-            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
-
             ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.OriginDate));
         }
     }

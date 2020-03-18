@@ -10,12 +10,10 @@ using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -27,40 +25,34 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public class AssignmentsImportService : IAssignmentsImportService
     {
-        private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataVerifier verifier;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUnitOfWork sessionProvider;
         private readonly IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository;
         private readonly IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
-        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
         private readonly IAssignmentFactory assignmentFactory;
         private readonly IInvitationService invitationService;
         private readonly IAssignmentPasswordGenerator passwordGenerator;
 
-        public AssignmentsImportService(IUserViewFactory userViewFactory,
-            IPreloadedDataVerifier verifier,
+        public AssignmentsImportService(IPreloadedDataVerifier verifier,
             IAuthorizedUser authorizedUser,
             IUnitOfWork sessionProvider,
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage,
             IAssignmentsImportFileConverter assignmentsImportFileConverter,
             IAssignmentFactory assignmentFactory,
             IInvitationService invitationService, 
             IAssignmentPasswordGenerator passwordGenerator)
         {
-            this.userViewFactory = userViewFactory;
             this.verifier = verifier;
             this.authorizedUser = authorizedUser;
             this.sessionProvider = sessionProvider;
             this.importAssignmentsProcessRepository = importAssignmentsProcessRepository;
             this.importAssignmentsRepository = importAssignmentsRepository;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
-            this.assignmentsStorage = assignmentsStorage;
             this.assignmentsImportFileConverter = assignmentsImportFileConverter;
             this.assignmentFactory = assignmentFactory;
             this.invitationService = invitationService;

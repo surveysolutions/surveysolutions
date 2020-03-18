@@ -21,6 +21,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.LogDate);
             Property(x => x.Type);
             Property(x => x.Log);
+            Property(x => x.ActionExceptionMessage);
+            Property(x => x.ActionExceptionType);
         }
     }
 }

@@ -1,0 +1,396 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DataExport_Title" xml:space="preserve">
+    <value>Data Export</value>
+  </data>
+  <data name="DataExport_Header" xml:space="preserve">
+    <value>Select type and format of data to export</value>
+  </data>
+  <data name="BinaryData" xml:space="preserve">
+    <value>Binary Data</value>
+  </data>
+  <data name="DDI" xml:space="preserve">
+    <value>DDI</value>
+  </data>
+  <data name="ParaData" xml:space="preserve">
+    <value>Paradata</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Last update date</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="ConfirmStop" xml:space="preserve">
+    <value>Are you sure you want to stop</value>
+  </data>
+  <data name="export" xml:space="preserve">
+    <value>export process</value>
+  </data>
+  <data name="Metadata" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>Archive with binary data (e.g., pictures, audio)</value>
+  </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>You can't change the export settings because the export process is already running.</value>
+  </data>
+  <data name="Bytes" xml:space="preserve">
+    <value>MB</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>Not generated</value>
+  </data>
+  <data name="DDIDescription" xml:space="preserve">
+    <value>Data Documentation Initiative XML data</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>Export range:</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>File size</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>format</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="Generating" xml:space="preserve">
+    <value>Generating</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Preparing</value>
+  </data>
+  <data name="Compressing" xml:space="preserve">
+    <value>Compressing</value>
+  </data>
+  <data name="LastGeneratedTitle" xml:space="preserve">
+    <value>Generated on</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>Main Survey Data</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>No Data available</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>Metadata on the interview process (events and timing)</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>Queued</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>Status of exported interviews</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>(version) Survey questionnaire</value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>Zip archive with main interview data</value>
+  </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>XML format</value>
+  </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>Items in export queue:</value>
+  </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>Tabular Format</value>
+  </data>
+  <data name="ExportExplanation" xml:space="preserve">
+    <value>Pressing Generate button creates a data archive of interviews available on the server at that time. The time of archive creation and the archive size are shown in the table. The last generated data archive can be downloaded by pressing Download button. Press Generate button again to create a new archive.</value>
+  </data>
+  <data name="ZipFile" xml:space="preserve">
+    <value>Zip file</value>
+  </data>
+  <data name="Dropbox" xml:space="preserve">
+    <value>Dropbox</value>
+  </data>
+  <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+  <data name="GoogleDrive" xml:space="preserve">
+    <value>Google Drive</value>
+  </data>
+  <data name="SaveBinaryDataTo" xml:space="preserve">
+    <value>Save binary data to:</value>
+  </data>
+  <data name="ExportBtn" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+    <value>Export file will be uploaded to Dropbox</value>
+  </data>
+  <data name="DataExport_Destination_File" xml:space="preserve">
+    <value>Export file will be avalaible for download</value>
+  </data>
+  <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+    <value>Export file will be uploaded to Google Drive</value>
+  </data>
+  <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+    <value>Export file will be uploaded to OneDrive</value>
+  </data>
+  <data name="DataExport_QueuedOn" xml:space="preserve">
+    <value>Queued on {{date}}</value>
+  </data>
+  <data name="DataExport_CompletedOn" xml:space="preserve">
+    <value>Completed on {{date}}</value>
+  </data>
+  <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+    <value>{{title}} (ver. {{version}})</value>
+  </data>
+  <data name="DataExport_Regenerate" xml:space="preserve">
+    <value>Regenerate</value>
+  </data>
+  <data name="DataExport_RegenerateDesc" xml:space="preserve">
+    <value>Queue export with the same params</value>
+  </data>
+  <data name="DataExport_FileLastUpdate" xml:space="preserve">
+    <value>Last updated: {{date}}</value>
+  </data>
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>File was regenerated</value>
+  </data>
+  <data name="DataExport_FileSize" xml:space="preserve">
+    <value>File size: {{size}} MB</value>
+  </data>
+  <data name="DataExport_Destination" xml:space="preserve">
+    <value>Destination: {{dest}}</value>
+  </data>
+  <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+    <value>Export service is not available</value>
+  </data>
+  <data name="DataType" xml:space="preserve">
+    <value>Data type</value>
+  </data>
+  <data name="DataType_Binary" xml:space="preserve">
+    <value>Binary Data. Archive with binary data (e.g., pictures, audio)</value>
+  </data>
+  <data name="DataType_Ddi" xml:space="preserve">
+    <value>DDI. Data Documentation Initiative XML data</value>
+  </data>
+  <data name="DataType_MainSurveyData" xml:space="preserve">
+    <value>Main Survey Data. Zip archive with main interview data</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filter interviews to export</value>
+  </data>
+  <data name="SurveyQuestionnaire" xml:space="preserve">
+    <value>Survey template</value>
+  </data>
+  <data name="DataType_Paradata" xml:space="preserve">
+    <value>Paradata. Metadata on the interview process (events and timing)</value>
+  </data>
+  <data name="DataDestination" xml:space="preserve">
+    <value>Export file destination</value>
+  </data>
+  <data name="DataFormat" xml:space="preserve">
+    <value>Data format</value>
+  </data>
+  <data name="DataDestination_Dropbox" xml:space="preserve">
+    <value>Upload to Dropbox</value>
+  </data>
+  <data name="DataDestination_GoogleDrive" xml:space="preserve">
+    <value>Upload to Google Drive</value>
+  </data>
+  <data name="DataDestination_OneDrive" xml:space="preserve">
+    <value>Upload to OneDrive</value>
+  </data>
+  <data name="DataDestination_Zip" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="DataFormat_Spss" xml:space="preserve">
+    <value>SPSS format</value>
+  </data>
+  <data name="DataFormat_Stata" xml:space="preserve">
+    <value>Stata 14 format</value>
+  </data>
+  <data name="DataFormat_Tab" xml:space="preserve">
+    <value>Tab separated data</value>
+  </data>
+  <data name="AddToQueue" xml:space="preserve">
+    <value>Add to queue</value>
+  </data>
+  <data name="GeneratedDataSets" xml:space="preserve">
+    <value>Previously generated export sets</value>
+  </data>
+  <data name="GeneratedDataSets_Desc" xml:space="preserve">
+    <value>Data is exported in a zip archive containing the data files of specified content and type. Below is a list of previously exported data files.</value>
+  </data>
+  <data name="NoDataSets" xml:space="preserve">
+    <value>No generated data sets yet</value>
+  </data>
+  <data name="DataExportApi" xml:space="preserve">
+    <value>Data export API</value>
+  </data>
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>You can setup automatic export of collected interview data using our API toolset for more information and inctruction use:</value>
+  </data>
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>Data Export API reference</value>
+  </data>
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>Export job was canceled by user.</value>
+  </data>
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>Not enough space fot the selected cloud storage provide. Please free space and restart the job or choose another provider.</value>
+  </data>
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>An unexpected error occurred during export. We are sorry for inconvenience. Please contact support team support@mysurvey.solutions.</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>all statuses</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Approved by Headquarters status</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Approved by Supervisor  status</value>
+  </data>
+  <data name="DataExport_InterviewsStatus" xml:space="preserve">
+    <value>Interviews in {{status}}.</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Interviewer assigned  status</value>
+  </data>
+</root>

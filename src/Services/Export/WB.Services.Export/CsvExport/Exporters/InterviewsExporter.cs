@@ -137,9 +137,11 @@ namespace WB.Services.Export.CsvExport.Exporters
                
                 var interviewEntities = this.interviewFactory.GetInterviewEntities(interviewIds, questionnaire);
                 var interviewEntitiesLookup = interviewEntities.ToLookup(ie => ie.InterviewId);
-                
+
                 Parallel.ForEach(batch, interviewToExport =>
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var interviewExportedDataRecord = this.ExportSingleInterview(interviewToExport,
                         interviewEntitiesLookup[interviewToExport.Id].ToList(),
                         questionnaireExportStructure,

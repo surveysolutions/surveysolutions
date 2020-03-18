@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
@@ -9,7 +10,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -82,7 +83,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 .Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
 
             var users = new Mock<IUserRepository>();
-            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(new HqUser()
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser()
                 {Profile = new HqUserProfile() {SupervisorId = supervisorId}}));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
@@ -94,7 +95,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             InScopeExecutor.Init(executor.Object);
 
             interviewPackagesService = Create.Service.InterviewPackagesService(
-                    syncSettings: new SyncSettings(origin) {UseBackgroundJobForProcessingPackages = true},
+                    syncSettings: new SyncSettings(origin) {},
                     logger: Mock.Of<ILogger>(),
                     serializer: newtonJsonSerializer,
                     interviewPackageStorage: packagesStorage,
@@ -120,7 +121,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                             DateTime.UtcNow, DateTime.Today),
                     });
 
-            interviewPackagesService.StoreOrProcessPackage(
+            interviewPackagesService.ProcessPackage(
                     new InterviewPackage
                     {
                         InterviewId = expectedCommand.InterviewId,
@@ -132,12 +133,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents
                             .Select(IntegrationCreate.AggregateRootEvent).ToArray())
                     });
-
-            BecauseOf();
-           
         }
 
-        private void BecauseOf() => interviewPackagesService.ProcessPackage("1");
 
         [NUnit.Framework.Test] public void should_execute_SynchronizeInterviewEventsCommand_command () =>
             mockOfCommandService.Verify(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), origin), Times.Once);

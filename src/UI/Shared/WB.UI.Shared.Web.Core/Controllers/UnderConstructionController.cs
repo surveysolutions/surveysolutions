@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.Modularity;
-using WB.UI.Shared.Web.Resources;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Shared.Web.Controllers
 {
+    [NoTransaction]
     public class UnderConstructionController : Controller
     {
-        public UnderConstructionInfo underConstructionInfo;
+        private readonly UnderConstructionInfo underConstructionInfo;
 
         public UnderConstructionController(UnderConstructionInfo underConstructionInfo)
         {
@@ -33,12 +35,18 @@ namespace WB.UI.Shared.Web.Controllers
 
             var model = new UnderConstructionModel()
             {
-                Title = UnderConstruction.UnderConstructionTitle,
-                MainMessage = isError ? status.Message : UnderConstruction.ServerInitializing,
+                Title = Resources.UnderConstruction.UnderConstructionTitle,
+                MainMessage = isError ? status.Message : Resources.UnderConstruction.ServerInitializing,
                 SubMessage = isError ? null : status.Message
             };
 
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Status()
+        {
+            return Ok(underConstructionInfo.Status);
         }
     }
 }

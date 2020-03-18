@@ -1,27 +1,24 @@
-using System.Web;
-using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using WB.Tests.Abc;
-
-using WB.UI.Headquarters.Controllers;
+using WB.Tests.Web;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttributeTests
 {
     internal class when_action_executing_and_admin_user_exists_and_install_controller : InstallationAttributeTestsContext
     {
-        [NUnit.Framework.Test]
-        public void should_exception_status_code_be_equal_to_404()
+        [Test]
+        public void should_return_404_result()
         {
-            attribute = CreateInstallationAttribute();
-            var exception = Assert.Throws<HttpException>(() =>
-                attribute.OnActionExecuting(CreateFilterContext(new InstallController(null, null, null, null, null),
-                    Create.Storage.UserRepository(Create.Entity.HqUser(role: UserRoles.Administrator)))));
+            var users = Abc.Create.Storage.UserRepository(Create.Entity.HqUser(role: UserRoles.Administrator));
+            var attribute = CreateInstallationAttribute();
+            var actionExecutingContext = CreateFilterContext(Create.Controller.InstallController(), users);
+            
+            attribute.OnActionExecuting(actionExecutingContext);
 
-            exception.GetHttpCode().Should().Be(404);
+            Assert.That(actionExecutingContext.Result, 
+                Is.InstanceOf<NotFoundResult>());
         }
-
-        private static InstallationAttribute attribute;
     }
 }

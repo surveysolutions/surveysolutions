@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Quartz;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Enumerator.Native.WebInterview;
@@ -11,10 +11,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
     [DisallowConcurrentExecution]
     internal class PauseResumeJob : IJob
     {
-        private readonly ILogger logger;
+        private readonly ILogger<PauseResumeJob> logger;
         private readonly IPauseResumeQueue queue;
 
-        public PauseResumeJob(IPauseResumeQueue queue, ILogger logger)
+        public PauseResumeJob(IPauseResumeQueue queue, ILogger<PauseResumeJob> logger)
         {
             this.queue = queue;
             this.logger = logger;
@@ -34,12 +34,17 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
                         commandService.Execute(interviewCommand);
                     });
                 }
-                catch(InterviewException interviewException) when (interviewException.ExceptionType == InterviewDomainExceptionType.StatusIsNotOneOfExpected)
+                catch(InterviewException interviewException) 
+                    when (interviewException.ExceptionType == InterviewDomainExceptionType.StatusIsNotOneOfExpected ||
+                          interviewException.ExceptionType == InterviewDomainExceptionType.QuestionnaireIsMissing)
                 {
                 }
                 catch (Exception e)
                 {
-                    this.logger.Error($"Failed to log command {interviewCommand.GetType().Name} for interview {interviewCommand.InterviewId}", e);
+                    this.logger.LogError(e, "Failed to log command {command} for interview {interviewId}",
+                        interviewCommand.GetType().Name,
+                        interviewCommand.InterviewId
+                    );
                 }
             }
 

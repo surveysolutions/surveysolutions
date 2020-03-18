@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NHibernate.Linq;
-using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -120,22 +120,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 return devices
                     .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
                     .GroupBy(x => x.SyncDate.Date)
-                    .Select(group => new {
+                    .Select(group => new
+                    {
                         Key = group.Key,
-                        DownloadBytes = group.Sum(s => s.Statistics.TotalDownloadedBytes),
-                        UploadedBytes = group.Sum(s => s.Statistics.TotalUploadedBytes)
-                        })
+                        DownloadBytes = group.Sum(s => (long?)s.Statistics.TotalDownloadedBytes),
+                        UploadedBytes = group.Sum(s => (long?)s.Statistics.TotalUploadedBytes)
+                    })
                     .OrderByDescending(x => x.Key)
                     .Take(30)
                     .ToList();
             });
-            
+
             var list = dbData
                 .OrderBy(x => x.Key)
                 .Select(x => new InterviewerDailyTrafficUsage
                 {
-                    DownloadedBytes = x.DownloadBytes,
-                    UploadedBytes = x.UploadedBytes,
+                    DownloadedBytes = x.DownloadBytes ?? 0,
+                    UploadedBytes = x.UploadedBytes ?? 0,
                     Year = x.Key.Year,
                     Month = x.Key.Month,
                     Day = x.Key.Day

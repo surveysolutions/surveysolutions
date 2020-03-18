@@ -1,0 +1,12 @@
+﻿@using WB.UI.Headquarters.Code
+@model WB.UI.Headquarters.Controllers.LogsModel
+
+@{
+    ViewBag.Title = TabletLogs.PageTitle;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>
+

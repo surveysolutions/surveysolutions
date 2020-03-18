@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WB.Services.Infrastructure.Logging;
 using WB.Services.Scheduler.Model;
 
 namespace WB.Services.Scheduler.Services.Implementation
@@ -12,7 +13,7 @@ namespace WB.Services.Scheduler.Services.Implementation
         private readonly IServiceProvider serviceProvider;
 
         private readonly ILogger<JobWorker> logger;
-        private static long _instanceCounter = 0;
+        private static long instanceCounter = 0;
         public long Id { get; set; }
         public Task Task { get; set; }
 
@@ -21,13 +22,14 @@ namespace WB.Services.Scheduler.Services.Implementation
         {
             this.serviceProvider = serviceProvider;
             this.logger = logger;
-            Id = Interlocked.Increment(ref _instanceCounter);
+            Id = Interlocked.Increment(ref instanceCounter);
         }
 
         private void Info(string message) => logger.LogInformation("[{Id}] {message}", Id, message);
 
         public async Task StartAsync(CancellationToken token)
         {
+            using var logContext = LoggingHelpers.LogContext("workerId", Environment.MachineName + ":" + this.Id);
             Info("Start new worker");
 
             while (true)

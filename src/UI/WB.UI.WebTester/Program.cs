@@ -1,13 +1,11 @@
 using System;
+using System.IO;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-using NLog.Web;
+using Serilog;
+using Serilog.Events;
 
 namespace WB.UI.WebTester
 {
@@ -15,18 +13,12 @@ namespace WB.UI.WebTester
     {
         public static void Main(string[] args)
         {
-            var config = new LoggingConfiguration();
-            var consoleTarget = new ColoredConsoleTarget
-            {
-                Name = "console",
-                Layout = @"${longdate}|${uppercase:${level}}|${logger:shortName=true}|${message} ${exception:format=tostring}|status: ${aspnet-response-statuscode}|url: ${aspnet-request-url}"
-            };
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
 
-            config.AddTarget(consoleTarget);
-            config.AddRuleForAllLevels(consoleTarget); // all to console
-            LogManager.Configuration = config;
-
-            var logger = LogManager.GetCurrentClassLogger();
             try
             {
                 CreateHostBuilder(args)
@@ -35,16 +27,37 @@ namespace WB.UI.WebTester
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                Log.Fatal(e, "Host terminated unexpectedly");
             }
             finally
             {
-                LogManager.Shutdown();
+                Log.CloseAndFlush();
             }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog((host, loggerConfig) =>
+                {
+                    var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "log.log");
+                    var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "verbose.log");
+
+                    loggerConfig
+                        //.MinimumLevel.Debug()
+                        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                        .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
+                        .Enrich.FromLogContext()
+                        .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day,
+                            restrictedToMinimumLevel: LogEventLevel.Warning)
+                        .WriteTo.File(verboseLog, rollingInterval: RollingInterval.Day,
+                            restrictedToMinimumLevel: LogEventLevel.Verbose, retainedFileCountLimit: 2);
+                    if (host.HostingEnvironment.IsDevelopment())
+                    {
+                        // To debug logitems source add {SourceContext} to output template
+                        // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
+                        loggerConfig.WriteTo.Console();
+                    }
+                })
                 .ConfigureAppConfiguration(c =>
                 {
                     c.AddIniFile("appsettings.ini", false, true);
@@ -53,15 +66,8 @@ namespace WB.UI.WebTester
                     c.AddIniFile("appsettings.Production.ini", true);
                 })
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                })
-                .UseNLog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseWebRoot("Content");
                     webBuilder.UseStartup<Startup>();
                 });
     }

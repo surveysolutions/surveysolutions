@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     filter.SortOrder = new[] { new OrderRequestItem() { Field = "LogDate", Direction = OrderDirection.Desc} };
                 }
 
-                var totalCount = query.LongCount();
+                var totalCount = query.Count();
 
                 var items = query.OrderUsingSortExpression(filter.SortOrder.GetOrderRequestString())
                     .Skip((filter.PageIndex - 1) * filter.PageSize)

@@ -1,0 +1,12 @@
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Headquarters.Code
+@model object
+@{
+    ViewBag.Title = MainMenu.SurveyStatistics;
+    ViewBag.ActivePage = MenuItem.SurveyStatistics;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>

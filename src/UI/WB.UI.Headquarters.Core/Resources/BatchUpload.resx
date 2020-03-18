@@ -1,0 +1,609 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdvancedMode" xml:space="preserve">
+    <value>Advanced data upload mode</value>
+  </data>
+  <data name="AdvancedModeDescription" xml:space="preserve">
+    <value>In order to pre-load data to more sections and variables, you can prepare a set of .tab files that correspond to the structure of your questionnaire and put in a .zip archive . Please use the template archive below. You can put only those files and columns that you wish to upload. Any columns left missing or with titles not corresponding to an existing variable in the questionnaire will be ignored.</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="BrowseTeams" xml:space="preserve">
+    <value>Browse teams</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="CreateUsers" xml:space="preserve">
+    <value>Create users</value>
+  </data>
+  <data name="CreatingUsers" xml:space="preserve">
+    <value>Creating users</value>
+  </data>
+  <data name="DataIsValid" xml:space="preserve">
+    <value>Data are valid</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>Download .zip template for this questionnaire</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>File name</value>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>File size</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="FinishedWithError" xml:space="preserve">
+    <value>Finished with error(s)</value>
+  </data>
+  <data name="FinishedWithErrorMessage" xml:space="preserve">
+    <value>Finished with error(s). Reason:</value>
+  </data>
+  <data name="InVerificationProcess" xml:space="preserve">
+    <value>is in verification process, verified</value>
+  </data>
+  <data name="IsInvalid" xml:space="preserve">
+    <value>is invalid. Please fix error(s) below and upload again.</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Last date updated</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="OutOf" xml:space="preserve">
+    <value>out of</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Please wait, the file</value>
+  </data>
+  <data name="ReadyForUserCreation" xml:space="preserve">
+    <value>Ready for user creation</value>
+  </data>
+  <data name="ReadyForValidation" xml:space="preserve">
+    <value>Ready for validation</value>
+  </data>
+  <data name="RecordsCount" xml:space="preserve">
+    <value>Records count</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="UploadDate" xml:space="preserve">
+    <value>Upload date</value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>Uploaded</value>
+  </data>
+  <data name="UploadNewFile" xml:space="preserve">
+    <value>Upload a new file</value>
+  </data>
+  <data name="UploadSample" xml:space="preserve">
+    <value>Upload sample</value>
+  </data>
+  <data name="UploadSampleDescription" xml:space="preserve">
+    <value>To upload the sample to be interviewed, please prepare a file (size up to 300MB) with tab-separated values (.tab file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as identifying.</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Batch User Upload</value>
+  </data>
+  <data name="UploadUsersDescription" xml:space="preserve">
+    <value>Prepare a file with tab-separated values (.tab file) corresponding to a template below. Columns marked with (*) are required. Only 'Supervisor' or 'Interviewer' are allowed in the 'role' column.</value>
+  </data>
+  <data name="UserBatchUploads" xml:space="preserve">
+    <value>Batch User Upload</value>
+  </data>
+  <data name="UsersHaveBeenCreated" xml:space="preserve">
+    <value>user(s) have been created</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Validated</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Validating</value>
+  </data>
+  <data name="ValidationFinishedWithError" xml:space="preserve">
+    <value>Validated</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+    <value>Are you sure you want to delete this file ?</value>
+  </data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+    <value>User preloading process is missing</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>List of files with preloaded users</value>
+  </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>Batch upload</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>File does not contain column(s) for the required identifying questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>Choose a file to upload</value>
+  </data>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>Select responsible</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>The file size can not exceed 300MB.</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>Import sample</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>File wasn't parsed. Only tab-delimited files are allowed.</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>File format is not supported. The data inside the file will be ignored</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>Interview Creation Result</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Processing...</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>Interview creation completed successfully.</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>Upload new data</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Row</value>
+  </data>
+  <data name="VerifySampleData" xml:space="preserve">
+    <value>Verify data</value>
+  </data>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>Other assignment import process is running. Only one assignment import process at a time is allowed. Wait until the process is finished and then upload a new sample file. Follow the link if you want to get more detailed progress information about the other import process.</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>Create interviews from this data</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>Interview import successfully completed</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>Interview import completed with errors</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>Import status</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>Interview(s) created</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Estimated Time</value>
+  </data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>Download invalid interviews</value>
+  </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>Download invalid assignments</value>
+  </data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+    <value>The responsible user will be assigned automatically</value>
+  </data>
+  <data name="VerifyPanelData" xml:space="preserve">
+    <value>Verify panel data</value>
+  </data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve">
+    <value>Go to running assignment import process</value>
+  </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>Upload a zip-archive with one or more tab separated files corresponding to the main interview level and subordinate rosters. Allows preloading variables at any level of the interview.&lt;br/&gt;
+All data files must contain variable interview__id with a unique string or numeric identifier of the interview. Links within rosters and nested rosters established the same way as in exported data.&lt;br/&gt;
+&lt;br/&gt;
+Optionally can specify the following columns in the main interview level file:&lt;br/&gt;
+_responsible - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+_quantity - capacity of the assignment;&lt;br/&gt;
+_email - email of the respondent (for web-interviews only);&lt;br/&gt;
+_password - password to start an interview (for web-interviews only);&lt;br/&gt;
+_webmode - is this assignment in the web mode (value 1 should be used);&lt;br/&gt;
+_record_audio - audio recording is enabled for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire);&lt;br/&gt;
+_comment - comments for the assignment</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+  <data name="BatchTitle" xml:space="preserve">
+    <value>Identifying and collected data (archive)</value>
+  </data>
+  <data name="CreatingMultipleInterviews" xml:space="preserve">
+    <value>Creating multiple interviews</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>Creating multiple assignments</value>
+  </data>
+  <data name="EmptySupervisorDescription" xml:space="preserve">
+    <value>If usernames are not specified you will need to assign a supervisor to all assignments in a later step.</value>
+  </data>
+  <data name="ManualModeDescription" xml:space="preserve">
+      <value>You can create individual assignments by entering all required data in {{url}}</value>
+  </data>
+  <data name="ManualModeLinkTitle" xml:space="preserve">
+    <value>manual mode</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>Upload tab separated file with values for questions in the interview level only. Include values for identifying questions and other questions at the main interview level. Does not allow preloading values inside rosters.&lt;br/&gt;
+&lt;br/&gt;
+Optionally can specify the following columns:&lt;br/&gt;
+_responsible - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+_quantity - capacity of the assignment;&lt;br/&gt;
+_email - email of the respondent (for web-interviews only);&lt;br/&gt;
+_password - password to start an interview (for web-interviews only);&lt;br/&gt;
+_webmode - is this assignment in the web mode (value 1 should be used);&lt;br/&gt;
+_record_audio - audio recording is enabled for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire);&lt;br/&gt;
+_comment - comments for the assignment</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+  <data name="SimpleTitle" xml:space="preserve">
+    <value>Identifying data only</value>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>Upload a file with identifying data to create new assignments.
+Specify usernames for headquarters, supervisors or interviewers to make batch assignments.</value>
+  </data>
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>Save file in UTF8 encoding for support language specific texts.</value>
+  </data>
+  <data name="UploadTabFile" xml:space="preserve">
+    <value>Upload .tab file</value>
+  </data>
+  <data name="UploadZipFile" xml:space="preserve">
+    <value>Upload .zip file</value>
+  </data>
+  <data name="ViewListPrefilledData" xml:space="preserve">
+    <value>View list of required identifying data</value>
+  </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>View list of preloaded values</value>
+  </data>
+  <data name="DownloadTabTemplate" xml:space="preserve">
+    <value>Download .tab template for this questionnaire</value>
+  </data>
+  <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+    <value>Variables marked as Identifying in Designer. Download a</value>
+  </data>
+  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+    <value>.tab template.</value>
+  </data>
+  <data name="HideListPrefilledData" xml:space="preserve">
+    <value>Hide list of required identifying data</value>
+  </data>
+  <data name="PrefilledRequiredData" xml:space="preserve">
+    <value>Required identifying data</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Identifying questions</value>
+  </data>
+  <data name="BatchFileVerificationFailed" xml:space="preserve">
+    <value>Verification of the uploaded file failed</value>
+  </data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+    <value>creating multiple assignments</value>
+  </data>
+  <data name="ImportFrom" xml:space="preserve">
+      <value>Importing information from {{fileName}} for {{title}}</value>
+  </data>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve">
+    <value>Creating multiple interviews with batch upload</value>
+  </data>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>Creating multiple assignments with batch upload</value>
+  </data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve">
+    <value>No interviews were created</value>
+  </data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve">
+      <value>{{count}} errors found</value>
+      <comment>{0} - count of founded errors</comment>
+  </data>
+  <data name="SingleErrorFound" xml:space="preserve">
+    <value>1 error found</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Back to import</value>
+  </data>
+  <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+    <value>Assigned to {0} interviewers</value>
+    <comment>{0} - count of enumerators (always &gt; 1)</comment>
+  </data>
+  <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+    <value>Assigned to {0} supervisors</value>
+    <comment>{0} - count of supervisors (always &gt; 1)</comment>
+  </data>
+  <data name="AssignedToSingleEnumerator" xml:space="preserve">
+    <value>Assigned to 1 interviewer</value>
+  </data>
+  <data name="AssignedToSingleSupervisor" xml:space="preserve">
+    <value>Assigned to 1 supervisor</value>
+  </data>
+  <data name="CreateInterviews" xml:space="preserve">
+    <value>Create interviews</value>
+  </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>Create assignments</value>
+  </data>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+    <value>Data for {0} interviews found</value>
+    <comment>{0} - count of interviews (always &gt; 1)</comment>
+  </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>Data for {0} assignments found</value>
+    <comment>{0} - count of assignments (always &gt; 1)</comment>
+  </data>
+  <data name="DataForSingleInterviewFound" xml:space="preserve">
+    <value>Data for 1 interview found</value>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>Data for 1 assignment found</value>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Importing</value>
+  </data>
+  <data name="ImportInterviewsFor" xml:space="preserve">
+    <value>Importing interviews for {0}</value>
+    <comment>{0} - questionnaire name and version</comment>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+      <value>Importing assignments for {{title}}</value>
+  </data>
+  <data name="ImportInterviews_Done" xml:space="preserve">
+    <value>Done:</value>
+  </data>
+  <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+    <value>None failed</value>
+  </data>
+  <data name="ImportProgressFormat" xml:space="preserve">
+      <value>{{createdCount}} of {{totalCount}}</value>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Importing assignments</value>
+  </data>
+  <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>{0} interviews failed to be created</value>
+    <comment>{0} - count of created interviews (always &gt; 1)</comment>
+  </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+      <value>{{count}} assignments failed to be created</value>
+  </data>
+  <data name="MultipleInterviewsCreated" xml:space="preserve">
+    <value>{0} interviews created</value>
+    <comment>{0} - count of created interviews (always &gt; 1)</comment>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+      <value>{{count}} assignments created</value>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>Select the responsible for this batch</value>
+  </data>
+  <data name="SingleInterviewCreated" xml:space="preserve">
+    <value>1 interview created</value>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>1 assignment created</value>
+  </data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>1 interview failed to be created</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1 assignment failed to be created</value>
+  </data>
+  <data name="VerificationCompleted" xml:space="preserve">
+    <value>Verification complete</value>
+  </data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve">
+    <value>Supervisor or interviewer must be selected</value>
+  </data>
+  <data name="Cell" xml:space="preserve">
+    <value>Cell</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+    <value>Only files with {0} and {1} extensions are allowed for upload.</value>
+  </data>
+  <data name="Prerequisite_FileOpen" xml:space="preserve">
+    <value>Uploaded file cannot be opened. Please check that it is in correct format.</value>
+  </data>
+  <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
+    <value>Only .tab and .txt files are allowed for upload.</value>
+  </data>
+  <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
+    <value>The following files are not supported: {0}.</value>
+  </data>
+  <data name="Prerequisite_ZipFile" xml:space="preserve">
+    <value>Only .zip files are allowed for upload.</value>
+  </data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>No assignments were created</value>
+  </data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>Verification of assignment data</value>
+  </data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+      <value>Verification of assignments for questionnaire {{title}}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>Verification of data file</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+      <value>step {{verifiedCount}} of {{totalCount}}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>Verification of data file succeeded</value>
+  </data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>1 assignment verified successfully</value>
+  </data>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1 error</value>
+  </data>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+      <value>{{count}} assignments verified successfully</value>
+  </data>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+      <value>{{count}} errors</value>
+  </data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>Questionnaire cannot be used for preloading</value>
+  </data>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>Hidden questions</value>
+  </data>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Roster source questions</value>
+  </data>
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>Select default responsible (required)</value>
+  </data>
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>If no responsible assigned in batch file use this headquarters/supervisor/interviewer account:</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>This field is mandatory</value>
+  </data>
+</root>

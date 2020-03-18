@@ -143,17 +143,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                           .Where(x => questionnaire.GetQuestionType(x.Identity.Id) != QuestionType.GpsCoordinates)
                           .Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(),
                                     x.AnswerAsString,
-                                    x.Identity))
+                                    x.Identity,
+                                    questionnaire.GetQuestionVariableName(x.Identity.Id)))
                           .ToList();
             return identifyingColumnText;
         }
 
         public async Task<AssignmentHistory> LoadHistoryAsync(Guid assignmentPublicKey, int offset, int limit)
         {
-            var events = await this.hqEventStore.GetEventsInReverseOrderAsync(assignmentPublicKey, offset, limit);
+            var events = await this.hqEventStore.GetEventsInReverseOrderAsync(assignmentPublicKey, offset, limit)
+                .ConfigureAwait(false);
             var result = new AssignmentHistory();
 
-            var totalLength = await this.hqEventStore.TotalEventsCountAsync(assignmentPublicKey);
+            var totalLength = await this.hqEventStore.TotalEventsCountAsync(assignmentPublicKey).ConfigureAwait(false);
             result.RecordsFiltered = totalLength;
 
             foreach (IEvent committedEvent in events.Select(x => x.Payload))

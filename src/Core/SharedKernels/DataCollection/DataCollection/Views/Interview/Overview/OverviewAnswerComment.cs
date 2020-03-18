@@ -10,5 +10,6 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
         public UserRoles UserRole { get; set; }
         public DateTime CommentTimeUtc { get; set; }
         public string EntityId { get; set; }
+        public bool Resolved { get; set; }
     }
 }

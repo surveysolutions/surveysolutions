@@ -7,19 +7,24 @@ using Main.Core.Entities.Composite;
 using Moq;
 using NHibernate;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc;
@@ -46,7 +51,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, designerApi: rest.Object);
 
             //Act
-            var importResult = await service.Import(Guid.NewGuid(), "null", false, null, null);
+            var importResult = await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             //Assert
             Assert.That(importResult.ImportError, Is.EqualTo(exprectedErrorMessageFromServer));
@@ -67,7 +72,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 designerApi: rest.Object, unitOfWork: uow.Object);
 
             //Act
-            await service.Import(Guid.NewGuid(), "null", false, null, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             //Assert
             uow.Verify(u => u.DiscardChanges(), Times.Once);
@@ -94,20 +99,20 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 designerApi: designerApi.Object, unitOfWork: uow.Object);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false, null, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
             
             //Assert
             uow.Verify(u => u.DiscardChanges(), Times.Once);
         }
 
         [Test]
-        public void when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception()
+        public async Task when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception()
         {
             var supportedVerstion = 1;
 
             var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedQuestionnaireVersion() == supportedVerstion);
 
-            var commandServiceException = new Exception();
+            var commandServiceException = new Exception("meessage");
 
             var commandService = new Mock<ICommandService>();
             commandService
@@ -118,13 +123,17 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var designerApi = new Mock<IDesignerApi>();
             SetupGetQuestionnaire(designerApi);
+            var uow = GetUnitOfWorkMock();
 
             var service = CreateIQuestionnaireImportService(commandService: commandService.Object,
-                supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, designerApi: designerApi.Object);
+                supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, designerApi: designerApi.Object, unitOfWork: uow.Object);
 
             // Act-assert
-            var exception = Assert.ThrowsAsync<Exception>(async () => await service.Import(Guid.NewGuid(), "null", false, null, null));
-            Assert.That(exception, Is.SameAs(commandServiceException));
+            var importResult = await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
+
+            Assert.That(importResult.Status, Is.EqualTo(QuestionnaireImportStatus.Error));
+            Assert.That(importResult.ImportError, Is.Not.Empty);
+            uow.Verify(u => u.DiscardChanges(), Times.Once);
         }
 
         [Test]
@@ -157,7 +166,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtils, designerApi: designerApi.Object);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false, null, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             // Assert
             designerApi
@@ -246,7 +255,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 lookupStorage: lookupStorage);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false, null, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             // Assert
 
@@ -276,10 +285,10 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider.Object);
 
             // Act
-            var result = await importService.Import(questionnaireId, "null", false, null, null);
+            var result = await importService.Import(questionnaireId, "null", false, null, null, includePdf: false);
 
             // Assert
-            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.Status, Is.EqualTo(QuestionnaireImportStatus.Error));
             Assert.That(result.ImportError, Is.EqualTo(someFaultReason));
         }
 
@@ -308,7 +317,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             );
 
             // act
-            await importService.Import(Guid.NewGuid(), "questionnaire1", false, null, "http://fsb.ru");
+            await importService.Import(Guid.NewGuid(), "questionnaire1", false, null, "http://fsb.ru", includePdf: false);
 
             designerApi.Verify(d => d.UpdateRevisionMetadata(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<QuestionnaireRevisionMetadataModel>(m =>
                 m.HqHost == "fsb.ru"
@@ -351,6 +360,10 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             unitOfWork = unitOfWork ?? GetUnitOfWorkMock().Object;
 
+            var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
+            InScopeExecutor.Init(executor);
+
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
@@ -363,9 +376,16 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<ISystemLog>(),
                 unitOfWork,
                 globalInfoProvider,
-                designerApi ?? Mock.Of<IDesignerApi>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>(),
-                Mock.Of<IReusableCategoriesStorage>());
+                Mock.Of<IReusableCategoriesStorage>(),
+                designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
+                Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
+                new QuestionnaireImportStatuses(),
+                Mock.Of<IAssignmentsUpgradeService>()
+                );
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
+
             return questionnaireImportService;
         }
     }

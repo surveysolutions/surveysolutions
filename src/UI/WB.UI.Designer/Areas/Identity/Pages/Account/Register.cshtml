@@ -2,8 +2,9 @@
 @using Microsoft.Extensions.Options
 @using reCAPTCHA.AspNetCore
 @using WB.UI.Designer.Models
+@using WB.UI.Shared.Web.Services
 @model RegisterModel
-@inject IOptions<CaptchaConfig> CaptchaConfig;
+@inject IOptions<RecaptchaSettings> CaptchaConfig;
 @{
     ViewData["Title"] = AccountResources.Register;
 }
@@ -40,7 +41,7 @@
         <span asp-validation-for="Input.ConfirmPassword" class="text-danger help-inline"></span>
     </div>
 
-    @if (Model.CaptchaOptions.Value.IsReCaptchaEnabled)
+    @if (Model.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha)
     {
         <div class="recaptcha">
             @Html.Recaptcha(CaptchaConfig.Value)

@@ -1,9 +1,7 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Filters;
@@ -41,16 +39,6 @@ namespace WB.UI.Headquarters.Utils
             return url.AbsoluteUri;
         }
 
-        public static bool RequestHasMatchingFileHash(this HttpRequestMessage request, byte[] hash)
-        {
-            var expectedHash = $@"""{Convert.ToBase64String(hash)}""";
-
-            if (request.Headers.IfNoneMatch.Any(tag => tag.Tag == expectedHash))
-            {
-                return true;
-            }
-
-            return false;
-        }
+     
     }
 }

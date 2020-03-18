@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
-    public class HqUserLogin
+    public class HqUserLogin : IdentityUserLogin<Guid>
     {
         protected bool Equals(HqUserLogin other)
         {
@@ -33,59 +32,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 return hashCode;
             }
         }
-
-        /// <summary>
-        ///     The login provider for the login (i.e. facebook, google)
-        /// </summary>
-        public virtual string LoginProvider { get; set; }
-
-        /// <summary>
-        ///     Key representing the login for the provider
-        /// </summary>
-        public virtual string ProviderKey { get; set; }
-
-        /// <summary>
-        ///     User Id for the user who owns this login
-        /// </summary>
-        public virtual Guid UserId { get; set; }
     }
 
-    public class HqUserClaim
+    public class HqUserClaim : IdentityUserClaim<Guid>
     {
-        /// <summary>
-        /// Gets or sets the identifier for this user claim.
-        /// </summary>
-        public virtual int Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the primary key of the user associated with this claim.
-        /// </summary>
-        public virtual Guid UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the claim type for this claim.
-        /// </summary>
-        public virtual string ClaimType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the claim value for this claim.
-        /// </summary>
-        public virtual string ClaimValue { get; set; }
     }
 
-    public class HqRole
+    public class HqRole : IdentityRole<Guid>
     {
         public HqRole()
         {
             Users = new List<HqUser>();
         }
+
         public virtual ICollection<HqUser> Users { get; set; }
-
-        public virtual Guid Id { get; set; }
-
-        public virtual string Name { get; set; }
     }
-    public class HqUser
+
+    public class HqUser : IdentityUser<Guid>
     {
         public HqUser()
         {
@@ -93,6 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             Roles = new List<HqRole>();
             Logins = new List<HqUserLogin>();
             DeviceSyncInfos = new HashSet<DeviceSyncInfo>();
+            Profile = new HqUserProfile();
         }
 
         public virtual HqUserProfile Profile { get; set; }
@@ -113,31 +77,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             return this.Roles.Any(r => r.Id.ToUserRole() == role);
         }
 
-        public virtual string Email { get; set; }
-
-        public virtual bool EmailConfirmed { get; set; }
-
-        public virtual string PasswordHash { get; set; }
-
-        public virtual string SecurityStamp { get; set; }
-
-        public virtual string PhoneNumber { get; set; }
-
-        public virtual bool PhoneNumberConfirmed { get; set; }
-
-        public virtual bool TwoFactorEnabled { get; set; }
-
         /// <summary>
         ///     DateTime in UTC when lockout ends, any time in the past is considered not locked out.
         /// </summary>
         public virtual DateTime? LockoutEndDateUtc { get; set; }
-
-        /// <summary>
-        ///     Is lockout enabled for this user
-        /// </summary>
-        public virtual bool LockoutEnabled { get; set; }
-
-        public virtual int AccessFailedCount { get; set; }
 
         public virtual ICollection<HqRole> Roles { get; set; }
 
@@ -145,11 +88,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public virtual ICollection<HqUserLogin> Logins { get; set; }
 
-        public virtual Guid Id { get; set; }
-
-        public virtual string UserName { get; set; }
-
         public virtual ICollection<DeviceSyncInfo> DeviceSyncInfos { get; set; }
+    }
+
+    public class HqUserToken : IdentityUserToken<Guid>
+    {
+
     }
 
     public class HqUserProfile

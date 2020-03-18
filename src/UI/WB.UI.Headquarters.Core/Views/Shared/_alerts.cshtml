@@ -1,0 +1,25 @@
+@using WB.Infrastructure.Native.Sanitizer
+@using WB.UI.Shared.Web.Extensions
+@if (Alerts.ALL.Any(TempData.ContainsKey))
+{
+    <div id="alerts" class="alerts">
+        @if (TempData.ContainsKey(Alerts.ATTENTION))
+        {
+            <div class="alert alert-warning">
+                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>@Pages.Attention</strong>
+                @Html.Raw(TempData[Alerts.ATTENTION].ToString().RemoveHtmlTags())
+            </div>
+        }
+        @foreach (string key in Alerts.ALL.Except(new[] {Alerts.ATTENTION}))
+        {
+            if (TempData.ContainsKey(key))
+            {
+                <div class="alert alert-@key">
+                    <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @Html.Raw(TempData[key].ToString().RemoveHtmlTags())
+                </div>
+            }
+        }
+    </div>
+}

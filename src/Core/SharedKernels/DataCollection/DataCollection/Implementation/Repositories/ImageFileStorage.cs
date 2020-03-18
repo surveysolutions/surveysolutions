@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -15,11 +16,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private readonly string basePath;
         private const string DataDirectoryName = "InterviewData";
 
-        public ImageFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
+        public ImageFileStorage(IFileSystemAccessor fileSystemAccessor, IOptions<FileStorageConfig> rootDirectoryPath)
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
-            this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, DataDirectoryName);
+            this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath.Value.AppData, DataDirectoryName);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(this.basePath))
                 this.fileSystemAccessor.CreateDirectory(this.basePath);

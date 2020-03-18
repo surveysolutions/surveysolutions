@@ -2,7 +2,6 @@
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;

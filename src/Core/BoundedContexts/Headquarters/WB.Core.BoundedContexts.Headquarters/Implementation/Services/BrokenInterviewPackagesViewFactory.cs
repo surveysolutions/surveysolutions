@@ -21,13 +21,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public BrokenInterviewPackagesViewFactory(IPlainStorageAccessor<BrokenInterviewPackage> plainStorageAccessor)
         {
             this.plainStorageAccessor = plainStorageAccessor;
-            knownExceptionTypes = knownExceptionTypes ??
-                                      Enum.GetValues(typeof(InterviewDomainExceptionType))
-                                          .Cast<InterviewDomainExceptionType>()
-                                          .Select(x => x.ToString()).ToList();
+            knownExceptionTypes ??= Enum.GetValues(typeof(InterviewDomainExceptionType))
+                .Cast<InterviewDomainExceptionType>()
+                .Select(x => x.ToString()).ToList();
         }
 
-        public BrokenInterviewPackagesView GetFilteredItems(BrokenInterviewPackageFilter filter)
+        public BrokenInterviewPackagesView GetFilteredItems(InterviewPackageFilter filter)
         {
             return this.plainStorageAccessor.Query(queryable =>
             {

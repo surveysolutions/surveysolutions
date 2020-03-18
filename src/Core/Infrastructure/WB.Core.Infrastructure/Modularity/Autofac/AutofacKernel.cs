@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Core;
 using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -19,9 +20,15 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
         }
 
-        public AutofacKernel(ContainerBuilder containerBuilder)
+        public AutofacKernel(ContainerBuilder containerBuilder, Action<IContainer> onBuildAction = null)
         {
             this.containerBuilder = containerBuilder;
+
+            containerBuilder.RegisterBuildCallback(container =>
+            {
+                Container = container;
+                onBuildAction?.Invoke(container);
+            });
 
             this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
 
@@ -59,32 +66,24 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
 
 
-        public async Task InitAsync(bool restartOnInitiazationError)
+        public Task InitAsync(bool restartOnInitializationError)
         {
-            this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
-            Container = containerBuilder.Build();
-            await InitModules(restartOnInitiazationError);
-        }
+            if (Container == null)
+                throw new ArgumentException("Container should be build before init");
 
-        public Task InitCoreAsync(ILifetimeScope container, bool restartOnInitiazationError)
-        {
-            Container = container;
+            if (restartOnInitializationError && !Container.IsRegistered<IApplicationRestarter>())
+                throw new ArgumentException("For restart application need implement and register IApplicationRestarter");
 
-            return InitModules(restartOnInitiazationError);
-        }
-
-        private Task InitModules(bool restartOnInitiazationError)
-        {
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            var initTask = Task.Run(async () =>
-                await InitModules(Container.Resolve<UnderConstructionInfo>(), Container, restartOnInitiazationError));
+            var initTask = Task.Run(() => InitModules(Container, restartOnInitializationError));
             return initTask;
         }
 
-        private async Task InitModules(UnderConstructionInfo status, ILifetimeScope container,
-            bool restartOnInitiazationError)
+        private async Task InitModules(ILifetimeScope container, bool restartOnInitializationError)
         {
+            var status = Container.Resolve<UnderConstructionInfo>();
+
             status.Run();
 
             try
@@ -119,7 +118,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             void ScheduleAppReboot()
             {
-                if (restartOnInitiazationError && !scheduledAppReboot)
+                if (restartOnInitializationError && !scheduledAppReboot)
                 {
                     container.Resolve<ILogger>().Error("Scheduled application pool reboot in 10 seconds");
 
@@ -127,7 +126,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                     Task.Run(async () =>
                     {
                         await Task.Delay(TimeSpan.FromSeconds(10));
-                        AppDomain.Unload(AppDomain.CurrentDomain);
+                        container.Resolve<IApplicationRestarter>().Restart();
                     });
                 }
             }

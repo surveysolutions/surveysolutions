@@ -102,8 +102,6 @@ namespace WB.UI.Headquarters
 
             registry.Bind<IInterviewCreatorFromAssignment, InterviewCreatorFromAssignment>();
 
-            registry.Bind<IMapService, MapService>();
-
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
 

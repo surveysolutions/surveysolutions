@@ -20,7 +20,6 @@ namespace WB.Services.Export.Host
 {
     class Program
     {
-        private static FileStream pid;
 
         static async Task Main(string[] args)
         {
@@ -32,15 +31,19 @@ namespace WB.Services.Export.Host
                     Console.WriteLine(eventArgs.ExceptionObject.ToString());
                     Log.Logger.Fatal("Unhandled exception occur {exception}", new[] { eventArgs.ExceptionObject.ToString() });
                 };
-                
+
                 var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
                 var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-                
+
                 Directory.SetCurrentDirectory(pathToContentRoot);
-                OpenPIDFile();
+
+                if (args.All(a => a != "--ignore-pid"))
+                {
+                    new StartupBlocker().OpenPIDFile();
+                }
 
                 var host = CreateWebHostBuilder(args).UseWindowsService();
-                
+
                 if (WindowsServiceHelpers.IsWindowsService())
                 {
                     host = host.UseContentRoot(pathToContentRoot);
@@ -71,6 +74,7 @@ namespace WB.Services.Export.Host
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithProperty("AppType", "ExportService")
+                .Enrich.WithProperty("workerId", "root")
                 .Enrich.WithProperty("Version", fvi.FileVersion)
                 .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
                 .Enrich.WithProperty("Host", Environment.MachineName)
@@ -84,7 +88,6 @@ namespace WB.Services.Export.Host
 
                 .WriteTo
                     .File(Path.GetFullPath(fileLog), LogEventLevel.Debug,
-
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
                     rollingInterval: RollingInterval.Day);
 
@@ -124,7 +127,8 @@ namespace WB.Services.Export.Host
                 {
                     var logConfig = new LoggerConfiguration();
                     logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
-                    logConfig.WriteTo.Console(LogEventLevel.Debug);
+                    logConfig.WriteTo.Console(LogEventLevel.Debug,
+                        "[{Timestamp:HH:mm:ss} {Level:u3}] {workerId} {tenantName} #{jobId} {Message:lj}{NewLine}{Exception}");
                     logConfig.Destructure.ByMaskingProperties("Password", "ArchivePassword");
 
                     ConfigureSerilog(logConfig, hosting.Configuration);
@@ -146,26 +150,21 @@ namespace WB.Services.Export.Host
                     web.UseStartup<Startup>();
                     web.ConfigureAppConfiguration(c =>
                     {
+                        c.AddIniFile("appsettings.ini", false, true);
                         c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
+                        c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
+
                         c.AddJsonFile($"appsettings.Cloud.json", true);
+                        c.AddIniFile($"appsettings.Cloud.ini", true);
+
                         c.AddJsonFile($"appsettings.Production.json", true);
+                        c.AddIniFile($"appsettings.Production.ini", true);
 
                         c.AddCommandLine(args);
                     });
 
-                     web.UseSerilog();
+                    web.UseSerilog();
                 });
-        }
-
-        // pid file - is a file that is exists only while process is alive and contains own process id
-        private static void OpenPIDFile()
-        {
-            pid = new FileStream("pid", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read, 4096,
-                FileOptions.DeleteOnClose);
-            var writer = new StreamWriter(pid);
-
-            writer.WriteLine(Process.GetCurrentProcess().Id);
-            writer.Flush();
         }
     }
 }

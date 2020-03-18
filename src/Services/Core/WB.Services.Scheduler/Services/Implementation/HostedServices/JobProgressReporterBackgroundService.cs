@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using WB.Services.Infrastructure.Logging;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Model.Events;
 
 namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 {
-    internal class JobProgressReporterBackgroundService : BackgroundService, Services.IJobProgressReporter
+    internal class JobProgressReporterBackgroundService : BackgroundService, IJobProgressReporter
     {
         private readonly ILogger<JobProgressReporterBackgroundService> logger;
         private readonly TaskCompletionSource<bool> queueCompletion = new TaskCompletionSource<bool>();
@@ -27,18 +28,25 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         {
             return Task.Run(async () =>
             {
-                logger.LogInformation("JobProgressReporterBackgroundService started");
+                using var ctx = LoggingHelpers.LogContext("workerId", "progressReporter");
+                logger.LogInformation("{service} started", nameof(JobProgressReporterBackgroundService));
                 foreach (var task in queue.GetConsumingEnumerable())
                 {
                     try
                     {
                         using var scope = serviceProvider.CreateScope();
                         var runner = scope.ServiceProvider.GetRequiredService<IJobProgressReportWriter>();
+                        stoppingToken.ThrowIfCancellationRequested();
                         await runner.WriteReportAsync(task, stoppingToken);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        logger.LogError("{service} cancellation requested. Stopping", nameof(JobProgressReporterBackgroundService));
+                        return;
                     }
                     catch (Exception e)
                     {
-                        logger.LogError("Progress reporting queue got an exception", e);
+                        logger.LogError("Exception during progress reporting for jobId: {task}", task.Id, e);
                     }
                 }
 

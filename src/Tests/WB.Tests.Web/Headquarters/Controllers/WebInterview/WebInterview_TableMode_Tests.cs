@@ -18,10 +18,12 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
 
 using WB.UI.Headquarters.API.WebInterview;
+using WB.UI.Headquarters.Controllers.Api.WebInterview;
+using WB.UI.Headquarters.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 {
-    [TestOf(typeof(WebInterviewHub))]
+    [TestOf(typeof(Enumerator.Native.WebInterview.WebInterview))]
     public class WebInterview_TableMode_Tests
     {
         [Test]

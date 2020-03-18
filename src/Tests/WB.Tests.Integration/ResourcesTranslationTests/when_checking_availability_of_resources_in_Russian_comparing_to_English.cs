@@ -11,13 +11,13 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         public void should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English()
         {
             russianResourceFiles = TestEnvironment
-                .GetAllFilesFromSourceFolder(string.Empty, "*.ru.resx")
+                .GetAllFilesInSolution("*.ru.resx")
                 .ToList();
 
             englishResourceFiles = TestEnvironment
-                .GetAllFilesFromSourceFolder(string.Empty, "*.resx")
-                .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??.resx"))
-                .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??-??.resx"))
+                .GetAllFilesInSolution("*.resx")
+                .Except(TestEnvironment.GetAllFilesInSolution("*.??.resx"))
+                .Except(TestEnvironment.GetAllFilesInSolution("*.??-??.resx"))
                 .ToList();
 
             russianResourceNames =
@@ -33,7 +33,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 from resource in GetStringResourcesFromResX(resourceFile)
                 where IsNotPluralForm(resource.Key) && !string.IsNullOrEmpty(resource.Value)
                 select $"{resourceFileName}: {resource.Key}";
-
 
             //should_find_Russian_resource_files() => 
             Assert.That(russianResourceFiles, Is.Not.Empty);

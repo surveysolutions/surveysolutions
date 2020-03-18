@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.Tenant;
@@ -36,7 +38,8 @@ namespace WB.Services.Export.Jobs
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IFileSystemAccessor fileSystemAccessor,
             IExternalArtifactsStorage externalArtifactsStorage,
-            IDataExportFileAccessor exportFileAccessor)
+            IDataExportFileAccessor exportFileAccessor,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
@@ -52,11 +55,12 @@ namespace WB.Services.Export.Jobs
             if(!tenant.Id.Equals(process.ExportSettings.Tenant.Id)) throw new ArgumentException("Cannot found process #" + processId, nameof(processId));
 
             var dataExportProcessView = ToDataExportProcessView(process);
+            var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
 
             var exportSettings = new ExportSettings
             {
                 Tenant = tenant,
-                QuestionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId),
+                QuestionnaireId = questionnaireId,
                 ExportFormat = dataExportProcessView.Format,
                 Status = dataExportProcessView.InterviewStatus,
                 FromDate = dataExportProcessView.FromDate,
@@ -70,12 +74,52 @@ namespace WB.Services.Export.Jobs
             dataExportProcessView.DataFileLastUpdateDate = exportFileInfo.LastUpdateDate;
             dataExportProcessView.FileSize = exportFileInfo.FileSize;
             dataExportProcessView.HasFile = exportFileInfo.HasFile;
-
             dataExportProcessView.DataDestination = process.StorageType.HasValue 
                 ? process.StorageType.Value.ToString() 
                 : "File";
-
+            
             return dataExportProcessView;
+        }
+
+        public async Task<List<DataExportProcessView>> GetDataExportStatusesAsync(long[] processIds, TenantInfo tenant)
+        {
+            var processes = await this.dataExportProcessesService.GetProcessesAsync(processIds);
+
+            var result = new List<DataExportProcessView>();
+
+            foreach (var process in processes)
+            {
+                if (!tenant.Id.Equals(process.ExportSettings.Tenant.Id))
+                    continue;
+
+                var dataExportProcessView = ToDataExportProcessView(process);
+                var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
+
+                var exportSettings = new ExportSettings
+                {
+                    Tenant = tenant,
+                    QuestionnaireId = questionnaireId,
+                    ExportFormat = dataExportProcessView.Format,
+                    Status = dataExportProcessView.InterviewStatus,
+                    FromDate = dataExportProcessView.FromDate,
+                    ToDate = dataExportProcessView.ToDate
+                };
+
+                dataExportProcessView.HasFile = false;
+
+                var exportFileInfo = await GetExportFileInfo(exportSettings);
+                
+                dataExportProcessView.DataFileLastUpdateDate = exportFileInfo.LastUpdateDate;
+                dataExportProcessView.FileSize = exportFileInfo.FileSize;
+                dataExportProcessView.HasFile = exportFileInfo.HasFile;
+                dataExportProcessView.DataDestination = process.StorageType.HasValue
+                    ? process.StorageType.Value.ToString()
+                    : "File";
+
+                result.Add(dataExportProcessView);
+            }
+
+            return result;
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
@@ -89,7 +133,7 @@ namespace WB.Services.Export.Jobs
                 .Select(ToDataExportProcessView).ToArray();
 
             var exports = new List<DataExportView>();
-
+            
             foreach (var supportedDataExport in this.supportedDataExports)
             {
                 var exportSettings = new ExportSettings
@@ -99,11 +143,11 @@ namespace WB.Services.Export.Jobs
                     ExportFormat = supportedDataExport.format,
                     Status = status,
                     FromDate = fromDate,
-                    ToDate = toDate
+                    ToDate = toDate,
                 };
                 var dataExportView = await this.CreateDataExportView(exportSettings,
                     supportedDataExport.exportType, allProcesses);
-
+                
                 exports.Add(dataExportView);
             }
 
@@ -141,7 +185,6 @@ namespace WB.Services.Export.Jobs
             dataExportView.ProgressInPercents = process?.Progress ?? 0;
             dataExportView.TimeEstimation = process?.TimeEstimation;
 
-
             var exportFileInfo = await GetExportFileInfo(exportSettings);
 
             dataExportView.LastUpdateDate = exportFileInfo.LastUpdateDate;
@@ -172,9 +215,12 @@ namespace WB.Services.Export.Jobs
 
             return new DataExportProcessView
             {
+                Id = dataExportProcessDetails.ProcessId,
                 IsRunning = status.IsRunning,
                 DataExportProcessId = dataExportProcessDetails.NaturalId,
-                BeginDate = status.BeginDate ?? DateTime.MinValue,
+                BeginDate = status.BeginDate ?? status.CreatedDate,
+                EndDate = status.EndDate,
+                JobStatus = status.JobStatus,
                 LastUpdateDate = status.LastUpdateDate,
                 Progress = status.ProgressInPercents,
                 TimeEstimation = status.TimeEstimation,

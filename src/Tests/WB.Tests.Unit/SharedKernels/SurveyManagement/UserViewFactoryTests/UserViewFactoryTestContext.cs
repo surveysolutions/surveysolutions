@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
@@ -33,7 +33,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
             deviceSyncInfosMock.As<IQueryable<DeviceSyncInfo>>().Setup(m => m.Expression).Returns(queryableDeviceSyncInfos.Expression);
             deviceSyncInfosMock.As<IQueryable<DeviceSyncInfo>>().Setup(m => m.ElementType).Returns(queryableDeviceSyncInfos.ElementType);
             deviceSyncInfosMock.As<IQueryable<DeviceSyncInfo>>().Setup(m => m.GetEnumerator()).Returns(queryableDeviceSyncInfos.GetEnumerator());
-            Mock.Get(users).Setup(x => x.DeviceSyncInfos).Returns(deviceSyncInfosMock.Object);
             return users;
         }
     }

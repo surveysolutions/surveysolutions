@@ -142,4 +142,8 @@
     <value>Заполните поле Captcha</value>
     <comment>Заполните поле Captcha</comment>
   </data>
+  <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+    <value>Опросник уже загружается</value>
+    <comment>Опросник уже загружается</comment>
+  </data>
 </root>

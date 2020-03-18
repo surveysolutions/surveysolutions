@@ -123,16 +123,17 @@ namespace WB.UI.Interviewer
 
         private IContainer CreateAndInitializeIoc()
         {
-            this.modules = new IModule[] {
+            this.modules = new IModule[]
+            {
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
                 new InterviewerInfrastructureModule(),
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
-                new InterviewerBoundedContextModule(), 
+                new InterviewerBoundedContextModule(),
                 new InterviewerUIModule(),
-                };
+            };
 
             ContainerBuilder builder = new ContainerBuilder();
             builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
@@ -140,7 +141,7 @@ namespace WB.UI.Interviewer
             {
                 builder.RegisterModule(module.AsAutofac());
             }
-            builder.RegisterModule(new InterviewerLoggingModule());
+            builder.RegisterModule(new EnumeratorLoggingModule());
 
             builder.RegisterType<NLogLogger>().As<ILogger>();
 
