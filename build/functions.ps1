@@ -205,7 +205,7 @@ function versionCheck() {
 #
 # to execute pre build step - use script with name `preproduction`
 ##############################
-function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
+function BuildStaticContent($blockName, $targetLocation, $cmd = @("gulp","--production")) {
     Push-Location $targetLocation
     try {
         Log-Block $blockName {
@@ -219,8 +219,8 @@ function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
                 return $wasBuildSuccessfull
             }
     
-            Log-Message "Running gulp --production"
-            &yarn gulp --production | Write-Host
+            Log-Message "Running $cmd"
+            &yarn $cmd | Write-Host
     
             $wasBuildSuccessfull = $LASTEXITCODE -eq 0
             if (-not $wasBuildSuccessfull) {
@@ -373,23 +373,23 @@ function BuildAspNetCoreWebPackage
 
     return Log-Block "Building Asp.Net Core package for project $Project branch: $branch" {
         try {
+
             $arg = @("publish"
                 $Project
-                "--configuration", $BuildConfiguration
-                "-v", "n"
+                "-c", $BuildConfiguration, '-r', 'win-x64', "/bl"
                 "--version-suffix", $branch
-                '--runtime', 'win-x64'
                 "/p:PublishProfile=WebDeployPackage",
                 "/p:BuildNumber=$BuildNumber"
             )
 
-            "dotnet $arg" | Write-Host
-            & dotnet $arg | Write-Host
-            
-            $ok = $LASTEXITCODE -eq 0
+            "dotnet $arg" | out-Host
+            & dotnet $arg
 
+            $ok = $LASTEXITCODE -eq 0
+            "dotnet exit code: $LASTEXITCODE"
             if($ok -eq $False) {
                 Log-Error $result
+                throw
             }
 
             return $ok
