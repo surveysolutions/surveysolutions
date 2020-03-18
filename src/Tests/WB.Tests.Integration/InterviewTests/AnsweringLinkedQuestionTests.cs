@@ -211,6 +211,16 @@ namespace WB.Tests.Integration.InterviewTests
 
             var appDomainContext = AppDomainContext.Create();
 
+            var answerOnLinkedToListQuestionWith2Options = new[] {1, 3};
+            var answerOnLinkedToListQuestionWith1Option = new[] {3};
+            var answerOnListQuestion = new[]
+            {
+                new Tuple<decimal, string>(1, "1"), 
+                new Tuple<decimal, string>(2, "2"), 
+                new Tuple<decimal, string>(3, "3"), 
+                new Tuple<decimal, string>(4, "4"), 
+            };
+
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 SetUp.MockedServiceLocator();
@@ -227,40 +237,61 @@ namespace WB.Tests.Integration.InterviewTests
 
                 var whenListIsEmpty = GetOptionsFromLinkedToListFilteredQuestion(interview);
 
-                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.UtcNow, new[]
-                {
-                    new Tuple<decimal, string>(1, "1"), 
-                    new Tuple<decimal, string>(2, "2"), 
-                    new Tuple<decimal, string>(3, "3"), 
-                    new Tuple<decimal, string>(4, "4"), 
-                });
+                using var eventContext = new EventContext();
+
+                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.UtcNow, answerOnListQuestion);
 
                 var whenListHas4Answers = GetOptionsFromLinkedToListFilteredQuestion(interview);
+                var hasEventByAnswerOnListQuestion = eventContext.GetSingleEvent<TextListQuestionAnswered>().Answers
+                    .SequenceEqual(answerOnListQuestion);
+
+                var hasEventByLinkedToListOptionsChanged =
+                    eventContext.GetLastEvent<LinkedToListOptionsChanged>().ChangedLinkedQuestions.Single(x =>
+                            x.QuestionId == Identity.Create(linkedToListId, RosterVector.Empty)).Options
+                        .SequenceEqual(answerOnListQuestion.Select(y => y.Item1));
 
                 interview.AnswerMultipleOptionsQuestion(userId, linkedToListId, RosterVector.Empty,
-                    DateTime.Now, new[] {1, 3});
+                    DateTime.Now, answerOnLinkedToListQuestionWith2Options);
+
+                var hasEventByLinkedToListWithFilterWith2OptionsChanged =
+                    eventContext.GetLastEvent<LinkedToListOptionsChanged>().ChangedLinkedQuestions.Single(x =>
+                            x.QuestionId == Identity.Create(linkedToListFilteredId, RosterVector.Empty)).Options
+                        .SequenceEqual(answerOnLinkedToListQuestionWith2Options.Select(_ => (decimal) _));
 
                 var whenLinkedToListHas2Options = GetOptionsFromLinkedToListFilteredQuestion(interview);
 
                 interview.AnswerMultipleOptionsQuestion(userId, linkedToListId, RosterVector.Empty,
                     DateTime.Now, new[] {3});
 
+                var hasEventByLinkedToListWithFilterWith1OptionChanged =
+                    eventContext.GetLastEvent<LinkedToListOptionsChanged>().ChangedLinkedQuestions.Single(x =>
+                            x.QuestionId == Identity.Create(linkedToListFilteredId, RosterVector.Empty)).Options
+                        .SequenceEqual(answerOnLinkedToListQuestionWith1Option.Select(_ => (decimal) _));
                 var whenLinkedToListRemoved1Option = GetOptionsFromLinkedToListFilteredQuestion(interview);
+                
 
                 return new
                 {
                     whenListIsEmpty, 
                     whenListHas4Answers, 
                     whenLinkedToListHas2Options,
-                    whenLinkedToListRemoved1Option
+                    whenLinkedToListRemoved1Option,
+                    hasEventByAnswerOnListQuestion,
+                    hasEventByLinkedToListOptionsChanged,
+                    hasEventByLinkedToListWithFilterWith2OptionsChanged,
+                    hasEventByLinkedToListWithFilterWith1OptionChanged
                 };
             });
 
             Assert.That(results, Is.Not.Null);
             Assert.That(results.whenListIsEmpty, Is.Empty);
             Assert.That(results.whenListHas4Answers, Is.Empty);
-            Assert.That(results.whenLinkedToListHas2Options, Is.EqualTo(new[] {1, 3}));
+            Assert.That(results.whenLinkedToListHas2Options, Is.EqualTo(answerOnLinkedToListQuestionWith2Options));
             Assert.That(results.whenLinkedToListRemoved1Option, Is.EqualTo(new[] {3}));
+            Assert.That(results.hasEventByAnswerOnListQuestion, Is.True);
+            Assert.That(results.hasEventByLinkedToListOptionsChanged, Is.True);
+            Assert.That(results.hasEventByLinkedToListWithFilterWith2OptionsChanged, Is.True);
+            Assert.That(results.hasEventByLinkedToListWithFilterWith1OptionChanged, Is.True);
 
             appDomainContext.Dispose();
             appDomainContext = null;
@@ -281,6 +312,16 @@ namespace WB.Tests.Integration.InterviewTests
 
             var appDomainContext = AppDomainContext.Create();
 
+            var answerOnLinkedToListQuestionWith2Options = new[] {1, 3};
+            var answerOnLinkedToListQuestionWith1Option = new[] {3};
+            var answerOnListQuestion = new[]
+            {
+                new Tuple<decimal, string>(1, "1"), 
+                new Tuple<decimal, string>(2, "2"), 
+                new Tuple<decimal, string>(3, "3"), 
+                new Tuple<decimal, string>(4, "4"), 
+            };
+
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 SetUp.MockedServiceLocator();
@@ -297,40 +338,60 @@ namespace WB.Tests.Integration.InterviewTests
 
                 var whenListIsEmpty = GetOptionsFromLinkedToListFilteredQuestion(interview);
 
-                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.UtcNow, new[]
-                {
-                    new Tuple<decimal, string>(1, "1"), 
-                    new Tuple<decimal, string>(2, "2"), 
-                    new Tuple<decimal, string>(3, "3"), 
-                    new Tuple<decimal, string>(4, "4"), 
-                });
+                using var eventContext = new EventContext();
+
+                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.UtcNow, answerOnListQuestion);
 
                 var whenListHas4Answers = GetOptionsFromLinkedToListFilteredQuestion(interview);
+                var hasEventByAnswerOnListQuestion = eventContext.GetSingleEvent<TextListQuestionAnswered>().Answers
+                    .SequenceEqual(answerOnListQuestion);
+
+                var hasEventByLinkedToListOptionsChanged =
+                    eventContext.GetLastEvent<LinkedToListOptionsChanged>().ChangedLinkedQuestions.Single(x =>
+                            x.QuestionId == Identity.Create(linkedToListId, RosterVector.Empty)).Options
+                        .SequenceEqual(answerOnListQuestion.Select(y => y.Item1));
 
                 interview.AnswerMultipleOptionsQuestion(userId, linkedToListId, RosterVector.Empty,
-                    DateTime.Now, new[] {1, 3});
+                    DateTime.Now, answerOnLinkedToListQuestionWith2Options);
+
+                var hasEventByLinkedToListWithFilterWith2OptionsChanged =
+                    eventContext.GetLastEvent<LinkedToListOptionsChanged>().ChangedLinkedQuestions.Single(x =>
+                            x.QuestionId == Identity.Create(linkedToListFilteredId, RosterVector.Empty)).Options
+                        .SequenceEqual(answerOnLinkedToListQuestionWith2Options.Select(_ => (decimal) _));
 
                 var whenLinkedToListHas2Options = GetOptionsFromLinkedToListFilteredQuestion(interview);
 
                 interview.AnswerMultipleOptionsQuestion(userId, linkedToListId, RosterVector.Empty,
                     DateTime.Now, new[] {3});
 
+                var hasEventByLinkedToListWithFilterWith1OptionChanged =
+                    eventContext.GetLastEvent<LinkedToListOptionsChanged>().ChangedLinkedQuestions.Single(x =>
+                            x.QuestionId == Identity.Create(linkedToListFilteredId, RosterVector.Empty)).Options
+                        .SequenceEqual(answerOnLinkedToListQuestionWith1Option.Select(_ => (decimal) _));
                 var whenLinkedToListRemoved1Option = GetOptionsFromLinkedToListFilteredQuestion(interview);
-
+                
                 return new
                 {
                     whenListIsEmpty, 
                     whenListHas4Answers, 
                     whenLinkedToListHas2Options,
-                    whenLinkedToListRemoved1Option
+                    whenLinkedToListRemoved1Option,
+                    hasEventByAnswerOnListQuestion,
+                    hasEventByLinkedToListOptionsChanged,
+                    hasEventByLinkedToListWithFilterWith2OptionsChanged,
+                    hasEventByLinkedToListWithFilterWith1OptionChanged
                 };
             });
 
             Assert.That(results, Is.Not.Null);
             Assert.That(results.whenListIsEmpty, Is.Empty);
             Assert.That(results.whenListHas4Answers, Is.Empty);
-            Assert.That(results.whenLinkedToListHas2Options, Is.EqualTo(new[] {1, 3}));
+            Assert.That(results.whenLinkedToListHas2Options, Is.EqualTo(answerOnLinkedToListQuestionWith2Options));
             Assert.That(results.whenLinkedToListRemoved1Option, Is.EqualTo(new[] {3}));
+            Assert.That(results.hasEventByAnswerOnListQuestion, Is.True);
+            Assert.That(results.hasEventByLinkedToListOptionsChanged, Is.True);
+            Assert.That(results.hasEventByLinkedToListWithFilterWith2OptionsChanged, Is.True);
+            Assert.That(results.hasEventByLinkedToListWithFilterWith1OptionChanged, Is.True);
 
             appDomainContext.Dispose();
             appDomainContext = null;
@@ -383,16 +444,38 @@ namespace WB.Tests.Integration.InterviewTests
                     new Tuple<decimal, string>(4, "4"), 
                 });
 
+                var answerOnLinkedToListFilteredQuestionWith2Options = interview
+                    .GetMultiOptionLinkedToListQuestion(Create.Identity(linkedToListFilteredId)).GetAnswer()
+                    ?.CheckedValues;
+
+                using var eventContext = new EventContext();
+
+                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.UtcNow, new Tuple<decimal, string>[0]);
+
+                var hasAnswerRemovedEventByLinkedToListQuestion = eventContext.GetLastEvent<AnswersRemoved>(x =>
+                    x.Questions.Contains(Identity.Create(linkedToListId, RosterVector.Empty))) != null;
+
+                var hasAnswerRemovedEventByLinkedToListFilteredQuestion = eventContext.GetLastEvent<AnswersRemoved>(x =>
+                                                                      x.Questions.Contains(Identity.Create(linkedToListFilteredId, RosterVector.Empty))) != null;
+
+                var answerOnLinkedToListFilteredQuestionAfterRemovingAllParentOptions = interview
+                    .GetMultiOptionLinkedToListQuestion(Create.Identity(linkedToListFilteredId)).GetAnswer()
+                    ?.CheckedValues;
+
                 return new
                 {
-                    answerOnLinkedToListFilteredQuestion = interview
-                        .GetMultiOptionLinkedToListQuestion(Create.Identity(linkedToListFilteredId)).GetAnswer()
-                        ?.CheckedValues
+                    answerOnLinkedToListFilteredQuestionWith2Options,
+                    answerOnLinkedToListFilteredQuestionAfterRemovingAllParentOptions,
+                    hasAnswerRemovedEventByLinkedToListQuestion,
+                    hasAnswerRemovedEventByLinkedToListFilteredQuestion
                 };
             });
 
             Assert.That(results, Is.Not.Null);
-            Assert.That(results.answerOnLinkedToListFilteredQuestion, Is.EqualTo(new[] {1, 3}));
+            Assert.That(results.answerOnLinkedToListFilteredQuestionWith2Options, Is.EqualTo(new[] {1, 3}));
+            Assert.That(results.answerOnLinkedToListFilteredQuestionAfterRemovingAllParentOptions, Is.Null);
+            Assert.That(results.hasAnswerRemovedEventByLinkedToListQuestion, Is.True);
+            Assert.That(results.hasAnswerRemovedEventByLinkedToListFilteredQuestion, Is.True);
 
             appDomainContext.Dispose();
             appDomainContext = null;
@@ -437,24 +520,31 @@ namespace WB.Tests.Integration.InterviewTests
 
                 interview.AnswerSingleOptionQuestion(userId, linkedToListFilteredId, RosterVector.Empty,
                     DateTime.Now, 2);
+                
+                using var eventContext = new EventContext();
 
-                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.UtcNow, new[]
-                {
-                    new Tuple<decimal, string>(1, "1"), 
-                    new Tuple<decimal, string>(3, "3"), 
-                    new Tuple<decimal, string>(4, "4"), 
-                });
+                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.UtcNow, new Tuple<decimal, string>[0]);
+
+                var hasAnswerRemovedEventByLinkedToListQuestion = eventContext.GetLastEvent<AnswersRemoved>(x =>
+                                                                      x.Questions.Contains(Identity.Create(linkedToListId, RosterVector.Empty))) != null;
+
+                var hasAnswerRemovedEventByLinkedToListFilteredQuestion = eventContext.GetLastEvent<AnswersRemoved>(x =>
+                                                                              x.Questions.Contains(Identity.Create(linkedToListFilteredId, RosterVector.Empty))) != null;
 
                 return new
                 {
-                    answerOnLinkedToListFilteredQuestion = interview
+                    answerOnLinkedToListFilteredQuestion= interview
                         .GetSingleOptionLinkedToListQuestion(Create.Identity(linkedToListFilteredId)).GetAnswer()
-                        ?.SelectedValue
+                        ?.SelectedValue,
+                    hasAnswerRemovedEventByLinkedToListQuestion,
+                    hasAnswerRemovedEventByLinkedToListFilteredQuestion
                 };
             });
 
             Assert.That(results, Is.Not.Null);
             Assert.That(results.answerOnLinkedToListFilteredQuestion, Is.Null);
+            Assert.That(results.hasAnswerRemovedEventByLinkedToListQuestion, Is.True);
+            Assert.That(results.hasAnswerRemovedEventByLinkedToListFilteredQuestion, Is.True);
 
             appDomainContext.Dispose();
             appDomainContext = null;
