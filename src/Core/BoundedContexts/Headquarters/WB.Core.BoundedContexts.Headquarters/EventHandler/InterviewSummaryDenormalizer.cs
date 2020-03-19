@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -144,6 +145,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 AssignmentId = assignmentId,
                 LastResumeEventUtcTimestamp = creationTime
             };
+
+            CommonMetrics.InterviewsCreatedCount.Inc();
 
             return interviewSummary;
         }

@@ -43,14 +43,12 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
             return new InterviewSummaryCompositeDenormalizer(
                 interviewStatuses,
-                new TestInMemoryWriter<InterviewSummary, int>(), 
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage),
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(), 
                 new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
-                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage), 
-                Mock.Of<IMemoryCache>());
+                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage)                );
         }
 
         protected void UseTransactionToSaveSummaryAndSpeedReport(InterviewSummary interviewSummary)

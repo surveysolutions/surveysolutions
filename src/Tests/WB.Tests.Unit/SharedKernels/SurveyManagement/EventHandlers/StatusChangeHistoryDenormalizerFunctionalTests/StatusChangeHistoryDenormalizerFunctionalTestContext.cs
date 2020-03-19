@@ -8,7 +8,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
 {
@@ -23,14 +22,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
             return new InterviewSummaryCompositeDenormalizer(
                 interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                new TestInMemoryWriter<InterviewSummary, int>(),
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage), 
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(), 
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),
                 new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
-                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage), 
-                Create.Storage.NewMemoryCache());
+                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage));
         }
 
         public static StatusChangeHistoryDenormalizerFunctional CreateStatusChangeHistoryDenormalizerFunctional()
