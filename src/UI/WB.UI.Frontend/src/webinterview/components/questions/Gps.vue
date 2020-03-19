@@ -30,8 +30,9 @@
                     </button>
 
                     <button type="button"
-                        :disabled="!$me.acceptAnswer && $me.pickLocationAllowed"
-                        class="btn btn-default btn-lg btn-action-questionnaire"
+                        v-if="$store.getters.pickLocationAllowed"
+                        :disabled="!$me.acceptAnswer"
+                        class="btn btn-default btn-lg btn-action-questionnaire pick-location marl"
                         @click="pickLocation">
                         {{ $t('WebInterviewUI.PickLocation') }}
                     </button>
@@ -199,7 +200,7 @@ export default {
                 buttons: {
                     ok: {
                         label: self.$t('Common.Ok'),
-                        assName: 'btn-success',
+                        className: 'btn btn-primary',
                         callback: () => {
                             if(self.pickedLocation) {
                                 self.onPositionDetermined({
@@ -213,7 +214,7 @@ export default {
                     },
                     cancel: {
                         label: self.$t('Common.Cancel'),
-                        className: 'btn-danger',
+                        className: 'btn btn-link',
                     },
                 },
             })
