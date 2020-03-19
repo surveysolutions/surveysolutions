@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using NHibernate;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Infrastructure.Native.Monitoring;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -114,6 +115,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
 
                 writer.Complete();
+                CommonMetrics.EventsCreatedCount.Inc(result.Count);
             }
 
             return result;
