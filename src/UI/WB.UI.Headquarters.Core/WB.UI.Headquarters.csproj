@@ -67,8 +67,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest"/>
-    <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never">
+    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
+    <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">
       <DependentUpon>appsettings.ini</DependentUpon>
     </Content>
   </ItemGroup>
