@@ -102,35 +102,35 @@
                     id="map-canvas"
                     class="extra-margin-bottom"
                     style="width:100%; height: 400px"></div>
-                <div style="display:none;">
+                <div style="display: none;">
                     <div ref="tooltip">
                         <div
                             class="map-tooltip-info"
                             v-for="selectedTooltip in selectedTooltips"
-                            :key="selectedTooltip.InterviewKey">
+                            :key="selectedTooltip.interviewKey">
                             <p>
-                                <span>#{{selectedTooltip.InterviewKey}}</span>
-                                <span>({{$t("MapReport.Assignment")}} {{selectedTooltip.AssignmentId}})</span>
+                                <span>#{{selectedTooltip.interviewKey}}</span>
+                                <span>({{$t("MapReport.Assignment")}} {{selectedTooltip.assignmentId}})</span>
                             </p>
                             <p>
                                 <strong>{{$t("Users.Interviewer")}} :</strong>
-                                &nbsp;{{selectedTooltip.InterviewerName}}
+                                &nbsp;{{selectedTooltip.interviewerName}}
                             </p>
                             <p>
                                 <strong>{{$t("Users.Supervisor")}} :</strong>
-                                &nbsp;{{selectedTooltip.SupervisorName}}
+                                &nbsp;{{selectedTooltip.supervisorName}}
                             </p>
                             <p>
                                 <strong>{{$t("Common.Status")}} :</strong>
-                                &nbsp;{{selectedTooltip.LastStatus}}
+                                &nbsp;{{selectedTooltip.lastStatus}}
                             </p>
                             <p>
                                 <strong>{{$t("Reports.LastUpdatedDate")}} :</strong>
-                                &nbsp;{{selectedTooltip.LastUpdatedDate}}
+                                &nbsp;{{selectedTooltip.lastUpdatedDate}}
                             </p>
                             <p>
                                 <a
-                                    v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.InterviewId"
+                                    v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.interviewId"
                                     target="_blank">{{$t("MapReport.ViewInterviewContent")}}</a>
                             </p>
                         </div>
@@ -397,7 +397,7 @@
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_DeviceLocation')}}</td>
                             <td
-                                id="device-address">{{this.fullModel.deviceLocationOrLastKnownLocationLat}} {{this.fullModel.deviceLocationOrLastKnownLocationLon}}</td>
+                                id="device-address">{{lastKnownLocation}}</td>
                         </tr>
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_DeviceOrientation')}}</td>
@@ -504,10 +504,12 @@ export default {
             trafficUsage: [],
             maxDailyUsage: 0,
             markerExist: false,
+            lastKnownLocation: '',
         }
     },
     mounted() {
         this.initializeMap()
+        this.setLastKnownLocationAddress()
         this.initializeTrafficUsage()
     },
     methods: {
@@ -554,28 +556,7 @@ export default {
 
             return is_ie
         },
-        showLocationsOnMap(locations) {
-            const self = this
-            locations.forEach(point => {
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(point.Latitude, point.Longitude),
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: '#2a81cb',
-                        strokeColor: '#2a81cb',
-                    },
-                    map: self.map,
-                    opacity: 1,
-                    zIndex: 999,
-                })
-                marker.set('id', point.InterviewIds[0])
-
-                self.addDetailsOnClick(marker, point)
-            })
-        },
-
-        showPointsOnMap(points) {
+        showPointsOnMap(points, locations) {
             const self = this
 
             const arrowMarker = {
@@ -590,28 +571,48 @@ export default {
             var markers = []
             points.forEach(point => {
                 var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(point.Latitude, point.Longitude),
-                    label: {text: point.Index === -1 ? '' : point.Index + '', color: 'white'},
+                    position: new google.maps.LatLng(point.latitude, point.longitude),
+                    label: {text: point.index === -1 ? '' : point.index + '', color: 'white'},
                     map: self.map,
                     opacity: 1,
-                    zIndex: point.Index === -1 ? 1000 : 1000 + point.Index,
+                    zIndex: point.Index === -1 ? 1000 : 1000 + point.index,
                 })
-                marker.set('id', point.Index)
+                marker.set('id', point.index)
 
                 self.addDetailsOnClick(marker, point)
 
                 markers.push(marker)
                 bounds.extend(marker.getPosition())
 
-                self.points.set(point.Index, {
-                    index: point.Index,
+                self.points.set(point.index, {
+                    index: point.index,
                     cluster: 0,
                     point: {
-                        lat: point.Latitude,
-                        lng: point.Longitude,
+                        lat: point.latitude,
+                        lng: point.longitude,
                     },
                     marker: marker,
                 })
+            })
+            locations.forEach(point => {
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(point.latitude, point.longitude),
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: '#2a81cb',
+                        strokeColor: '#2a81cb',
+                    },
+                    map: self.map,
+                    opacity: 1,
+                    zIndex: 999,
+                })
+                marker.set('id', point.interviewIds[0])
+
+                self.addDetailsOnClick(marker, point)
+
+                markers.push(marker)
+                bounds.extend(marker.getPosition())
             })
 
             this.markerCluster = new MarkerClusterer(this.map, markers, {
@@ -634,7 +635,7 @@ export default {
                 'click',
                 (function(marker, point) {
                     return function() {
-                        self.loadPointDetails(point.InterviewIds, marker)
+                        self.loadPointDetails(point.interviewIds, marker)
                     }
                 })(marker, point)
             )
@@ -666,7 +667,8 @@ export default {
                     let markerId = marker.get('id')
 
                     let point = this.points.get(markerId)
-                    point.cluster = i
+                    if(point != null)
+                        point.cluster = i
                 })
             }
 
@@ -727,56 +729,67 @@ export default {
                     })
                 })
         },
-        initializeMap() {
+        setLastKnownLocationAddress() {
+            if(this.fullModel.deviceLocationOrLastKnownLocationLat != null && this.fullModel.deviceLocationOrLastKnownLocationLon != null)
+            {
+                var geocoder = new google.maps.Geocoder
+                var self = this
+                geocoder.geocode(
+                    { 'location': {
+                        lat: this.fullModel.deviceLocationOrLastKnownLocationLat, 
+                        lng: this.fullModel.deviceLocationOrLastKnownLocationLon, 
+                    } },
+                    function(results, status) {
+                        if (status === 'OK') {
+                            if (results[0]) {
+                                self.lastKnownLocation = results[0].formatted_address
+                            }
+                        }
+                    })
+            }
+        },
+        async initializeMap() {
             if (!this.model.showMap) return
 
-            const self = this
-            this.$http.get(this.model.api.interviewerPoints + '/' + this.interviewerId).then(response => {
-                var data = response.data || {CheckInPoints: [], TargetLocations: []}
-                var points = data.CheckInPoints || []
-                var locations = data.TargetLocations || []
+            const response = await this.$http.get(this.model.api.interviewerPoints + '/' + this.interviewerId)
+            var data = response.data || {checkInPoints: [], targetLocations: []}
+            var points = data.checkInPoints || []
+            var locations = data.targetLocations || []
 
-                if (points.length > 0 || locations.length > 0) {
-                    this.markerExist = true
+            if (points.length > 0 || locations.length > 0) {
+                this.markerExist = true
 
-                    var mapOptions = {
-                        zoom: 9,
-                        mapTypeControl: true,
-                        mapTypeControlOptions: {
-                            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                            position: google.maps.ControlPosition.TOP_CENTER,
-                        },
-                        panControl: true,
-                        panControlOptions: {
-                            position: google.maps.ControlPosition.TOP_RIGHT,
-                        },
-                        zoomControl: true,
-                        zoomControlOptions: {
-                            style: google.maps.ZoomControlStyle.LARGE,
-                            position: google.maps.ControlPosition.TOP_RIGHT,
-                        },
-                        // mapTypeControlOptions: {
-                        //     position: google.maps.ControlPosition.LEFT_TOP,
-                        // },
-                        minZoom: 3,
-                        scaleControl: true,
-                        streetViewControl: false,
-                        center: this.model.initialLocation,
-                    }
-
-                    this.map = new google.maps.Map(this.$refs.map, mapOptions)
-
-                    if (points.length > 0) {
-                        self.showPointsOnMap(points)
-                    }
-
-                    if (locations.length > 0) {
-                        self.showLocationsOnMap(locations)
-                    }
-                } else {
-                    this.markerExist = false
+                var mapOptions = {
+                    zoom: 9,
+                    mapTypeControl: true,
+                    mapTypeControlOptions: {
+                        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                        position: google.maps.ControlPosition.TOP_CENTER,
+                    },
+                    panControl: true,
+                    panControlOptions: {
+                        position: google.maps.ControlPosition.TOP_RIGHT,
+                    },
+                    zoomControl: true,
+                    zoomControlOptions: {
+                        style: google.maps.ZoomControlStyle.LARGE,
+                        position: google.maps.ControlPosition.TOP_RIGHT,
+                    },
+                    // mapTypeControlOptions: {
+                    //     position: google.maps.ControlPosition.LEFT_TOP,
+                    // },
+                    minZoom: 3,
+                    scaleControl: true,
+                    streetViewControl: false,
+                    center: this.model.initialLocation,
                 }
-            })
+
+                const self = this
+                Vue.nextTick(function(){
+                    self.map = new google.maps.Map(self.$refs.map, mapOptions)
+                    self.showPointsOnMap(points, locations)
+                })
+            }
         },
     },
     computed: {
