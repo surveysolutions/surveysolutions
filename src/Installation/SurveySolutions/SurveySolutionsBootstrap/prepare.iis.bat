@@ -1,1 +1,1 @@
-cmd.exe /C c:\windows\system32\dism.exe /Online /Enable-Feature /All /FeatureName:IIS-WebServerManagementTools /FeatureName:IIS-WebServerRole /FeatureName:IIS-ManagementConsole /FeatureName:IIS-HttpCompressionDynamic
+cmd.exe /C c:\windows\system32\dism.exe /Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-WebServerManagementTools /FeatureName:IIS-ManagementConsole /FeatureName:IIS-HttpCompressionDynamic /FeatureName:IIS-WebSockets /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-ASPNET45
