@@ -2,14 +2,7 @@
   "profiles": {
     "WB.Services.Export.Host": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:5002"
-    },
-    "Export.Host": {
-      "commandName": "Project",
+      "launchBrowser": false,
       "commandLineArgs": "--console --ignore-pid --kestrel",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
