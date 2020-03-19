@@ -15,24 +15,6 @@
             src="@googleMapsConfig.Value.ApiBaseUrl/maps/api/js?key=@googleMapsConfig.Value.ApiKey">
     </script>
     
-    @if (Model.DeviceLocationOrLastKnownLocationLat.HasValue && Model.DeviceLocationOrLastKnownLocationLon.HasValue)
-        {
-            <script>
-                function getAddress() {
-                    var geocoder = new google.maps.Geocoder;
-                    geocoder.geocode(
-                        { 'location': { lat: @Model.DeviceLocationOrLastKnownLocationLat.Value, lng: @Model.DeviceLocationOrLastKnownLocationLon.Value } },
-                        function(results, status) {
-                            if (status === 'OK') {
-                                if (results[0]) {
-                                    $("#device-address").text(results[0].formatted_address);
-                                }
-                            }
-                        });
-                }
-            </script>
-    }
-    
     @Html.RenderHqConfig(new
     {
         ShowMap = Model.HasAnyGpsAnswerForInterviewer,
