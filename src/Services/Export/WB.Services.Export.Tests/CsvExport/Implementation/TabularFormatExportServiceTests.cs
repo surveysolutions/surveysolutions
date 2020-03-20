@@ -5,12 +5,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests.CsvExport.Implementation
 {
@@ -19,13 +22,31 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
     internal class TabularFormatExportServiceTests
     {
         [Test]
+        public async Task When_no_filters_on_interviews_applied_Should_export_all_assignments()
+        {
+            var exportStructure = CreateQuestionnaireExportStructure();
+            var assignmentsExporter = new Mock<IAssignmentActionsExporter>();
+            
+            var exportService = Create.ReadSideToTabularFormatExportService(
+                exportStructure,
+                assignmentsActionsExporter: assignmentsExporter.Object);
+
+            // act
+            await exportService.ExportInterviewsInTabularFormatAsync(new ExportSettings(), "x:/", new ExportProgress(), CancellationToken.None);
+            
+            // assert
+            assignmentsExporter.Verify(x => x.ExportAllAsync(It.IsAny<TenantInfo>(), @"x:/", It.IsAny<ExportProgress>(),
+                It.IsAny<CancellationToken>()));
+        }
+        
+        [Test]
         public async Task When_generating_description_file_Then_should_generate_it_with_data_about_questionnaire_and_files()
         {
             // arrange
             string description = null;
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor
-                .Setup(accessor => accessor.WriteAllText(@"x:\export__readme.txt", It.IsAny<string>()))
+                .Setup(accessor => accessor.WriteAllText(@"x:/export__readme.txt", It.IsAny<string>()))
                 .Callback<string, string>((file, content) => description = content);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
@@ -48,22 +69,16 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                     }),
             });
 
-            var hqApi = new Mock<IHeadquartersApi>();
-
-            var tenantApi = Create.TenantHeadquartersApi(hqApi.Object);
-
             var exportService = Create.ReadSideToTabularFormatExportService(
                 questionnaireExportStructure,
-                tenantApi,
-
                 fileSystemAccessor: fileSystemAccessor.Object,
                 questionnaireStorage: questionnaireStorage.Object);
 
             // act
-            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), @"x:\", ".xlsx");
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), "x:/", ".xlsx");
 
             // assert
-            Assert.That(description, Is.Not.Empty);
+            Assert.That(description, Is.Not.Null.Or.Empty);
             var lines = description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
             CollectionAssert.AreEqual(lines.Skip(3), new[]
             {
@@ -81,7 +96,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             string description = null;
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor
-                .Setup(accessor => accessor.WriteAllText(@"x:\export__readme.txt", It.IsAny<string>()))
+                .Setup(accessor => accessor.WriteAllText(@"x:/export__readme.txt", It.IsAny<string>()))
                 .Callback<string, string>((file, content) => description = content);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
@@ -93,18 +108,14 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructure = CreateQuestionnaireExportStructure();
-            var hqApi = new Mock<IHeadquartersApi>();
-            var tenantApi = Create.TenantHeadquartersApi(hqApi.Object);
 
             var exportService = Create.ReadSideToTabularFormatExportService(
                 questionnaireExportStructure,
-                tenantApi,
-
                 fileSystemAccessor: fileSystemAccessor.Object,
                 questionnaireStorage: questionnaireStorage.Object);
 
             // act
-            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId("id"), @"x:\", ".xlsx");
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId("id"), @"x:/", ".xlsx");
 
             // assert
             Assert.That(description, Is.Not.Empty);
@@ -164,7 +175,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             return new QuestionnaireExportStructure
             {
                 HeaderToLevelMap = header,
-                QuestionnaireId = questionnaireId 
+                QuestionnaireId = questionnaireId
             };
         }
 
