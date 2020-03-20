@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using SQLite;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -20,6 +22,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         public string GetPath(Guid interviewId, string filename = null)
         {
             return null;
+        }
+
+        public Task<bool> HasAnyAudioAuditFilesStoredAsync(QuestionnaireIdentity questionnaire)
+        {
+            throw new NotImplementedException();
         }
     }
 
