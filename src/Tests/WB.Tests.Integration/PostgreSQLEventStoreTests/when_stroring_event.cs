@@ -60,11 +60,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 .Returns(Mock.Of<ISession>(i => i.Connection == npgsqlConnection));
 
             eventStore = new PostgresEventStore(
-                new PostgreConnectionSettings
-                {
-                    ConnectionString = connectionStringBuilder.ConnectionString,
-                    SchemaName = schemaName
-                },
                 eventTypeResolver,
                 sessionProvider.Object);
 

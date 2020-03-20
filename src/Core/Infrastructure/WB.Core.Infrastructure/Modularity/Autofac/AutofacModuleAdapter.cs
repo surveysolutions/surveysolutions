@@ -114,6 +114,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             containerBuilder.RegisterType<T2>().As<T1>().InstancePerLifetimeScope();
         }
 
+        public void BindInPerLifetimeScope<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface2, TInterface1
+        {
+            containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface2>().InstancePerLifetimeScope();
+        }
+
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>().SingleInstance();
