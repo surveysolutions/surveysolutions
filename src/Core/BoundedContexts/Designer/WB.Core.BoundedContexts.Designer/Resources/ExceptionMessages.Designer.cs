@@ -583,6 +583,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found errors in provided file.
+        /// </summary>
+        public static string ProvidedFileHasErrors {
+            get {
+                return ResourceManager.GetString("ProvidedFileHasErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question with public key {0} can&apos;t be found..
         /// </summary>
         public static string QuestionCannotBeFound {
