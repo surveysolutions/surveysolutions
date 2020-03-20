@@ -179,24 +179,32 @@ namespace WB.Services.Export.Tests
             return Mock.Of<IOptions<ExportServiceSettings>>(x => x.Value == new ExportServiceSettings());
         }
 
-        public static TabularFormatExportService ReadSideToTabularFormatExportService(QuestionnaireExportStructure questionnaireExportStructure,
-            ITenantApi<IHeadquartersApi> tenantApi,
+        public static TabularFormatExportService ReadSideToTabularFormatExportService(
+            QuestionnaireExportStructure questionnaireExportStructure,
             IFileSystemAccessor fileSystemAccessor = null,
-            ICsvWriter csvWriter = null,
-            IQuestionnaireStorage questionnaireStorage = null)
+            IQuestionnaireStorage questionnaireStorage = null,
+            IAssignmentActionsExporter assignmentsActionsExporter = null)
         {
+            var defaultQuestionnaireStorage = new Mock<IQuestionnaireStorage>();
+            var questionnaireDocument = Create.QuestionnaireDocument(Guid.Parse("11111111111111111111111111111111"), 555);
+            defaultQuestionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+                .ReturnsAsync(questionnaireDocument);
+            
+            var defaultInterviewsSource = new Mock<IInterviewsToExportSource>();
+            defaultInterviewsSource.SetReturnsDefault(new List<InterviewToExport>());
+        
             return new TabularFormatExportService(Mock.Of<ILogger<TabularFormatExportService>>(),
-                Mock.Of<IInterviewsToExportSource>(),
+                defaultInterviewsSource.Object,
                 Mock.Of<IInterviewsExporter>(),
                 Mock.Of<ICommentsExporter>(),
                 Mock.Of<IDiagnosticsExporter>(),
                 Mock.Of<IInterviewActionsExporter>(),
                 Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == Task.FromResult(questionnaireExportStructure)),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                questionnaireStorage ?? defaultQuestionnaireStorage.Object,
                 Mock.Of<IProductVersion>(),
                 Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<IAssignmentActionsExporter>());
+                assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>());
         }
 
         public static CommentsExporter CommentsExporter()

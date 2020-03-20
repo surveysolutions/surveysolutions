@@ -32,11 +32,6 @@ namespace WB.Services.Export.Host
                     Log.Logger.Fatal("Unhandled exception occur {exception}", new[] { eventArgs.ExceptionObject.ToString() });
                 };
 
-                var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
-                var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-
-                Directory.SetCurrentDirectory(pathToContentRoot);
-
                 if (args.All(a => a != "--ignore-pid"))
                 {
                     new StartupBlocker().OpenPIDFile();
@@ -46,6 +41,10 @@ namespace WB.Services.Export.Host
 
                 if (WindowsServiceHelpers.IsWindowsService())
                 {
+                    var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
+                    var pathToContentRoot = Path.GetDirectoryName(pathToExe);
+
+                    Directory.SetCurrentDirectory(pathToContentRoot);
                     host = host.UseContentRoot(pathToContentRoot);
                 }
 

@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Microsoft.Extensions.Logging;
+using Polly;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -11,24 +16,54 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
     internal class InterviewUniqueKeyGenerator : IInterviewUniqueKeyGenerator
     {
         private static int randomValueIndex = 0;
-
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
+        private readonly IPlainKeyValueStorage<NaturalKeySettings> naturalKeySettings;
         private readonly IRandomValuesSource randomValuesSource;
-        private const int maxInterviewKeyValue = 99999999;
+        private readonly ILogger<InterviewUniqueKeyGenerator> logger;
+        private int maxInterviewKeyValue = 0;
 
         public InterviewUniqueKeyGenerator(IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
-            IRandomValuesSource randomValuesSource)
+            IPlainKeyValueStorage<NaturalKeySettings> naturalKeySettings,
+            IRandomValuesSource randomValuesSource,
+            ILogger<InterviewUniqueKeyGenerator> logger)
         {
             this.summaries = summaries;
+            this.naturalKeySettings = naturalKeySettings;
             this.randomValuesSource = randomValuesSource;
+            this.logger = logger;
+
+            NaturalKeySettings storedMaxValue = naturalKeySettings.GetById(AppSetting.NatualKeySettings);
+            maxInterviewKeyValue = storedMaxValue?.MaxValue ?? 99_99_99_99;
         }
 
         public InterviewKey Get()
         {
+            var result = Policy.Handle<InterviewUniqueKeyGeneratorException>()
+                .Retry(5, (ctx, retryCount) =>
+                {
+                    logger.LogWarning("Failed to generate human id. Retry count {retry}", retryCount);
+                    if (retryCount > 3 && maxInterviewKeyValue != int.MaxValue)
+                    {
+                        NaturalKeySettings storedMaxValue = naturalKeySettings.GetById(AppSetting.NatualKeySettings) ?? new NaturalKeySettings();
+                        storedMaxValue.MaxValue = int.MaxValue;
+
+                        naturalKeySettings.Store(storedMaxValue, AppSetting.NatualKeySettings);
+                        maxInterviewKeyValue = storedMaxValue.MaxValue;
+                    }
+                })
+                .Execute(GetKey);
+
+            return result;
+        }
+
+        private InterviewKey GetKey()
+        {
             var potentialRandomKeys = this.GetRandomSequence();
 
             string[] stringKeys = potentialRandomKeys.Select(x => x.ToString()).ToArray();
-            List<string> usedIds = this.summaries.Query(_ => _.Where(x => stringKeys.Contains(x.Key)).Select(x => x.Key).ToList());
+            List<string> usedIds = this.summaries.Query(_ => _.Where(x => stringKeys.Contains(x.Key))
+                .Select(x => x.Key)
+                .ToList());
 
             int nextIndexToUse = Interlocked.Increment(ref randomValueIndex);
 
@@ -39,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                 if (uniqueIdString != null) return InterviewKey.Parse(uniqueIdString);
             }
 
-            return this.Get();
+            throw new InterviewUniqueKeyGeneratorException("Failed to generate new human id");
         }
 
         private List<InterviewKey> GetRandomSequence()

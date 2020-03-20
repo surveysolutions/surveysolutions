@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
@@ -13,7 +15,9 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 
         public override string ToString()
         {
-            return this.RawValue.ToString("00-00-00-00");
+            return RawValue <= 99_99_99_99
+                ? RawValue.ToString("00-00-00-00")
+                : RawValue.ToString("00-00-00-00-00");
         }
 
         public static InterviewKey Parse(string value)

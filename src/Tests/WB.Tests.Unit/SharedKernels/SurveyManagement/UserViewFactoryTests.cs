@@ -29,5 +29,33 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
             // assert
             Assert.That(responsibles.Users.Select(x => x.UserName), Is.EquivalentTo(new[] {"int", "super", "head"}));
         }
+
+        [Test]
+        public void when_GetInterviewers_should_return_all_interviewers_by_supervisor()
+        {
+            // arrange
+            var supervisorId = Id.g1;
+            var otherSupervisor = Id.g2;
+
+            var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(new[]
+            {
+                Create.Entity.HqUser(Id.g1, userName: "int", role: UserRoles.Interviewer, supervisorId: supervisorId),
+                Create.Entity.HqUser(Id.g1, userName: "archivedint", role: UserRoles.Interviewer, isArchived: true, supervisorId: supervisorId),
+                Create.Entity.HqUser(Id.g1, userName: "lockedint", role: UserRoles.Interviewer, lockedBySupervisor: true, supervisorId: supervisorId),
+                Create.Entity.HqUser(Id.g1, userName: "intindiffteam", role: UserRoles.Interviewer, lockedBySupervisor: true, supervisorId: otherSupervisor),
+            });
+
+            var teamFactory = CreateInterviewersViewFactory(readerWithUsers);
+
+            // act
+            var responsibles = teamFactory.GetInterviewers(supervisorId);
+
+            // assert
+            Assert.That(responsibles, Has.Exactly(3).Items);
+            Assert.That(responsibles.Select(x => x.UserName),
+                Is.EquivalentTo(new[] {"int", "archivedint", "lockedint"}));
+            Assert.That(responsibles.Single(x=>x.UserName == "archivedint").IsLockedBySupervisor, Is.True);
+            Assert.That(responsibles.Single(x=>x.UserName == "lockedint").IsLockedBySupervisor, Is.True);
+        }
     }
 }

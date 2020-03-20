@@ -978,6 +978,11 @@ angular-ui-utils@^0.1.1:
   resolved "https://registry.yarnpkg.com/angular-ui-utils/-/angular-ui-utils-0.1.1.tgz#ff8b5c4abb2aebeb08ee05d09a78c4cfbfb65009"
   integrity sha1-/4tcSrsq6+sI7gXQmnjEz7+2UAk=
 
+angular-unsavedchanges@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/angular-unsavedchanges/-/angular-unsavedchanges-0.2.5.tgz#34be961d547051f2c6d536c60a5b42f565c8858b"
+  integrity sha1-NL6WHVRwUfLG1TbGCltC9WXIhYs=
+
 angular@>=1.0.6, angular@^1.7.8:
   version "1.7.9"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.9.tgz#e52616e8701c17724c3c238cfe4f9446fd570bc4"

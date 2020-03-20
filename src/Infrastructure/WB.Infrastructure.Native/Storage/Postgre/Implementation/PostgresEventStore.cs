@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using NHibernate;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Infrastructure.Native.Monitoring;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -22,21 +23,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IEventTypeResolver eventTypeResolver;
 
-        private readonly string tableNameWithSchema;
-        private readonly string tableName;
+        private const string tableNameWithSchema = "events.events";
         private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
         private readonly IUnitOfWork sessionProvider;
 
-        public PostgresEventStore(PostgreConnectionSettings connectionSettings,
-            IEventTypeResolver eventTypeResolver,
+        public PostgresEventStore(IEventTypeResolver eventTypeResolver,
             IUnitOfWork sessionProvider)
         {
             this.eventTypeResolver = eventTypeResolver;
             this.sessionProvider = sessionProvider;
-
-            this.tableName = "events";
-            tableNameWithSchema = connectionSettings.SchemaName + "." + this.tableName;
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
@@ -114,6 +110,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
 
                 writer.Complete();
+                CommonMetrics.EventsCreatedCount.Inc(result.Count);
             }
 
             return result;

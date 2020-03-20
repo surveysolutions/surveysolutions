@@ -13,8 +13,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.serviceLocator = serviceLocator;
         }
 
-        private readonly Gauge sessionCloseCount = new Gauge(@"nhibernate_session_close_count", @"Count of closed sessions", "source");
-        private readonly Gauge sessionOpenCount = new Gauge(@"nhibernate_session_open_count", @"Count of opened sessions", "source");
+        private readonly Gauge sessionCountTotal = new Gauge(@"nhibernate_sessions_total", @"Count of closed sessions","state");
 
         public void RegisterMetrics()
         {
@@ -23,8 +22,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public void UpdateMetrics()
         {
             var sessionFactory = this.serviceLocator.GetInstance<ISessionFactory>();
-            this.sessionCloseCount.Set(sessionFactory.Statistics.SessionCloseCount);
-            this.sessionOpenCount.Set(sessionFactory.Statistics.SessionOpenCount);
+            this.sessionCountTotal.Labels("closed").Set(sessionFactory.Statistics.SessionCloseCount);
+            this.sessionCountTotal.Labels("open").Set(sessionFactory.Statistics.SessionOpenCount);
         }
     }
 }

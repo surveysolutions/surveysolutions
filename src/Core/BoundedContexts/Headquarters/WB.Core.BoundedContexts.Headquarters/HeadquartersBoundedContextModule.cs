@@ -218,7 +218,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IMapReport, MapReport>();
             registry.Bind<IStatusDurationReport, StatusDurationReport>();
             registry.BindAsSingleton<ICommandsMonitoring, PrometheusCommandsMonitoring>();
-
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewUniqueKeyGenerator>();
             registry.BindAsSingleton<IRandomValuesSource, RandomValuesSource>();
 
@@ -299,8 +298,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
 
-            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
-            registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
+
+            registry.BindInPerLifetimeScope<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
 
             registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
             
