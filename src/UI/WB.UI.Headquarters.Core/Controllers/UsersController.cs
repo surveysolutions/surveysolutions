@@ -108,7 +108,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
-                    IsObserving = this.authorizedUser.IsObserving
+                    IsObserving = this.authorizedUser.IsObserving,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter
                 },
                 Api = new
                 {
@@ -299,6 +300,9 @@ namespace WB.UI.Headquarters.Controllers
                 if(this.ModelState.IsValid)
                     this.ModelState.AddModelError(nameof(EditUserModel.PersonName), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
             }
+
+            if (!authorizedUser.IsAdministrator && !authorizedUser.IsHeadquarter && currentUser.IsLockedByHeadquaters != editModel.IsLockedByHeadquarters)
+                return this.Forbid();
 
             if (this.ModelState.IsValid)
             {
