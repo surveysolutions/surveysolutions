@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             out PostgreReadSideStorage<InterviewSummary> reader,
             out PostgreReadSideStorage<QuestionAnswer> featuredQuestionAnswersReader)
         {
-            connectionString = DatabaseTestInitializer.InitializeDb(DbType.ReadSide);
+            connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
 
             var sessionFactory = IntegrationCreate.SessionFactory(connectionString, new[]
             {

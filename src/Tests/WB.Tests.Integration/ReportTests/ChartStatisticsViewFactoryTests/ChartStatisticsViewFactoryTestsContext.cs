@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            connectionString = DatabaseTestInitializer.InitializeDb(DbType.ReadSide);
+            connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
 
             sessionFactory = IntegrationCreate.SessionFactory(
                 this.connectionString, new List<Type> { typeof(CumulativeReportStatusChangeMap) }, 
