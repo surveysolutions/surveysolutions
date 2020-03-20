@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             SetUp.MockedServiceLocator();
             
-            this.connectionString = DatabaseTestInitializer.InitializeDb(DbType.PlainStore, DbType.ReadSide);
+            this.connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.PlainStore, DbType.ReadSide);
 
             sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
