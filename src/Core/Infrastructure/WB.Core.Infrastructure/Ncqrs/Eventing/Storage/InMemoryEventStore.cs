@@ -28,7 +28,7 @@ namespace Ncqrs.Eventing.Storage
 
         public bool IsDirty(Guid eventSourceId, long lastKnownEventSequence)
         {
-            return GetLastEventSequence(eventSourceId) == lastKnownEventSequence;
+            return GetLastEventSequence(eventSourceId) != lastKnownEventSequence;
         }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
