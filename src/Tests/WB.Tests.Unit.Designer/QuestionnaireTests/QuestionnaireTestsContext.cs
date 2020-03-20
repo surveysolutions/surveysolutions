@@ -5,9 +5,12 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -60,9 +63,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         }
 
         public static Questionnaire CreateQuestionnaire(Guid responsibleId, Guid? questionnaireId = null, string text = "text of questionnaire",
-            IExpressionProcessor expressionProcessor = null)
+            IExpressionProcessor expressionProcessor = null, IFindReplaceService findReplaceService = null)
         {
-            var questionnaire = Create.Questionnaire(expressionProcessor: expressionProcessor);
+            var questionnaire = Create.Questionnaire(expressionProcessor: expressionProcessor, findReplaceService: findReplaceService);
 
             var command = Create.Command.CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), title: text, createdBy: responsibleId, isPublic: false);
             questionnaire.CreateQuestionnaire(command);
@@ -79,9 +82,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         }
 
         public static Questionnaire CreateQuestionnaireWithOneGroup(Guid responsibleId, Guid? questionnaireId = null, Guid? groupId = null, bool isRoster = false,
-            IExpressionProcessor expressionProcessor = null)
+            IExpressionProcessor expressionProcessor = null, IFindReplaceService findReplaceService = null)
         {
-            Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId, expressionProcessor: expressionProcessor);
+            Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), 
+                text: "Title", responsibleId: responsibleId, expressionProcessor: expressionProcessor,
+                findReplaceService: findReplaceService ?? new FindReplaceService(Mock.Of<IDesignerQuestionnaireStorage>()));
 
             groupId = groupId ?? Guid.NewGuid();
             questionnaire.AddGroup(groupId.Value,
