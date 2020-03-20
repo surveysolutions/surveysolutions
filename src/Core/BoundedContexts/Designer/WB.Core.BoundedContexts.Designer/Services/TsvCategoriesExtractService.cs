@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
 
             if (errors.Any())
-                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors){FoundErrors = errors};
+                throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors) {FoundErrors = errors};
 
             this.verifier.VerifyAll(categories, headers);
 
