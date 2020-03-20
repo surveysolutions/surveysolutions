@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                             .MaxOptionsCountInFilteredComboboxQuestion));
 
                 if (headers.IdIndex == null)
-                    throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors)
+                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
                     {
                         FoundErrors = new List<ImportValidationError>(new[]
                         {
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     };
 
                 if (headers.TextIndex == null)
-                    throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors)
+                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
                     {
                         FoundErrors = new List<ImportValidationError>(new[]
                         {
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 }
 
                 if (errors.Any())
-                    throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors){FoundErrors = errors};
+                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors) {FoundErrors = errors};
 
                 this.verifier.VerifyAll(categories, headers);
 
