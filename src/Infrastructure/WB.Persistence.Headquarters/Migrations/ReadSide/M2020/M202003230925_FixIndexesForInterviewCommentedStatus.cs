@@ -3,7 +3,7 @@
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
     [Migration(202003230925)]
-    public class M202003230925_FixIndexesForIntervieCommentedStatus : Migration
+    public class M202003230925_FixIndexesForInterviewCommentedStatus : Migration
     {
         public override void Up()
         {
@@ -22,7 +22,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
         public override void Down()
         {
-            
+
         }
     }
 }
