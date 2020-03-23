@@ -86,6 +86,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         private CategoriesHeaderMap TryGetHeadersFromFile(List<string> rowValues)
         {
+            if (rowValues == null)
+                return null;
+
             var headerMap = new CategoriesHeaderMap();
             for (int i = 0; i < rowValues.Count; i++)
             {
