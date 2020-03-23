@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPlainStorage<SupervisorIdentity> usersStorage;
 
         public SupervisorPrincipal(IPlainStorage<SupervisorIdentity> usersStorage,
-            IPasswordHasher passwordHasher) : base(passwordHasher)
+            IPasswordHasher passwordHasher, IPreferencesStorage preferencesStorage) : base(passwordHasher, preferencesStorage)
         {
             this.usersStorage = usersStorage;
         }
@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected override IUserIdentity GetUserById(string userId)
             => this.usersStorage.GetById(userId);
 
-        public ISupervisorUserIdentity CurrentUserIdentity => (ISupervisorUserIdentity)base.currentUserIdentity;
+        public new ISupervisorUserIdentity CurrentUserIdentity => (ISupervisorUserIdentity) base.CurrentUserIdentity;
 
         protected override void UpdateUserHash(string userId, string hash)
         {

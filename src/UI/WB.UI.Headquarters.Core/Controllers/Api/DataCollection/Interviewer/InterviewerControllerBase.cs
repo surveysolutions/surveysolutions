@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -144,6 +145,20 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         public override Task<IActionResult> PostTabletInformation()
         {
             return base.PostTabletInformation();
+        }
+
+        [Authorize(Roles = "Interviewer")]
+        [HttpGet]
+        [Route("compatibility")]
+        [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
+        public virtual IActionResult Compatibility(string deviceId, int protocol,
+            string tenantId = null)
+        {
+            var compatibilityResult = this.CheckCompatibility(deviceId, protocol, tenantId);
+
+            return compatibilityResult is ForbidResult
+                ? new StatusCodeResult((int) HttpStatusCode.ExpectationFailed)
+                : compatibilityResult;
         }
 
         [Authorize(Roles = "Interviewer")]

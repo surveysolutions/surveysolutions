@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IPlainStorage<InterviewerIdentity> usersStorage;
 
         public InterviewerPrincipal(IPlainStorage<InterviewerIdentity> usersStorage,
-            IPasswordHasher passwordHasher) : base(passwordHasher)
+            IPasswordHasher passwordHasher, IPreferencesStorage preferencesStorage) : base(passwordHasher, preferencesStorage)
         {
             this.usersStorage = usersStorage;
         }
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         protected override IUserIdentity GetUserById(string userId)
             => this.usersStorage.GetById(userId);
 
-        public IInterviewerUserIdentity CurrentUserIdentity => (IInterviewerUserIdentity)base.currentUserIdentity;
+        public new IInterviewerUserIdentity CurrentUserIdentity => (IInterviewerUserIdentity) base.CurrentUserIdentity;
         
         private InterviewerIdentity GetInterviewerIdentity()
         {

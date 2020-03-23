@@ -6,26 +6,33 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public abstract class EnumeratorPrincipal : IPrincipal
     {
-        protected readonly IPasswordHasher passwordHasher;
+        private const string LoggedInPreferenceKey = "loggedInUser";
 
-        protected EnumeratorPrincipal(IPasswordHasher passwordHasher)
+        protected readonly IPasswordHasher passwordHasher;
+        private readonly IPreferencesStorage preferencesStorage;
+
+        protected EnumeratorPrincipal(IPasswordHasher passwordHasher, IPreferencesStorage preferencesStorage)
         {
             this.passwordHasher = passwordHasher;
+            this.preferencesStorage = preferencesStorage;
         }
         protected abstract IUserIdentity GetUserByName(string userName);
         protected abstract IUserIdentity GetUserById(string userId);
 
-        public bool IsAuthenticated => this.currentUserIdentity != null;
+        public bool IsAuthenticated => !string.IsNullOrEmpty(this.GetLoggedInUserName());
 
-        protected IUserIdentity currentUserIdentity;
-        IUserIdentity IPrincipal.CurrentUserIdentity => this.currentUserIdentity;
+        public IUserIdentity CurrentUserIdentity => this.FindIdentityByUsername(this.GetLoggedInUserName());
 
         private IUserIdentity FindIdentityByUsername(string userName) 
             => userName == null ? null : this.GetUserByName(userName.ToLower());
 
+        private string GetLoggedInUserName() => this.preferencesStorage.Get(LoggedInPreferenceKey);
+        private void SetLoggedInUserName(string userName) =>
+            this.preferencesStorage.Store(LoggedInPreferenceKey, userName);
+
         public bool SignIn(string userName, string password, bool staySignedIn)
         {
-            this.currentUserIdentity = null;
+            this.SignOut();
 
             var localUser = FindIdentityByUsername(userName); // db query
 
@@ -44,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     UpdateUserHash(localUser.Id, this.passwordHasher.Hash(password));
                 }
 
-                this.currentUserIdentity = localUser;
+                this.SetLoggedInUserName(localUser.Name);
             }
 
             return this.IsAuthenticated;
@@ -54,24 +61,25 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public bool SignInWithHash(string userName, string passwordHash, bool staySignedIn)
         {
-            this.currentUserIdentity = null;
+            this.SignOut();
 
             var localUser = FindIdentityByUsername(userName); // db query
 
             if (string.Equals(localUser.PasswordHash, passwordHash, StringComparison.Ordinal))
             {
-                this.currentUserIdentity = localUser;
+                this.SetLoggedInUserName(localUser.Name);
             }
 
             return this.IsAuthenticated;
         }
 
-        public void SignOut() => this.currentUserIdentity = null;
+        public void SignOut() => this.SetLoggedInUserName(string.Empty);
 
         public bool SignIn(string userId, bool staySignedIn)
         {
             var interviewer = this.GetUserById(userId);
-            this.currentUserIdentity = interviewer;
+            this.SetLoggedInUserName(interviewer.Name);
+
             return this.IsAuthenticated;
         }
     }

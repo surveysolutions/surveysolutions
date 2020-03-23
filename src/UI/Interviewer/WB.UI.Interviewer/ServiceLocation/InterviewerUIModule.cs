@@ -90,6 +90,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
             registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();
+            registry.Bind<IPreferencesStorage, PreferencesStorage>();
             
             RegisterViewModels(registry);
         }

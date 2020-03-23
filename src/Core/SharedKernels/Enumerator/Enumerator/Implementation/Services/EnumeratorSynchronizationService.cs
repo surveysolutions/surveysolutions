@@ -189,12 +189,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, string tenantId = null, CancellationToken token = default)
         {
-            string url = string.Concat(ApiUrl, "compatibility/", this.deviceSettings.GetDeviceId(), "/",
+            string url = string.Concat(ApiUrl, "compatibility?deviceid=", this.deviceSettings.GetDeviceId(), "&protocol=",
                 this.syncProtocolVersionProvider.GetProtocolVersion());
 
             if (tenantId != null)
             {
-                url += "?tenantId=" + WebUtility.UrlEncode(tenantId);
+                url += "&tenantId=" + WebUtility.UrlEncode(tenantId);
             }
 
             var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(

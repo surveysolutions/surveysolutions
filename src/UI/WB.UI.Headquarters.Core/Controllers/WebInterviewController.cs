@@ -36,7 +36,6 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.WebInterview;
-using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers

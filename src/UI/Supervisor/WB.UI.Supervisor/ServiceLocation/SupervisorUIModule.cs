@@ -87,6 +87,7 @@ namespace WB.UI.Supervisor.ServiceLocation
 #endif
 
             registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();
+            registry.Bind<IPreferencesStorage, PreferencesStorage>();
         }
 
         private void BindOfflineServices(IIocRegistry registry)

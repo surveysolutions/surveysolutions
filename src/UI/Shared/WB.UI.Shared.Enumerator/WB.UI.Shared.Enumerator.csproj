@@ -226,6 +226,7 @@
     <Compile Include="Services\Notifications\SimpleNotification.cs" />
     <Compile Include="Services\PermissionsExtensions.cs" />
     <Compile Include="Services\ServiceBinder.cs" />
+    <Compile Include="Services\PreferencesStorage.cs" />
     <Compile Include="Services\SyncBgService.cs" />
     <Compile Include="Services\SyncServiceConnection.cs" />
     <Compile Include="Settings\AndroidBattery.cs" />

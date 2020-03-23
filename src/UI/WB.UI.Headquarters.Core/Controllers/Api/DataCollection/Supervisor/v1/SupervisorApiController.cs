@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -76,6 +77,20 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         public virtual int? GetLatestVersion()
         {
             return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        [HttpGet]
+        [Route("compatibility")]
+        [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
+        public virtual IActionResult Compatibility(string deviceId, int protocol,
+            string tenantId = null)
+        {
+            var compatibilityResult = this.CheckCompatibility(deviceId, protocol, tenantId);
+
+            return compatibilityResult is ForbidResult
+                ? new StatusCodeResult((int) HttpStatusCode.ExpectationFailed)
+                : compatibilityResult;
         }
 
         [Authorize(Roles = "Supervisor")]

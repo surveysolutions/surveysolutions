@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     switch (restException.StatusCode)
                     {
                         case HttpStatusCode.Unauthorized:
+                        case HttpStatusCode.Forbidden:
                             if (restException.Message.Contains("lock"))
                             {
                                 exceptionMessage = EnumeratorUIResources.AccountIsLockedOnServer;
@@ -103,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             exceptionMessage = EnumeratorUIResources.InternalServerError;
                             exceptionType = SynchronizationExceptionType.InternalServerError;
                             break;
-                        case HttpStatusCode.Forbidden:
+                        case HttpStatusCode.ExpectationFailed:
                             exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
                             break;
                     }
