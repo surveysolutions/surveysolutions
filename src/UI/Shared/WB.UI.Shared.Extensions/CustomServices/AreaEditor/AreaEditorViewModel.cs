@@ -334,7 +334,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         });
 
-        public IMvxCommand SwitchLocatorCommand => new MvxCommand(() =>
+        public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async() =>
         {
             if (!IsLocationServiceSwitchEnabled)
                 return;
@@ -348,35 +348,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
-                if (!this.MapView.LocationDisplay.IsEnabled &&
-                    !this.MapView.LocationDisplay.Started &&
-                    (this.MapView.LocationDisplay.DataSource != null &&
-                     !this.MapView.LocationDisplay.DataSource.IsStarted))
-                {
-                    this.MapView.LocationDisplay.IsEnabled = true;
-                    this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;
-                }
-
-                else
-                {
-                    this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
-                    this.MapView.LocationDisplay.IsEnabled = false;
-                }
+                await this.MapView.LocationDisplay.DataSource.StartAsync();
+                this.MapView.LocationDisplay.IsEnabled = true;
+                this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;                
             }
-            catch (ArgumentException exc)
+            catch (Exception exc)
             {
-                logger.Error("Error occurred on map location switch.", exc);
+                logger.Error("Error occurred on map location start.", exc);
+                IsLocationServiceSwitchEnabled = false;
             }
-            finally
-            {
-                //workaround for maps location service error
-                Task.Run(() =>
-                {
-                    Thread.Sleep(5000);
-                    IsLocationServiceSwitchEnabled = true;
-                });
-            }
-
         });
 
         private void LocationDisplayOnLocationChanged(object sender, Location e)
