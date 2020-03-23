@@ -88,18 +88,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             // dates CTE will generate gape-less interval of dates
             // timespan CTE will produce cross product of dates and available statuses
+            // report CTE will produce report over all data
+            // do not move date filtering inside report CTE as it will affect partition query
             var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
                 @"with 
                         dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::date as date),
-                        timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status)
-
-                        select span.date, span.status, 
-                                sum(sum(coalesce(cum.changevalue, 0))) over (partition by span.status order by span.date) as count
-                        from timespan as span  
-                        left join readside.cumulativereportstatuschanges cum on cum.date = span.date and cum.status = span.status
-                            and cum.questionnaireidentity = any(@questionnairesList)
-                        where span.date >= @minDate::date and span.date <= @maxDate::date
-                        group by 1,2 order by 1", queryParams);
+                        timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
+                        report as 
+                        (
+                            select span.date, span.status, 
+                                    sum(sum(coalesce(cum.changevalue, 0))) over (partition by span.status order by span.date) as count
+                            from timespan as span  
+                            left join readside.cumulativereportstatuschanges cum on cum.date = span.date and cum.status = span.status
+                                and cum.questionnaireidentity = any(@questionnairesList)
+                            group by 1,2 order by 1
+                        )
+                       select date, status, count
+                       from report where date >= @minDate::date and date <= @maxDate::date", queryParams);
             // ReSharper restore StringLiteralTypo
             
             var view = new ChartStatisticsView();
