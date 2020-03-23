@@ -24,7 +24,11 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <h3>{{$t('Assignments.AssignmentInfo')}}</h3>
+                    <h3>
+                        {{$t('Assignments.AssignmentInfo')}}
+                        <span v-if="this.model.isArchived"
+                            class="badge">{{$t('Common.Archived')}}</span>
+                    </h3>
                     <table class="table table-striped table-bordered">
                         <tbody>
                             <tr>
