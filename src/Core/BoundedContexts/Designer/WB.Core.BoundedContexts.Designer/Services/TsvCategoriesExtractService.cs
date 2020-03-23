@@ -57,18 +57,20 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
                     var row = GetRowValues(rawRow, headers, csvReader.Context.RawRow);
 
-                    if (string.IsNullOrEmpty(row.Id) && string.IsNullOrEmpty(row.ParentId) &&
-                        string.IsNullOrEmpty(row.Text)) continue;
+                    if (!string.IsNullOrEmpty(row.Id) || !string.IsNullOrEmpty(row.ParentId) || !string.IsNullOrEmpty(row.Text))
+                    {
+                        var error = this.verifier.Verify(row, headers);
 
-                    var error = this.verifier.Verify(row, headers);
+                        if (error != null) 
+                            errors.Add(error);
+                        else 
+                            categories.Add(row);
 
-                    if (error != null) errors.Add(error);
-                    else categories.Add(row);
+                        if (errors.Count >= 10) break;
 
-                    if (errors.Count >= 10) break;
-
-                    if (categories.Count > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion)
-                        throw new InvalidFileException(ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion));
+                        if (categories.Count > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion)
+                            throw new InvalidFileException(ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion));
+                    }
 
                     rawRow = csvReader.Read()?.ToList();
                 }
