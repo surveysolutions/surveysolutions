@@ -155,7 +155,7 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [TestCase(CategoriesFileType.Excel, "A", 2)]
-        [TestCase(CategoriesFileType.Tsv, "id", 1)]
+        [TestCase(CategoriesFileType.Tsv, "0", 1)]
         public void when_store_excel_file_with_category_with_empty_id_then_should_throw_excel_exception(CategoriesFileType type, string expectedColumn, int expectedRow)
         {
             // arrange
@@ -174,7 +174,7 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [TestCase(CategoriesFileType.Excel, "A", 2)]
-        [TestCase(CategoriesFileType.Tsv, "id", 1)]
+        [TestCase(CategoriesFileType.Tsv, "0", 1)]
         public void when_store_excel_file_with_category_with_not_numeric_id_then_should_throw_excel_exception(CategoriesFileType type, string expectedColumn, int expectedRow)
         {
             // arrange
@@ -193,7 +193,7 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [TestCase(CategoriesFileType.Excel, "C", 2)]
-        [TestCase(CategoriesFileType.Tsv, "parentid", 1)]
+        [TestCase(CategoriesFileType.Tsv, "2", 1)]
         public void when_store_excel_file_with_category_with_not_numeric_parent_id_then_should_throw_excel_exception(CategoriesFileType type, string expectedColumn, int expectedRow)
         {
             // arrange
@@ -212,7 +212,7 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [TestCase(CategoriesFileType.Excel, "B", 2)]
-        [TestCase(CategoriesFileType.Tsv, "text", 1)]
+        [TestCase(CategoriesFileType.Tsv, "1", 1)]
         public void when_store_excel_file_with_category_with_empty_text_then_should_throw_excel_exception(CategoriesFileType type, string expectedColumn, int expectedRow)
         {
             // arrange
@@ -362,6 +362,30 @@ namespace WB.Tests.Unit.Designer.Services
             var categoriesId = Id.g2;
             var data = new string[][]
             {
+                new[] {"1", "option 1", "1"}, 
+                new[] {"", "", ""}, 
+                new[] {"2", "option 2", "1"} 
+            };
+            var mockOfDbContext = new Mock<DesignerDbContext>();
+            var service = CreateCategoriesService(dbContext: mockOfDbContext.Object);
+
+            // act
+            service.Store(questionnaireId, categoriesId, CreateFileWithHeader(data, type), type);
+
+            // assert
+            mockOfDbContext.Verify(x => x.AddRange(Moq.It.Is<IEnumerable<CategoriesInstance>>(y => y.Count() == 2)), Times.Once);
+        }
+
+        [TestCase(CategoriesFileType.Excel)]
+        [TestCase(CategoriesFileType.Tsv)]
+        public void when_store_excel_file_with_header_and_data_should_be_ok(CategoriesFileType type)
+        {
+            // arrange
+            var questionnaireId = Id.g1;
+            var categoriesId = Id.g2;
+            var data = new string[][]
+            {
+                new[] {"id", "text", "parentid"}, 
                 new[] {"1", "option 1", "1"}, 
                 new[] {"", "", ""}, 
                 new[] {"2", "option 2", "1"} 
