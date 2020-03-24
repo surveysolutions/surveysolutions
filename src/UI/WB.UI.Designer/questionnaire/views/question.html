@@ -149,14 +149,16 @@
             </div>
         </div>
 
-    <script type="text/ng-template" id="categorical-filter-expression">
+        <script type="text/ng-template" id="categorical-filter-expression">
             <div class="form-group" ng-hide="activeQuestion.isCascade == true">
                 <label class="wb-label" for="optionsFilterExpression" ng-i18next="QuestionFilter"></label>
                 <div class="pseudo-form-control">
-                    <div id="optionsFilterExpression" ng-if="activeQuestion.isLinked" 
-                         ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" 
-                         ng-model="activeQuestion.linkedFilterExpression"></div>                    
-                    <div id="optionsFilterExpression" ng-else ui-ace="{ onLoad : aceLoadedForOtionFilter, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.optionsFilterExpression"></div>
+                    <div id="optionsFilterExpression" ng-if="activeQuestion.isLinked && activeQuestion.linkedToEntity.type != 'textlist'"
+                         ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }"
+                         ng-model="activeQuestion.linkedFilterExpression"></div>
+                    <div id="optionsFilterExpression" ng-else
+                         ui-ace="{ onLoad : aceLoadedForOtionFilter, require: ['ace/ext/language_tools'] }"
+                         ng-model="activeQuestion.optionsFilterExpression"></div>
                 </div>
             </div>
         </script>
@@ -187,7 +189,7 @@
                             <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
 
                             <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type==='roster'"
-                               ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
+                               ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression, activeQuestion.optionsFilterExpression)"
                                role="menuitem"
                                tabindex="-1"
                                class="linked-roster-source"
@@ -202,7 +204,7 @@
                             </a>
 
                             <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type!=='roster'"
-                               ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
+                               ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression, activeQuestion.optionsFilterExpression)"
                                role="menuitem"
                                tabindex="-1"
                                class="linked-question-source"

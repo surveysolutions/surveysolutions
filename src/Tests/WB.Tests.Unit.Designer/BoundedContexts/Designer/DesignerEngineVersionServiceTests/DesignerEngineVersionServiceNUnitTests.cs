@@ -137,6 +137,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             Assert.That(contentVersion, Is.EqualTo(27));
         }
 
+
+        [Test]
+        public void should_return_29_when_linked_to_list_question_with_option_filter()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.MultipleOptionsQuestion(optionsFilterExpression: "filter"),
+                });
+
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(29));
+        }
+        
         [Test]
         public void should_return_29_when_custom_title_used()
         {
@@ -152,5 +170,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             //aaa
             Assert.That(contentVersion, Is.EqualTo(29));
         }
+
     }
 }
