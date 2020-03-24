@@ -138,10 +138,7 @@ namespace WB.Infrastructure.Native.Storage
                 var key = Key(aggregateId);
                 this.dirtyCheckedAggregateRoots.Remove(aggregateId);
 
-                if (Cache.Remove(key) != null)
-                {
-                    CacheItemRemoved(key, CacheEntryRemovedReason.Evicted);
-                }
+                Cache.Remove(key);
             });
         }
 
