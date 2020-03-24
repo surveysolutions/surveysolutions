@@ -28,19 +28,19 @@
                 </button>
                 @if (authorizedUser.IsAdministrator)
                 {
-                    <a class="navbar-brand" asp-action="Index" asp-controller="Headquarters" asp-area="">@Users.Admin</a>
+                    <a class="navbar-brand" asp-action="Index" asp-controller="Home" asp-area="">@Users.Admin</a>
                 }
                 else if (authorizedUser.IsHeadquarter)
                 {
-                    <a class="navbar-brand" asp-action="Index" asp-controller="HQ" asp-area="">@Users.Headquarters</a>
+                    <a class="navbar-brand" asp-action="Index" asp-controller="Home" asp-area="">@Users.Headquarters</a>
                 }
                 else if (authorizedUser.IsSupervisor)
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Interviews", new {area = ""})">@Users.Supervisor</a>
+                    <a class="navbar-brand"  asp-action="Index" asp-controller="Home" asp-area="">@Users.Supervisor</a>
                 }
                 else if (authorizedUser.IsObserver)
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">@Users.Observer</a>
+                    <a class="navbar-brand"  asp-action="Index" asp-controller="Home" asp-area="">@Users.Observer</a>
                 }
             </div>
             <div class="collapse navbar-collapse">
