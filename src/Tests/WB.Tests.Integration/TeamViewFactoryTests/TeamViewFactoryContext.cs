@@ -43,13 +43,12 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
         protected IUnitOfWork UnitOfWork;
         protected ISessionFactory sessionFactory;
 
-
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             SetUp.MockedServiceLocator();
 
-            this.connectionString = DatabaseTestInitializer.InitializeDb(DbType.PlainStore, DbType.ReadSide);
+            this.connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.PlainStore, DbType.ReadSide);
 
             sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
