@@ -307,7 +307,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RefreshOptionsFromModelAsync()
         {
-            var textListAnswerRows = this.GetTextListAnswerRows();
+            var textListAnswerRows = this.GetTextListAnswerRows().ToList();
 
             await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
@@ -358,15 +358,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.RaisePropertyChanged(() => this.HasOptions);
             });
 
-        private List<TextListAnswerRow> GetTextListAnswerRows()
+        private IEnumerable<TextListAnswerRow> GetTextListAnswerRows()
         {
             var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.Identity);
+            if (listQuestion == null || listQuestion.IsDisabled()) yield break;
 
-            if ((listQuestion == null) || listQuestion.IsDisabled() ||
-                listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows == null)
-                return new List<TextListAnswerRow>();
+            var listOptions = listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows;
+            var filteredOptions = interview.GetSingleOptionLinkedToListQuestion(this.Identity)?.Options;
+            
+            if (listOptions == null || filteredOptions == null) yield break;
 
-            return new List<TextListAnswerRow>(listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows);
+            foreach (var textListAnswerRow in listOptions)
+            {
+                if (filteredOptions.Contains(textListAnswerRow.Value))
+                    yield return textListAnswerRow;
+            }
         }
 
         private SingleOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
