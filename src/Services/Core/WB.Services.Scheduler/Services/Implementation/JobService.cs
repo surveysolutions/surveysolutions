@@ -142,7 +142,7 @@ namespace WB.Services.Scheduler.Services.Implementation
         public Task<List<JobItem>> GetRunningOrQueuedJobs(TenantInfo tenant)
         {
             return db.Jobs.Where(j => j.Tenant == tenant.Id.Id &&
-                                      j.Status == JobStatus.Created || j.Status == JobStatus.Running)
+                                      (j.Status == JobStatus.Created || j.Status == JobStatus.Running))
                 .ToListAsync();
         }
     }

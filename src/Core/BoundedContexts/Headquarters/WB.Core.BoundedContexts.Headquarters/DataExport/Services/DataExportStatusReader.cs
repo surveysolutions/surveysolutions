@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NHibernate.Id.Insert;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,18 +24,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IExportServiceApi exportServiceApi;
         private readonly IExportFileNameService exportFileNameService;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IAssignmentsService assignmentsService;
 
         // TODO: Restore SLACK notifications
         //private readonly ISlackApiClient slackApiClient;
         private readonly ILogger logger;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
 
         public DataExportStatusReader(
             IExportServiceApi exportServiceApi,
             IExportFileNameService exportFileNameService,
             IQuestionnaireStorage questionnaireStorage,
-            IAssignmentsService assignmentsService,
-
+            IAudioAuditFileStorage audioAuditFileStorage,
             // TODO: Restore SLACK notifications
             // ISlackApiClient slackApiClient,
             ILoggerProvider loggerProvider)
@@ -42,10 +42,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.exportServiceApi = exportServiceApi;
             this.exportFileNameService = exportFileNameService;
             this.questionnaireStorage = questionnaireStorage;
-            this.assignmentsService = assignmentsService;
             // TODO: Restore SLACK notifications
             //    this.slackApiClient = slackApiClient;
             this.logger = loggerProvider.GetForType(this.GetType());
+            this.audioAuditFileStorage = audioAuditFileStorage;
         }
 
         public async Task<DataExportArchive> GetDataArchive(QuestionnaireIdentity questionnaireIdentity,
@@ -75,19 +75,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
         }
 
-        public Task<ExportDataAvailabilityView> GetDataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity)
+        public async Task<ExportDataAvailabilityView> GetDataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
             if (questionnaire == null)
-                return Task.FromResult<ExportDataAvailabilityView>(null);
+                return null;
 
-            var hasAssignmentWithAudioRecordingEnabled = assignmentsService.HasAssignmentWithAudioRecordingEnabled(questionnaireIdentity);
-            return Task.FromResult(new ExportDataAvailabilityView
+            var hasAudioAuditFiles = await this.audioAuditFileStorage.HasAnyAudioAuditFilesStoredAsync(questionnaireIdentity);
+            return new ExportDataAvailabilityView
             {
-                HasBinaryData = questionnaire.HasAnyMultimediaQuestion() || hasAssignmentWithAudioRecordingEnabled,
+                HasBinaryData = questionnaire.HasAnyMultimediaQuestion() 
+                || hasAudioAuditFiles,
                 HasInterviews = true
-            });
+            };
         }
 
         public async Task<DataExportProcessView> GetProcessStatus(long id)
