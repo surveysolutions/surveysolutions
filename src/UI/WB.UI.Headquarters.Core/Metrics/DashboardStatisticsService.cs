@@ -57,8 +57,8 @@ namespace WB.UI.Headquarters.Metrics
             var cpuDiff = RegisterCounter(() => Process.GetCurrentProcess().TotalProcessorTime.TotalSeconds);
 
             // interviews cached/evicted change over time per second
-            var interviewsCached = RegisterCounter(() => CommonMetrics.StatefullInterviewCached.Value);
-            var interviewsEvicted = RegisterCounter(() => CommonMetrics.StatefullInterviewEvicted.GetSummForLabels());
+            var interviewsCached = RegisterCounter(() => CommonMetrics.StatefullInterviewsCached.GetSummForLabels(CacheAddedLabel));
+            var interviewsEvicted = RegisterCounter(() => CommonMetrics.StatefullInterviewsCached.GetSummForLabels(CacheRemovedLabel));
 
             // npgsql data transfer change over time  per second
             var dataTransferRead = RegisterCounter(() => CommonMetrics.NpgsqlDataCounter.GetSummForLabels(ReadDbdataLabel));
@@ -91,9 +91,9 @@ namespace WB.UI.Headquarters.Metrics
             result.Add(new MetricState("Web interview connections", "connection".ToQuantity(connections, "N0")));
 
             // statefull interviews
-            var statefulInterviews = CommonMetrics.StatefullInterviewCached.Value;
-            var evicted = CommonMetrics.StatefullInterviewEvicted.GetSummForLabels();
-            result.Add(new MetricState("Statefull interviews in cache", "interview".ToQuantity(statefulInterviews - evicted, "N0")
+            var statefulInterviews = CommonMetrics.StatefullInterviewsCached.GetDiffForLabels(CacheAddedLabel, CacheRemovedLabel);
+
+            result.Add(new MetricState("Statefull interviews in cache", "interview".ToQuantity(statefulInterviews, "N0")
                     + $" (cached {await interviewsCached:N2} / evicted {await interviewsEvicted:N2} per second)"));
 
             // exceptions
@@ -120,6 +120,8 @@ namespace WB.UI.Headquarters.Metrics
 
         private static readonly string[] OpenConnectionsLabel = { "open" };
         private static readonly string[] ClosedConnectionsLabel = { "closed" };
+        private static readonly string[] CacheAddedLabel = { "added" };
+        private static readonly string[] CacheRemovedLabel = { "removed" };
         private static readonly string[] IdleDbConnectionsLabel = { "idle" };
         private static readonly string[] BusyDbConnectionsLabel = { "busy" };
         private static readonly string[] ReadDbdataLabel = { "read" };
