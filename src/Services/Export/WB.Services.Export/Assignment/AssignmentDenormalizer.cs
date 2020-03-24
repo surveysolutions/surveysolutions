@@ -8,6 +8,7 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Events.Assignment;
 using WB.Services.Export.Events.Assignment.Base;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Assignment
@@ -43,6 +44,7 @@ namespace WB.Services.Export.Assignment
                 WebMode = @event.Event.WebMode,
                 AudioRecording = @event.Event.AudioRecording,
                 Comment = @event.Event.Comment,
+                QuestionnaireId = @event.Event.QuestionnaireIdentity
             });
 
             AddRecord(@event, AssignmentExportedAction.Created, null, null, @event.Event.Comment, position: 1);
