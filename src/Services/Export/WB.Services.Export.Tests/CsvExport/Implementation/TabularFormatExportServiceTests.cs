@@ -32,10 +32,14 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 assignmentsActionsExporter: assignmentsExporter.Object);
 
             // act
-            await exportService.ExportInterviewsInTabularFormatAsync(new ExportSettings(), "x:/", new ExportProgress(), CancellationToken.None);
+            var questionnaireId = new QuestionnaireId("questionnaire");
+            await exportService.ExportInterviewsInTabularFormatAsync(new ExportSettings
+            {
+                QuestionnaireId = questionnaireId
+            }, "x:/", new ExportProgress(), CancellationToken.None);
             
             // assert
-            assignmentsExporter.Verify(x => x.ExportAllAsync(It.IsAny<TenantInfo>(), @"x:/", It.IsAny<ExportProgress>(),
+            assignmentsExporter.Verify(x => x.ExportAllAsync(It.IsAny<TenantInfo>(), questionnaireId, @"x:/", It.IsAny<ExportProgress>(),
                 It.IsAny<CancellationToken>()));
         }
         
