@@ -161,7 +161,8 @@ namespace WB.UI.Headquarters.Controllers
                 UpdatedAtUtc = assignment.UpdatedAtUtc,
                 WebMode = assignment.WebMode,
                 IsHeadquarters = this.currentUser.IsAdministrator || this.currentUser.IsHeadquarter,
-                Comments = assignment.Comments
+                Comments = assignment.Comments,
+                IsArchived = assignment.Archived
             });
         }
 
