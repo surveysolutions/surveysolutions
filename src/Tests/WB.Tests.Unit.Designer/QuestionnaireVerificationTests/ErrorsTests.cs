@@ -343,15 +343,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .ExpectNoError("WB0012");
 
         [Test]
-        public void linked_to_TextList_question_has_options_filter()
-            => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
-                {
-                    Create.TextListQuestion(Id1),
-                    Create.SingleQuestion(linkedToQuestionId: Id1, optionsFilter: "something")
-                })
-                .ExpectCritical("WB0117");
-
-        [Test]
         public void linked_to_TextList_question_has_linked_filter()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
