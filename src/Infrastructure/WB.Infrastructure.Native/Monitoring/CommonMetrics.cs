@@ -3,8 +3,8 @@
     public static class CommonMetrics
     {
         public static Counter WebInterviewConnection = new Counter("wb_webinterview_connections_total", "Number of times connection were open (open/closed), (review,takenew,web)", "action", "mode");
-        public static Counter StatefullInterviewCached = new Counter("wb_statefullinterview_cache_create", "Total number of times statefull interview cached");
-        public static Counter StatefullInterviewEvicted = new Counter("wb_statefullinterview_cache_evict", "Total number of times statefull interview cached", "reason");
+        public static Counter StatefullInterviewsCached = new Counter("wb_statefullinterview_cached_total", "Total number of times statefull interview cached (added/removed)", "action");
+        
         public static Counter StatefullInterviewCacheHit = new Counter("wb_statefullinterview_cache_hit", "Total number of times statefull interview cache hit");
         public static Counter StatefullInterviewCacheMiss = new Counter("wb_statefullinterview_cache_miss", "Total number of times statefull interview cache missed");
 
