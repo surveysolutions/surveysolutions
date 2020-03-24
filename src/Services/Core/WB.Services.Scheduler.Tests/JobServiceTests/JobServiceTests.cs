@@ -191,5 +191,24 @@ namespace WB.Services.Scheduler.Tests.JobServiceTests
             Assert.That(job.Status, Is.EqualTo(JobStatus.Fail));
             Assert.That(job.ShouldDropTenantSchema, Is.EqualTo(false));
         }
+
+        [Test]
+        public async Task should_return_own_running_jobs()
+        {
+            var tenantA = new TenantInfo("a", "A", "A");
+            var tenantB = new TenantInfo("B", "B", "B");
+
+            var runningTenantA = Create.Entity.Job(tenant: tenantA.Id.Id, tag: "jobA").Start("A");
+            var runningTenantB = Create.Entity.Job(tenant: tenantB.Id.Id, tag: "jobB").Start("A");
+
+            await CreateNewJobs(runningTenantA, runningTenantB);
+
+            var service = serviceProvider.GetService<JobService>();
+
+            var jobs = await service.GetRunningOrQueuedJobs(tenantA);
+
+            Assert.That(jobs.Count, Is.EqualTo(1));
+            Assert.That(jobs[0].Tag, Is.EqualTo("jobA"));
+        }
     }
 }
