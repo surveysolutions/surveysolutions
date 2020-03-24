@@ -2812,7 +2812,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<InterviewTreeQuestion> linkedToListQuestions = tree.FindQuestions().Where(x => x.IsLinkedToListQuestion);
             foreach (InterviewTreeQuestion linkedQuestion in linkedToListQuestions)
             {
-                linkedQuestion.CalculateLinkedToListOptions(resetAnswerOnOptionChange);
+                var options = linkedQuestion.GetCalculatedLinkedToListOptions();
+                if (options != null)
+                    linkedQuestion.UpdateLinkedToListOptionsAndUpdateAnswerIfNeeded(options, resetAnswerOnOptionChange);
+
                 if (!linkedQuestion.IsAnswered())
                 {
                     interviewExpressionState.RemoveAnswer(linkedQuestion.Identity);

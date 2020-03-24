@@ -27,6 +27,9 @@ namespace WB.Tests.Integration
             return eventContext.Events.Where(e => e.Payload is T).Select(e => (T)e.Payload);
         }
 
+        public static T GetLastEvent<T>(this EventContext eventContext, Func<T, bool> isSelected = null)
+            => (T) eventContext.Events.Last(e => e.Payload is T ev && (isSelected?.Invoke(ev) ?? true)).Payload;
+
         public static bool AnyEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
         {
             return condition == null 

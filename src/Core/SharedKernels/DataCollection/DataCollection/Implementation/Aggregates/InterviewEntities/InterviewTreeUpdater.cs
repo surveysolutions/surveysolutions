@@ -247,7 +247,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsParentDiabled(question))
                 return;
 
-            question.CalculateLinkedToListOptions(this.updateLinkedAnswers);
+            var level = this.GetLevel(question);
+            var filter = level.GetCategoricalFilter(question.Identity);
+
+            var options = question.GetCalculatedLinkedToListOptions();
+            var filteredOptions = filter == null ? options : options.Where(x => RunOptionFilter(filter, x)).ToArray();
+
+            question.UpdateLinkedToListOptionsAndUpdateAnswerIfNeeded(filteredOptions, this.updateLinkedAnswers);
         }
 
         public void UpdateRoster(InterviewTreeRoster roster)

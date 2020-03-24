@@ -162,8 +162,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Create.ViewModel.ThrottlingViewModel(),
-                Create.Fake.MvxMainThreadDispatcher());
+                Create.ViewModel.ThrottlingViewModel());
         }
 
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
