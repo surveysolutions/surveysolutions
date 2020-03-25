@@ -2,6 +2,7 @@ using System;
 using MvvmCross.Commands;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -71,6 +72,12 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void ViewAppeared()
         {
+            if (!this.Principal.IsAuthenticated)
+            {
+                this.viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                return;
+            }
+
             var interviewId = Guid.Parse(this.InterviewId);
             
             if (IsAudioRecordingEnabled == true && !isAuditStarting)
