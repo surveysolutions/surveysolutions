@@ -89,10 +89,18 @@ namespace WB.Services.Export.CsvExport.Exporters
             progress.Report(100);
         }
 
-        public async Task ExportAllAsync(TenantInfo tenantInfo, string basePath, ExportProgress progress,
+        public async Task ExportAllAsync(TenantInfo tenantInfo, 
+            QuestionnaireId questionnaireIdentity, 
+            string basePath,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
-            var allAssignments = await this.dbContext.Assignments.OrderBy(x => x.Id).Select(x => x.Id).ToListAsync(cancellationToken);
+            var allAssignments = await this.dbContext.Assignments
+                .Where(x => x.QuestionnaireId == questionnaireIdentity.Id)
+                .OrderBy(x => x.Id)
+                .Select(x => x.Id)
+                .ToListAsync(cancellationToken);
+            
             await this.ExportAsync(allAssignments, tenantInfo, basePath, progress, cancellationToken);
         }
 
