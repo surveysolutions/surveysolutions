@@ -247,6 +247,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public GroupStatus Status { get; set; }
 
         public Validity Validity { get; set; } = new Validity();
+        
+        public bool HasCustomRosterTitle { get; set; }
     }
 
     public class RosterEntity : InterviewEntity
