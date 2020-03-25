@@ -171,7 +171,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void ViewDisappearing()
         {
-            if (InterviewId != null)
+            if (InterviewId != null && Principal.IsAuthenticated)
             {
                 var interview = interviewRepository.Get(this.InterviewId);
                 if (interview != null)
