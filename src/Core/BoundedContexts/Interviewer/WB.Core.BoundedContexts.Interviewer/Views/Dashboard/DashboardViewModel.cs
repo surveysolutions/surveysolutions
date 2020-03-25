@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
@@ -112,6 +113,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public override void ViewAppeared()
         {
+            if (!this.principal.IsAuthenticated)
+            {
+                this.viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                return;
+            }
+
             base.ViewAppeared();
 
             SubscribeOnMessages();
