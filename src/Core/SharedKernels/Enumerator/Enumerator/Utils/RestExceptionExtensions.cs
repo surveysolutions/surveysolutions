@@ -104,7 +104,13 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             exceptionType = SynchronizationExceptionType.InternalServerError;
                             break;
                         case HttpStatusCode.Forbidden:
-                            exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
+                            if (restException.Message.Contains("relinked"))
+                                exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
+                            else
+                            {
+                                exceptionMessage = EnumeratorUIResources.Unauthorized;
+                                exceptionType = SynchronizationExceptionType.Unauthorized;
+                            }
                             break;
                     }
 
