@@ -376,9 +376,8 @@ namespace WB.Tests.Unit.Designer.Services
             mockOfDbContext.Verify(x => x.AddRange(Moq.It.Is<IEnumerable<CategoriesInstance>>(y => y.Count() == 2)), Times.Once);
         }
 
-        [TestCase(CategoriesFileType.Excel)]
-        [TestCase(CategoriesFileType.Tsv)]
-        public void when_store_excel_file_with_header_and_data_should_be_ok(CategoriesFileType type)
+        [Test]
+        public void when_store_tab_file_with_header_and_data_should_be_ok()
         {
             // arrange
             var questionnaireId = Id.g1;
@@ -392,6 +391,7 @@ namespace WB.Tests.Unit.Designer.Services
             };
             var mockOfDbContext = new Mock<DesignerDbContext>();
             var service = CreateCategoriesService(dbContext: mockOfDbContext.Object);
+            var type = CategoriesFileType.Tsv;
 
             // act
             service.Store(questionnaireId, categoriesId, CreateFileWithHeader(data, type), type);
