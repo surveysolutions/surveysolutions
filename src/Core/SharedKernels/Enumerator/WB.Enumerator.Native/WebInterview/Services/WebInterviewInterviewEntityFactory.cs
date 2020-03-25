@@ -330,11 +330,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (group != null)
             {
                 var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(group);
-                if (questionnaire.HasCustomRosterTitle(group.Identity.Id))
-                {
-                    result.RosterTitle = null;
-                }
 
+                result.HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(group.Identity.Id);
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyGroupStateData(result, group, callerInterview, isReviewMode, questionnaire);
                 this.ApplyValidity(result.Validity, result.Status);
