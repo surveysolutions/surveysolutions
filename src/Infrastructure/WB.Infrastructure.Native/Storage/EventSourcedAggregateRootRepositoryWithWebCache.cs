@@ -23,7 +23,7 @@ namespace WB.Infrastructure.Native.Storage
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
 
-        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, 
+        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore,
             IInMemoryEventStore inMemoryEventStore,
             EventBusSettings eventBusSettings,
             IDomainRepository repository,
@@ -75,7 +75,7 @@ namespace WB.Infrastructure.Native.Storage
                 CommonMetrics.StatefullInterviewCacheMiss.Inc();
                 return null;
             }
-            
+
             bool isDirty = cachedAggregate.HasUncommittedChanges() || eventStore.GetLastEventSequence(aggregateId) != cachedAggregate.Version; 
 
             if (isDirty)
@@ -97,14 +97,14 @@ namespace WB.Infrastructure.Native.Storage
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
         {
             var key = Key(aggregateRoot.EventSourceId);
-            
+
             Cache.Set(key, aggregateRoot, new CacheItemPolicy
             {
                 RemovedCallback = OnUpdateCallback,
                 SlidingExpiration = Expiration
             });
 
-            CommonMetrics.StatefullInterviewCached.Inc();
+            CommonMetrics.StatefullInterviewsCached.Labels("added").Inc();
         }
 
         private void OnUpdateCallback(CacheEntryRemovedArguments arguments)
@@ -113,10 +113,10 @@ namespace WB.Infrastructure.Native.Storage
         }
 
         protected virtual string Key(Guid id) => "aggregateRoot_" + id;
-        
+
         protected virtual void CacheItemRemoved(string key, CacheEntryRemovedReason reason)
         {
-            CommonMetrics.StatefullInterviewEvicted.Labels(reason.ToString()).Inc();
+            CommonMetrics.StatefullInterviewsCached.Labels("removed").Inc();
         }
 
         public void Evict(Guid aggregateId)
@@ -125,10 +125,7 @@ namespace WB.Infrastructure.Native.Storage
             {
                 var key = Key(aggregateId);
 
-                if (Cache.Remove(key) != null)
-                {
-                    CacheItemRemoved(key, CacheEntryRemovedReason.Evicted);
-                }
+                Cache.Remove(key);
             });
         }
 
