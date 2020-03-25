@@ -260,6 +260,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             foreach (var questionIdentity in identities)
             {
+                if (interview.GetQuestion(questionIdentity) == null) continue;
+
                 if (interview.GetTextListQuestion(questionIdentity) == null) continue;
 
                 var listQuestionIds = questionnaire.GetLinkedToSourceEntity(questionIdentity.Id).ToArray();
