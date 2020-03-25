@@ -570,12 +570,22 @@ export default {
             var bounds = new google.maps.LatLngBounds()
             var markers = []
             points.forEach(point => {
+                var icon = {
+                    path: 'M 0 -50C 15 -50 50 -15 50 0C 50 15 15 50 0 50C -15 50 -50 15 -50 0C -50 -15 -15 -50 0 -50 Z',
+                    fillColor: point.colors[0],
+                    fillOpacity: 0.9,
+                    strokeColor: 'white',
+                    strokeWeight: 2,
+                    scale: 0.4,
+                }
+  
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(point.latitude, point.longitude),
                     label: {text: point.index === -1 ? '' : point.index + '', color: 'white'},
                     map: self.map,
                     opacity: 1,
                     zIndex: point.Index === -1 ? 1000 : 1000 + point.index,
+                    icon: icon,
                 })
                 marker.set('id', point.index)
 
@@ -616,7 +626,7 @@ export default {
             })
 
             this.markerCluster = new MarkerClusterer(this.map, markers, {
-                imagePath: './img/google-maps-markers/m',
+                imagePath: '/img/google-maps-markers/m',
                 enableRetinaIcons: true,
                 minimumClusterSize: this.minimumClusterSize,
                 averageCenter: true,
