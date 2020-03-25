@@ -6,6 +6,7 @@ using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -104,6 +105,12 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void ViewAppeared()
         {
+            if (!this.Principal.IsAuthenticated)
+            {
+                this.viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                return;
+            }
+
             Task.Run(async () =>
             {
                 var interviewId = Guid.Parse(InterviewId);
