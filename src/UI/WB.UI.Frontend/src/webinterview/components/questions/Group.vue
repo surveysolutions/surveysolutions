@@ -10,7 +10,7 @@
             <router-link :to="navigateTo"
                 class="btn btn-roster-section"
                 :class="btnStatusClass">
-                <span v-html="$me.title"></span><span v-if="this.$me.isRoster && this.$me.rosterTitle"> - <i>{{rosterTitle}}</i></span>
+                <span v-html="$me.title"></span><span v-if="this.$me.isRoster && !this.$me.hasCustomRosterTitle"> - <i>{{rosterTitle}}</i></span>
             </router-link>
         </div>
     </wb-question>

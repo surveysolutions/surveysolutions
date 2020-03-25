@@ -116,7 +116,7 @@ namespace WB.Infrastructure.Native.Storage
                 SlidingExpiration = Expiration
             });
 
-            CommonMetrics.StatefullInterviewCached.Inc();
+            CommonMetrics.StatefullInterviewsCached.Labels("added").Inc();
         }
 
         private void OnUpdateCallback(CacheEntryRemovedArguments arguments)
@@ -128,7 +128,7 @@ namespace WB.Infrastructure.Native.Storage
 
         protected virtual void CacheItemRemoved(string key, CacheEntryRemovedReason reason)
         {
-            CommonMetrics.StatefullInterviewEvicted.Labels(reason.ToString()).Inc();
+            CommonMetrics.StatefullInterviewsCached.Labels("removed").Inc();
         }
 
         public void Evict(Guid aggregateId)

@@ -53,9 +53,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
                 stataEnvironmentContentService =
                     CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
-            
 
-             stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "",
+                stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "",
                         default(CancellationToken));
 
             Assert.That(stataGeneratedContent.Contains(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName)));
