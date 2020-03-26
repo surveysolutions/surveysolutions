@@ -74,6 +74,7 @@ $installationArgs = @(
     "/p:Configuration=Release";
     "/p:Platform=x86";
     "/p:SurveySolutionsVersion=$version";
+	"/p:HqVersion=$versionOfProduct"
 )
 
 $pathToMsBuild = GetPathToMSBuild
