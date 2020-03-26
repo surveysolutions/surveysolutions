@@ -31,10 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.logger = logger;
         }
 
-        public bool IsNeedProcessing()
-        {
-            return questionnaire.Translations?.Count > 0;
-        }
+        public bool IsNeedProcessing() => true;
 
         public async Task DownloadFromDesignerAsync(IProgress<int> progress)
         {
