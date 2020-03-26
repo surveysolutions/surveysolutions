@@ -396,8 +396,13 @@
                         </tr>
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_DeviceLocation')}}</td>
-                            <td
-                                id="device-address">{{lastKnownLocation}}</td>
+                            <td id="device-address">
+                                <a v-bind:href="goolgeMapUrl"
+                                    v-if="hasLastKnownLocation"
+                                    :title="$t('WebInterviewUI.ShowOnMap')"
+                                    target="_blank">
+                                    {{fullModel.deviceLocationOrLastKnownLocationLat}}, {{fullModel.deviceLocationOrLastKnownLocationLon}}</a>
+                            </td>
                         </tr>
                         <tr>
                             <td>{{$t('Pages.InterviewerProfile_DeviceOrientation')}}</td>
@@ -504,12 +509,10 @@ export default {
             trafficUsage: [],
             maxDailyUsage: 0,
             markerExist: false,
-            lastKnownLocation: '',
         }
     },
     mounted() {
         this.initializeMap()
-        this.setLastKnownLocationAddress()
         this.initializeTrafficUsage()
     },
     methods: {
@@ -739,25 +742,6 @@ export default {
                     })
                 })
         },
-        setLastKnownLocationAddress() {
-            if(this.fullModel.deviceLocationOrLastKnownLocationLat != null && this.fullModel.deviceLocationOrLastKnownLocationLon != null)
-            {
-                var geocoder = new google.maps.Geocoder
-                var self = this
-                geocoder.geocode(
-                    { 'location': {
-                        lat: this.fullModel.deviceLocationOrLastKnownLocationLat, 
-                        lng: this.fullModel.deviceLocationOrLastKnownLocationLon, 
-                    } },
-                    function(results, status) {
-                        if (status === 'OK') {
-                            if (results[0]) {
-                                self.lastKnownLocation = results[0].formatted_address
-                            }
-                        }
-                    })
-            }
-        },
         async initializeMap() {
             if (!this.model.showMap) return
 
@@ -811,6 +795,12 @@ export default {
         },
         showMap() {
             return this.$config.model.showMap
+        },
+        hasLastKnownLocation(){
+            return this.fullModel.deviceLocationOrLastKnownLocationLat != null && this.fullModel.deviceLocationOrLastKnownLocationLon != null
+        },
+        goolgeMapUrl(){
+            return `${this.$config.googleMapsBaseUrl}/maps?q=${this.fullModel.deviceLocationOrLastKnownLocationLat},${this.fullModel.deviceLocationOrLastKnownLocationLon}`
         },
     },
     components: {
