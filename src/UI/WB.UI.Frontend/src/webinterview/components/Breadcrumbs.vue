@@ -6,7 +6,7 @@
             <li v-for="breadcrumb in entities"
                 :key="breadcrumb.target">
                 <a href="javascript:void(0)"
-                    @click="navigate(breadcrumb)">{{ breadcrumb.title}} <span v-if="breadcrumb.isRoster"> - <i>{{getRosterTitle(breadcrumb.rosterTitle)}}</i></span> </a>
+                    @click="navigate(breadcrumb)">{{ breadcrumb.title}} <span v-if="breadcrumb.isRoster && !breadcrumb.hasCustomRosterTitle"> - <i>{{getRosterTitle(breadcrumb.rosterTitle)}}</i></span> </a>
             </li>
         </ol>
         <h3 v-html="title"></h3>
@@ -46,7 +46,7 @@ export default {
         title(){
             var title = this.info.title
 
-            if(this.info.isRoster)
+            if(this.info.isRoster && !this.info.hasCustomRosterTitle)
                 title += '<span> - <i>' + this.getRosterTitle(this.info.rosterTitle) + '</i></span>'
 
             return title
