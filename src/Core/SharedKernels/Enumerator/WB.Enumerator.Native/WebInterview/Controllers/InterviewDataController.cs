@@ -392,15 +392,17 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (currentTreeGroup == null)
             {
                 this.webInterviewNotificationService.ReloadInterview(interviewId);
+                return new BreadcrumbInfo();
             }
 
             var info = new BreadcrumbInfo
             {
-                Title = currentTreeGroup?.Title.Text,
+                Title = currentTreeGroup.Title.Text,
                 RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
                 Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode(), statefulInterview, questionnaire),
-                IsRoster = currentTreeGroupAsRoster != null
+                IsRoster = currentTreeGroupAsRoster != null,
+                HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(currentTreeGroup.Identity.Id)
             };
 
             this.interviewEntityFactory.ApplyValidity(info.Validity, info.Status);
