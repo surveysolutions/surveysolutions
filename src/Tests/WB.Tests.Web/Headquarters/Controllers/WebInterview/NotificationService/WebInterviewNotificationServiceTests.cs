@@ -142,5 +142,24 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
             localHubMock.Verify(g => g.RefreshSection(localInterview.Id), Times.Once);
             localHubMock.Verify(g => g.RefreshSectionState(localInterview.Id), Times.Never);
         }
+
+        [Test]
+        public void should_not_throw_when_RefreshLinkedToListQuestions_to_wrong_question_id()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.SingleQuestion(Id.Identity1.Id),
+                Create.Entity.SingleQuestion(Id.Identity2.Id, cascadeFromQuestionId: Id.Identity1.Id, showAsList: true)
+            });
+
+            var localInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, shouldBeInitialized: true);
+            var localHubMock = new Mock<IWebInterviewInvoker>();
+
+            var service = Web.Create.Service.WebInterviewNotificationService(Create.Storage.InterviewRepository(localInterview),
+                Create.Storage.QuestionnaireStorage(questionnaire), localHubMock.Object);
+
+            // act
+            Assert.DoesNotThrow(() => service.RefreshLinkedToListQuestions(localInterview.Id, new[] { Id.Identity3 }));
+        }
     }
 }
