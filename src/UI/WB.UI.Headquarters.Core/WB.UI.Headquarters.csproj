@@ -58,8 +58,6 @@
     <PackageReference Include="UAParser" Version="3.1.43" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.3.1" />
     <PackageReference Include="SkiaSharp" Version="1.68.1.1" />
-    <PackageReference Include="SkiaSharp.NativeAssets.NanoServer" Version="1.68.1.1" />
-
   </ItemGroup>
 
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -67,7 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
+    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">
       <DependentUpon>appsettings.ini</DependentUpon>
     </Content>
