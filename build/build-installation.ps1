@@ -56,7 +56,7 @@ Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
 $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
-$version = $newVersion = "{0}.{1}.{2}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart, $BuildNumber
+$version = $newVersion = "{0}{1}.{2}.{3}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart, $versionOfProduct.FileBuildPart, $BuildNumber
 #    [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 
 # Cleaning up slack configuration section from config
