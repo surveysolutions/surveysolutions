@@ -14,6 +14,7 @@ namespace WB.UI.Headquarters.Services.Impl
             this.options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public string GetAbsolutePath(string relativePath) => relativePath.Replace("~", options.Value.BaseUrl);
+        public string GetAbsolutePath(string relativePath) => relativePath.Replace("~", this.GetHostUrl());
+        public string GetHostUrl() => this.options.Value.BaseUrl;
     }
 }
