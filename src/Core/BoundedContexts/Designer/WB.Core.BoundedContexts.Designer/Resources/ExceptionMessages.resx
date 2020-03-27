@@ -276,6 +276,9 @@
   <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
     <value>Old attachment id is empty and file is absent for attachment {0} in questionnaire {1}</value>
   </data>
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+    <value>Found errors in provided file</value>
+  </data>
   <data name="TranlationExcelFileHasErrors" xml:space="preserve">
     <value>Found errors in excel file</value>
   </data>
