@@ -8,6 +8,8 @@ using System.Text;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using AutoMapper;
+using HotChocolate;
+using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -241,6 +243,9 @@ namespace WB.UI.Headquarters
             services.AddTransient<ObserverNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
 
+            services.AddDataLoaderRegistry()
+                .AddGraphQL(x => SchemaBuilder.New().AddQueryType<InterviewsQueryType>().Create());
+            
             FileStorageModule.Setup(services, Configuration);
 
             AddCompression(services);
@@ -367,6 +372,8 @@ namespace WB.UI.Headquarters
 
             app.UseHqSwaggerUI();
 
+            app.UseGraphQLHttpPost(new HttpPostMiddlewareOptions {Path = "/graphql"})
+                .UseGraphQLHttpGetSchema(new HttpGetSchemaMiddlewareOptions {Path = "/graphql/schema"});
             app.UseRequestLocalization(opt =>
             {
                 opt.DefaultRequestCulture = new RequestCulture("en-US");
