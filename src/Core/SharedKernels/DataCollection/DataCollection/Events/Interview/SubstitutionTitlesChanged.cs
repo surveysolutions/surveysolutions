@@ -20,9 +20,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             Identity[] groups, DateTimeOffset originDate)
             : base(originDate)
         {
-            this.Questions = questions?.ToArray() ?? new Identity[] { };
-            this.StaticTexts = staticTexts?.ToArray() ?? new Identity[]{};
-            this.Groups = groups?.ToArray() ?? new Identity[] {};
+            this.Questions   = questions?.ToArray()   ?? new Identity[] {};
+            this.StaticTexts = staticTexts?.ToArray() ?? new Identity[] {};
+            this.Groups      = groups?.ToArray()      ?? new Identity[] {};
         }
     }
 }

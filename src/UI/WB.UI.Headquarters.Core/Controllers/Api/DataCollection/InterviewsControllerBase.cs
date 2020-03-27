@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -11,10 +12,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -122,7 +125,30 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected IActionResult DetailsV3(Guid id)
         {
             var allEvents = eventStore.Read(id, 0).ToList();
+
+            var isNeedUpdateApp = IsNeedUpdateApp(allEvents);
+
+            if (isNeedUpdateApp)
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
+
             return new JsonResult(allEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
+        }
+
+        private bool IsNeedUpdateApp(List<CommittedEvent> allEvents)
+        {
+            var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
+            if (clientApkBuildNumber > 27398)
+                return false;
+
+            return allEvents.Any(e =>
+            {
+                if (e.Payload is SubstitutionTitlesChanged titlesChanged)
+                {
+                    return !titlesChanged.Questions.Any() && !titlesChanged.Groups.Any() && !titlesChanged.StaticTexts.Any();
+                }
+
+                return false;
+            });
         }
 
         protected IActionResult PostV3(InterviewPackageApiView package)
