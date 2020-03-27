@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     ErrorAddress = $"{headers.IdIndex}{x.FirstOrDefault()?.RowId}"
                 }).ToList();
 
-                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+                throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors) {FoundErrors = errors};
             }
         }
 
@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     ErrorAddress = $"{headers.IdIndex}{x.FirstOrDefault()?.RowId}"
                 }).ToList();
 
-                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+                throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors) {FoundErrors = errors};
             }
         }
 
@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     ErrorAddress = $"{headers.TextIndex}{x.RowId}"
                 }).ToList();
 
-                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+                throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors) {FoundErrors = errors};
             }
         }
     }
