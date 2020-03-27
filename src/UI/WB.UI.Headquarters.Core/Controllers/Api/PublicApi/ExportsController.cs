@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
@@ -30,13 +31,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IExportSettings exportSettings;
         private readonly ISystemLog auditLog;
         private readonly IExportFileNameService exportFileNameService;
+        private readonly IVirtualPathService env;
 
         public ExportsController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDataExportStatusReader dataExportStatusReader,
             IExportServiceApi exportServiceApi,
             IExportSettings exportSettings,
             ISystemLog auditLog,
-            IExportFileNameService exportFileNameService)
+            IExportFileNameService exportFileNameService,
+            IVirtualPathService env)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.dataExportStatusReader = dataExportStatusReader;
@@ -44,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.exportSettings = exportSettings;
             this.auditLog = auditLog;
             this.exportFileNameService = exportFileNameService;
+            this.env = env;
         }
 
         /// <summary>
@@ -66,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireBrowseItem == null)
-                return StatusCode(StatusCodes.Status400BadRequest, @"Questionnaire not found");
+                return StatusCode(StatusCodes.Status404NotFound, @"Questionnaire not found");
 
             var password = this.exportSettings.EncryptionEnforced()
                 ? this.exportSettings.GetPassword()
@@ -195,11 +199,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 From = exportProcess.FromDate,
                 To = exportProcess.ToDate,
                 StartDate = exportProcess.BeginDate,
+                CompleteDate = exportProcess.EndDate,
                 ExportStatus = (ExportStatus) exportProcess.JobStatus,
                 Progress = exportProcess.Progress,
                 ExportType = (ExportType) exportProcess.Format,
                 ETA = exportProcess.TimeEstimation,
                 Error = exportProcess.Error?.Message,
+                HasExportFile = exportProcess.HasFile,
                 InterviewStatus = exportProcess.InterviewStatus == null
                     ? ExportInterviewType.All
                     : (ExportInterviewType) exportProcess.InterviewStatus
@@ -208,9 +214,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (exportProcess.IsRunning || exportProcess.HasFile)
                 process.Links = new ExportJobLinks();
             if (exportProcess.IsRunning)
-                process.Links.Cancel = Url.Action("CancelExports", new {id = exportProcess.Id});
+                process.Links.Cancel = $"{this.env.GetHostUrl()}{Url.Action("CancelExports", new {id = exportProcess.Id})}";
             if (exportProcess.HasFile)
-                process.Links.Download = Url.Action("GetExportFile", new {id = exportProcess.Id});
+                process.Links.Download = $"{this.env.GetHostUrl()}{Url.Action("GetExportFile", new {id = exportProcess.Id})}";
 
             return process;
         }
@@ -231,10 +237,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             public long JobId { get; set; }
             public ExportStatus ExportStatus { get; set; }
             public DateTime? StartDate { get; set; }
+            public DateTime? CompleteDate { get; set; }
             public int Progress { get; set; }
             public TimeSpan? ETA { get; set; }
             public string Error { get; set; }
             public ExportJobLinks Links { get; set; }
+            public bool HasExportFile { get; set; }
         }
 
         public class ExportJobLinks
