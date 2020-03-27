@@ -22,6 +22,8 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="11.0.0-preview.117" />
+    <PackageReference Include="HotChocolate.Types.Filters" Version="11.0.0-preview.117" />
     <PackageReference Include="Humanizer.Core.ar" Version="2.7.9" />
     <PackageReference Include="Humanizer.Core.es" Version="2.7.9" />
     <PackageReference Include="Humanizer.Core.fr" Version="2.7.9" />
