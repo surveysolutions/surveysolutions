@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -31,10 +32,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
-            IAudioAuditFileStorage audioAuditFileStorage) :
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IWebHostEnvironment webHostEnvironment) :
             base(imageFileStorage,
                 audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder,
-                synchronizationSerializer, eventStore, audioAuditFileStorage)
+                synchronizationSerializer, eventStore, audioAuditFileStorage, webHostEnvironment)
         {
         }
 

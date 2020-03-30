@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -29,7 +30,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
-            IHeadquartersEventStore eventStore) :
+            IHeadquartersEventStore eventStore,
+            IWebHostEnvironment webHostEnvironment) :
             base(imageFileStorage,
                 audioFileStorage,
                 authorizedUser,
@@ -39,7 +41,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 metaBuilder,
                 synchronizationSerializer,
                 eventStore,
-                audioAuditFileStorage)
+                audioAuditFileStorage,
+                webHostEnvironment)
         {
         }
 

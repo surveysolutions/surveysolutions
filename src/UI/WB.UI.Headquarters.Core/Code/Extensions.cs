@@ -10,6 +10,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.Security.Application;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using UAParser;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -32,7 +33,7 @@ namespace WB.UI.Headquarters.Code
 
         private static Regex buildVersionRegex = new Regex("build (\\d+)", RegexOptions.Compiled);
 
-        public static int? GetBuildNumberFromUserAgent(this HttpRequest request)
+        public static int? GetBuildNumberFromUserAgent(this HttpRequest request) 
         {
             if (request?.Headers?.ContainsKey(HeaderNames.UserAgent) != true) return null;
 
@@ -123,6 +124,24 @@ namespace WB.UI.Headquarters.Code
                 originalSource.AsSpan().CopyTo(resultSpan);
                 resultSpan[0] = Char.ToUpper(resultSpan[0]);
             });
+        }
+
+        public static Version GetProductVersionFromUserAgent(this HttpRequest request, string productName)
+        {
+            string userAgentString = request.Headers["User-Agent"].ToString();
+ 
+            var parser = Parser.GetDefault();
+            var userAgent = parser.ParseUserAgent(userAgentString);
+
+            if (userAgent.Family?.StartsWith(productName, StringComparison.OrdinalIgnoreCase) ?? false)
+            {
+                if (int.TryParse(userAgent.Major, out int major)
+                   && int.TryParse(userAgent.Minor, out int minor)
+                   && int.TryParse(userAgent.Patch, out int patch))
+                return new Version(major, minor, patch);
+            }
+
+            return null;
         }
     }
 }
