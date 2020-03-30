@@ -88,6 +88,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.authorizedUser.Id));
             return StatusCode(StatusCodes.Status204NoContent);
         }
+
+        protected abstract string ProductName { get; }
         
         public virtual IActionResult PostImage([FromBody] PostFileRequest request)
         {
@@ -142,6 +144,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private bool IsNeedUpdateApp(List<CommittedEvent> allEvents)
         {
             if (webHostEnvironment.IsDevelopment())
+                return false;
+
+            var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
+            if (productVersion != null && productVersion >= new Version(20, 4))
                 return false;
 
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
