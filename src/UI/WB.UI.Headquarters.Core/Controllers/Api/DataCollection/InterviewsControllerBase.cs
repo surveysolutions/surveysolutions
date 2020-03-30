@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -26,6 +28,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
@@ -44,7 +47,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
-            IAudioAuditFileStorage audioAuditFileStorage)
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IWebHostEnvironment webHostEnvironment)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
@@ -56,6 +60,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStore = eventStore;
             this.audioAuditFileStorage = audioAuditFileStorage;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         public virtual ActionResult<List<InterviewApiView>> Get()
@@ -136,6 +141,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         private bool IsNeedUpdateApp(List<CommittedEvent> allEvents)
         {
+            if (webHostEnvironment.IsDevelopment())
+                return false;
+
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
             if (clientApkBuildNumber > 27398)
                 return false;
