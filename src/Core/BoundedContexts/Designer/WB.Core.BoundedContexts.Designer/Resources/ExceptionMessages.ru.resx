@@ -377,4 +377,10 @@
   <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
       <value>Разрешены только файлы разделенные табуляцией (*.tab, *.txt, *.tsv) и эксель файлы (*.xslx, *.xls, *.ods)</value>
   </data>
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+      <value>Найдены ошибки в файле
+</value>
+      <comment>Найдены ошибки в файле
+      </comment>
+  </data>
 </root>
