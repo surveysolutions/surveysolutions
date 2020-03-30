@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Hosting;
+using Moq;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -33,7 +34,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 metaBuilder: metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStore: Mock.Of<IHeadquartersEventStore>(),
-                audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>());
+                audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
+                webHostEnvironment: Mock.Of<IWebHostEnvironment>());
         }
     }
 }
