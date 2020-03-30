@@ -130,11 +130,11 @@ namespace WB.UI.Headquarters.Code
         {
             string userAgentString = request.Headers["User-Agent"].ToString();
  
-            var parser = Parser.GetDefault();
-            var userAgent = parser.ParseUserAgent(userAgentString);
-
-            if (userAgent.Family?.StartsWith(productName, StringComparison.OrdinalIgnoreCase) ?? false)
+            if (userAgentString?.StartsWith(productName, StringComparison.OrdinalIgnoreCase) ?? false)
             {
+                var parser = Parser.GetDefault();
+                var userAgent = parser.ParseUserAgent(userAgentString);
+
                 if (int.TryParse(userAgent.Major, out int major)
                    && int.TryParse(userAgent.Minor, out int minor)
                    && int.TryParse(userAgent.Patch, out int patch))
