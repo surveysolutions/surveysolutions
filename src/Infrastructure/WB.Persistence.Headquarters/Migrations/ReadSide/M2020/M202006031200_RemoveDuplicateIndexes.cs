@@ -16,6 +16,5 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
         public override void Down()
         {
         }
-
     }
 }
