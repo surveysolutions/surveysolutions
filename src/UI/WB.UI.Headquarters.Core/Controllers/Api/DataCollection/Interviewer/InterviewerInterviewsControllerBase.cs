@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         {
         }
 
-        protected override string ProductName => "Interviewer";
+        protected override string ProductName => "org.worldbank.solutions.interviewer";
 
         protected override IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId)
         {
