@@ -3,6 +3,7 @@ using HotChocolate;
 using HotChocolate.Types;
 using HotChocolate.Types.Filters;
 using HotChocolate.Types.Relay;
+using HotChocolate.Types.Sorting;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -83,6 +84,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     {
         public IQueryable<InterviewSummary> GetInterviews([Service] IUnitOfWork unitOfWork)
         {
+            unitOfWork.DiscardChanges();
             return unitOfWork.Session.Query<InterviewSummary>();
         }
     }
@@ -95,8 +97,21 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             descriptor.Field(x => x.GetInterviews(default))
                 .Type<NonNullType<ListType<InterviewSummaryObject>>>()
+                .UsePaging<InterviewSummaryObject>()
                 .UseFiltering<InterviewsQueryFilerType>()
-                .UsePaging<StringType>();
+                .UseSorting<InterviewsQuerySortType>();
+        }
+    }
+
+    public class InterviewsQuerySortType : SortInputType<InterviewSummary>
+    {
+        protected override void Configure(ISortInputTypeDescriptor<InterviewSummary> descriptor)
+        {
+            descriptor.BindFieldsExplicitly();
+            descriptor.Sortable(x => x.Key);
+            descriptor.Sortable(x => x.CreatedDate);
+            descriptor.Sortable(x => x.UpdateDate);
+            descriptor.Sortable(x => x.SummaryId).Name("id");
         }
     }
 
