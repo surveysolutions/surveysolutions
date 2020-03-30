@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor
         {
         }
 
-        protected override string ProductName => "Supervisor";
+        protected override string ProductName => "org.worldbank.solutions.supervisor";
 
 
         protected override IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid supervisorId)
