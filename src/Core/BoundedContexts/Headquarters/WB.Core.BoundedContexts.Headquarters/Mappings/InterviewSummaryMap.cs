@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     collection.Key(key => key.Column("interview_id"));
                     collection.OrderBy(x => x.Position);
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                    //collection.Lazy(CollectionLazy.NoLazy);
+                    
                     collection.Inverse(true);
                 },
                 rel => rel.OneToMany());
@@ -153,18 +153,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         public QuestionAnswerMap()
         {
             Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
-            this.Table("AnswersToFeaturedQuestions");
 
-            Property(x => x.Questionid, clm => clm.Column("QuestionId"));
-            Property(x => x.Title, col => col.Column("AnswerTitle"));
+            Table("AnswersToFeaturedQuestions");
+
             Property(x => x.Position, col => col.Column("Position"));
-            Property(x => x.Answer, col =>
+            Property(x => x.Answer, col => col.Column("AnswerValue"));
+            Property(x => x.AnswerCode, col => col.Column("answer_code"));
+            Property(x => x.Title, col =>
             {
-                col.Column("AnswerValue");
+                col.Lazy(true);
+                col.Formula("(select qe.question_text from readside.questionnaire_entities qe where qe.id = question_id)");
+            });
+            Property(x => x.Variable, col =>
+            {
+                col.Lazy(true);
+                col.Formula("(select qe.stata_export_caption from readside.questionnaire_entities qe where qe.id = question_id)");
+            });
+
+            ManyToOne(x => x.Question, mtm =>
+            {
+                mtm.Lazy(LazyRelation.Proxy);
+                mtm.Column("question_id");                
             });
 
             ManyToOne(x => x.InterviewSummary, mtm => mtm.Column("interview_id"));
         }
     }
-
 }
