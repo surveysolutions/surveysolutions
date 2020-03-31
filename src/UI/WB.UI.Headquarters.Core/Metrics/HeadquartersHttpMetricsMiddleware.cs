@@ -45,6 +45,9 @@ namespace WB.UI.Headquarters.Metrics
             // web interview requests for interview details
             else if (path.StartsWithSegments("/api/webinterview")) subsystem[0] = "webinterview";
 
+            // export service requests
+            else if (path.StartsWithSegments("/api/export")) subsystem[0] = "export";
+
             // all other requests
             else subsystem[0] = "other";
 
