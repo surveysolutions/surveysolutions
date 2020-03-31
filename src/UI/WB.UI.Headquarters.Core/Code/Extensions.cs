@@ -136,9 +136,13 @@ namespace WB.UI.Headquarters.Code
                 var userAgent = parser.ParseUserAgent(userAgentString);
 
                 if (int.TryParse(userAgent.Major, out int major)
-                   && int.TryParse(userAgent.Minor, out int minor)
-                   && int.TryParse(userAgent.Patch, out int patch))
-                return new Version(major, minor, patch);
+                    && int.TryParse(userAgent.Minor, out int minor))
+                {
+                    if (int.TryParse(userAgent.Patch, out int patch))
+                        return new Version(major, minor, patch);
+                    else 
+                        return new Version(major, minor);
+                }
             }
 
             return null;

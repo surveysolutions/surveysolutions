@@ -158,7 +158,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             {
                 if (e.Payload is SubstitutionTitlesChanged titlesChanged)
                 {
-                    return !titlesChanged.Questions.Any() && !titlesChanged.Groups.Any() && !titlesChanged.StaticTexts.Any();
+                    return titlesChanged.Questions.Length == 0 && titlesChanged.Groups.Length == 0 && titlesChanged.StaticTexts.Length == 0;
                 }
 
                 return false;
