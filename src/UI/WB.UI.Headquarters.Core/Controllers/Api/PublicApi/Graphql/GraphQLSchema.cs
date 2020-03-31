@@ -1,5 +1,4 @@
 using System.Linq;
-using HotChocolate;
 using HotChocolate.Types;
 using HotChocolate.Types.Filters;
 using HotChocolate.Types.Relay;
@@ -9,7 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
-namespace WB.UI.Headquarters.Controllers.Api.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
     public class InterviewSummaryObject : ObjectType<InterviewSummary>
     {
@@ -77,15 +76,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             
             descriptor.Field(x => x.Variable)
                 .Type<NonNullType<StringType>>();
-        }
-    }
-    
-    public class InterviewsQuery
-    {
-        public IQueryable<InterviewSummary> GetInterviews([Service] IUnitOfWork unitOfWork)
-        {
-            unitOfWork.DiscardChanges();
-            return unitOfWork.Session.Query<InterviewSummary>();
         }
     }
 

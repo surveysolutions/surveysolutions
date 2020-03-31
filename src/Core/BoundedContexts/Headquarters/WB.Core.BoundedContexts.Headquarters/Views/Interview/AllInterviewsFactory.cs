@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -135,6 +136,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 }).ToList()
             };
             return result;
+        }
+
+        public InterviewSummary Load(Guid interviewId)
+        {
+            return this.interviewSummaryReader.GetById(interviewId);
         }
 
         private static IQueryable<InterviewSummary> ApplyFilter(InterviewsWithoutPrefilledInputModel input, IQueryable<InterviewSummary> _)
