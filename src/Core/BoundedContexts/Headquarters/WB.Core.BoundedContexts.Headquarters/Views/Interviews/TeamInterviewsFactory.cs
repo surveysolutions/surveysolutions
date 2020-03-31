@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                         FeaturedQuestions = 
                             x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
                             {
-                                Id = a.Questionid,
+                                Id = a.Id,
                                 Answer = a.Answer,
                                 Question = a.Title
                             }).ToList(),
