@@ -12,6 +12,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         {
             services.AddDataLoaderRegistry()
                 .AddGraphQL(x => SchemaBuilder.New()
+                    .AddAuthorizeDirectiveType()
                     .AddType(new PaginationAmountType(200))
                     .AddQueryType<InterviewsQueryType>().Create());
         }
