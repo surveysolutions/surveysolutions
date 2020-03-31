@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
-using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -25,22 +24,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
-        private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
+        private readonly IAllInterviewsFactory interviewSummaryViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IPauseResumeQueue pauseResumeQueue;
 
         public InterviewController(IAuthorizedUser authorizedUser,
-            IInterviewSummaryViewFactory interviewSummaryViewFactory,
+            IAllInterviewsFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory,
-            IStatefulInterviewRepository statefulInterviewRepository,
-            IPauseResumeQueue pauseResumeQueue, IQuestionnaireStorage questionnaireRepository)
+            IStatefulInterviewRepository statefulInterviewRepository, 
+            IQuestionnaireStorage questionnaireRepository)
         {
             this.authorizedUser = authorizedUser;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.pauseResumeQueue = pauseResumeQueue;
             this.questionnaireRepository = questionnaireRepository;
         }
 

@@ -204,7 +204,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
-            registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
             registry.Bind<IChartStatisticsViewFactory, ChartStatisticsViewFactory>();
             registry.Bind<IQuestionnaireBrowseViewFactory, QuestionnaireBrowseViewFactory>();
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
