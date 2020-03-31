@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">Questionnaire id is malformed</response>
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
-        public async Task<ActionResult<ExportProcess>> PostExports(CreateExportProcess request)
+        public async Task<ActionResult<ExportProcess>> PostExports([FromBody]CreateExportProcess request)
         {
             if (!QuestionnaireIdentity.TryParse(request.QuestionnaireId, out var questionnaireIdentity))
                 return StatusCode(StatusCodes.Status400BadRequest, @"Invalid questionnaire identity");
