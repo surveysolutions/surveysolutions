@@ -8,8 +8,6 @@ using System.Text;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using AutoMapper;
-using HotChocolate;
-using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -55,6 +53,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.HealthChecks;
 using WB.UI.Headquarters.Metrics;
@@ -243,8 +242,7 @@ namespace WB.UI.Headquarters
             services.AddTransient<ObserverNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
 
-            services.AddDataLoaderRegistry()
-                .AddGraphQL(x => SchemaBuilder.New().AddQueryType<InterviewsQueryType>().Create());
+            services.AddGraphQL();
             
             FileStorageModule.Setup(services, Configuration);
 
@@ -371,9 +369,8 @@ namespace WB.UI.Headquarters
             app.UseRequestDecompression();
 
             app.UseHqSwaggerUI();
-
-            app.UseGraphQLHttpPost(new HttpPostMiddlewareOptions {Path = "/graphql"})
-                .UseGraphQLHttpGetSchema(new HttpGetSchemaMiddlewareOptions {Path = "/graphql/schema"});
+            app.UseGraphQL();
+            
             app.UseRequestLocalization(opt =>
             {
                 opt.DefaultRequestCulture = new RequestCulture("en-US");

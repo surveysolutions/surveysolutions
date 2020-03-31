@@ -211,9 +211,9 @@ namespace WB.Tests.Abc.TestFactories
             => new FileSystemIOAccessor();
 
         public InterviewAnswersCommandValidator InterviewAnswersCommandValidator(
-            IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
+            IAllInterviewsFactory interviewSummaryViewFactory = null)
             => new InterviewAnswersCommandValidator(
-                interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
+                interviewSummaryViewFactory ?? Mock.Of<IAllInterviewsFactory>());
 
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
             IPlainStorage<InterviewView> interviewViewRepository = null,

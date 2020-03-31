@@ -28,20 +28,17 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly ITeamInterviewsFactory teamInterviewViewFactory;
         private readonly IChangeStatusFactory changeStatusFactory;
-        private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
         public InterviewApiController(
             IAuthorizedUser authorizedUser, 
             IAllInterviewsFactory allInterviewsViewFactory,
             ITeamInterviewsFactory teamInterviewViewFactory,
-            IChangeStatusFactory changeStatusFactory,
-            IInterviewSummaryViewFactory interviewSummaryViewFactory)
+            IChangeStatusFactory changeStatusFactory)
         {
             this.authorizedUser = authorizedUser;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.teamInterviewViewFactory = teamInterviewViewFactory;
             this.changeStatusFactory = changeStatusFactory;
-            this.interviewSummaryViewFactory = interviewSummaryViewFactory;
         }
 
         [HttpGet]
@@ -177,7 +174,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         private InterviewSummaryForMapPointView GetInterviewSummaryForMapPointView(Guid interviewId)
         {
-            var interviewSummaryView = this.interviewSummaryViewFactory.Load(interviewId);
+            var interviewSummaryView = this.allInterviewsViewFactory.Load(interviewId);
             if (interviewSummaryView == null)
                 return null;
 
