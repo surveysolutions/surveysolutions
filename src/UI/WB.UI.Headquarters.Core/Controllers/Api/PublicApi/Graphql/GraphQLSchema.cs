@@ -85,7 +85,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         {
             base.Configure(descriptor);
 
-            descriptor.Field(x => x.GetInterviews(default))
+            descriptor.Field(x => x.GetInterviews(default, default))
+                .Authorize()
                 .Type<NonNullType<ListType<InterviewSummaryObject>>>()
                 .UsePaging<InterviewSummaryObject>()
                 .UseFiltering<InterviewsQueryFilerType>()
