@@ -27,7 +27,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
             ExecuteForQuestionnaire((db, questionnaireId, questions) =>
             {
-                var entityMap = db.Query<(Guid, int)>($@"select entityid, id from readside._temp_questionnaire_entities_answers 
+                var entityMap = db.Query<(Guid, int)>($@"select entityid, id from readside.questionnaire_entities 
                                 WHERE questionnaireidentity = @questionnaireId", new { questionnaireId })
                     .ToDictionary(k => k.Item1, k => k.Item2);
 
