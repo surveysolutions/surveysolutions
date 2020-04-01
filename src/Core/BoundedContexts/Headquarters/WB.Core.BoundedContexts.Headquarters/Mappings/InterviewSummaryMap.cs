@@ -159,17 +159,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Position, col => col.Column("Position"));
             Property(x => x.Answer, col => col.Column("AnswerValue"));
             Property(x => x.AnswerCode, col => col.Column("answer_code"));
-            Property(x => x.Title, col =>
-            {
-                col.Lazy(true);
-                col.Formula("(select qe.question_text from readside.questionnaire_entities qe where qe.id = question_id)");
-            });
-            Property(x => x.Variable, col =>
-            {
-                col.Lazy(true);
-                col.Formula("(select qe.stata_export_caption from readside.questionnaire_entities qe where qe.id = question_id)");
-            });
-
+            
             ManyToOne(x => x.Question, mtm =>
             {
                 mtm.Lazy(LazyRelation.Proxy);

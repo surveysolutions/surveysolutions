@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         {
                             Id = a.Id,
                             Answer = a.Answer,
-                            Question = a.Title
+                            Question = a.Question.QuestionText
                         }).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDateUtc = x.UpdateDate,
