@@ -943,7 +943,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mark this variable to be excluded from the exported data..
+        ///   Looks up a localized string similar to Mark this variable to exclude it from export.
         /// </summary>
         public static string HelpDoNotExport {
             get {
