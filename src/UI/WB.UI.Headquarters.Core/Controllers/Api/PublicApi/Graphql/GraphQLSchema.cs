@@ -1,10 +1,15 @@
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using HotChocolate.Resolvers;
 using HotChocolate.Types;
 using HotChocolate.Types.Filters;
 using HotChocolate.Types.Relay;
 using HotChocolate.Types.Sorting;
 using Main.Core.Entities.SubEntities;
+using SixLabors.ImageSharp.ColorSpaces;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -73,20 +78,43 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             
             descriptor.Field(x => x.Answer)
                 .Type<StringType>();
-            
-            descriptor.Field(x => x.Variable)
+
+            descriptor.Field(x => x.AnswerCode)
+                .Type<IntType>()
+                .Name("answerValue")
+                .Description("Answer value for categorical questions");
+
+            descriptor.Field(x => x.Question)
+                .Type<NonNullType<QuestionTypeObject>>();
+        }
+    }
+
+    public class QuestionTypeObject : ObjectType<QuestionnaireCompositeItem>
+    {
+        protected override void Configure(IObjectTypeDescriptor<QuestionnaireCompositeItem> descriptor)
+        {
+            descriptor.BindFieldsExplicitly();
+            descriptor.Name("Question");
+
+            descriptor.Field(x => x.QuestionText)
                 .Type<NonNullType<StringType>>();
+            
+            descriptor.Field(x => x.StatExportCaption)
+                .Type<NonNullType<StringType>>()
+                .Name("variable");
         }
     }
 
     public class InterviewsQueryType : ObjectType<InterviewsQuery>
     {
+        [UseSelection]
         protected override void Configure(IObjectTypeDescriptor<InterviewsQuery> descriptor)
         {
             base.Configure(descriptor);
 
             descriptor.Field(x => x.GetInterviews(default, default))
                 .Authorize()
+                .UseSelection()
                 .Type<NonNullType<ListType<InterviewSummaryObject>>>()
                 .UsePaging<InterviewSummaryObject>()
                 .UseFiltering<InterviewsQueryFilerType>()
@@ -111,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         protected override void Configure(IFilterInputTypeDescriptor<InterviewSummary> descriptor)
         {
             descriptor.BindFieldsExplicitly();
-
+            
             descriptor.Filter(x => x.Status)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowNotEquals().And().AllowIn();
@@ -161,9 +189,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                     
                     y.Filter(f => f.Answer)
                         .BindFiltersImplicitly();
-                    y.Filter(x => x.Variable)
-                        .BindFiltersExplicitly()
-                        .AllowEquals();
+
+                    y.Object(x => x.Question)
+                        .AllowObject(o =>
+                        {
+                            o.BindFieldsExplicitly();
+                            o.Filter(z => z.QuestionText).AllowEquals();
+                            o.Filter(z => z.StatExportCaption).AllowEquals().Name("variable");
+                        });
                 }).Name("answers_some");
         }
     }
