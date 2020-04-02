@@ -1,13 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using HotChocolate.Resolvers;
 using HotChocolate.Types;
 using HotChocolate.Types.Filters;
 using HotChocolate.Types.Relay;
 using HotChocolate.Types.Sorting;
 using Main.Core.Entities.SubEntities;
-using SixLabors.ImageSharp.ColorSpaces;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -20,6 +16,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         protected override void Configure(IObjectTypeDescriptor<InterviewSummary> descriptor)
         {
             descriptor.BindFieldsExplicitly();
+            descriptor.Name("Interview");
             
             descriptor.Field(x => x.SummaryId)
                 .Name("id")
@@ -126,6 +123,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         protected override void Configure(ISortInputTypeDescriptor<InterviewSummary> descriptor)
         {
             descriptor.BindFieldsExplicitly();
+            descriptor.Name("InterviewSort");
             descriptor.Sortable(x => x.Key);
             descriptor.Sortable(x => x.CreatedDate);
             descriptor.Sortable(x => x.UpdateDate);
@@ -144,7 +142,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         protected override void Configure(IFilterInputTypeDescriptor<InterviewSummary> descriptor)
         {
             descriptor.BindFieldsExplicitly();
-            
+            descriptor.Name("InterviewFilter");
             descriptor.Filter(x => x.Status)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowNotEquals().And().AllowIn();
@@ -199,8 +197,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                         .AllowObject(o =>
                         {
                             o.BindFieldsExplicitly();
-                            o.Filter(z => z.QuestionText).AllowEquals();
-                            o.Filter(z => z.StatExportCaption).AllowEquals().Name("variable");
+                            o.Name("QuestionFilter");
+                            o.Filter(z => z.QuestionText).BindFiltersExplicitly().AllowEquals();
+                            o.Filter(z => z.StatExportCaption).BindFiltersExplicitly().AllowEquals().Name("variable");
                         });
                 }).Name("answers_some");
         }
