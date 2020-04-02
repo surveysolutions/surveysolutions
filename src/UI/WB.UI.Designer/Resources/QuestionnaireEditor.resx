@@ -936,7 +936,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>This date will be shown as started date for selection on a tablet</value>
   </data>
   <data name="HelpDoNotExport" xml:space="preserve">
-    <value>Mark this variable to be excluded from the exported data.</value>
+    <value>Mark this variable to exclude it from export</value>
   </data>
   <data name="VariableNoExport" xml:space="preserve">
     <value>Do not export</value>
