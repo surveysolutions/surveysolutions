@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         protected override void Configure(IFilterInputTypeDescriptor<InterviewSummary> descriptor)
         {
             descriptor.BindFieldsExplicitly();
-            descriptor.Name("InterviewFilter"); 
+            descriptor.Name("InterviewFilter");
             descriptor.Filter(x => x.Status)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowNotEquals().And().AllowIn();
