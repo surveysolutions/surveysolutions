@@ -107,7 +107,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
     public class InterviewsQueryType : ObjectType<InterviewsQuery>
     {
-        [UseSelection]
         protected override void Configure(IObjectTypeDescriptor<InterviewsQuery> descriptor)
         {
             base.Configure(descriptor);
@@ -130,6 +129,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             descriptor.Sortable(x => x.Key);
             descriptor.Sortable(x => x.CreatedDate);
             descriptor.Sortable(x => x.UpdateDate);
+            descriptor.Sortable(x => x.ResponsibleName);
+            descriptor.Sortable(x => x.ResponsibleRole);
+            descriptor.Sortable(x => x.AssignmentId);
+            descriptor.Sortable(x => x.ErrorsCount);
+            descriptor.Sortable(x => x.QuestionnaireId);
+            descriptor.Sortable(x => x.QuestionnaireVersion);
             descriptor.Sortable(x => x.SummaryId).Name("id");
         }
     }
