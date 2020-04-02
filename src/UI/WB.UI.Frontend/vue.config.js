@@ -191,5 +191,19 @@ module.exports = {
                 return args;
             });
         });
-    }
+    },
+
+    pluginOptions: {
+        // Apollo-related options
+        apollo: {
+            // // Enable automatic mocking
+            // enableMocks: true,
+            // // Enable Apollo Engine
+            // enableEngine: false,
+            // Enable ESLint for `.gql` files
+            lintGQL: true,
+
+            /* Other options (with default values) */
+        },
+    },
 };
