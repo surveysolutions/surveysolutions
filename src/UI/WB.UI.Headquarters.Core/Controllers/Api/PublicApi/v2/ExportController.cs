@@ -249,20 +249,53 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
         public class ExportProcess : CreateExportProcess
         {
+            /// <summary>
+            /// Export process id
+            /// </summary>
             public long JobId { get; set; }
+            /// <summary>
+            /// Format of export data to download
+            /// </summary>
             public ExportStatus ExportStatus { get; set; }
+            /// <summary>
+            /// Export process stated date
+            /// </summary>
             public DateTime? StartDate { get; set; }
+            /// <summary>
+            /// Export process completed date
+            /// </summary>
             public DateTime? CompleteDate { get; set; }
+            /// <summary>
+            /// Progress of export in percents
+            /// </summary>
             public int Progress { get; set; }
+            /// <summary>
+            /// Estimated time to finish of export
+            /// </summary>
             public TimeSpan? ETA { get; set; }
+            /// <summary>
+            /// 
+            /// </summary>
             public string Error { get; set; }
+            /// <summary>
+            /// Links for cancelling export process and downloading data file
+            /// </summary>
             public ExportJobLinks Links { get; set; }
+            /// <summary>
+            /// True, if export process is finished and exported file ready for download, otherwise false 
+            /// </summary>
             public bool HasExportFile { get; set; }
         }
 
         public class ExportJobLinks
         {
+            /// <summary>
+            /// Link for cancelling export process
+            /// </summary>
             public string Cancel { get; set; }
+            /// <summary>
+            /// Link for downloading file with data
+            /// </summary>
             public string Download { get; set; }
         }
 
