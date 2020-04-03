@@ -400,7 +400,6 @@ export default {
                 }
             }`,
             variables() {
-                console.log('apollo', 'variables', this.order)
                 return { 
                     order: this.order, 
                 }
@@ -563,8 +562,6 @@ export default {
                 columns,
                 
                 ajax (data, callback, settings) {
-                    console.log('ajax', data, settings)
-
                     callback({
                         recordsTotal: self.interviewData.total,
                         data: self.rowData || [],
@@ -595,12 +592,10 @@ export default {
     methods: {
         orderTable({ table, orders }) {
             const order = orders[0]
-            const column = this.tableColumns[order.index]
+            const column = this.tableColumns[order.col - 1]
             const orderResult = {}
             orderResult[column.data] = order.dir.toUpperCase()
-        
-            console.log(table, order)
-            // console.log(args)
+            this.order = orderResult
         },
 
         togglePrefield() {
