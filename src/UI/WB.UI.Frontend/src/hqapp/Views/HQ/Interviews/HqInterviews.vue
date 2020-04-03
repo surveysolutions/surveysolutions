@@ -78,7 +78,6 @@
             @page="resetSelection"
             @totalRows="(rows) => totalRows = rows"
             @ajaxComlpete="isLoading = false"
-            @order="orderTable"
             :selectable="showSelectors"
             :selectableId="'id'">
             <div
@@ -340,7 +339,40 @@ import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
 import {lowerCase, map, join, assign, isNaN} from 'lodash'
 import gql from 'graphql-tag'
- 
+
+const query = gql` query interviews(
+        $order: InterviewSort,
+        $skip: Int,
+        $take: Int
+        ) {
+    interviews(order_by: $order, skip: $skip, take: $take)
+    {
+        totalCount,
+        edges{
+            node {
+                id
+                key
+                status
+                questionnaireId
+                responsibleName
+                errorsCount
+                assignmentId
+                updateDate
+                receivedByInterviewer
+                questionnaireVersion
+                identifyingQuestions {
+                    question {
+                        variable
+                        questionText
+                    },
+
+                    answer
+                }
+            }
+        }
+    }
+}`
+
 export default {
     data() {
         return {
@@ -361,56 +393,10 @@ export default {
             unactiveDateStart: null,
             unactiveDateEnd: null,
             statuses: this.$config.model.statuses,
-            order: {
-                errorsCount: 'ASC', id: 'DESC',
-            },
+           
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
         }
-    },
-  
-    apollo: {    
-        interviews: {
-            query: gql` query interviews($order: InterviewSort) {
-                interviews(first: 20, order_by: $order)
-                {
-                    totalCount,
-                    edges{
-                        node {
-                            id
-                            key
-                            status
-                            questionnaireId
-                            responsibleName
-                            errorsCount
-                            assignmentId
-                            updateDate
-                            receivedByInterviewer
-                            questionnaireVersion
-                            identifyingQuestions {
-                                question {
-                                    variable
-                                    questionText
-                                },
-
-                                answer
-                            }
-                        }
-                    }
-                }
-            }`,
-            variables() {
-                return { 
-                    order: this.order, 
-                }
-            },
-        },
-    }, 
-
-    watch: {
-        interviewData(to) {
-            this.$refs.table.reload()
-        },
     },
 
     computed: {
@@ -566,11 +552,27 @@ export default {
                 order: [[defaultSortIndex, 'desc']],
                 deferLoading: 0,
                 columns,
-                
+                pageLength: 10,
                 ajax (data, callback, settings) {
-                    callback({
-                        recordsTotal: self.interviewData.total,
-                        data: self.rowData || [],
+                    const order = {}
+                    const order_col = data.order[0]
+                    const column = data.columns[order_col.column]
+                    order[column.data] = order_col.dir.toUpperCase()
+
+                    self.$apollo.query({
+                        query, 
+                        variables: {
+                            order: order,
+                            skip: data.start,
+                            take: data.length,
+                        },
+                        fetchPolicy: 'network-only',
+                    }).then(response => {
+                        const data = response.data.interviews
+                        callback({
+                            recordsTotal: data.totalCount,
+                            data: data.edges.map(e => e.node),
+                        })
                     })
                 },
                 select: {
@@ -596,14 +598,6 @@ export default {
     },
 
     methods: {
-        orderTable({ table, orders }) {
-            const order = orders[0]
-            const column = this.tableColumns[order.col - 1]
-            const orderResult = {}
-            orderResult[column.data] = order.dir.toUpperCase()
-            this.order = orderResult
-        },
-
         togglePrefield() {
             this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
             return false

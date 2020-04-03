@@ -165,7 +165,7 @@ module.exports = {
             .use(WebpackBuildNotifierPlugin)
 
         config.plugin("livereload")
-            .use(LiveReloadPlugin, [{ appendScriptTag: true }])
+            .use(LiveReloadPlugin, [{ appendScriptTag: true, delay: 1000 }])
 
         config.merge({
             optimization: {
