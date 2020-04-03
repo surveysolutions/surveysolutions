@@ -25,7 +25,8 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             {
                 typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap),
                 typeof(QuestionAnswerMap), typeof(InterviewCommentedStatusMap),
-                typeof(InterviewStatisticsReportRowMap), typeof(InterviewCommentMap)
+                typeof(InterviewStatisticsReportRowMap), typeof(InterviewCommentMap),
+                typeof(QuestionnaireCompositeItemMap)
             }, true, schemaName: "readside");
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
