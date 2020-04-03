@@ -2261,8 +2261,14 @@ namespace WB.Tests.Abc.TestFactories
 
         public AuditLogEntityFactory AuditLogEntity => new AuditLogEntityFactory();
 
-        public InterviewerDocument InterviewerDocument(Guid interviewerId, string login = null) =>
-            new InterviewerDocument {Id = interviewerId.ToString(), InterviewerId = interviewerId, UserName = login};
+        public InterviewerDocument InterviewerDocument(Guid interviewerId, string login = null, bool isLockedBySv = false) =>
+            new InterviewerDocument
+            {
+                Id = interviewerId.ToString(),
+                InterviewerId = interviewerId,
+                UserName = login,
+                IsLockedBySupervisor = isLockedBySv
+            };
 
         public class AuditLogEntityFactory
         {
