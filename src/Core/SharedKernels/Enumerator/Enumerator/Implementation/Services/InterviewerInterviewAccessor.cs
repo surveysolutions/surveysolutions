@@ -143,14 +143,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         private IReadOnlyCollection<CommittedEvent> GetFilteredEventsToSend(Guid interviewId)
         {
-            var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, new[]{typeof(InterviewCompleted).Name});
-            var lastComplete = this.eventStore.GetEventByEventSequence(interviewId, lastCompleteSequence);
-            
-            return this.eventStreamOptimizer.FilterEventsToBeSent(
-                this.eventStore.Read(interviewId, this.eventStore.GetLastEventKnownToHq(interviewId) + 1), 
-                lastComplete?.CommitId);
+            var minVersion = this.eventStore.GetLastEventKnownToHq(interviewId) + 1;
+            //var minVersion = 1;
+            return this.eventStore.Read(interviewId, minVersion)
+                .ToReadOnlyCollection();
+
+//            var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, new[]{typeof(InterviewCompleted).Name});
+//            var lastComplete = this.eventStore.GetEventByEventSequence(interviewId, lastCompleteSequence);
+//
+//            return this.eventStreamOptimizer.FilterEventsToBeSent(
+//                this.eventStore.Read(interviewId, this.eventStore.GetLastEventKnownToHq(interviewId) + 1), 
+//                lastComplete?.CommitId);
         }
-        
+
         public InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId)
         {
             return new InterviewPackageContainer(interviewId, this.GetFilteredEventsToSend(interviewId));
@@ -201,6 +206,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     }
                 }
             }
+        }
+
+        public void MarkEventsAsReceivedByHQ(Guid interviewId)
+        {
+            eventStore.MarkAllEventsAsReceivedByHQ(interviewId);
         }
 
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details)

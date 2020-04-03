@@ -7,5 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public bool IsEventsUploaded { get; set; }
         public HashSet<string> ImagesFilesNames { get; set; } = new HashSet<string>();
         public HashSet<string> AudioFilesNames { get; set; } = new HashSet<string>();
+        public HashSet<string> ImageQuestionsFilesMd5 { get; set; }
+        public HashSet<string> AudioQuestionsFilesMd5 { get; set; }
+        public HashSet<string> AudioAuditFilesMd5 { get; set; }
     }
 }

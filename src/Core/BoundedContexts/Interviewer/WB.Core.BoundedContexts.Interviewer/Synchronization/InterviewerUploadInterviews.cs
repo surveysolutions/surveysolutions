@@ -31,7 +31,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
         {
-            return interviewViewRepository.Where(interview => interview.Status == InterviewStatus.Completed);
+            return interviewViewRepository.Where(interview => 
+                   interview.Status == InterviewStatus.Completed
+                || interview.Status == InterviewStatus.Restarted
+                || interview.Status == InterviewStatus.InterviewerAssigned
+                );
         }
     }
 }
