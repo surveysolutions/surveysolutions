@@ -268,6 +268,29 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             return files;
         }
 
+        public void MarkAllEventsAsReceivedByHQ(Guid interviewId)
+        {
+            var connection = this.GetOrCreateConnection(interviewId);
+            using (connection.Lock())
+            {
+                try
+                {
+                    connection.BeginTransaction();
+                    var commandText = $"UPDATE {nameof(EventView)} " +
+                                      $"SET {nameof(EventView.ExistsOnHq)} = 1 " +
+                                      $"WHERE {nameof(EventView.ExistsOnHq)} != 1 AND {nameof(EventView.EventSourceId)} = ?";
+                    var sqLiteCommand = connection.CreateCommand(commandText, interviewId);
+                    sqLiteCommand.ExecuteNonQuery();
+                    connection.Commit();
+                }
+                catch
+                {
+                    connection.Rollback();
+                    throw;
+                }
+            }
+        }
+
         public int GetLastEventKnownToHq(Guid interviewId)
         {
             var connection = this.GetOrCreateConnection(interviewId);

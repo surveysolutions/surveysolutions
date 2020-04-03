@@ -11,5 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId);
 
         void CheckAndProcessInterviewsToFixViews();
+
+        void MarkEventsAsReceivedByHQ(Guid interviewId);
     }
 }
