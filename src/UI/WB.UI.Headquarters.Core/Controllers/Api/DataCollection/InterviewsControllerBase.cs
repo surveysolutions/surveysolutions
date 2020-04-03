@@ -1,18 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
 
@@ -103,20 +107,49 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        protected InterviewUploadState GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
+        protected async Task<InterviewUploadState> GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
         {
             var doesEventsExists = this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);
 
             // KP-12038 media files are not updated if interviewer changes them after reject
-            var imageNames = new HashSet<string>(); //this.imageFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
-            var audioNames = new HashSet<string>(); //this.audioFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
+            var imageNames = new HashSet<string>(); 
+            var audioNames = new HashSet<string>();
+
+            var imagesQuestionsMd5 = (await GetMd5Caches(await this.imageFileStorage.GetBinaryFilesForInterview(id)));
+            var audioQuestionsFilesMd5 = (await GetMd5Caches(await this.audioFileStorage.GetBinaryFilesForInterview(id)));
+            var audioAuditFilesMd5 = (await GetMd5Caches(await this.audioAuditFileStorage.GetBinaryFilesForInterview(id)));
 
             return new InterviewUploadState
             {
                 IsEventsUploaded = doesEventsExists,
                 ImagesFilesNames = imageNames,
-                AudioFilesNames = audioNames
+                AudioFilesNames = audioNames,
+                ImageQuestionsFilesMd5 = imagesQuestionsMd5,
+                AudioQuestionsFilesMd5 = audioQuestionsFilesMd5,
+                AudioAuditFilesMd5 = audioAuditFilesMd5,
             };
+        }
+
+        private static async Task<HashSet<string>> GetMd5Caches(List<InterviewBinaryDataDescriptor> descriptors)
+        {
+            List<string> caches = new List<string>(descriptors.Count);
+
+            foreach (var descriptor in descriptors)
+            {
+                var md5 = await GetMd5Cache(descriptor);
+                caches.Add(md5);
+            }
+
+            return caches.ToHashSet();
+        }
+
+        private static async Task<string> GetMd5Cache(InterviewBinaryDataDescriptor descriptor)
+        {
+            var fileContent = await descriptor.GetData();
+            using var crypto = MD5.Create();
+            var hash = crypto.ComputeHash(fileContent);
+            var hashString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            return hashString;
         }
 
         protected IActionResult DetailsV3(Guid id)
