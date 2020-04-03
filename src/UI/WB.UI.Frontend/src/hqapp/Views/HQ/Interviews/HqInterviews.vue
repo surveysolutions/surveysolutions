@@ -78,8 +78,9 @@
             @page="resetSelection"
             @totalRows="(rows) => totalRows = rows"
             @ajaxComlpete="isLoading = false"
+            @order="orderTable"
             :selectable="showSelectors"
-            :selectableId="'interviewId'">
+            :selectableId="'id'">
             <div
                 class="panel panel-table"
                 v-if="selectedRows.length"
@@ -168,7 +169,6 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-
         <ModalFrame ref="deleteModal">
             <div class="action-container">
                 <p
@@ -196,12 +196,13 @@
                 </div>
                 <div>
                     <label
-                        for="txtStatusChangeComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}} :</label>
+                        for="txtStatusApproveComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}} :</label>
                     <textarea
                         class="form-control"
                         rows="10"
                         maxlength="200"
-                        id="txtStatusChangeComment"
+                        name="txtStatusChangeComment"
+                        id="txtStatusApproveComment"
                         v-model="statusChangeComment"></textarea>
                 </div>
             </form>
@@ -219,7 +220,6 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-
         <ModalFrame ref="rejectModal">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -271,7 +271,6 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-
         <ModalFrame ref="unapproveModal">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -293,7 +292,6 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-
         <ModalFrame ref="statusHistory"
             :title="$t('Pages.HistoryOfStatuses_Title')">
             <div class="action-container">
@@ -341,7 +339,8 @@
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
 import {lowerCase, map, join, assign, isNaN} from 'lodash'
-
+import gql from 'graphql-tag'
+ 
 export default {
     data() {
         return {
@@ -362,13 +361,64 @@ export default {
             unactiveDateStart: null,
             unactiveDateEnd: null,
             statuses: this.$config.model.statuses,
-
+            order: {
+                errorsCount: 'ASC', id: 'DESC',
+            },
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
         }
     },
+  
+    apollo: {    
+        interviews: {
+            query: gql` query interviews($order: InterviewSort) {
+                interviews(first: 20, order_by: $order)
+                {
+                    totalCount,
+                    edges{
+                        node {
+                            id
+                            key
+                            status
+                            questionnaireId
+                            responsibleName
+                            invalidAnswersCount
+                            assignmentId
+                            updateDate
+                            receivedByInterviewer
+                            questionnaireVersion
+                            identifyingQuestions {
+                                question {
+                                    variable
+                                    questionText
+                                },
+
+                                answer
+                            }
+                        }
+                    }
+                }
+            }`,
+            variables() {
+                console.log('apollo', 'variables', this.order)
+                return { 
+                    order: this.order, 
+                }
+            },
+        },
+    }, 
 
     computed: {
+        rowData() {
+            return (this.interviewData.edges || []).map(e => e.node)
+        },
+
+        interviewData() {
+            if(this.interviews == null) {
+                return {}
+            }
+            return this.interviews
+        },
         interviewKey() {
             return this.selectedRowWithMenu != undefined ? this.selectedRowWithMenu.key : ''
         },
@@ -402,7 +452,7 @@ export default {
                     className: 'interview-id title-row',
                     render(data, type, row) {
                         var result =
-                            '<a href=\'' + self.config.interviewReviewUrl + '/' + row.interviewId + '\'>' + data + '</a>'
+                            '<a href=\'' + self.config.interviewReviewUrl + '/' + row.id + '\'>' + data + '</a>'
                         return result
                     },
                     createdCell(td, cellData, rowData, row, col) {
@@ -410,14 +460,14 @@ export default {
                     },
                 },
                 {
-                    data: 'featuredQuestions',
+                    data: 'identifyingQuestions',
                     title: this.$t('Assignments.IdentifyingQuestions'),
                     className: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        var questionsWithTitles = map(data, question => {
-                            return question.question + ': ' + question.answer
+                        var questionsWithTitles = map(data, node => {
+                            return node.question.questionText + ': ' + node.answer
                         })
                         return join(questionsWithTitles, ', ')
                     },
@@ -435,7 +485,7 @@ export default {
                     },
                 },
                 {
-                    data: 'lastEntryDateUtc',
+                    data: 'updateDate',
                     name: 'UpdateDate',
                     title: this.$t('Assignments.UpdatedAt'),
                     className: 'date last-update',
@@ -451,7 +501,7 @@ export default {
                     },
                 },
                 {
-                    data: 'errorsCount',
+                    data: 'invalidAnswersCount',
                     name: 'ErrorsCount',
                     title: this.$t('Interviews.Errors'),
                     orderable: true,
@@ -499,18 +549,26 @@ export default {
             const columns = this.tableColumns.filter(x => x.if == null || x.if())
 
             var defaultSortIndex = 3 //findIndex(columns, { name: "UpdateDate" });
+            
             if (this.showSelectors) defaultSortIndex += 1
 
+            const self = this
+            
             var tableOptions = {
                 rowId: function(row) {
-                    return `row_${row.interviewId}`
+                    return `row_${row.id}`
                 },
                 order: [[defaultSortIndex, 'desc']],
                 deferLoading: 0,
                 columns,
-                ajax: {
-                    url: this.$config.model.allInterviews,
-                    type: 'GET',
+                
+                ajax (data, callback, settings) {
+                    console.log('ajax', data, settings)
+
+                    callback({
+                        recordsTotal: self.interviewData.total,
+                        data: self.rowData || [],
+                    })
                 },
                 select: {
                     style: 'multi',
@@ -535,6 +593,16 @@ export default {
     },
 
     methods: {
+        orderTable({ table, orders }) {
+            const order = orders[0]
+            const column = this.tableColumns[order.index]
+            const orderResult = {}
+            orderResult[column.data] = order.dir.toUpperCase()
+        
+            console.log(table, order)
+            // console.log(args)
+        },
+
         togglePrefield() {
             this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
             return false
