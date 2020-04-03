@@ -382,7 +382,7 @@ export default {
                             status
                             questionnaireId
                             responsibleName
-                            invalidAnswersCount
+                            errorsCount
                             assignmentId
                             updateDate
                             receivedByInterviewer
@@ -506,7 +506,7 @@ export default {
                     },
                 },
                 {
-                    data: 'invalidAnswersCount',
+                    data: 'errorsCount',
                     name: 'ErrorsCount',
                     title: this.$t('Interviews.Errors'),
                     orderable: true,
