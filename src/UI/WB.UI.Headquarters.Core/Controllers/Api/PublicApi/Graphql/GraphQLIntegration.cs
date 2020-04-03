@@ -11,10 +11,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         public static void AddGraphQL(this IServiceCollection services)
         {
             services.AddDataLoaderRegistry()
-                .AddGraphQL(x => SchemaBuilder.New()
+                .AddGraphQL(x =>
+                    SchemaBuilder.New()
                     .AddAuthorizeDirectiveType()
                     .AddType(new PaginationAmountType(200))
-                    .AddQueryType<InterviewsQueryType>().Create());
+                    .AddQueryType<HeadquartersQuery>().Create());
         }
 
         public static void UseGraphQL(this IApplicationBuilder app)
