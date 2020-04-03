@@ -384,40 +384,6 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewSummary = interviewSummary
             };
 
-        public InterviewData InterviewData(
-            bool createdOnClient = false,
-            InterviewStatus status = InterviewStatus.Created,
-            Guid? interviewId = null,
-            Guid? responsibleId = null,
-            Guid? questionnaireId = null)
-            => new InterviewData
-            {
-                CreatedOnClient = createdOnClient,
-                Status = status,
-                InterviewId = interviewId.GetValueOrDefault(),
-                ResponsibleId = responsibleId.GetValueOrDefault(),
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid()
-            };
-
-        public InterviewData InterviewData(params InterviewQuestion[] topLevelQuestions)
-        {
-            var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
-            foreach (var interviewQuestion in topLevelQuestions)
-            {
-                interviewData.Levels["#"].QuestionsSearchCache.Add(interviewQuestion.Id, interviewQuestion);
-            }
-            return interviewData;
-        }
-
-        public InterviewData InterviewData(Guid variableId, object topLevelVariable)
-        {
-            var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
-            interviewData.Levels["#"].Variables.Add(variableId, topLevelVariable);
-            return interviewData;
-        }
-
         public InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
             => new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
 
@@ -441,25 +407,8 @@ namespace WB.Tests.Abc.TestFactories
                    Id = id
                };
 
-        public InterviewDataExportView InterviewDataExportView(
-            Guid? interviewId = null,
-            Guid? questionnaireId = null,
-            long questionnaireVersion = 1,
-            params InterviewDataExportLevelView[] levels)
-            => new InterviewDataExportView(interviewId ?? Guid.NewGuid(), levels);
-
         public InterviewItemId InterviewItemId(Guid id, decimal[] rosterVector = null)
             => new InterviewItemId(id, rosterVector);
-
-        public InterviewQuestion InterviewQuestion(Guid? questionId = null, object answer = null)
-        {
-            var interviewQuestion = new InterviewQuestion(questionId ?? Guid.NewGuid()) { Answer = answer };
-            if (answer != null)
-            {
-                interviewQuestion.QuestionState |= QuestionState.Answered;
-            }
-            return interviewQuestion;
-        }
 
         public InterviewSummary InterviewSummary()
             => new InterviewSummary();
