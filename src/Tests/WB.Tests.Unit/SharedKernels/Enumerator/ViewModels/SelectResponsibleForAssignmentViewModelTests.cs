@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
     internal class SelectResponsibleForAssignmentViewModelTests
     {
         [Test]
-        public void when_prepare_and_reassign_for_interview_should_list_of_interviewers_doesnot_exist_responsible_of_interview()
+        public void when_prepare_and_reassign_for_interview_should_list_of_interviewers_does_not_exist_responsible_of_interview()
         {
             // arrange
             var interviewId = Guid.Parse("11111111111111111111111111111111");
@@ -44,7 +44,27 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         }
 
         [Test]
-        public void when_prepare_and_reassign_for_assignement_should_list_of_interviewers_doesnot_exist_responsible_of_assignment()
+        public void when_reassigning_should_not_show_locked_interviewers()
+        {
+            // arrange
+            var interviewId = Id.g1;
+            var lockedInterviewerId = Id.g3;
+            
+            var usersRepository = Create.Storage.SqliteInmemoryStorage(
+                Create.Entity.InterviewerDocument(lockedInterviewerId, isLockedBySv: true));
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(
+                Create.AggregateRoot.StatefulInterview(interviewId));
+
+            var viewModel = CreateSelectResponsibleForAssignmentViewModel(usersRepository: usersRepository,
+                statefullInterviewRepository: statefulInterviewRepository);
+            // act
+            viewModel.Prepare(new SelectResponsibleForAssignmentArgs(interviewId));
+            // assert
+            Assert.That(viewModel.UiItems.Select(x => x.Id), Does.Not.Contain(lockedInterviewerId));
+        }
+        
+        [Test]
+        public void when_prepare_and_reassign_for_assignment_should_list_of_interviewers_does_not_exist_responsible_of_assignment()
         {
             // arrange
             var assignmentId = 22;
@@ -345,7 +365,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 navigationService: navigationService ?? Mock.Of<IViewModelNavigationService>(),
                 mvxMessenger: mvxMessenger ?? Mock.Of<IMvxMessenger>(),
-                statefullInterviewRepository: statefullInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                statefulInterviewRepository: statefullInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewStorage: interviewStorage ?? Create.Storage.SqliteInmemoryStorage<InterviewView>(),
                 assignmentsStorage: assignmentsStorage ?? Create.Storage.SqliteInmemoryStorage<AssignmentDocument, int>());
         }
