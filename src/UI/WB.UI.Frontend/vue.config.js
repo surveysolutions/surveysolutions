@@ -12,6 +12,8 @@ const webTesterFolder = path.join(uiFolder, "WB.UI.WebTester");
 
 const StatsPlugin = require('stats-webpack-plugin')
 const CleanupPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
+const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const locales = {
     hq: ["Assignments", "Common", "Dashboard", "DataExport", "DataTables",
@@ -158,6 +160,12 @@ module.exports = {
                     modules: false,
                     children: false
                 }]);
+
+        config.plugin("notifier")
+            .use(WebpackBuildNotifierPlugin)
+
+        config.plugin("livereload")
+            .use(LiveReloadPlugin, [{ appendScriptTag: true }])
 
         config.merge({
             optimization: {
