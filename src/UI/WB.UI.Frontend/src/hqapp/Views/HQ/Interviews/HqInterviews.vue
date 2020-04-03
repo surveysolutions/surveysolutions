@@ -407,6 +407,12 @@ export default {
         },
     }, 
 
+    watch: {
+        interviewData(to) {
+            this.$refs.table.reload()
+        },
+    },
+
     computed: {
         rowData() {
             return (this.interviewData.edges || []).map(e => e.node)
