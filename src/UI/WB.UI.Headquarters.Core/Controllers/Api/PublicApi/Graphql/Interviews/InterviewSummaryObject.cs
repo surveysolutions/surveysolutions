@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.ReceivedByInterviewer);
             
             descriptor.Field(x => x.ErrorsCount)
-                .Name("invalidAnswersCount");
+                .Type<NonNullType<IntType>>();
 
             descriptor.Field(x => x.QuestionnaireId);
             descriptor.Field(x => x.QuestionnaireVersion);
