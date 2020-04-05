@@ -26,8 +26,9 @@
                     :disabled="questionnaireId == null"
                     :value="questionnaireVersion"
                     :values="questionnaireId == null ? [] : questionnaireId.versions"
-                    v-on:selected="questionnaireVersionSelected"/>
+                    v-on:selected="questionnaireVersionSelected" />
             </FilterBlock>
+
             <FilterBlock :title="$t('Common.Status')">
                 <Typeahead
                     control-id="status"
@@ -75,8 +76,7 @@
             :addParamsToRequest="addParamsToRequest"
             :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="rows => selectedRows = rows"
-            @page="resetSelection"
-            @totalRows="(rows) => totalRows = rows"
+            @page="resetSelection"           
             @ajaxComlpete="isLoading = false"
             :selectable="showSelectors"
             :selectableId="'id'">
@@ -343,9 +343,10 @@ import gql from 'graphql-tag'
 const query = gql` query interviews(
         $order: InterviewSort,
         $skip: Int,
-        $take: Int
-        ) {
-    interviews(order_by: $order, skip: $skip, take: $take)
+        $take: Int,
+        $where: InterviewFilter
+    ) {
+    interviews(order_by: $order, skip: $skip, take: $take, where: $where)
     {
         totalCount,
         edges{
@@ -557,22 +558,39 @@ export default {
                     const order = {}
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
+                    
                     order[column.data] = order_col.dir.toUpperCase()
+
+                    const variables = {
+                        order: order,
+                        skip: data.start,
+                        take: data.length,
+                    }
+
+                    if(Object.keys(self.where).length > 0) {
+                        variables.where = self.where
+                    }
 
                     self.$apollo.query({
                         query, 
-                        variables: {
-                            order: order,
-                            skip: data.start,
-                            take: data.length,
-                        },
+                        variables: variables,
                         fetchPolicy: 'network-only',
                     }).then(response => {
                         const data = response.data.interviews
+                        self.totalRows = data.totalCount
                         callback({
                             recordsTotal: data.totalCount,
+                            recordsFiltered: 0,
                             data: data.edges.map(e => e.node),
                         })
+                    }).catch(err => {
+                        callback({
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: [],
+                            error: err.toString(),
+                        })
+                        console.error(err)
                     })
                 },
                 select: {
@@ -594,6 +612,17 @@ export default {
         },
         config() {
             return this.$config.model
+        },
+        where() {
+            const data = {}
+            if (this.status) data.status = this.status.alias
+            if (this.questionnaireId) data.questionnaireId = this.questionnaireId
+            if (this.questionnaireVersion) data.questionnaireVersion = this.questionnaireVersion
+            if (this.responsibleId) data.responsibleName = this.responsibleId.value
+            if (this.assignmentId) data.assignmentId = this.assignmentId
+            if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
+            if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
+            return data
         },
     },
 
@@ -1111,22 +1140,15 @@ export default {
         },
 
         addParamsToRequest(data) {
-            data.status = (this.status || {}).key
-            data.questionnaireId = (this.questionnaireId || {}).key
-            data.questionnaireVersion = (this.questionnaireVersion || {}).key
-            //data.responsibleId = (this.responsibleId || {}).key
-            data.responsibleName = (this.responsibleId || {}).value
-
-            if (this.assignmentId) {
-                data.assignmentId = this.assignmentId
-            }
-            if (this.unactiveDateStart) {
-                data.unactiveDateStart = this.unactiveDateStart
-            }
-            if (this.unactiveDateEnd) {
-                data.unactiveDateEnd = this.unactiveDateEnd
-            }
+            if (this.status) data.status = this.status 
+            if (this.questionnaireId) data.questionnaireId = this.questionnaireId
+            if (this.questionnaireVersion) data.questionnaireVersion = this.questionnaireVersion
+            if (this.responsibleName) data.responsibleName = this.responsibleName
+            if (this.assignmentId) data.assignmentId = this.assignmentId
+            if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
+            if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
         },
+
         addParamsToRequestStatuses(data) {
             data.interviewId = this.selectedRowWithMenu.interviewId
         },
@@ -1152,26 +1174,14 @@ export default {
                 this.$refs.table.reload()
             }
         },
+
         reloadTableAndSaveRoute() {
             this.reloadTable()
             this.addParamsToQueryString()
         },
+
         addParamsToQueryString() {
-            var queryString = {}
-
-            if (this.questionnaireId != null) {
-                queryString.templateId = this.questionnaireId.key
-            }
-            if (this.questionnaireVersion != null) {
-                queryString.templateVersion = this.questionnaireVersion.key
-            }
-
-            if (this.responsibleId) queryString.responsible = this.responsibleId.value
-            if (this.assignmentId) queryString.assignmentId = this.assignmentId
-            if (this.status) queryString.status = this.status.alias
-            if (this.unactiveDateStart) queryString.unactiveDateStart = this.unactiveDateStart
-            if (this.unactiveDateEnd) queryString.unactiveDateEnd = this.unactiveDateEnd
-
+            var queryString = this.where
             this.$router.push({query: queryString})
         },
 
