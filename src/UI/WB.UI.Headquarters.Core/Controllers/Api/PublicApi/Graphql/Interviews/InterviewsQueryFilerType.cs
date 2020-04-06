@@ -4,7 +4,7 @@ using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 {
-    public class InterviewsFilerInputType : FilterInputType<InterviewSummary>
+    public class InterviewsFilterInputType : FilterInputType<InterviewSummary>
     {
         protected override void Configure(IFilterInputTypeDescriptor<InterviewSummary> descriptor)
         {
