@@ -11,7 +11,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
             descriptor.Field<InterviewsResolver>(x => x.GetInterviews(default, default, default, default))
-                .UseSelection()
                 .Argument("skip", a => a.Type<IntType>())
                 .Argument("take", a => a.Type<IntType>())
                 .Authorize()

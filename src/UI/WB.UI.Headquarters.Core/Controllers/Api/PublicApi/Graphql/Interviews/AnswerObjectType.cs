@@ -1,5 +1,12 @@
+using System.Linq;
+using System.Threading;
+using GreenDonut;
+using HotChocolate.Resolvers;
 using HotChocolate.Types;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
@@ -19,6 +26,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Answer value for categorical questions");
 
             descriptor.Field(x => x.Question)
+                .Resolver(context => context.GroupDataLoader<int, QuestionnaireCompositeItem>("questionByAnswer", async keys =>
+                {
+                    var unitOfWork = context.Service<IUnitOfWork>();
+                    var items = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
+                        .Where(q => keys.Contains(q.Id))
+                        .ToListAsync()
+                        .ConfigureAwait(false);
+                    return items.ToLookup(x => x.Id);
+                }).LoadAsync(context.Parent<QuestionAnswer>().Question.Id))
                 .Type<NonNullType<QuestionItemObjectType>>();
         }
     }
