@@ -57,6 +57,7 @@
                     $scope.activeRoster.numerics = result.numericIntegerQuestions;
                     $scope.activeRoster.titles = result.numericIntegerTitles;
                     $scope.activeRoster.multiOption = result.notLinkedMultiOptionQuestions;
+                    $scope.activeRoster.customRosterTitle = result.customRosterTitle;
 
                     bindListsWithSelectedElements();
 
@@ -66,7 +67,7 @@
                         return _.find($scope.activeRoster.rosterTypeOptions, { 'value': $scope.activeRoster.type }).text;
                     };
 
-                    if (!_.isNull($scope.editRosterForm) && !_.isUndefined($scope.editRosterForm)) {
+                    if ($scope.editRosterForm) {
                         $scope.editRosterForm.$setPristine();
                     }
                 };
@@ -267,6 +268,18 @@
                         });
                     }
                 });
+
+                $scope.$watch('activeRoster.customRosterTitle',
+                    function(newValue, oldValue, scope) {
+                        if (_.isUndefined(newValue) || !scope.activeRoster || _.isUndefined(oldValue)) return;
+
+                        if (newValue && scope.activeRoster.title.indexOf('%rostertitle%') === -1) {
+                            scope.activeRoster.title += ' - %rostertitle%';
+                        }
+                        if (!newValue && scope.activeRoster.title.endsWith(' - %rostertitle%')) {
+                            scope.activeRoster.title = scope.activeRoster.title.replace(' - %rostertitle%', '');
+                        }
+                    });
 
                 $scope.loadRoster();
             }

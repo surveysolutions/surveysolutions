@@ -15,6 +15,9 @@ namespace Ncqrs.Eventing.Storage
         IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken);
 
         int? GetLastEventSequence(Guid id);
+
+        bool IsDirty(Guid eventSourceId, long lastKnownEventSequence);
+
         /// <summary>
         /// Persists the <paramref name="eventStream"/> in the store as a single and atomic commit.
         /// </summary>

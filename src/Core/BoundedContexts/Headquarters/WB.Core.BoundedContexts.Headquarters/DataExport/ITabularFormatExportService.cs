@@ -4,6 +4,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public interface ITabularFormatExportService
     {
-        void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath);
+        void CreateTemplateFilesForAdvancedPreloading(QuestionnaireIdentity questionnaireIdentity, string basePath);
     }
 }

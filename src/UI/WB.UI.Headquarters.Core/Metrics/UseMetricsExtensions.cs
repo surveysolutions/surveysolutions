@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.Configs;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Metrics
 {
@@ -17,10 +18,13 @@ namespace WB.UI.Headquarters.Metrics
         {
             services.AddHostedService<PushGatewayMetricsPusher>();
             services.AddHostedService<NpgsqlMetricsCollectionService>();
+
+            services.AddHostedService<IDashboardStatisticsService, DashboardStatisticsService>();
+            
             services.AddTransient<IOnDemandCollector, BrokenPackagesStatsCollector>();
             services.AddTransient<IOnDemandCollector, NHibernateStatsCollector>();
         }
-
+  
         public static void UseMetrics(this IApplicationBuilder app, IConfiguration configuration)
         {
             var metricsConfig = configuration.MetricsConfiguration().Get<MetricsConfig>();

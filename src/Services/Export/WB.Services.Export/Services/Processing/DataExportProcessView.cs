@@ -17,6 +17,7 @@ namespace WB.Services.Export.Services.Processing
         public InterviewStatus? InterviewStatus { get; set; }
         public string QuestionnaireId { get; set; }
         public DataExportStatus ProcessStatus { get; set; }
+        public DataExportJobStatus JobStatus { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public bool IsRunning { get; set; }
@@ -26,6 +27,5 @@ namespace WB.Services.Export.Services.Processing
         public double FileSize { get; set; }
         public DateTime DataFileLastUpdateDate { get; set; }
         public string DataDestination { get; set; }
-        public DataExportJobStatus JobStatus { get; internal set; }
     }
 }

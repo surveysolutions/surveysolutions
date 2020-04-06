@@ -70,6 +70,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
                     var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, SidebarMapOptions);
+                    sidebar.HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(child.Identity.Id);
+
                     result.Groups.Add(sidebar);
                 }
 
@@ -143,8 +145,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     case InterviewQuestionType.SingleLinkedToList:
                         result = this.Map<InterviewSingleOptionQuestion>(question, res =>
                         {
-                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
-                                (question.GetAsInterviewTreeSingleOptionLinkedToListQuestion()).LinkedSourceId).ToList();
+                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question).ToList();
                         });
                         break;
                     case InterviewQuestionType.Text:
@@ -226,7 +227,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     case InterviewQuestionType.MultiLinkedToList:
                         result = this.Map<InterviewMutliOptionQuestion>(question, res =>
                         {
-                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().LinkedSourceId).ToList();
+                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question).ToList();
                             var callerQuestionnaire = questionnaire;
                             res.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             res.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
@@ -330,6 +331,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(group);
 
+                result.HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(group.Identity.Id);
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyGroupStateData(result, group, callerInterview, isReviewMode, questionnaire);
                 this.ApplyValidity(result.Validity, result.Status);
@@ -459,18 +461,39 @@ namespace WB.Enumerator.Native.WebInterview.Services
             });
 
         private static IEnumerable<CategoricalOption> GetOptionsLinkedToListQuestion(IStatefulInterview callerInterview,
-            Identity identity, Guid linkedSourceId)
+            Identity identity, InterviewTreeQuestion question)
         {
-            var listQuestion = callerInterview.FindQuestionInQuestionBranch(linkedSourceId, identity);
+            Guid? linkedSourceId = null;
+            int[] filteredOptions = null;
 
-            if (listQuestion == null || listQuestion.IsDisabled() || listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows == null)
-                return new List<CategoricalOption>();
-
-            return new List<CategoricalOption>(listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows.Select(x => new CategoricalOption
+            if (question.IsMultiLinkedToList)
             {
-                Value = x.Value,
-                Title = x.Text
-            }));
+                linkedSourceId = question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().LinkedSourceId;
+                filteredOptions = callerInterview.GetMultiOptionLinkedToListQuestion(identity)?.Options;
+            }
+            else if (question.IsSingleLinkedToList)
+            {
+                linkedSourceId = question.GetAsInterviewTreeSingleOptionLinkedToListQuestion().LinkedSourceId;
+                filteredOptions = callerInterview.GetSingleOptionLinkedToListQuestion(identity)?.Options;
+            }
+
+            if(!linkedSourceId.HasValue) yield break;
+
+            var listQuestion = callerInterview.FindQuestionInQuestionBranch(linkedSourceId.Value, identity);
+            if (listQuestion == null || listQuestion.IsDisabled()) yield break;
+
+            var listOptions = listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows;
+            if (listOptions == null || filteredOptions == null) yield break;
+
+            foreach (var listItem in listOptions)
+            {
+                if(filteredOptions.Contains(listItem.Value))
+                    yield return new CategoricalOption
+                    {
+                        Value = listItem.Value,
+                        Title = listItem.Text
+                    };
+            }
         }
 
         protected virtual Comment[] GetComments(InterviewTreeQuestion question)

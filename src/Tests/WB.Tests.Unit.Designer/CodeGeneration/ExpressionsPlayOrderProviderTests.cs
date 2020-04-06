@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.CodeGeneration
 {
@@ -257,6 +258,22 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             var dependensies = GetDependensies(questionnaireDocument, q1Id);
 
             Assert.That(dependensies, Is.EqualTo(new[] { q1Id, q3Id, q2Id, q4Id }));
+        }
+
+        [Test]
+        public void when_GetDependencyGraph_for_linked_to_list_with_option_filter()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Id.g9, children: new IComposite[]
+            {
+                Create.TextListQuestion(Id.g1, variable: "list"),
+                Create.NumericIntegerQuestion(Id.g7, "num"),
+                Create.MultyOptionsQuestion(Id.g2, variable: "multi_without_filter", linkedToQuestionId: Id.g1, enablementCondition: "num == 7"),
+                Create.MultyOptionsQuestion(Id.g3, variable: "multi_with_filter", linkedToQuestionId: Id.g1, optionsFilterExpression: "multi_without_filter.Contains(@optioncode)"),
+                Create.TextQuestion(Id.g4, variable: "text", enablementCondition: "multi_with_filter == 5"),
+            });
+
+            var dependencies = GetDependensies(questionnaireDocument, Id.g7);
+            CollectionAssert.AreEqual(dependencies, new[] { Id.g7, Id.g2, Id.g3, Id.g4});
         }
 
 

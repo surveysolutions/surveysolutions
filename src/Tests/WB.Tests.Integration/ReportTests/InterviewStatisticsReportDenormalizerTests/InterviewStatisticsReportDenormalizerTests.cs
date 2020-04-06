@@ -195,7 +195,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, dwellingQuestion, (decimal)Dwelling.Hole));
             denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, relationQuestion, (decimal)Relation.Child));
 
-            denormalizer.Update(summary, new AnswersRemoved(new[] { Create.Identity(dwellingQuestion) }, DateTimeOffset.UtcNow)
+            denormalizer.Update(summary, new AnswersRemoved(null, new[] { Create.Identity(dwellingQuestion) }, DateTimeOffset.UtcNow)
                 .ToPublishedEvent(summary.InterviewId));
 
             UnitOfWork.Session.Flush();

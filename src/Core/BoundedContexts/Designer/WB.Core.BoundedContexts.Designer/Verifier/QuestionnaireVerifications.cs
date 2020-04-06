@@ -444,7 +444,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
             {
-                bool isCheckedEntityaRoster = traslatedEntityWithSubstitution.Entity is IGroup group && group.IsRoster; 
+                bool isCheckedEntityaRoster = traslatedEntityWithSubstitution.Entity is IGroup group && group.IsRoster && !group.CustomRosterTitle; 
                 if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0 || 
                          vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 1 && isCheckedEntityaRoster)
                 {

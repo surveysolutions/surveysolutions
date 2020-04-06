@@ -318,7 +318,7 @@
                         command.linkedFilterExpression = question.linkedFilterExpression;
                         command.yesNoView = question.yesNoView;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
-                        command.options = !_.isEmpty(command.linkedToEntityId) || command.isFilteredCombobox ? null : question.options;
+                        command.options = !_.isEmpty(command.linkedToEntityId) ? null : question.options;
                         command.categoriesId = question.categoriesId;
                         break;
                     case "Numeric":
@@ -440,7 +440,8 @@
                         expression: variable.expression,
                         name: variable.variable,
                         type: variable.type,
-                        label: variable.label
+                        label: variable.label,
+                        doNotExport: variable.doNotExport
                     }
                 }
 
@@ -476,7 +477,8 @@
                     hideIfDisabled: incomingRoster.hideIfDisabled,
                     variableName: incomingRoster.variableName,
                     displayMode: incomingRoster.displayMode,
-                    isRoster: true
+                    isRoster: true,
+                    customRosterTitle: incomingRoster.customRosterTitle
                 };
 
                 switch (incomingRoster.type) {

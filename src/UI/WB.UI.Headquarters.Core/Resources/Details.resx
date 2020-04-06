@@ -156,7 +156,10 @@
   <data name="Duration" xml:space="preserve">
     <value>Duration</value>
   </data>
-  <data name="Overview">
+  <data name="Overview" xml:space="preserve">
     <value>Overview</value>
+  </data>
+  <data name="ShowQuestionnaireDetails" xml:space="preserve">
+    <value>Show questionnaire details</value>
   </data>
 </root>

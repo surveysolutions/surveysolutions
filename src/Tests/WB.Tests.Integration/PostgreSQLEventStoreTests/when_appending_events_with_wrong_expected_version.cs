@@ -32,11 +32,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             eventTypeResolver.RegisterEventDataType(typeof(AccountLocked));
 
             eventStore = new PostgresEventStore(
-                new PostgreConnectionSettings
-                {
-                    ConnectionString = connectionStringBuilder.ConnectionString,
-                    SchemaName = schemaName
-                },
                 eventTypeResolver,
                 sessionProvider.Object);
         }

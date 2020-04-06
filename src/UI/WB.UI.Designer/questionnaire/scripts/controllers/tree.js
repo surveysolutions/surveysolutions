@@ -771,6 +771,7 @@
                 var staticText = questionnaireService.findItem($scope.items, data.itemId);
                 if (_.isNull(staticText)) return;
                 staticText.text = data.text;
+                staticText.attachmentName = data.attachmentName;
 
                 staticText.hasValidation = data.hasValidation;
                 staticText.hasCondition = data.hasCondition;

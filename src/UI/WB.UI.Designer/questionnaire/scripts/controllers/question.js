@@ -109,7 +109,7 @@
                     ? 'Identifying' 
                     : question.questionScope;
 
-                $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
+                $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression, question.optionsFilterExpression);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
                 $scope.setQuestionType(question.type);
 
@@ -376,7 +376,7 @@
                 }
 
                 if (type !== "SingleOption" && type !== "MultyOption") {
-                    $scope.setLinkSource(null, null);
+                    $scope.setLinkSource(null, null, null);
                 }
 
                 if (type === 'MultyOption' || type === "SingleOption") {
@@ -386,8 +386,8 @@
                 }
 
                 if (!$scope.doesQuestionSupportOptionsFilters()) {
-                    $scope.activeQuestion.optionsFilterExpression = '';
-                    $scope.activeQuestion.linkedFilterExpression = '';
+                    $scope.activeQuestion.optionsFilterExpression = null;
+                    $scope.activeQuestion.linkedFilterExpression = null;
                 }
 
                 if (type === "Area") {
@@ -721,7 +721,7 @@
                         return;
                     }
                     if (newValue) {
-                        $scope.activeQuestion.optionsFilterExpression = null;
+                        // nothing
                     } else {
                         $scope.activeQuestion.linkedToEntityId = null;
                         $scope.activeQuestion.linkedToEntity = null;
@@ -754,13 +754,22 @@
                     });
             });
 
-            $scope.setLinkSource = function (itemId, linkedFilterExpression) {
+            $scope.setLinkSource = function (itemId, linkedFilterExpression, optionsFilterExpression) {
                 $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
 
                 if (itemId) {
                     $scope.activeQuestion.linkedToEntityId = itemId;
                     $scope.activeQuestion.linkedToEntity = _.find($scope.sourceOfLinkedEntities, { id: $scope.activeQuestion.linkedToEntityId });
-                    $scope.activeQuestion.linkedFilterExpression = linkedFilterExpression;
+
+                    var filter = linkedFilterExpression || optionsFilterExpression;
+                    if ($scope.activeQuestion.linkedToEntity.type == 'textlist') {
+                        $scope.activeQuestion.linkedFilterExpression = null;
+                        $scope.activeQuestion.optionsFilterExpression = filter;
+                    } else {
+                        $scope.activeQuestion.linkedFilterExpression = filter;
+                        $scope.activeQuestion.optionsFilterExpression = null;
+                    }
+
                     markFormAsChanged();
                 } 
             };

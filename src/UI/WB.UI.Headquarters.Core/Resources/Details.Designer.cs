@@ -178,6 +178,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show questionnaire details.
+        /// </summary>
+        public static string ShowQuestionnaireDetails {
+            get {
+                return ResourceManager.GetString("ShowQuestionnaireDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status: {{ name }}.
         /// </summary>
         public static string Status {

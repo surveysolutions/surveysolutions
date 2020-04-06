@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool StaticTextIsEmpty(IStaticText staticText, MultiLanguageQuestionnaireDocument document)
         {
-            return string.IsNullOrWhiteSpace(staticText.Text);
+            return string.IsNullOrWhiteSpace(staticText.Text) && string.IsNullOrEmpty(staticText.AttachmentName);
         }
 
         private static bool StaticTextRefersAbsentAttachment(IStaticText staticText, MultiLanguageQuestionnaireDocument document)

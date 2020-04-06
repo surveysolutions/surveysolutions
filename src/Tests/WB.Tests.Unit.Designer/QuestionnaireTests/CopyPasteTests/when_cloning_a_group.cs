@@ -14,7 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
 
         private void BecauseOf() => clone.FixedRosterTitles[0].Title = "changed";
 
-        [NUnit.Framework.Test] public void should_not_change_original_fixed_roster_title_when_chaning_title_in_clone () => original.FixedRosterTitles[0].Title.Should().Be("title1");
+        [NUnit.Framework.Test] 
+        public void should_not_change_original_fixed_roster_title_when_chaning_title_in_clone () => original.FixedRosterTitles[0].Title.Should().Be("title1");
 
         static Group original;
         static Group clone;

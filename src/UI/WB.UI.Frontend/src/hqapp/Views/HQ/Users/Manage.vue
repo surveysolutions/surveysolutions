@@ -62,14 +62,14 @@
                             id="PhoneNumber"/>
                     </form-group>
                     <p v-if="!isOwnProfile && lockMessage != null">{{lockMessage}}</p>
-                    <form-group v-if="!isOwnProfile" 
+                    <form-group v-if="!isOwnProfile && canBeLockedAsHeadquarters" 
                         :error="modelState['IsLockedByHeadquarters']">
                         <div>
                             <input
                                 class="checkbox-filter single-checkbox"
                                 id="IsLocked"
                                 name="IsLocked"
-                                type="checkbox"
+                                type="checkbox"                                
                                 v-model="isLockedByHeadquarters"/>
                             <label for="IsLocked"
                                 style="font-weight: bold">
@@ -220,6 +220,9 @@ export default {
         },
         canLockBySupervisor() {
             return this.isInterviewer
+        },
+        canBeLockedAsHeadquarters(){
+            return this.userInfo.canBeLockedAsHeadquarters
         },
         canChangePassword() {
             if (this.isOwnProfile && (this.isHeadquarters || this.isAdmin))

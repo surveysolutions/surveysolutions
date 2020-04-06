@@ -34,7 +34,8 @@ namespace WB.Tests.Unit.Designer
             List<ValidationCondition>validationConditions = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(questionnaire.Id, questionId, parentId, title, responsibleId, index));
-            var questionValidationConditions = validationConditions ?? new List<ValidationCondition>().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage).ToList();
+            var questionValidationConditions = validationConditions ?? new List<ValidationCondition>().ConcatWithOldConditionIfNotEmpty(validationExpression, 
+                validationMessage).ToList();
             
             questionnaire.UpdateTextQuestion(new UpdateTextQuestion(questionnaire.Id,
                 questionId, 
@@ -278,12 +279,13 @@ namespace WB.Tests.Unit.Designer
             Guid responsibleId,
             VariableType variableType = VariableType.String,
             string variableName = "variable",
-            string variableExpression = null)
+            string variableExpression = null,
+            bool doNotExport = false)
         {
             questionnaire.AddVariableAndMoveIfNeeded(
                 new AddVariable(questionnaire.Id, 
                     entityId,
-                    new VariableData(variableType, variableName, variableExpression, null), 
+                    new VariableData(variableType, variableName, variableExpression, null, doNotExport), 
                     responsibleId, parentId));
             
         }

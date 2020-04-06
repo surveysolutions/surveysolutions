@@ -1,8 +1,9 @@
 {
   "profiles": {
-    "Export.Host": {
+    "WB.Services.Export.Host": {
       "commandName": "Project",
-      "commandLineArgs": "--console",
+      "launchBrowser": false,
+      "commandLineArgs": "--console --ignore-pid --kestrel",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
