@@ -11,5 +11,6 @@ namespace WB.Services.Export.Assignment
         public bool AudioRecording { get; set; }
         public bool? WebMode { get; set; }
         public string Comment { get; set; }
+        public string QuestionnaireId { get; set; }
     }
 }

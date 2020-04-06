@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
+using Microsoft.Graph;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -12,15 +13,9 @@ using WB.Persistence.Headquarters.Migrations.ReadSide;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
-    internal enum DbType
-    {
-        PlainStore,
-        ReadSide
-    }
-
     internal class DatabaseTestInitializer
     {
-        public static string InitializeDb(params DbType[] dbType)
+        public static string CreateAndInitializeDb(params DbType[] dbType)
         {
             var TestConnectionString = TestsConfigurationManager.ConnectionString;
             var databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
@@ -41,6 +36,13 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 connection.Close();
             }
 
+            InitializeDb(connectionStringBuilder.ConnectionString, dbType);
+
+            return connectionStringBuilder.ConnectionString;
+        }
+
+        public static void InitializeDb(string connectionString, params DbType[] dbType)
+        {
             foreach (var db in dbType)
             {
                 string schemaName = null;
@@ -54,26 +56,24 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                         break;
                 }
 
-                DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, schemaName);
-                DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, "users");
-                DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, "events");
-                DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, "events",
+                DatabaseManagement.InitDatabase(connectionString, schemaName);
+                DatabaseManagement.InitDatabase(connectionString, "users");
+                DatabaseManagement.InitDatabase(connectionString, "events");
+                DbMigrationsRunner.MigrateToLatest(connectionString, "events",
                     new DbUpgradeSettings(typeof(M201812181520_AddedGlobalSequenceSequence).Assembly, typeof(M201812181520_AddedGlobalSequenceSequence).Namespace));
 
                 switch (db)
                 {
                     case DbType.PlainStore:
-                        DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, schemaName,
+                        DbMigrationsRunner.MigrateToLatest(connectionString, schemaName,
                             new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace));
                         break;
                     case DbType.ReadSide:
-                        DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, schemaName,
+                        DbMigrationsRunner.MigrateToLatest(connectionString, schemaName,
                             new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace));
                         break;
                 }
             }
-
-            return connectionStringBuilder.ConnectionString;
         }
 
         public static void DropDb(string connectionString)

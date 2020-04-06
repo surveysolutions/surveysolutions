@@ -313,6 +313,7 @@
     <item name="android:textCursorDrawable">@null</item>
     <item name="android:background">@drawable/question_list_item_editor_background</item>
     <item name="android:textColorHint">@color/editorHintTextColor</item>
+    <item name="android:textColor">@color/editorTextColor</item>
     <item name="android:textStyle">bold</item>
   </style>
 

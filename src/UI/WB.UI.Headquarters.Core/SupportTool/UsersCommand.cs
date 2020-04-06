@@ -38,14 +38,19 @@ namespace WB.UI.Headquarters.SupportTool
                     Required = true,
                     Argument = new Argument<string>()
                 },
-                new Option("--login")
+                new Option(new [] { "--username", "--login" })
                 {
                     Required = true,
+                    Argument = new Argument<string>()
+                },
+                new Option("--email")
+                {
+                    Required = false,
                     Argument = new Argument<string>()
                 }
             };
 
-            cmd.Handler = CommandHandler.Create<UserRoles, string, string>(async (role, password, login) =>
+            cmd.Handler = CommandHandler.Create<UserRoles, string, string, string>(async (role, password, login, email) =>
             {
                 var inScopeExecutor = this.host.Services.GetRequiredService<IInScopeExecutor>();
                 await inScopeExecutor.ExecuteAsync(async (locator, unitOfWork) =>
@@ -55,7 +60,8 @@ namespace WB.UI.Headquarters.SupportTool
                     var userManager = locator.GetInstance<UserManager<HqUser>>();
                     var user = new HqUser
                     {
-                        UserName = login
+                        UserName = login,
+                        Email = email
                     };
                     var creationResult = await userManager.CreateAsync(user, password);
                     if (creationResult.Succeeded)
@@ -83,9 +89,9 @@ namespace WB.UI.Headquarters.SupportTool
         {
             var cmd = new Command("reset-password")
             {
-                new Option("--username")
+                new Option(new [] { "--username", "--login" })
                 {
-                    Required = true,
+                    Required = true,                    
                     Argument = new Argument<string>()
                 },
                 new Option("--password")

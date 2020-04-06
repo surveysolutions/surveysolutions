@@ -14,7 +14,16 @@
             
         <div class="row">
             <div class="col-sm-8">
-                <h2>{{$t('Pages.QuestionnaireNameFormat', { name : questionnaire.title, version : questionnaire.version})}}</h2>
+                <h2>
+                    {{$t('Pages.QuestionnaireNameFormat', { name : questionnaire.title, version : questionnaire.version})}}
+                    <router-link
+                        :to="{ name: 'questionnairedetails', params: { questionnaireId: questionnaire.id } }"
+                        target='_blank'>
+                        <span
+                            :title="$t('Details.ShowQuestionnaireDetails')"
+                            class="glyphicon glyphicon-link"/>
+                    </router-link>
+                </h2>
             </div>
         </div>
         <div class="row">

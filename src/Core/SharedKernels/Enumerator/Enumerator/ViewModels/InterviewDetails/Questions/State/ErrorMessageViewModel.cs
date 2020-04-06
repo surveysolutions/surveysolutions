@@ -10,8 +10,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         public ErrorMessageViewModel(IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
-            ISubstitutionService substitutionService) : 
-                base(eventRegistry, interviewRepository, substitutionService)
+            ISubstitutionService substitutionService,
+            IQuestionnaireStorage questionnaireStorage) : 
+                base(eventRegistry, interviewRepository, substitutionService, questionnaireStorage)
         {
         }
 

@@ -52,11 +52,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return !string.IsNullOrEmpty(input) && input.Contains(rosterTitle);
         }
 
-        public string GenerateRosterName(string groupTitle, string rosterInstanceTitle)
-        {
-            return string.Format("{0} - {1}", groupTitle, string.IsNullOrEmpty(rosterInstanceTitle) ? DefaultSubstitutionText : rosterInstanceTitle);
-        }
-
         public string DefaultSubstitutionText => "[...]";
     }
 }

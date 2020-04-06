@@ -251,6 +251,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 HideIfDisabled = roster.HideIfDisabled,
                 VariableName = roster.VariableName,
                 DisplayMode = roster.DisplayMode,
+                CustomRosterTitle = roster.CustomRosterTitle,
                 DisplayModes = Enum.GetValues(typeof(RosterDisplayMode)).Cast<RosterDisplayMode>().ToArray(),
 
                 Type = rosterType,
@@ -369,7 +370,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 Id = variable.PublicKey,
                 ItemId = variable.PublicKey.FormatGuid(),
-                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression, variable.Label),
+                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression, variable.Label,variable.DoNotExport),
                 TypeOptions = VariableTypeOptions,
                 Breadcrumbs = this.GetBreadcrumbs(questionnaire, variable),
             };

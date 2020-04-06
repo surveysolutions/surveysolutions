@@ -7,7 +7,7 @@
         noInstructions="true"
         noComments="true"
         noFlag="true">
-        <span v-html="$me.title"></span><span v-if="this.$me.isRoster"> - <i>{{rosterTitle}}</i></span>
+        <span v-html="$me.title"></span><span v-if="this.$me.isRoster && !this.$me.hasCustomRosterTitle"> - <i>{{rosterTitle}}</i></span>
     </wb-question>
 </template>
 

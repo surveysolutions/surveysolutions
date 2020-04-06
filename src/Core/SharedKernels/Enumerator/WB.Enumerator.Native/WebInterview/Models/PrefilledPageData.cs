@@ -42,6 +42,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string RosterTitle { get; set; }
         public bool IsRoster { get; set; }
         public Validity Validity { get; set; } = new Validity();
+        
+        public bool HasCustomRosterTitle { get; set; }
     }
 
     public class Breadcrumb

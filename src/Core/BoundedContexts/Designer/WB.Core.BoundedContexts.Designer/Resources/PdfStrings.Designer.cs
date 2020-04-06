@@ -860,5 +860,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("Variable", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This variable is marked to be excluded from the exported data.
+        /// </summary>
+        public static string VariableExcludedFromExport {
+            get {
+                return ResourceManager.GetString("VariableExcludedFromExport", resourceCulture);
+            }
+        }
     }
 }

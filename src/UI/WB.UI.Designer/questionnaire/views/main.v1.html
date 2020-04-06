@@ -478,7 +478,8 @@
                                         </div>
                                         <div class="actions" ng-class="{dirty: categories.form.$dirty }">
                                             <div ng-show="categories.form.$dirty" class="pull-left">
-                                                <button type="submit" ng-disabled="categories.form.$invalid" class="btn lighter-hover" ng-click="saveCategories(categories);$event.stopPropagation()"
+                                                <button type="submit" ng-disabled="categories.form.$invalid" class="btn lighter-hover" 
+                                                        ng-click="saveCategories(categories);$event.stopPropagation()"
                                                         ng-i18next>
                                                     Save
                                                 </button>
@@ -489,7 +490,9 @@
                                                 <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + categories.categoriesId}}" class="btn btn-default"
                                                    target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
 
-                                                <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                                <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser" 
+                                                        class="btn btn-default" ngf-select="" ngf-max-size="10MB" 
+                                                        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
                                                         ngf-change="fileSelected(categories, $file);$event.stopPropagation()" type="button">
                                                     <span ng-i18next>Update</span>
                                                 </button>

@@ -38,6 +38,8 @@ export default {
     },
 
     getters: {
-
+        pickLocationAllowed() {
+            return true
+        },
     },
 }

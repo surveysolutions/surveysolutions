@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -230,7 +231,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             }
 
             return this.userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id) != deviceId
-                ? (IActionResult) Forbid()
+                ? (IActionResult)StatusCode(StatusCodes.Status403Forbidden, new {Message = "relinked"})
                 : new JsonResult("449634775");
         }
 

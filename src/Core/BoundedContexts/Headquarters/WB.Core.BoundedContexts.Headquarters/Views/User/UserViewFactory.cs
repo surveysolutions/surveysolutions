@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             Func<IQueryable<HqUser>, IQueryable<InterviewerFullApiView>> query = allUsers =>
             {
-                var interviewers = ApplyFilter(allUsers, null, false, UserRoles.Interviewer);
+                var interviewers = ApplyFilter(allUsers, null, null, UserRoles.Interviewer);
 
                 interviewers = ApplyFacetFilter(null, InterviewerFacet.None, interviewers);
 
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     PhoneNumber = x.PhoneNumber,
                     PasswordHash = x.PasswordHash,
                     IsLockedByHeadquarters = x.IsLockedByHeadquaters,
-                    IsLockedBySupervisor = x.IsLockedBySupervisor,
+                    IsLockedBySupervisor = x.IsLockedBySupervisor || x.IsArchived,
                     SecurityStamp = x.SecurityStamp
                 });
             };

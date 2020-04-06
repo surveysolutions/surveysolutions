@@ -21,6 +21,12 @@
         "WB.UI.Designer": { "ProfileName": "WB.UI.Designer" }
       }
     },
+    "Designer+WebTester": {
+      "Projects": {
+        "WB.UI.Designer": { "ProfileName": "WB.UI.Designer" },
+        "WB.UI.WebTester": { "ProfileName": "WB.UI.WebTester" }
+      }
+    },
     "HQ+Designer": {
       "Projects": {
         "WB.UI.Headquarters": {

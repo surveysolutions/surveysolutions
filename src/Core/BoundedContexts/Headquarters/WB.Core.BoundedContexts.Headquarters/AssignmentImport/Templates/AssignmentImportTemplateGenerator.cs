@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 return archiveFilePath;
 
-            this.tabularFormatExportService.CreateHeaderStructureForPreloadingForQuestionnaire(new QuestionnaireIdentity(questionnaireId, version), dataDirectoryPath);
+            this.tabularFormatExportService.CreateTemplateFilesForAdvancedPreloading(new QuestionnaireIdentity(questionnaireId, version), dataDirectoryPath);
 
             if (this.fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Length == 0)
             {

@@ -234,6 +234,13 @@ namespace WB.Services.Export.Host.Controllers
         }
 
         [HttpGet]
+        [Route("api/v1/job/byQuery")]
+        public async Task<IEnumerable<DataExportProcessView>> GetJobsByQuery(DataExportFormat? exportType,
+            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile, TenantInfo tenant)
+            => await this.jobsStatusReporting.GetDataExportStatusesAsync(exportType, interviewStatus,
+                questionnaireIdentity, exportStatus, hasFile, tenant);
+
+        [HttpGet]
         [Route("api/v1/job/all")]
         public async Task<List<long>> GetAllJobsList(TenantInfo tenant)
         {

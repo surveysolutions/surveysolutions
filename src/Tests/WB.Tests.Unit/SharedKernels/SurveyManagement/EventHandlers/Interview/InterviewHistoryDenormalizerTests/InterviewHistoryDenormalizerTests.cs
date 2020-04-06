@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -87,6 +90,38 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewExportedDataDenormalizer);
 
             Assert.AreEqual(interviewHistoryView.Records[0].Parameters["question"], variableName);
+        }
+
+        [Test]
+        public void should_provide_user_id_when_remove_answer()
+        {
+            var interviewHistoryView = CreateInterviewHistoryView(Id.g1);
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new[]
+            {
+                Create.Entity.TextQuestion(Id.g2, variable: "text")
+            });
+
+            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(questionnaireDocument);
+
+            var answerEvents = new List<IEvent>();
+            answerEvents.Add(Create.Event.AnswersRemoved(Id.g10, Create.Identity(Id.g2)));
+
+            UserViewLite user = Mock.Of<UserViewLite>(u => u.UserName == "User"
+                                                           && u.Roles == new HashSet<UserRoles>(new[] { UserRoles.Supervisor }));
+            var userViewFactory = Mock.Of<IUserViewFactory>(u => u.GetUser(Id.g10) == user);
+
+            var interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(
+                questionnaire: CreateQuestionnaireExportStructure(Id.g2, "text"),
+                questionnaireStorage: questionnaireStorage,
+                userDocumentWriter: userViewFactory);
+
+            //act
+            PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView,
+                interviewExportedDataDenormalizer);
+
+            Assert.AreEqual(interviewHistoryView.Records[0].Parameters["question"], "text");
+            Assert.AreEqual(interviewHistoryView.Records[0].OriginatorName, "User");
+            Assert.AreEqual(interviewHistoryView.Records[0].OriginatorRole, "Supervisor");
         }
     }
 }

@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.EventHandler
         {
             // arrange
             var @event = Create.PublishedEvent.GeoLocationQuestionAnswered();
-            var connectionString = DatabaseTestInitializer.InitializeDb(DbType.ReadSide);
+            var connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
 
             var sessionFactory = IntegrationCreate.SessionFactory(connectionString,
                 new List<Type> {typeof(InterviewGpsMap)}, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.EventHandler
         {
             // arrange
             var @event = Create.PublishedEvent.GeoLocationQuestionAnswered(timestamp: DateTimeOffset.MinValue);
-            var connectionString = DatabaseTestInitializer.InitializeDb(DbType.ReadSide);
+            var connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
 
             var sessionFactory = IntegrationCreate.SessionFactory(connectionString,
                 new List<Type> { typeof(InterviewGpsMap) }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
