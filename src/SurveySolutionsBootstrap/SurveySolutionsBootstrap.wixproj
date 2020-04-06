@@ -8,8 +8,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Bundle</OutputType>
     <Name>SurveySolutionsBootstrap</Name>
-    <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.1.0.0</SurveySolutionsVersion>
-    <OutputName>SurveySolutions.$(SurveySolutionsVersion)</OutputName>
+    <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">12.3.0.0</SurveySolutionsVersion>
+	<HqVersion Condition=" '$(HqVersion)' == '' ">1.2.3.0</HqVersion>
+    <OutputName>SurveySolutions.$(HqVersion)</OutputName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -26,7 +27,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;SurveySolutionsVersion=$(SurveySolutionsVersion)</DefineConstants>
+    <DefineConstants>Debug;SurveySolutionsVersion=$(SurveySolutionsVersion);HqVersion=$(HqVersion)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>

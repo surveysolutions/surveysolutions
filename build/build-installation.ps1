@@ -55,7 +55,9 @@ Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
 $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
-$version = $newVersion = "{0}.{1}.{2}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart, $BuildNumber
+# $version = $newVersion = "{0}{1}.{2}.{3}.{4}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart.ToString("00"), $versionOfProduct.ProductBuildPart, $versionOfProduct.ProductPrivatePart, $BuildNumber
+$productFileVersion = $versionOfProduct.FileVersion
+
 
 
 # https://github.com/dotnet/core/issues/4011#issuecomment-567610911
@@ -84,7 +86,8 @@ $installationArgs = @(
     "/p:HarvestDirectory=$HQsitePath";
     "/p:Configuration=Release";
     "/p:Platform=x86";
-    "/p:SurveySolutionsVersion=$version";
+    "/p:SurveySolutionsVersion=$productFileVersion";
+	"/p:HqVersion=$productFileVersion";
 )
 
 $pathToMsBuild = GetPathToMSBuild
