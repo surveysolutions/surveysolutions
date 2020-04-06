@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using GreenDonut;
@@ -26,15 +27,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Answer value for categorical questions");
 
             descriptor.Field(x => x.Question)
-                .Resolver(context => context.GroupDataLoader<int, QuestionnaireCompositeItem>("questionByAnswer", async keys =>
-                {
-                    var unitOfWork = context.Service<IUnitOfWork>();
-                    var items = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
-                        .Where(q => keys.Contains(q.Id))
-                        .ToListAsync()
-                        .ConfigureAwait(false);
-                    return items.ToLookup(x => x.Id);
-                }).LoadAsync(context.Parent<QuestionAnswer>().Question.Id))
+                .Resolver(context => {
+                    var parent = context.Parent<QuestionAnswer>();
+
+                    return context.BatchDataLoader<int, QuestionnaireCompositeItem>("questionByAnswer", async keys =>
+                    {
+                        var unitOfWork = context.Service<IUnitOfWork>();
+                        var items = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
+                            .Where(q => keys.Contains(q.Id))
+                            .ToListAsync()
+                            .ConfigureAwait(false);
+                        return items.ToDictionary(x => x.Id);
+                    }).LoadAsync(parent.Question.Id);
+                    }
+                )
                 .Type<NonNullType<QuestionItemObjectType>>();
         }
     }
