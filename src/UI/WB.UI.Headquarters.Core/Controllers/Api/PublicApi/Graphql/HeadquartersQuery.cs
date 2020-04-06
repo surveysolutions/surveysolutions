@@ -16,9 +16,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .Argument("take", a => a.Type<IntType>())
                 .Authorize()
                 .Type<NonNullType<ListType<InterviewSummaryObjectType>>>()
-                .UsePaging<InterviewSummaryObjectType>()
                 .UseFiltering<InterviewsFilerInputType>()
-                .UseSorting<InterviewsSortInputType>();
+                .UseSorting<InterviewsSortInputType>()
+                .UsePaging<InterviewSummaryObjectType>();
 
             descriptor.Field<QuestionsResolver>(x => x.Questions(default, default, default, default))
                 .Authorize()
