@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -178,7 +177,9 @@ namespace WB.UI.Headquarters
                     phoneNumberMaxLength: EditUserModel.PhoneNumberLength,
                     personNameFormatRegex: EditUserModel.PersonNameRegex);
 
-            var synchronizationSettings = new SyncSettings(origin: Constants.SupervisorSynchronizationOrigin);
+            var synchronizationSettings = new SyncSettings(origin: Constants.SupervisorSynchronizationOrigin) {
+                HumainIdMaxValue = Configuration.GetValue<int>("Headquarters:HumanIdMaxValue", 99_99_99_99)
+            };
 
             ExternalStoragesSettings externalStoragesSettings = new FakeExternalStoragesSettings();
 

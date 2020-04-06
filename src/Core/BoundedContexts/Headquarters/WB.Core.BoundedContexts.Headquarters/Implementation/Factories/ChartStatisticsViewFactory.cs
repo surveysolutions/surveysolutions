@@ -62,8 +62,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             // ReSharper disable StringLiteralTypo
             var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
-                @"select min(date), max(date) from readside.cumulativereportstatuschanges
-                      where questionnaireidentity = any(@questionnairesList) and status = any(@allowedStatuses)", 
+                @"with dates as (
+                    select date from readside.cumulativereportstatuschanges
+                    where questionnaireidentity = any(@questionnairesList) and status = any(@allowedStatuses)
+                  ) select min(date), max(date) from dates", 
                  new { questionnairesList, AllowedStatuses });
 
             if (dates.min == null && dates.max == null) // we have no data at all
@@ -87,6 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             // dates CTE will generate gape-less interval of dates
             // timespan CTE will produce cross product of dates and available statuses
             // report CTE will produce report over all data
+            // do not move date filtering inside report CTE as it will affect partition query
             var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
                 @"with 
                         dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::date as date),

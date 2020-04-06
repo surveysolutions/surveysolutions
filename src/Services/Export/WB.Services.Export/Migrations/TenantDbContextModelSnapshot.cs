@@ -16,7 +16,7 @@ namespace WB.Services.Export.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.0.0")
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("WB.Services.Export.Assignment.Assignment", b =>
@@ -40,6 +40,10 @@ namespace WB.Services.Export.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnName("quantity")
                         .HasColumnType("integer");
+
+                    b.Property<string>("QuestionnaireId")
+                        .HasColumnName("questionnaire_id")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("ResponsibleId")
                         .HasColumnName("responsible_id")

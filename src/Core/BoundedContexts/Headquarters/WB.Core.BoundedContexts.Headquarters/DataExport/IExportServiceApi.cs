@@ -56,6 +56,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         [Get("/api/v1/job")]
         Task<DataExportProcessView> GetJobsStatus(long processId);
 
+        [Get("/api/v1/job/byQuery")]
+        Task<IEnumerable<DataExportProcessView>> GetJobsByQuery(DataExportFormat? exportType, InterviewStatus? interviewStatus,
+            string questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile);
+
         [Get("/api/v1/jobs")]
         Task<List<DataExportProcessView>> GetJobsStatuses([Query(CollectionFormat.Multi)]long[] processIds);
 

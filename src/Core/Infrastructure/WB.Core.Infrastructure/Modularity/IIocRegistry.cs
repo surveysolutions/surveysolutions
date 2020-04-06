@@ -28,8 +28,6 @@ namespace WB.Core.Infrastructure.Modularity
         void BindGeneric(Type implementation);
         void BindInPerLifetimeScope<T1, T2>() where T2 : T1;
 
-        void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName,
-            object argumentValue) where TImplementation : TInterface;
-
+        void BindInPerLifetimeScope<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface2, TInterface1;
     }
 }

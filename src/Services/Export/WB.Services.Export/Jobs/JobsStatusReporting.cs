@@ -38,8 +38,7 @@ namespace WB.Services.Export.Jobs
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IFileSystemAccessor fileSystemAccessor,
             IExternalArtifactsStorage externalArtifactsStorage,
-            IDataExportFileAccessor exportFileAccessor,
-            IQuestionnaireStorage questionnaireStorage)
+            IDataExportFileAccessor exportFileAccessor            )
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
@@ -51,33 +50,12 @@ namespace WB.Services.Export.Jobs
         public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId, TenantInfo tenant)
         {
             DataExportProcessArgs process = await this.dataExportProcessesService.GetProcessAsync(processId);
+            if (process == null) return null;
 
             if(!tenant.Id.Equals(process.ExportSettings.Tenant.Id)) throw new ArgumentException("Cannot found process #" + processId, nameof(processId));
 
-            var dataExportProcessView = ToDataExportProcessView(process);
-            var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
+            var dataExportProcessView = await ToDataExportProcessView(tenant, process);
 
-            var exportSettings = new ExportSettings
-            {
-                Tenant = tenant,
-                QuestionnaireId = questionnaireId,
-                ExportFormat = dataExportProcessView.Format,
-                Status = dataExportProcessView.InterviewStatus,
-                FromDate = dataExportProcessView.FromDate,
-                ToDate = dataExportProcessView.ToDate
-            };
-
-            dataExportProcessView.HasFile = false;
-            
-            var exportFileInfo = await GetExportFileInfo(exportSettings);
-
-            dataExportProcessView.DataFileLastUpdateDate = exportFileInfo.LastUpdateDate;
-            dataExportProcessView.FileSize = exportFileInfo.FileSize;
-            dataExportProcessView.HasFile = exportFileInfo.HasFile;
-            dataExportProcessView.DataDestination = process.StorageType.HasValue 
-                ? process.StorageType.Value.ToString() 
-                : "File";
-            
             return dataExportProcessView;
         }
 
@@ -92,34 +70,44 @@ namespace WB.Services.Export.Jobs
                 if (!tenant.Id.Equals(process.ExportSettings.Tenant.Id))
                     continue;
 
-                var dataExportProcessView = ToDataExportProcessView(process);
-                var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
-
-                var exportSettings = new ExportSettings
-                {
-                    Tenant = tenant,
-                    QuestionnaireId = questionnaireId,
-                    ExportFormat = dataExportProcessView.Format,
-                    Status = dataExportProcessView.InterviewStatus,
-                    FromDate = dataExportProcessView.FromDate,
-                    ToDate = dataExportProcessView.ToDate
-                };
-
-                dataExportProcessView.HasFile = false;
-
-                var exportFileInfo = await GetExportFileInfo(exportSettings);
-                
-                dataExportProcessView.DataFileLastUpdateDate = exportFileInfo.LastUpdateDate;
-                dataExportProcessView.FileSize = exportFileInfo.FileSize;
-                dataExportProcessView.HasFile = exportFileInfo.HasFile;
-                dataExportProcessView.DataDestination = process.StorageType.HasValue
-                    ? process.StorageType.Value.ToString()
-                    : "File";
+                var dataExportProcessView = await ToDataExportProcessView(tenant, process);
 
                 result.Add(dataExportProcessView);
             }
 
             return result;
+        }
+
+        public async Task<IEnumerable<DataExportProcessView>> GetDataExportStatusesAsync(
+            DataExportFormat? exportType, InterviewStatus? interviewStatus, string questionnaireIdentity,
+            DataExportJobStatus? exportStatus, bool? hasFile, TenantInfo tenant)
+        {
+            var allProcesses = await this.dataExportProcessesService.GetAllProcesses(tenant, false);
+                
+            var filteredViews = new List<DataExportProcessView>();
+            foreach (var process in allProcesses)
+            {
+                var view = await ToDataExportProcessView(tenant, process);
+
+                if (IsInFilter(view, exportType, interviewStatus, questionnaireIdentity, exportStatus, hasFile))
+                    filteredViews.Add(view);
+            }
+
+            return filteredViews.OrderByDescending(x => x.Id);
+        }
+
+        private bool IsInFilter(DataExportProcessView process, DataExportFormat? exportType,
+            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus,
+            bool? hasFile)
+        {
+            var hasFormat = !exportType.HasValue || process.Format == exportType;
+            var hasInterviewStatus = !interviewStatus.HasValue || process.InterviewStatus == interviewStatus;
+            var hasJobStatus = !exportStatus.HasValue || process.JobStatus == exportStatus;
+            var hasHasFile = !hasFile.HasValue || process.HasFile == hasFile;
+            var hasQuestionnaire = string.IsNullOrEmpty(questionnaireIdentity) ||
+                                   process.QuestionnaireId == questionnaireIdentity;
+
+            return hasFormat && hasInterviewStatus && hasJobStatus && hasHasFile && hasQuestionnaire;
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
@@ -205,6 +193,34 @@ namespace WB.Services.Export.Jobs
                 && x.Type == dataType);
 
             return matchingProcess?.ProcessStatus ?? DataExportStatus.NotStarted;
+        }
+
+        private async Task<DataExportProcessView> ToDataExportProcessView(TenantInfo tenant, DataExportProcessArgs process)
+        {
+            var dataExportProcessView = ToDataExportProcessView(process);
+            var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
+
+            var exportSettings = new ExportSettings
+            {
+                Tenant = tenant,
+                QuestionnaireId = questionnaireId,
+                ExportFormat = dataExportProcessView.Format,
+                Status = dataExportProcessView.InterviewStatus,
+                FromDate = dataExportProcessView.FromDate,
+                ToDate = dataExportProcessView.ToDate
+            };
+
+            dataExportProcessView.HasFile = false;
+
+            var exportFileInfo = await GetExportFileInfo(exportSettings);
+
+            dataExportProcessView.DataFileLastUpdateDate = exportFileInfo.LastUpdateDate;
+            dataExportProcessView.FileSize = exportFileInfo.FileSize;
+            dataExportProcessView.HasFile = exportFileInfo.HasFile;
+            dataExportProcessView.DataDestination = process.StorageType.HasValue
+                ? process.StorageType.Value.ToString()
+                : "File";
+            return dataExportProcessView;
         }
 
         private static DataExportProcessView ToDataExportProcessView(DataExportProcessArgs dataExportProcessDetails)

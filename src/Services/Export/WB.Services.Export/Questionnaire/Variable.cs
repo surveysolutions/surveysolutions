@@ -32,6 +32,8 @@ namespace WB.Services.Export.Questionnaire
         public string Label { get; set; }
         public string Expression { get; set; }
 
+        public bool DoNotExport { get; set; }
+
         private string columnName;
         public string ColumnName
         {
@@ -44,6 +46,8 @@ namespace WB.Services.Export.Questionnaire
                 return columnName;
             }
         }
+
+        public bool IsExportable => DoNotExport == false;
     }
 
     public enum VariableType

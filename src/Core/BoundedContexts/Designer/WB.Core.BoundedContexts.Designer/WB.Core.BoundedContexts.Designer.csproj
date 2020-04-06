@@ -107,6 +107,26 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="**\*.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+
+    <Compile Update="Resources\*.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup> 
+  
+
+  <ItemGroup>
+    <Folder Include="Services\WebTester\" />
+  </ItemGroup> 
+  
+
+  <ItemGroup>
     <Compile Update="Resources\Common.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -116,6 +136,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Country.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ExceptionMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\KindOfData.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -127,6 +152,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ModeOfDataCollection.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\PdfStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PdfStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Roster.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -137,17 +172,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>StudyType.resx</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="**\*.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\WebTester\" />
-  </ItemGroup>
+    <Compile Update="Resources\VerificationMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>VerificationMessages.resx</DependentUpon>
+    </Compile>
+  </ItemGroup> 
+  
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\Common.resx">
@@ -158,6 +189,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Country.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ExceptionMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\KindOfData.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>KindOfData.Designer.cs</LastGenOutput>
@@ -165,6 +200,14 @@
     <EmbeddedResource Update="Resources\ModeOfDataCollection.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ModeOfDataCollection.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PdfStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Roster.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -174,5 +217,15 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>StudyType.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\VerificationMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\VerificationMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
+
+ 
 </Project>

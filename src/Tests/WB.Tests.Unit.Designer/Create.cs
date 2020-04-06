@@ -410,10 +410,11 @@ namespace WB.Tests.Unit.Designer
             bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false, List<Answer> answersList = null,
             string title = "test",
             bool isCombobox = false,
+            string optionsFilterExpression = null,
             params decimal[] answers)
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            return new MultyOptionsQuestion("Question MO")
+            var multipleOptionsQuestion = new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = publicKey,
                 StataExportCaption = GetNameForEntity("multi_option", publicKey),
@@ -427,8 +428,10 @@ namespace WB.Tests.Unit.Designer
                 YesNoView = isYesNo,
                 Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList(),
                 QuestionText = title,
-                IsFilteredCombobox = isCombobox
+                IsFilteredCombobox = isCombobox,
             };
+            multipleOptionsQuestion.Properties.OptionsFilterExpression = optionsFilterExpression;
+            return multipleOptionsQuestion;
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
@@ -604,7 +607,8 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnaireHistoryVersionsService historyVersionsService = null)
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnaireHistoryVersionsService historyVersionsService = null,
+            IFindReplaceService findReplaceService = null)
         {
             return new Questionnaire(
                 Mock.Of<IClock>(),
@@ -612,7 +616,8 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
                 historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
-                Mock.Of<ICategoriesService>());
+                Mock.Of<ICategoriesService>(),
+                findReplaceService ?? Mock.Of<IFindReplaceService>());
         }
 
 
@@ -665,12 +670,13 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire");
 
-        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", string label = null)
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", 
+            string label = null, bool doNotExport = false)
         {
             var publicKey = id ?? Guid.NewGuid();
             var name = variableName ?? GetNameForEntity("var", publicKey);
             return new Variable(publicKey: publicKey, 
-                variableData: new VariableData(type: type, name: name, expression: expression, label: label));
+                variableData: new VariableData(type: type, name: name, expression: expression, label: label, doNotExport: doNotExport));
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
@@ -863,7 +869,8 @@ namespace WB.Tests.Unit.Designer
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
-            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection,
+            bool customRosterTitle = false)
         {
             var id = rosterId ?? Guid.NewGuid();
             Group group = Create.Group(
@@ -893,6 +900,7 @@ namespace WB.Tests.Unit.Designer
 
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
+            group.CustomRosterTitle = customRosterTitle;
 
             return group;
         }
@@ -905,10 +913,11 @@ namespace WB.Tests.Unit.Designer
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null,
             decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false,
             string linkedFilterExpression = null, Guid? linkedToRosterId = null, List<Answer> answers = null,
-            bool isPrefilled = false, bool isComboBox = false, bool showAsList = false, Guid? categoriesId = null)
+            bool isPrefilled = false, bool isComboBox = false, bool showAsList = false, Guid? categoriesId = null,
+            string optionsFilterExpression = null)
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            return new SingleQuestion
+            var singleOptionQuestion = new SingleQuestion
             {
                 PublicKey = publicKey,
                 StataExportCaption = variable ?? GetNameForEntity("single_option", publicKey),
@@ -928,6 +937,8 @@ namespace WB.Tests.Unit.Designer
                 QuestionScope = scope,
                 CategoriesId = categoriesId
             };
+            singleOptionQuestion.Properties.OptionsFilterExpression = optionsFilterExpression;
+            return singleOptionQuestion;
         }
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
@@ -1134,11 +1145,13 @@ namespace WB.Tests.Unit.Designer
                 FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
-                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode);
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode, false);
 
-            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, string label = null, Guid? userId = null)
+            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, 
+                string name, string expression, string label = null, Guid? userId = null, bool doNotExport = false)
             {
-                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, label));
+                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, 
+                    new VariableData(type, name, expression, label, doNotExport));
             }
 
             public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, 
@@ -1182,6 +1195,10 @@ namespace WB.Tests.Unit.Designer
                 Guid sourceQuestionnaireId, Guid sourceItemId, Guid responsibleId) 
                 => new PasteAfter(questionnaireId, entityId, itemToPasteAfterId, sourceQuestionnaireId, sourceItemId, responsibleId);
 
+            public static PasteInto PasteInto(Guid questionnaireId, Guid entityId, 
+                Guid sourceQuestionnaireId, Guid sourceItemId, Guid targetParentId, Guid responsibleId) 
+                => new PasteInto(questionnaireId, entityId, sourceQuestionnaireId, sourceItemId, targetParentId, responsibleId);
+
             public static DeleteGroup DeleteGroup(Guid questionnaireId, Guid groupId)
                 => new DeleteGroup(questionnaireId, groupId, Guid.NewGuid());
 
@@ -1214,9 +1231,12 @@ namespace WB.Tests.Unit.Designer
                     isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: options);
             }
 
-            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, string label = null, int? index =null)
+            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, 
+                Guid responsibleId, string name = null, string expression = null, 
+                VariableType variableType = VariableType.String, string label = null, int? index =null, bool doNotExport = false)
             {
-                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression, label), responsibleId, parentId, index);
+                return new AddVariable(questionnaireId, entityId, 
+                    new VariableData(variableType, name, expression, label, doNotExport), responsibleId, parentId, index);
             }
 
             public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", string variable = "questionnaire", bool isPublic = false, bool isResponsibleAdmin = false)

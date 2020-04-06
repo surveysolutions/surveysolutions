@@ -26,6 +26,11 @@ namespace Ncqrs.Eventing.Storage
         public virtual int? GetLastEventSequence(Guid id)
              => this._events.GetOrNull(id)?.LastOrDefault()?.EventSequence;
 
+        public bool IsDirty(Guid eventSourceId, long lastKnownEventSequence)
+        {
+            return GetLastEventSequence(eventSourceId) != lastKnownEventSequence;
+        }
+
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             if (eventStream.IsNotEmpty)
@@ -57,5 +62,7 @@ namespace Ncqrs.Eventing.Storage
 
             return new CommittedEventStream(eventStream.SourceId);
         }
+
+       
     }
 }

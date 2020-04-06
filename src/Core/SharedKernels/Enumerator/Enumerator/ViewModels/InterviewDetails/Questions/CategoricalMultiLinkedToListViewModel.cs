@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -31,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher) : base(
+            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel) : base(
             questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal, answering,
             instructionViewModel, throttlingModel)
         {
@@ -58,14 +56,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override IEnumerable<CategoricalMultiOptionViewModel<int>> GetOptions(IStatefulInterview interview)
         {
             var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.Identity);
+            if (listQuestion == null || listQuestion.IsDisabled()) yield break;
 
-            if (listQuestion == null || listQuestion.IsDisabled() || listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows == null)
-                yield break;
+            var listOptions = listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows;
+            var filteredOptions = interview.GetMultiOptionLinkedToListQuestion(this.Identity)?.Options;
             
-            foreach (var textListAnswerRow in listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows)
+            if (listOptions == null || filteredOptions == null) yield break;
+
+            foreach (var optionCode in filteredOptions)
             {
                 var vm = new CategoricalMultiOptionViewModel<int>();
-                base.InitViewModel(textListAnswerRow.Text, textListAnswerRow.Value, interview, vm);
+                base.InitViewModel(listOptions.First(x => x.Value == optionCode).Text, optionCode, interview, vm);
 
                 yield return vm;
             }

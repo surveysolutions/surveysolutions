@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Mo
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
@@ -165,13 +166,16 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             foreach (var question in questionsWithFilter)
             {
                 var variable = questionnaire.GetVariable(question);
-                yield return 
-                    new OptionsFilterMethodModel(
-                        ExpressionLocation.CategoricalQuestionFilter(question.PublicKey),
-                        levelClassNames[questionnaire.GetRosterScope(question)], 
-                        $"{CodeGeneratorV2.OptionsFilterPrefix}{variable}", 
-                        this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaire.Macros.Values),
-                        variable);
+                var methodName = $"{CodeGeneratorV2.OptionsFilterPrefix}{variable}";
+                var expression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaire.Macros.Values);
+                var levelClassName = levelClassNames[questionnaire.GetRosterScope(question)];
+
+                yield return new OptionsFilterMethodModel(
+                    ExpressionLocation.CategoricalQuestionFilter(question.PublicKey),
+                    levelClassName,
+                    methodName,
+                    expression,
+                    variable);
             }
         }
 

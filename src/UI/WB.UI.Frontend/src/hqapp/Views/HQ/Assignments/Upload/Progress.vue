@@ -14,7 +14,16 @@
         </div>
         <div class="row">
             <div class="col-sm-7">
-                <h3>{{$t('BatchUpload.ImportAssignmentsFor', { title: $t('Pages.QuestionnaireNameFormat', { name: questionnaire.title, version: questionnaire.version }) })}}</h3>
+                <h3>
+                    {{$t('BatchUpload.ImportAssignmentsFor', { title: $t('Pages.QuestionnaireNameFormat', { name: questionnaire.title, version: questionnaire.version }) })}}
+                    <router-link
+                        :to="{ name: 'questionnairedetails', params: { questionnaireId: questionnaire.id } }"
+                        target='_blank'>
+                        <span
+                            :title="$t('Details.ShowQuestionnaireDetails')"
+                            class="glyphicon glyphicon-link"/>
+                    </router-link>
+                </h3>
             </div>
         </div>
         <div class="row">

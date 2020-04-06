@@ -43,12 +43,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
 
             var textQuestionIdentity = Create.Entity.Identity(sourceOfLinkedQuestionId, Create.Entity.RosterVector(1));
 
-            var textQuestionViewModel = Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository);
+            var textQuestionViewModel = Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository, questionnaireStorage: 
+                Create.Storage.QuestionnaireStorage(questionnaireDocument));
             textQuestionViewModel.Init(this.interview.Id.ToString(), textQuestionIdentity, Create.Other.NavigationState());
 
             //act
             this.interview.AnswerMultipleOptionsQuestion(interviewerId, rosterQuestionId, Create.Entity.RosterVector(), DateTime.UtcNow, new int[0]);
-            textQuestionViewModel.Handle(new AnswersRemoved(new [] { textQuestionIdentity}, DateTime.UtcNow));
+            textQuestionViewModel.Handle(new AnswersRemoved(null, new [] { textQuestionIdentity}, DateTime.UtcNow));
 
             //assert
             Assert.That(textQuestionViewModel.Answer, Is.Empty);

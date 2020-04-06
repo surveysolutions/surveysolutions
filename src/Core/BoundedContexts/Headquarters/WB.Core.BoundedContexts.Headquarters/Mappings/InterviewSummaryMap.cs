@@ -14,7 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Id(x => x.Id, p => p.Generator(Generators.Identity));
 
-            // Property(x => x.SummaryId);
             this.PropertyKeyAlias(x => x.SummaryId, id => summary => summary.SummaryId == id);
 
             Property(x => x.QuestionnaireTitle);
@@ -70,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     collection.Key(key => key.Column("interview_id"));
                     collection.OrderBy(x => x.Position);
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                    collection.Lazy(CollectionLazy.NoLazy);
+                    //collection.Lazy(CollectionLazy.NoLazy);
                     collection.Inverse(true);
                 },
                 rel => rel.OneToMany());

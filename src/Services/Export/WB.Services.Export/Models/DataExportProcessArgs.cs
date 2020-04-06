@@ -16,22 +16,13 @@ namespace WB.Services.Export.Models
         public DateTime? EndDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
         public DataExportStatus Status { get; set; } = DataExportStatus.Queued;
+        public DataExportJobStatus JobStatus { get; set; }
         public int ProgressInPercents { get; set; }
         public bool IsRunning { get; set; }
         public TimeSpan? TimeEstimation { get; set; }
         public DateExportProcessError Error { get; set; }
-        public DataExportJobStatus JobStatus { get; set; }
     }
-
-    public enum DataExportJobStatus
-    {
-        Created = 0,
-        Running = 1,
-        Completed = 2,
-        Fail = 3,
-        Canceled = 4
-    }
-
+     
     public class DataExportProcessArgs
     {
         public ExportSettings ExportSettings { get; set; }

@@ -49,6 +49,11 @@ namespace WB.Core.Infrastructure
             {
                 throw new NotImplementedException("This application is event free.");
             }
+
+            public bool IsDirty(Guid eventSourceId, long lastKnownEventSequence)
+            {
+                throw new NotImplementedException("This application is event free.");
+            }
         }
 
         public class DummyEventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository
