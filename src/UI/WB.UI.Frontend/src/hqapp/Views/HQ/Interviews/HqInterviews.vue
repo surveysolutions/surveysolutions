@@ -340,39 +340,31 @@ import moment from 'moment'
 import {lowerCase, map, join, assign, isNaN} from 'lodash'
 import gql from 'graphql-tag'
 
-const query = gql` query interviews(
-        $order: InterviewSort,
-        $skip: Int,
-        $take: Int,
-        $where: InterviewFilter
-    ) {
-    interviews(order_by: $order, skip: $skip, take: $take, where: $where)
-    {
-        totalCount,
-        edges{
-            node {
-                id
-                key
-                status
-                questionnaireId
-                responsibleName
-                errorsCount
-                assignmentId
-                updateDate
-                receivedByInterviewer
-                questionnaireVersion
-                identifyingQuestions {
-                    question {
-                        variable
-                        questionText
-                    },
-
-                    answer
-                }
-            }
+const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
+  interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
+    totalCount
+    nodes {
+      id
+      key
+      status
+      questionnaireId
+      responsibleName
+      errorsCount
+      assignmentId
+      updateDate
+      receivedByInterviewer
+      questionnaireVersion
+      identifyingQuestions {
+        question {
+          variable
+          questionText
         }
+        answer
+      }
     }
-}`
+  }
+}
+`
 
 export default {
     data() {
@@ -580,8 +572,7 @@ export default {
                         self.totalRows = data.totalCount
                         callback({
                             recordsTotal: data.totalCount,
-                            recordsFiltered: 0,
-                            data: data.edges.map(e => e.node),
+                            data: data.nodes,
                         })
                     }).catch(err => {
                         callback({

@@ -9,9 +9,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 {
     public class InterviewsResolver
     {
-        public IQueryable<InterviewSummary> GetInterviews(
-            int? skip, int? take,
-            [Service] IUnitOfWork unitOfWork, [Service]IAuthorizedUser user)
+        public IQueryable<InterviewSummary> GetInterviews([Service] IUnitOfWork unitOfWork, [Service]IAuthorizedUser user)
         {
             unitOfWork.DiscardChanges();
 
@@ -24,17 +22,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             if (user.IsInterviewer)
             {
                 interviewSummaries = interviewSummaries.Where(x => x.ResponsibleId == user.Id);
-            }
-            
-            
-            if(skip.HasValue)
-            {
-                interviewSummaries = interviewSummaries.Skip(skip.Value);
-            }
-
-            if(take.HasValue)
-            {
-                interviewSummaries = interviewSummaries.Take(take.Value);
             }
             
             return interviewSummaries;

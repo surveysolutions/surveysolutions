@@ -1,7 +1,8 @@
-using System;
+#nullable enable
 using HotChocolate.Types;
-using HotChocolate.Types.Relay;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
@@ -10,14 +11,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
-            descriptor.Field<InterviewsResolver>(x => x.GetInterviews(default, default, default, default))
-                .Argument("skip", a => a.Type<IntType>())
-                .Argument("take", a => a.Type<IntType>())
+            descriptor.Field<InterviewsResolver>(x => x.GetInterviews(default, default))
                 .Authorize()
-                .Type<NonNullType<ListType<InterviewSummaryObjectType>>>()
-                .UseFiltering<InterviewsFilerInputType>()
-                .UseSorting<InterviewsSortInputType>()
-                .UsePaging<InterviewSummaryObjectType>();
+                .UseSimplePaging<InterviewSummaryObjectType, InterviewSummary>()
+                .UseFiltering<InterviewsFilterInputType>()
+                .UseSorting<InterviewsSortInputType>();
 
             descriptor.Field<QuestionsResolver>(x => x.Questions(default, default, default, default))
                 .Authorize()
