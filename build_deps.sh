@@ -5,4 +5,4 @@ yarn
 yarn gulp
 cd ../WB.UI.Frontend
 yarn
-yarn build
+yarn dev
