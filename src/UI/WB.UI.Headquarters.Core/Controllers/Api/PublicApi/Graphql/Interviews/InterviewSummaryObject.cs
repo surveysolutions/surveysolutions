@@ -1,6 +1,8 @@
 using System.Linq;
+using HotChocolate.Resolvers;
 using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -49,16 +51,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Field(x => x.AnswersToFeaturedQuestions)
                 .Name("identifyingQuestions")
-                .Resolver(x =>
-                {
-                    var interviewSummary = x.Parent<InterviewSummary>();
-                    var unitOfWork = x.Service<IUnitOfWork>();
-                    var answers = unitOfWork.Session.Query<QuestionAnswer>()
-                        .Where(a => a.InterviewSummary == interviewSummary)
-                        .OrderBy(a => a.Position)
-                        .ToList();
-                    return answers;
-                })
+                .Resolver(context => 
+                    context.GroupDataLoader<string, QuestionAnswer>
+                        ("answersByInterview", async keys =>
+                    {
+                        var unitOfWork = context.Service<IUnitOfWork>();
+                        var questionAnswers = await unitOfWork.Session.Query<QuestionAnswer>()
+                            .Where(a => keys.Contains(a.InterviewSummary.SummaryId))
+                            .ToListAsync()
+                            .ConfigureAwait(false);
+                        var answers = questionAnswers
+                            .ToLookup(x => x.InterviewSummary.SummaryId);
+
+                        return answers;
+                    }).LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
                 .Type<NonNullType<ListType<NonNullType<AnswerObjectType>>>>();
         }
     }
