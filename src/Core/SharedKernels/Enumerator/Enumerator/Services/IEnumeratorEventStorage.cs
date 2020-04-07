@@ -17,6 +17,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         int GetMaxSequenceForAnyEvent(Guid interviewId, params string[] typeNames);
 
         List<Guid> GetListOfAllItemsIds();
-        void MarkAllEventsAsReceivedByHQ(Guid interviewId);
+        void MarkAllEventsAsReceivedByHq(Guid interviewId);
+
+        void InsertEventsFromHqInEventsStream(Guid interviewId, CommittedEventStream events);
+        bool IsLastEventInSequence(Guid interviewId, Guid eventId);
+        Guid? GetLastEventIdUploadedToHq(Guid interviewId);
     }
 }

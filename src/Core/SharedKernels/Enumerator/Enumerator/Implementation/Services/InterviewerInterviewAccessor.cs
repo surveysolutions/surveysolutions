@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public void MarkEventsAsReceivedByHQ(Guid interviewId)
         {
-            eventStore.MarkAllEventsAsReceivedByHQ(interviewId);
+            eventStore.MarkAllEventsAsReceivedByHq(interviewId);
         }
 
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details)

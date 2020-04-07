@@ -182,6 +182,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                                         limit 1", new { eventSourceId, eventTypes = typeNames });
         }
 
+        public Guid? GetLastSequenceEventId(Guid eventSourceId)
+        {
+            return this.sessionProvider.Session.Connection.ExecuteScalar<Guid?>(
+                $@"select id from {tableNameWithSchema} where
+                                        eventsourceid = @eventSourceId
+                                        order by eventsequence
+                                        limit 1", 
+                new { eventSourceId }
+                );
+        }
 
         public IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize)
         {

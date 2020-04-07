@@ -365,6 +365,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
+        public Task<List<CommittedEvent>> GetInterviewDetailsAsyncAfterEvent(Guid interviewId, Guid eventId, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
+        {
+            try
+            {
+                return this.TryGetRestResponseOrThrowAsync(
+                    () =>  this.restService.GetAsync<List<CommittedEvent>>(
+                        url: string.Concat(this.InterviewsController, "/", interviewId, "/", eventId),
+                        credentials: this.restCredentials,
+                        transferProgress: transferProgress,
+                        token: token));
+            }
+            catch (SynchronizationException exception)
+            {
+                var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
+                if (httpStatusCode == HttpStatusCode.NotFound)
+                    return Task.FromResult<List<CommittedEvent>>(null);
+
+                this.logger.Error("Exception on download interview. ID:" + interviewId, exception);
+                throw;
+            }
+        }
+
         public Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
         {
             try

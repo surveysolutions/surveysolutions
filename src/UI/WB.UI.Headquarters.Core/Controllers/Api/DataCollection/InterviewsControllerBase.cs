@@ -69,6 +69,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     IsRejected = interview.IsRejected,
                     ResponsibleId = interview.ResponsibleId,
                     Sequence = interview.LastEventSequence,
+                    LastSequenceEventId = interview.LastSequenceEventId,
                     IsMarkedAsReceivedByInterviewer = interview.IsReceivedByInterviewer
                 }).ToList();
 
@@ -155,6 +156,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected IActionResult DetailsV3(Guid id)
         {
             var allEvents = eventStore.Read(id, 0).ToList();
+            return new JsonResult(allEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
+        }
+
+        protected IActionResult DetailsAfter(Guid id, Guid eventId)
+        {
+            var allEvents = eventStore.Read(id, 0).SkipWhile(e => e.EventIdentifier != eventId).ToList();
             return new JsonResult(allEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
         }
 
