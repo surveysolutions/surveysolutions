@@ -74,6 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetInterviewsRequest, GetInterviewsResponse>(GetInterviews);
             requestHandler.RegisterHandler<LogInterviewAsSuccessfullyHandledRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(Handle);
+            requestHandler.RegisterHandler<GetInterviewDetailsAfterEventRequest, GetInterviewDetailsResponse>(Handle);
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
             requestHandler.RegisterHandler<SupervisorIdRequest, SupervisorIdResponse>(GetSupervisorId);
             requestHandler.RegisterHandler<ApplicationSettingsRequest, ApplicationSettingsResponse>(GetApplicationSettings);
@@ -246,6 +247,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         public Task<GetInterviewDetailsResponse> Handle(GetInterviewDetailsRequest arg)
         {
             var events = this.eventStore.Read(arg.InterviewId, 0).ToList();
+
+            return Task.FromResult(new GetInterviewDetailsResponse
+            {
+                Events = events
+            });
+        }
+
+        private Task<GetInterviewDetailsResponse> Handle(GetInterviewDetailsAfterEventRequest arg)
+        {
+            var events = this.eventStore.Read(arg.InterviewId, 0)
+                .SkipWhile(e => e.EventIdentifier != arg.EventId)
+                .ToList();
 
             return Task.FromResult(new GetInterviewDetailsResponse
             {
