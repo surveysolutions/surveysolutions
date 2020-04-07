@@ -370,8 +370,9 @@ namespace WB.UI.Headquarters
             app.UseRequestDecompression();
 
             app.UseHqSwaggerUI();
-            app.UseGraphQL();
             
+            app.UseGraphQLApi();
+
             app.UseRequestLocalization(opt =>
             {
                 opt.DefaultRequestCulture = new RequestCulture("en-US");

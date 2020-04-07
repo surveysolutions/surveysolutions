@@ -1,3 +1,4 @@
+#nullable enable
 using System.Linq;
 using HotChocolate.Resolvers;
 using HotChocolate.Types;
@@ -18,25 +19,25 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Field(x => x.SummaryId)
                 .Name("id")
-                .Type<NonNullType<IdType>>();
+                .Type<IdType>();
             
             descriptor.Field(x => x.Status)
-                .Type<NonNullType<EnumType<InterviewStatus>>>();
+                .Type<EnumType<InterviewStatus>>();
             
             descriptor.Field(x => x.ResponsibleName)
-                .Type<NonNullType<StringType>>();
+                .Type<StringType>();
 
             descriptor.Field(x => x.ResponsibleRole)
-                .Type<NonNullType<EnumType<UserRoles>>>();
+                .Type<EnumType<UserRoles>>();
 
             descriptor.Field(x => x.AssignmentId)
-                .Type<NonNullType<IntType>>();
+                .Type<IntType>();
 
             descriptor.Field(x => x.CreatedDate)
                 .Description("Utc creation date");
 
             descriptor.Field(x => x.Key)
-                .Type<NonNullType<StringType>>();
+                .Type<StringType>();
             
             descriptor.Field(x => x.UpdateDate)
                 .Description("Utc last updated date");
@@ -44,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.ReceivedByInterviewer);
             
             descriptor.Field(x => x.ErrorsCount)
-                .Type<NonNullType<IntType>>();
+                .Type<IntType>();
 
             descriptor.Field(x => x.QuestionnaireId);
             descriptor.Field(x => x.QuestionnaireVersion);
@@ -65,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 
                         return answers;
                     }).LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
-                .Type<NonNullType<ListType<NonNullType<AnswerObjectType>>>>();
+                .Type<ListType<NonNullType<AnswerObjectType>>>();
         }
     }
 }
