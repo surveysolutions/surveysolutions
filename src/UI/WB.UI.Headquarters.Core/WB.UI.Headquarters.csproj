@@ -7,7 +7,7 @@
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8</LangVersion>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
     <PublishSingleFile>false</PublishSingleFile>
     <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>

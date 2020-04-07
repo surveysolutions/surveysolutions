@@ -185,6 +185,74 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
 
+        public void InsertEventsFromHqInEventsStream(Guid interviewId, CommittedEventStream events)
+        {
+            var connection = this.GetOrCreateConnection(events.SourceId);
+            using (connection.Lock())
+            {
+                try
+                {
+                    connection.RunInTransaction(() =>
+                    {
+                        var eventsCount = events.Count;
+                        var commandText = $"UPDATE {nameof(EventView)} " +
+                                          $"SET {nameof(EventView.EventSequence)} = {nameof(EventView.EventSequence)} + ?" +
+                                          $"WHERE {nameof(EventView.ExistsOnHq)} != 1 AND {nameof(EventView.EventSourceId)} = ?";
+                        var sqLiteCommand = connection.CreateCommand(commandText, eventsCount, interviewId);
+                        sqLiteCommand.ExecuteNonQuery();
+
+
+                        var storedEvents = events.Select(x => ToStoredEvent(x, eventSerializer));
+                        foreach (var @event in storedEvents)
+                        {
+                            connection.Insert(@event);
+                        }
+                    });
+                }
+                catch (SQLiteException ex)
+                {
+                    this.logger.Fatal($"Failed to persist eventstream {events.SourceId}", ex);
+                    throw;
+                }
+            }
+        }
+
+        public bool IsLastEventInSequence(Guid eventSourceId, Guid eventId)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var @eventById = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(ev => ev.EventId == eventId
+                                          && ev.EventSourceId == eventSourceId);
+
+                if (eventById == null)
+                    return false;
+
+                var @anyFreshEvent = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(ev => ev.EventSequence > @eventById.EventSequence
+                                          && ev.EventSourceId == eventSourceId);
+                return @anyFreshEvent != null;
+            }
+        }
+
+        public Guid? GetLastEventIdUploadedToHq(Guid eventSourceId)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var @event = connection
+                    .Table<EventView>()
+                    .Where(ev => ev.EventSourceId == eventSourceId && ev.ExistsOnHq == 1)
+                    .OrderByDescending(ev => ev.EventSequence)
+                    .FirstOrDefault();
+
+                return @event?.EventId;
+            }
+        }
+
         public List<CommittedEvent> GetPendingEvents(Guid interviewId)
         {
             var eventSourceFilePath = this.GetEventSourceConnectionString(interviewId);
@@ -268,7 +336,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             return files;
         }
 
-        public void MarkAllEventsAsReceivedByHQ(Guid interviewId)
+        public void MarkAllEventsAsReceivedByHq(Guid interviewId)
         {
             var connection = this.GetOrCreateConnection(interviewId);
             using (connection.Lock())
