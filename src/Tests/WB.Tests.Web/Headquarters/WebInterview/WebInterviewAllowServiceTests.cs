@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         [TestCase(InterviewStatus.Completed, ExpectedResult = false)]
         [TestCase(InterviewStatus.ApprovedByHeadquarters, ExpectedResult = false)]
         [TestCase(InterviewStatus.RejectedByHeadquarters, ExpectedResult = false)]
-        [TestCase(InterviewStatus.RejectedBySupervisor, ExpectedResult = false)]
+        [TestCase(InterviewStatus.RejectedBySupervisor, ExpectedResult = true)]
         public bool should_only_allow_interviews_in_state(InterviewStatus interviewStatus)
         {
             ArrangeTest(interviewStatus: interviewStatus, webInterviewEnabled: true);
