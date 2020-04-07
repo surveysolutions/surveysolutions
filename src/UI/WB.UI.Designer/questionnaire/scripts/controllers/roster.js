@@ -271,7 +271,7 @@
 
                 $scope.$watch('activeRoster.customRosterTitle',
                     function(newValue, oldValue, scope) {
-                        if (_.isUndefined(newValue) || !scope.activeRoster) return;
+                        if (_.isUndefined(newValue) || !scope.activeRoster || _.isUndefined(oldValue)) return;
 
                         if (newValue && scope.activeRoster.title.indexOf('%rostertitle%') === -1) {
                             scope.activeRoster.title += ' - %rostertitle%';
