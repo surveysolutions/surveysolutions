@@ -559,8 +559,20 @@ export default {
                         take: data.length,
                     }
 
-                    if(Object.keys(self.where).length > 0) {
-                        variables.where = self.where
+                    const where = self.where
+                    const search = data.search.value
+                    if(search && search != '') {
+                        where.OR = [
+                            { key_starts_with: search },
+                            { responsibleName_starts_with: search },
+                            { identifyingQuestions_some: {
+                                answer_starts_with: search,
+                            }},
+                        ]                      
+                    }
+
+                    if(Object.keys(where).length > 0) {
+                        variables.where = where
                     }
 
                     self.$apollo.query({
@@ -1062,7 +1074,7 @@ export default {
             menu.push({
                 name: self.$t('Pages.InterviewerHq_OpenInterview'),
                 callback: () => {
-                    window.location = self.config.interviewReviewUrl + '/' + rowData.interviewId.replace(/-/g, '')
+                    window.location = self.config.interviewReviewUrl + '/' + rowData.id.replace(/-/g, '')
                 },
             })
 
