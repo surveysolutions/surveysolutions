@@ -606,11 +606,11 @@ export default {
         },
         where() {
             const data = {}
-            if (this.status) data.status = this.status.alias
-            if (this.questionnaireId) data.questionnaireId = this.questionnaireId
-            if (this.questionnaireVersion) data.questionnaireVersion = this.questionnaireVersion
+            if (this.status) data.status = this.status.alias.toUpperCase()
+            if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
+            if (this.questionnaireVersion) data.questionnaireVersion = parseInt(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
-            if (this.assignmentId) data.assignmentId = this.assignmentId
+            if (this.assignmentId) data.assignmentId = parseInt(this.assignmentId)
             if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
             if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
             return data

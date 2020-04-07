@@ -18,9 +18,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                     .AddQueryType<HeadquartersQuery>().Create());
         }
 
-        public static void UseGraphQL(this IApplicationBuilder app)
+        public static IApplicationBuilder UseGraphQLApi(this IApplicationBuilder app)
         {
-            app.UseGraphQLHttpPost(new HttpPostMiddlewareOptions
+           return app.UseGraphQLHttpPost(new HttpPostMiddlewareOptions
                 {
                     Path = "/graphql"
                 })
