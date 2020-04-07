@@ -46,8 +46,11 @@
                         :src="areaAnswerUrl"></iframe>
                 </div>
                 <div v-else-if="item.controlType === 'map'">
-                    <img v-bind:src="googleMapPosition"
-                        draggable="false" />
+                    <a v-bind:href="goolgeMapUrl"
+                        :title="$t('WebInterviewUI.ShowOnMap')"
+                        target="_blank">
+                        {{gpsAnswer.latitude}}, {{gpsAnswer.longitude}}
+                    </a>
                 </div>
                 <div v-else>
                     {{item.answer}}
@@ -136,11 +139,11 @@ export default {
         areaAnswerUrl() {
             return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.item.id}`
         },
-        googleMapPosition() {
-            let coords = this.parseGps(this.item.answer)
-            return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${coords.latitude},${coords.longitude}`
-                + `&zoom=14&scale=0&size=340x177&markers=color:blue|label:O|${coords.latitude},${coords.longitude}`
-                + `&key=${this.$config.googleApiKey}`
+        gpsAnswer(){
+            return this.parseGps(this.item.answer)
+        },
+        goolgeMapUrl(){
+            return `${this.$config.googleMapsBaseUrl}/maps?q=${this.gpsAnswer.latitude},${this.gpsAnswer.longitude}`
         },
         audioRecordPath() {
             return api.resources.audioRecordUri(this.interviewId, this.item.answer)
