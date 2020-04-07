@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using AutoMapper;
@@ -413,6 +414,12 @@ namespace WB.UI.Headquarters
                 endpoints.MapDefaultControllerRoute();
 
                 endpoints.MapHub<WebInterview>("interview");
+
+                endpoints.MapGet("/Index", ctx =>
+                {
+                    ctx.Response.Redirect("/");
+                    return Task.CompletedTask;
+                });
 
                 // obsolete since all interviewers will be 20.03 and higher
                 endpoints.MapGet("/Dependencies/img/logo.png", async context =>
