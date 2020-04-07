@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.SupportTool
                     Required = true,
                     Argument = new Argument<string>()
                 },
-                new Option("--login")
+                new Option(new [] { "--username", "--login" })
                 {
                     Required = true,
                     Argument = new Argument<string>()
@@ -89,9 +89,9 @@ namespace WB.UI.Headquarters.SupportTool
         {
             var cmd = new Command("reset-password")
             {
-                new Option("--username")
+                new Option(new [] { "--username", "--login" })
                 {
-                    Required = true,
+                    Required = true,                    
                     Argument = new Argument<string>()
                 },
                 new Option("--password")
