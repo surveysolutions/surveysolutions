@@ -348,6 +348,7 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
       key
       status
       questionnaireId
+      responsibleId
       responsibleName
       errorsCount
       assignmentId

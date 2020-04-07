@@ -27,6 +27,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.ResponsibleName)
                 .Type<StringType>();
 
+            descriptor.Field(x => x.ResponsibleId)
+                .Type<UuidType>();
+
             descriptor.Field(x => x.ResponsibleRole)
                 .Type<EnumType<UserRoles>>();
 
@@ -66,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 
                         return answers;
                     }).LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
-                .Type<ListType<NonNullType<AnswerObjectType>>>();
+                .Type<ListType<AnswerObjectType>>();
         }
     }
 }
