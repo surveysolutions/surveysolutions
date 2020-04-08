@@ -20,7 +20,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         private static readonly ComboboxViewItem[] headquartersStatuses =
         {
-            ComboboxViewItem("All", Strings.AllInterviewers),
             ComboboxViewItem("AllExceptApprovedByHQ", Strings.AllInterviewersExceptApprovedByHeadquarters),
             ComboboxViewItem(InterviewStatus.ApprovedByHeadquarters.ToString(), Strings.InterviewStatus_ApprovedByHeadquarters),
             ComboboxViewItem(InterviewStatus.ApprovedBySupervisor.ToString(), Strings.InterviewStatus_ApprovedBySupervisor),

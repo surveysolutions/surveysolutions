@@ -232,7 +232,7 @@
     <value>All interviewers</value>
   </data>
   <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
-    <value>All interviewers except "Approved by Headquarters"</value>
+    <value>Not approved by Headquarters</value>
   </data>
   <data name="NoPermissionsToExecute" xml:space="preserve">
     <value>User is not authorized to execute provided action</value>

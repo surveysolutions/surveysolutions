@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All interviewers except &quot;Approved by Headquarters&quot;.
+        ///   Looks up a localized string similar to Not approved by Headquarters.
         /// </summary>
         public static string AllInterviewersExceptApprovedByHeadquarters {
             get {
