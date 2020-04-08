@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ICommandService commandService;
         private readonly IViewModelNavigationService navigationService;
         private readonly IMvxMessenger mvxMessenger;
-        private readonly IStatefulInterviewRepository statefullInterviewRepository;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IPlainStorage<InterviewView> interviewStorage;
         private readonly IPlainStorage<AssignmentDocument, int> assignmentsStorage;
 
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ICommandService commandService,
             IViewModelNavigationService navigationService,
             IMvxMessenger mvxMessenger,
-            IStatefulInterviewRepository statefullInterviewRepository,
+            IStatefulInterviewRepository statefulInterviewRepository,
             IPlainStorage<InterviewView> interviewStorage,
             IPlainStorage<AssignmentDocument, int> assignmentsStorage)
         {
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.commandService = commandService;
             this.navigationService = navigationService;
             this.mvxMessenger = mvxMessenger;
-            this.statefullInterviewRepository = statefullInterviewRepository;
+            this.statefulInterviewRepository = statefulInterviewRepository;
             this.interviewStorage = interviewStorage;
             this.assignmentsStorage = assignmentsStorage;
         }
@@ -70,8 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         private IMvxAsyncCommand reassignCommand;
-        public IMvxAsyncCommand ReassignCommand => reassignCommand ??
-                                                   (reassignCommand = new MvxAsyncCommand(this.ReassignAsync, () => this.CanReassign));
+        public IMvxAsyncCommand ReassignCommand => reassignCommand ??= new MvxAsyncCommand(this.ReassignAsync, () => this.CanReassign);
         public IMvxCommand CancelCommand => new MvxCommand(this.Cancel);
         public IMvxCommand SelectInterviewerCommand => new MvxCommand<InterviewerToSelectViewModel>(this.SelectInterviewer);
 
@@ -79,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public MvxObservableCollection<InterviewerToSelectViewModel> UiItems
         {
             get => this.uiItems;
-            protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
+            private set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
         private void Cancel() => this.mvxNavigationService.Close(this);
@@ -122,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private async Task AssignToInterviewAsync(Guid interviewId, InterviewerToSelectViewModel interviewer)
         {
-            var interview = this.statefullInterviewRepository.Get(interviewId.FormatGuid());
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
             var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
                 interviewer.Id);
@@ -147,7 +146,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.input = parameter;
 
             var responsible = GetResponsible(parameter);
-            var interviewerViewModels = this.usersRepository.LoadAll().Where(x => x.InterviewerId != responsible)
+            var interviewerViewModels = this.usersRepository.LoadAll()
+                .Where(x => x.InterviewerId != responsible 
+                            && !x.IsLockedByHeadquarters 
+                            && !x.IsLockedBySupervisor)
                 .Select(ToInterviewerToSelectViewModel)
                 .OrderBy(x => $"{x.FullName}{(string.IsNullOrEmpty(x.FullName) ? "" : " - ")}{x.Login}");
 
@@ -158,7 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (args.InterviewId.HasValue)
             {
-                var selectedInterview = this.statefullInterviewRepository.Get(this.input.InterviewId.Value.FormatGuid());
+                var selectedInterview = this.statefulInterviewRepository.Get(this.input.InterviewId.Value.FormatGuid());
                 return selectedInterview.CurrentResponsibleId;
             }
 
