@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
@@ -86,20 +87,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
         {
             IProgress<TransferProgress> transferProgress = progress.AsTransferReport();
 
-            foreach (var interview in interviews)
+            for (int i = 0; i < interviews.Count; i++)
                 try
                 {
+                    var interview = interviews[i];
                     cancellationToken.ThrowIfCancellationRequested();
                     progress.Report(new SyncProgressInfo
                     {
-                        Title = EnumeratorUIResources.Synchronization_Download_Title,
+                        Title = EnumeratorUIResources.Synchronization_Update_Interviews_Title,
                         Description = string.Format(EnumeratorUIResources.Synchronization_Download_Description_Format,
-                            statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1, interviews.Count,
+                            i + 1, interviews.Count,
                             EnumeratorUIResources.Synchronization_Interviews),
                         Stage = SyncStage.UpdatingInterviews,
                         StageExtraInfo = new Dictionary<string, string>()
                         {
-                            { "processedCount", (statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1).ToString() },
+                            { "processedCount", (i + 1).ToString() },
                             { "totalCount", interviews.Count.ToString()}
                         }
                     });
@@ -112,10 +114,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                         continue;
                     }
 
+                    if (!IsCanInsertEventsInStream(interviewDetails))
+                    {
+                        continue;
+                    }
+
                     eventStore.InsertEventsFromHqInEventsStream(interview.InterviewId, new CommittedEventStream(interview.InterviewId, interviewDetails));
                     eventBus.PublishCommittedEvents(interviewDetails);
-
-                    //await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.InterviewId);
                 }
                 catch (OperationCanceledException)
                 {
@@ -130,6 +135,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                         "Failed to download hq changes for interview, interviewer",
                         exception);
                 }
+        }
+
+        private bool IsCanInsertEventsInStream(List<CommittedEvent> events)
+        {
+            return events.All(@event =>
+            {
+                switch (@event.Payload)
+                {
+                    case InterviewReceivedByInterviewer interviewReceivedByInterviewer:
+                    case InterviewReceivedBySupervisor interviewReceivedBySupervisor:
+                    case AnswerCommented answerCommented:
+                    case AnswerCommentResolved answerCommentResolved:
+                    case InterviewPaused interviewPaused:
+                    case InterviewResumed interviewResumed:
+                        return true;
+
+                    default:
+                        return false;
+                }
+            });
         }
     }
 }
