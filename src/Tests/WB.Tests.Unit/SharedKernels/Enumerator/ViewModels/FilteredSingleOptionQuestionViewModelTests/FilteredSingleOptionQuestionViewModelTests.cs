@@ -93,7 +93,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
             string interviewId = "interviewId";
             Guid userId = Guid.NewGuid();
-            string answerValue = "ï¿½";
+            string answerValue = "é";
 
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             var option = new CategoricalOption() { Value = 1, Title = "dfdf" + answerValue };
