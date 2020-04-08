@@ -93,7 +93,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
             string interviewId = "interviewId";
             Guid userId = Guid.NewGuid();
-            string answerValue = "é";
+            string answerValue = "ï¿½";
 
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             var option = new CategoricalOption() { Value = 1, Title = "dfdf" + answerValue };
@@ -126,7 +126,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var autocomplete = viewModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
             //act
-            autocomplete.FilterCommand.Execute(answerValue);
+            await autocomplete.FilterCommand.ExecuteAsync(answerValue);
             
             //assert
             autocomplete.FilterText.Should().Be(answerValue);
