@@ -182,14 +182,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                                         limit 1", new { eventSourceId, eventTypes = typeNames });
         }
 
-        public Guid? GetLastSequenceEventId(Guid eventSourceId)
+        public Guid? GetLastSequenceEventId(Guid eventSourceId, params string[] excludeTypeNames)
         {
             return this.sessionProvider.Session.Connection.ExecuteScalar<Guid?>(
                 $@"select id from {tableNameWithSchema} where
                                         eventsourceid = @eventSourceId
+                                        and NOT (eventtype = ANY(@eventTypes))
                                         order by eventsequence
                                         limit 1", 
-                new { eventSourceId }
+                new { eventSourceId, eventTypes = excludeTypeNames }
                 );
         }
 

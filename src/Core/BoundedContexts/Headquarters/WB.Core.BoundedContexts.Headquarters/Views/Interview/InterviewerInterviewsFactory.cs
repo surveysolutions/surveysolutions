@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     ResponsibleId = interview.ResponsibleId,
                     IsReceivedByInterviewer = interview.ReceivedByInterviewer,
                     LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
-                    LastSequenceEventId = eventStore.GetLastSequenceEventId(interview.InterviewId),
+                    LastSequenceEventId = eventStore.GetLastSequenceEventId(interview.InterviewId/*, EventsThatChangeAddedInStreamAfterSynchronization.GetTypeNames()*/),
                 }).ToList();
             
             return filteredInterviews;
@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     ResponsibleId = interview.ResponsibleId,
                     IsReceivedByInterviewer = interview.ReceivedByInterviewer,
                     LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
-                    LastSequenceEventId = eventStore.GetLastSequenceEventId(interview.InterviewId),
+                    LastSequenceEventId = eventStore.GetLastSequenceEventId(interview.InterviewId/*, EventsThatChangeAddedInStreamAfterSynchronization.GetTypeNames()*/),
                 }).ToList();
 
             return filteredInterviews;

@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     if (!remoteInterviewWithSequence.TryGetValue(interview.Key, out var lastHqEventId))
                         return false;
 
-                    return interview.Key != lastHqEventId;
+                    return interview.Value.Value != lastHqEventId;
                 }).Select(kv => new InterviewLite()
                 {
                     InterviewId = kv.Key,
@@ -107,16 +107,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     List<CommittedEvent> interviewDetails = await this.synchronizationService.GetInterviewDetailsAsyncAfterEvent(
                         interview.InterviewId, interview.LastHqEventId, transferProgress, cancellationToken);
 
-                    if (interviewDetails == null)
+                    if (interviewDetails == null || interviewDetails.Count == 0)
                     {
-                        statistics.NewInterviewsCount++;
                         continue;
                     }
 
                     eventStore.InsertEventsFromHqInEventsStream(interview.InterviewId, new CommittedEventStream(interview.InterviewId, interviewDetails));
                     eventBus.PublishCommittedEvents(interviewDetails);
 
-                    await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.InterviewId);
+                    //await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.InterviewId);
                 }
                 catch (OperationCanceledException)
                 {
