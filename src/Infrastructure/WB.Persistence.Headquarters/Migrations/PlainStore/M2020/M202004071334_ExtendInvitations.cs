@@ -11,8 +11,10 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
                 .AsString().Nullable();
             Create.Column("last_rejected_status_order").OnTable("invitations")
                 .AsInt32().Nullable();
-            
-            Execute.Sql(@"update plainstore.Invitations 
+
+            if (Schema.Schema("readside").Table("interviewcommentedstatuses").Exists())
+            {
+                Execute.Sql(@"update plainstore.Invitations 
             set last_rejected_status_order = ss.""position""
             from (select max(ics.""position"") as ""position"", s.summaryid as interview_id 
             from readside.interviewcommentedstatuses ics
@@ -20,6 +22,7 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
             where ics.status = 7  
             group by s.summaryid ) ss
                 where ss.interview_id  = interviewid");
+            }
         }
 
         public override void Down()
