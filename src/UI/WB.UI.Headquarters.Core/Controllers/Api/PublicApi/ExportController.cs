@@ -25,6 +25,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     [Authorize(Roles = "ApiUser, Administrator")]
     [Route(@"api/v1/export")]
     [PublicApiJson]
+    [Obsolete]
     public class ExportController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;

@@ -3,5 +3,6 @@
     public interface IVirtualPathService
     {
         string GetAbsolutePath(string relativePath);
+        string GetBaseUrl();
     }
 }
