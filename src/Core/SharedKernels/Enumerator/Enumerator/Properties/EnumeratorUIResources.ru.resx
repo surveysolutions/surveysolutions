@@ -920,4 +920,7 @@
   <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
     <value>Логи отправлены</value>
   </data>
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>Обновление интервью данными с сервера</value>
+  </data>
 </root>

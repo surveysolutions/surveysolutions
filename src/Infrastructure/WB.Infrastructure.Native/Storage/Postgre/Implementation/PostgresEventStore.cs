@@ -188,7 +188,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 $@"select id from {tableNameWithSchema} where
                                         eventsourceid = @eventSourceId
                                         and NOT (eventtype = ANY(@eventTypes))
-                                        order by eventsequence
+                                        order by eventsequence desc
                                         limit 1", 
                 new { eventSourceId, eventTypes = excludeTypeNames }
                 );

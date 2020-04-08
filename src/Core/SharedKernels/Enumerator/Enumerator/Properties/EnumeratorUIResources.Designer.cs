@@ -1943,6 +1943,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updating local interviews with changes from server.
+        /// </summary>
+        public static string Synchronization_Update_Interviews_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_Update_Interviews_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to completed assignments.
         /// </summary>
         public static string Synchronization_Upload_CompletedAssignments_Text {
