@@ -245,7 +245,7 @@
     <value>Пользователь не авторизован выполнять данное действие</value>
   </data>
   <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
-      <value>Все интервью кроме "Утверждено Хедквотером"</value>
-      <comment>Все интервью кроме </comment>
+    <value>Не утвержденные Хедквотером</value>
+    <comment>Все интервью кроме </comment>
   </data>
 </root>
