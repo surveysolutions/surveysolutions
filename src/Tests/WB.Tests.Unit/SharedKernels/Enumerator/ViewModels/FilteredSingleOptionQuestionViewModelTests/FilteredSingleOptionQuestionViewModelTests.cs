@@ -126,7 +126,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var autocomplete = viewModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
             //act
-            await autocomplete.FilterCommand.ExecuteAsync(answerValue);
+            autocomplete.FilterCommand.Execute(answerValue);
             
             //assert
             autocomplete.FilterText.Should().Be(answerValue);
