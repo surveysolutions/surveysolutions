@@ -194,19 +194,38 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 {
                     connection.RunInTransaction(() =>
                     {
+                        var lastHqEvent = connection.Table<EventView>()
+                            .Where(eventView => eventView.EventSourceId == interviewId && eventView.ExistsOnHq == 1)
+                            .OrderByDescending(e => e.EventSequence)
+                            .FirstOrDefault();
+
+                        var localEvents = connection.Table<EventView>()
+                            .Where(eventView => eventView.EventSourceId == interviewId && (eventView.ExistsOnHq == null || eventView.ExistsOnHq != 1))
+                            .OrderByDescending(e => e.EventSequence);
+
                         var eventsCount = events.Count;
+                        foreach (var localEvent in localEvents)
+                        {
+                            localEvent.EventSequence += eventsCount;
+                            connection.Update(localEvent);
+                        }
+
+                        var storedEvents = events.Select(x => ToStoredEvent(x, eventSerializer)).ToList();
+                        for (int i = 0; i < storedEvents.Count; i++)
+                        {
+                            var storedEvent = storedEvents[i];
+                            storedEvent.EventSequence = lastHqEvent.EventSequence + i + 1;
+                            connection.Insert(storedEvent);
+                        }
+
+                        /*
                         var commandText = $"UPDATE {nameof(EventView)} " +
                                           $"SET {nameof(EventView.EventSequence)} = {nameof(EventView.EventSequence)} + ?" +
                                           $"WHERE {nameof(EventView.ExistsOnHq)} != 1 AND {nameof(EventView.EventSourceId)} = ?";
                         var sqLiteCommand = connection.CreateCommand(commandText, eventsCount, interviewId);
                         sqLiteCommand.ExecuteNonQuery();
+                        */
 
-
-                        var storedEvents = events.Select(x => ToStoredEvent(x, eventSerializer));
-                        foreach (var @event in storedEvents)
-                        {
-                            connection.Insert(@event);
-                        }
                     });
                 }
                 catch (SQLiteException ex)

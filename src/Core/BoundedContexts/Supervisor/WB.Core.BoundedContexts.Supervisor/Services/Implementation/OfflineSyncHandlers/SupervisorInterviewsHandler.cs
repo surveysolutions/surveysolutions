@@ -258,6 +258,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             var events = this.eventStore.Read(arg.InterviewId, 0)
                 .SkipWhile(e => e.EventIdentifier != arg.EventId)
+                .Skip(1)
                 .ToList();
 
             return Task.FromResult(new GetInterviewDetailsResponse
