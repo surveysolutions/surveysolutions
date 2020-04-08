@@ -93,9 +93,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (Enum.TryParse(request.Status, out InterviewStatus enumValue))
                 return new[] { enumValue };
 
-            if (request.Status == "All")
-                return null;
-
             if (request.Status == "AllExceptApprovedByHQ")
                 return ((InterviewStatus[])Enum.GetValues(typeof(InterviewStatus))).Where(s => s != InterviewStatus.ApprovedByHeadquarters).ToArray();
 
