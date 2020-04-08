@@ -120,7 +120,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                            !assignment.Quantity.HasValue 
                            || !assignment.CreatedInterviewsCount.HasValue
                            || assignment.Quantity.Value - assignment.CreatedInterviewsCount.Value > 0
-                       ).ToReadOnlyCollection());
+                       )
+                       .ToReadOnlyCollection()
+                       .SortAssignments()
+               );
 
         private MvxObservableCollection<IDashboardItem> uiItems = new MvxObservableCollection<IDashboardItem>();
         public MvxObservableCollection<IDashboardItem> UiItems
