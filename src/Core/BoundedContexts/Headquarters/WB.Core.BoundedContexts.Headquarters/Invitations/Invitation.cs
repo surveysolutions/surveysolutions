@@ -42,8 +42,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public virtual InterviewSummary Interview { get; protected set; }
         
-        public virtual DateTime? LastRejectedInterviewSentAtUtc { get; protected set; }
-
         public virtual string LastRejectedInterviewEmailId { get; protected set; }
         
         public virtual bool IsWithAssignmentResolvedByPassword() => Token.Length > 0 && Token[0] == 'I';
@@ -83,16 +81,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.AssignmentId = assignmentId;
         }
 
-        public virtual void RejectedReminderSent(string emailId)
+        public virtual void RejectedReminderSent(string emailId, int lastInterviewCommentedStatusId)
         {
             this.LastRejectedInterviewEmailId = emailId;
-            this.LastRejectedInterviewSentAtUtc = DateTime.UtcNow;
+            this.LastRejectedStatusOrder = lastInterviewCommentedStatusId;
         }
 
-        public void RejectedReminderWasNotSent()
+        public virtual int? LastRejectedStatusOrder { get; protected set; }
+
+        public virtual void RejectedReminderWasNotSent()
         {
-            this.LastRejectedInterviewSentAtUtc = null;
-            this.LastRejectedInterviewEmailId = null;
+            this.LastRejectedStatusOrder = null;
         }
     }
 
