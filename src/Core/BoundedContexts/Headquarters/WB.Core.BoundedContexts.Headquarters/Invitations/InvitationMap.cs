@@ -18,8 +18,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             Property(x => x.Token);
             Property(x => x.ResumePassword);
             Property(x => x.SentOnUtc);
-            Property(x => x.LastRejectedInterviewEmailId);
-            Property(x => x.LastRejectedInterviewSentAtUtc);
+            Property(x => x.LastRejectedInterviewEmailId, c => c.Column("last_rejected_interview_email_id"));
+            Property(x => x.LastRejectedStatusOrder, c => c.Column("last_rejected_status_order"));
             Property(x => x.InvitationEmailId);
             Property(x => x.LastReminderSentOnUtc);
             Property(x => x.LastReminderEmailId);

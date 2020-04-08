@@ -4,9 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -180,7 +183,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public void MarkRejectedInterviewReminderSent(int invitationId, string emailId)
         {
             var invitation = this.invitationStorage.GetById(invitationId);
-            invitation.RejectedReminderSent(emailId);
+            var lastRejectedStatus =
+                invitation.Interview.InterviewCommentedStatuses.Last(x =>
+                    x.Status == InterviewExportedAction.RejectedBySupervisor);
+            invitation.RejectedReminderSent(emailId, lastRejectedStatus.Position);
         }
 
         public void RejectedInterviewReminderWasNotSent(int invitationId)
@@ -191,7 +197,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         private Expression<Func<Invitation,bool>> NoRejectedInterviewEmailSent()
         {
-            return x => x.LastRejectedInterviewSentAtUtc == null;
+            return x => 
+                        x.Interview.InterviewCommentedStatuses
+                                   .Any(s => s.Status == InterviewExportedAction.RejectedBySupervisor &&
+                                             (x.LastRejectedStatusOrder == null || s.Position > x.LastRejectedStatusOrder));
         }
 
         private Expression<Func<Invitation,bool>> HasRejectedInterview()
