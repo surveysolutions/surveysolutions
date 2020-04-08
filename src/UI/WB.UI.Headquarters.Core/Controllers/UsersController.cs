@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters.Controllers
                     PersonName = user.FullName,
                     PhoneNumber = user.PhoneNumber,
                     UserName = user.UserName,
-                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToUiString(),
+                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
