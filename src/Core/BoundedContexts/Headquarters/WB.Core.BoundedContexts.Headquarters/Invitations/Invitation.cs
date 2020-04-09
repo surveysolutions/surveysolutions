@@ -84,14 +84,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public virtual void RejectedReminderSent(string emailId, int lastInterviewCommentedStatusId)
         {
             this.LastRejectedInterviewEmailId = emailId;
-            this.LastRejectedStatusOrder = lastInterviewCommentedStatusId;
+            this.LastRejectedStatusPosition = lastInterviewCommentedStatusId;
         }
 
-        public virtual int? LastRejectedStatusOrder { get; protected set; }
+        public virtual int? LastRejectedStatusPosition { get; protected set; }
 
         public virtual void RejectedReminderWasNotSent()
         {
-            this.LastRejectedStatusOrder = null;
+            this.LastRejectedStatusPosition = null;
         }
     }
 
