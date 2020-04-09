@@ -1,8 +1,5 @@
 ![Link Text](https://build.mysurvey.solutions/app/rest/builds/buildType:(id:CI_Package)/statusIcon)
 
-20.05 version 
-** Not compatible ** with export service 20.04. Both should be in sync
-
 20.3 version
 - runs on .net core 3.1
 - requires chaning of configuraiton file from xml to ini format

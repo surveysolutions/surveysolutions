@@ -95,6 +95,9 @@ namespace WB.Services.Export.Host.Infra
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
                 CancellationToken cancellationToken)
             {
+                var uri = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "apiKey", this.tenant.Id.ToString());
+                request.RequestUri = new Uri(uri);
+                
                 request.Headers.Authorization = new AuthenticationHeaderValue("TenantToken", this.tenant.Id.ToString());
                 
                 using (LoggingHelpers.LogContext(("uri", request.RequestUri)))
