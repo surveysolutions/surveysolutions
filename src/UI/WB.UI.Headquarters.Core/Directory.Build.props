@@ -24,7 +24,7 @@
 
       <!-- On local dev PC export service has `-dev` suffix -->
       <Version Condition=" '$(CleanSuffix)' == '' ">$(ProductVersion)-dev.$(BuildNumber)</Version>
-      <Version Condition=" '$(CleanSuffix)' == 'release' ">$(ProductVersion).$(BuildNumber)</Version>
+      <Version Condition=" '$(CleanSuffix)' == 'release' Or '$(CleanSuffix)' == 'build-number-fix'">$(ProductVersion).$(BuildNumber)</Version>
       <FileVersion>$(ProductVersion).$(BuildNumber)</FileVersion>
    </PropertyGroup>
 
