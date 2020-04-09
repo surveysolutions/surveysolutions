@@ -65,9 +65,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .AllowSome(y =>
                 {
                     y.BindFieldsExplicitly();
-                    
-                    y.Filter(f => f.Answer)
-                        .BindFiltersImplicitly();
+                    y.Filter(f => f.Answer).BindFiltersImplicitly();
+                    y.Filter(f => f.AnswerCode).BindFiltersImplicitly();
                     
                     y.Object(x => x.Question)
                         .AllowObject<QuestionsFilterType>();
