@@ -200,7 +200,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return x => 
                         x.Interview.InterviewCommentedStatuses
                                    .Any(s => s.Status == InterviewExportedAction.RejectedBySupervisor &&
-                                             (x.LastRejectedStatusOrder == null || s.Position > x.LastRejectedStatusOrder));
+                                             (x.LastRejectedStatusPosition == null || s.Position > x.LastRejectedStatusPosition));
         }
 
         private Expression<Func<Invitation,bool>> HasRejectedInterview()

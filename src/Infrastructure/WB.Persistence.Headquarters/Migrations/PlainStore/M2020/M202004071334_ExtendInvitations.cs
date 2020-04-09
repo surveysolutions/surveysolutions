@@ -9,13 +9,13 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
         {
             Create.Column("last_rejected_interview_email_id").OnTable("invitations")
                 .AsString().Nullable();
-            Create.Column("last_rejected_status_order").OnTable("invitations")
+            Create.Column("last_rejected_status_position").OnTable("invitations")
                 .AsInt32().Nullable();
 
             if (Schema.Schema("readside").Table("interviewcommentedstatuses").Exists())
             {
-                Execute.Sql(@"update plainstore.Invitations 
-            set last_rejected_status_order = ss.""position""
+                Execute.Sql(@"update plainstore.invitations 
+            set last_rejected_status_position = ss.""position""
             from (select max(ics.""position"") as ""position"", s.summaryid as interview_id 
             from readside.interviewcommentedstatuses ics
             inner join readside.interviewsummaries s on ics.interview_id = s.id 
