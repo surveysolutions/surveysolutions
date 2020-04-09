@@ -22,7 +22,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             Execute.Sql(@"update readside.answerstofeaturedquestions ans
                 set question_id = s.id, answer_code = s.answer_code 
                 from (
-	                select a.id as aid, qe.id as id, qea.answer_code as answer_code
+	                select a.id as aid, qe.id as id, qea.value::int as answer_code
 	                from readside.answerstofeaturedquestions a
                     join readside.interviewsummaries s on s.id = a.interview_id 
 	                join readside.questionnaire_entities qe on qe.questionnaireidentity = s.questionnaireidentity and qe.entityid = a.questionid 
