@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -94,10 +95,9 @@ namespace WB.Services.Export.Host.Infra
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
                 CancellationToken cancellationToken)
             {
-                var uri = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "apiKey", this.tenant.Id.ToString());
-                request.RequestUri = new Uri(uri);
-
-                using (LoggingHelpers.LogContext(("uri", uri)))
+                request.Headers.Authorization = new AuthenticationHeaderValue("TenantToken", this.tenant.Id.ToString());
+                
+                using (LoggingHelpers.LogContext(("uri", request.RequestUri)))
                 {
                     var sw = Stopwatch.StartNew();
 
