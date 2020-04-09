@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                       .BindFiltersExplicitly()
                       .AllowEquals().Name("identifying")
                       .Description("Find only identifying questions");
+
         }
     }
 }
