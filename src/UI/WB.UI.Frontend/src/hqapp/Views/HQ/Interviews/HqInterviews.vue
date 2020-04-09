@@ -68,7 +68,14 @@
                     </div>
                 </div>
             </FilterBlock>
-        </Filters>
+
+            <InterviewFilter slot="additional"
+                v-if="where.questionnaireId && where.questionnaireVersion"
+                :questionnaireId="where.questionnaireId"
+                :questionnaireVersion="where.questionnaireVersion"
+                @change="questionFilterChanged" />
+
+        </Filters>  
 
         <DataTables
             ref="table"
@@ -77,9 +84,10 @@
             :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="rows => selectedRows = rows"
             @page="resetSelection"           
-            @ajaxComlpete="isLoading = false"
+            @ajaxComplete="isLoading = false"
             :selectable="showSelectors"
             :selectableId="'id'">
+        
             <div
                 class="panel panel-table"
                 v-if="selectedRows.length"
@@ -338,6 +346,7 @@
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
 import {lowerCase, map, join, assign, isNaN} from 'lodash'
+import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 
 const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
@@ -364,10 +373,12 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
       }
     }
   }
-}
-`
+}`
 
 export default {
+    components: {
+        InterviewFilter,
+    },
     data() {
         return {
             restart_comment: null,
@@ -390,6 +401,8 @@ export default {
            
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
+
+            conditions: [],
         }
     },
 
@@ -561,15 +574,36 @@ export default {
                     }
 
                     const where = self.where
+                    delete where.AND
                     const search = data.search.value
+
                     if(search && search != '') {
-                        where.OR = [
+                        if(where.AND == null) {
+                            where.AND = []
+                        }
+                        where.AND.push({ OR: [
                             { key_starts_with: search },
                             { responsibleName_starts_with: search },
                             { identifyingQuestions_some: {
                                 answer_starts_with: search,
-                            }},
-                        ]                      
+                            },
+                            }],
+                        })
+                    }
+
+                    if(self.conditions != null && self.conditions.length > 0) {
+                        if(where.AND == null) {
+                            where.AND = []
+                        }
+
+                        self.conditions.forEach(cond => {
+                            where.AND.push({
+                                identifyingQuestions_some: {
+                                    question: {variable: cond.variable},
+                                    answerCode: parseInt(cond.value),
+                                },
+                            })
+                        })
                     }
 
                     if(Object.keys(where).length > 0) {
@@ -626,11 +660,16 @@ export default {
             if (this.assignmentId) data.assignmentId = parseInt(this.assignmentId)
             if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
             if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
+            
             return data
         },
     },
 
     methods: {
+        questionFilterChanged(conditions) {
+            this.conditions = conditions
+            this.reloadTable()
+        },
         togglePrefield() {
             this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
             return false
