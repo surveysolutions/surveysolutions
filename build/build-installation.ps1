@@ -52,21 +52,32 @@ Copy-Item $sitePatha\* $HQsitePath\Site -Force -Recurse
 
 Copy-Item $HQSourcePath\ExportService $HQsitePath\ExportService -Force -Recurse
 Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse
-#Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
 $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
 # $version = $newVersion = "{0}{1}.{2}.{3}.{4}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart.ToString("00"), $versionOfProduct.ProductBuildPart, $versionOfProduct.ProductPrivatePart, $BuildNumber
 $productFileVersion = $versionOfProduct.FileVersion
 
-#    [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 
-# Cleaning up slack configuration section from config
-#  $hqConfig = "$HQsitePath\Web.config"
-#  [xml]$xml = Get-Content $hqConfig
-#  $node = $xml.SelectSingleNode("//slack")
-#  $node.ParentNode.RemoveChild($node)
-#  $xml.save($hqConfig)
+
+# https://github.com/dotnet/core/issues/4011#issuecomment-567610911
+$envBundle = [xml] @"
+<environmentVariables>
+<environmentVariable name="DOTNET_BUNDLE_EXTRACT_BASE_DIR" value=".\.net-app" />
+</environmentVariables>
+"@
+
+ $hqConfig = "$HQsitePath\Site\Web.config"
+ [xml]$xml = Get-Content $hqConfig
+ $aspNetCores = $xml.SelectNodes("//aspNetCore")
+
+ foreach($aspNetCore in $aspNetCores) 
+ {
+     $envNode = $xml.ImportNode($envBundle.DocumentElement, $true)
+     $aspNetCore.AppendChild($envNode)
+ }
+
+ $xml.save($hqConfig)
 
 $installationArgs = @(
     $InstallationProject;
