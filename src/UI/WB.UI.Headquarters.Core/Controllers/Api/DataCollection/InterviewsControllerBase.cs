@@ -147,11 +147,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 return false;
 
             var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
-            if (productVersion != null && productVersion >= new Version(20, 4))
-                return false;
-
-            var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
-            if (clientApkBuildNumber > 27398)
+            if (productVersion != null && productVersion >= new Version(20, 5))
                 return false;
 
             return allEvents.Any(e =>

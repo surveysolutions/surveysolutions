@@ -126,6 +126,9 @@ namespace WB.UI.Headquarters.Code
             });
         }
 
+        private static Regex tabletVersionRegex = new Regex(@"org\.worldbank\.solutions\.(?<appname>\w+)/(?<version>[\d\.]+) \(build (?<build>\d+)\)", RegexOptions.Compiled);
+
+
         public static Version GetProductVersionFromUserAgent(this HttpRequest request, string productName)
         {
             string userAgentString = request.Headers["User-Agent"].ToString();
@@ -134,6 +137,16 @@ namespace WB.UI.Headquarters.Code
             {
                 var parser = Parser.GetDefault();
                 var userAgent = parser.ParseUserAgent(userAgentString);
+
+                if (userAgent.Family == Parser.Other)
+                {
+                    var match = tabletVersionRegex.Match(userAgentString);
+                    if (match.Success)
+                    {
+                        var versionString = match.Groups["version"].Value;
+                        return new Version(versionString);
+                    }
+                }
 
                 if (int.TryParse(userAgent.Major, out int major)
                     && int.TryParse(userAgent.Minor, out int minor))
