@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -17,8 +18,7 @@ namespace WB.UI.Headquarters.Code
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Survey Solutions API",
-                    Version = "v1"
+                    Title = "Survey Solutions API"
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -50,10 +50,11 @@ namespace WB.UI.Headquarters.Code
                 });
 
                 c.SchemaFilter<CapitalizedCaseSchemaFilter>();
-
                 c.OrderActionsBy(x =>
                 {
                     var sort = new StringBuilder(x.ActionDescriptor.RouteValues["controller"]);
+                    sort.Append("_");
+                    sort.Append(x.RelativePath.Split('/')[1]);
                     sort.Append("_");
                     if (x.HttpMethod == "GET")
                     {
@@ -81,6 +82,8 @@ namespace WB.UI.Headquarters.Code
                     var result = sort.ToString();
                     return result;
                 });
+                c.TagActionsBy(x => 
+                    new List<string> {x.ActionDescriptor.RouteValues["controller"].Replace("PublicApi", "")});
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
@@ -90,7 +93,7 @@ namespace WB.UI.Headquarters.Code
         {
             appBuilder.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Survey Solutions API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Survey Solutions API");
                 c.RoutePrefix = "apidocs";
             });
         }
