@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -79,9 +80,8 @@ namespace WB.UI.Headquarters.Code.Authentication
                 {
                     opts.Realm = "WB.Headquarters";
                 })
-                .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>("AuthToken", opts =>
-                {
-                });
+                .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>("AuthToken", _ => { })
+                .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>("TenantToken", _ => {});
 
             services.Configure<IdentityOptions>(options =>
             {
