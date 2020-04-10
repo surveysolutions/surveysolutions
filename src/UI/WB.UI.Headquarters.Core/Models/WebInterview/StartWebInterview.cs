@@ -9,6 +9,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class StartWebInterview : StartOrResumeWebInterview
     {
         public string WelcomeText { get; set; }
+        public string StartNewButton { get; set; }
     }
 
     public class ResumeWebInterview: StartOrResumeWebInterview
@@ -16,6 +17,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string StartedDate { get; set; }
         public string ResumeWelcome { get; set; }
         public string ResumeInvitation { get; set; }
+        public string ResumeButton { get; set; }
     }
 
     public class StartOrResumeWebInterview

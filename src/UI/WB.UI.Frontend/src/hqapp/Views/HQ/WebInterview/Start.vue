@@ -4,7 +4,7 @@
             <h2>{{ $config.model.welcomeText }}</h2>
         </div>
 
-        <StartOrResumeForm :buttonTitle="$t('WebInterview.Start')" />
+        <StartOrResumeForm :buttonTitle="$config.model.startInterviewButton" />
     </div>
 </template>
 

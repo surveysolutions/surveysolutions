@@ -114,16 +114,45 @@
                                                 </div>
                                             </div>
                                         </div>
+
+
+                                        <div class="row-element mb-30">
+                                            <div class="h5">
+                                                {{$t('WebInterviewSettings.StartNew')}}
+                                            </div>
+                                            <div class="form-group"
+                                                :class="{ 'has-error': errors.has('welcomePage.startNewButton') }">
+                                                <div class="field"
+                                                    :class="{ 'answered': webInterviewPageMessages['startNewButton'].text }">
+                                                    <input type="text" 
+                                                        v-model="webInterviewPageMessages['startNewButton'].text"  
+                                                        v-validate="'required'"
+                                                        data-vv-name="startNewButton"
+                                                        ref="startNewButton"
+                                                        maxlength="200"
+                                                        class="form-control"/>
+                                                    <button type="button"
+                                                        @click="webInterviewPageMessages['startNewButton'].text=''"
+                                                        class="btn btn-link btn-clear">
+                                                        <span></span>
+                                                    </button>
+                                                    <span class="help-block"
+                                                        v-if="errors.first('welcomePage.startNewButton')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                         <div class="">
                                             <button type="submit"
                                                 :disabled="!isDirty('$welcomePage')"
-                                                @click="savePageTextEditMode('welcomePage', 'welcomeText', 'invitation')"
+                                                @click="savePageTextEditMode('welcomePage', 'welcomeText', 'invitation', 'startNewButton')"
                                                 class="btn btn-md btn-success">
                                                 {{$t('WebInterviewSettings.Save')}}
                                             </button>
                                             <button type="submit"
                                                 :disabled="!isDirty('$welcomePage')"
-                                                @click="cancelPageTextEditMode('welcomePage', 'welcomeText', 'invitation')"
+                                                @click="cancelPageTextEditMode('welcomePage', 'welcomeText', 'invitation', 'startNewButton')"
                                                 class="btn btn-md btn-link">
                                                 {{$t('WebInterviewSettings.Cancel')}}
                                             </button>
@@ -277,16 +306,43 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="row-element mb-30">
+                                            <div class="h5">
+                                                {{$t('WebInterviewSettings.Resume')}}
+                                            </div>
+                                            <div class="form-group"
+                                                :class="{ 'has-error': errors.has('resumePage.resumeButton') }">
+                                                <div class="field"
+                                                    :class="{ 'answered': webInterviewPageMessages['resumeButton'].text }">
+                                                    <input type="text" 
+                                                        v-model="webInterviewPageMessages['resumeButton'].text"  
+                                                        v-validate="'required'"
+                                                        data-vv-name="resumeButton"
+                                                        ref="resumeButton"
+                                                        maxlength="200"
+                                                        class="form-control"/>
+                                                    <button type="button"
+                                                        @click="webInterviewPageMessages['resumeButton'].text=''"
+                                                        class="btn btn-link btn-clear">
+                                                        <span></span>
+                                                    </button>
+                                                    <span class="help-block"
+                                                        v-if="errors.first('resumePage.resumeButton')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="">
                                             <button type="submit"
                                                 :disabled="!isDirty('$resumePage')"
-                                                @click="savePageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation')"
+                                                @click="savePageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation', 'resumeButton')"
                                                 class="btn btn-md btn-success">
                                                 {{$t('WebInterviewSettings.Save')}}
                                             </button>
                                             <button type="submit"
                                                 :disabled="!isDirty('$resumePage')"
-                                                @click="cancelPageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation')"
+                                                @click="cancelPageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation', 'resumeButton')"
                                                 class="btn btn-md btn-link">
                                                 {{$t('WebInterviewSettings.Cancel')}}
                                             </button>
@@ -1238,7 +1294,7 @@ export default {
         isEditModePageTextEditMode(type) {
             return this.webInterviewPageMessages[type].isEditMode
         },
-        async savePageTextEditMode(scope, titleType, messageType) {
+        async savePageTextEditMode(scope, titleType, messageType, buttonText) {
             var self = this
             var validationResult = await this.$validator.validateAll(scope)
             if (validationResult)
@@ -1246,7 +1302,7 @@ export default {
                 var editTitleText = this.webInterviewPageMessages[titleType]
                 var editDescriptionText = this.webInterviewPageMessages[messageType]
                 self.$store.dispatch('showProgress')
-                await this.$hq.WebInterviewSettings.updatePageMessage(self.questionnaireId, titleType, editTitleText.text, messageType, editDescriptionText.text)
+                await this.$hq.WebInterviewSettings.updatePageMessage(self.questionnaireId, titleType, editTitleText.text, messageType, editDescriptionText.text, buttonText, buttonText !== undefined ? this.webInterviewPageMessages[messageType] : undefined )
                     .then(function (response) {
                         editTitleText.cancelText = editTitleText.text
                         editDescriptionText.cancelText = editDescriptionText.text
@@ -1260,11 +1316,17 @@ export default {
                     })
             }
         },
-        cancelPageTextEditMode(scope, titleType, messageType) {
+        cancelPageTextEditMode(scope, titleType, messageType, buttonText) {
             var editTitleText = this.webInterviewPageMessages[titleType]
             var editDescriptionText = this.webInterviewPageMessages[messageType]
             editTitleText.text = editTitleText.cancelText
             editDescriptionText.text = editDescriptionText.cancelText
+
+            if(buttonText !== undefined)
+            {
+                var editButtonText = this.webInterviewPageMessages[buttonText]            
+                editButtonText.text = editButtonText.cancelText
+            }
             this.$validator.reset(scope)
         },
         async startWebInterview() {
