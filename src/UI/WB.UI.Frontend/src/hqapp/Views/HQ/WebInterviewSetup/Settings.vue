@@ -1302,10 +1302,13 @@ export default {
                 var editTitleText = this.webInterviewPageMessages[titleType]
                 var editDescriptionText = this.webInterviewPageMessages[messageType]
                 self.$store.dispatch('showProgress')
-                await this.$hq.WebInterviewSettings.updatePageMessage(self.questionnaireId, titleType, editTitleText.text, messageType, editDescriptionText.text, buttonText, buttonText !== undefined ? this.webInterviewPageMessages[messageType] : undefined )
+                await this.$hq.WebInterviewSettings.updatePageMessage(self.questionnaireId, titleType, editTitleText.text, messageType, editDescriptionText.text, buttonText, buttonText !== undefined ? this.webInterviewPageMessages[buttonText].text : undefined )
                     .then(function (response) {
                         editTitleText.cancelText = editTitleText.text
                         editDescriptionText.cancelText = editDescriptionText.text
+
+                        if(buttonText !== undefined)                       
+                            self.webInterviewPageMessages[buttonText].cancelText = self.webInterviewPageMessages[buttonText].text
                         self.$validator.reset(scope)
                     })
                     .catch(function (error) {
