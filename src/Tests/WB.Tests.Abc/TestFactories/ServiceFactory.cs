@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Events;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Ncqrs.Eventing;
 using NHibernate.Linq;
@@ -1018,12 +1019,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IInScopeExecutor InScopeExecutor(IServiceLocator serviceLocatorMock)
         {
-            var result = new Mock<IInScopeExecutor>();
-
-            result.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>()))
-                .Callback((Action<IServiceLocator> act) => act(serviceLocatorMock));
-
-            return result.Object;
+            return new NoScopeInScopeExecutor(serviceLocatorMock);
         }
         
         public RestService RestService(IRestServiceSettings restServiceSettings = null,
@@ -1074,7 +1070,6 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public SendRemindersJob SendRemindersJob(
-            ILogger logger = null, 
             IInvitationService invitationService = null, 
             IEmailService emailService = null,
             IWebInterviewConfigProvider webInterviewConfigProvider = null,
@@ -1088,14 +1083,21 @@ namespace WB.Tests.Abc.TestFactories
             settingsMock.Setup(x => x.Get(It.IsAny<QuestionnaireIdentity>())).Returns(Mock.Of<WebInterviewConfig>(_ 
                 => _.ReminderAfterDaysIfNoResponse == 2
                 && _.ReminderAfterDaysIfPartialResponse == 2));
+            
+            var invService = invitationService ?? Mock.Of<IInvitationService>();
 
+            var webInterviewConfigProvider1 = webInterviewConfigProvider ?? settingsMock.Object;
+            
             return new SendRemindersJob(
-                logger ?? Mock.Of<ILogger>(),
-                invitationService ?? Mock.Of<IInvitationService>(),
+                Mock.Of<ILogger<SendRemindersJob>>(),
+                invService,
                 emailService ?? emailServiceMock.Object,
-                webInterviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>(),
+                webInterviewConfigProvider1,
                 emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>(),
-                webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>());
+                webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
+                Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInvitationService>() == 
+                                                                              invService)),
+                Options.Create(new HeadquartersConfig{BaseUrl = "http://localhost"}));
         }
 
         public SendInvitationsJob SendInvitationsJob(

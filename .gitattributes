@@ -1,7 +1,7 @@
 * text=auto
 
 # Windows forced line-endings
-*.sln text eol=crlf
+*.sln crlf
 
 #
 ## These files are binary and should be left untouched
@@ -30,3 +30,4 @@
 *.ez binary
 *.bz2 binary
 *.swp binary
+*.dll binary
