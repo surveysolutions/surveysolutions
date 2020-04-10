@@ -107,9 +107,6 @@ export default {
             const question = find(this.questions, { variable: condition.variable })
             return question
         },
-        isCategorical(question) {
-            return this.selectedQuestion != null && this.selectedQuestion.type == 'SINGLEOPTION'
-        },
 
         getTypeaheadValues(options) {
             return options.map(o => {
@@ -137,7 +134,11 @@ export default {
 
     computed: {
         questionsList() {
-            const array = [...(this.questions || [])]
+            const array = filter([...(this.questions || [])], q => {
+                return q.type == 'SINGLEOPTION' 
+                    || q.type == 'TEXT'
+                    || q.type == 'NUMERIC'
+            })
             array.sort(function (a, b) {
                 return a.questionText.localeCompare(b.questionText)
             })

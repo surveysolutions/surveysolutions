@@ -277,11 +277,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Equal.
+        ///   Looks up a localized string similar to Equals.
         /// </summary>
-        public static string Equal {
+        public static string Equals {
             get {
-                return ResourceManager.GetString("Equal", resourceCulture);
+                return ResourceManager.GetString("Equals", resourceCulture);
             }
         }
         
