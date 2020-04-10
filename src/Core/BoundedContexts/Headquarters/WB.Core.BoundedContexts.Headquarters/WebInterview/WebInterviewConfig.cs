@@ -36,8 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
                 { WebInterviewUserMessages.WelcomeText,     WebInterviewResources.WelcomeText },
                 { WebInterviewUserMessages.CompleteNoteToSupervisor,     WebInterviewResources.NoteForSupervisor},
                 { WebInterviewUserMessages.CompleteButton,  WebInterviewResources.Complete},
-                { WebInterviewUserMessages.StartNewInterviewButton,  WebInterviewResources.StartNewInterview},
-                { WebInterviewUserMessages.ResumeInterviewButton,  WebInterviewResources.ResumeInterview},
+                { WebInterviewUserMessages.StartNewButton,  WebInterviewResources.StartNewInterview},
+                { WebInterviewUserMessages.ResumeButton,  WebInterviewResources.ResumeInterview},
             };
 
         public Dictionary<EmailTextTemplateType, EmailTextTemplate> EmailTemplates { get; set; }

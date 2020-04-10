@@ -232,7 +232,7 @@
                                                     <div class="row-element mb-40">
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-success btn-lg">
-                                                            Start New interview
+                                                            {{previewText(webInterviewPageMessages['startNewButton'].text)}}
                                                         </a>
                                                     </div>
                                                 </div>            
@@ -425,7 +425,7 @@
                                                     <div class="row-element">
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-success btn-lg mb-1">
-                                                            {{$t('WebInterview.ResumeInterview')}}
+                                                            {{previewText(webInterviewPageMessages['resumeButton'].text)}}
                                                         </a>
                                                     </div>
                                                 </div>            

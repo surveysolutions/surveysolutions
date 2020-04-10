@@ -11,7 +11,7 @@
         SurveyName = 6,
         CompleteNoteToSupervisor =7,
         CompleteButton = 8,
-        StartNewInterviewButton = 9,
-        ResumeInterviewButton = 10
+        StartNewButton = 9,
+        ResumeButton = 10
     }
 }
