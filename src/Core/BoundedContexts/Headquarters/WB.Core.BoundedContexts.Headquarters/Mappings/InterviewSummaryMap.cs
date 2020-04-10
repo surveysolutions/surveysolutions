@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Property(x => x.QuestionnaireTitle);
             Property(x => x.ResponsibleName);
+            Property(x => x.ResponsibleNameLowerCase, pm => pm.Column("responsible_name_lower_case"));
             Property(x => x.TeamLeadId, pm => pm.Column(cm => cm.Index("InterviewSummaries_TeamLeadId")));
             Property(x => x.TeamLeadName);
             Property(x => x.ResponsibleRole);
