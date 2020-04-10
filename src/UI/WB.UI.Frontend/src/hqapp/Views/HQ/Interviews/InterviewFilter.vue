@@ -1,49 +1,28 @@
 <template>
-    <div class="block-filter">
-        <h5>
-            <inline-selector                 
-                :options="questionsList"
-                keySelector="variable"
-                valueSelector="questionText"
-                :value="selectedQuestion"
-                @input="questionSelected" />
-            <span class="caret"></span>
-        </h5>
-        <Typeahead
-            v-if="isCategorical(selectedQuestion)"
-            :control-id="'question-' + selectedQuestion.variable"
-            fuzzy
+    <FilterBlock :title="question.questionText">
+        <Typeahead fuzzy
+            v-if="isCategorical"
+            :control-id="'question-' + question.variable"           
             :placeholder="$t('Common.SelectOptionValue')"            
             :values="options"
             :value="selectedOption"
             v-on:selected="optionSelected"/>
-        
-    </div>    
+    </FilterBlock>   
 </template>
 <script>
 
 import gql from 'graphql-tag'
-import InlineSelector from './InlineSelector'
 import { find, sortBy } from 'lodash'
 
 export default {
     props: {
-        exludedQuestions: { type: Array },
-        questions: {type: Array },
+        question: {type: Object },
         
         /** @type: {variable: string, value: string} */
         condition: { type: Object },
     },
 
     methods: {
-        addCondition() {
-            this.conditions.push({})
-        },
-
-        isCategorical(question) {
-            return this.selectedQuestion != null && this.selectedQuestion.type == 'SINGLEOPTION'
-        },
-
         getTypeaheadValues(options) {
             return options.map(o => {
                 return {
@@ -53,48 +32,26 @@ export default {
             })
         },
 
-        questionSelected(question) {
-            this.$emit('remove', this.condition.variable)
-            this.$emit('change', {
-                variable: question.variable,
-                value: null,
-            })
-        },
-
         optionSelected(option) {
             this.$emit('change', {
-                variable: this.selectedQuestion.variable,
+                variable: this.question.variable,
                 value: option == null ? null : option.key,
             })
         },
     },
 
     computed: {
-        questionsList() {
-            const array = [...this.questions]
-            array.sort(function (a, b) {
-                return a.questionText.localeCompare(b.questionText)
-            })
-            return array
+        isCategorical() {
+            return this.question != null && this.question.type == 'SINGLEOPTION'
         },
 
         options() {
-            return this.getTypeaheadValues(sortBy(this.selectedQuestion.options, ['title']))
-        },
-
-        selectedQuestion() {
-            return find(this.questions, { variable: this.condition.variable })
+            return this.getTypeaheadValues(sortBy(this.question.options, ['title']))
         },
 
         selectedOption() {
-
             return find(this.options, {key: this.condition.value})
         },
-    },
-
-    components: {
-        InlineSelector,
-        //   QuestionCondition,
     },
 }
 </script>
