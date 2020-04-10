@@ -4,7 +4,8 @@
             <h2>{{ $config.model.welcomeText }}</h2>
         </div>
 
-        <StartOrResumeForm :buttonTitle="$config.model.startNewButton" />
+        <StartOrResumeForm :buttonTitle="$config.model.startNewButton" 
+          :resumeButtonTitle="$config.model.resumeButton" />
     </div>
 </template>
 
