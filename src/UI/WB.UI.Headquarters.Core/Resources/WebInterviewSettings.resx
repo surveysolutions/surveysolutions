@@ -250,4 +250,12 @@
   <data name="NoteToSupervisor" xml:space="preserve">
     <value>Note for supervisor</value>
   </data>
+  <data name="Resume" xml:space="preserve">
+    <value>Resume</value>
+    <comment>Resume button title</comment>
+  </data>
+  <data name="StartNew" xml:space="preserve">
+    <value>Start new interview</value>
+    <comment>Start new interview button title</comment>
+  </data>
 </root>

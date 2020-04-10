@@ -35,6 +35,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             [Required] public string TitleText { get; set; }
             [Required] public WebInterviewUserMessages MessageType { get; set; }
             [Required] public string MessageText { get; set; }
+
+            public WebInterviewUserMessages? ButtonType { get; set; }
+            public string ButtonText { get; set; }
         }
 
         [Route(@"{id}/pageTemplate")]
@@ -54,6 +57,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
             config.CustomMessages[updateModel.TitleType] = updateModel.TitleText;
             config.CustomMessages[updateModel.MessageType] = updateModel.MessageText;
+            if(updateModel.ButtonType != null && !string.IsNullOrEmpty(updateModel.ButtonText))
+                config.CustomMessages[updateModel.ButtonType.Value] = updateModel.ButtonText;
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();
