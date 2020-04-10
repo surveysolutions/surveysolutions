@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unarchived .
+        ///   Looks up a localized string similar to Unarchived.
         /// </summary>
         public static string Action_UnArchived {
             get {
