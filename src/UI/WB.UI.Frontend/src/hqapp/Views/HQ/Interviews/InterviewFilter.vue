@@ -13,17 +13,18 @@
             v-if="isCategorical(selectedQuestion)"
             :control-id="'question-' + selectedQuestion.variable"
             fuzzy
-            :placeholder="$t('Common.AllStatuses')"            
+            :placeholder="$t('Common.SelectOptionValue')"            
             :values="options"
             :value="selectedOption"
             v-on:selected="optionSelected"/>
+        
     </div>    
 </template>
 <script>
 
 import gql from 'graphql-tag'
 import InlineSelector from './InlineSelector'
-import { find } from 'lodash'
+import { find, sortBy } from 'lodash'
 
 export default {
     props: {
@@ -70,11 +71,15 @@ export default {
 
     computed: {
         questionsList() {
-            return this.questions
+            const array = [...this.questions]
+            array.sort(function (a, b) {
+                return a.questionText.localeCompare(b.questionText)
+            })
+            return array
         },
 
         options() {
-            return this.getTypeaheadValues(this.selectedQuestion.options)
+            return this.getTypeaheadValues(sortBy(this.selectedQuestion.options, ['title']))
         },
 
         selectedQuestion() {
