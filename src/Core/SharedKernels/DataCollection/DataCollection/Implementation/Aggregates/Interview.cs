@@ -721,6 +721,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
 
         public bool UsesExpressionStorage { get; protected set; } = false;
+        public bool WasCompleted => this.properties.WasCompleted;
+        public bool WasRejected => this.properties.WasRejected;
         
         public string QuestionnaireId => this.QuestionnaireIdentity?.ToString();
 
