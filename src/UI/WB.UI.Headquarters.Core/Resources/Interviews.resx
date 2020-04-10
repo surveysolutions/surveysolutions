@@ -215,4 +215,13 @@
   <data name="Errors" xml:space="preserve">
     <value>Errors</value>
   </data>
+  <data name="ChooseQuestionsTitle" xml:space="preserve">
+    <value>Choose question to apply filters</value>
+  </data>
+  <data name="FiltersByQuestions" xml:space="preserve">
+    <value>Filters by questions</value>
+  </data>
+  <data name="QuestionsSelector" xml:space="preserve">
+    <value>Questions selector</value>
+  </data>
 </root>
