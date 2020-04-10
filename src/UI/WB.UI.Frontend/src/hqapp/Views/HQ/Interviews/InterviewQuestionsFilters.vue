@@ -1,10 +1,10 @@
 <template>
     <div class="filters-container"
-        v-if="questionsList != null">
+        v-if="questionsList != null && questionsList.length > 0">
         <h4>Filters by Questions</h4>
         <div class="block-filter">            
             <button type="button"
-                class="btn btn-primary btn-lg btn-block"
+                class="btn"
                 @click="$refs.questionsSelector.modal()">
                 Choose questions
             </button>
@@ -13,12 +13,19 @@
         <ModalFrame ref="questionsSelector">
             <form onsubmit="return false;">
                 <div class="action-container">
-                    <Checkbox v-for="question in questionsList"
-                        :key="'cb_' + question.variable"
-                        :label="`[${question.variable}] ${question.questionText}`"
-                        :value="isChecked(question)"
-                        :name="'check_' + question.variable"
-                        @input="check(question)" />
+                    <div class="pull-right">
+                        <!-- <Typeahead 
+
+                        /> -->
+                    </div>
+                    <div>
+                        <Checkbox v-for="question in questionsList"
+                            :key="'cb_' + question.variable"
+                            :label="`[${question.variable}] ${question.questionText}`"
+                            :value="isChecked(question)"
+                            :name="'check_' + question.variable"
+                            @input="check(question)" />
+                    </div>
                 </div>
             </form>
             <div slot="actions">
