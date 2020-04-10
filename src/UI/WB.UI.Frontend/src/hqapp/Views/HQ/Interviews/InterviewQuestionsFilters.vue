@@ -2,16 +2,41 @@
     <div class="filters-container"
         v-if="questionsList != null">
         <h4>Filters by Questions</h4>
-    
+        <div class="block-filter">            
+            <button type="button"
+                class="btn btn-primary btn-lg btn-block"
+                @click="$refs.questionsSelector.modal()">
+                Choose questions
+            </button>
+        </div>
+
+        <ModalFrame ref="questionsSelector">
+            <form onsubmit="return false;">
+                <div class="action-container">
+                    <Checkbox v-for="question in questionsList"
+                        :key="'cb_' + question.variable"
+                        :label="`[${question.variable}] ${question.questionText}`"
+                        :value="isChecked(question)"
+                        :name="'check_' + question.variable"
+                        @input="check(question)" />
+                </div>
+            </form>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal"
+                    role="cancel">{{ $t("Common.Ok") }}</button>
+            </div>
+        </ModalFrame>
+             
         <InterviewFilter 
-            v-for="condition in conditionsList"            
-            :questions="questionsList"            
-            :key="condition.variable || '__new'"
+            v-for="condition in conditions"         
+            :key="'filter_' + condition.variable"
+            :question="questionFor(condition)"            
             :condition="condition"
-            @remove="conditionRemoved"
-            @change="conditionChanged"
-            class="block-filter">
-        </InterviewFilter>      
+            @change="conditionChanged">
+        </InterviewFilter>    
     </div>
     
 </template>
@@ -24,9 +49,10 @@ import { find, filter } from 'lodash'
 export default {
     data() {
         return {
-            conditions: [],
+            conditions: [], /** { } */
             questions: null,
             selectedQuestion: null,
+            checked: {},
         }
     },
 
@@ -49,7 +75,6 @@ export default {
                 }
             }`,
             variables() {
-                console.log('apollo.questions.id', (this.questionnaireId || '').replace(/-/g, ''))
                 return {
                     id: (this.questionnaireId || '').replace(/-/g, ''),
                     version: this.questionnaireVersion,
@@ -58,11 +83,24 @@ export default {
     },
 
     methods: {
-        addCondition() {
-
-            this.conditions.push({})
+        isChecked(question){
+            return find(this.conditions, {variable: question.variable}) != null
         },
 
+        check(question) {
+            const condition = find(this.conditions, {variable: question.variable})
+            
+            if(condition == null) {
+                this.conditions.push({variable: question.variable, value: null})
+            } else {
+                this.conditions = filter(this.conditions, c => c.variable != question.variable)
+            }
+        },
+
+        questionFor(condition) {
+            const question = find(this.questions, { variable: condition.variable })
+            return question
+        },
         isCategorical(question) {
             return this.selectedQuestion != null && this.selectedQuestion.type == 'SINGLEOPTION'
         },
@@ -76,10 +114,6 @@ export default {
             })
         },
 
-        conditionRemoved(variable) {
-            this.conditions = filter(this.conditions, c => c.variable != variable)            
-        },
-
         conditionChanged(changedCondition) {
             const condition = find(this.conditions, {variable: changedCondition.variable})
 
@@ -91,29 +125,21 @@ export default {
                 condition.value = changedCondition.value
                 this.$emit('change', filter(this.conditions, c => c.value))
             }
-
         },
     },
 
     computed: {
         questionsList() {
-            return this.questions
-        },
-
-        conditionsList() {
-            const conditions = [ ...this.conditions]
-            
-            if(find(conditions, c => !c.value) == null) {
-                conditions.push({})
-            }
-
-            return conditions
+            const array = [...(this.questions || [])]
+            array.sort(function (a, b) {
+                return a.questionText.localeCompare(b.questionText)
+            })
+            return array
         },
     },
 
     components: {
         InterviewFilter,
-        //   QuestionCondition,
     },
 }
 </script>
