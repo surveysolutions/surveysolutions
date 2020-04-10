@@ -244,4 +244,10 @@
   <data name="SingleResponse" xml:space="preserve">
     <value>Ограничить одним интервью</value>
   </data>
+  <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+    <value>Начать новое интервью</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
 </root>
