@@ -26,6 +26,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Field(x => x.ResponsibleName)
                 .Type<StringType>();
+            descriptor.Field(x => x.ResponsibleNameLowerCase)
+                .Type<StringType>();
 
             descriptor.Field(x => x.ResponsibleId)
                 .Type<UuidType>();

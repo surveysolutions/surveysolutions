@@ -42,6 +42,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Filter(x => x.ResponsibleName)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowStartsWith().And().AllowIn().And().AllowNotIn();
+            
+            descriptor.Filter(x => x.ResponsibleNameLowerCase)
+                .BindFiltersExplicitly()
+                .AllowEquals().And().AllowStartsWith().And().AllowIn().And().AllowNotIn();
+            
             descriptor.Filter(x => x.ResponsibleRole)
                 .BindFiltersExplicitly()
                 .AllowEquals();
