@@ -214,10 +214,15 @@ namespace WB.UI.Interviewer.ViewModel
                     && samePendingCommand 
                     && interviewRepository.Get(this.InterviewId) != null)//could be synced and deleted
                 {
-                    
-                    commandService.Execute(pendingPause);
+                    try
+                    {
+                        commandService.Execute(pendingPause);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Info($"Was not able to save pause event for {pendingPause.InterviewId}", e);
+                    }
                 }
-                    
 
                 pendingPause = null;
             }
