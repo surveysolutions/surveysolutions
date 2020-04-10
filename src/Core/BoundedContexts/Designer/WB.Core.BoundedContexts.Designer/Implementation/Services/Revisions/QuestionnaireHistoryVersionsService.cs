@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Main.Core.Documents;
@@ -13,7 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.BoundedContexts.Designer.Implementation.Services
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
 {
     public class QuestionnaireHistoryVersionsService : IQuestionnaireHistoryVersionsService
     {
@@ -22,6 +23,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IOptions<QuestionnaireHistorySettings> historySettings;
         private readonly IPatchApplier patchApplier;
         private readonly IPatchGenerator patchGenerator;
+
+        private readonly object lockObject = new object();
+
+        static MemoryCache memoryCache = new MemoryCache(typeof(QuestionnaireDocument).Name + " K/V memory cache");
 
         public QuestionnaireHistoryVersionsService(DesignerDbContext dbContext,
             IEntitySerializer<QuestionnaireDocument> entitySerializer,
@@ -38,7 +43,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.commandService = commandService;
         }
 
+
+
         public QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId)
+        {
+            lock (lockObject)
+            {
+                var id = historyReferenceId.FormatGuid();
+                if (memoryCache.Get(id) is QuestionnaireDocument value)
+                    return value;
+
+                value = GetByHistoryVersionInt(historyReferenceId);
+                if (value != null)
+                    memoryCache.Set(id, value, DateTimeOffset.Now.AddSeconds(10));
+
+                return value;
+            }
+        }
+
+        private QuestionnaireDocument GetByHistoryVersionInt(Guid historyReferenceId)
         {
             var questionnaireChangeRecord = this.dbContext.QuestionnaireChangeRecords.Find(historyReferenceId.FormatGuid());
             if (questionnaireChangeRecord == null)
@@ -162,7 +185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.dbContext.SaveChanges();
         }
 
-        public string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire)
+        private string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire)
         {
             var previousVersion = this.GetLastStoredQuestionnaireVersion(questionnaire);
             var left = this.entitySerializer.Serialize(previousVersion);

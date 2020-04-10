@@ -30,7 +30,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
                 value = base.GetById(id);
                 if (value != null)
-                    memoryCache.Set(id, value, DateTimeOffset.Now.AddSeconds(10));
+                {
+                    CacheItemPolicy policy = new CacheItemPolicy
+                    {
+                        SlidingExpiration = TimeSpan.FromMinutes(3)
+                    };
+                    memoryCache.Set(id, value, policy);
+                }
 
                 return value;
             }
