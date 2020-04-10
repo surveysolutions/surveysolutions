@@ -19,6 +19,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.Answer)
                 .Type<StringType>();
 
+            descriptor.Field(x => x.AnswerLowerCase)
+                .Description("Lower cased version of answer")
+                .Type<StringType>();
+            
             descriptor.Field(x => x.AnswerCode)
                 .Type<IntType>()
                 .Name("answerValue")

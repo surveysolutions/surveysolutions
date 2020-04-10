@@ -159,6 +159,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Position, col => col.Column("Position"));
             Property(x => x.Answer, col => col.Column("AnswerValue"));
             Property(x => x.AnswerCode, col => col.Column("answer_code"));
+            Property(x => x.AnswerLowerCase, col => col.Column("answer_lower_case"));
             
             ManyToOne(x => x.Question, mtm =>
             {
