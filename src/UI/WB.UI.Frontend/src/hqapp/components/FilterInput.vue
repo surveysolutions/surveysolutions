@@ -3,7 +3,7 @@
         <input
             class="form-control with-clear-btn"
             :placeholder="placeholder"
-            type="text"
+            :type="type"
             :value="value"
             @input="input" />
         <div class="input-group-btn"
@@ -21,6 +21,7 @@ export default {
     props: {
         placeholder: { type: String },
         value: {type: String },
+        type: {type: String, default: 'text'},
     },
 
     methods: {
