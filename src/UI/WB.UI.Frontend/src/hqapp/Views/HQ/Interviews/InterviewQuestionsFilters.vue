@@ -1,9 +1,10 @@
 <template>
-    <div class="filters-container">
-        <h4>Filter by Questions</h4>
+    <div class="filters-container"
+        v-if="questionsList != null">
+        <h4>Filters by Questions</h4>
     
         <InterviewFilter 
-            v-for="condition in conditionsList"
+            v-for="condition in conditionsList"            
             :questions="questionsList"            
             :key="condition.variable || '__new'"
             :condition="condition"
