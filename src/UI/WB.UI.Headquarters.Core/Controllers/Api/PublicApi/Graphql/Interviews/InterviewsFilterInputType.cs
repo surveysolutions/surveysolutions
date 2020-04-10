@@ -65,8 +65,24 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .AllowSome(y =>
                 {
                     y.BindFieldsExplicitly();
-                    y.Filter(f => f.Answer).BindFiltersImplicitly();
-                    y.Filter(f => f.AnswerCode).BindFiltersImplicitly();
+                    
+                    y.Filter(f => f.Answer)
+                        .BindFiltersExplicitly()
+                        .AllowEquals().Description("Allows case sensitive equals comparison of answer")
+                            .And().AllowNotEquals().Description("Allows case sensitive not equals comparison of answer")
+                            .And().AllowStartsWith().Description("Allows case sensitive starts with comparison of answer")
+                            .And().AllowNotStartsWith().Description("Allows case sensitive not starts with comparison of answer");
+                    
+                    y.Filter(f => f.AnswerLowerCase)
+                        .BindFiltersExplicitly()
+                        .AllowEquals().Description("Allows case insensitive equals comparison of answer")
+                        .And().AllowNotEquals().Description("Allows case insensitive not equals comparison of answer")
+                        .And().AllowStartsWith().Description("Allows case insensitive starts with comparison of answer")
+                        .And().AllowNotStartsWith().Description("Allows case insensitive not starts with comparison of answer");
+                    
+                    y.Filter(f => f.AnswerCode)
+                        .BindFiltersExplicitly()
+                        .AllowEquals().And().AllowIn().And().AllowNotEquals().And().AllowNotIn();
                     
                     y.Object(x => x.Question)
                         .AllowObject<QuestionsFilterType>();

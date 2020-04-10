@@ -6,10 +6,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public class QuestionAnswer : IReadSideRepositoryEntity
     {
+        private string answer;
         public virtual int Id { get; set; }
 
         public virtual QuestionnaireCompositeItem Question { get; set; }
-        public virtual string Answer { get; set; }
+
+        public virtual string Answer
+        {
+            get => answer;
+            set
+            {
+                answer = value;
+                this.AnswerLowerCase = value?.ToLower();
+            }
+        }
+
+        public virtual string AnswerLowerCase { get; protected set; }
+        
         public virtual decimal? AnswerCode { get; set; }
         public virtual InterviewSummary InterviewSummary { get; set; }
         public virtual int Position { get; set; }
