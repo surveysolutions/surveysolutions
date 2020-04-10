@@ -702,6 +702,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor comments does not exist.
+        /// </summary>
+        public static string Interview_Cover_Supervisor_Comments_does_not_exists {
+            get {
+                return ResourceManager.GetString("Interview_Cover_Supervisor_Comments_does_not_exists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor note:.
         /// </summary>
         public static string Interview_Cover_Supervisor_Note {
