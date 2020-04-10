@@ -25,7 +25,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
         public void when_old_interviewer_get_interview_with_short_substitution_events_should_return_update_required()
         {
             var interviewId = Id.g1;
-            var userAgent = "org.worldbank.solutions.interviewer/443 (build 25532) (DEBUG QuestionnaireVersion/29.0.0)";
+            var userAgent = "org.worldbank.solutions.interviewer/20.04.111 (build 25532) (DEBUG QuestionnaireVersion/29.0.0)";
 
             var events = new CommittedEvent[]
             {
