@@ -61,7 +61,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
                          return questionnaires.Where(q => q.Item3 != null).ToDictionary(
                                 q => q.Id, 
-                                q => q.Item3.GetOptionsForQuestion(q.EntityId, null, null, null).ToList());
+                                q =>
+                                {
+                                    var questionType = q.Item3.GetQuestionType(q.EntityId);
+                                    if(questionType == QuestionType.SingleOption)
+                                        return q.Item3.GetOptionsForQuestion(q.EntityId, null, null, null).ToList();
+                                    return new List<CategoricalOption>();
+                                });
                       
                     }).LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
                 .Type<ListType<CategoricalOptionType>>();
