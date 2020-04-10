@@ -1,3 +1,4 @@
+#nullable enable
 using HotChocolate.Types;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging

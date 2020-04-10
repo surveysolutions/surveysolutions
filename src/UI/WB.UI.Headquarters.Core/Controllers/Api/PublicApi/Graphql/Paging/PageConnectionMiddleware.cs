@@ -20,8 +20,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
 
             PageDetails pageDetails = new PageDetails
             {
-                Skip = context.Variables.GetVariable<int>("skip"),
-                Take = context.Variables.GetVariable<int>("take"),
+                Skip = context.Argument<int>("skip"),
+                Take = context.Argument<int>("take"),
             };
 
             if (context.Result is IQueryable<TClrType> source)
