@@ -582,10 +582,10 @@ export default {
                             where.AND = []
                         }
                         where.AND.push({ OR: [
-                            { key_starts_with: search },
-                            { responsibleName_starts_with: search },
+                            { key_starts_with: search.toLowerCase() },
+                            { responsibleName_starts_with: search.toLowerCase() },
                             { identifyingQuestions_some: {
-                                answerLowerCase_starts_with: search,
+                                answerLowerCase_starts_with: search.toLowerCase(),
                             },
                             }],
                         })
