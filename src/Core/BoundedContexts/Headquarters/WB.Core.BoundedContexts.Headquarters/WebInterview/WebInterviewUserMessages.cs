@@ -2,14 +2,16 @@
 {
     public enum WebInterviewUserMessages
     {
-        WelcomeText,
-        Invitation,
-        ResumeWelcome,
-        ResumeInvitation,
-        WebSurveyHeader,
-        FinishInterview,
-        SurveyName,
-        CompleteNoteToSupervisor,
-        CompleteButton
+        WelcomeText = 0,
+        Invitation = 1,
+        ResumeWelcome = 2,
+        ResumeInvitation = 3,
+        WebSurveyHeader = 4,
+        FinishInterview = 5,
+        SurveyName = 6,
+        CompleteNoteToSupervisor =7,
+        CompleteButton = 8,
+        StartNewInterviewButton = 9,
+        ResumeInterviewButton = 10
     }
 }
