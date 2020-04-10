@@ -208,8 +208,16 @@ namespace WB.UI.Interviewer.ViewModel
                 var sameInterview = pendingPause.InterviewId == interviewId;
                 var samePendingCommand = pendingPause.CommandIdentifier == cmdid;
 
-                if (pendingPause != null && delay > PauseResumeThrottling && sameInterview && samePendingCommand)
+                if (pendingPause != null 
+                    && delay > PauseResumeThrottling 
+                    && sameInterview 
+                    && samePendingCommand 
+                    && interviewRepository.Get(this.InterviewId) != null)//could be synced and deleted
+                {
+                    
                     commandService.Execute(pendingPause);
+                }
+                    
 
                 pendingPause = null;
             }
