@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IImageFileStorage imagesStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
         protected UploadInterviews(IInterviewerInterviewAccessor interviewFactory,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
@@ -31,6 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAudioFileStorage audioFileStorage,
             ISynchronizationService synchronizationService,
             IAudioAuditFileStorage audioAuditFileStorage,
+            IPlainStorage<InterviewView> interviewViewRepository,
             int sortOrder) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
@@ -38,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.imagesStorage = imagesStorage ?? throw new ArgumentNullException(nameof(imagesStorage));
             this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
             this.audioAuditFileStorage = audioAuditFileStorage;
+            this.interviewViewRepository = interviewViewRepository;
         }
 
         public override async Task ExecuteAsync()
@@ -114,9 +118,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     }
 
                     if (interview.Status == InterviewStatus.Completed)
+                    {
                         this.interviewFactory.RemoveInterview(interview.InterviewId);
+                    }
                     else
+                    {
                         this.interviewFactory.MarkEventsAsReceivedByHQ(interview.InterviewId);
+                        MarkInterviewAsNonDeletedMore(interview.InterviewId);
+                    }
 
                     this.Context.Statistics.SuccessfullyUploadedInterviewsCount++;
                 }
@@ -129,6 +138,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
             }
         }
+
+        private void MarkInterviewAsNonDeletedMore(Guid interviewId)
+        {
+            var interviewView = interviewViewRepository.GetById(interviewId.FormatGuid());
+            interviewView.CanBeDeleted = false;
+            interviewViewRepository.Store(interviewView);
+        }
+
         private async Task UploadImagesByCompletedInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)

@@ -7,13 +7,17 @@ using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -26,11 +30,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
         private readonly IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly ILiteEventBus eventBus;
+        private readonly ICommandService commandService;
+        private readonly IPrincipal principal;
+        private readonly IEventSourcedAggregateRootRepositoryCacheCleaner aggregateRootRepositoryCacheCleaner;
 
         private class InterviewLite
         {
             public Guid InterviewId { get; set; }
             public Guid LastHqEventId { get; set; }
+            public bool IsCompleted { get; set; }
         }
 
         public DownloadHQChangesForInterview(int sortOrder, 
@@ -39,13 +47,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
             IEnumeratorEventStorage eventStore,
-            ILiteEventBus eventBus) 
+            ILiteEventBus eventBus,
+            ICommandService commandService,
+            IPrincipal principal,
+            IEventSourcedAggregateRootRepositoryCacheCleaner aggregateRootRepositoryCacheCleaner) 
             : base(sortOrder, synchronizationService, logger)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.interviewSequenceViewRepository = interviewSequenceViewRepository;
             this.eventStore = eventStore;
             this.eventBus = eventBus;
+            this.commandService = commandService;
+            this.principal = principal;
+            this.aggregateRootRepositoryCacheCleaner = aggregateRootRepositoryCacheCleaner;
         }
 
         public override async Task ExecuteAsync()
@@ -56,26 +70,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                 .ToDictionary(k => k.Id, v => v.LastSequenceEventId.Value);
 
             var localInterviews = this.interviewViewRepository.LoadAll();
-            var localNonCompletedInterviewIds = localInterviews
-                .Where(i => i.Status != InterviewStatus.Completed)
-                .Select(interview => interview.InterviewId)
-                .ToDictionary(k => k, v => eventStore.GetLastEventIdUploadedToHq(v));
+            var localPartialySyncedInterviews = localInterviews
+                .Select(i => new
+                {
+                    InterviewId = i.InterviewId,
+                    LastHqEventId = eventStore.GetLastEventIdUploadedToHq(i.InterviewId),
+                    IsCompleted = i.Status == InterviewStatus.Completed
+                })
+                .Where(i => i.LastHqEventId.HasValue)
+                .ToDictionary(k => k.InterviewId, v => new InterviewLite(){
+                    InterviewId = v.InterviewId,
+                    LastHqEventId = v.LastHqEventId.Value,
+                    IsCompleted = v.IsCompleted
+                });
 
-            var localInterviewsToUpdate = localNonCompletedInterviewIds
+            var localInterviewsToUpdate = localPartialySyncedInterviews
                 .Where(interview =>
                 {
-                    if (!interview.Value.HasValue)
-                        return false;
-
                     if (!remoteInterviewWithSequence.TryGetValue(interview.Key, out var lastHqEventId))
                         return false;
 
-                    return interview.Value.Value != lastHqEventId;
-                }).Select(kv => new InterviewLite()
-                {
-                    InterviewId = kv.Key,
-                    LastHqEventId = kv.Value.Value
-                }).ToList(); 
+                    return interview.Value.LastHqEventId != lastHqEventId;
+                }).Select(kv => kv.Value).ToList(); 
 
             await this.UpdateLocalInterviewsAsync(localInterviewsToUpdate, this.Context.Statistics, this.Context.Progress, this.Context.CancellationToken);
         }
@@ -121,6 +137,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
                     eventStore.InsertEventsFromHqInEventsStream(interview.InterviewId, new CommittedEventStream(interview.InterviewId, interviewDetails));
                     eventBus.PublishCommittedEvents(interviewDetails);
+
+                    aggregateRootRepositoryCacheCleaner.CleanCache();
+
+
+                    if (DoesNewEventsHaveComments(interviewDetails))
+                    {
+                        var userId = principal.CurrentUserIdentity.UserId;
+                        var command = new RestartInterviewCommand(interview.InterviewId, userId, "reopen after get new comments", DateTime.Now);
+                        commandService.Execute(command);
+                    }
+
+                    statistics.SuccessfullyDownloadedPatchesForInterviewsCount++;
                 }
                 catch (OperationCanceledException)
                 {
@@ -128,13 +156,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                 }
                 catch (Exception exception)
                 {
-                    statistics.FailedToCreateInterviewsCount++;
-
                     await this.TrySendUnexpectedExceptionToServerAsync(exception);
                     this.logger.Error(
                         "Failed to download hq changes for interview, interviewer",
                         exception);
                 }
+        }
+
+        private bool DoesNewEventsHaveComments(List<CommittedEvent> events)
+        {
+            return events.Any(@event =>
+            {
+                switch (@event.Payload)
+                {
+                    case AnswerCommented answerCommented:
+                        return true;
+
+                    default:
+                        return false;
+                }
+            });
         }
 
         private bool IsCanInsertEventsInStream(List<CommittedEvent> events)
@@ -149,6 +190,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     case AnswerCommentResolved answerCommentResolved:
                     case InterviewPaused interviewPaused:
                     case InterviewResumed interviewResumed:
+                    case InterviewKeyAssigned interviewKeyAssigned:
                         return true;
 
                     default:
