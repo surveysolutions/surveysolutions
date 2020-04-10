@@ -698,7 +698,7 @@ namespace WB.UI.Headquarters.Controllers
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(),
                     questionnaireBrowseItem.Title),
                 ResumeButton = SubstituteQuestionnaireName(
-                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeInterviewButton).ToString(),
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeButton).ToString(),
                     questionnaireBrowseItem.Title),
                 SubmitUrl = Url.Action("Resume", "WebInterview"),
             };
@@ -725,7 +725,7 @@ namespace WB.UI.Headquarters.Controllers
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(),
                     questionnaireBrowseItem.Title),
                 StartNewButton = SubstituteQuestionnaireName(
-                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.StartNewInterviewButton).ToString(),
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.StartNewButton).ToString(),
                     questionnaireBrowseItem.Title),
                 CaptchaErrors = ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any()
                                 ? ViewData.ModelState["InvalidCaptcha"].Errors.Select(e => e.ErrorMessage).ToList()
