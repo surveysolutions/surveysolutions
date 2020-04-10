@@ -21,6 +21,12 @@
             @input="input"                
             :id="'filter_' + condition.variable" />
         
+        <filter-input v-if="question.type == 'NUMERIC'"
+            :value="condition.value"
+            type="numeric"
+            @input="input"                
+            :id="'filter_' + condition.variable" />
+            
     </div>   
 </template>
 <script>
@@ -55,7 +61,7 @@ export default {
         input(value) {
             this.$emit('change', {
                 variable: this.question.variable,
-                field: 'answerLowerCase_starts_with',
+                field: this.field.id,
                 value,
             })
         },
@@ -91,7 +97,11 @@ export default {
             case 'SINGLEOPTION': return null
             case 'TEXT': return [
                 { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
-                { id: 'answerLowerCase', value: this.$t('Common.Equal') },
+                { id: 'answerLowerCase', value: this.$t('Common.Equals') },
+                
+            ]
+            case 'NUMERIC': return [
+                { id: 'answer', value: this.$t('Common.Equals')},
             ]
             }
             return null
