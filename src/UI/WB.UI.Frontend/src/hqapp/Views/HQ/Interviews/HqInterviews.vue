@@ -585,7 +585,7 @@ export default {
                             { key_starts_with: search },
                             { responsibleName_starts_with: search },
                             { identifyingQuestions_some: {
-                                answer_starts_with: search,
+                                answerLowerCase_starts_with: search,
                             },
                             }],
                         })
@@ -597,12 +597,15 @@ export default {
                         }
 
                         self.conditions.forEach(cond => {
-                            where.AND.push({
-                                identifyingQuestions_some: {
-                                    question: {variable: cond.variable},
-                                    answerCode: parseInt(cond.value),
-                                },
-                            })
+                            if(cond.value == null) return
+                            
+                            const identifyingQuestions_some = { question: {variable: cond.variable}}
+
+                            const value = typeof(cond.value) === 'string' ? cond.value.toLowerCase() : cond.value
+
+                            identifyingQuestions_some[cond.field] = value
+
+                            where.AND.push({identifyingQuestions_some})
                         })
                     }
 

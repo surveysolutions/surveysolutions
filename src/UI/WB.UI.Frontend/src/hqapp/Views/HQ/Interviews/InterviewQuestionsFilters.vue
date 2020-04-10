@@ -1,23 +1,22 @@
 <template>
     <div class="filters-container"
         v-if="questionsList != null && questionsList.length > 0">
-        <h4>Filters by Questions</h4>
+        <h4>{{$t("Interviews.FiltersByQuestions")}}</h4>
         <div class="block-filter">            
             <button type="button"
                 class="btn"
                 @click="$refs.questionsSelector.modal()">
-                Choose questions
+                {{$t("Interviews.QuestionsSelector")}}
             </button>
         </div>
 
-        <ModalFrame ref="questionsSelector">
+        <ModalFrame ref="questionsSelector"
+            :title="$t('Interviews.ChooseQuestionsTitle')">
             <form onsubmit="return false;">
                 <div class="action-container">
-                    <div class="pull-right">
-                        <!-- <Typeahead 
-
-                        /> -->
-                    </div>
+                    <!-- <div class="pull-right">
+                        <span>There will be language selector</span>
+                    </div> -->
                     <div>
                         <Checkbox v-for="question in questionsList"
                             :key="'cb_' + question.variable"
@@ -129,8 +128,9 @@ export default {
             }
 
             if(condition != null) {
+                condition.field = changedCondition.field
                 condition.value = changedCondition.value
-                this.$emit('change', filter(this.conditions, c => c.value))
+                this.$emit('change', [...this.conditions])
             }
         },
     },

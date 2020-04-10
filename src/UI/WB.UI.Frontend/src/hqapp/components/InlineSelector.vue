@@ -4,9 +4,7 @@
             style="border-bottom: 1px dashed"
             data-toggle="dropdown"
             aria-haspopup="true"
-            aria-expanded="true">
-            {{value == null ? 'Select question' : value[valueSelector]}}
-        </span>
+            aria-expanded="true">{{text}}</span>
         <ul class="dropdown-menu"
             style="width:auto">
             <li v-for="item in options"
@@ -34,11 +32,27 @@ export default {
         valueSelector: {
             type: String, required: false, default: 'value',
         },
+        noEmpty: {
+            type: Boolean, required: false, default: false,
+        },
     },
 
     methods: {
         select(item) {
             this.$emit('input', item)
+        },
+    },
+
+    computed: {
+        text() {
+            if(this.value == null) {
+                if(this.noEmpty && this.options.length > 0) {
+                    this.select(this.options[0])
+                    return ''
+                }
+                return this.$t('Common.SelectOption')
+            }
+            return this.value[this.valueSelector]
         },
     },
 
