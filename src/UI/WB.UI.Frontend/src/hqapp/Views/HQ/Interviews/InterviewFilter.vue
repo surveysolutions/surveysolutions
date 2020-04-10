@@ -1,13 +1,27 @@
 <template>
-    <FilterBlock :title="question.questionText">
-        <Typeahead fuzzy
-            v-if="isCategorical"
+    <div class="block-filter"
+        v-if="question != null && isSupported">
+        <h5 :title="question.questionText">
+            {{question.questionText}} <inline-selector :options="fieldOptions"
+                no-empty
+                v-if="fieldOptions != null"
+                v-model="field" />
+        </h5>
+
+        <Typeahead fuzzy        
+            v-if="question.type == 'SINGLEOPTION'"
             :control-id="'question-' + question.variable"           
-            :placeholder="$t('Common.SelectOptionValue')"            
+            :placeholder="$t('Common.SelectOption')"            
             :values="options"
             :value="selectedOption"
             v-on:selected="optionSelected"/>
-    </FilterBlock>   
+        
+        <filter-input v-if="question.type == 'TEXT'"
+            :value="condition.value"
+            @input="input"                
+            :id="'filter_' + condition.variable" />
+        
+    </div>   
 </template>
 <script>
 
@@ -22,6 +36,12 @@ export default {
         condition: { type: Object },
     },
 
+    data() {
+        return {
+            field: null,
+        }
+    },
+
     methods: {
         getTypeaheadValues(options) {
             return options.map(o => {
@@ -32,25 +52,49 @@ export default {
             })
         },
 
+        input(value) {
+            this.$emit('change', {
+                variable: this.question.variable,
+                field: 'answerLowerCase_starts_with',
+                value,
+            })
+        },
+
         optionSelected(option) {
             this.$emit('change', {
                 variable: this.question.variable,
-                value: option == null ? null : option.key,
+                field: 'answerCode',
+                value: option == null ? null : parseInt(option.key),
             })
         },
     },
 
-    computed: {
-        isCategorical() {
-            return this.question != null && this.question.type == 'SINGLEOPTION'
-        },
-
+    computed: { 
         options() {
             return this.getTypeaheadValues(sortBy(this.question.options, ['title']))
         },
 
         selectedOption() {
-            return find(this.options, {key: this.condition.value})
+            let key = this.condition.value
+            if(key != null) key = key.toString()
+            return find(this.options, { key })
+        },
+        
+        isSupported() {
+            const supported = ['SINGLEOPTION', 'TEXT', 'NUMERIC']
+            return find(supported, s => s == this.question.type)
+        },
+
+        fieldOptions() {
+            switch(this.question.type) 
+            {
+            case 'SINGLEOPTION': return null
+            case 'TEXT': return [
+                { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
+                { id: 'answerLowerCase', value: this.$t('Common.Equal') },
+            ]
+            }
+            return null
         },
     },
 }
