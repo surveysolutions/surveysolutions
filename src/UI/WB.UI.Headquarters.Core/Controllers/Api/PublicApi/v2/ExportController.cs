@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.Code;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
@@ -22,6 +23,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
     /// </summary>
     [Authorize(Roles = "ApiUser, Administrator")]
     [Route(@"api/v2/export")]
+    [PublicApiJson]
     public class ExportController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -53,10 +55,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         /// Start export file creation
         /// </summary>
         /// 
-        /// <response code="200">Export started</response>
+        /// <response code="201">Export started</response>
         /// <response code="400">Questionnaire id is malformed</response>
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<ExportProcess>> PostExports([FromBody]CreateExportProcess request)
         {
             if (!QuestionnaireIdentity.TryParse(request.QuestionnaireId, out var questionnaireIdentity))
@@ -82,7 +85,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {request.InterviewStatus.ToString() ?? ""}",
                 (DataExportFormat) request.ExportType);
 
-            return CreatedAtAction(nameof(GetExports), new {id = result.JobId}, request);
+            var createdExportProcess = await this.dataExportStatusReader.GetProcessStatus(result.JobId);
+
+            return CreatedAtAction(nameof(GetExports), new {id = result.JobId}, ToExportProcess(createdExportProcess));
         }
 
         /// <summary>
@@ -109,15 +114,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         /// <param name="questionnaireIdentity">Questionnaire id</param>
         /// <param name="exportStatus">Status of export process</param>
         /// <param name="hasFile">Has export process file to download</param>
+        /// <param name="limit">Select a limited number of records</param>
+        /// <param name="offset">Skip number of records before beginning to return records</param>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExportProcess>>> GetExports(ExportType? exportType,
             ExportInterviewType? interviewStatus, string questionnaireIdentity, ExportStatus? exportStatus,
-            bool? hasFile)
+            bool? hasFile, int? limit, int? offset)
         {
             var status = interviewStatus == ExportInterviewType.All ? null : (InterviewStatus?) interviewStatus;
 
             var filteredProcesses = await this.exportServiceApi.GetJobsByQuery((DataExportFormat?) exportType,
-                status, questionnaireIdentity, (DataExportJobStatus?) exportStatus, hasFile);
+                status, questionnaireIdentity, (DataExportJobStatus?) exportStatus, hasFile, limit, offset);
 
             return this.Ok(filteredProcesses.Select(ToExportProcess));
         }
