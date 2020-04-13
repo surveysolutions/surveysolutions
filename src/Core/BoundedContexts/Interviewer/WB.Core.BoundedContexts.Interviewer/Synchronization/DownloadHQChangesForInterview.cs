@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                         Description = string.Format(EnumeratorUIResources.Synchronization_Download_Description_Format,
                             i + 1, interviews.Count,
                             EnumeratorUIResources.Synchronization_Interviews),
-                        Stage = SyncStage.UpdatingInterviews,
+                        Stage = SyncStage.UpdatingInterviewsChanges,
                         StageExtraInfo = new Dictionary<string, string>()
                         {
                             { "processedCount", (i + 1).ToString() },
@@ -146,6 +146,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                         var userId = principal.CurrentUserIdentity.UserId;
                         var command = new RestartInterviewCommand(interview.InterviewId, userId, "reopen after get new comments", DateTime.Now);
                         commandService.Execute(command);
+                        statistics.ReopenedInterviewsAfterReceivedCommentsCount++;
                     }
 
                     statistics.SuccessfullyDownloadedPatchesForInterviewsCount++;
