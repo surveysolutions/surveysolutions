@@ -29,5 +29,6 @@
         UpdatingQuestionnaires,
         FailedUnauthorized,
         UpdatingInterviews,
+        UpdatingInterviewsChanges,
     }
 }
