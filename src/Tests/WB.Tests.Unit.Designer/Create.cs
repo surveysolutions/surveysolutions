@@ -12,6 +12,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
 using Ncqrs;
@@ -74,7 +75,6 @@ using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.E
 using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Tests.Unit.Designer
@@ -1325,7 +1325,8 @@ namespace WB.Tests.Unit.Designer
             IEntitySerializer<QuestionnaireDocument> entitySerializer = null,
             IPatchApplier patchApplier = null,
             IOptions<QuestionnaireHistorySettings> questionnaireHistorySettings = null,
-            ICommandService commandService = null)
+            ICommandService commandService = null,
+            IMemoryCache memoryCache = null)
         {
             return new QuestionnaireHistoryVersionsService(
                 dbContext ?? Create.InMemoryDbContext(),
@@ -1336,7 +1337,8 @@ namespace WB.Tests.Unit.Designer
                 }), 
                 patchApplier ?? Create.PatchApplier(),
                 Create.PatchGenerator(),
-                commandService ?? Mock.Of<ICommandService>());
+                commandService ?? Mock.Of<ICommandService>(),
+                memoryCache ?? Mock.Of<IMemoryCache>());
         }
 
         private static IPatchApplier PatchApplier()
