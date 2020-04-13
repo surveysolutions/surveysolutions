@@ -73,9 +73,9 @@
                 v-if="where.questionnaireId && where.questionnaireVersion"
                 :questionnaireId="where.questionnaireId"
                 :questionnaireVersion="where.questionnaireVersion"
+                :value="conditions"
                 @change="questionFilterChanged" />
-
-        </Filters>  
+        </Filters>
 
         <DataTables
             ref="table"
@@ -87,7 +87,6 @@
             @ajaxComplete="isLoading = false"
             :selectable="showSelectors"
             :selectableId="'id'">
-        
             <div
                 class="panel panel-table"
                 v-if="selectedRows.length"
@@ -345,7 +344,7 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
-import {lowerCase, map, join, assign, isNaN} from 'lodash'
+import {lowerCase, find, filter, flatten, map, join, assign, isNaN, isNumber, toNumber} from 'lodash'
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 
@@ -375,10 +374,39 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
   }
 }`
 
+/** convert
+ * [{variable, field, value}, {variable, field, value}] 
+ * ["variable,field,value", "variable,field,value"]
+ */
+function conditionToQueryString(conditions) {
+    const result = []
+    conditions.forEach(c => {
+        result.push(`${c.variable},${c.field},${c.value}`)
+    })
+    return result.length > 0 ? result : null
+}
+
+function queryStrignToCondition(queryStringArray) {
+    const result = []
+    queryStringArray.forEach(q => {
+        const parts = q.split(',')
+        const value = parts.slice(2).join(',')
+        
+        result.push({
+            variable: parts[0],
+            field: parts[1],
+            value: isNaN(value) ? value : toNumber(value),
+        })
+    })
+    return result
+}
+
 export default {
+
     components: {
         InterviewFilter,
     },
+
     data() {
         return {
             restart_comment: null,
@@ -573,8 +601,8 @@ export default {
                         take: data.length,
                     }
 
-                    const where = self.where
-                    delete where.AND
+                    const where = Object.assign({} ,self.where)
+
                     const search = data.search.value
 
                     if(search && search != '') {
@@ -601,7 +629,7 @@ export default {
                             
                             const identifyingQuestions_some = { question: {variable: cond.variable}}
 
-                            const value = typeof(cond.value) === 'string' ? cond.value.toLowerCase() : cond.value
+                            const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
 
                             identifyingQuestions_some[cond.field] = value
 
@@ -654,13 +682,14 @@ export default {
         config() {
             return this.$config.model
         },
+
         where() {
             const data = {}
             if (this.status) data.status = this.status.alias.toUpperCase()
             if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
-            if (this.questionnaireVersion) data.questionnaireVersion = parseInt(this.questionnaireVersion.key)
+            if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
-            if (this.assignmentId) data.assignmentId = parseInt(this.assignmentId)
+            if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
             if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
             if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
             
@@ -671,6 +700,7 @@ export default {
     methods: {
         questionFilterChanged(conditions) {
             this.conditions = conditions
+            this.addParamsToQueryString()
             this.reloadTable()
         },
         togglePrefield() {
@@ -1227,7 +1257,12 @@ export default {
         },
 
         addParamsToQueryString() {
-            var queryString = this.where
+            const queryString = Object.assign({}, this.where)
+            
+            const conditions = filter(this.conditions, c => c.value != null)
+            if(conditions.length > 0) {
+                queryString.conditions = conditionToQueryString(conditions)
+            }
             this.$router.push({query: queryString})
         },
 
@@ -1260,37 +1295,57 @@ export default {
 
             onDone(questionnaireId, version)
         },
-    },
 
-    mounted() {
-        var self = this
+        initPageFilters() {
+            const self = this
+            const query = this.$route.query
 
-        this.unactiveDateStart = this.$route.query.unactiveDateStart
-        this.unactiveDateEnd = this.$route.query.unactiveDateEnd
-        this.assignmentId = this.$route.query.assignmentId
+            this.unactiveDateStart = query.unactiveDateStart
+            this.unactiveDateEnd = query.unactiveDateEnd
+            this.assignmentId = query.assignmentId
 
-        if (this.$route.query.status != undefined) {
-            self.status = self.statuses.find(o => o.alias === self.$route.query.status)
-        }
-
-        self.loadQuestionnaireId((questionnaireId, version) => {
-            if (questionnaireId != undefined) {
-                self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
-                if (version != undefined && self.questionnaireId != undefined) {
-                    self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
-                }
+            if (query.status != undefined) {
+                self.status = self.statuses.find(o => o.alias === query.status)
             }
 
-            self.loadResponsibleIdByName(responsibleId => {
-                if (responsibleId != undefined)
-                    self.responsibleId = {key: responsibleId, value: self.$route.query.responsible}
+            self.loadQuestionnaireId((questionnaireId, version) => {
+                if (questionnaireId != undefined) {
+                    self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
+                    if (version != undefined && self.questionnaireId != undefined) {
+                        self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
 
-                self.startWatchers(
-                    ['responsibleId', 'questionnaireId', 'status', 'assignmentId', 'questionnaireVersion'],
-                    self.reloadTableAndSaveRoute.bind(self)
-                )
+                        if(query.conditions != null) {
+                            self.conditions = queryStrignToCondition(flatten([query.conditions]))
+                        }
+                    }
+                }
+
+                self.loadResponsibleIdByName(responsibleId => {
+                    if (responsibleId != undefined)
+                        self.responsibleId = {key: responsibleId, value: query.responsible}
+
+                    self.startWatchers(
+                        ['responsibleId',
+                            'questionnaireId', 
+                            'status', 
+                            'assignmentId', 
+                            'questionnaireVersion'],
+                        self.reloadTableAndSaveRoute.bind(self)
+                    )
+                })
             })
-        })
+        },
+    },
+
+    mounted() {        
+        this.initPageFilters()
+    },
+
+    watch: {
+        '$route'(to) {
+            this.initPageFilters()
+            this.reloadTable()
+        },
     },
 }
 </script>
