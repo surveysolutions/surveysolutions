@@ -465,7 +465,7 @@ export default {
                     searchable: false,
                     render(data) {
                         var questionsWithTitles = map(data, node => {
-                            return node.question.questionText + ': ' + node.answer
+                            return node.question.variable + ': ' + node.answer
                         })
                         return join(questionsWithTitles, ', ')
                     },
@@ -1255,8 +1255,8 @@ export default {
         loadQuestionnaireId(onDone) {
             let requestParams = null
 
-            const questionnaireId = this.$route.query.templateId
-            const version = this.$route.query.templateVersion
+            const questionnaireId = this.$route.query.questionnaireId
+            const version = this.$route.query.questionnaireVersion
 
             onDone(questionnaireId, version)
         },
