@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.Caching;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -23,17 +23,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
         private readonly IOptions<QuestionnaireHistorySettings> historySettings;
         private readonly IPatchApplier patchApplier;
         private readonly IPatchGenerator patchGenerator;
+        private readonly IMemoryCache memoryCache;
 
         private readonly object lockObject = new object();
-
-        static MemoryCache memoryCache = new MemoryCache(typeof(QuestionnaireDocument).Name + " K/V memory cache");
 
         public QuestionnaireHistoryVersionsService(DesignerDbContext dbContext,
             IEntitySerializer<QuestionnaireDocument> entitySerializer,
             IOptions<QuestionnaireHistorySettings> historySettings,
             IPatchApplier patchApplier,
             IPatchGenerator patchGenerator,
-            ICommandService commandService)
+            ICommandService commandService,
+            IMemoryCache memoryCache)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             this.entitySerializer = entitySerializer;
@@ -41,23 +41,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             this.patchApplier = patchApplier;
             this.patchGenerator = patchGenerator;
             this.commandService = commandService;
+            this.memoryCache = memoryCache;
         }
 
-
+        private string CacheKey(string id) => "QuestionnaireHistoricalDocument:" + id;
 
         public QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId)
         {
             lock (lockObject)
             {
-                var id = historyReferenceId.FormatGuid();
-                if (memoryCache.Get(id) is QuestionnaireDocument value)
-                    return value;
-
-                value = GetByHistoryVersionInt(historyReferenceId);
-                if (value != null)
-                    memoryCache.Set(id, value, DateTimeOffset.Now.AddSeconds(10));
-
-                return value;
+                return memoryCache.GetOrCreate(CacheKey(historyReferenceId.FormatGuid()), cache =>
+                {
+                    cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
+                    return GetByHistoryVersionInt(historyReferenceId);
+                });
             }
         }
 
