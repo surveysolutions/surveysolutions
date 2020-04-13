@@ -277,6 +277,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} interview(s) updated.
+        /// </summary>
+        public static string SynchronizationCompleted_InterviewsPatches {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_InterviewsPatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} interview(s) rejected.
         /// </summary>
         public static string SynchronizationCompleted_InterviewsRejected {
@@ -309,6 +318,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string SynchronizationCompleted_NothingToSync {
             get {
                 return ResourceManager.GetString("SynchronizationCompleted_NothingToSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interview(s) was reopened after received on comments by this interviews.
+        /// </summary>
+        public static string SynchronizationCompleted_ReopenedInterviewsAfterComments {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_ReopenedInterviewsAfterComments", resourceCulture);
             }
         }
         

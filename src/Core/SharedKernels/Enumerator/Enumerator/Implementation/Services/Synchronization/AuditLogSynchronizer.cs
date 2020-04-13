@@ -41,7 +41,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 statistics.NewInterviewsCount,
                 statistics.SuccessfullyUploadedInterviewsCount,
                 statistics.RejectedInterviewsCount,
-                statistics.DeletedInterviewsCount
+                statistics.DeletedInterviewsCount,
+                statistics.SuccessfullyDownloadedPatchesForInterviewsCount,
+                statistics.ReopenedInterviewsAfterReceivedCommentsCount
             ));
 
             var auditLogEntities = auditLogService.GetAuditLogEntitiesForSync();

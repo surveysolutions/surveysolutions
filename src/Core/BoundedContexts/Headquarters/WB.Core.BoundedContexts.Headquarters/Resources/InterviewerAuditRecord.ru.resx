@@ -202,26 +202,32 @@
     <value>отправлено {0} интервью</value>
     <comment>отправлено {0} интервью</comment>
   </data>
-    <data name="RocordsMissing" xml:space="preserve">
+  <data name="RocordsMissing" xml:space="preserve">
     <value>Еще нет записей</value>
     <comment>Аудит записи не найдены</comment>
   </data>
-    <data name="PageTitle" xml:space="preserve">
+  <data name="PageTitle" xml:space="preserve">
     <value>Лог действий</value>
     <comment>Лог действий</comment>
   </data>
-    <data name="AssignResponsibleToInterview" xml:space="preserve">
+  <data name="AssignResponsibleToInterview" xml:space="preserve">
     <value>Назначен ответственный {0} на интервью {1}</value>
     <comment>Назначен ответственный {0} на интервью {1}</comment>
   </data>
-    <data name="AssignResponsibleToAssignment" xml:space="preserve">
+  <data name="AssignResponsibleToAssignment" xml:space="preserve">
     <value>Назначен ответственный {0} на задачу №{1}
 </value>
     <comment>Назначен ответственный {0} на задачу №{1}
 </comment>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
-      <value>Установка приложения закончена</value>
-      <comment>Установка приложения закончена</comment>
+    <value>Установка приложения закончена</value>
+    <comment>Установка приложения закончена</comment>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPatches" xml:space="preserve">
+    <value>{0} интервью были обновленны</value>
+  </data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
+    <value>{0} интервью были переоткрыты после получения коментариев по ним</value>
   </data>
 </root>
