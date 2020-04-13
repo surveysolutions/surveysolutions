@@ -73,6 +73,8 @@
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_RejectedInterviews_Format'), Synchronization.Statistics.TotalRejectedInterviewsCount); Visible GreaterThan(Synchronization.Statistics.TotalRejectedInterviewsCount, 0)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_NewInterviews_Format'), Synchronization.Statistics.TotalNewInterviewsCount); Visible GreaterThan(Synchronization.Statistics.TotalNewInterviewsCount, 0)" />
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_InterviewsUpdated_Format'), Synchronization.Statistics.TotalNewInterviewsCount); Visible GreaterThan(Synchronization.Statistics.SuccessfullyDownloadedPatchesForInterviewsCount, 0)" />
 
         </LinearLayout>
 
