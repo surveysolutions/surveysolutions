@@ -148,4 +148,10 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>Здравствуйте и Добро пожаловать в Survey Solutions Web Survey</value>
   </data>
+  <data name="StartNewInterview" xml:space="preserve">
+    <value>Начать новое интервью</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>Продолжить интевью</value>
+  </data>
 </root>
