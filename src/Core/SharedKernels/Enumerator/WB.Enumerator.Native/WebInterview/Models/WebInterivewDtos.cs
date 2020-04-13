@@ -21,6 +21,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string FirstSectionId { get; set; }
         public string InterviewKey { get; set; }
         public bool InterviewCannotBeChanged { get; set; }
+        public bool CanAddComments { get; set; }
         public bool ReceivedByInterviewer { get; set; }
         public bool IsCurrentUserObserving { get; set; }
         public bool DoesBrokenPackageExist { get; set; }

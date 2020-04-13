@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -89,6 +89,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 QuestionnaireVersion = questionnaire.Version,
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
                 InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.IsCurrentUserObserving(),
+                CanAddComments = statefulInterview.Status != InterviewStatus.ApprovedByHeadquarters && !this.IsCurrentUserObserving(),
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
                 IsCurrentUserObserving = this.IsCurrentUserObserving(),
                 DoesBrokenPackageExist = false
