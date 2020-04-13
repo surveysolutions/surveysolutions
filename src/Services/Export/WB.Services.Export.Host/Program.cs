@@ -64,8 +64,6 @@ namespace WB.Services.Export.Host
 
             var fileLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
             var verboseLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-verbose-.log");
-            var errorDetailedLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-errors-.log");
-
             var connectionString = GetConnectionString(configuration);
 
             logConfig
@@ -80,11 +78,6 @@ namespace WB.Services.Export.Host
                 .WriteTo.Postgres(connectionString, LogEventLevel.Error)
                 .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose,
                     retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
-                .WriteTo.File(Path.GetFullPath(errorDetailedLog),
-                    LogEventLevel.Error,
-                        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}{Properties:j}",
-                    rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5)
-
                 .WriteTo
                     .File(Path.GetFullPath(fileLog), LogEventLevel.Debug,
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",

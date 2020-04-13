@@ -2442,9 +2442,11 @@ namespace WB.Tests.Abc.TestFactories
             Title = title
         };
 
-        public Invitation Invitation(int id, Assignment assignment, 
+        public Invitation Invitation(int id, 
+            Assignment assignment, 
             string token = null,
-            string interviewId = null)
+            string interviewId = null,
+            InterviewSummary interview = null)
         {
             var invitation = new Invitation();
 
@@ -2454,7 +2456,8 @@ namespace WB.Tests.Abc.TestFactories
             asDynamic.Assignment = assignment;
             asDynamic.Token = token;
             asDynamic.InterviewId = interviewId;
-
+            asDynamic.Interview = interview;
+            
             return invitation;
         }
 
