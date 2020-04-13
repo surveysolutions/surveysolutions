@@ -185,7 +185,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember] public string Password { get; set; }
 
-        [DataMember] public bool? WebMode { get; set; }
+        [DataMember] public bool WebMode { get; set; }
 
         [DataMember] public bool? IsAudioRecordingEnabled { get; set; }
         [DataMember] public string Comments { get; set; }

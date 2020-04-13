@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
@@ -15,18 +14,15 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     public class WebInterviewSettingsApiController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IVirtualPathService virtualPathService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
 
         public WebInterviewSettingsApiController(
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
-            IVirtualPathService virtualPathService)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.virtualPathService = virtualPathService;
         }
 
         public class UpdatePageTemplateModel
@@ -163,7 +159,6 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
                 return Ok();
 
             config.Started = true;
-            config.BaseUrl = this.virtualPathService.GetAbsolutePath("~/");
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();
