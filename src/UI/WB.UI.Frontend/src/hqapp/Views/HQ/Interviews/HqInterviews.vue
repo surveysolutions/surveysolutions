@@ -375,6 +375,22 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
   }
 }`
 
+const statusTranslations = {
+    'APPROVEDBYHEADQUARTERS': 'Strings.InterviewStatus_ApprovedByHeadquarters',
+    'APPROVEDBYSUPERVISOR': 'Strings.InterviewStatus_ApprovedBySupervisor',
+    'COMPLETED': 'Strings.InterviewStatus_Completed',
+    'CREATED': 'Strings.InterviewStatus_Created',
+    'DELETED': 'Strings.InterviewStatus_Deleted',
+    'INTERVIEWERASSIGNED': 'Strings.InterviewStatus_InterviewerAssigned',
+    'READYFORINTERVIEW': 'Strings.InterviewStatus_ReadyForInterview',
+    'REJECTEDBYHEADQUARTERS': 'Strings.InterviewStatus_RejectedByHeadquarters',
+    'REJECTEDBYSUPERVISOR': 'Strings.InterviewStatus_RejectedBySupervisor',
+    'RESTARTED': 'Strings.InterviewStatus_Restarted',
+    'RESTORED': 'Strings.InterviewStatus_Restored',
+    'SENTTOCAPI': 'Strings.InterviewStatus_SentToCapi',
+    'SUPERVISORASSIGNED': 'Strings.InterviewStatus_SupervisorAssigned',
+}
+
 /** convert
  * [{variable, field, value}, {variable, field, value}] 
  * ["variable,field,value", "variable,field,value"]
@@ -544,6 +560,9 @@ export default {
                     name: 'Status',
                     title: this.$t('Common.Status'),
                     orderable: true,
+                    render(data) {
+                        return self.$t(statusTranslations[data])
+                    },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'status')
                     },
