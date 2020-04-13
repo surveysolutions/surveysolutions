@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
 
         [HttpGet]
         [Route("{id:guid}/{eventId:guid}")]
-        [WriteToSyncLog(SynchronizationLogType.GetInterviewV3)]
+        [WriteToSyncLog(SynchronizationLogType.GetInterviewPatch)]
         public IActionResult DetailsAfter(Guid id, Guid eventId) => base.DetailsAfter(id, eventId);
 
         [HttpPost]
