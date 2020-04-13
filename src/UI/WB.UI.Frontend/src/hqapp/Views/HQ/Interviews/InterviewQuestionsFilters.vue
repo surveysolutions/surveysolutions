@@ -20,7 +20,7 @@
                     <div>
                         <Checkbox v-for="question in questionsList"
                             :key="'cb_' + question.variable"
-                            :label="`[${question.variable}] ${question.questionText}`"
+                            :label="`${question.questionText}`"
                             :value="isChecked(question)"
                             :name="'check_' + question.variable"
                             @input="check(question)" />
