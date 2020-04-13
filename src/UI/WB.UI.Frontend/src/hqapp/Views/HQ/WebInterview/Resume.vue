@@ -21,7 +21,7 @@
             </ul>
         </div>
 
-        <StartOrResumeForm :buttonTitle="$t('WebInterview.ResumeInterview')" />
+        <StartOrResumeForm :buttonTitle="$config.model.resumeButton" />
     </div>
 
 </template>
