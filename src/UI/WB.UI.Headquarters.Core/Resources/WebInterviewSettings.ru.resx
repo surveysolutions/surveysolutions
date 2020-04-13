@@ -252,4 +252,10 @@
   <data name="NoteToSupervisor" xml:space="preserve">
     <value>Заметка для супервизора</value>
   </data>
+  <data name="Resume" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
+  <data name="StartNew" xml:space="preserve">
+    <value>Начать новое интервью</value>
+  </data>
 </root>
