@@ -1889,6 +1889,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} interviews was updated.
+        /// </summary>
+        public static string Synchronization_Success_State_InterviewsUpdated_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_InterviewsUpdated_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} new interviews downloaded.
         /// </summary>
         public static string Synchronization_Success_State_NewInterviews_Format {
