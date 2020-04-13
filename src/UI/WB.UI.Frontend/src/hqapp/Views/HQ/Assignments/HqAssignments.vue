@@ -502,7 +502,7 @@ export default {
                     tooltip: this.$t('Assignments.Tooltip_Table_WebMode'),
                     searchable: false,
                     render(data) {
-                        return data ? self.$t('Common.Yes') : self.$t('Common.No')
+                        return data === false ? self.$t('Common.No') : self.$t('Common.Yes') 
                     },
                 },
             ]

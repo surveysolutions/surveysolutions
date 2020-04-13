@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -17,19 +18,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
         private readonly IWebInterviewEmailRenderer webInterviewEmailRenderer;
+        private readonly IOptions<HeadquartersConfig> configuration;
 
         public InvitationMailingService(
             IInvitationService invitationService, 
             IEmailService emailService,
             IWebInterviewConfigProvider webInterviewConfigProvider, 
             IPlainKeyValueStorage<EmailParameters> emailParamsStorage,
-            IWebInterviewEmailRenderer webInterviewEmailRenderer)
+            IWebInterviewEmailRenderer webInterviewEmailRenderer,
+            IOptions<HeadquartersConfig> configuration)
         {
             this.invitationService = invitationService;
             this.emailService = emailService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.emailParamsStorage = emailParamsStorage;
             this.webInterviewEmailRenderer = webInterviewEmailRenderer;
+            this.configuration = configuration;
         }
 
         public async Task SendInvitationAsync(int invitationId, Assignment assignment, string email = null)
@@ -59,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var password = assignment.Password;
             var address = email ?? assignment.Email;
 
-            var link = new Url(webInterviewConfig.BaseUrl, relativeUri, queryParams: null).ToString();
+            var link = new Url(configuration.Value.BaseUrl, relativeUri, queryParams: null).ToString();
             var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);
 
             var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitation.Id}";
@@ -84,11 +88,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml.Trim(), interviewEmail.MessageText.Trim());
             invitationService.MarkInvitationAsSent(invitation.Id, emailId);
         }
-    }
-
-    public interface IInvitationMailingService
-    {
-        Task SendInvitationAsync(int invitationId, Assignment assignment, string email = null);
-        Task SendResumeAsync(int invitationId, Assignment assignment, string email);
     }
 }

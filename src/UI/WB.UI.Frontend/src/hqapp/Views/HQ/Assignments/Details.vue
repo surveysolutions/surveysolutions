@@ -180,7 +180,7 @@ export default {
             return this.model.receivedByTabletAtUtc != null ? this.$t('Common.Yes') : this.$t('Common.No')
         },
         isWebMode() {
-            return this.model.webMode ? this.$t('Common.Yes') : this.$t('Common.No')
+            return this.model.webMode === false ?  this.$t('Common.No') : this.$t('Common.Yes')
         },
         interviewsCount() {
             if (this.model.quantity == null || this.model.quantity < 0) return this.$t('Assignments.Unlimited')
