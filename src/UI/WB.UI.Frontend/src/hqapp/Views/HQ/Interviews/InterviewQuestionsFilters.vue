@@ -70,6 +70,7 @@ export default {
             type: Number,
         },
         questionsFilter:{ type: Object},
+        value: {type: Array},
     },
 
     apollo: {
@@ -85,6 +86,18 @@ export default {
                     id: (this.questionnaireId || '').replace(/-/g, ''),
                     version: this.questionnaireVersion,
                 }},
+        },
+    },
+
+    mounted() {
+        if(this.value != null) {
+            this.conditions = this.value
+        }
+    },
+
+    watch: {
+        value(to) {
+            this.conditions = this.value
         },
     },
 
