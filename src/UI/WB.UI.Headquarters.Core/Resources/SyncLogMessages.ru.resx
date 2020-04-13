@@ -269,4 +269,7 @@
   <data name="DownloadReusableCategories" xml:space="preserve">
     <value>Загрузка списка категорий {0}</value>
   </data>
+  <data name="GetInterviewPatch" xml:space="preserve">
+    <value>Загрузка изменений интервью: {0}</value>
+  </data>
 </root>
