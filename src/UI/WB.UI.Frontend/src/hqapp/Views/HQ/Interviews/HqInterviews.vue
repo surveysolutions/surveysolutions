@@ -344,7 +344,8 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
-import {lowerCase, find, filter, flatten, map, join, assign, isNaN, isNumber, toNumber} from 'lodash'
+import {lowerCase, find, filter, flatten, map, 
+    join, assign, isNaN, isNumber, toNumber, isEqual} from 'lodash'
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 
@@ -1283,7 +1284,15 @@ export default {
             if(conditions.length > 0) {
                 queryString.conditions = conditionToQueryString(conditions)
             }
-            this.$router.push({query: queryString})
+            if (!isEqual(this.$route.query, queryString)) {
+                this.$router.push({ query })
+                    .catch(() => { })
+                    .then(r => {
+                        if (this.routeUpdated) {
+                            this.routeUpdated(r)
+                        }
+                    })
+            }
         },
 
         async loadResponsibleIdByName(onDone) {
