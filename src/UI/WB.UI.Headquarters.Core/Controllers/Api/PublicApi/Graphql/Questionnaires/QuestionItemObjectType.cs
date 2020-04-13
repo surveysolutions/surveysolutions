@@ -25,13 +25,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             descriptor.Field(x => x.QuestionText)
                 .Type<StringType>();
 
-            descriptor.Field(x => x.StatExportCaption)
+            descriptor.Field(x => x.StataExportCaption)
                 .Name("variable")
                 .Type<StringType>();
 
             descriptor.Field(x => x.QuestionScope)
                 .Name("scope")
                 .Type<EnumType<QuestionScope>>();
+
+            descriptor.Field(x => x.VariableLabel)
+                .Name("label")
+                .Type<StringType>();
 
             descriptor.Field(x => x.QuestionType)
                 .Name("type")

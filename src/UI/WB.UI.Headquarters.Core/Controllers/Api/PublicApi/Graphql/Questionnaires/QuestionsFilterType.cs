@@ -17,7 +17,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                       .BindFiltersExplicitly()
                       .AllowEquals();
             
-            descriptor.Filter(z => z.StatExportCaption)
+            descriptor.Filter(z => z.StataExportCaption)
                       .BindFiltersExplicitly()
                       .AllowEquals().Name("variable");
             

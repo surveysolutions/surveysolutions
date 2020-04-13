@@ -367,6 +367,7 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
         question {
           variable
           questionText
+          label
         }
         answer
       }
@@ -493,7 +494,7 @@ export default {
                     searchable: false,
                     render(data) {
                         var questionsWithTitles = map(data, node => {
-                            return node.question.variable + ': ' + node.answer
+                            return (node.question.label || node.question.questionText) + ': ' + node.answer
                         })
                         return join(questionsWithTitles, ', ')
                     },

@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var gpsQuery = QueryGpsAnswers()
                 .Where(x => x.Answer.IsEnabled &&
-                            x.QuestionnaireItem.StatExportCaption == gpsQuestionVariableName &&
+                            x.QuestionnaireItem.StataExportCaption == gpsQuestionVariableName &&
                             x.InterviewSummary.QuestionnaireId == questionnaireId);
 
             if (questionnaireVersion.HasValue)
