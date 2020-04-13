@@ -143,7 +143,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         {
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
                 new IComposite[]{
-                    Create.MultipleOptionsQuestion(optionsFilterExpression: "filter"),
+                    Create.TextListQuestion(Id.g1),
+                    Create.MultipleOptionsQuestion(optionsFilterExpression: "filter", linkedToQuestionId: Id.g1),
                 });
 
 
@@ -153,6 +154,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
             //aaa
             Assert.That(contentVersion, Is.EqualTo(29));
+        }
+
+        [Test]
+        public void should_not_return_29_when_question_with_option_filter()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.SingleOptionQuestion(optionsFilterExpression: "filter"),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.Not.EqualTo(29));
         }
         
         [Test]
