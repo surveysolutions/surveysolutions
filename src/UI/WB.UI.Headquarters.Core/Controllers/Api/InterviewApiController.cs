@@ -44,7 +44,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpGet]
         public InterviewsDataTableResponse Interviews([FromQuery] InterviewsDataTableRequest request)
         {
-
             var input = new AllInterviewsInputModel
             {
                 Page = request.PageIndex,
@@ -53,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 QuestionnaireId = request.QuestionnaireId,
                 QuestionnaireVersion = request.QuestionnaireVersion,
                 SupervisorOrInterviewerName = request.ResponsibleName,
-                Statuses = request.Status != null ? new[] { request.Status.Value } : null,
+                Statuses = GetFilterByStatus(request),
                 SearchBy = request.SearchBy ?? request.Search?.Value,
                 TeamId = request.TeamId,
                 UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
@@ -83,11 +82,24 @@ namespace WB.UI.Headquarters.Controllers.Api
             return response;
         }
 
+        private static InterviewStatus[] GetFilterByStatus(InterviewsDataTableRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Status))
+                return null;
+
+            if (Enum.TryParse(request.Status, out InterviewStatus enumValue))
+                return new[] { enumValue };
+
+            if (request.Status == "AllExceptApprovedByHQ")
+                return ((InterviewStatus[])Enum.GetValues(typeof(InterviewStatus))).Where(s => s != InterviewStatus.ApprovedByHeadquarters).ToArray();
+
+            throw new ArgumentException("Unknown status filter value: " + request.Status);
+        }
+
         [HttpGet]
         [Authorize(Roles = "Interviewer")]
         public InterviewsDataTableResponse GetInterviews(InterviewsDataTableRequest request)
         {
-            
             var input = new AllInterviewsInputModel
             {
                 Page = request.PageIndex,
@@ -127,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 QuestionnaireId = request.QuestionnaireId,
                 QuestionnaireVersion = request.QuestionnaireVersion,
                 SearchBy = request.SearchBy,
-                Status = request.Status,
+                Statuses = GetFilterByStatus(request),
                 ResponsibleName = request.ResponsibleName,
                 ViewerId = this.authorizedUser.Id,
                 UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
