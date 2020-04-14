@@ -8,6 +8,7 @@ using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -76,6 +77,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public async Task should_not_upload_binaries_that_exists()
         {
+            fixture.GetMock<IInterviewerInterviewAccessor>()
+                .Setup(s => s.GetInterviewEventStreamContainer(It.IsAny<Guid>()))
+                .Returns(new InterviewPackageContainer(interviewId, new[] { Create.Event.CommittedEvent() }.ToReadOnlyCollection()));
             // arrange interview with 2 images and 2 audio
             fixture.GetMock<IPlainStorage<InterviewMultimediaView>>()
                 .Setup(s => s.Where(It.IsAny<Expression<Func<InterviewMultimediaView, bool>>>()))
@@ -101,7 +105,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 {
                     IsEventsUploaded = true,
                     ImagesFilesNames = new HashSet<string> { "pic1.jpg" },
-                    AudioFilesNames = new HashSet<string> { "audio1.flac" }
+                    AudioFilesNames = new HashSet<string> { "audio1.flac" },
                 });
 
             await fixture.Create<InterviewerUploadInterviews>().ExecuteAsync();

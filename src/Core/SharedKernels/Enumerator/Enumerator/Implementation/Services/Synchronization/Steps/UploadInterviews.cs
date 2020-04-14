@@ -161,7 +161,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 var fileContent = await this.imagesStorage.GetInterviewBinaryDataAsync(interview.InterviewId, imageView.FileName);
                 var hash = GetMd5Cache(fileContent);
-                if (uploadState.ImageQuestionsFilesMd5.Contains(hash)) continue;
+                if (uploadState.ImageQuestionsFilesMd5?.Contains(hash) ?? false) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -195,7 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 var fileData = await auditFile.GetData();
                 var hash = GetMd5Cache(fileData);
-                if (uploadState.ImageQuestionsFilesMd5.Contains(hash)) continue;
+                if (uploadState.AudioAuditFilesMd5?.Contains(hash) ?? false) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 
                 var fileData = await audioFile.GetData();
                 var hash = GetMd5Cache(fileData);
-                if (uploadState.ImageQuestionsFilesMd5.Contains(hash)) continue;
+                if (uploadState.AudioQuestionsFilesMd5?.Contains(hash) ?? false) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 
