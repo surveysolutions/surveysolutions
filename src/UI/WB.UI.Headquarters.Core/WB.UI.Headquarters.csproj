@@ -8,7 +8,6 @@
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <LangVersion>latest</LangVersion>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <PublishSingleFile>false</PublishSingleFile>
     <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
