@@ -256,7 +256,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return StatusCode(StatusCodes.Status400BadRequest,
                     "For assignments having Email or Password Web Mode should be activated");
 
-            if (createItem.Quantity == 1 && (createItem.WebMode == null || createItem.WebMode == true) &&
+            if (createItem.Quantity == 1 && createItem.WebMode &&
                 string.IsNullOrEmpty(createItem.Email) && !string.IsNullOrEmpty(createItem.Password))
             {
                 var hasPasswordInDb = this.assignmentsStorage.DoesExistPasswordInDb(questionnaireId, password);

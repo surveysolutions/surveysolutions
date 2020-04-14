@@ -68,7 +68,7 @@
                 name="resume"
                 class="btn btn-success btn-lg"
                 type="submit"
-                :value="$t('WebInterview.ResumeInterview')"/>
+                :value="resumeButtonTitle"/>
         </form>
     </div>
 </template>
@@ -83,6 +83,7 @@ export default {
     },
     props: {
         buttonTitle: null,
+        resumeButtonTitle:null,
     },
     computed: {
         model() {
