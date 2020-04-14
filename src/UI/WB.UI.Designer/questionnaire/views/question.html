@@ -156,7 +156,7 @@
                     <div id="optionsFilterExpression" ng-if="activeQuestion.isLinked && activeQuestion.linkedToEntity.type != 'textlist'"
                          ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }"
                          ng-model="activeQuestion.linkedFilterExpression"></div>
-                    <div id="optionsFilterExpression" ng-else
+                    <div id="optionsFilterExpression" ng-if="!(activeQuestion.isLinked && activeQuestion.linkedToEntity.type != 'textlist')"
                          ui-ace="{ onLoad : aceLoadedForOtionFilter, require: ['ace/ext/language_tools'] }"
                          ng-model="activeQuestion.optionsFilterExpression"></div>
                 </div>
