@@ -131,6 +131,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public async Task should_upload_interviews_when_there_is_no_interview_exists()
         {
+            fixture.GetMock<IInterviewerInterviewAccessor>()
+                .Setup(s => s.GetInterviewEventStreamContainer(It.IsAny<Guid>()))
+                .Returns(new InterviewPackageContainer(interviewId, new[] { Create.Event.CommittedEvent() }.ToReadOnlyCollection()));
+
             syncService
                 .Setup(ss =>
                     ss.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(),
