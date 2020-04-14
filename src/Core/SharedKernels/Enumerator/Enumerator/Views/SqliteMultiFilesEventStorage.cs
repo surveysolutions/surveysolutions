@@ -365,7 +365,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                     connection.BeginTransaction();
                     var commandText = $"UPDATE {nameof(EventView)} " +
                                       $"SET {nameof(EventView.ExistsOnHq)} = 1 " +
-                                      $"WHERE {nameof(EventView.ExistsOnHq)} != 1 AND {nameof(EventView.EventSourceId)} = ?";
+                                      $"WHERE ({nameof(EventView.ExistsOnHq)} != 1 OR {nameof(EventView.ExistsOnHq)} is NULL)" +
+                                      $" AND {nameof(EventView.EventSourceId)} = ?";
                     var sqLiteCommand = connection.CreateCommand(commandText, interviewId);
                     sqLiteCommand.ExecuteNonQuery();
                     connection.Commit();
