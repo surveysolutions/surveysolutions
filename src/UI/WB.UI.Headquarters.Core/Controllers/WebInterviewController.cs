@@ -697,6 +697,9 @@ namespace WB.UI.Headquarters.Controllers
                 ResumeInvitation = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(),
                     questionnaireBrowseItem.Title),
+                ResumeButton = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeButton).ToString(),
+                    questionnaireBrowseItem.Title),
                 SubmitUrl = Url.Action("Resume", "WebInterview"),
             };
         }
@@ -720,6 +723,12 @@ namespace WB.UI.Headquarters.Controllers
                 HasPassword = !string.IsNullOrWhiteSpace(assignment?.Password ?? String.Empty),
                 WelcomeText = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(),
+                    questionnaireBrowseItem.Title),
+                StartNewButton = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.StartNewButton).ToString(),
+                    questionnaireBrowseItem.Title),
+                ResumeButton = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeButton).ToString(),
                     questionnaireBrowseItem.Title),
                 CaptchaErrors = ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any()
                                 ? ViewData.ModelState["InvalidCaptcha"].Errors.Select(e => e.ErrorMessage).ToList()

@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
@@ -15,18 +14,15 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     public class WebInterviewSettingsApiController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IVirtualPathService virtualPathService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
 
         public WebInterviewSettingsApiController(
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
-            IVirtualPathService virtualPathService)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.virtualPathService = virtualPathService;
         }
 
         public class UpdatePageTemplateModel
@@ -35,6 +31,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             [Required] public string TitleText { get; set; }
             [Required] public WebInterviewUserMessages MessageType { get; set; }
             [Required] public string MessageText { get; set; }
+
+            public WebInterviewUserMessages? ButtonType { get; set; }
+            public string ButtonText { get; set; }
         }
 
         [Route(@"{id}/pageTemplate")]
@@ -54,6 +53,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
             config.CustomMessages[updateModel.TitleType] = updateModel.TitleText;
             config.CustomMessages[updateModel.MessageType] = updateModel.MessageText;
+            if(updateModel.ButtonType != null && !string.IsNullOrEmpty(updateModel.ButtonText))
+                config.CustomMessages[updateModel.ButtonType.Value] = updateModel.ButtonText;
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();
@@ -163,7 +164,6 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
                 return Ok();
 
             config.Started = true;
-            config.BaseUrl = this.virtualPathService.GetAbsolutePath("~/");
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();
