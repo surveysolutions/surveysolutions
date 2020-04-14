@@ -36,7 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
                 { WebInterviewUserMessages.WelcomeText,     WebInterviewResources.WelcomeText },
                 { WebInterviewUserMessages.CompleteNoteToSupervisor,     WebInterviewResources.NoteForSupervisor},
                 { WebInterviewUserMessages.CompleteButton,  WebInterviewResources.Complete},
-
+                { WebInterviewUserMessages.StartNewButton,  WebInterviewResources.StartNewInterview},
+                { WebInterviewUserMessages.ResumeButton,  WebInterviewResources.ResumeInterview},
             };
 
         public Dictionary<EmailTextTemplateType, EmailTextTemplate> EmailTemplates { get; set; }
@@ -53,8 +54,6 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
 
         public int? ReminderAfterDaysIfNoResponse { get; set; }
         public int? ReminderAfterDaysIfPartialResponse { get; set; }
-
-        public string BaseUrl { get; set; }
 
         public virtual WebInterviewEmailTemplate GetEmailTemplate(EmailTextTemplateType type)
         {

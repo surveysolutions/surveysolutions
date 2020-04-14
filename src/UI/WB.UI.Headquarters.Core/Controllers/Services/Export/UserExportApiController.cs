@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using AngleSharp.Network.Default;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -18,6 +19,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
     }
 
     [Route("api/export/v1")]
+    [Authorize(AuthenticationSchemes = "TenantToken")]
     public class UserExportApiController : Controller
     {
         private readonly IUserRepository userRepository;
@@ -28,7 +30,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("user/{id}")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         public ActionResult<UserDto> Get(string id)
         {

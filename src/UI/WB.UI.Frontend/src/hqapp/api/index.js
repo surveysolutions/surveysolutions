@@ -14,7 +14,12 @@ class QuestionnaireApi {
         let offset = 1
 
         while (offset > 0) {
-            const response = await this.http.get(this.base, { params: { limit: 40, offset } })
+            const response = await this.http.get(this.base, {
+                params: {
+                    limit: 40,
+                    offset,
+                },
+            })
             const data = response.data
             offset = data.Offset + 1
 
@@ -28,13 +33,17 @@ class QuestionnaireApi {
 
     Delete() {
         var self = this
-        return this.http.post('api/QuestionnairesApi/DeleteQuestionnaire',
-            { questionnaireId: self.questionnaireId, version: self.version })
+        return this.http.post('api/QuestionnairesApi/DeleteQuestionnaire', {
+            questionnaireId: self.questionnaireId,
+            version: self.version,
+        })
     }
 
     AudioAudit(enabled) {
         const url = `${this.base}${this.questionnaireId}/${this.version}/recordAudio`
-        return this.http.post(url, { enabled: enabled })
+        return this.http.post(url, {
+            enabled: enabled,
+        })
     }
 }
 
@@ -46,7 +55,10 @@ class SurveyStatistics {
 
     async Questions(questionnaireId, version) {
         return (await this.http.get(`${this.reportPath}/questions`, {
-            params: { questionnaireId, version },
+            params: {
+                questionnaireId,
+                version,
+            },
         })).data
     }
 
@@ -73,10 +85,9 @@ class MapsReport {
     }
 
     async InteriewSummaryUrl(interviewId) {
-        var response = await this.http.post('api/InterviewApi/InterviewSummaryForMapPoint',
-            {
-                interviewId,
-            })
+        var response = await this.http.post('api/InterviewApi/InterviewSummaryForMapPoint', {
+            interviewId,
+        })
 
         return response
     }
@@ -93,7 +104,9 @@ class Users {
 
     async Supervisors(filter) {
         return (await this.http.get('api/v1/users/supervisors', {
-            params: { filter },
+            params: {
+                filter,
+            },
         })).data
     }
 
@@ -116,7 +129,12 @@ class Reports {
         return new MapsReport(this.http)
     }
 
-    Chart({ questionnaireId, version, from, to }) {
+    Chart({
+        questionnaireId,
+        version,
+        from,
+        to,
+    }) {
         return this.http.post('api/ReportDataApi/ChartStatistics', {
             templateId: questionnaireId,
             templateVersion: version,
@@ -144,7 +162,9 @@ class AssignmentsApi {
     setAudioSettings(assignmentId, isEnabled) {
         var url = `${this.base}/${assignmentId}/recordAudio`
 
-        return this.http.patch(url, { enabled: isEnabled })
+        return this.http.patch(url, {
+            enabled: isEnabled,
+        })
     }
 
     async quantitySettings(assignmentId) {
@@ -187,12 +207,25 @@ class WebInterviewSettingsApi {
 
     updateEmailTemplate(questionnaireId, type, subject, message, passwordDescription, linkText) {
         var url = `${this.base}/${questionnaireId}/emailTemplate`
-        return this.http.post(url, { type: type, subject: subject, message: message, passwordDescription: passwordDescription, linkText: linkText })
+        return this.http.post(url, {
+            type: type,
+            subject: subject,
+            message: message,
+            passwordDescription: passwordDescription,
+            linkText: linkText,
+        })
     }
 
-    updatePageMessage(questionnaireId, titleType, titleText, messageType, messageText) {
+    updatePageMessage(questionnaireId, titleType, titleText, messageType, messageText, buttonType, buttonText) {
         var url = `${this.base}/${questionnaireId}/pageTemplate`
-        return this.http.post(url, { titleType: titleType, titleText: titleText, messageType: messageType, messageText: messageText })
+        return this.http.post(url, {
+            titleType: titleType,
+            titleText: titleText,
+            messageType: messageType,
+            messageText: messageText,
+            buttonType: buttonType,
+            buttonText: buttonText,
+        })
     }
 
     /*updateReminderSettings(questionnaireId, reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse) {
@@ -238,7 +271,9 @@ class ExportSettings {
 
     setEncryption(val) {
         const url = `${this.base}/ChangeState`
-        return this.http.post(url, { enableState: val })
+        return this.http.post(url, {
+            enableState: val,
+        })
     }
 
     getEncryption() {
@@ -285,20 +320,23 @@ class AdminSettings {
         return this.http.get(`${this.base}/GlobalNoticeSettings`)
     }
     setGlobalNotice(val) {
-        return this.http.post(`${this.base}/GlobalNoticeSettings`, { GlobalNotice: val })
+        return this.http.post(`${this.base}/GlobalNoticeSettings`, {
+            GlobalNotice: val,
+        })
     }
     getProfileSettings() {
         return this.http.get(`${this.base}/ProfileSettings`)
     }
     setProfileSettings(allowInterviewerUpdateProfile) {
-        return this.http.post(`${this.base}/ProfileSettings`, { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile })
+        return this.http.post(`${this.base}/ProfileSettings`, {
+            allowInterviewerUpdateProfile: allowInterviewerUpdateProfile,
+        })
     }
     setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled) {
-        return this.http.post(`${this.base}/InterviewerSettings`,
-            {
-                interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
-                notificationsEnabled: isDeviceNotificationsEnabled,
-            })
+        return this.http.post(`${this.base}/InterviewerSettings`, {
+            interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
+            notificationsEnabled: isDeviceNotificationsEnabled,
+        })
     }
     getInterviewerSettings() {
         return this.http.get(`${this.base}/InterviewerSettings`)
@@ -307,7 +345,9 @@ class AdminSettings {
         return this.http.get(`${this.base}/WebInterviewSettings`)
     }
     setWebInterviewSettings(allowEmails) {
-        return this.http.post(`${this.base}/WebInterviewSettings`, { allowEmails: allowEmails })
+        return this.http.post(`${this.base}/WebInterviewSettings`, {
+            allowEmails: allowEmails,
+        })
     }
 }
 
@@ -342,13 +382,21 @@ class HqApiClient {
         return new QuestionnaireApi(questionnaireId, version, this.http)
     }
 
-    get Report() { return new Reports(this.http) }
+    get Report() {
+        return new Reports(this.http)
+    }
 
-    get Users() { return new Users(this.http) }
+    get Users() {
+        return new Users(this.http)
+    }
 
-    get Assignments() { return new AssignmentsApi(this.http) }
+    get Assignments() {
+        return new AssignmentsApi(this.http)
+    }
 
-    get WebInterviewSettings() { return new WebInterviewSettingsApi(this.http) }
+    get WebInterviewSettings() {
+        return new WebInterviewSettingsApi(this.http)
+    }
 
     get ExportSettings() {
         return new ExportSettings(this.http)
