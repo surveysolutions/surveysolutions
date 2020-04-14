@@ -14,7 +14,7 @@ namespace WB.Services.Export.Jobs
         Task<List<DataExportProcessView>> GetDataExportStatusesAsync(long[] processIds, TenantInfo tenant);
 
         Task<IEnumerable<DataExportProcessView>> GetDataExportStatusesAsync(DataExportFormat? exportType,
-            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile, TenantInfo tenant);
+            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset, TenantInfo tenant);
 
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             TenantInfo tenant,
