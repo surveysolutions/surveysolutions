@@ -75,7 +75,6 @@ namespace WB.UI.Headquarters
                 {
                     //webBuilder.UseHttpSys();
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseIISIntegration();
                 });
     }
 }
