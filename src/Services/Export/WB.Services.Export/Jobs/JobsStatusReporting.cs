@@ -80,18 +80,24 @@ namespace WB.Services.Export.Jobs
 
         public async Task<IEnumerable<DataExportProcessView>> GetDataExportStatusesAsync(
             DataExportFormat? exportType, InterviewStatus? interviewStatus, string questionnaireIdentity,
-            DataExportJobStatus? exportStatus, bool? hasFile, TenantInfo tenant)
+            DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset, TenantInfo tenant)
         {
             var allProcesses = await this.dataExportProcessesService.GetAllProcesses(tenant, false);
                 
-            var filteredViews = new List<DataExportProcessView>();
+            var allViews = new List<DataExportProcessView>();
             foreach (var process in allProcesses)
             {
                 var view = await ToDataExportProcessView(tenant, process);
 
                 if (IsInFilter(view, exportType, interviewStatus, questionnaireIdentity, exportStatus, hasFile))
-                    filteredViews.Add(view);
+                    allViews.Add(view);
             }
+
+            var filteredViews = allViews.AsEnumerable();
+            if (offset.HasValue)
+                filteredViews = filteredViews.Skip(offset.Value);
+            if (limit.HasValue)
+                filteredViews = filteredViews.Take(limit.Value);
 
             return filteredViews.OrderByDescending(x => x.Id);
         }

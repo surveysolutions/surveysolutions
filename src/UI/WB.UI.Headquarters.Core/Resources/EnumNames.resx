@@ -189,4 +189,10 @@
   <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
     <value>Complete</value>
   </data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+    <value>Start new interview</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+    <value>Resume</value>
+  </data>
 </root>

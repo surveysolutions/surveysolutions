@@ -100,4 +100,17 @@
     </Content>
     <EmbeddedResource Include="wwwroot\**\*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\WebInterviewSettings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewSettings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\WebInterviewSettings.resx">
+      <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
