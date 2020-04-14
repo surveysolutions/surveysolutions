@@ -71,12 +71,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
                     var baseUrl = configuration.Value.BaseUrl;
                     
-                    await SendNoResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo);
+                    await SendNoResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo)
+                        .ConfigureAwait(false);
 
-                    await SendPartialResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo);
+                    await SendPartialResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo)
+                        .ConfigureAwait(false);
 
                     await SendRejectedInterviewReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig,
-                        baseUrl, senderInfo);
+                        baseUrl, senderInfo)
+                        .ConfigureAwait(false);
                 }
 
                 sw.Stop();
@@ -128,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 };
                 emailParamsStorage.Store(emailParams, emailParamsId);
 
-                var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams);
+                var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
 
                 await inScopeExecutor.ExecuteAsync(async (locator) =>
                 {
@@ -142,9 +145,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                         invitationServiceLocal.MarkRejectedInterviewReminderSent(invitationId, emailId);
                     }
-                    catch (EmailServiceException)
+                    catch (EmailServiceException e)
                     {
                         invitationServiceLocal.RejectedInterviewReminderWasNotSent(invitation.Id);
+                        this.logger.LogError(e, "Rejected email was not sent");
                     }
                 }).ConfigureAwait(false);
             }
@@ -159,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse);
 
-            await SendReminders(questionnaireTitle, baseUrl, invitationIdsToRemind, emailTemplate, senderInfo);
+            await SendReminders(questionnaireTitle, baseUrl, invitationIdsToRemind, emailTemplate, senderInfo).ConfigureAwait(false);
         }
 
         private async Task SendNoResponseReminder(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle, WebInterviewConfig webInterviewConfig, string baseUrl, ISenderInformation senderInfo)
@@ -171,7 +175,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_NoResponse);
 
-            await SendReminders(questionnaireTitle, baseUrl, invitationIdsToRemind, emailTemplate, senderInfo);
+            await SendReminders(questionnaireTitle, baseUrl, invitationIdsToRemind, emailTemplate, senderInfo).ConfigureAwait(false);
         }
 
         private async Task SendReminders(string questionnaireTitle, string baseUrl, IEnumerable<int> invitationIdsToRemind,
@@ -205,18 +209,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 };
                 emailParamsStorage.Store(emailParams, emailParamsId);
 
-                var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams);
+                var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
 
                 try
                 {
-                    var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml, interviewEmail.MessageText);
+                    var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml, interviewEmail.MessageText)
+                        .ConfigureAwait(false);
 
                     invitationService.MarkInvitationAsReminded(invitationId, emailId);
                 }
                 catch (EmailServiceException e)
                 {
                     invitationService.ReminderWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
-                    this.logger.LogError(e, "Rejected interview email was not sent");
+                    this.logger.LogError(e, "Interview email was not sent");
                 }
             }
         }
