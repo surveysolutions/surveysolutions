@@ -190,4 +190,10 @@
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
     <value>Комментарий для супервизора</value>
   </data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+    <value>Начать новое интервью</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
 </root>
