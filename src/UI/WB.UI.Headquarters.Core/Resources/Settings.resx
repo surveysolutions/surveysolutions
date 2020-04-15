@@ -213,6 +213,12 @@
   <data name="AutoUpdateDescription" xml:space="preserve">
     <value>If checked then only latest version of Interviewer/Supervisor application can synchronize with Headquarters</value>
   </data>
+  <data name="InterviewerCustomSynchronization" xml:space="preserve">
+    <value>Partial synchronization enabled</value>
+  </data>
+  <data name="CustomSynchronizationDescription" xml:space="preserve">
+    <value>If checked then interviewer tablet will send partial collected data to server</value>
+  </data>
   <data name="EmailProvider_Amazon" xml:space="preserve">
     <value>Amazon Simple Email Service (SES)</value>
   </data>

@@ -45,5 +45,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [HttpGet]
         [Route("tenantId")]
         public override ActionResult<TenantIdApiView> TenantId() => base.TenantId();
+
+        [HttpGet]
+        [Route("tabletsettings")]
+        public RemoteTabletSettingsApiView TabletSettings() =>
+            new RemoteTabletSettingsApiView()
+            {
+                CustomSynchronizationEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsCustomSynchronizationEnabled()
+            };
     }
 }

@@ -34,9 +34,5 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         bool DashboardViewsUpdated { get; }
         void SetDashboardViewsUpdated(bool updated);
-
-        bool CustomSynchronizationEnabled { get; }
-        void SetCustomSynchronizationEnabled(bool enable);
-
     }
 }

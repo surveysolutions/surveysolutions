@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -14,6 +15,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
     public class InterviewerUploadInterviews : UploadInterviews
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IInterviewerSettings interviewerSettings;
 
         public InterviewerUploadInterviews(
             IInterviewerInterviewAccessor interviewFactory, 
@@ -24,18 +26,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             ISynchronizationService synchronizationService, 
             IAudioAuditFileStorage audioAuditFileStorage,
             int sortOrder, 
-            IPlainStorage<InterviewView> interviewViewRepository) : base(interviewFactory, interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, audioAuditFileStorage, interviewViewRepository, sortOrder)
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IInterviewerSettings interviewerSettings) : base(interviewFactory, interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, audioAuditFileStorage, interviewViewRepository, sortOrder)
         {
             this.interviewViewRepository = interviewViewRepository;
+            this.interviewerSettings = interviewerSettings;
         }
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
         {
-            return interviewViewRepository.Where(interview => 
-                   interview.Status == InterviewStatus.Completed
-                || interview.Status == InterviewStatus.Restarted
-                || interview.Status == InterviewStatus.InterviewerAssigned
+            if (interviewerSettings.CustomSynchronizationEnabled)
+            {
+                return interviewViewRepository.Where(interview =>
+                    interview.Status == InterviewStatus.Completed
+                    || interview.Status == InterviewStatus.Restarted
+                    || interview.Status == InterviewStatus.InterviewerAssigned
                 );
+            }
+
+            return interviewViewRepository.Where(interview =>
+                interview.Status == InterviewStatus.Completed
+            );
         }
     }
 }

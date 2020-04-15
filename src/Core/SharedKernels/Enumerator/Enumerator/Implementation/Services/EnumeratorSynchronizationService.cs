@@ -50,6 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string AutoUpdateUrl => string.Concat(ApplicationUrl, "/autoupdate");
         protected string NotificationsUrl => string.Concat(ApplicationUrl, "/notifications");
         protected string PublicKeyForEncryptionUrl => string.Concat(ApplicationUrl, "/encryption-key");
+        protected string RemoteTabletSettingsUrl => string.Concat(ApplicationUrl, "/tabletsettings");
 
         protected string MapsController => string.Concat(ApplicationUrl, "/maps"); 
 
@@ -310,6 +311,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<ReusableCategoriesDto>>(
                 url: url, credentials: this.restCredentials, token: cancellationToken));
         }
+
+        public Task<RemoteTabletSettingsApiView> GetTabletSettings(CancellationToken token = default)
+            => this.TryGetRestResponseOrThrowAsync(() => 
+                this.restService.GetAsync<RemoteTabletSettingsApiView>(
+                    url: RemoteTabletSettingsUrl, 
+                    credentials: this.restCredentials,
+                    token: token
+               ));
+
 
         public Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
