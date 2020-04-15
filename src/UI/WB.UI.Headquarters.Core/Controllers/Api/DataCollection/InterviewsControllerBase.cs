@@ -138,7 +138,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             foreach (var descriptor in descriptors)
             {
                 var md5 = await GetMd5Cache(descriptor);
-                caches.Add(md5);
+                if (md5 != null)
+                    caches.Add(md5);
             }
 
             return caches.ToHashSet();
@@ -147,6 +148,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private static async Task<string> GetMd5Cache(InterviewBinaryDataDescriptor descriptor)
         {
             var fileContent = await descriptor.GetData();
+            if (fileContent == null)
+                return null;
+
             using var crypto = MD5.Create();
             var hash = crypto.ComputeHash(fileContent);
             var hashString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
