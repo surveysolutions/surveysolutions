@@ -80,7 +80,6 @@
         <DataTables
             ref="table"
             :tableOptions="tableOptions"
-            :addParamsToRequest="addParamsToRequest"
             :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="rows => selectedRows = rows"
             @page="resetSelection"           
@@ -376,22 +375,6 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
   }
 }`
 
-const statusTranslations = {
-    'APPROVEDBYHEADQUARTERS': 'Strings.InterviewStatus_ApprovedByHeadquarters',
-    'APPROVEDBYSUPERVISOR': 'Strings.InterviewStatus_ApprovedBySupervisor',
-    'COMPLETED': 'Strings.InterviewStatus_Completed',
-    'CREATED': 'Strings.InterviewStatus_Created',
-    'DELETED': 'Strings.InterviewStatus_Deleted',
-    'INTERVIEWERASSIGNED': 'Strings.InterviewStatus_InterviewerAssigned',
-    'READYFORINTERVIEW': 'Strings.InterviewStatus_ReadyForInterview',
-    'REJECTEDBYHEADQUARTERS': 'Strings.InterviewStatus_RejectedByHeadquarters',
-    'REJECTEDBYSUPERVISOR': 'Strings.InterviewStatus_RejectedBySupervisor',
-    'RESTARTED': 'Strings.InterviewStatus_Restarted',
-    'RESTORED': 'Strings.InterviewStatus_Restored',
-    'SENTTOCAPI': 'Strings.InterviewStatus_SentToCapi',
-    'SUPERVISORASSIGNED': 'Strings.InterviewStatus_SupervisorAssigned',
-}
-
 /** convert
  * [{variable, field, value}, {variable, field, value}] 
  * ["variable,field,value", "variable,field,value"]
@@ -420,7 +403,6 @@ function queryStrignToCondition(queryStringArray) {
 }
 
 export default {
-
     components: {
         InterviewFilter,
     },
@@ -483,6 +465,7 @@ export default {
             const result = this.selectedRowWithMenu != null ? lowerCase(this.selectedRowWithMenu.responsibleRole) : ''
             return result
         },
+        
         tableColumns() {
             const self = this
             return [
@@ -562,7 +545,7 @@ export default {
                     title: this.$t('Common.Status'),
                     orderable: true,
                     render(data) {
-                        return self.$t(statusTranslations[data])
+                        return find(self.statuses, s => s.key == data).value
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'status')
@@ -622,7 +605,7 @@ export default {
                         take: data.length,
                     }
 
-                    const where = Object.assign({} ,self.where)
+                    const where = Object.assign({}, self.where)
 
                     const search = data.search.value
 
@@ -656,6 +639,11 @@ export default {
 
                             where.AND.push({identifyingQuestions_some})
                         })
+                    }
+
+                    if(where.status) {
+                        where.status_in = JSON.parse(self.status.alias)
+                        delete where.status
                     }
 
                     if(Object.keys(where).length > 0) {
@@ -700,13 +688,15 @@ export default {
         title() {
             return this.$t('Common.Interviews') + ' (' + this.formatNumber(this.totalRows) + ')'
         },
+
         config() {
             return this.$config.model
         },
 
         where() {
             const data = {}
-            if (this.status) data.status = this.status.alias.toUpperCase()
+
+            if (this.status) data.status = this.status.key
             if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
@@ -716,13 +706,24 @@ export default {
             
             return data
         },
+
+        queryString() {
+            const query = Object.assign({}, this.where)
+            
+            const conditions = filter(this.conditions, c => c.value != null)
+            
+            if(conditions.length > 0) {
+                query.conditions = conditionToQueryString(conditions)
+            }
+
+            return query
+        },
     },
 
     methods: {
         questionFilterChanged(conditions) {
             this.conditions = conditions
-            this.addParamsToQueryString()
-            this.reloadTable()
+            this.reloadTableAndSaveRoute()
         },
         togglePrefield() {
             this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
@@ -986,6 +987,7 @@ export default {
                 self.$refs.rejectModal.hide()
             }
         },
+
         rejectInterview() {
             this.statusChangeComment = null
             this.newResponsibleId = null
@@ -1099,6 +1101,7 @@ export default {
         deleteInterview() {
             this.$refs.deleteModal.modal({keyboard: false})
         },
+
         newResponsibleSelected(newValue) {
             this.newResponsibleId = newValue
         },
@@ -1232,26 +1235,15 @@ export default {
 
             return menu
         },
+
         resetSelection() {
             this.selectedRows.splice(0, this.selectedRows.length)
         },
 
-        addParamsToRequest(data) {
-            if (this.status) data.status = this.status 
-            if (this.questionnaireId) data.questionnaireId = this.questionnaireId
-            if (this.questionnaireVersion) data.questionnaireVersion = this.questionnaireVersion
-            if (this.responsibleName) data.responsibleName = this.responsibleName
-            if (this.assignmentId) data.assignmentId = this.assignmentId
-            if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
-            if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
-        },
-
-        addParamsToRequestStatuses(data) {
-            data.interviewId = this.selectedRowWithMenu.interviewId
-        },
         clearAssignmentFilter() {
             this.assignmentId = null
         },
+        
         formatNumber(value) {
             if (value == null || value == undefined) return value
             var language =
@@ -1278,28 +1270,19 @@ export default {
         },
 
         addParamsToQueryString() {
-            const queryString = Object.assign({}, this.where)
-            
-            const conditions = filter(this.conditions, c => c.value != null)
-            if(conditions.length > 0) {
-                queryString.conditions = conditionToQueryString(conditions)
-            }
-            if (!isEqual(this.$route.query, queryString)) {
+            const query = Object.assign({} , this.queryString)
+
+            if (!isEqual(this.$route.query, query)) {
                 this.$router.push({ query })
-                    .catch(() => { })
-                    .then(r => {
-                        if (this.routeUpdated) {
-                            this.routeUpdated(r)
-                        }
-                    })
+                    .catch(() => {})                    
             }
         },
 
         async loadResponsibleIdByName(onDone) {
-            if (this.$route.query.responsible != undefined) {
+            if (this.$route.query.responsibleName != undefined) {
                 const requestParams = assign(
                     {
-                        query: this.$route.query.responsible,
+                        query: this.$route.query.responsibleName,
                         pageSize: 1,
                         cache: false,
                     },
@@ -1309,7 +1292,7 @@ export default {
                 const response = await this.$http.get(this.config.api.responsible, {params: requestParams})
 
                 onDone(
-                    response.data.options.length > 0 && response.data.options[0].value == this.$route.query.responsible
+                    response.data.options.length > 0 && response.data.options[0].value == this.$route.query.responsibleName
                         ? response.data.options[0].key
                         : undefined
                 )
@@ -1334,7 +1317,7 @@ export default {
             this.assignmentId = query.assignmentId
 
             if (query.status != undefined) {
-                self.status = self.statuses.find(o => o.alias === query.status)
+                self.status = self.statuses.find(o => o.key === query.status)
             }
 
             self.loadQuestionnaireId((questionnaireId, version) => {
@@ -1348,20 +1331,22 @@ export default {
                         }
                     }
                 }
+            })
+            
+            self.loadResponsibleIdByName(responsibleId => {
+                if (responsibleId != undefined)
+                    self.responsibleId = {key: responsibleId, value: query.responsibleName}
+                else 
+                    self.responsibleId = null
 
-                self.loadResponsibleIdByName(responsibleId => {
-                    if (responsibleId != undefined)
-                        self.responsibleId = {key: responsibleId, value: query.responsible}
-
-                    self.startWatchers(
-                        ['responsibleId',
-                            'questionnaireId', 
-                            'status', 
-                            'assignmentId', 
-                            'questionnaireVersion'],
-                        self.reloadTableAndSaveRoute.bind(self)
-                    )
-                })
+                self.startWatchers(
+                    ['responsibleId',
+                        'questionnaireId', 
+                        'status', 
+                        'assignmentId', 
+                        'questionnaireVersion'],
+                    self.reloadTableAndSaveRoute.bind(self)
+                )
             })
         },
     },
@@ -1372,8 +1357,10 @@ export default {
 
     watch: {
         '$route'(to) {
-            this.initPageFilters()
-            this.reloadTable()
+            if(!isEqual(to.query, this.queryString)) {
+                this.initPageFilters()
+                this.reloadTable()
+            }
         },
     },
 }
