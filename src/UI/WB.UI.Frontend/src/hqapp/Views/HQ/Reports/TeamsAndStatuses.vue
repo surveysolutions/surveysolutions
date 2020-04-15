@@ -184,11 +184,11 @@ export default {
             }
 
             if (row.responsible) {
-                queryObject.responsible = row.responsible
+                queryObject.responsibleName = row.responsible
             }
 
             if (!isUndefined(interviewStatus)) {
-                queryObject.status = interviewStatus
+                queryObject.status = interviewStatus.toUpperCase()
             }
 
             var queryString = $.param(queryObject)
