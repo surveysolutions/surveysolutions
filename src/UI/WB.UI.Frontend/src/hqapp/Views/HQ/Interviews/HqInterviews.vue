@@ -605,17 +605,17 @@ export default {
                         take: data.length,
                     }
 
-                    const where = Object.assign({}, self.where)
-
+                    const where = { 
+                        AND: [...self.whereQuery],
+                    }
+                   
                     const search = data.search.value
 
                     if(search && search != '') {
-                        if(where.AND == null) {
-                            where.AND = []
-                        }
                         where.AND.push({ OR: [
                             { key_starts_with: search.toLowerCase() },
-                            { responsibleName_starts_with: search.toLowerCase() },
+                            { responsibleNameLowerCase_starts_with: search.toLowerCase() },
+                            { teamLeadNameLowerCase_starts_with: search.toLowerCase() },
                             { identifyingQuestions_some: {
                                 answerLowerCase_starts_with: search.toLowerCase(),
                             },
@@ -623,30 +623,7 @@ export default {
                         })
                     }
 
-                    if(self.conditions != null && self.conditions.length > 0) {
-                        if(where.AND == null) {
-                            where.AND = []
-                        }
-
-                        self.conditions.forEach(cond => {
-                            if(cond.value == null) return
-                            
-                            const identifyingQuestions_some = { question: {variable: cond.variable}}
-
-                            const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
-
-                            identifyingQuestions_some[cond.field] = value
-
-                            where.AND.push({identifyingQuestions_some})
-                        })
-                    }
-
-                    if(where.status) {
-                        where.status_in = JSON.parse(self.status.alias)
-                        delete where.status
-                    }
-
-                    if(Object.keys(where).length > 0) {
+                    if(where.AND.length > 0) {
                         variables.where = where
                     }
 
@@ -706,6 +683,51 @@ export default {
             if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
             
             return data
+        },
+
+        whereQuery() {
+            const and = []
+
+            if(this.where.questionnaireId) {
+                and.push({questionnaireId: this.where.questionnaireId})
+
+                if(this.where.questionnaireVersion) {
+                    and.push({questionnaireVersion: this.where.questionnaireVersion})
+                }
+            }
+
+            if(this.where.status) {
+                and.push({ status_in: JSON.parse(this.status.alias)})
+            }
+
+            if(this.conditions != null && this.conditions.length > 0) {
+                this.conditions.forEach(cond => {
+                    if(cond.value == null) return
+                            
+                    const identifyingQuestions_some = { question: {variable: cond.variable}}
+                    const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
+                    identifyingQuestions_some[cond.field] = value
+                    and.push({ identifyingQuestions_some })
+                })
+            }
+
+            if(this.responsibleId) {
+                and.push({ 
+                    OR: [
+                        { responsibleName: this.responsibleId.value },
+                        { teamLeadName: this.responsibleId.value },
+                    ]})
+            }
+
+            if(this.unactiveDateStart) {
+                and.push({ updateDate_gte: this.unactiveDateStart})
+            }
+            
+            if(this.unactiveDateEnd) {
+                and.push({ updateDate_lte: this.unactiveDateEnd})
+            }
+
+            return and
         },
 
         queryString() {

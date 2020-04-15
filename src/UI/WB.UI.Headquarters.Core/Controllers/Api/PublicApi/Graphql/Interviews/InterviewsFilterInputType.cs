@@ -39,14 +39,23 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .And().AllowNotGreaterThanOrEquals()
                 .And().AllowNotLowerThan()
                 .And().AllowNotLowerThanOrEquals();
+
             descriptor.Filter(x => x.ResponsibleName)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowStartsWith().And().AllowIn().And().AllowNotIn();
-            
+
             descriptor.Filter(x => x.ResponsibleNameLowerCase)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowStartsWith().And().AllowIn().And().AllowNotIn();
-            
+
+            descriptor.Filter(x => x.TeamLeadName)
+                .BindFiltersExplicitly()
+                .AllowEquals().And().AllowStartsWith().And().AllowIn().And().AllowNotIn();
+
+            descriptor.Filter(x => x.TeamLeadNameLowerCase)
+                .BindFiltersExplicitly()
+                .AllowEquals().And().AllowStartsWith().And().AllowIn().And().AllowNotIn();
+
             descriptor.Filter(x => x.ResponsibleRole)
                 .BindFiltersExplicitly()
                 .AllowEquals();

@@ -77,6 +77,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual Guid TeamLeadId { get; set; }
         public virtual string TeamLeadName { get; set; }
+        public virtual string TeamLeadNameLowerCase { get; set; }
+
         public virtual UserRoles ResponsibleRole { get; set; }
         public virtual DateTime UpdateDate { get; set; }
         public virtual string LastStatusChangeComment { get; set; }
