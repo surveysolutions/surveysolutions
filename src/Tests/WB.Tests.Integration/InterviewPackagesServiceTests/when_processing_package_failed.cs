@@ -117,8 +117,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         DateTime.UtcNow, DateTime.Today),
                 });
 
-            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents
-                .Select(IntegrationCreate.AggregateRootEvent).ToArray());
+            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.ToArray());
 
             interviewPackagesService.ProcessPackage(new InterviewPackage
             {
