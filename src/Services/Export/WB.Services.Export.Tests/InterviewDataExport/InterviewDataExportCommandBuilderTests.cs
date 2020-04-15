@@ -211,7 +211,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             ExportBulkCommand exportBulkCommand = new ExportBulkCommand();
 
             var rosterTableKey = new RosterTableKey() { InterviewId = interviewId1, RosterVector = rosterVector1 };
-            var updateValueInfos = Enumerable.Range(1, 200000).Select(value =>
+            var updateValueInfos = Enumerable.Range(1, 200_000).Select(value =>
                 new UpdateValueInfo() { ColumnName = fakeColumnName1, Value = value, ValueType = NpgsqlDbType.Integer }
             );
 
@@ -222,7 +222,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
                 updateValueInfos);
             var command = exportBulkCommand.GetCommand();
 
-            Assert.That(command.Parameters.Count, Is.EqualTo(200008));
+            Assert.That(command.Parameters.Count, Is.EqualTo(200_014));
             Approvals.Verify(command.CommandText);
         }
 
