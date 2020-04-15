@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
@@ -2076,9 +2077,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
-                if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewCreated))
+                // Version 19.02 still generates InterviewOnClientCreated created event
+                //if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewCreated))
                 {
-                    // Version 19.02 still generates InterviewOnClientCreated created event
                     // throw new InterviewException("Create interview must be the first event");
                 }
             }
@@ -2095,9 +2096,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(command.InterviewStatus);
             }
 
-            foreach (IEvent synchronizedEvent in command.SynchronizedEvents)
+            foreach (AggregateRootEvent synchronizedEvent in command.SynchronizedEvents)
             {
-                this.ApplyEvent(synchronizedEvent);
+                var @event = synchronizedEvent.Payload;
+                this.ApplyEvent(synchronizedEvent.EventIdentifier, synchronizedEvent.EventTimeStamp, @event);
             }
 
             var sourceInterview = GetChangedTree();
