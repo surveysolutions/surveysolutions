@@ -50,7 +50,7 @@ const store = safeStore({
             return result
         },
         addCommentsAllowed(state) {
-            return state.canAddComments || false
+            return true
         },
         basePath() {
             return window.CONFIG.basePath
