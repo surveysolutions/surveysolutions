@@ -2,7 +2,9 @@
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -27,6 +29,11 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.Interviews)]
         public IActionResult Index()
+        {
+            return View("Index", GetViewModel());
+        }
+
+        private InterviewsFilterModel GetViewModel()
         {
             var title = Common.Interviews;
 
@@ -56,10 +63,11 @@ namespace WB.UI.Headquarters.Controllers
                 Responsible = model.IsSupervisor
                     ? Url.Action("InterviewersCombobox", "Teams")
                     : Url.Action("ResponsiblesCombobox", "Teams"),
+                InterviewStatuses = Url.Action("ChangeStateHistory", "InterviewApi"),
                 QuestionnaireByIdUrl = Url.Action("QuestionnairesComboboxById", "QuestionnairesApi")
             };
 
-            return View("Index", model);
+            return model;
         }
     }
 }
