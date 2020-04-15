@@ -209,5 +209,12 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public string GetDataBaseSize() => 
             FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
+
+        public bool CustomSynchronizationEnabled => this.CurrentSettings.CustomSynchronizationEnabled ?? false;
+
+        public void SetCustomSynchronizationEnabled(bool enable)
+        {
+            this.SaveCurrentSettings(settings => { settings.CustomSynchronizationEnabled = enable; });
+        }
     }
 }
