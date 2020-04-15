@@ -115,7 +115,8 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
 
-            foreach (var x in allInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
+            foreach (var x in allInterviews.Items) 
+                foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
 
             var response = new InterviewsDataTableResponse
             {
