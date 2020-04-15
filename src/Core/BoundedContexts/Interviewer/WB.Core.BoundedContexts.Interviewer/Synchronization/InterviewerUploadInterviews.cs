@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
         {
-            if (interviewerSettings.CustomSynchronizationEnabled && !interviewerSettings.AllowSyncWithHq)
+            if (interviewerSettings.CustomSynchronizationEnabled && interviewerSettings.AllowSyncWithHq)
             {
                 return interviewViewRepository.Where(interview =>
                     interview.Status == InterviewStatus.Completed
