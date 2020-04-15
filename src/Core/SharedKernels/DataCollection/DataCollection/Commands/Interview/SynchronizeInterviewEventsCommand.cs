@@ -1,4 +1,5 @@
 ﻿using System;
+using Main.Core.Events;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -11,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public long QuestionnaireVersion { get; set; }
 
-        public IEvent[] SynchronizedEvents { get; set; }
+        public AggregateRootEvent[] SynchronizedEvents { get; set; }
 
         public InterviewStatus InterviewStatus { get;  set; }
 
@@ -25,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             Guid userId,
             Guid questionnaireId,
             long questionnaireVersion,
-            IEvent[] synchronizedEvents,
+            AggregateRootEvent[] synchronizedEvents,
             InterviewStatus interviewStatus,
             bool createdOnClient,
             InterviewKey interviewKey,

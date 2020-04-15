@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     aggregateRootRepositoryCacheCleaner.CleanCache();
 
 
-                    if (DoesNewEventsHaveComments(interviewDetails))
+                    if (interview.IsCompleted && DoesNewEventsHaveComments(interviewDetails))
                     {
                         var userId = principal.CurrentUserIdentity.UserId;
                         var command = new RestartInterviewCommand(interview.InterviewId, userId, "reopen after get new comments", DateTime.Now);

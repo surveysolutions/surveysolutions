@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                             interviewKey: shouldChangeInterviewKey
                                 ? serviceLocator.GetInstance<IInterviewUniqueKeyGenerator>().Get()
                                 : null,
-                            synchronizedEvents: serializedEvents,
+                            synchronizedEvents: aggregateRootEvents,
                             newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null),
                         this.syncSettings.Origin);
 

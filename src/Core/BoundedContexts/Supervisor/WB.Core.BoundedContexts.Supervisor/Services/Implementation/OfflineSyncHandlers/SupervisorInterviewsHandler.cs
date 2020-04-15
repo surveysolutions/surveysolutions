@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     createdOnClient: interview.MetaInfo.CreatedOnClient ?? false,
                     interviewStatus: (InterviewStatus) interview.MetaInfo.Status,
                     interviewKey: InterviewKey.Parse(request.InterviewKey),
-                    synchronizedEvents: serializedEvents,
+                    synchronizedEvents: aggregateRootEvents,
                     newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null
                 ), null);
 
