@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -33,6 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IEventSourcedAggregateRootRepositoryCacheCleaner aggregateRootRepositoryCacheCleaner;
+        private readonly IInterviewerSettings interviewerSettings;
 
         private class InterviewLite
         {
@@ -50,7 +52,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             ILiteEventBus eventBus,
             ICommandService commandService,
             IPrincipal principal,
-            IEventSourcedAggregateRootRepositoryCacheCleaner aggregateRootRepositoryCacheCleaner) 
+            IEventSourcedAggregateRootRepositoryCacheCleaner aggregateRootRepositoryCacheCleaner,
+            IInterviewerSettings interviewerSettings) 
             : base(sortOrder, synchronizationService, logger)
         {
             this.interviewViewRepository = interviewViewRepository;
@@ -60,10 +63,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             this.commandService = commandService;
             this.principal = principal;
             this.aggregateRootRepositoryCacheCleaner = aggregateRootRepositoryCacheCleaner;
+            this.interviewerSettings = interviewerSettings;
         }
 
         public override async Task ExecuteAsync()
         {
+            if (!interviewerSettings.CustomSynchronizationEnabled)
+                return;
+
             List<InterviewApiView> remoteInterviews = await this.synchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
             var remoteInterviewWithSequence = remoteInterviews
                 .Where(i => i.LastSequenceEventId.HasValue)
@@ -181,7 +188,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         private bool IsCanInsertEventsInStream(List<CommittedEvent> events)
         {
-            return events.All(@event =>
+            return true;
+            /*return events.All(@event =>
             {
                 switch (@event.Payload)
                 {
@@ -197,7 +205,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     default:
                         return false;
                 }
-            });
+            });*/
         }
     }
 }
