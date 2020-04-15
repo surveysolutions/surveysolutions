@@ -68,8 +68,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         public override async Task ExecuteAsync()
         {
-            if (!interviewerSettings.CustomSynchronizationEnabled)
-                return;
+            /*if (!interviewerSettings.CustomSynchronizationEnabled)
+                return;*/
 
             List<InterviewApiView> remoteInterviews = await this.synchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
             var remoteInterviewWithSequence = remoteInterviews
