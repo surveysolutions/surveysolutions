@@ -659,6 +659,7 @@ export default {
                         self.totalRows = data.totalCount
                         callback({
                             recordsTotal: data.totalCount,
+                            recordsFiltered: data.totalCount,
                             data: data.nodes,
                         })
                     }).catch(err => {
