@@ -24,28 +24,23 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.Status)
                 .Type<EnumType<InterviewStatus>>();
             
-            descriptor.Field(x => x.ResponsibleName)
-                .Type<StringType>();
-            descriptor.Field(x => x.ResponsibleNameLowerCase)
-                .Type<StringType>();
+            descriptor.Field(x => x.ResponsibleName).Type<StringType>();
+            descriptor.Field(x => x.ResponsibleNameLowerCase).Type<StringType>();
 
-            descriptor.Field(x => x.ResponsibleId)
-                .Type<UuidType>();
+            descriptor.Field(x => x.ResponsibleId).Type<UuidType>();
+            descriptor.Field(x => x.ResponsibleRole).Type<EnumType<UserRoles>>();
 
-            descriptor.Field(x => x.ResponsibleRole)
-                .Type<EnumType<UserRoles>>();
+            descriptor.Field(x => x.TeamLeadName).Type<StringType>();
+            descriptor.Field(x => x.TeamLeadNameLowerCase).Type<StringType>();
 
-            descriptor.Field(x => x.AssignmentId)
-                .Type<IntType>();
+            descriptor.Field(x => x.AssignmentId).Type<IntType>();
 
             descriptor.Field(x => x.CreatedDate)
                 .Description("Utc creation date");
 
-            descriptor.Field(x => x.Key)
-                .Type<StringType>();
+            descriptor.Field(x => x.Key).Type<StringType>();
             
-            descriptor.Field(x => x.UpdateDate)
-                .Description("Utc last updated date");
+            descriptor.Field(x => x.UpdateDate).Description("Utc last updated date");
             
             descriptor.Field(x => x.ReceivedByInterviewer);
             
