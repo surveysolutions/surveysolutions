@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         public override async Task ExecuteAsync()
         {
-            if (!interviewerSettings.CustomSynchronizationEnabled)
+            if (!interviewerSettings.CustomSynchronizationEnabled || !interviewerSettings.AllowSyncWithHq)
                 return;
 
             List<InterviewApiView> remoteInterviews = await this.synchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
