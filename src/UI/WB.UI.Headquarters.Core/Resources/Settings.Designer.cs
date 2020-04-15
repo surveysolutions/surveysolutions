@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If checked then interviewer tablet will send partial collected data to server.
+        ///   Looks up a localized string similar to When enabled then interviewer tablet will send partial collected data to server.
         /// </summary>
         public static string CustomSynchronizationDescription {
             get {
@@ -538,7 +538,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Partial synchronization enabled.
+        ///   Looks up a localized string similar to Enable partial synchronization.
         /// </summary>
         public static string InterviewerCustomSynchronization {
             get {
