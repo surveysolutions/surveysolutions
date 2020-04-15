@@ -229,6 +229,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Categories;
         }
 
+        public Task<RemoteTabletSettingsApiView> GetTabletSettings(CancellationToken cancellationToken)
+        {
+            var tabletSettingsApiView = new RemoteTabletSettingsApiView()
+            {
+                CustomSynchronizationEnabled = false,
+            };
+            return Task.FromResult(tabletSettingsApiView);
+        }
+
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken token = default)
         {
             return this.syncClient.SendAsync(new UploadAuditLogEntityRequest

@@ -63,5 +63,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken);
         Task<bool> AreNotificationsEnabledAsync(CancellationToken token);
         Task<List<ReusableCategoriesDto>> GetQuestionnaireReusableCategoriesAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken);
+        Task<RemoteTabletSettingsApiView> GetTabletSettings(CancellationToken cancellationToken);
     }
 }

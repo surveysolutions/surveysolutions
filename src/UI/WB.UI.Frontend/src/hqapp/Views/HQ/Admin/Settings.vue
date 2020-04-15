@@ -148,6 +148,24 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-7">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input
+                            class="checkbox-filter single-checkbox"
+                            v-model="isCustomSynchronizationEnabled"
+                            @change="updateDeviceSettings"
+                            id="interviewerCustomSynchronizationEnabled"
+                            type="checkbox"/>
+                        <label for="interviewerCustomSynchronizationEnabled"
+                            style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{$t('Settings.InterviewerCustomSynchronization')}}
+                            <p style="font-weight: normal">{{$t('Settings.CustomSynchronizationDescription')}}</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row extra-margin-bottom contain-input">
@@ -261,6 +279,7 @@ export default {
             globalNoticeUpdated: false,
             isAllowInterviewerUpdateProfile: false,
             isInterviewerAutomaticUpdatesEnabled: false,
+            isCustomSynchronizationEnabled: false,
             isDeviceNotificationsEnabled: false,
             isEmailAllowed: false,
         }
@@ -282,10 +301,9 @@ export default {
                 profile.data.allowInterviewerUpdateProfile
 
             const interviewerSettings = await this.$hq.AdminSettings.getInterviewerSettings()
-            this.isInterviewerAutomaticUpdatesEnabled =
-                interviewerSettings.data.interviewerAutoUpdatesEnabled
-            this.isDeviceNotificationsEnabled =
-                interviewerSettings.data.notificationsEnabled
+            this.isInterviewerAutomaticUpdatesEnabled = interviewerSettings.data.interviewerAutoUpdatesEnabled
+            this.isDeviceNotificationsEnabled = interviewerSettings.data.notificationsEnabled
+            this.isCustomSynchronizationEnabled = interviewerSettings.data.customSynchronizationEnabled
 
             const webInterviewSettings = await this.$hq.AdminSettings.getWebInterviewSettings()
             this.isEmailAllowed = webInterviewSettings.data.allowEmails
@@ -331,7 +349,8 @@ export default {
         updateDeviceSettings() {
             return this.$hq.AdminSettings.setInterviewerSettings(
                 this.isInterviewerAutomaticUpdatesEnabled,
-                this.isDeviceNotificationsEnabled
+                this.isDeviceNotificationsEnabled,
+                this.isCustomSynchronizationEnabled
             )
         },
         updateWebInterviewEmailNotifications() {

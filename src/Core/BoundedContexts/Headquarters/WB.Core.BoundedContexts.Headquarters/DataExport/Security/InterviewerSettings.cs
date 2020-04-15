@@ -6,9 +6,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
     {
         public const bool AutoUpdateEnabledDefault = true;
         public const bool DeviceNotificationsEnabledDefault = true;
+        public const bool CustomSynchronizationEnabledDefault = false;
 
         public bool AutoUpdateEnabled { get; set; }
         public bool? DeviceNotificationsEnabled { get; set; }
+        public bool? CustomSynchronizationEnabled { get; set; }
     }
 
     public static class InterviewerSettingsExtensions
@@ -26,6 +28,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
                 return InterviewerSettings.DeviceNotificationsEnabledDefault;
 
             return settings.DeviceNotificationsEnabled.Value;
+        }
+
+        public static bool IsCustomSynchronizationEnabled(this InterviewerSettings settings)
+        {
+            if (settings?.CustomSynchronizationEnabled == null)
+                return InterviewerSettings.CustomSynchronizationEnabledDefault;
+
+            return settings.CustomSynchronizationEnabled.Value;
         }
     }
 }
