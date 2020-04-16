@@ -19,6 +19,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 .ForMember(x => x.IdentifyingData, opts => opts.MapFrom(x => x.IdentifyingData))
                 .ForMember(x => x.InterviewsCount, opts => opts.MapFrom(x => x.InterviewSummaries.Count))
                 .ForMember(x => x.ResponsibleName, opts => opts.MapFrom(x => x.Responsible.Name))
+                .ForMember(x => x.IsAudioRecordingEnabled, opts => opts.MapFrom(x => x.AudioRecording))
                 .ForMember(x => x.Answers, opts => opts.MapFrom(x => x.Answers));
 
             this.CreateMap<Assignment, AssignmentDetails>()
@@ -49,7 +50,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 .ForMember(x => x.CreatedAtUtc, opts => opts.MapFrom(x => x.CreatedAtUtc))
                 .ForMember(x => x.UpdatedAtUtc, opts => opts.MapFrom(x => x.UpdatedAtUtc))
                 .ForMember(x => x.ReceivedByTabletAtUtc, opts => opts.MapFrom(x => x.ReceivedByTabletAtUtc))
-                .ForMember(x => x.Archived, opts => opts.MapFrom(x => x.Archived));
+                .ForMember(x => x.Archived, opts => opts.MapFrom(x => x.Archived))
+                .ForMember(x => x.IsAudioRecordingEnabled, opts => opts.MapFrom(x => x.IsAudioRecordingEnabled));
         }
     }
 }
