@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.ResponsibleNameLowerCase, pm => pm.Column("responsible_name_lower_case"));
             Property(x => x.TeamLeadId, pm => pm.Column(cm => cm.Index("InterviewSummaries_TeamLeadId")));
             Property(x => x.TeamLeadName);
-            Property(x => x.TeamLeadNameLowerCase, pm => pm.Formula("lower(teamleadname)"));
+            Property(x => x.TeamLeadNameLowerCase, pm => pm.Column("teamlead_name_lower_case"));
             Property(x => x.ResponsibleRole);
             Property(x => x.UpdateDate);
             Property(x => x.WasCreatedOnClient);
