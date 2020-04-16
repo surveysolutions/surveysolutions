@@ -104,22 +104,27 @@
                     <button
                         class="btn btn-lg btn-success"
                         v-if="selectedRows.length"
+                        :disabled="getFilteredToAssign().length == 0"
                         @click="assignInterview">{{ $t("Common.Assign") }}</button>
                     <button
                         class="btn btn-lg btn-success"
                         v-if="selectedRows.length"
+                        :disabled="getFilteredToApprove().length == 0"
                         @click="approveInterview">{{ $t("Common.Approve")}}</button>
                     <button
                         class="btn btn-lg reject"
                         v-if="selectedRows.length"
+                        :disabled="getFilteredToReject().length == 0"
                         @click="rejectInterview">{{ $t("Common.Reject")}}</button>
                     <button
                         class="btn btn-lg btn-primary"
                         v-if="selectedRows.length && !config.isSupervisor"
+                        :disabled="getFilteredToUnApprove().length == 0"
                         @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
                     <button
                         class="btn btn-link"
                         v-if="selectedRows.length && !config.isSupervisor"
+                        :disabled="getFilteredToDelete().length == 0"
                         @click="deleteInterview">{{ $t("Common.Delete")}}</button>
                 </div>
             </div>
@@ -362,6 +367,7 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
       assignmentId
       updateDate
       receivedByInterviewer
+      actionFlags
       questionnaireVersion
       identifyingQuestions {
         question {
@@ -754,32 +760,32 @@ export default {
         },
 
         getFilteredToDelete() {
-            return this.getFileredItems(function(item) {
-                var value = item.canDelete
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANBEDELETED') >= 0
                 return !isNaN(value) && value
             })
         },
         getFilteredToAssign() {
-            return this.getFileredItems(function(item) {
-                var value = item.canBeReassigned
+            return this.getFilteredItems(function(item) {
+                var value =  item.actionFlags.indexOf('CANBEREASSIGNED') >= 0
                 return !isNaN(value) && value
             })
         },
         getFilteredToApprove() {
-            return this.getFileredItems(function(item) {
-                var value = item.canApprove
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANBEAPPROVED') >= 0
                 return !isNaN(value) && value
             })
         },
         getFilteredToReject() {
-            return this.getFileredItems(function(item) {
-                var value = item.canReject
+            return this.getFilteredItems(function(item) {
+                var value =  item.actionFlags.indexOf('CANBEREJECTED') >= 0
                 return !isNaN(value) && value
             })
         },
         getFilteredToUnApprove() {
-            return this.getFileredItems(function(item) {
-                var value = item.canUnapprove
+            return this.getFilteredItems(function(item) {
+                var value =  item.actionFlags.indexOf('CANBEUNAPPROVEDBYHQ') >= 0
                 return !isNaN(value) && value
             })
         },
@@ -791,7 +797,7 @@ export default {
             )
         },
         CountReceivedByInterviewerItems() {
-            return this.getFileredItems(function(item) {
+            return this.getFilteredItems(function(item) {
                 return item.receivedByInterviewer === true
             }).length
         },
@@ -876,7 +882,7 @@ export default {
             this.$refs.assignModal.modal({keyboard: false})
         },
 
-        getFileredItems(filterPredicat) {
+        getFilteredItems(filterPredicat) {
             if (this.$refs.table == undefined) return []
 
             var selectedItems = this.$refs.table.table.rows({selected: true}).data()

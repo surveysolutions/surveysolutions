@@ -45,45 +45,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Lowercased version of team lead name")
                 .Type<StringType>();
 
-            descriptor.Field("canBeDeleted")
-                .Description("Indicates if interview can safely be discarded")
-                .Resolver(ctx =>
-                {
-                    var summary = ctx.Parent<InterviewSummary>();
-                    return (summary.Status == InterviewStatus.Created
-                            || summary.Status == InterviewStatus.SupervisorAssigned
-                            || summary.Status == InterviewStatus.InterviewerAssigned
-                            || summary.Status == InterviewStatus.SentToCapi) &&
-                           !summary.ReceivedByInterviewer && !summary.WasCompleted;
-                });
-                
-            descriptor.Field("canBeApproved")
-                .Description("Indicates if interview can be approved")
-                .Resolver(ctx =>
-                {
-                    var summary = ctx.Parent<InterviewSummary>();
-                    return summary.Status == InterviewStatus.ApprovedBySupervisor || summary.Status == InterviewStatus.Completed;
-                });
-                   
-            descriptor.Field("canBeRejected")
-                .Description("Indicates if interview can be rejected")
-                .Resolver(ctx =>
-                {
-                    var summary = ctx.Parent<InterviewSummary>();
-                    return summary.Status == InterviewStatus.ApprovedBySupervisor || summary.Status == InterviewStatus.Completed;
-                });
-            descriptor.Field("canBeReassigned")
-                .Description("Indicates if interview can be reassigned")
-                .Resolver(ctx =>
-                {
-                    var summary = ctx.Parent<InterviewSummary>();
-                    return summary.Status == InterviewStatus.SupervisorAssigned
-                           || summary.Status == InterviewStatus.InterviewerAssigned
-                           || summary.Status == InterviewStatus.Completed
-                           || summary.Status == InterviewStatus.RejectedBySupervisor
-                           || summary.Status == InterviewStatus.RejectedByHeadquarters;
-                });
-
             descriptor.Field(x => x.AssignmentId).Type<IntType>()
                   .Description("Identifier for the assignment to which this interview belongs");
 
@@ -118,12 +79,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                             .Where(a => keys.Contains(a.InterviewSummary.SummaryId))
                             .ToListAsync()
                             .ConfigureAwait(false);
+                        
                         var answers = questionAnswers
                             .ToLookup(x => x.InterviewSummary.SummaryId);
 
                         return answers;
                     }).LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
                 .Type<ListType<AnswerObjectType>>();
+
+            descriptor.Field<InterviewActionFlagsResolver>(f => f.GetActionFlags(default, default))
+                .Description("List of actions that can be applied to interview")
+                .Name("actionFlags");
         }
     }
 }
