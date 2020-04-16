@@ -20,4 +20,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                 .Where(x => x.EntityType == EntityType.Question);
         }
     }
+
+
 }
