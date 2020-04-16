@@ -99,7 +99,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.AssignmentId = !assignmentId.HasValue ? null : string.Format(UIResources.AssignmentN, assignmentId);
            
             this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
-            this.DoesShowCommentsBlock = CountOfCommentedQuestions > 0 || interview.WasCompleted || interview.WasRejected;
 
             this.CountOfCommentedQuestions = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Count();
             this.CommentedEntities = entitiesListViewModelFactory.GetEntitiesWithComments(interviewId, navigationState).ToList();
@@ -109,6 +108,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 : CommentedEntities.Count == this.CountOfCommentedQuestions
                     ? UIResources.Interview_Cover_Questions_With_Comments
                     : string.Format(UIResources.Interview_Cover_First_n_Questions_With_Comments, entitiesListViewModelFactory.MaxNumberOfEntities);
+
+            this.DoesShowCommentsBlock = CountOfCommentedQuestions > 0 || interview.WasCompleted || interview.WasRejected;
 
             this.SupervisorNote = interview.GetLastSupervisorComment();
         }
