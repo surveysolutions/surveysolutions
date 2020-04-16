@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 {
@@ -39,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Field(x => x.QuestionType)
                 .Name("type")
-                .Type<EnumType<QuestionType>>();
+                .Type<QuestionTypeObjectType>();
 
             descriptor.Field(x => x.Featured)
                 .Name("identifying")
