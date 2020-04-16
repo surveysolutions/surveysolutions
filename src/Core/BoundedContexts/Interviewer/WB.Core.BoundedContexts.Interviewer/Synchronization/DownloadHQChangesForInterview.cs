@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
@@ -188,8 +189,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         private bool IsCanInsertEventsInStream(List<CommittedEvent> events)
         {
-            return true;
-            /*return events.All(@event =>
+            //return true;
+            return events.All(@event =>
             {
                 switch (@event.Payload)
                 {
@@ -203,9 +204,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                         return true;
 
                     default:
-                        return false;
+                        var isAnswerEvent = @event.GetType().IsSubclassOf(typeof(QuestionAnswered));
+                        return !isAnswerEvent;
                 }
-            });*/
+            });
         }
     }
 }
