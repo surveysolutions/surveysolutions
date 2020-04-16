@@ -17,8 +17,8 @@ class QuestionnaireApi {
             const response = await this.http.get(this.base, {
                 params: {
                     limit: 40,
-                    offset
-                }
+                    offset,
+                },
             })
             const data = response.data
             offset = data.Offset + 1
@@ -35,14 +35,14 @@ class QuestionnaireApi {
         var self = this
         return this.http.post('api/QuestionnairesApi/DeleteQuestionnaire', {
             questionnaireId: self.questionnaireId,
-            version: self.version
+            version: self.version,
         })
     }
 
     AudioAudit(enabled) {
         const url = `${this.base}${this.questionnaireId}/${this.version}/recordAudio`
         return this.http.post(url, {
-            enabled: enabled
+            enabled: enabled,
         })
     }
 }
@@ -57,7 +57,7 @@ class SurveyStatistics {
         return (await this.http.get(`${this.reportPath}/questions`, {
             params: {
                 questionnaireId,
-                version
+                version,
             },
         })).data
     }
@@ -105,7 +105,7 @@ class Users {
     async Supervisors(filter) {
         return (await this.http.get('api/v1/users/supervisors', {
             params: {
-                filter
+                filter,
             },
         })).data
     }
@@ -133,7 +133,7 @@ class Reports {
         questionnaireId,
         version,
         from,
-        to
+        to,
     }) {
         return this.http.post('api/ReportDataApi/ChartStatistics', {
             templateId: questionnaireId,
@@ -163,7 +163,7 @@ class AssignmentsApi {
         var url = `${this.base}/${assignmentId}/recordAudio`
 
         return this.http.patch(url, {
-            enabled: isEnabled
+            enabled: isEnabled,
         })
     }
 
@@ -212,7 +212,7 @@ class WebInterviewSettingsApi {
             subject: subject,
             message: message,
             passwordDescription: passwordDescription,
-            linkText: linkText
+            linkText: linkText,
         })
     }
 
@@ -224,7 +224,7 @@ class WebInterviewSettingsApi {
             messageType: messageType,
             messageText: messageText,
             buttonType: buttonType,
-            buttonText: buttonText
+            buttonText: buttonText,
         })
     }
 
@@ -272,7 +272,7 @@ class ExportSettings {
     setEncryption(val) {
         const url = `${this.base}/ChangeState`
         return this.http.post(url, {
-            enableState: val
+            enableState: val,
         })
     }
 
@@ -321,7 +321,7 @@ class AdminSettings {
     }
     setGlobalNotice(val) {
         return this.http.post(`${this.base}/GlobalNoticeSettings`, {
-            GlobalNotice: val
+            GlobalNotice: val,
         })
     }
     getProfileSettings() {
@@ -329,7 +329,7 @@ class AdminSettings {
     }
     setProfileSettings(allowInterviewerUpdateProfile) {
         return this.http.post(`${this.base}/ProfileSettings`, {
-            allowInterviewerUpdateProfile: allowInterviewerUpdateProfile
+            allowInterviewerUpdateProfile: allowInterviewerUpdateProfile,
         })
     }
     setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled) {
@@ -346,7 +346,7 @@ class AdminSettings {
     }
     setWebInterviewSettings(allowEmails) {
         return this.http.post(`${this.base}/WebInterviewSettings`, {
-            allowEmails: allowEmails
+            allowEmails: allowEmails,
         })
     }
 }
