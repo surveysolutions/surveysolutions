@@ -1,9 +1,11 @@
 #nullable enable
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
@@ -19,11 +21,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             descriptor.Field<QuestionsResolver>(x => x.Questions(default, default, default, default))
                 .Authorize()
-                .Type<NonNullType<ListType<QuestionItemObjectType>>>()
+                .Type<ListType<QuestionItemObjectType>>()
                 .Argument("id", a => a.Description("Questionnaire id").Type<UuidType>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<LongType>())
                 .Argument("language", a => a.Description("Questionnaire language").Type<StringType?>())
                 .UseFiltering<QuestionsFilterType>();
+
+            descriptor.Field<UsersResolver>(x => x.GetViewer(default))
+                .Authorize(ApplyPolicy.BeforeResolver)
+                .Type<UserType>().Name("viewer");
         }
     }
 }
