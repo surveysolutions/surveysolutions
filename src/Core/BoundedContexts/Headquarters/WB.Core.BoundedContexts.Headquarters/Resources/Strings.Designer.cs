@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -205,11 +205,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure authenticator app.
+        /// </summary>
+        public static string HQ_Views_EnableAuthenticator_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_EnableAuthenticator_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage account.
         /// </summary>
         public static string HQ_Views_Manage_Title {
             get {
                 return ResourceManager.GetString("HQ_Views_Manage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Two factor authentication.
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Title", resourceCulture);
             }
         }
         

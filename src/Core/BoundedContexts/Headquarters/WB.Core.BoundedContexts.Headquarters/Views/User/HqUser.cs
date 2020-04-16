@@ -94,6 +94,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
     public class HqUserToken : IdentityUserToken<Guid>
     {
 
+        public override bool Equals(object obj) => obj is HqUserToken token &&
+                                                   UserId == token.UserId &&
+                                                   LoginProvider == token.LoginProvider &&
+                                                   Name == token.Name;
+
+        public override int GetHashCode()
+        {
+            var hashCode = -1791060676;
+            hashCode = hashCode * -1521134295 + EqualityComparer<Guid>.Default.GetHashCode(UserId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(LoginProvider);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            return hashCode;
+        }
+
     }
 
     public class HqUserProfile
