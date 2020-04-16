@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// Archived status to filter by. True or False
         /// </summary>
         [DataMember]
-        public bool Archived { get; set; } = false;
+        public bool Archived { get; set; }
 
         /// <summary>
         /// Date (UTC) when assignment were created
@@ -98,6 +98,12 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// </summary>
         [DataMember]
         public DateTime? ReceivedByTabletAtUtc { get; set; }
+
+        /// <summary>
+        /// Determines if interview from this assignment must record voice during interview (only on tablet)
+        /// </summary>
+        [DataMember]
+        public bool IsAudioRecordingEnabled { get; set; }
     }
 
     public class AssignmentAssignRequest
