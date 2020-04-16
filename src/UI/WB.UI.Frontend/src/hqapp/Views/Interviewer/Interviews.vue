@@ -87,6 +87,9 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
       assignmentId
       updateDate
       status
+      receivedByInterviewer
+      wasCompleted
+      canBeDeleted
       identifyingQuestions {
         question {
           questionText
@@ -245,15 +248,15 @@ export default {
             if (rowData.status != 'COMPLETED') {
                 menu.push({
                     name: self.$t('Pages.InterviewerHq_OpenInterview'),
-                    callback: () => self.$store.dispatch('openInterview', rowData.interviewId),
+                    callback: () => self.$store.dispatch('openInterview', rowData.id),
                 })
             }
 
-            if (rowData.status == 'INTERVIEWERASSIGNED') {
+            if (rowData.canBeDeleted) {
                 menu.push({
                     name: self.$t('Pages.InterviewerHq_DiscardInterview'),
                     callback() {
-                        self.discardInterview(rowData.interviewId, rowIndex)
+                        self.discardInterview(rowData.id, rowIndex)
                     },
                 })
             }
@@ -263,7 +266,7 @@ export default {
                     name: self.$t('Pages.InterviewerHq_RestartInterview'),
                     callback: () => {
                         self.$refs.table.disableRow(rowIndex)
-                        self.restartInterview(rowData.interviewId)
+                        self.restartInterview(rowData.id)
                     },
                 })
             }
