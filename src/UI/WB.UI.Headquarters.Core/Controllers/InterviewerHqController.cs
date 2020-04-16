@@ -82,9 +82,7 @@ namespace WB.UI.Headquarters.Controllers
             return new InterviewerHqModel
             {
                 Title = title.ToUiString(),
-                AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
-                InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
-                Statuses = statuses.Select(s => s.ToString()).ToArray(),
+                Statuses = statuses.Select(s => s.ToString().ToUpper()).ToArray(),
                 Questionnaires = this.GetQuestionnaires(statuses)
             };
         }
