@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     interview.Status == InterviewStatus.Completed
                     || interview.Status == InterviewStatus.Restarted
                     || interview.Status == InterviewStatus.InterviewerAssigned
+                    || interview.Status == InterviewStatus.RejectedBySupervisor
                 );
             }
 
