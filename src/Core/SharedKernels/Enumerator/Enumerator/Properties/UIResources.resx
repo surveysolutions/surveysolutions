@@ -210,6 +210,9 @@
   <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
     <value>Answer was not saved</value>
   </data>
+  <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
+    <value>On Previous Answer</value>
+  </data>
   <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
     <value>Your comment</value>
   </data>

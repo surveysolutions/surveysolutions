@@ -709,4 +709,7 @@
   <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
     <value>Коментариев от супервизора нет</value>
   </data>
+  <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
+    <value>На предыдущий ответ</value>
+  </data>
 </root>
