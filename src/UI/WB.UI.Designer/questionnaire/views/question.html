@@ -1,4 +1,4 @@
-﻿<form role="form" id="question-editor" name="questionForm" unsaved-warning-form ng-show="activeQuestion">
+﻿<form role="form" method="POST" id="question-editor" name="questionForm" unsaved-warning-form ng-show="activeQuestion">
     <div id="show-reload-details-promt" class="ng-cloak" ng-show="activeQuestion.shouldUserSeeReloadDetailsPromt">
         <div class="inner">{{'QuestionToUpdateOptions' | i18next}} <a ng-click="loadQuestion();" href="javascript:void(0);" ng-i18next="QuestionClickReload"></a></div>
     </div>
@@ -109,7 +109,7 @@
             <input id="cb-isWarning{{$index}}" type="checkbox" class="wb-checkbox" ng-model="validation.severity" ng-true-value="'Warning'" ng-false-value="'Error'" />
             <label for="cb-isWarning{{$index}}"><span></span>{{'IsWarning' | i18next}}</label>
 
-            <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
+            <button type="button" class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
             <div class="pseudo-form-control">
                 <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }"
