@@ -183,9 +183,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 case InterviewStatus.Restarted:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(
                         InterviewStatus.InterviewerAssigned,
-                        InterviewStatus.RejectedBySupervisor,
-                        InterviewStatus.RejectedByHeadquarters,
-                        InterviewStatus.SupervisorAssigned);
+                        InterviewStatus.RejectedBySupervisor);
                     return;
                 default:
                     throw new InterviewException(
