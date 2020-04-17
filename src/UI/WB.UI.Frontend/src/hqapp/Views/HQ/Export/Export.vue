@@ -34,7 +34,6 @@
                                             class="form-group"
                                             :class="{ 'has-error': errors.has('questionnaireId') }">
                                             <Typeahead
-                                                fuzzy
                                                 control-id="questionnaireId"
                                                 :value="questionnaireId"
                                                 :placeholder="$t('Common.AllQuestionnaires')"
@@ -72,7 +71,6 @@
                                         <h5>{{$t('DataExport.StatusOfExportTitle')}}</h5>
                                         <Typeahead
                                             control-id="status"
-                                            fuzzy
                                             :selectedKey="pageState.status"
                                             data-vv-name="status"
                                             data-vv-as="status"

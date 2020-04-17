@@ -18,7 +18,6 @@
                     ref="reportTypeControl"
                     control-id="reportTypeId"
                     no-clear
-                    fuzzy
                     data-vv-name="reportTypeId"
                     data-vv-as="reportType"
                     :placeholder="$t('PeriodicStatusReport.InterviewActions')"
@@ -31,7 +30,6 @@
                 <Typeahead
                     ref="questionnaireIdControl"
                     control-id="questionnaireId"
-                    fuzzy
                     data-vv-name="questionnaireId"
                     data-vv-as="questionnaire"
                     :placeholder="$t('Common.AllQuestionnaires')"
@@ -44,7 +42,6 @@
                 <Typeahead
                     ref="questionnaireVersionControl"
                     control-id="questionnaireVersion"
-                    fuzzy
                     data-vv-name="questionnaireVersion"
                     data-vv-as="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
@@ -57,7 +54,6 @@
                 <Typeahead
                     ref="overTheLast"
                     control-id="overTheLast"
-                    fuzzy
                     no-clear
                     data-vv-name="overTheLast"
                     data-vv-as="overTheLast"
@@ -71,7 +67,6 @@
                 <Typeahead
                     ref="period"
                     control-id="period"
-                    fuzzy
                     no-clear
                     :placeholder="$t('PeriodicStatusReport.Period')"
                     data-vv-name="period"
