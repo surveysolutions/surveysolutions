@@ -1,0 +1,108 @@
+﻿@using reCAPTCHA.AspNetCore
+@using WB.Core.Infrastructure.Versions
+@using WB.UI.Headquarters.Resources
+@using WB.UI.Headquarters.Services
+@using WB.UI.Shared.Web.Captcha
+@using WB.UI.Shared.Web.Extensions
+@inject IProductVersion productVersion
+@inject ICaptchaProvider captchaProvider;
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOn2faModel
+@{
+    Layout = "_Logon";
+}
+<header>
+    <div class="container-fluid">
+        <nav class="navbar navbar-fixed-top" role="navigation">
+            <div class="container-fluid ">
+                <div class="row flex-row">
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <div class="centered-box-table">
+                            <div class="centered-box-table-cell">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-lg-offset-9 col-md-1 col-md-offset-8 col-sm-2 col-sm-offset-6 col-xs-4 col-xs-offset-2">
+                        <div class="centered-box-table">
+                            <div class="centered-box-table-cell">
+                                <a href="http://support.mysurvey.solutions/headquarters" title="@MainMenu.Help" target="_blank" class="help">
+                                    @MainMenu.Help
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+</header>
+<main>
+    <div class="container-fluid" style="min-height: 400px">
+        <div class="row two-columns-form">
+            <div class="col-md-6 col-sm-6 col-xs-12 left-column">
+                <div class="centered-box-table">
+                    <div class="centered-box-table-cell">
+                        @using (Html.BeginForm("LogOn", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post,
+                          true, new { id = "log-in", @class = "log-in" }))
+                        {
+                            <div class="retina headquarter">Survey Solutions Headquarters</div>
+                            if (ViewData.ModelState.Any(s => s.Value.Errors.Any()))
+                            {
+                                <div class="form-group has-error">
+                                    <p>
+                                        <span class="help-block">
+                                            @Html.ValidationMessage(ViewData.ModelState.Keys.First(f => ViewData.ModelState[f].Errors.Any()))
+                                        </span>
+                                    </p>
+                                </div>
+                            }
+
+                            <div class="form-group">
+                                <p>@Pages.LogOn_TwoFactor</p>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.TwoFactorCode, new { @class = "form-control", @autofocus = @"autofocus", autocomplete = "off", placeholder = Pages.AuthenticatorCode })
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="btn btn-success btn-lg" type="submit">@Pages.LogOn_LogIn</button>
+                            </div>
+                            <div class="form-group">
+                                <p>
+                                    Don't have access to your authenticator device? You can
+                                    <a id="recovery-code-login" href='@Url.Action("LoginWithRecoveryCode")'>log in with a recovery code</a>.
+                                </p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 right-column">
+                <div class="centered-box-table">
+                    @if (ViewBag.HasCompanyLogo)
+                    {
+                        <div class="centered-box-table-cell">
+                            <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" id="placeholder"
+                                 onerror="this.parentElement.className += ' no-logo'" />
+                            <div class="default-logo"></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="centered-box-table-cell no-logo">
+                            <div class="default-logo"></div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="interviewer-app">
+                <a href="@Url.Action("Index", "Download")" class="get-interviewer-app">
+                    <span>@Pages.GetLatestApp</span>
+                    <span class="version">Version @(productVersion.ToString())</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>

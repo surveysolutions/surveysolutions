@@ -35,61 +35,46 @@
                     </ul>
                 </div>
                 <div class="col-md-9">
-                    <div>
+                    <div >
                         <div >
-                            <h2>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Title')}}</h2>
+                            <h2>{{$t('Strings.HQ_Views_GenerateRecoveryCodes_Title')}}</h2>
                         </div>
-                        <div>
+                        <div >
                             <form-group :label="$t('Pages.AccountManage_Login')">
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
-                            </form-group>
+                            </form-group>                    
                         </div>
-                        <div v-if="is2faEnabled">
-                            <div class="alert alert-danger" 
-                                v-if="recoveryCodesLeft == 0">
-                                <strong>You have no recovery codes left.</strong>
-                                <p>You must <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
-                            </div>                                
-                    
-                            <div class="alert alert-danger" 
-                                v-if="recoveryCodesLeft == 1">
-                                <strong>You have 1 recovery code left.</strong>
-                                <p>You can <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a>.</p>
-                            </div>
+
+                        <div > 
                             <div class="alert alert-warning" 
-                                v-if="recoveryCodesLeft <= 3">
-                                <strong>You have {{recoveryCodesLeft}} recovery codes left.</strong>
-                                <p>You should <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a>.</p>
-                            </div>                    
-    
-                            <a :href="getUrl('Users/Disable2fa')" 
-                                class="btn btn-success"
-                                style="margin-right: 5px;">Disable 2FA</a>
-                            <a :href="getUrl('../../Users/GenerateRecoveryCodes')" 
-                                class="btn btn-success">Reset recovery codes</a>
-                        </div>
-
-                        <h5>Authenticator app</h5>
-
-                        <a v-if="!hasAuthenticator" 
-                            id="enable-authenticator" 
-                            :href="getUrl('../../Users/EnableAuthenticator')" 
-                            class="btn btn-success">Add authenticator app
-                        </a>                
-                        <a v-if="hasAuthenticator" 
-                            id="enable-authenticator" 
-                            :href="getUrl('../../Users/EnableAuthenticator')" 
-                            style="margin-right: 5px;"
-                            class="btn btn-success">Setup authenticator app
-                        </a>
-                        <a v-if="hasAuthenticator" 
-                            id="reset-authenticator" 
-                            :href="getUrl('../../Users/ResetAuthenticator')" 
-                            class="btn btn-success">Reset authenticator app
-                        </a>               
-                    </div>
+                                role="alert">
+                                <p>
+                                    <span class="glyphicon glyphicon-warning-sign"></span>
+                                    <strong>Put these codes in a safe place.</strong>
+                                </p>
+                                <p>
+                                    If you lose your device and don't have the recovery codes you will lose access to your account.
+                                </p>
+                                <p>
+                                    Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key
+                                    used in an authenticator app you should <a v-bind:href="getUrl('../../Users/ResetAuthenticator')">reset your authenticator keys.</a>
+                                </p>
+                            </div>                                  
+                        </div> 
+                        <div >
+                            <div class="block-filter">
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger"
+                            
+                                    id="btnGenerateRecoveryCodes"
+                                    v-bind:disabled="userInfo.isObserving"
+                                    @click="generateRecoveryCodes">{{$t('Pages.GenerateRecoveryCodes')}}</button>                        
+                            </div>
+                        </div>              
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -107,12 +92,9 @@ export default {
             personName: null,
         }
     },
-    computed: {
-        is2faEnabled(){
-            return this.userInfo.is2faEnabled
-        },
-        recoveryCodesLeft(){
-            return this.userInfo.recoveryCodesLeft
+    computed: {        
+        recoveryCodes(){
+            return this.userInfo.recoveryCodes
         },
         hasAuthenticator(){
             return this.userInfo.hasAuthenticator
@@ -159,7 +141,7 @@ export default {
         },
         tfaUrl(){
             return this.getUrl('../../Users/TwoFactorAuthentication')
-        },        
+        },
     },
     mounted() {
         this.personName = this.userInfo.personName        
@@ -170,6 +152,32 @@ export default {
         },
     },
     methods: {
+        generateRecoveryCodes(){
+            this.successMessage = null
+            for (var error in this.modelState) {
+                delete this.modelState[error]
+            }
+
+            var self = this
+            this.$http({
+                method: 'post',
+                url: this.model.api.generateRecoveryCodesUrl,
+                data: {
+                    userId: self.userInfo.userId,                                     
+                },
+                headers: {
+                    'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                },
+            }).then(
+                response => {
+                    window.location.href = self.model.api.showRecoveryCodesUrl                    
+                },
+                error => {
+                    self.processModelState(error.response.data, self)
+                }
+            )
+
+        },
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
                 return baseUrl

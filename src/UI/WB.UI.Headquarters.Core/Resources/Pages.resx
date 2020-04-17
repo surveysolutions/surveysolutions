@@ -135,6 +135,9 @@
   <data name="AccountManage_ChangePassword" xml:space="preserve">
     <value>Change password</value>
   </data>
+  <data name="AccountManage_Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
   <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
     <value>Use the form below to change the password for the account</value>
   </data>
@@ -338,6 +341,12 @@
   </data>
   <data name="LogOn_LogIn" xml:space="preserve">
     <value>Log in</value>
+  </data>
+  <data name="LogOn_TwoFactor" xml:space="preserve">
+    <value>Your login is protected with an authenticator app. Enter your authenticator code below.</value>
+  </data>
+  <data name="LogOn_LoginWithRecoveryCode" xml:space="preserve">
+    <value>You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again.</value>
   </data>
   <data name="LogOn_Legend" xml:space="preserve">
     <value>Please log in</value>
@@ -811,6 +820,9 @@
   <data name="Update" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>This action will create individual user with supervisor rights,
         &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
@@ -841,6 +853,9 @@
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="AuthenticatorCode" xml:space="preserve">
+    <value>Authenticator code</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{{name}} (ver. {{version}})</value>
@@ -944,6 +959,12 @@
   </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Reset user password</value>
+  </data>
+  <data name="ResetAuthenticator" xml:space="preserve">
+    <value>Reset authenticator</value>
+  </data>
+  <data name="Disable2fa" xml:space="preserve">
+    <value>Disable 2FA</value>
   </data>
   <data name="Profile_ApiUsersList" xml:space="preserve">
     <value>API users</value>

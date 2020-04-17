@@ -7,6 +7,8 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
@@ -33,18 +35,24 @@ namespace WB.UI.Headquarters.Controllers
         private readonly UserManager<HqUser> userManager;
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
+        private IOptions<HeadquartersConfig> options;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
+
+        [TempData]
+        public string[] RecoveryCodes { get; set; }
 
         public UsersController(IAuthorizedUser authorizedUser, 
             UserManager<HqUser> userManager, 
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
-            UrlEncoder urlEncoder)
+            UrlEncoder urlEncoder,
+            IOptions<HeadquartersConfig> options)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
             this.profileSettingsStorage = profileSettingsStorage;
             this.urlEncoder = urlEncoder;
+            this.options = options;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -173,7 +181,124 @@ namespace WB.UI.Headquarters.Controllers
 
             return result.ToString().ToLowerInvariant();
         }
+
+        [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AntiForgeryFilter]
+        public async Task<ActionResult> ResetAuthenticator(Guid? id)
+        {
+            var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
+            if (user == null) return NotFound("User not found");
+            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            
+            return View(new
+            {
+                UserInfo = new
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
+                    IsOwnProfile = user.Id == this.authorizedUser.Id,
+                    IsObserving = this.authorizedUser.IsObserving
+                },
+                Api = new
+                {
+                    ResetAuthenticatorKeyUrl = Url.Action("ResetAuthenticatorKey"),
+                    EnableAuthenticatorUrl = Url.Action("EnableAuthenticator"),
+                }
+            });
+        }
+
         
+        [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AntiForgeryFilter]
+        public async Task<ActionResult> GenerateRecoveryCodes(Guid? id)
+        {
+            var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
+            if (user == null) return NotFound("User not found");
+            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+
+            
+            return View(new
+            {
+                UserInfo = new
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
+                    IsOwnProfile = user.Id == this.authorizedUser.Id,
+                    IsObserving = this.authorizedUser.IsObserving
+                },
+                Api = new
+                {
+                    GenerateRecoveryCodesUrl = Url.Action("GenerateRecoveryCodes"),
+                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes")
+                }
+            });
+        }
+
+
+        [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AntiForgeryFilter]
+        public async Task<ActionResult> ShowRecoveryCodes(Guid? id)
+        {
+            var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
+            if (user == null) return NotFound("User not found");
+            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+
+            if (RecoveryCodes == null || RecoveryCodes.Length == 0)
+            {
+                return RedirectToAction("TwoFactorAuthentication", new { id = id });
+            }
+
+            return View(new
+            {
+                UserInfo = new
+                {
+                    RecoveryCodes = string.Join(" ", RecoveryCodes),
+
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
+                    IsOwnProfile = user.Id == this.authorizedUser.Id,
+                    IsObserving = this.authorizedUser.IsObserving
+                },
+                Api = new { }
+            });
+        }
+
+        [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AntiForgeryFilter]
+        public async Task<ActionResult> Disable2fa(Guid? id)
+        {
+            var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
+            if (user == null) return NotFound("User not found");
+            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+
+            if(!user.TwoFactorEnabled)
+                return RedirectToAction("TwoFactorAuthentication", new { id = id });
+
+            return View(new
+            {
+                UserInfo = new
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
+                    IsOwnProfile = user.Id == this.authorizedUser.Id,
+                    IsObserving = this.authorizedUser.IsObserving
+                },
+                Api = new
+                {
+                    Disable2faUrl = Url.Action("DisableTwoFactor"),
+                    RedirectUrl = Url.Action("TwoFactorAuthentication")
+                }
+            });
+        }
+
 
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
@@ -196,7 +321,7 @@ namespace WB.UI.Headquarters.Controllers
             var authenticatorUri =
                     string.Format(
                     AuthenticatorUriFormat,
-                    urlEncoder.Encode("mysurvey.solutions"), // load base url
+                    urlEncoder.Encode(options.Value?.BaseUrl ?? "mysurvey.solutions"),
                     urlEncoder.Encode(user.UserName),
                     unformattedKey);
 
@@ -214,7 +339,10 @@ namespace WB.UI.Headquarters.Controllers
                     IsObserving = this.authorizedUser.IsObserving
                 },
                 Api = new
-                    { }
+                {
+                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode"),
+                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes")
+                }
             });
         }
 
@@ -421,6 +549,126 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.ModelState.ErrorsToJsonResult();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        public async Task<ActionResult> CheckVerificationCode([FromBody] VerificationCodeModel editModel)
+        {
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
+            if (currentUser == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+
+            
+            if (this.ModelState.IsValid)
+            {
+                var verificationCode = editModel.VerificationCode.Replace(" ", string.Empty).Replace("-", string.Empty);
+
+                var is2faTokenValid = await userManager.VerifyTwoFactorTokenAsync(
+                    currentUser, userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
+                
+                if (!is2faTokenValid)
+                    this.ModelState.AddModelError(nameof(VerificationCodeModel.VerificationCode),
+                        "Invalid code");
+                else
+                {
+                    await userManager.SetTwoFactorEnabledAsync(currentUser, true);
+
+                    if (await userManager.CountRecoveryCodesAsync(currentUser) == 0)
+                    {
+                        var recoveryCodes = await userManager.GenerateNewTwoFactorRecoveryCodesAsync(currentUser, 10);
+                        RecoveryCodes = recoveryCodes.ToArray();
+                    }
+                }
+            }
+
+            return this.ModelState.ErrorsToJsonResult();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        public async Task<ActionResult> ResetAuthenticatorKey([FromBody] TwoFAUser editModel)
+        {
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
+            if (currentUser == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+
+
+            if (this.ModelState.IsValid)
+            {
+                await userManager.SetTwoFactorEnabledAsync(currentUser, false);
+                await userManager.ResetAuthenticatorKeyAsync(currentUser);
+                //await signInManager.RefreshSignInAsync(currentUser);
+            }
+
+            return this.ModelState.ErrorsToJsonResult();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        public async Task<ActionResult> DisableTwoFactor([FromBody] TwoFAUser editModel)
+        {
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
+            if (currentUser == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+
+
+            if (this.ModelState.IsValid)
+            {
+                var disable2faResult = await userManager.SetTwoFactorEnabledAsync(currentUser, false);
+                if (!disable2faResult.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user '{currentUser.UserName}'.");
+                }
+            }
+
+            return this.ModelState.ErrorsToJsonResult();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        public async Task<ActionResult> GenerateRecoveryCodes([FromBody] TwoFAUser editModel)
+        {
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
+            if (currentUser == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+
+
+            if (this.ModelState.IsValid)
+            {
+                var isTwoFactorEnabled = await userManager.GetTwoFactorEnabledAsync(currentUser);
+                var userId = await userManager.GetUserIdAsync(currentUser);
+                if (!isTwoFactorEnabled)
+                {
+                    throw new InvalidOperationException($"Cannot generate recovery codes for user with ID '{userId}' as they do not have 2FA enabled.");
+                }
+
+                var recoveryCodes = await userManager.GenerateNewTwoFactorRecoveryCodesAsync(currentUser, 10);
+                RecoveryCodes = recoveryCodes.ToArray();
+            }
+
+            return this.ModelState.ErrorsToJsonResult();
+        }
+
 
         [Authorize(Roles = "Administrator")]
         [ActivePage(MenuItem.Observers)]

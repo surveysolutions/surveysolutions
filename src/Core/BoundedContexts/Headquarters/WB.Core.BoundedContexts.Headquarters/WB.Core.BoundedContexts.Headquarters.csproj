@@ -97,6 +97,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>DataExport.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ErrorMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Report.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -123,6 +128,9 @@
     <EmbeddedResource Update="Resources\DataExport.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ErrorMessages.resx">
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Report.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

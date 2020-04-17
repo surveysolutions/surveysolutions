@@ -25,8 +25,7 @@
                     </div>
                     <slot />
                 </div>
-            </div>
-           
+            </div>           
             <slot name="modals" />
             <ModalFrame id="pendingProgress"
                 ref="pending"
