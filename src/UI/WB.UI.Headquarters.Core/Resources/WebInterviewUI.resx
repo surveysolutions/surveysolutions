@@ -165,6 +165,9 @@
   <data name="CommentYours" xml:space="preserve">
     <value>Your comment</value>
   </data>
+  <data name="CommentOnPreviousAnswer" xml:space="preserve">
+    <value>On Previous Answer</value>
+  </data>
   <data name="CommentAdmin" xml:space="preserve">
     <value>Admin comment</value>
   </data>

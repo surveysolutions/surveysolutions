@@ -13,7 +13,8 @@
                 :isOwnComment="comment.isOwnComment" 
                 :key="comment.commentTimeUtc"
                 :date="comment.commentTimeUtc"
-                :resolved="comment.resolved" />
+                :resolved="comment.resolved"
+                :commentOnPreviousAnswer="comment.commentOnPreviousAnswer" />
         </template>
 
         <div class="comment active"
