@@ -352,7 +352,7 @@ import {lowerCase, find, filter, flatten, map,
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 
-const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
+const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
   interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     nodes {
