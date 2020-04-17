@@ -22,6 +22,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             descriptor.Name("Question");
             
             descriptor.Field(x => x.QuestionText)
+                .Description("Question text. May contain html tags.")
                 .Type<StringType>();
 
             descriptor.Field(x => x.StataExportCaption)

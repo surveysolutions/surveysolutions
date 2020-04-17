@@ -210,6 +210,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filters by questions is only available when concrete questionnaire version is selected.
+        /// </summary>
+        public static string QuestionsFilterNotAvailable {
+            get {
+                return ResourceManager.GetString("QuestionsFilterNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questions selector.
         /// </summary>
         public static string QuestionsSelector {

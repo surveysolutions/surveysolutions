@@ -69,8 +69,7 @@
                 </div>
             </FilterBlock>
 
-            <InterviewFilter slot="additional"
-                v-if="where.questionnaireId && where.questionnaireVersion"
+            <InterviewFilter slot="additional"                
                 :questionnaireId="where.questionnaireId"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"

@@ -225,4 +225,7 @@
   <data name="QuestionsSelector" xml:space="preserve">
     <value>Выбор вопросов</value>
   </data>
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Фильтр по вопросам доступен только когда выбрана конкретная версия опросника</value>
+  </data>
 </root>
