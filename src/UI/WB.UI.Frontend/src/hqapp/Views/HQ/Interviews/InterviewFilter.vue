@@ -1,14 +1,14 @@
 <template>
-    <div class="block-filter"
+    <div class="block-filter" 
         v-if="question != null && isSupported">
         <h5 :title="question.questionText">
-            {{question.questionText}} <inline-selector :options="fieldOptions"
+            {{sanitizeHtml(question.questionText)}} <inline-selector :options="fieldOptions"
                 no-empty
                 v-if="fieldOptions != null"
                 v-model="field" />
         </h5>
 
-        <Typeahead fuzzy        
+        <Typeahead
             v-if="question.type == 'SINGLEOPTION'"
             :control-id="'question-' + question.variable"           
             :placeholder="$t('Common.SelectOption')"            
@@ -33,6 +33,7 @@
 
 import gql from 'graphql-tag'
 import { find, sortBy } from 'lodash'
+import sanitizeHtml  from 'sanitize-html'
 
 export default {
     props: {
@@ -73,6 +74,8 @@ export default {
                 value: option == null ? null : parseInt(option.key),
             })
         },
+
+        sanitizeHtml: sanitizeHtml,
     },
 
     computed: { 
@@ -92,18 +95,16 @@ export default {
         },
 
         fieldOptions() {
-            switch(this.question.type) 
-            {
+            switch(this.question.type) {
             case 'SINGLEOPTION': return null
             case 'TEXT': return [
                 { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
                 { id: 'answerLowerCase', value: this.$t('Common.Equals') },
-                
+                        
             ]
             case 'NUMERIC': return [
                 { id: 'answer', value: this.$t('Common.Equals')},
-            ]
-            }
+            ]}
             return null
         },
     },
