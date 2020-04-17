@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
             var result = await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
                 (DataExportFormat) request.ExportType, interviewStatus, request.From, request.To, password,
-                request.AccessToken, (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType);
+                request.AccessToken, null, (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType);
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {request.InterviewStatus.ToString() ?? ""}",

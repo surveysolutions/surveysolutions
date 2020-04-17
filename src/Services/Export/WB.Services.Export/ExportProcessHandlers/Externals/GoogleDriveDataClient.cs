@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Drive.v3;
+using Google.Apis.Drive.v3.Data;
+using Google.Apis.Requests;
 using Google.Apis.Services;
+using Microsoft.Extensions.Logging;
+using Polly;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Services;
+using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 using File = Google.Apis.Drive.v3.Data.File;
 
@@ -15,20 +24,38 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 {
     internal class GoogleDriveDataClient : IExternalDataClient
     {
+        private readonly ILogger<GoogleDriveDataClient> logger;
+        private readonly ITenantApi<IHeadquartersApi> tenantApi;
+
+        public GoogleDriveDataClient(ILogger<GoogleDriveDataClient> logger, 
+            ITenantApi<IHeadquartersApi> tenantApi)
+        {
+            this.logger = logger;
+            this.tenantApi = tenantApi;
+        }
+        
         private DriveService driveService;
         private TenantInfo tenant;
+        private string refreshToken;
         private const string GoogleDriveFolderMimeType = "application/vnd.google-apps.folder";
 
-        public IDisposable InitializeDataClient(string accessToken, TenantInfo tenant)
+        public void InitializeDataClient(string accessToken, string refreshToken, TenantInfo tenant)
         {
             this.tenant = tenant;
+            this.refreshToken = refreshToken;
+            
+            this.CreateClient(accessToken);
+        }
+
+        private void CreateClient(string accessToken)
+        {
             var token = new Google.Apis.Auth.OAuth2.Responses.TokenResponse
             {
                 AccessToken = accessToken,
                 ExpiresInSeconds = 3600,
                 IssuedUtc = DateTime.UtcNow
             };
-
+            
             var fakeFlow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
             {
                 ClientSecrets = new ClientSecrets
@@ -45,7 +72,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             };
 
             this.driveService = new DriveService(serviceInitializer);
-            return this.driveService;
         }
 
         public async Task<string> CreateApplicationFolderAsync(string subFolder)
@@ -84,10 +110,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             };
 
             var file = await GetFileIdAsync(fileName, folder);
-
             if (file != null)
             {
-                await driveService.Files.Delete(file.Id).ExecuteAsync(cancellationToken);
+                Func<FilesResource.DeleteRequest> request = () => driveService.Files.Delete(file.Id);
+                await this.ExecuteRequestAsync(request, cancellationToken);
             }
 
             await driveService.Files.Create(fileMetadata, fileStream, "application/octet-stream").UploadAsync(cancellationToken);
@@ -95,10 +121,15 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         public async Task<long?> GetFreeSpaceAsync()
         {
-            var storageInfoRequest = driveService.About.Get();
-            storageInfoRequest.Fields = "storageQuota";
+            Func<ClientServiceRequest<About>> request = ()=>
+            {
+                var storageInfoRequest = driveService.About.Get();
+                storageInfoRequest.Fields = "storageQuota";
+                
+                return storageInfoRequest;
+            };
 
-            var storageInfo = await storageInfoRequest.ExecuteAsync();
+            var storageInfo = await this.ExecuteRequestAsync(request);
             if (storageInfo?.StorageQuota?.Limit == null) return null;
 
             return storageInfo.StorageQuota.Limit - storageInfo.StorageQuota.Usage ?? 0;
@@ -129,10 +160,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 file.Parents = new List<string> { parentId };
             }
 
-            var request = driveService.Files.Create(file);
+            return await this.ExecuteRequestAsync(() =>
+            {
+                var createRequest = driveService.Files.Create(file);
+                createRequest.Fields = "id";
 
-            request.Fields = "id";
-            return await request.ExecuteAsync();
+                return createRequest;
+            });
         }
 
         private Task<File> GetFolderIdAsync(string folderName, string parentFolderId = null)
@@ -142,22 +176,45 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             return SearchForFirstOccurenceAsync(query);
         }
 
-        private async Task<File> SearchForFirstOccurenceAsync(string query)
-        {
-            FilesResource.ListRequest listRequest = driveService.Files.List();
-            listRequest.Q = query;
-            listRequest.Fields = "files(id, name)";
+        private async Task<File> SearchForFirstOccurenceAsync(string query) =>
+            (await this.ExecuteRequestAsync(() =>
+            {
+                var listRequest = this.driveService.Files.List();
 
-            var files = (await listRequest.ExecuteAsync()).Files;
-
-            return files.FirstOrDefault();
-        }
+                listRequest.Q = query;
+                listRequest.Fields = "files(id, name)";
+                return listRequest;
+            })).Files.FirstOrDefault();
 
         private string SearchQuery(string name, string parentFolder)
         {
             var query = $"name = '{name}' and trashed = false";
             if (parentFolder != null) query += $" and '{parentFolder}' in parents";
             return query;
+        }
+
+        public Task<T> ExecuteRequestAsync<T>(Func<ClientServiceRequest<T>> request)
+            => this.ExecuteRequestAsync(request, CancellationToken.None);
+
+        public async Task<T> ExecuteRequestAsync<T>(Func<ClientServiceRequest<T>> request, CancellationToken token) =>
+            await Policy.Handle<GoogleApiException>(e => e.HttpStatusCode == HttpStatusCode.Unauthorized)
+                .RetryAsync(2, async (exception, span) =>
+                {
+                    this.logger.LogError(exception, $"Unauthorized exception during request to Google Drive");
+
+                    var newAccessToken = await this.tenantApi.For(this.tenant)
+                        .GetExternalStorageAccessTokenByRefreshTokenAsync(ExternalStorageType.GoogleDrive,
+                            this.refreshToken).ConfigureAwait(false);
+
+                    this.CreateClient(newAccessToken);
+
+                })
+                .ExecuteAsync(async () => await request().ExecuteAsync(token));
+
+        public void Dispose()
+        {
+            this.driveService?.Dispose();
+            this.driveService = null;
         }
     }
 }
