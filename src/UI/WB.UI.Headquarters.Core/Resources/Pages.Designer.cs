@@ -106,6 +106,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Profile.
+        /// </summary>
+        public static string AccountManage_Profile {
+            get {
+                return ResourceManager.GetString("AccountManage_Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Role.
         /// </summary>
         public static string AccountManage_Role {
@@ -574,6 +583,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authenticator code.
+        /// </summary>
+        public static string AuthenticatorCode {
+            get {
+                return ResourceManager.GetString("AuthenticatorCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Index.
         /// </summary>
         public static string Backup_IndexTitle {
@@ -678,6 +696,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string DetailsQuestionPartialView_WriteCommentPlaceholder {
             get {
                 return ResourceManager.GetString("DetailsQuestionPartialView_WriteCommentPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable 2FA.
+        /// </summary>
+        public static string Disable2fa {
+            get {
+                return ResourceManager.GetString("Disable2fa", resourceCulture);
             }
         }
         
@@ -2599,11 +2626,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again..
+        /// </summary>
+        public static string LogOn_LoginWithRecoveryCode {
+            get {
+                return ResourceManager.GetString("LogOn_LoginWithRecoveryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log On.
         /// </summary>
         public static string LogOn_Title {
             get {
                 return ResourceManager.GetString("LogOn_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your login is protected with an authenticator app. Enter your authenticator code below..
+        /// </summary>
+        public static string LogOn_TwoFactor {
+            get {
+                return ResourceManager.GetString("LogOn_TwoFactor", resourceCulture);
             }
         }
         
@@ -3364,6 +3409,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset authenticator.
+        /// </summary>
+        public static string ResetAuthenticator {
+            get {
+                return ResourceManager.GetString("ResetAuthenticator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string Search {
@@ -3910,6 +3964,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Users_Supervisors_Instruction2 {
             get {
                 return ResourceManager.GetString("Users_Supervisors_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify.
+        /// </summary>
+        public static string Verify {
+            get {
+                return ResourceManager.GetString("Verify", resourceCulture);
             }
         }
         

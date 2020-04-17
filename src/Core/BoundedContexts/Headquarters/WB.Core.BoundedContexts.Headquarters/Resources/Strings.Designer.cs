@@ -205,6 +205,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable two-factor authentication.
+        /// </summary>
+        public static string HQ_Views_DisableTwoFactorAuth_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_DisableTwoFactorAuth_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure authenticator app.
         /// </summary>
         public static string HQ_Views_EnableAuthenticator_Title {
@@ -214,11 +223,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generate recovery codes.
+        /// </summary>
+        public static string HQ_Views_GenerateRecoveryCodes_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_GenerateRecoveryCodes_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage account.
         /// </summary>
         public static string HQ_Views_Manage_Title {
             get {
                 return ResourceManager.GetString("HQ_Views_Manage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset authenticator key.
+        /// </summary>
+        public static string HQ_Views_ResetAuthenticator_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_ResetAuthenticator_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recovery codes.
+        /// </summary>
+        public static string HQ_Views_ShowRecoveryCodes_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_ShowRecoveryCodes_Title", resourceCulture);
             }
         }
         
