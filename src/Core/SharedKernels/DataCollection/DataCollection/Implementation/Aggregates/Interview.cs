@@ -2085,7 +2085,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
-                if (command.InterviewStatus == InterviewStatus.Completed || command.InterviewStatus == InterviewStatus.InterviewerAssigned)
+                if (command.InterviewStatus == InterviewStatus.Completed 
+                    || command.InterviewStatus == InterviewStatus.InterviewerAssigned
+                    || command.InterviewStatus == InterviewStatus.Restarted
+                    || command.InterviewStatus == InterviewStatus.RejectedBySupervisor
+                    )
                 {
                     propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(command.UserId);
                 }
