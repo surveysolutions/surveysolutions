@@ -1,10 +1,13 @@
 <template>
-    <div class="filters-container"
-        v-if="questionsList != null && questionsList.length > 0">
-        <h4>{{$t("Interviews.FiltersByQuestions")}}</h4>
+    <div class="filters-container">
+        <h4>
+            {{$t("Interviews.FiltersByQuestions")}}
+        </h4>
         <div class="block-filter">            
             <button type="button"
                 class="btn"
+                :disabled="isDisabled"
+                :title="isDisabled ? $t('Interviews.QuestionsFilterNotAvailable'):''"
                 @click="$refs.questionsSelector.modal()">
                 {{$t("Interviews.QuestionsSelector")}}
             </button>
@@ -20,7 +23,7 @@
                     <div>
                         <Checkbox v-for="question in questionsList"
                             :key="'cb_' + question.variable"
-                            :label="`${question.questionText}`"
+                            :label="`${sanitizeHtml(question.questionText)}`"
                             :value="isChecked(question)"
                             :name="'check_' + question.variable"
                             @input="check(question)" />
@@ -30,7 +33,7 @@
             <div slot="actions">
                 <button
                     type="button"
-                    class="btn btn-link"
+                    class="btn btn-primary"
                     data-dismiss="modal"
                     role="cancel">{{ $t("Common.Ok") }}</button>
             </div>
@@ -51,6 +54,7 @@
 import gql from 'graphql-tag'
 import InterviewFilter from './InterviewFilter'
 import { find, filter } from 'lodash'
+import sanitizeHtml  from 'sanitize-html'
 
 export default {
     data() {
@@ -64,7 +68,7 @@ export default {
 
     props: {
         questionnaireId: {
-            type: String, required: true,
+            type: String, required: false,
         },
         questionnaireVersion : {
             type: Number,
@@ -85,7 +89,11 @@ export default {
                 return {
                     id: (this.questionnaireId || '').replace(/-/g, ''),
                     version: this.questionnaireVersion,
-                }},
+                }
+            },
+            skip() {
+                return this.questionnaireId == null
+            },
         },
     },
 
@@ -143,6 +151,8 @@ export default {
                 this.$emit('change', [...this.conditions])
             }
         },
+
+        sanitizeHtml: sanitizeHtml,
     },
 
     computed: {
@@ -153,9 +163,13 @@ export default {
                     || q.type == 'NUMERIC'
             })
             array.sort(function (a, b) {
-                return a.questionText.localeCompare(b.questionText)
+                return sanitizeHtml(a.questionText).localeCompare(sanitizeHtml(b.questionText))
             })
             return array
+        },
+
+        isDisabled() {
+            return this.questionsList == null || this.questionsList.length == 0
         },
     },
 

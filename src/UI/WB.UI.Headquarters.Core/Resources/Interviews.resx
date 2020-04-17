@@ -224,4 +224,7 @@
   <data name="QuestionsSelector" xml:space="preserve">
     <value>Questions selector</value>
   </data>
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Filters by questions is only available when concrete questionnaire version is selected</value>
+  </data>
 </root>
