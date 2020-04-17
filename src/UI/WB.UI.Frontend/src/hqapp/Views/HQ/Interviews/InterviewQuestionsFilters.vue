@@ -107,6 +107,14 @@ export default {
         value(to) {
             this.conditions = this.value
         },
+
+        questionnaireId() {
+            this.conditions = []
+        },
+
+        questionnaireVersion() {
+            this.conditions = []
+        },
     },
 
     methods: {
@@ -162,9 +170,7 @@ export default {
                     || q.type == 'TEXT'
                     || q.type == 'NUMERIC'
             })
-            array.sort(function (a, b) {
-                return sanitizeHtml(a.questionText).localeCompare(sanitizeHtml(b.questionText))
-            })
+           
             return array
         },
 
