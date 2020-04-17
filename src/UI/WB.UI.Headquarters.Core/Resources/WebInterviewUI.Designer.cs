@@ -232,6 +232,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On Previous Answer.
+        /// </summary>
+        public static string CommentOnPreviousAnswer {
+            get {
+                return ResourceManager.GetString("CommentOnPreviousAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Post.
         /// </summary>
         public static string CommentPost {
