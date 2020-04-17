@@ -223,6 +223,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public DateTime CommentTimeUtc { get; set; }
         public Guid? Id { get; set; }
         public bool Resolved { get; set; }
+        public bool CommentOnPreviousAnswer { get; set; }
     }
 
     public abstract class InterviewEntity

@@ -70,7 +70,8 @@ namespace WB.UI.Headquarters.Services.Impl
                             UserRole = ac.UserRole,
                             CommentTimeUtc = ac.CommentTime,
                             Id = ac.Id,
-                            Resolved = ac.Resolved
+                            Resolved = ac.Resolved,
+                            CommentOnPreviousAnswer = ac.CommentOnPreviousAnswer
                         };
 
                         return comment;
