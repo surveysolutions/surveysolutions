@@ -732,6 +732,10 @@ export default {
                 and.push({ updateDate_lte: this.unactiveDateEnd})
             }
 
+            if(this.assignmentId) {
+                and.push({ assignmentId: parseInt(this.assignmentId) })
+            }
+
             return and
         },
 
