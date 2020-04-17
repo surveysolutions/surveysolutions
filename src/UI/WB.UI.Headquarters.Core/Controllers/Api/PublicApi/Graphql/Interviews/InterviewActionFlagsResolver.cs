@@ -76,7 +76,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 if (x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed)
                     yield return InterviewActionFlags.CanBeRejected;
 
-                if (x.Status == InterviewStatus.ApprovedByHeadquarters && user.IsHeadquarter)
+                if (x.Status == InterviewStatus.ApprovedByHeadquarters)
                     yield return InterviewActionFlags.CanBeUnApprovedByHq;
 
                 if (x.Status == InterviewStatus.SupervisorAssigned
