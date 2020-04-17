@@ -540,6 +540,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On Previous Answer.
+        /// </summary>
+        public static string Interview_Comment_OnPreviousAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Comment_OnPreviousAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resolve.
         /// </summary>
         public static string Interview_Comment_Resolve {
