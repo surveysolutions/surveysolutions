@@ -23,147 +23,163 @@
             <h1>{{$t('Strings.HQ_Views_Manage_Title')}}</h1>
         </div>
         <div class="extra-margin-bottom">
-            <div class="profile">
-                <div class="col-sm-12">
-                    <form-group :label="$t('Pages.AccountManage_Login')">
-                        <TextInput :value="userInfo.userName"
-                            id="UserName"
-                            disabled />
-                    </form-group>
-
-                    <form-group :label="$t('Pages.AccountManage_Role')">
-                        <TextInput :value="$t(`Roles.${userInfo.role}`)"
-                            id="Role"
-                            disabled />
-                    </form-group>
-
-                    <form-group
-                        :label="$t('FieldsAndValidations.PersonNameFieldName')"
-                        :error="modelState['PersonName']">
-                        <TextInput
-                            v-model.trim="personName"
-                            :haserror="modelState['PersonName'] !== undefined"
-                            id="PersonName"/>
-                    </form-group>
-                    <form-group
-                        :label="$t('FieldsAndValidations.EmailFieldName')"
-                        :error="modelState['Email']">
-                        <TextInput
-                            v-model.trim="email"
-                            :haserror="modelState['Email'] !== undefined"
-                            id="Email"/>
-                    </form-group>
-                    <form-group
-                        :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
-                        :error="modelState['PhoneNumber']">
-                        <TextInput
-                            v-model.trim="phoneNumber"
-                            :haserror="modelState['PhoneNumber'] !== undefined"
-                            id="PhoneNumber"/>
-                    </form-group>
-                    <p v-if="!isOwnProfile && lockMessage != null">{{lockMessage}}</p>
-                    <form-group v-if="!isOwnProfile && canBeLockedAsHeadquarters" 
-                        :error="modelState['IsLockedByHeadquarters']">
-                        <div>
-                            <input
-                                class="checkbox-filter single-checkbox"
-                                id="IsLocked"
-                                name="IsLocked"
-                                type="checkbox"                                
-                                v-model="isLockedByHeadquarters"/>
-                            <label for="IsLocked"
-                                style="font-weight: bold">
-                                <span class="tick"></span>
-                                {{$t('FieldsAndValidations.IsLockedFieldName')}}
-                            </label>
-                        </div>
-                    </form-group>
-                    <form-group v-if="!isOwnProfile && canLockBySupervisor" 
-                        :error="modelState['IsLockedBySupervisor']">
-                        <div>
-                            <input
-                                class="checkbox-filter single-checkbox"
-                                data-val="true"
-                                id="IsLockedBySupervisor"
-                                name="IsLockedBySupervisor"
-                                type="checkbox"
-                                v-model="isLockedBySupervisor"/>
-                            <label for="IsLockedBySupervisor"
-                                style="font-weight: bold">
-                                <span class="tick"></span>
-                                {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
-                            </label>
-                        </div>
-                    </form-group>
+            <div class="profile flex-row">                
+                <div class="col-md-3">
+                    <ul class="nav flex-block">
+                        <li class="nav-item open"><a class="nav-link active"
+                            id="profile"
+                            v-bind:href="getUrl('../../Users/Manage')">Profile</a></li>                            
+                        <li class="nav-item"><a class="nav-link "
+                            id="two-factor"
+                            v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">Two-factor authentication</a></li>                            
+                    </ul>
                 </div>
+                <div class="col-md-9">
+                    <div >
+                        <div >
+                            <h2>{{$t('Pages.AccountManage_Profile')}}</h2>
+                        </div>
+                        <div>                            
+                            <form-group :label="$t('Pages.AccountManage_Login')">
+                                <TextInput :value="userInfo.userName"
+                                    id="UserName"
+                                    disabled />
+                            </form-group>
 
-                <div class="col-sm-12">
-                    <div class="block-filter">
-                        <button
-                            type="submit"
-                            class="btn btn-success"
-                            style="margin-right:5px"
-                            id="btnUpdateUser"
-                            v-bind:disabled="userInfo.isObserving"
-                            @click="updateAccount">{{$t('Pages.Update')}}</button>
-                        <a class="btn btn-default"
-                            v-bind:href="referrerUrl"
-                            id="lnkCancelUpdateUser">
-                            {{$t('Common.Cancel')}}
-                        </a>
+                            <form-group :label="$t('Pages.AccountManage_Role')">
+                                <TextInput :value="$t(`Roles.${userInfo.role}`)"
+                                    id="Role"
+                                    disabled />
+                            </form-group>
+
+                            <form-group
+                                :label="$t('FieldsAndValidations.PersonNameFieldName')"
+                                :error="modelState['PersonName']">
+                                <TextInput
+                                    v-model.trim="personName"
+                                    :haserror="modelState['PersonName'] !== undefined"
+                                    id="PersonName"/>
+                            </form-group>
+                            <form-group
+                                :label="$t('FieldsAndValidations.EmailFieldName')"
+                                :error="modelState['Email']">
+                                <TextInput
+                                    v-model.trim="email"
+                                    :haserror="modelState['Email'] !== undefined"
+                                    id="Email"/>
+                            </form-group>
+                            <form-group
+                                :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
+                                :error="modelState['PhoneNumber']">
+                                <TextInput
+                                    v-model.trim="phoneNumber"
+                                    :haserror="modelState['PhoneNumber'] !== undefined"
+                                    id="PhoneNumber"/>
+                            </form-group>
+                            <p v-if="!isOwnProfile && lockMessage != null">{{lockMessage}}</p>
+                            <form-group v-if="!isOwnProfile && canBeLockedAsHeadquarters" 
+                                :error="modelState['IsLockedByHeadquarters']">
+                                <div>
+                                    <input
+                                        class="checkbox-filter single-checkbox"
+                                        id="IsLocked"
+                                        name="IsLocked"
+                                        type="checkbox"                                
+                                        v-model="isLockedByHeadquarters"/>
+                                    <label for="IsLocked"
+                                        style="font-weight: bold">
+                                        <span class="tick"></span>
+                                        {{$t('FieldsAndValidations.IsLockedFieldName')}}
+                                    </label>
+                                </div>
+                            </form-group>
+                            <form-group v-if="!isOwnProfile && canLockBySupervisor" 
+                                :error="modelState['IsLockedBySupervisor']">
+                                <div>
+                                    <input
+                                        class="checkbox-filter single-checkbox"
+                                        data-val="true"
+                                        id="IsLockedBySupervisor"
+                                        name="IsLockedBySupervisor"
+                                        type="checkbox"
+                                        v-model="isLockedBySupervisor"/>
+                                    <label for="IsLockedBySupervisor"
+                                        style="font-weight: bold">
+                                        <span class="tick"></span>
+                                        {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
+                                    </label>
+                                </div>
+                            </form-group>
+                        </div>
+
+                        <div >
+                            <div class="block-filter">
+                                <button
+                                    type="submit"
+                                    class="btn btn-success"
+                                    style="margin-right:5px"
+                                    id="btnUpdateUser"
+                                    v-bind:disabled="userInfo.isObserving"
+                                    @click="updateAccount">{{$t('Pages.Update')}}</button>
+                                <a class="btn btn-default"
+                                    v-bind:href="referrerUrl"
+                                    id="lnkCancelUpdateUser">
+                                    {{$t('Common.Cancel')}}
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="profile"
-                v-if="canChangePassword">
-                <div class="col-sm-7">
-                    <h2>{{$t('Pages.AccountManage_ChangePassword')}}</h2>
-                </div>
-                <div class="col-sm-12">
-                    <form-group
-                        v-if="isOwnProfile"
-                        :label="$t('FieldsAndValidations.OldPasswordFieldName')"
-                        :error="modelState['OldPassword']">
-                        <TextInput
-                            type="password"
-                            v-model.trim="oldPassword"
-                            :haserror="modelState['OldPassword'] !== undefined"
-                            id="OldPassword"/>
-                    </form-group>
-                    <form-group
-                        :label="$t('FieldsAndValidations.NewPasswordFieldName')"
-                        :error="modelState['Password']">
-                        <TextInput
-                            type="password"
-                            v-model.trim="password"
-                            :haserror="modelState['Password'] !== undefined"
-                            id="Password"/>
-                    </form-group>
-                    <form-group
-                        :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
-                        :error="modelState['ConfirmPassword']">
-                        <TextInput
-                            type="password"
-                            v-model.trim="confirmPassword"
-                            :haserror="modelState['ConfirmPassword'] !== undefined"
-                            id="ConfirmPassword"/>
-                    </form-group>
-                </div>
+                    <div v-if="canChangePassword">
+                        <div >
+                            <h2>{{$t('Pages.AccountManage_ChangePassword')}}</h2>
+                        </div>
+                        <div >
+                            <form-group
+                                v-if="isOwnProfile"
+                                :label="$t('FieldsAndValidations.OldPasswordFieldName')"
+                                :error="modelState['OldPassword']">
+                                <TextInput
+                                    type="password"
+                                    v-model.trim="oldPassword"
+                                    :haserror="modelState['OldPassword'] !== undefined"
+                                    id="OldPassword"/>
+                            </form-group>
+                            <form-group
+                                :label="$t('FieldsAndValidations.NewPasswordFieldName')"
+                                :error="modelState['Password']">
+                                <TextInput
+                                    type="password"
+                                    v-model.trim="password"
+                                    :haserror="modelState['Password'] !== undefined"
+                                    id="Password"/>
+                            </form-group>
+                            <form-group
+                                :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
+                                :error="modelState['ConfirmPassword']">
+                                <TextInput
+                                    type="password"
+                                    v-model.trim="confirmPassword"
+                                    :haserror="modelState['ConfirmPassword'] !== undefined"
+                                    id="ConfirmPassword"/>
+                            </form-group>
+                        </div>
 
-                <div class="col-sm-12">
-                    <div class="block-filter">
-                        <button
-                            type="submit"
-                            class="btn btn-success"
-                            style="margin-right:5px"
-                            id="btnUpdatePassword"
-                            v-bind:disabled="userInfo.isObserving"
-                            @click="updatePassword">{{$t('Pages.Update')}}</button>
-                        <a class="btn btn-default"
-                            v-bind:href="referrerUrl"
-                            id="lnkCancelUpdatePassword">
-                            {{$t('Common.Cancel')}}
-                        </a>
+                        <div >
+                            <div class="block-filter">
+                                <button
+                                    type="submit"
+                                    class="btn btn-success"
+                                    style="margin-right:5px"
+                                    id="btnUpdatePassword"
+                                    v-bind:disabled="userInfo.isObserving"
+                                    @click="updatePassword">{{$t('Pages.Update')}}</button>
+                                <a class="btn btn-default"
+                                    v-bind:href="referrerUrl"
+                                    id="lnkCancelUpdatePassword">
+                                    {{$t('Common.Cancel')}}
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -258,7 +274,7 @@ export default {
             }
 
             return '/'
-        },
+        },        
     },
     mounted() {
         this.personName = this.userInfo.personName
@@ -362,6 +378,13 @@ export default {
                     }
                 })
             }
+        },
+        getUrl: function(baseUrl){
+            if(this.isOwnProfile)
+                return baseUrl
+            else
+                return baseUrl + '/' + this.model.userInfo.userId  
+
         },
     },
 }

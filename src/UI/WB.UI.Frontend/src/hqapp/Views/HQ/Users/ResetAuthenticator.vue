@@ -22,6 +22,7 @@
             </ol>
             <h1>{{$t('Strings.HQ_Views_Manage_Title')}}</h1>
         </div>
+
         <div class="extra-margin-bottom">
             <div class="profile flex-row">                
                 <div class="col-md-3">
@@ -35,64 +36,50 @@
                     </ul>
                 </div>
                 <div class="col-md-9">
-                    <div>
+                    <div >
                         <div >
-                            <h2>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Title')}}</h2>
+                            <h2>{{$t('Strings.HQ_Views_ResetAuthenticator_Title')}}</h2>
                         </div>
-                        <div>
+                        <div >
                             <form-group :label="$t('Pages.AccountManage_Login')">
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
-                            </form-group>
+                            </form-group>                    
                         </div>
-                        <div v-if="is2faEnabled">
-                            <div class="alert alert-danger" 
-                                v-if="recoveryCodesLeft == 0">
-                                <strong>You have no recovery codes left.</strong>
-                                <p>You must <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
-                            </div>                                
-                    
-                            <div class="alert alert-danger" 
-                                v-if="recoveryCodesLeft == 1">
-                                <strong>You have 1 recovery code left.</strong>
-                                <p>You can <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a>.</p>
-                            </div>
+
+                        <div  >                    
                             <div class="alert alert-warning" 
-                                v-if="recoveryCodesLeft <= 3">
-                                <strong>You have {{recoveryCodesLeft}} recovery codes left.</strong>
-                                <p>You should <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a>.</p>
-                            </div>                    
-    
-                            <a :href="getUrl('Users/Disable2fa')" 
-                                class="btn btn-success"
-                                style="margin-right: 5px;">Disable 2FA</a>
-                            <a :href="getUrl('../../Users/GenerateRecoveryCodes')" 
-                                class="btn btn-success">Reset recovery codes</a>
+                                role="alert">
+                                <p>
+                                    <span class="glyphicon glyphicon-warning-sign"></span>
+                                    <strong>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</strong>
+                                </p>
+                                <p>
+                                    This process disables 2FA until you verify your authenticator app.
+                                    If you do not complete your authenticator app configuration you may lose access to your account.
+                                </p>
+                            </div>
                         </div>
-
-                        <h5>Authenticator app</h5>
-
-                        <a v-if="!hasAuthenticator" 
-                            id="enable-authenticator" 
-                            :href="getUrl('../../Users/EnableAuthenticator')" 
-                            class="btn btn-success">Add authenticator app
-                        </a>                
-                        <a v-if="hasAuthenticator" 
-                            id="enable-authenticator" 
-                            :href="getUrl('../../Users/EnableAuthenticator')" 
-                            style="margin-right: 5px;"
-                            class="btn btn-success">Setup authenticator app
-                        </a>
-                        <a v-if="hasAuthenticator" 
-                            id="reset-authenticator" 
-                            :href="getUrl('../../Users/ResetAuthenticator')" 
-                            class="btn btn-success">Reset authenticator app
-                        </a>               
-                    </div>
+                        <div>
+                            <div class="block-filter">
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger"
+                            
+                                    id="btnResetAuthenticator"
+                                    v-bind:disabled="userInfo.isObserving"
+                                    @click="resetAuthenticator">{{$t('Pages.ResetAuthenticator')}}</button>                        
+                            </div>
+                        </div>                 
+                    </div>                    
                 </div>
             </div>
         </div>
+
+
+
+
     </HqLayout>
 </template>
 
@@ -155,11 +142,11 @@ export default {
             return '/'
         },
         profileUrl(){
-            return this.getUrl('../../Users/Manage')
+            return this.getUrl('../../Users/Manage/')
         },
         tfaUrl(){
-            return this.getUrl('../../Users/TwoFactorAuthentication')
-        },        
+            return this.getUrl('../../Users/TwoFactorAuthentication') 
+        },
     },
     mounted() {
         this.personName = this.userInfo.personName        
@@ -170,6 +157,32 @@ export default {
         },
     },
     methods: {
+        resetAuthenticator(){
+            this.successMessage = null
+            for (var error in this.modelState) {
+                delete this.modelState[error]
+            }
+
+            var self = this
+            this.$http({
+                method: 'post',
+                url: this.model.api.resetAuthenticatorKeyUrl,
+                data: {
+                    userId: self.userInfo.userId,                                     
+                },
+                headers: {
+                    'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                },
+            }).then(
+                response => {
+                    window.location.href = self.model.api.enableAuthenticatorUrl                    
+                },
+                error => {
+                    self.processModelState(error.response.data, self)
+                }
+            )
+
+        },
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
                 return baseUrl

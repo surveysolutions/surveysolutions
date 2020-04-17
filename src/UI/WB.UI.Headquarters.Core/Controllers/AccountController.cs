@@ -53,6 +53,44 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> LogOn2fa(string returnUrl)
+        {
+            this.ViewBag.ActivePage = MenuItem.Logon;
+            this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+            
+            var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return this.View(new LogOn2faModel
+            {
+                
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LoginWithRecoveryCode()
+        {
+            this.ViewBag.ActivePage = MenuItem.Logon;
+            //this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+
+            var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return this.View(new LoginWithRecoveryCodeModel
+            {
+
+            });
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> LogOn(LogOnModel model, string returnUrl)
@@ -78,6 +116,10 @@ namespace WB.UI.Headquarters.Controllers
                 this.captchaService.ResetFailedLogin(model.UserName);
                 return Redirect(returnUrl ?? Url.Action("Index", "Home"));
             }
+            if (signInResult.RequiresTwoFactor)
+            {
+                return RedirectToAction("LogOn2fa", new { ReturnUrl = returnUrl, RememberMe = true });
+            }
 
             if (signInResult.IsLockedOut)
             {
@@ -89,6 +131,81 @@ namespace WB.UI.Headquarters.Controllers
             this.captchaService.RegisterFailedLogin(model.UserName);
             model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
             this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> LogOn2fa(LogOn2faModel model, string returnUrl)
+        {
+            this.ViewBag.ActivePage = MenuItem.Logon;
+            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+            
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
+            if (user == null)
+            {
+                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+            }
+
+            var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
+            var signInResult = await signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, true, false);
+            
+            if (signInResult.Succeeded)
+            {
+                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+            }
+            
+            if (signInResult.IsLockedOut)
+            {
+                this.ModelState.AddModelError("LockedOut", ErrorMessages.SiteAccessNotAllowed);
+                return View(model);
+            }
+
+            
+            this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.InvalidAuthenticatorCode);
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginWithRecoveryCode(LoginWithRecoveryCodeModel model, string returnUrl)
+        {
+            this.ViewBag.ActivePage = MenuItem.Logon;
+            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
+            if (user == null)
+            {
+                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+            }
+
+            var recoveryCode = model.RecoveryCode.Replace(" ", string.Empty);
+            var signInResult = await signInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
+
+            if (signInResult.Succeeded)
+            {
+                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+            }
+
+            if (signInResult.IsLockedOut)
+            {
+                this.ModelState.AddModelError("LockedOut", ErrorMessages.SiteAccessNotAllowed);
+                return View(model);
+            }
+
+
+            this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.InvalidRecoveryCode);
             return View(model);
         }
 
