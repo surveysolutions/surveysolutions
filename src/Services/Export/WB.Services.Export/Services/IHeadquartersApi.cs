@@ -9,6 +9,7 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Events;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.Services
 {
@@ -58,5 +59,7 @@ namespace WB.Services.Export.Services
 
         [Get("/api/export/v1/user/{userId}")]
         Task<User.User> GetUserAsync(Guid userId);
+        [Post("/api/export/v1/externalstorages/refreshtoken")]
+        Task<string> GetExternalStorageAccessTokenByRefreshTokenAsync(ExternalStorageType type, string refreshToken);
     }
 }
