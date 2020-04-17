@@ -180,6 +180,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                         InterviewStatus.RejectedByHeadquarters,
                         InterviewStatus.SupervisorAssigned);
                     return;
+                case InterviewStatus.Restarted:
+                    this.ThrowIfInterviewStatusIsNotOneOfExpected(
+                        InterviewStatus.InterviewerAssigned,
+                        InterviewStatus.RejectedBySupervisor,
+                        InterviewStatus.RejectedByHeadquarters,
+                        InterviewStatus.SupervisorAssigned);
+                    return;
                 default:
                     throw new InterviewException(
                         $"Status {interviewStatus} not allowed to be changed with ApplySynchronizationMetadata command",
