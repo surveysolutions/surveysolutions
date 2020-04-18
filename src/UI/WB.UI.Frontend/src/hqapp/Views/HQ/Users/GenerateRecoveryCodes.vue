@@ -28,10 +28,10 @@
                     <ul class="nav flex-block">
                         <li class="nav-item"><a class="nav-link"
                             id="profile"
-                            :href="profileUrl">Profile</a></li>                            
+                            :href="profileUrl">{{$t('Pages.AccountManage_Profile')}}</a></li>                            
                         <li class="nav-item open"><a class="nav-link active"
                             id="two-factor"
-                            :href="tfaUrl">Two-factor authentication</a></li>                            
+                            :href="tfaUrl">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>                            
                     </ul>
                 </div>
                 <div class="col-md-9">
@@ -52,14 +52,16 @@
                                 role="alert">
                                 <p>
                                     <span class="glyphicon glyphicon-warning-sign"></span>
-                                    <strong>Put these codes in a safe place.</strong>
+                                    <strong>{{$t('Pages.RecoveryCodesInfo')}}</strong>
                                 </p>
                                 <p>
-                                    If you lose your device and don't have the recovery codes you will lose access to your account.
+                                    {{$t('Pages.RecoveryCodesDescription')}}
                                 </p>
                                 <p>
-                                    Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key
-                                    used in an authenticator app you should <a v-bind:href="getUrl('../../Users/ResetAuthenticator')">reset your authenticator keys.</a>
+                                    {{$t('Pages.RecoveryCodesDescriptionLine1')}}
+
+                                    {{$t('Pages.ChandgeKeyLine1')}} <a v-bind:href="getUrl('../../Users/ResetAuthenticator')">{{$t('Pages.ChandgeKeyLine2')}}</a>                                   
+                                    
                                 </p>
                             </div>                                  
                         </div> 

@@ -149,7 +149,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+                return RedirectToAction("LogOn", new { ReturnUrl = returnUrl, RememberMe = true });
             }
 
             var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+                return RedirectToAction("LogOn", new { ReturnUrl = returnUrl, RememberMe = true });
             }
 
             var recoveryCode = model.RecoveryCode.Replace(" ", string.Empty);

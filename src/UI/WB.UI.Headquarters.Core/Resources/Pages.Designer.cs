@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authenticator app.
+        /// </summary>
+        public static string AccountManage_AuthenticatorApp {
+            get {
+                return ResourceManager.GetString("AccountManage_AuthenticatorApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change password.
         /// </summary>
         public static string AccountManage_ChangePassword {
@@ -138,6 +147,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string AccountManage_Title {
             get {
                 return ResourceManager.GetString("AccountManage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Two factor authentication.
+        /// </summary>
+        public static string AccountManage_TwoFactorAuth {
+            get {
+                return ResourceManager.GetString("AccountManage_TwoFactorAuth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add authenticator.
+        /// </summary>
+        public static string AddAuthenticator {
+            get {
+                return ResourceManager.GetString("AddAuthenticator", resourceCulture);
             }
         }
         
@@ -619,6 +646,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you wish to change the key used in an authenticator app you should.
+        /// </summary>
+        public static string ChandgeKeyLine1 {
+            get {
+                return ResourceManager.GetString("ChandgeKeyLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to reset your authenticator keys..
+        /// </summary>
+        public static string ChandgeKeyLine2 {
+            get {
+                return ResourceManager.GetString("ChandgeKeyLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset user password.
         /// </summary>
         public static string ChangePassword {
@@ -705,6 +750,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Disable2fa {
             get {
                 return ResourceManager.GetString("Disable2fa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action only disables 2FA.
+        /// </summary>
+        public static string Disable2faLine1 {
+            get {
+                return ResourceManager.GetString("Disable2faLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disabling 2FA does not change the keys used in authenticator apps..
+        /// </summary>
+        public static string Disable2faLine2 {
+            get {
+                return ResourceManager.GetString("Disable2faLine2", resourceCulture);
             }
         }
         
@@ -808,6 +871,51 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To use an authenticator app go through the following steps:.
+        /// </summary>
+        public static string EnableAuthenticatorLine1 {
+            get {
+                return ResourceManager.GetString("EnableAuthenticatorLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download a two-factor authenticator app like Microsoft Authenticator for.
+        /// </summary>
+        public static string EnableAuthenticatorLine2 {
+            get {
+                return ResourceManager.GetString("EnableAuthenticatorLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to or Google Authenticator for.
+        /// </summary>
+        public static string EnableAuthenticatorLine3 {
+            get {
+                return ResourceManager.GetString("EnableAuthenticatorLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan the QR Code or enter this key into your two factor authenticator app. Spaces and casing do not matter..
+        /// </summary>
+        public static string EnableAuthenticatorLine4 {
+            get {
+                return ResourceManager.GetString("EnableAuthenticatorLine4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Once you have scanned the QR code or input the key above, your two factor authentication app will provide you with a unique code. Enter the code in the confirmation box below..
+        /// </summary>
+        public static string EnableAuthenticatorLine5 {
+            get {
+                return ResourceManager.GetString("EnableAuthenticatorLine5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred while processing your request..
         /// </summary>
         public static string Error_Description {
@@ -876,6 +984,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Forbidden_Title {
             get {
                 return ResourceManager.GetString("Forbidden_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate recovery codes.
+        /// </summary>
+        public static string GenerateRecoveryCodes {
+            get {
+                return ResourceManager.GetString("GenerateRecoveryCodes", resourceCulture);
             }
         }
         
@@ -2626,11 +2743,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again..
+        ///   Looks up a localized string similar to You have requested to log in with a recovery code..
         /// </summary>
         public static string LogOn_LoginWithRecoveryCode {
             get {
                 return ResourceManager.GetString("LogOn_LoginWithRecoveryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to log in with a recovery code.
+        /// </summary>
+        public static string LogOn_LoginWithRecoveryLink {
+            get {
+                return ResourceManager.GetString("LogOn_LoginWithRecoveryLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t have access to your authenticator device? You can.
+        /// </summary>
+        public static string LogOn_NoAccessToDevice {
+            get {
+                return ResourceManager.GetString("LogOn_NoAccessToDevice", resourceCulture);
             }
         }
         
@@ -3382,6 +3517,42 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recovery code.
+        /// </summary>
+        public static string RecoveryCode {
+            get {
+                return ResourceManager.GetString("RecoveryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you lose your device and don&apos;t have the recovery codes you will lose access to your account..
+        /// </summary>
+        public static string RecoveryCodesDescription {
+            get {
+                return ResourceManager.GetString("RecoveryCodesDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generating new recovery codes does not change the keys used in authenticator apps..
+        /// </summary>
+        public static string RecoveryCodesDescriptionLine1 {
+            get {
+                return ResourceManager.GetString("RecoveryCodesDescriptionLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put these codes in a safe place..
+        /// </summary>
+        public static string RecoveryCodesInfo {
+            get {
+                return ResourceManager.GetString("RecoveryCodesInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reevaluate interview.
         /// </summary>
         public static string ReevaluateInterview {
@@ -3418,11 +3589,47 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you reset your authenticator key your authenticator app will not work until you reconfigure it..
+        /// </summary>
+        public static string ResetAuthenticatorLine1 {
+            get {
+                return ResourceManager.GetString("ResetAuthenticatorLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account..
+        /// </summary>
+        public static string ResetAuthenticatorLine2 {
+            get {
+                return ResourceManager.GetString("ResetAuthenticatorLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset recovery codes.
+        /// </summary>
+        public static string ResetRecoveryCodes {
+            get {
+                return ResourceManager.GetString("ResetRecoveryCodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setup authenticator.
+        /// </summary>
+        public static string SetupAuthenticator {
+            get {
+                return ResourceManager.GetString("SetupAuthenticator", resourceCulture);
             }
         }
         

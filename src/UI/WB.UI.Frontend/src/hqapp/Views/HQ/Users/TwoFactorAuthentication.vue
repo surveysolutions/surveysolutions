@@ -28,10 +28,10 @@
                     <ul class="nav flex-block">
                         <li class="nav-item"><a class="nav-link"
                             id="profile"
-                            :href="profileUrl">Profile</a></li>                            
+                            :href="profileUrl">{{$t('Pages.AccountManage_Profile')}}</a></li>                            
                         <li class="nav-item open"><a class="nav-link active"
                             id="two-factor"
-                            :href="tfaUrl">Two-factor authentication</a></li>                            
+                            :href="tfaUrl">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>                            
                     </ul>
                 </div>
                 <div class="col-md-9">
@@ -66,28 +66,28 @@
     
                             <a :href="getUrl('Users/Disable2fa')" 
                                 class="btn btn-success"
-                                style="margin-right: 5px;">Disable 2FA</a>
+                                style="margin-right: 5px;">{{$t('Pages.Disable2fa')}}</a>
                             <a :href="getUrl('../../Users/GenerateRecoveryCodes')" 
-                                class="btn btn-success">Reset recovery codes</a>
+                                class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </a>
                         </div>
 
-                        <h5>Authenticator app</h5>
+                        <h5>{{$t('Pages.AccountManage_AuthenticatorApp')}}</h5>
 
                         <a v-if="!hasAuthenticator" 
                             id="enable-authenticator" 
                             :href="getUrl('../../Users/EnableAuthenticator')" 
-                            class="btn btn-success">Add authenticator app
+                            class="btn btn-success">{{$t('Pages.AddAuthenticator')}}
                         </a>                
                         <a v-if="hasAuthenticator" 
                             id="enable-authenticator" 
                             :href="getUrl('../../Users/EnableAuthenticator')" 
                             style="margin-right: 5px;"
-                            class="btn btn-success">Setup authenticator app
+                            class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}
                         </a>
                         <a v-if="hasAuthenticator" 
                             id="reset-authenticator" 
                             :href="getUrl('../../Users/ResetAuthenticator')" 
-                            class="btn btn-success">Reset authenticator app
+                            class="btn btn-success">{{$t('Pages.ResetAuthenticator')}}
                         </a>               
                     </div>
                 </div>
