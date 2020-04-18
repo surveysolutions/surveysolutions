@@ -29,10 +29,10 @@
                     <ul class="nav flex-block">
                         <li class="nav-item"><a class="nav-link"
                             id="profile"
-                            :href="profileUrl">Profile</a></li>                            
+                            :href="profileUrl">{{$t('Pages.AccountManage_Profile')}}</a></li>                            
                         <li class="nav-item open"><a class="nav-link active"
                             id="two-factor"
-                            :href="tfaUrl">Two-factor authentication</a></li>                            
+                            :href="tfaUrl">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>                            
                     </ul>
                 </div>
                 <div class="col-md-9">
@@ -47,16 +47,14 @@
                                     disabled />
                             </form-group>                    
                         </div>
-
-                        <div> 
-                    
+                        <div>                     
                             <div class="alert alert-warning" 
                                 role="alert">
                                 <p>
-                                    <strong>Put these codes in a safe place.</strong>
+                                    <strong>{{$t('Pages.RecoveryCodesInfo')}}</strong>
                                 </p>
                                 <p>
-                                    If you lose your device and don't have the recovery codes you will lose access to your account.
+                                    {{$t('Pages.RecoveryCodesDescription')}}                                    
                                 </p>
                             </div>                    
                         </div>    
@@ -67,10 +65,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
     </HqLayout>
 </template>
 

@@ -28,10 +28,10 @@
                     <ul class="nav flex-block">
                         <li class="nav-item open"><a class="nav-link active"
                             id="profile"
-                            v-bind:href="getUrl('../../Users/Manage')">Profile</a></li>                            
+                            v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>                            
                         <li class="nav-item"><a class="nav-link "
                             id="two-factor"
-                            v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">Two-factor authentication</a></li>                            
+                            v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>                            
                     </ul>
                 </div>
                 <div class="col-md-9">

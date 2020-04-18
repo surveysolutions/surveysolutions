@@ -30,10 +30,10 @@
                     <ul class="nav flex-block">
                         <li class="nav-item"><a class="nav-link"
                             id="profile"
-                            :href="profileUrl">Profile</a></li>                            
+                            :href="profileUrl">{{$t('Pages.AccountManage_Profile')}}</a></li>                            
                         <li class="nav-item open"><a class="nav-link active"
                             id="two-factor"
-                            :href="tfaUrl">Two-factor authentication</a></li>                            
+                            :href="tfaUrl">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>                            
                     </ul>
                 </div>
                 <div class="col-md-9">
@@ -53,11 +53,10 @@
                             <div class="alert alert-warning" 
                                 role="alert">
                                 <p>
-                                    <strong>This action only disables 2FA.</strong>
+                                    <strong>{{$t('Pages.Disable2faLine1')}}</strong>
                                 </p>
                                 <p>
-                                    Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key
-                                    used in an authenticator app you should <a v-bind:href="getUrl('../../Users/ResetAuthenticator')">reset your authenticator keys.</a>
+                                    {{$t('Pages.Disable2faLine1')}} {{$t('Pages.ChandgeKeyLine1')}} <a v-bind:href="getUrl('../../Users/ResetAuthenticator')">{{$t('Pages.ChandgeKeyLine2')}}</a>
                                 </p>
                             </div>
                         </div>

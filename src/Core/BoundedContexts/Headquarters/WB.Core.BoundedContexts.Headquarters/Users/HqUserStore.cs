@@ -120,11 +120,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
             throw new NotImplementedException();
         }
 
-        //!!!!should be implemented
         protected override async Task<HqUserToken> FindTokenAsync(HqUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
-            //throw new NotImplementedException();
-
             var token = await unitOfWork.Session.Query<HqUserToken>()
                 .Where(x => x.LoginProvider == loginProvider 
                             && x.Name == name 
@@ -242,104 +239,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         public Task<Microsoft.AspNetCore.Identity.IdentityResult> ChangePasswordAsync(HqUser user, string password)
         {
             throw new NotImplementedException();
-        }
-
-        //
-        public override Task SetTwoFactorEnabledAsync(HqUser user, bool enabled, CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            this.ThrowIfDisposed();
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
-            user.TwoFactorEnabled = enabled;
-            return Task.CompletedTask;
-        }
-
-        public override Task<bool> GetTwoFactorEnabledAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            this.ThrowIfDisposed();
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
-            return Task.FromResult<bool>(user.TwoFactorEnabled);
-        }
-
-        //in base class
-        /*public override async Task<string> GetTokenAsync(HqUser user, string loginProvider, string name, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            this.ThrowIfDisposed();
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
-            return (await this.FindTokenAsync(user, loginProvider, name, cancellationToken))?.Value;
-        }*/
-
-        //from base
-        public override async Task SetTokenAsync(
-            HqUser user,
-            string loginProvider,
-            string name,
-            string value,
-            CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            this.ThrowIfDisposed();
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
-            HqUserToken tokenAsync = await this.FindTokenAsync(user, loginProvider, name, cancellationToken);
-            if (tokenAsync == null)
-                await this.AddUserTokenAsync(this.CreateUserToken(user, loginProvider, name, value));
-            else
-                tokenAsync.Value = value;
-        }
-
-
-        //copy from base
-        //token names control if needed
-        public override async Task<int> CountCodesAsync(HqUser user, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            this.ThrowIfDisposed();
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
-
-            string str = await this.GetTokenAsync(user, "[AspNetUserStore]", "RecoveryCodes", cancellationToken) ?? "";
-            return str.Length <= 0 ? 0 : str.Split(';', StringSplitOptions.None).Length;
-        }
-
-        public override async Task<bool> RedeemCodeAsync(HqUser user, string code, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            this.ThrowIfDisposed();
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
-            if (code == null)
-                throw new ArgumentNullException(nameof(code));
-            string[] strArray = (await this.GetTokenAsync(user, "[AspNetUserStore]", "RecoveryCodes", cancellationToken) ?? "").Split(';', StringSplitOptions.None);
-            if (!((IEnumerable<string>)strArray).Contains<string>(code))
-                return false;
-            List<string> stringList = new List<string>(((IEnumerable<string>)strArray).Where<string>((Func<string, bool>)(s => s != code)));
-            await this.ReplaceCodesAsync(user, (IEnumerable<string>)stringList, cancellationToken);
-            return true;
-        }
-
-        public override Task ReplaceCodesAsync(HqUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
-        {
-            string str = string.Join(";", recoveryCodes);
-            return this.SetTokenAsync(user, "[AspNetUserStore]", "RecoveryCodes", str, cancellationToken);
-        }
-
-        //from base
-        //login provider control
-        public override Task<string> GetAuthenticatorKeyAsync(HqUser user, CancellationToken cancellationToken)
-        {
-            return this.GetTokenAsync(user, "[AspNetUserStore]", "AuthenticatorKey", cancellationToken);
-        }
-
-        //from base
-        public override Task SetAuthenticatorKeyAsync(HqUser user, string key, CancellationToken cancellationToken)
-        {
-            return this.SetTokenAsync(user, "[AspNetUserStore]", "AuthenticatorKey", key, cancellationToken);
         }
     }
 }
