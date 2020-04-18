@@ -203,8 +203,8 @@ namespace WB.UI.Headquarters.Controllers
                 },
                 Api = new
                 {
-                    ResetAuthenticatorKeyUrl = Url.Action("ResetAuthenticatorKey"),
-                    EnableAuthenticatorUrl = Url.Action("EnableAuthenticator"),
+                    ResetAuthenticatorKeyUrl = Url.Action("ResetAuthenticatorKey", new { id = id }),
+                    EnableAuthenticatorUrl = Url.Action("EnableAuthenticator", new { id = id }),
                 }
             });
         }
@@ -232,8 +232,8 @@ namespace WB.UI.Headquarters.Controllers
                 },
                 Api = new
                 {
-                    GenerateRecoveryCodesUrl = Url.Action("GenerateRecoveryCodes"),
-                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes")
+                    GenerateRecoveryCodesUrl = Url.Action("GenerateRecoveryCodes", new { id = id }),
+                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = id })
                 }
             });
         }
@@ -293,8 +293,8 @@ namespace WB.UI.Headquarters.Controllers
                 },
                 Api = new
                 {
-                    Disable2faUrl = Url.Action("DisableTwoFactor"),
-                    RedirectUrl = Url.Action("TwoFactorAuthentication")
+                    Disable2faUrl = Url.Action("DisableTwoFactor", new { id = id }),
+                    RedirectUrl = Url.Action("TwoFactorAuthentication", new { id = id })
                 }
             });
         }
@@ -340,8 +340,8 @@ namespace WB.UI.Headquarters.Controllers
                 },
                 Api = new
                 {
-                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode"),
-                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes")
+                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = id }),
+                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = id })
                 }
             });
         }
@@ -566,7 +566,7 @@ namespace WB.UI.Headquarters.Controllers
             
             if (this.ModelState.IsValid)
             {
-                var verificationCode = editModel.VerificationCode.Replace(" ", string.Empty).Replace("-", string.Empty);
+                var verificationCode = editModel?.VerificationCode?.Replace(" ", string.Empty).Replace("-", string.Empty);
 
                 var is2faTokenValid = await userManager.VerifyTwoFactorTokenAsync(
                     currentUser, userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
@@ -632,7 +632,8 @@ namespace WB.UI.Headquarters.Controllers
                 var disable2faResult = await userManager.SetTwoFactorEnabledAsync(currentUser, false);
                 if (!disable2faResult.Succeeded)
                 {
-                    throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user '{currentUser.UserName}'.");
+                    this.ModelState.AddModelError(nameof(TwoFAUser.UserId),
+                        "Invalid User");
                 }
             }
 
@@ -659,11 +660,14 @@ namespace WB.UI.Headquarters.Controllers
                 var userId = await userManager.GetUserIdAsync(currentUser);
                 if (!isTwoFactorEnabled)
                 {
-                    throw new InvalidOperationException($"Cannot generate recovery codes for user with ID '{userId}' as they do not have 2FA enabled.");
+                    this.ModelState.AddModelError(nameof(TwoFAUser.UserId),
+                        "Invalid User");
                 }
-
-                var recoveryCodes = await userManager.GenerateNewTwoFactorRecoveryCodesAsync(currentUser, 10);
-                RecoveryCodes = recoveryCodes.ToArray();
+                else
+                {
+                    var recoveryCodes = await userManager.GenerateNewTwoFactorRecoveryCodesAsync(currentUser, 10);
+                    RecoveryCodes = recoveryCodes.ToArray();
+                }
             }
 
             return this.ModelState.ErrorsToJsonResult();

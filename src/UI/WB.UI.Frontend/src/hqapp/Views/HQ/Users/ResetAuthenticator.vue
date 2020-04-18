@@ -29,10 +29,10 @@
                     <ul class="nav flex-block">
                         <li class="nav-item"><a class="nav-link"
                             id="profile"
-                            :href="profileUrl">Profile</a></li>                            
+                            :href="profileUrl">{{$t('Pages.AccountManage_Profile')}}</a></li>                            
                         <li class="nav-item open"><a class="nav-link active"
                             id="two-factor"
-                            :href="tfaUrl">Two-factor authentication</a></li>                            
+                            :href="tfaUrl">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>                            
                     </ul>
                 </div>
                 <div class="col-md-9">
@@ -53,11 +53,10 @@
                                 role="alert">
                                 <p>
                                     <span class="glyphicon glyphicon-warning-sign"></span>
-                                    <strong>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</strong>
+                                    <strong>{{$t('Pages.ResetAuthenticatorLine1')}}</strong>
                                 </p>
                                 <p>
-                                    This process disables 2FA until you verify your authenticator app.
-                                    If you do not complete your authenticator app configuration you may lose access to your account.
+                                    {{$t('Pages.ResetAuthenticatorLine2')}}
                                 </p>
                             </div>
                         </div>
@@ -142,7 +141,7 @@ export default {
             return '/'
         },
         profileUrl(){
-            return this.getUrl('../../Users/Manage/')
+            return this.getUrl('../../Users/Manage')
         },
         tfaUrl(){
             return this.getUrl('../../Users/TwoFactorAuthentication') 

@@ -41,7 +41,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12 left-column">
                 <div class="centered-box-table">
                     <div class="centered-box-table-cell">
-                        @using (Html.BeginForm("LogOn", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post,
+                        @using (Html.BeginForm("LoginWithRecoveryCode", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post,
                           true, new { id = "log-in", @class = "log-in" }))
                         {
                             <div class="retina headquarter">Survey Solutions Headquarters</div>
@@ -61,7 +61,7 @@
                             </div>
 
                             <div class="form-group">
-                                @Html.TextBoxFor(m => m.RecoveryCode, new { @class = "form-control", @autofocus = @"autofocus", autocomplete = "off", placeholder = Pages.AuthenticatorCode })
+                                @Html.TextBoxFor(m => m.RecoveryCode, new { @class = "form-control", @autofocus = @"autofocus", autocomplete = "off", placeholder = Pages.RecoveryCode })
                             </div>
 
                             <div class="form-actions">

@@ -28,10 +28,10 @@
                     <ul class="nav flex-block">
                         <li class="nav-item"><a class="nav-link"
                             id="profile"
-                            :href="profileUrl">Profile</a></li>                            
+                            :href="profileUrl">{{$t('Pages.AccountManage_Profile')}}</a></li>                            
                         <li class="nav-item open"><a class="nav-link active"
                             id="two-factor"
-                            :href="tfaUrl">Two-factor authentication</a></li>                            
+                            :href="tfaUrl">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>                            
                     </ul>
                 </div>
                 <div class="col-md-9">
@@ -48,30 +48,31 @@
                         </div>
 
                         <div >                 
-                            <p>To use an authenticator app go through the following steps:</p>
+                            <p>{{$t('Pages.EnableAuthenticatorLine1')}}</p>
                             <ol class="list">
                                 <li>
                                     <p>
-                                        Download a two-factor authenticator app like Microsoft Authenticator for
+                                        {{$t('Pages.EnableAuthenticatorLine2')}}
                                         <a href="https://go.microsoft.com/fwlink/?Linkid=825071">Windows Phone</a>,
-                                        <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a> and
-                                        <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a> or
-                                        Google Authenticator for
-                                        <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</a> and
+                                        <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a>,
+                                        <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a> 
+                                        
+                                        {{$t('Pages.EnableAuthenticatorLine3')}}
+                                        
+                                        <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</a>,
                                         <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>.
                                     </p>
                                 </li>
                                 <li>
-                                    <p>Scan the QR Code or enter this key <kbd>{{sharedKey}}</kbd> into your two factor authenticator app. Spaces and casing do not matter.</p>
-                            
+                                    <p>{{$t('Pages.EnableAuthenticatorLine4')}}</p>
+                                    <p><kbd>{{sharedKey}}</kbd></p>
                                     <canvas id="qrCode"></canvas>
                                     <div id="qrCodeData" 
                                         data-url="{{authenticatorUri}}"></div>
                                 </li>
                                 <li>
                                     <p>
-                                        Once you have scanned the QR code or input the key above, your two factor authentication app will provide you
-                                        with a unique code. Enter the code in the confirmation box below.
+                                        {{$t('Pages.EnableAuthenticatorLine5')}}
                                     </p>
 
                                     <form-group
@@ -200,6 +201,23 @@ export default {
                     self.processModelState(error.response.data, self)
                 }
             )
+        },
+        processModelState: function(response, vm) {
+            if (response) {
+                each(response, function(state) {
+                    var message = ''
+                    var stateErrors = state.value
+                    if (stateErrors) {
+                        each(stateErrors, function(stateError, j) {
+                            if (j > 0) {
+                                message += '; '
+                            }
+                            message += stateError
+                        })
+                        vm.$set(vm.modelState, state.key, message)
+                    }
+                })
+            }
         },
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
