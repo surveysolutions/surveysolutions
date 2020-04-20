@@ -10,7 +10,6 @@
                 <Typeahead
                     ref="supervisorControl"
                     control-id="supervisorToAssign"
-                    fuzzy
                     data-vv-name="supervisor"
                     data-vv-as="supervisor"
                     :placeholder="$t('Common.AllSupervisors')"

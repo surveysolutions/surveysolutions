@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_verify_web_specuial_passwords_no_error_should_be_fired()
+        public void when_verify_web_special_passwords_no_error_should_be_fired()
         {
             // arrange
             var password = "password";
