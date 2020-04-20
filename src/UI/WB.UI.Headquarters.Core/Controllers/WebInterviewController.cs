@@ -730,6 +730,9 @@ namespace WB.UI.Headquarters.Controllers
                 ResumeButton = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeButton).ToString(),
                     questionnaireBrowseItem.Title),
+                Description = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.Invitation).ToString(),
+                    questionnaireBrowseItem.Title),
                 CaptchaErrors = ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any()
                                 ? ViewData.ModelState["InvalidCaptcha"].Errors.Select(e => e.ErrorMessage).ToList()
                                 : new List<string>(),
