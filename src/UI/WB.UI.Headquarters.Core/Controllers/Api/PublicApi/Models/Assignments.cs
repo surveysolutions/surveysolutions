@@ -68,17 +68,17 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// Archived status to filter by. True or False
         /// </summary>
         [DataMember]
-        public bool Archived { get; set; } = false;
+        public bool Archived { get; set; }
 
         /// <summary>
-        /// Date when assignment were created
+        /// Date (UTC) when assignment were created
         /// Can be used for ordering
         /// </summary>
         [DataMember]
         public DateTime CreatedAtUtc { get; set; }
 
         /// <summary>
-        /// Last Update Date of assignment
+        /// Last Update Date (UTC) of assignment
         /// Can be used for ordering
         /// </summary>
         [DataMember]
@@ -92,6 +92,18 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember]
         public bool? WebMode { get; set; }
+        
+        /// <summary>
+        /// Represents date (UTC) when assignment was received by tablet
+        /// </summary>
+        [DataMember]
+        public DateTime? ReceivedByTabletAtUtc { get; set; }
+
+        /// <summary>
+        /// Determines if interview from this assignment must record voice during interview (only on tablet)
+        /// </summary>
+        [DataMember]
+        public bool IsAudioRecordingEnabled { get; set; }
     }
 
     public class AssignmentAssignRequest

@@ -21,7 +21,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     [ApiNoCache]
     [WebInterviewAuthorize(InterviewIdQueryString = "interviewId")]
     [Route("api/webinterview/commands")]
-    [Enumerator.Native.WebInterview.ObserverNotAllowed]
+    [ObserverNotAllowed]
     public class InterviewCommandsController : CommandsController
     {
         private readonly IAuthorizedUser authorizedUser;

@@ -59,8 +59,7 @@
 </template>
 
 <script>
-import Fuse from 'fuse.js'
-import { assign, chain, find, escape, escapeRegExp } from 'lodash'
+import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash'
 
 export default {
     name: 'Typeahead',
@@ -82,10 +81,6 @@ export default {
         noSearch: Boolean,
         noClear: Boolean,
         disabled: {
-            type: Boolean,
-            default: false,
-        },
-        fuzzy: {
             type: Boolean,
             default: false,
         },
@@ -152,17 +147,6 @@ export default {
             this.searchTerm = ''
         })
 
-        this.fuseOptions = {
-            shouldSort: true,
-            includeMatches: true,
-            threshold: this.fuzzy ? 0.35 : 0,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-            keys: ['value'],
-        }
-
         this.fetchOptions(this.searchTerm || this.selectedValue)
     },
 
@@ -225,9 +209,10 @@ export default {
                 .catch(() => (self.isLoading = false))
         },
         fetchLocalOptions(){
-            if (this.searchTerm != '') {
-                const fuse = new Fuse(this.values, this.fuseOptions)
-                this.options = this.setOptions(fuse.search(this.searchTerm), false)
+            if (this.searchTerm != '') {                
+                const search = this.searchTerm
+                const filtered = filter(this.values, v => v.value.toLowerCase().indexOf(search) >= 0)
+                this.options = this.setOptions(filtered)
             } else {
                 this.options = this.setOptions(this.values)
             }

@@ -358,7 +358,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                string.IsNullOrEmpty(assignmentRow.Email?.Value);
 
         private bool IncosistentWebmodeAndPassword(AssignmentPassword password, PreloadingAssignmentRow assignmentRow)
-            => !string.IsNullOrEmpty(password.Value) && (assignmentRow.WebMode.WebMode == false || assignmentRow.WebMode == null);
+            => !string.IsNullOrEmpty(password.Value) && (assignmentRow.WebMode == null || assignmentRow.WebMode.WebMode == false);
 
         private bool IncosistentWebmodeAndEmail(AssignmentEmail email, PreloadingAssignmentRow assignmentRow)
             => !string.IsNullOrEmpty(email.Value) && (assignmentRow.WebMode?.WebMode == false || assignmentRow.WebMode == null);

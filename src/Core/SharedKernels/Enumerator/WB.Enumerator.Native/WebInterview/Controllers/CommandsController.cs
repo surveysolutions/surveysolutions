@@ -14,6 +14,7 @@ using WB.Enumerator.Native.WebInterview.Models;
 
 namespace WB.Enumerator.Native.WebInterview.Controllers
 {
+    [HandleCommandError]
     public abstract class CommandsController : ControllerBase
     {
         protected readonly ICommandService commandService;
