@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
             var result = await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
                 (DataExportFormat) request.ExportType, interviewStatus, request.From, request.To, password,
-                request.AccessToken, null, (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType);
+                request.AccessToken, request.RefreshToken, (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType);
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {request.InterviewStatus.ToString() ?? ""}",
@@ -248,6 +248,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             /// Access token to external storage
             /// </summary>
             public string AccessToken { get; set; }
+            /// <summary>
+            /// Refresh token to external storage
+            /// </summary>
+            public string RefreshToken { get; set; }
             /// <summary>
             /// External storage type
             /// </summary>
