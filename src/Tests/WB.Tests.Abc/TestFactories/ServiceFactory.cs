@@ -374,13 +374,6 @@ namespace WB.Tests.Abc.TestFactories
                                             Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
-        public ITeamInterviewsFactory TeamInterviewsFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)
-        {
-            return new TeamInterviewsFactory(interviewSummarys ??
-                                             Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
-        }
-
         public IRandomValuesSource RandomValuesSource(params int[] sequence)
         {
             var result = Substitute.For<IRandomValuesSource>();
