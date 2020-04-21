@@ -64,7 +64,7 @@
                                 <p>You should <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a>.</p>
                             </div>                    
     
-                            <a :href="getUrl('Users/Disable2fa')" 
+                            <a :href="getUrl('./Disable2fa')" 
                                 class="btn btn-success"
                                 style="margin-right: 5px;">{{$t('Pages.Disable2fa')}}</a>
                             <a :href="getUrl('../../Users/GenerateRecoveryCodes')" 
