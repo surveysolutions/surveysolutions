@@ -185,7 +185,7 @@ export default {
             if (event.finished !== false) {
                 const MIN_HEIGHT = 16
                 event.api.setHeaderHeight(MIN_HEIGHT)
-                const headerCells = $(this.$refs.tableRoster.$el).find('.ag-header-cell-label')
+                const headerCells = this.$refs.tableRoster.$el.getElementsByClassName('ag-header-cell-label')
                 let minHeight = MIN_HEIGHT
                 for (let index = 0; index < headerCells.length; index++) {
                     const cell = headerCells[index]
