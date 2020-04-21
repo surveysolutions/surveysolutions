@@ -53,6 +53,21 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
             => this.Read(id, minVersion);
 
+        public IEnumerable<CommittedEvent> ReadAfter(Guid id, Guid eventId)
+        {
+            var rawEvents = sessionProvider.Session.Connection.Query<RawEvent>(
+                $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                $"FROM {tableNameWithSchema} " +
+                $"WHERE eventsourceid= @sourceId AND eventsequence > (select eventsequence from {tableNameWithSchema} where eventsourceid= @sourceId AND id = @eventId) " +
+                $"ORDER BY eventsequence",
+                new { sourceId = id, eventId }, buffered: true);
+
+            foreach (var committedEvent in ToCommittedEvent(rawEvents))
+            {
+                yield return committedEvent;
+            }
+        }
+
         public int? GetLastEventSequence(Guid id)
         {
             return this.sessionProvider.Session.Connection.ExecuteScalar<int?>(
