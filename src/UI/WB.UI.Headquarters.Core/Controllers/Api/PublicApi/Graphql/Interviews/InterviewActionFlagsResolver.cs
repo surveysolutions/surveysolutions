@@ -11,26 +11,25 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
     {
         public List<InterviewActionFlags> GetActionFlags([Parent] InterviewSummary interviewSummary, [Service] IAuthorizedUser user)
         {
-            var x = interviewSummary;
             IEnumerable<InterviewActionFlags> GetFlags()
             {
                 if (user.IsInterviewer)
                 {
-                    if ((x.Status == InterviewStatus.Created
-                         || x.Status == InterviewStatus.SupervisorAssigned
-                         || x.Status == InterviewStatus.InterviewerAssigned
-                         || x.Status == InterviewStatus.SentToCapi) &&
-                        !x.ReceivedByInterviewer && !x.WasCompleted)
+                    if ((interviewSummary.Status == InterviewStatus.Created
+                         || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                         || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                         || interviewSummary.Status == InterviewStatus.SentToCapi) &&
+                        !interviewSummary.ReceivedByInterviewer && !interviewSummary.WasCompleted)
                     {
                         yield return InterviewActionFlags.CanBeDeleted;
                     }
 
-                    if (x.Status == InterviewStatus.Completed)
+                    if (interviewSummary.Status == InterviewStatus.Completed)
                     {
                         yield return InterviewActionFlags.CanBeRestarted;
                     }
 
-                    if (x.Status != InterviewStatus.Completed)
+                    if (interviewSummary.Status != InterviewStatus.Completed)
                     {
                         yield return InterviewActionFlags.CanBeOpened;
                     }
@@ -40,22 +39,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 
                 if (user.IsSupervisor)
                 {
-                    if (x.Status == InterviewStatus.Created
-                        || x.Status == InterviewStatus.SupervisorAssigned
-                        || x.Status == InterviewStatus.InterviewerAssigned
-                        || x.Status == InterviewStatus.RejectedBySupervisor)
+                    if (interviewSummary.Status == InterviewStatus.Created
+                        || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                        || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                        || interviewSummary.Status == InterviewStatus.RejectedBySupervisor)
                     {
                         yield return InterviewActionFlags.CanBeReassigned;
                     }
 
-                    if (x.Status == InterviewStatus.Completed 
-                        || x.Status == InterviewStatus.RejectedByHeadquarters)
+                    if (interviewSummary.Status == InterviewStatus.Completed 
+                        || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters)
                     {
                         yield return InterviewActionFlags.CanBeApproved;
                     }
 
-                    if (x.Status == InterviewStatus.Completed
-                        || x.Status == InterviewStatus.RejectedByHeadquarters)
+                    if (interviewSummary.Status == InterviewStatus.Completed
+                        || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters)
                     {
                         yield return InterviewActionFlags.CanBeRejected;
                     }
@@ -63,27 +62,27 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     yield break;
                 }
 
-                if ((x.Status == InterviewStatus.Created
-                     || x.Status == InterviewStatus.SupervisorAssigned
-                     || x.Status == InterviewStatus.InterviewerAssigned
-                     || x.Status == InterviewStatus.SentToCapi) &&
-                    !x.ReceivedByInterviewer && !x.WasCompleted)
+                if ((interviewSummary.Status == InterviewStatus.Created
+                     || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                     || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                     || interviewSummary.Status == InterviewStatus.SentToCapi) &&
+                    !interviewSummary.ReceivedByInterviewer && !interviewSummary.WasCompleted)
                     yield return InterviewActionFlags.CanBeDeleted;
 
-                if (x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed)
+                if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor || interviewSummary.Status == InterviewStatus.Completed)
                     yield return InterviewActionFlags.CanBeApproved;
 
-                if (x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed)
+                if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor || interviewSummary.Status == InterviewStatus.Completed)
                     yield return InterviewActionFlags.CanBeRejected;
 
-                if (x.Status == InterviewStatus.ApprovedByHeadquarters)
+                if (interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters)
                     yield return InterviewActionFlags.CanBeUnApprovedByHq;
 
-                if (x.Status == InterviewStatus.SupervisorAssigned
-                    || x.Status == InterviewStatus.InterviewerAssigned
-                    || x.Status == InterviewStatus.Completed
-                    || x.Status == InterviewStatus.RejectedBySupervisor
-                    || x.Status == InterviewStatus.RejectedByHeadquarters)
+                if (interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                    || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                    || interviewSummary.Status == InterviewStatus.Completed
+                    || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                    || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters)
                     yield return InterviewActionFlags.CanBeReassigned;
             }
 
