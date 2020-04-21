@@ -139,6 +139,40 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         [AntiForgeryFilter]
+        public async Task<ActionResult> ChangePassword(Guid? id)
+        {
+            var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
+            if (user == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+
+            return View(new
+            {
+                UserInfo = new
+                {
+                    UserId = user.Id,
+                    Email = user.Email,
+                    PersonName = user.FullName,
+                    PhoneNumber = user.PhoneNumber,
+                    UserName = user.UserName,
+                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
+                    IsOwnProfile = user.Id == this.authorizedUser.Id,
+                    IsLockedByHeadquarters = user.IsLockedByHeadquaters,
+                    IsLockedBySupervisor = user.IsLockedBySupervisor,
+                    IsObserving = this.authorizedUser.IsObserving,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter
+                },
+                Api = new
+                {
+                    UpdatePasswordUrl = Url.Action("UpdatePassword"),
+                    UpdateUserUrl = Url.Action("UpdateUser")
+                }
+            });
+        }
+
+        [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AntiForgeryFilter]
         public async Task<ActionResult> TwoFactorAuthentication(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());

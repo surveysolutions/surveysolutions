@@ -11,6 +11,7 @@ import ResetAuthenticator from './ResetAuthenticator'
 import ShowRecoveryCodes from './ShowRecoveryCodes'
 import GenerateRecoveryCodes from './GenerateRecoveryCodes'
 import Disable2fa from './Disable2fa'
+import ChangePassword from './ChangePassword'
 
 export default class UsersComponent {
     constructor(rootStore) {
@@ -77,6 +78,12 @@ export default class UsersComponent {
         },
         {
             path: '/Users/Disable2fa/:userId', component: Disable2fa,
+        },
+        {
+            path: '/Users/ChangePassword/:userId', component: ChangePassword,
+        },
+        {
+            path: '/Users/ChangePassword/', component: ChangePassword,
         }]
     }
 }

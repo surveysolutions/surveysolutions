@@ -204,6 +204,9 @@
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Manage account</value>
   </data>
+  <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
     <value>Invalid property</value>
   </data>

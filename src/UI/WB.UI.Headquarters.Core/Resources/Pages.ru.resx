@@ -126,6 +126,9 @@
   <data name="AccountManage_Profile" xml:space="preserve">
     <value>Профиль</value>
   </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>Смена пароля</value>
+  </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Двухфакторная аутентификация</value>
   </data>

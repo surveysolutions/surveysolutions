@@ -28,7 +28,10 @@
                     <ul class="nav flex-block">
                         <li class="nav-item"><a class="nav-link"
                             id="profile"
-                            :href="profileUrl">{{$t('Pages.AccountManage_Profile')}}</a></li>                            
+                            :href="profileUrl">{{$t('Pages.AccountManage_Profile')}}</a></li>
+                        <li class="nav-item"><a class="nav-link"
+                            id="profile"
+                            v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                            
                         <li class="nav-item open"><a class="nav-link active"
                             id="two-factor"
                             :href="tfaUrl">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>                            
