@@ -165,9 +165,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         protected IActionResult DetailsAfter(Guid id, Guid eventId)
         {
-            var allEvents = eventStore.Read(id, 0);
-            var endOfEvents = allEvents.SkipWhile(e => e.EventIdentifier != eventId).Skip(1).ToList();
-            return new JsonResult(endOfEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
+            var events = eventStore.ReadAfter(id, eventId).ToList();
+            return new JsonResult(events, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
         }
 
         protected IActionResult PostV3(InterviewPackageApiView package)
