@@ -5,7 +5,6 @@
             <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead
                     control-id="questionnaireId"
-                    fuzzy
                     data-vv-name="questionnaireId"
                     data-vv-as="questionnaire"
                     :placeholder="$t('Common.AllQuestionnaires')"
@@ -17,7 +16,6 @@
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
                 <Typeahead
                     control-id="questionnaireVersion"
-                    fuzzy
                     data-vv-name="questionnaireVersion"
                     data-vv-as="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
