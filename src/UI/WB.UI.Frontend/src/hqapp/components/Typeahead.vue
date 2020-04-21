@@ -210,7 +210,7 @@ export default {
         },
         fetchLocalOptions(){
             if (this.searchTerm != '') {                
-                const search = this.searchTerm
+                const search = this.searchTerm.toLowerCase()
                 const filtered = filter(this.values, v => v.value.toLowerCase().indexOf(search) >= 0)
                 this.options = this.setOptions(filtered)
             } else {
