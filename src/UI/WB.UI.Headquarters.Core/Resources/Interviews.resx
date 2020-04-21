@@ -132,6 +132,9 @@
   <data name="AssignReceivedConfirm" xml:space="preserve">
     <value>Apply on {{count}} interview(s) which Interviewer already received</value>
   </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Warning!!! All new data filled by interviewer and not synchronized yet will be loss after reassign</value>
+  </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;
 &lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt; could be reassigned.</value>

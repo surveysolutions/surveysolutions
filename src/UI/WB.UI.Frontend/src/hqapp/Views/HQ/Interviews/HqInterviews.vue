@@ -152,6 +152,11 @@
                         <span class="tick"></span>
                         {{$t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems())}}
                     </label>
+                    <br />
+                    <span v-if="isReassignReceivedByInterviewer"
+                        style="color:red;">
+                        {{$t("Interviews.AssignReceivedWarning")}}
+                    </span>
                 </div>
             </form>
             <div slot="actions">

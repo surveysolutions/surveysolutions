@@ -217,4 +217,7 @@
   <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
     <value>Отображает общее количество вопросов и статических текстов с ошибкой. Несколько ошибок на одном и том же объекте в интервью считается одной ошибкой</value>
   </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Внимание!!! Данное действие может привести к потери данных.</value>
+  </data>
 </root>
