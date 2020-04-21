@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using Polly;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 using File = System.IO.File;
@@ -19,24 +18,22 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
     internal class OneDriveDataClient : IExternalDataClient
     {
         private readonly ILogger<OneDriveDataClient> logger;
-        private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly ITenantContext tenantContext;
         private IGraphServiceClient graphServiceClient;
-        private TenantInfo tenant;
         private string refreshToken;
 
         private static long MaxAllowedFileSizeByMicrosoftGraphApi = 4 * 1024 * 1024;
 
         public OneDriveDataClient(
             ILogger<OneDriveDataClient> logger,
-            ITenantApi<IHeadquartersApi> tenantApi)
+            ITenantContext tenantContext)
         {
             this.logger = logger;
-            this.tenantApi = tenantApi;
+            this.tenantContext = tenantContext;
         }
 
         public void InitializeDataClient(string accessToken, string refreshToken, TenantInfo tenant)
         {
-            this.tenant = tenant;
             this.refreshToken = refreshToken;
 
             this.CreateClient(accessToken);
@@ -60,7 +57,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             => string.Join("/", path.Where( p => p != null));
 
         public Task<string> CreateApplicationFolderAsync(string subFolder)
-            => Task.FromResult(Join("Survey Solutions", tenant.Name, subFolder));
+            => Task.FromResult(Join("Survey Solutions", this.tenantContext.Tenant.Name, subFolder));
 
         public Task<string> CreateFolderAsync(string folder, string parentFolder)
             => Task.FromResult(Join(parentFolder, folder));
@@ -117,7 +114,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 {
                     this.logger.LogError(exception, $"Unauthorized exception during request to OneDrive");
 
-                    var newAccessToken = await this.tenantApi.For(this.tenant)
+                    var newAccessToken = await this.tenantContext.Api
                         .GetExternalStorageAccessTokenByRefreshTokenAsync(ExternalStorageType.OneDrive,
                             this.refreshToken).ConfigureAwait(false);
 

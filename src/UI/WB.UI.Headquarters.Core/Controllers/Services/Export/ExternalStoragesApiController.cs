@@ -27,22 +27,22 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         {
             var response = await this.GetAccessTokenByRefreshTokenAsync(type, refreshToken);
 
-            return this.Ok(response.access_token);
+            return this.Ok(response.AccessToken);
         }
         
         private async Task<ExternalStorageTokenResponse> GetAccessTokenByRefreshTokenAsync(ExternalStorageType type, string refreshToken)
         {
             var storageSettings = this.GetExternalStorageSettings(type);
-            var client =  RestService.For<IExternalStoragesApi>(new HttpClient()
+            var client =  RestService.For<IOAuth2Api>(new HttpClient()
             {
                 BaseAddress = new Uri(storageSettings.TokenUri)
             });
             var request = new ExternalStorageRefreshTokenRequest
             {
-                refresh_token = refreshToken,
-                client_id = storageSettings.ClientId,
-                client_secret = storageSettings.ClientSecret,
-                grant_type = "refresh_token"
+                RefreshToken = refreshToken,
+                ClientId = storageSettings.ClientId,
+                ClientSecret = storageSettings.ClientSecret,
+                GrantType = "refresh_token"
             };
 
             return await client.GetAccessTokenByRefreshTokenAsync(request);

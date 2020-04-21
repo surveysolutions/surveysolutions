@@ -322,8 +322,8 @@ namespace WB.UI.Headquarters.API
                     state.InterviewStatus,
                     state.FromDate?.ToUniversalTime(),
                     state.ToDate?.ToUniversalTime(),
-                    response.access_token,
-                    response.refresh_token,
+                    response.AccessToken,
+                    response.RefreshToken,
                     state.Type);
 
                 return ExportToExternalStorage();
@@ -337,17 +337,17 @@ namespace WB.UI.Headquarters.API
         private Task<ExternalStorageTokenResponse> GetExternalStorageAuthTokenAsync(ExternalStorageStateModel state, string code)
         {
             var storageSettings = this.GetExternalStorageSettings(state.Type);
-            var client =  RestService.For<IExternalStoragesApi>(new HttpClient()
+            var client =  RestService.For<IOAuth2Api>(new HttpClient()
             {
                 BaseAddress = new Uri(storageSettings.TokenUri)
             });
             var request = new ExternalStorageAccessTokenRequest
             {
-                code = code,
-                client_id = storageSettings.ClientId,
-                client_secret = storageSettings.ClientSecret,
-                redirect_uri = this.externalStoragesSettings.OAuth2.RedirectUri,
-                grant_type = "authorization_code"
+                Code = code,
+                ClientId = storageSettings.ClientId,
+                ClientSecret = storageSettings.ClientSecret,
+                RedirectUri = this.externalStoragesSettings.OAuth2.RedirectUri,
+                GrantType = "authorization_code"
             };
             
             return client.GetTokensByAuthorizationCodeAsync(request);
