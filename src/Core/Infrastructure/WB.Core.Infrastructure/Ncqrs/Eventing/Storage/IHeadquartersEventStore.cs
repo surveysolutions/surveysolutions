@@ -32,5 +32,6 @@ namespace Ncqrs.Eventing.Storage
 
         Task<int> TotalEventsCountAsync(Guid aggregateRootId);
         Guid? GetLastSequenceEventId(Guid interviewId, params string[] excludeTypeNames);
+        IEnumerable<CommittedEvent> ReadAfter(Guid id, Guid eventId);
     }
 }
