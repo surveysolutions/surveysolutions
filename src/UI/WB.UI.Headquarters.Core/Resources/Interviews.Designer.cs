@@ -109,6 +109,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warning!!! All new data filled by interviewer and not synchronized yet will be loss after reassign.
+        /// </summary>
+        public static string AssignReceivedWarning {
+            get {
+                return ResourceManager.GetString("AssignReceivedWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;
         ///&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt; could be reassigned..
         /// </summary>
