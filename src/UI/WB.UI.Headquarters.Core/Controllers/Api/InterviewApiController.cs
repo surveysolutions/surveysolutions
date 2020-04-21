@@ -26,18 +26,15 @@ namespace WB.UI.Headquarters.Controllers.Api
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
-        private readonly ITeamInterviewsFactory teamInterviewViewFactory;
         private readonly IChangeStatusFactory changeStatusFactory;
 
         public InterviewApiController(
             IAuthorizedUser authorizedUser, 
             IAllInterviewsFactory allInterviewsViewFactory,
-            ITeamInterviewsFactory teamInterviewViewFactory,
             IChangeStatusFactory changeStatusFactory)
         {
             this.authorizedUser = authorizedUser;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
-            this.teamInterviewViewFactory = teamInterviewViewFactory;
             this.changeStatusFactory = changeStatusFactory;
         }
 
@@ -124,40 +121,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                 RecordsTotal = allInterviews.TotalCount,
                 RecordsFiltered = allInterviews.TotalCount,
                 Data = allInterviews.Items
-            };
-
-            return response;
-        }
-        
-        [HttpGet]
-        public TeamInterviewsDataTableResponse GetTeamInterviews([FromQuery] InterviewsDataTableRequest request)
-        {
-            var input = new TeamInterviewsInputModel
-            {
-                Page = request.PageIndex,
-                PageSize = request.PageSize,
-                Orders = request.GetSortOrderRequestItems(),
-                QuestionnaireId = request.QuestionnaireId,
-                QuestionnaireVersion = request.QuestionnaireVersion,
-                SearchBy = request.SearchBy,
-                Statuses = GetFilterByStatus(request),
-                ResponsibleName = request.ResponsibleName,
-                ViewerId = this.authorizedUser.Id,
-                UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
-                UnactiveDateEnd = request.UnactiveDateEnd?.ToUniversalTime(),
-                AssignmentId = request.AssignmentId
-            };
-
-            var teamInterviews = this.teamInterviewViewFactory.Load(input);
-
-            foreach (var x in teamInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
-
-            var response = new TeamInterviewsDataTableResponse
-            {
-                Draw = request.Draw + 1,
-                RecordsTotal = teamInterviews.TotalCount,
-                RecordsFiltered = teamInterviews.TotalCount,
-                Data = teamInterviews.Items
             };
 
             return response;

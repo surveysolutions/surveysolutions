@@ -191,7 +191,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IReusableCategoriesFillerIntoQuestionnaire, ReusableCategoriesFillerIntoQuestionnaire>();
 
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
-            registry.Bind<ITeamInterviewsFactory, TeamInterviewsFactory>();
             registry.Bind<IChangeStatusFactory, ChangeStatusFactory>();
             registry.Bind<IQuantityReportFactory, QuantityReportFactory>();
             registry.Bind<ISpeedReportFactory, SpeedReportFactory>();
