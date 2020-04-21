@@ -123,7 +123,6 @@
             <form onsubmit="return false;">
                 <div class="form-group"
                     v-if="getFilteredToAssign().length > 0">
-                    <p>{{$t("Interviews.ChooseResponsible")}}</p>
                     <label
                         class="control-label"
                         for="newResponsibleId">{{$t("Assignments.SelectResponsible")}}</label>
@@ -154,7 +153,7 @@
                     </label>
                     <br />
                     <span v-if="isReassignReceivedByInterviewer"
-                        style="color:red;">
+                        style="color:orange;">
                         {{$t("Interviews.AssignReceivedWarning")}}
                     </span>
                 </div>
