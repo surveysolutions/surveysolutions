@@ -43,6 +43,43 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_verify_web_passwords_and_password_has_duplicate_in_file_and_quantity_is_null_should_return_1_PL0061_error()
+        {
+            // arrange
+            var password = "password";
+            var fileName = "mainfile.tab";
+
+            var preloadingRows = new List<PreloadingAssignmentRow>(new[]
+            {
+                Create.Entity.PreloadingAssignmentRow(fileName,
+                    assignmentPassword: Create.Entity.AssignmentPassword(password),
+                    quantity: Create.Entity.AssignmentQuantity(parsedQuantity: null),
+                    assignmentWebMode: Create.Entity.AssignmentWebMode(true)),
+                Create.Entity.PreloadingAssignmentRow(fileName,
+                    assignmentPassword: Create.Entity.AssignmentPassword(password),
+                    quantity: Create.Entity.AssignmentQuantity(parsedQuantity: null),
+                    assignmentWebMode: Create.Entity.AssignmentWebMode(true))
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneQuestion());
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyWebPasswords(preloadingRows, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(2));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0061"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(password));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+            
+            Assert.That(errors[1].Code, Is.EqualTo("PL0061"));
+            Assert.That(errors[1].References.First().Content, Is.EqualTo(password));
+            Assert.That(errors[1].References.First().DataFile, Is.EqualTo(fileName));
+        }
+        
+        [Test]
         public void when_verify_web_passwords_and_password_has_duplicate_in_db_should_return_1_PL0061_error()
         {
             // arrange
