@@ -138,6 +138,9 @@
   <data name="AccountManage_Profile" xml:space="preserve">
     <value>Profile</value>
   </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Two factor authentication</value>
   </data>

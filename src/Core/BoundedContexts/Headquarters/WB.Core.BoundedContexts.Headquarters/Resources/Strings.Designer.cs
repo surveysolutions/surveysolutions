@@ -412,6 +412,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change password.
+        /// </summary>
+        public static string SurverManagement_MainMenu_ChangePassword {
+            get {
+                return ResourceManager.GetString("SurverManagement_MainMenu_ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage account.
         /// </summary>
         public static string SurverManagement_MainMenu_ManageAccount {
