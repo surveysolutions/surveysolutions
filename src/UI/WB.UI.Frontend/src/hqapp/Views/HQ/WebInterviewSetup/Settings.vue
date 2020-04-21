@@ -555,45 +555,17 @@
                                                 {{$t('WebInterviewSettings.Title')}}
                                             </div>
                                             <div class="form-group"
-                                                :class="{ 'has-error': errors.has('finishPage.finishInterview') }">
-                                                <div class="field"
-                                                    :class="{ 'answered': webInterviewPageMessages['finishInterview'].text }">
-                                                    <textarea-autosize  
-                                                        v-model="webInterviewPageMessages['finishInterview'].text"
-                                                        v-validate="'required'"
-                                                        data-vv-name="finishInterview"   
-                                                        ref="finishInterview"
-                                                        :min-height="77" 
-                                                        maxlength="200"                                                         
-                                                        class="form-control js-elasticArea h2" 
-                                                        placeholder="Please enter the main text">
-                                                    </textarea-autosize>
-                                                    <button type="button"
-                                                        @click="webInterviewPageMessages['finishInterview'].text=''"
-                                                        class="btn btn-link btn-clear">
-                                                        <span></span>
-                                                    </button>
-                                                    <span class="help-block"
-                                                        v-if="errors.first('finishPage.finishInterview')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-element mb-30">
-                                            <div class="h5">
-                                                {{$t('WebInterviewSettings.Description')}}
-                                            </div>
-                                            <div class="form-group"
                                                 :class="{ 'has-error': errors.has('finishPage.webSurveyHeader') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['webSurveyHeader'].text }">
-                                                    <textarea-autosize 
+                                                    <textarea-autosize  
                                                         v-model="webInterviewPageMessages['webSurveyHeader'].text"
                                                         v-validate="'required'"
-                                                        data-vv-name="webSurveyHeader" 
-                                                        ref="webSurveyHeader" 
-                                                        :min-height="56" 
-                                                        maxlength="200"                                                           
-                                                        class="form-control js-elasticArea font-bold" 
+                                                        data-vv-name="webSurveyHeader"   
+                                                        ref="webSurveyHeader"
+                                                        :min-height="77" 
+                                                        maxlength="200"                                                         
+                                                        class="form-control js-elasticArea h2" 
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -606,16 +578,44 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row-element mb-30">
+                                            <div class="h5">
+                                                {{$t('WebInterviewSettings.Description')}}
+                                            </div>
+                                            <div class="form-group"
+                                                :class="{ 'has-error': errors.has('finishPage.finishInterview') }">
+                                                <div class="field"
+                                                    :class="{ 'answered': webInterviewPageMessages['finishInterview'].text }">
+                                                    <textarea-autosize 
+                                                        v-model="webInterviewPageMessages['finishInterview'].text"
+                                                        v-validate="'required'"
+                                                        data-vv-name="finishInterview" 
+                                                        ref="finishInterview" 
+                                                        :min-height="56" 
+                                                        maxlength="200"                                                           
+                                                        class="form-control js-elasticArea font-bold" 
+                                                        placeholder="Please enter the main text">
+                                                    </textarea-autosize>
+                                                    <button type="button"
+                                                        @click="webInterviewPageMessages['finishInterview'].text=''"
+                                                        class="btn btn-link btn-clear">
+                                                        <span></span>
+                                                    </button>
+                                                    <span class="help-block"
+                                                        v-if="errors.first('finishPage.finishInterview')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="">
                                             <button type="submit"
                                                 :disabled="!isDirty('$finishPage')"
-                                                @click="savePageTextEditMode('finishPage', 'finishInterview', 'webSurveyHeader')"
+                                                @click="savePageTextEditMode('finishPage', 'webSurveyHeader', 'finishInterview' )"
                                                 class="btn btn-md btn-success">
                                                 {{$t('WebInterviewSettings.Save')}}
                                             </button>
                                             <button type="submit"
                                                 :disabled="!isDirty('$finishPage')"
-                                                @click="cancelPageTextEditMode('finishPage', 'finishInterview', 'webSurveyHeader')"
+                                                @click="cancelPageTextEditMode('finishPage', 'webSurveyHeader', 'finishInterview')"
                                                 class="btn btn-md btn-link">
                                                 {{$t('WebInterviewSettings.Cancel')}}
                                             </button>
@@ -686,11 +686,11 @@
                                                     </div>
                                                     <div class="row-element mb-20">
                                                         <div class="h2">
-                                                            {{previewText(webInterviewPageMessages['finishInterview'].text)}}
+                                                            {{previewText(webInterviewPageMessages['webSurveyHeader'].text)}}
                                                         </div>
                                                     </div>
                                                     <div class="row-element mb-40">
-                                                        <p  class="font-bold">{{previewText(webInterviewPageMessages['webSurveyHeader'].text)}}</p>
+                                                        <p  class="font-bold">{{previewText(webInterviewPageMessages['finishInterview'].text)}}</p>
                                                     </div>
                                                 </div>            
                                             </div>

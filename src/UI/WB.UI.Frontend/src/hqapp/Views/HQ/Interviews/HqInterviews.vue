@@ -6,7 +6,6 @@
                 <Typeahead
                     ref="questionnaireIdControl"
                     control-id="questionnaireId"
-                    fuzzy
                     data-vv-name="questionnaireId"
                     data-vv-as="questionnaire"
                     :placeholder="$t('Common.AllQuestionnaires')"
@@ -19,7 +18,6 @@
                 <Typeahead
                     ref="questionnaireVersionControl"
                     control-id="questionnaireVersion"
-                    fuzzy
                     data-vv-name="questionnaireVersion"
                     data-vv-as="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
@@ -32,7 +30,6 @@
             <FilterBlock :title="$t('Common.Status')">
                 <Typeahead
                     control-id="status"
-                    fuzzy
                     :selectedKey="selectedStatus"
                     data-vv-name="status"
                     data-vv-as="status"

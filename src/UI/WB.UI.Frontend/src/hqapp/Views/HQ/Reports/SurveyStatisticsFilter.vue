@@ -4,7 +4,6 @@
             <Typeahead
                 control-id="questionnaire"
                 :placeholder="selectedQuestionnairePlaceholder"
-                fuzzy
                 noClear
                 :values="questionnaireList"
                 :value="selectedQuestionnaire"
@@ -27,7 +26,6 @@
             <Typeahead
                 control-id="question"
                 :placeholder="selectedQuestionPlaceholder"
-                fuzzy
                 noClear
                 :forceLoadingState="loading.questions"
                 :values="questionsList"
@@ -104,7 +102,6 @@
                     :placeholder="$t('Reports.SelectConditionQuestion')"
                     :values="conditionVariablesList"
                     :value="selectedCondition"
-                    fuzzy
                     @selected="selectCondition"/>
             </FilterBlock>
             <template v-if="condition != null">
