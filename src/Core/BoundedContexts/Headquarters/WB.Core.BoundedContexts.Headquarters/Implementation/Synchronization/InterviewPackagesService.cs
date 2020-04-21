@@ -268,7 +268,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     exception);
 
                 // don't save package for partial synch
-                if (interview.InterviewStatus != InterviewStatus.Completed)
+                if (interview.InterviewStatus != InterviewStatus.Completed && interview.InterviewStatus != InterviewStatus.ApprovedBySupervisor)
                 {
                     throw;
                 }
