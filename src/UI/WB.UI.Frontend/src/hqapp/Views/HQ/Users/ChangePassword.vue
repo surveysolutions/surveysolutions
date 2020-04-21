@@ -43,6 +43,11 @@
                             <h2>{{$t('Pages.AccountManage_ChangePassword')}}</h2>
                         </div>
                         <div >
+                            <form-group :label="$t('Pages.AccountManage_Login')">
+                                <TextInput :value="userInfo.userName"
+                                    id="UserName"
+                                    disabled />
+                            </form-group>
                             <form-group
                                 v-if="isOwnProfile"
                                 :label="$t('FieldsAndValidations.OldPasswordFieldName')"
