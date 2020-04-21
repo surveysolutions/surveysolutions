@@ -15,7 +15,6 @@ using Google.Apis.Services;
 using Microsoft.Extensions.Logging;
 using Polly;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 using File = Google.Apis.Drive.v3.Data.File;
@@ -25,23 +24,21 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
     internal class GoogleDriveDataClient : IExternalDataClient
     {
         private readonly ILogger<GoogleDriveDataClient> logger;
-        private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly ITenantContext tenantContext;
 
         public GoogleDriveDataClient(ILogger<GoogleDriveDataClient> logger, 
-            ITenantApi<IHeadquartersApi> tenantApi)
+            ITenantContext tenantContext)
         {
             this.logger = logger;
-            this.tenantApi = tenantApi;
+            this.tenantContext = tenantContext;
         }
         
         private DriveService driveService;
-        private TenantInfo tenant;
         private string refreshToken;
         private const string GoogleDriveFolderMimeType = "application/vnd.google-apps.folder";
 
         public void InitializeDataClient(string accessToken, string refreshToken, TenantInfo tenant)
         {
-            this.tenant = tenant;
             this.refreshToken = refreshToken;
             
             this.CreateClient(accessToken);
@@ -49,6 +46,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         private void CreateClient(string accessToken)
         {
+            this.driveService?.Dispose();
+            
             var token = new Google.Apis.Auth.OAuth2.Responses.TokenResponse
             {
                 AccessToken = accessToken,
@@ -78,7 +77,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         {
             const string applicationFolderName = "Survey Solutions";
             var result = await GetOrCreateFolderAsync(applicationFolderName);
-            result = await GetOrCreateFolderAsync(this.tenant.Name, result.Id);
+            result = await GetOrCreateFolderAsync(this.tenantContext.Tenant.Name, result.Id);
             if (subFolder != null)
             {
                 result = await GetOrCreateFolderAsync(subFolder, result.Id);
@@ -202,7 +201,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 {
                     this.logger.LogError(exception, $"Unauthorized exception during request to Google Drive");
 
-                    var newAccessToken = await this.tenantApi.For(this.tenant)
+                    var newAccessToken = await this.tenantContext.Api
                         .GetExternalStorageAccessTokenByRefreshTokenAsync(ExternalStorageType.GoogleDrive,
                             this.refreshToken).ConfigureAwait(false);
 
