@@ -12,7 +12,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
-    public class PostgresWriteSideModule : IModule
+    public class PostgresWriteSideModule : IModule, IInitModule
     {
         private readonly PostgreConnectionSettings eventStoreSettings;
         private readonly DbUpgradeSettings dbUpgradeSettings;
