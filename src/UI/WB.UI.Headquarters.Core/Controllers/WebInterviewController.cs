@@ -173,10 +173,10 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             LogResume(interview);
-            return this.View("Index", GetInterviewModel(id, webInterviewConfig));
+            return this.View("Index", GetInterviewModel(id, interview, webInterviewConfig));
         }
 
-        private WebInterviewIndexPageModel GetInterviewModel(string interviewId, WebInterviewConfig webInterviewConfig)
+        private WebInterviewIndexPageModel GetInterviewModel(string interviewId, IStatefulInterview interview, WebInterviewConfig webInterviewConfig)
         {
             var emailSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
 
@@ -190,7 +190,15 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var askForEmail = isAskForEmailAvailable ? Request.Cookies[AskForEmail] ?? "false" : "false";
-
+            var questionnaire = this.questionnaireBrowseViewFactory.GetById(interview.QuestionnaireIdentity);
+            
+            foreach (var messageKey in webInterviewConfig.CustomMessages.Keys.ToList())
+            {
+                var oldMessage = webInterviewConfig.CustomMessages[messageKey];
+                webInterviewConfig.CustomMessages[messageKey] = 
+                    SubstituteQuestionnaireName(oldMessage, questionnaire.Title);
+            }
+            
             return new WebInterviewIndexPageModel
             {
                 Id = interviewId,
@@ -460,7 +468,7 @@ namespace WB.UI.Headquarters.Controllers
 
             LogResume(interview);
 
-            return View("Index", GetInterviewModel(id, webInterviewConfig));
+            return View("Index", GetInterviewModel(id, interview, webInterviewConfig));
         }
 
         private void LogResume(IStatefulInterview statefulInterview)
@@ -569,7 +577,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new {id, returnUrl});
             }
 
-            return View("Index", GetInterviewModel(id, webInterviewConfig));
+            return View("Index", GetInterviewModel(id, interview, webInterviewConfig));
         }
 
         [HttpPost]
