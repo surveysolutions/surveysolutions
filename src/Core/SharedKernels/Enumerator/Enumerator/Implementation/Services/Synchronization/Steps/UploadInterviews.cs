@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var interviewsToUpload = GetInterviewsForUpload();
             bool isNeedCompress = IsCompressEnabled();
 
-            var countInterviewsForFullUpload = interviewsToUpload.Count(i => ShouldRemoveLocalInterview(i));
+            var countInterviewsForFullUpload = interviewsToUpload.Count(i => IsNonPartialSynchedInterview(i));
             Context.Statistics.TotalCompletedInterviewsCount = countInterviewsForFullUpload;
             Context.Statistics.TotalPartialUploadedInterviewsCount = interviewsToUpload.Count - countInterviewsForFullUpload;
 
@@ -77,6 +77,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             { "totalCount", interviewsToUpload.Count.ToString()}
                         }
                     });
+
+                    var isNonPartialSynchedInterview = IsNonPartialSynchedInterview(interview);
 
                     var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(interview.InterviewId, isNeedCompress);
 
@@ -115,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         this.logger.Warn("Interview event stream is already uploaded");
                     }
 
-                    if (ShouldRemoveLocalInterview(interview))
+                    if (isNonPartialSynchedInterview)
                     {
                         this.interviewFactory.RemoveInterview(interview.InterviewId);
                         this.Context.Statistics.SuccessfullyUploadedInterviewsCount++;
@@ -139,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected abstract bool IsCompressEnabled();
 
-        protected abstract bool ShouldRemoveLocalInterview(InterviewView interview);
+        protected abstract bool IsNonPartialSynchedInterview(InterviewView interview);
 
         private void MarkInterviewAsNonDeletedMore(Guid interviewId)
         {
