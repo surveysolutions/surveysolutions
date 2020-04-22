@@ -244,4 +244,10 @@
   <data name="SingleResponse" xml:space="preserve">
     <value>Limit to one interview per respondent</value>
   </data>
+  <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+    <value>Start new interview</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+    <value>Resume</value>
+  </data>
 </root>

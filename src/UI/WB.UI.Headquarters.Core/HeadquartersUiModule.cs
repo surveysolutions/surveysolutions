@@ -41,8 +41,6 @@ namespace WB.UI.Headquarters
         {
             var services = registry;
 
-            services.AddScoped<ServiceApiKeyAuthorization>();
-
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
             registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
