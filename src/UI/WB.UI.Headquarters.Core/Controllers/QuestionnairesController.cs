@@ -129,6 +129,7 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
+        [AntiForgeryFilter]
         [ObserverNotAllowed]
         [Authorize(Roles = "Administrator")]
         [ActivePage(MenuItem.Questionnaires)]
@@ -167,13 +168,15 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (QuestionnaireException exception)
             {
+                this.logger.LogError(exception, $"Error occurred while cloning questionnaire (id: {model?.Id}, version: {model?.Version}).");
+
                 model.Error = exception.Message;
 
                 return this.View(model);
             }
             catch (Exception exception)
             {
-                this.logger.LogError(exception, "Unexpected error occurred while cloning questionnaire (id: {id}, version: {version}).", model.Id, model.Version);
+                this.logger.LogError(exception, $"Unexpected error occurred while cloning questionnaire (id: {model.Id}, version: {model.Version}).");
                 model.Error = QuestionnaireClonning.UnexpectedError;
                 return this.View(model);
             }

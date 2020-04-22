@@ -146,7 +146,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Report.COLUMN_NEVER_UPLOADED,
                     Report.COLUMN_TABLET_REASSIGNED,
                     Report.COLUMN_OLD_VERSION,
-                    Report.COLUMN_ANDROID_4_4_OR_LOWER,
                     Report.COLUMN_TEAM_SIZE
                 },
                 Data = new[]
@@ -159,7 +158,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         view.TotalRow.NeverUploadedCount,
                         view.TotalRow.ReassignedCount,
                         view.TotalRow.OutdatedCount,
-                        view.TotalRow.OldAndroidCount,
                         view.TotalRow.TeamSize
                     }
                 }.Concat(view.Items.Select(x => new object[]
@@ -170,7 +168,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     x.NeverUploadedCount,
                     x.ReassignedCount,
                     x.OutdatedCount,
-                    x.OldAndroidCount,
                     x.TeamSize
                 })).ToArray()
             };

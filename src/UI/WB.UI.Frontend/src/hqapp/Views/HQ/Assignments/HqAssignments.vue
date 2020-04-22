@@ -9,8 +9,7 @@
                 :title="$t('Common.Questionnaire')"
                 :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
                 <Typeahead
-                    control-id="questionnaireId"
-                    fuzzy
+                    control-id="questionnaireId"                    
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="questionnaireId"
                     :values="config.questionnaires"
@@ -21,8 +20,7 @@
                 :title="$t('Common.QuestionnaireVersion')"
                 :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
                 <Typeahead
-                    control-id="questionnaireVersion"
-                    fuzzy
+                    control-id="questionnaireVersion"                    
                     :placeholder="$t('Common.AllVersions')"
                     :values="questionnaireId == null ? null : questionnaireId.versions"
                     :value="questionnaireVersion"

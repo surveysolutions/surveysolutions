@@ -1438,4 +1438,10 @@
   <data name="VariableNoExport" xml:space="preserve">
     <value>Не экспортировать</value>
   </data>
+  <data name="HelpOptionValue" xml:space="preserve">
+    <value>Целый числовой код для категории (не отображается интервьюеру)</value>
+  </data>
+  <data name="HelpOptionTitle" xml:space="preserve">
+    <value>Текстовое название категории (отображается интервьюеру)</value>
+  </data>
 </root>
