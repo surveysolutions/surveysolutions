@@ -33,6 +33,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             this.interviewerSettings = interviewerSettings;
         }
 
+        protected override bool IsCompressEnabled()
+        {
+            return !interviewerSettings.PartialSynchronizationEnabled;
+        }
+
         protected override bool ShouldRemoveLocalInterview(InterviewView interview)
         {
             return interview.Status == InterviewStatus.Completed;

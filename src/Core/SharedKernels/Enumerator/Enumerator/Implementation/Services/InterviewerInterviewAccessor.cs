@@ -141,18 +141,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 prefilledQuestion.Answer);
         }
 
-        private IReadOnlyCollection<CommittedEvent> GetFilteredEventsToSend(Guid interviewId)
+        private IReadOnlyCollection<CommittedEvent> GetAllEventsToSend(Guid interviewId)
         {
             var minVersion = this.eventStore.GetLastEventKnownToHq(interviewId) + 1;
-            //var minVersion = 1;
             return this.eventStore.Read(interviewId, minVersion)
                 .ToReadOnlyCollection();
-
         }
 
-        public InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId)
+        private IReadOnlyCollection<CommittedEvent> GetFilteredEventsToSend(Guid interviewId)
         {
-            return new InterviewPackageContainer(interviewId, this.GetFilteredEventsToSend(interviewId));
+            var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, new[] { typeof(InterviewCompleted).Name });
+            var lastComplete = this.eventStore.GetEventByEventSequence(interviewId, lastCompleteSequence);
+
+            return this.eventStreamOptimizer.FilterEventsToBeSent(
+                this.eventStore.Read(interviewId, this.eventStore.GetLastEventKnownToHq(interviewId) + 1),
+                lastComplete?.CommitId);
+        }
+
+        public InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId, bool needCompress)
+        {
+            var events = needCompress
+                ? this.GetFilteredEventsToSend(interviewId)
+                : this.GetAllEventsToSend(interviewId);
+            return new InterviewPackageContainer(interviewId, events);
         }
 
         public void CheckAndProcessInterviewsToFixViews()

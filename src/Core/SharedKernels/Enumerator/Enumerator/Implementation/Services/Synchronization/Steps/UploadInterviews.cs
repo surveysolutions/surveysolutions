@@ -47,8 +47,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         public override async Task ExecuteAsync()
         {
             var interviewsToUpload = GetInterviewsForUpload();
+            bool isNeedCompress = IsCompressEnabled();
 
-            Context.Statistics.TotalCompletedInterviewsCount = interviewsToUpload.Count;
+            var countInterviewsForFullUpload = interviewsToUpload.Count(i => ShouldRemoveLocalInterview(i));
+            Context.Statistics.TotalCompletedInterviewsCount = countInterviewsForFullUpload;
+            Context.Statistics.TotalPartialUploadedInterviewsCount = interviewsToUpload.Count - countInterviewsForFullUpload;
+
             var transferProgress = Context.Progress.AsTransferReport();
 
             foreach (var interview in interviewsToUpload)
@@ -61,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Title = string.Format(EnumeratorUIResources.Synchronization_Upload_Title_Format,
                             EnumeratorUIResources.Synchronization_Upload_CompletedAssignments_Text),
                         Description = string.Format(EnumeratorUIResources.Synchronization_Upload_Description_Format,
-                            Context.Statistics.SuccessfullyUploadedInterviewsCount, Context.Statistics.TotalCompletedInterviewsCount,
+                            Context.Statistics.SuccessfullyUploadedInterviewsCount, interviewsToUpload.Count,
                             EnumeratorUIResources.Synchronization_Upload_Interviews_Text),
                         Status = SynchronizationStatus.Upload,
                         Stage = SyncStage.UploadInterviews,
@@ -74,13 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         }
                     });
 
-                    var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(interview.InterviewId);
-
-                    if (interviewEventStreamContainer.Events.Count == 0)
-                    {
-                        this.Context.Statistics.SuccessfullyUploadedInterviewsCount++;
-                        continue;
-                    }
+                    var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(interview.InterviewId, isNeedCompress);
 
                     var uploadState = await this.synchronizationService.GetInterviewUploadState(interview.InterviewId,
                         interviewEventStreamContainer.Tag, Context.CancellationToken);
@@ -138,6 +136,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
             }
         }
+
+        protected abstract bool IsCompressEnabled();
 
         protected abstract bool ShouldRemoveLocalInterview(InterviewView interview);
 
