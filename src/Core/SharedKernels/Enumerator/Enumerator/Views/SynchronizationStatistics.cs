@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public int FailedInterviewsCount => this.FailedToCreateInterviewsCount + this.FailedToUploadInterviewsCount;
         public int TotalPartialDownloadedInterviewsCount { get; set; }
         public int SuccessfullyPartialDownloadedInterviewsCount { get; set; }
+        public int TotalPartialUploadedInterviewsCount { get; set; }
         public int SuccessfullyPartialUploadedInterviewsCount { get; set; }
         public int FailedToPartialDownloadedInterviewsCount { get; set; }
         public int ReopenedInterviewsAfterReceivedCommentsCount { get; set; }
