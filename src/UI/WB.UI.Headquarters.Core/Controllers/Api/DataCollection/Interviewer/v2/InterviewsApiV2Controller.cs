@@ -42,7 +42,24 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [WriteToSyncLog(SynchronizationLogType.PostInterview)]
         public IActionResult Post([FromBody]InterviewPackageApiView package)
         {
-            return base.PostV3(package);
+            if (string.IsNullOrEmpty(package.Events))
+                return BadRequest("Server cannot accept empty package content.");
+
+            var interviewPackage = new InterviewPackage
+            {
+                InterviewId = package.InterviewId,
+                QuestionnaireId = package.MetaInfo.TemplateId,
+                QuestionnaireVersion = package.MetaInfo.TemplateVersion,
+                InterviewStatus = (InterviewStatus)package.MetaInfo.Status,
+                ResponsibleId = package.MetaInfo.ResponsibleId,
+                IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
+                IncomingDate = DateTime.UtcNow,
+                Events = package.Events
+            };
+
+            this.packagesService.StoreOrProcessPackage(interviewPackage);
+
+            return Ok();
         }
 
         [HttpPost]

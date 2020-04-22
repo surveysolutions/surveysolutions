@@ -120,8 +120,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     {
                         Title = EnumeratorUIResources.Synchronization_Update_Interviews_Title,
                         Description = string.Format(EnumeratorUIResources.Synchronization_Download_Description_Format,
-                            i + 1, interviews.Count,
-                            EnumeratorUIResources.Synchronization_Interviews),
+                            i + 1, interviews.Count, EnumeratorUIResources.Synchronization_PartialInterviews),
                         Stage = SyncStage.UpdatingInterviewsChanges,
                         StageExtraInfo = new Dictionary<string, string>()
                         {
@@ -157,7 +156,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                         statistics.ReopenedInterviewsAfterReceivedCommentsCount++;
                     }
 
-                    statistics.SuccessfullyDownloadedPatchesForInterviewsCount++;
+                    statistics.SuccessfullyPartialDownloadedInterviewsCount++;
                 }
                 catch (OperationCanceledException)
                 {
@@ -165,9 +164,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                 }
                 catch (Exception exception)
                 {
+                    statistics.FailedToPartialDownloadedInterviewsCount++;
+
                     await this.TrySendUnexpectedExceptionToServerAsync(exception);
                     this.logger.Error(
-                        "Failed to download hq changes for interview, interviewer",
+                        "Failed to partial download hq changes for interview, interviewer",
                         exception);
                 }
         }

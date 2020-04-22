@@ -33,6 +33,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             this.interviewerSettings = interviewerSettings;
         }
 
+        protected override bool ShouldRemoveLocalInterview(InterviewView interview)
+        {
+            return interview.Status == InterviewStatus.Completed;
+        }
+
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
         {
             if (interviewerSettings.PartialSynchronizationEnabled && interviewerSettings.AllowSyncWithHq)

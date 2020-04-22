@@ -224,10 +224,13 @@
     <value>Установка приложения закончена</value>
     <comment>Установка приложения закончена</comment>
   </data>
-  <data name="SynchronizationCompleted_InterviewsPatches" xml:space="preserve">
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
     <value>{0} интервью были обновленны</value>
   </data>
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
     <value>{0} интервью были переоткрыты после получения коментариев по ним</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
+    <value>{0} интервью частично отправлены</value>
   </data>
 </root>

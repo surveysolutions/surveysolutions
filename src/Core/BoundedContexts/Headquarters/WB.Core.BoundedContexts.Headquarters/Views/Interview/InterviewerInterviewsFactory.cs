@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.eventStore = eventStore;
         }
 
-        public IEnumerable<InterviewInformation> GetInProgressInterviewsForInterviewer(Guid interviewerId)
+        public List<InterviewInformation> GetInProgressInterviewsForInterviewer(Guid interviewerId)
         {
             var processingPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
