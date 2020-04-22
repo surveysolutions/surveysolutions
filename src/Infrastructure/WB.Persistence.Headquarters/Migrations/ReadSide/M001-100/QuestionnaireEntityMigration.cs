@@ -24,11 +24,11 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                     db.QuerySingle<string>("SELECT to_regclass('plainstore.questionnairedocuments')::text")))
                     return;
 
-                var questionnaireList = db.Query<string>("select id from plainstore.questionnairebrowseitems where isdeleted = false")
+                var questionnaireList = db.Query<string>("select id from plainstore.questionnairebrowseitems where isdeleted = false order by title asc")
                         .ToList();
 
                 //logger?.Info($"Got {questionnaireList.Count} questionnaires to update");
-
+                var index = 0;
                 foreach (var questionnaireId in questionnaireList)
                 {
                     var questionnaireJson = db.QuerySingleOrDefault<string>(
@@ -40,7 +40,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
                     action(db, questionnaireId, questions.ToList());
 
-                    //logger?.Info($"There is {questionnaireList.Count - (++processed)} questionnaires left");
+                    Console.WriteLine($"[ {index++}/{questionnaireList.Count} ]Imported questionnaire: {json["Id"]} - {json["Title"]}");
                 }
             });
         }
