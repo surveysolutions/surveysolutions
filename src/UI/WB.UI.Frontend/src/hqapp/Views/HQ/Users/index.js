@@ -6,7 +6,7 @@ import Create from './Create'
 import Supervisors from './Supervisors'
 import Interviewers from './Interviewers'
 import TwoFactorAuthentication from './TwoFactorAuthentication'
-import EnableAuthenticator from './EnableAuthenticator'
+import SetupAuthenticator from './SetupAuthenticator'
 import ResetAuthenticator from './ResetAuthenticator'
 import ShowRecoveryCodes from './ShowRecoveryCodes'
 import GenerateRecoveryCodes from './GenerateRecoveryCodes'
@@ -50,10 +50,10 @@ export default class UsersComponent {
             path: '/Users/TwoFactorAuthentication/:userId', component: TwoFactorAuthentication,
         },
         {
-            path: '/Users/EnableAuthenticator', component: EnableAuthenticator,
+            path: '/Users/SetupAuthenticator', component: SetupAuthenticator,
         },
         {
-            path: '/Users/EnableAuthenticator/:userId', component: EnableAuthenticator,
+            path: '/Users/SetupAuthenticator/:userId', component: SetupAuthenticator,
         },
         {
             path: '/Users/ResetAuthenticator', component: ResetAuthenticator,

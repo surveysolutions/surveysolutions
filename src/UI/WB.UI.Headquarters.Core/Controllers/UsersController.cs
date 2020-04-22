@@ -337,7 +337,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         [AntiForgeryFilter]
-        public async Task<ActionResult> EnableAuthenticator(Guid? id)
+        public async Task<ActionResult> SetupAuthenticator(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
