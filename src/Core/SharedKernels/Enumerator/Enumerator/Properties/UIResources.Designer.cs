@@ -711,7 +711,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor comments does not exist.
+        ///   Looks up a localized string similar to Supervisor comments don&apos;t exist.
         /// </summary>
         public static string Interview_Cover_Supervisor_Comments_does_not_exists {
             get {

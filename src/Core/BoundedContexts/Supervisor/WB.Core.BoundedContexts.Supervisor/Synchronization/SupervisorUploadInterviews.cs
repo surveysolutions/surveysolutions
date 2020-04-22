@@ -29,6 +29,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             this.interviewViewRepository = interviewViewRepository;
         }
 
+        protected override bool ShouldRemoveLocalInterview(InterviewView interview)
+        {
+            return interview.Status == InterviewStatus.ApprovedBySupervisor;
+        }
+
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
         {
             return this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.ApprovedBySupervisor);

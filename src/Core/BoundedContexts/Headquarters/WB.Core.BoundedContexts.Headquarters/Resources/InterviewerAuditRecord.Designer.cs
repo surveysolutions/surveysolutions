@@ -277,11 +277,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interview(s) updated.
+        ///   Looks up a localized string similar to {0} interview(s) partial updated from server.
         /// </summary>
-        public static string SynchronizationCompleted_InterviewsPatches {
+        public static string SynchronizationCompleted_InterviewsPartialDownloaded {
             get {
-                return ResourceManager.GetString("SynchronizationCompleted_InterviewsPatches", resourceCulture);
+                return ResourceManager.GetString("SynchronizationCompleted_InterviewsPartialDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interview(s) partial uploaded.
+        /// </summary>
+        public static string SynchronizationCompleted_InterviewsPartialUploaded {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_InterviewsPartialUploaded", resourceCulture);
             }
         }
         

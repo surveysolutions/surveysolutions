@@ -117,17 +117,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         this.logger.Warn("Interview event stream is already uploaded");
                     }
 
-                    if (interview.Status == InterviewStatus.Completed)
+                    if (ShouldRemoveLocalInterview(interview))
                     {
                         this.interviewFactory.RemoveInterview(interview.InterviewId);
+                        this.Context.Statistics.SuccessfullyUploadedInterviewsCount++;
                     }
                     else
                     {
                         this.interviewFactory.MarkEventsAsReceivedByHQ(interview.InterviewId);
                         MarkInterviewAsNonDeletedMore(interview.InterviewId);
+                        this.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount++;
                     }
-
-                    this.Context.Statistics.SuccessfullyUploadedInterviewsCount++;
                 }
                 catch (Exception syncException)
                 {
@@ -138,6 +138,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
             }
         }
+
+        protected abstract bool ShouldRemoveLocalInterview(InterviewView interview);
 
         private void MarkInterviewAsNonDeletedMore(Guid interviewId)
         {

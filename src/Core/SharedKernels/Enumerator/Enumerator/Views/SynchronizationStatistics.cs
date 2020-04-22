@@ -22,7 +22,10 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool NewVersionExists { get; set; }
 
         public int FailedInterviewsCount => this.FailedToCreateInterviewsCount + this.FailedToUploadInterviewsCount;
-        public int SuccessfullyDownloadedPatchesForInterviewsCount { get; set; }
+        public int TotalPartialDownloadedInterviewsCount { get; set; }
+        public int SuccessfullyPartialDownloadedInterviewsCount { get; set; }
+        public int SuccessfullyPartialUploadedInterviewsCount { get; set; }
+        public int FailedToPartialDownloadedInterviewsCount { get; set; }
         public int ReopenedInterviewsAfterReceivedCommentsCount { get; set; }
     }
 }

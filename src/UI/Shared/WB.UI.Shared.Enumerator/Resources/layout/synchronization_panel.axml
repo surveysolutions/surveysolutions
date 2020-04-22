@@ -21,9 +21,9 @@
         </LinearLayout>
 
         <LinearLayout style="@style/VerticalContentHeightWrappingLayout" local:MvxBind="Visible Not(Synchronization.SynchronizationErrorOccured)">
-        <TextView style="@style/Dashboard_Synchronization_Operation_Title"
+            <TextView style="@style/Dashboard_Synchronization_Operation_Title"
                   local:MvxBind="Text Synchronization.ProcessOperation; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
-        <TextView style="@style/Dashboard_Synchronization_Operation_Title"
+            <TextView style="@style/Dashboard_Synchronization_Operation_Title"
                   local:MvxBind="Text Synchronization.ProcessOperationDescription; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
         </LinearLayout>
 
@@ -49,7 +49,9 @@
                     local:MvxBind="Text Format(Localization('Synchronization_Fail_State_NewInterviews_Format'), Synchronization.Statistics.NewInterviewsCount, Synchronization.Statistics.TotalNewInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Fail_State_RejectedInterviews_Format'), Synchronization.Statistics.RejectedInterviewsCount, Synchronization.Statistics.TotalRejectedInterviewsCount)" />
-          
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_InterviewsPartialDownloaded_Format'), Synchronization.Statistics.TotalPartialDownloadedInterviewsCount, Synchronization.Statistics.TotalPartialDownloadedInterviewsCount)" />
+
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_DeletedInterviews_Format'), Synchronization.Statistics.DeletedInterviewsCount, Synchronization.Statistics.TotalDeletedInterviewsCount)" />
 
@@ -58,13 +60,15 @@
 
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Fail_State_FailedToProcess_Format'), Synchronization.Statistics.FailedInterviewsCount);" />
-          
+
         </LinearLayout>
 
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"
                       local:MvxBind="Visible And(Not(IsSynchronizationFailOrCanceled(Synchronization.Status)), Not(Synchronization.IsSynchronizationInProgress), Not(Synchronization.SynchronizationErrorOccured))">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.SuccessfullyUploadedInterviewsCount); Visible GreaterThan(Synchronization.Statistics.SuccessfullyUploadedInterviewsCount, 0)" />
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_PartialUploadInterviews_Format'), Synchronization.Statistics.TotalNewInterviewsCount); Visible GreaterThan(Synchronization.Statistics.SuccessfullyPartialUploadedInterviewsCount, 0)" />
 
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                   local:MvxBind="Text Format(Localization('Synchronization_Success_State_DeletedInterviews_Format'), Synchronization.Statistics.TotalDeletedInterviewsCount); Visible GreaterThan(Synchronization.Statistics.TotalDeletedInterviewsCount, 0)" />
@@ -74,7 +78,7 @@
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_NewInterviews_Format'), Synchronization.Statistics.TotalNewInterviewsCount); Visible GreaterThan(Synchronization.Statistics.TotalNewInterviewsCount, 0)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_InterviewsUpdated_Format'), Synchronization.Statistics.TotalNewInterviewsCount); Visible GreaterThan(Synchronization.Statistics.SuccessfullyDownloadedPatchesForInterviewsCount, 0)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_InterviewsPartialDownloaded_Format'), Synchronization.Statistics.TotalNewInterviewsCount); Visible GreaterThan(Synchronization.Statistics.SuccessfullyPartialDownloadedInterviewsCount, 0)" />
 
         </LinearLayout>
 

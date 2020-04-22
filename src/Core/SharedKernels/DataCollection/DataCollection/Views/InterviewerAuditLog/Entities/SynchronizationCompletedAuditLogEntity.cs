@@ -8,7 +8,8 @@
         public int SuccessfullyUploadedInterviewsCount { get; }
         public int RejectedInterviewsCount { get; }
         public int DeletedInterviewsCount { get; }
-        public int SuccessfullyDownloadedPatchesForInterviewsCount { get; }
+        public int SuccessfullyPartialDownloadedInterviewsCount { get; }
+        public int SuccessfullyPartialUploadedInterviewsCount { get; }
         public int ReopenedInterviewsAfterReceivedCommentsCount { get; }
 
         public SynchronizationCompletedAuditLogEntity(
@@ -18,8 +19,9 @@
             int successfullyUploadedInterviewsCount, 
             int rejectedInterviewsCount, 
             int deletedInterviewsCount,
-            int successfullyDownloadedPatchesForInterviewsCount = 0,
-            int reopenedInterviewsAfterReceivedCommentsCount = 0) 
+            int successfullyPartialDownloadedInterviewsCount = 0,
+            int reopenedInterviewsAfterReceivedCommentsCount = 0,
+            int successfullyPartialUploadedInterviewsCount = 0) 
             : base(AuditLogEntityType.SynchronizationCompleted)
         {
             NewAssignmentsCount = newAssignmentsCount;
@@ -28,7 +30,8 @@
             SuccessfullyUploadedInterviewsCount = successfullyUploadedInterviewsCount;
             RejectedInterviewsCount = rejectedInterviewsCount;
             DeletedInterviewsCount = deletedInterviewsCount;
-            SuccessfullyDownloadedPatchesForInterviewsCount = successfullyDownloadedPatchesForInterviewsCount;
+            SuccessfullyPartialDownloadedInterviewsCount = successfullyPartialDownloadedInterviewsCount;
+            SuccessfullyPartialUploadedInterviewsCount = successfullyPartialUploadedInterviewsCount;
             ReopenedInterviewsAfterReceivedCommentsCount = reopenedInterviewsAfterReceivedCommentsCount;
         }
     }
