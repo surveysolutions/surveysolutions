@@ -196,6 +196,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No records yet.
+        /// </summary>
+        public static string RecordsMissing {
+            get {
+                return ResourceManager.GetString("RecordsMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview {0} rejected.
         /// </summary>
         public static string RejectInterview {
@@ -210,15 +219,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string Relink {
             get {
                 return ResourceManager.GetString("Relink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No records yet.
-        /// </summary>
-        public static string RocordsMissing {
-            get {
-                return ResourceManager.GetString("RocordsMissing", resourceCulture);
             }
         }
         

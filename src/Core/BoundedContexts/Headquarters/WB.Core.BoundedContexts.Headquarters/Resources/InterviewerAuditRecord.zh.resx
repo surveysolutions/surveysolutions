@@ -165,7 +165,7 @@
   <data name="Relink" xml:space="preserve">
     <value>用户已经于新的平板电脑登录</value>
   </data>
-  <data name="RocordsMissing" xml:space="preserve">
+  <data name="RecordsMissing" xml:space="preserve">
     <value>目前尚无记录</value>
   </data>
   <data name="ShowPrevious7Days" xml:space="preserve">

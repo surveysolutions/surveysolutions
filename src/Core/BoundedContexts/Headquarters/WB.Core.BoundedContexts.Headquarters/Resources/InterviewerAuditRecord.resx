@@ -144,7 +144,7 @@
   <data name="DownloadTabLog" xml:space="preserve">
     <value>Download complete log in Tab format</value>
   </data>
-  <data name="RocordsMissing" xml:space="preserve">
+  <data name="RecordsMissing" xml:space="preserve">
     <value>No records yet</value>
   </data>
   <data name="Login" xml:space="preserve">
