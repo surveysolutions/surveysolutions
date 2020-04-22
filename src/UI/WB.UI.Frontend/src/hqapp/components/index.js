@@ -12,6 +12,8 @@ import Checkbox from './Checkbox'
 import Radio from './Radio'
 import DatePicker from './DatePicker'
 import FormGroup from './FormGroup'
+import FilterInput from './FilterInput'
+import InlineSelector from './InlineSelector'
 
 Vue.component('Confirm', Confirm)
 Vue.component('DataTables', () => import(/* webpackChunkName: "datatables" */'./DataTables'))
@@ -25,6 +27,8 @@ Vue.component('Checkbox', Checkbox)
 Vue.component('Radio', Radio)
 Vue.component('DatePicker', DatePicker)
 Vue.component('form-group', FormGroup)
+Vue.component('FilterInput', FilterInput)
+Vue.component('InlineSelector', InlineSelector)
 
 // export default {
 //     Confirm,
