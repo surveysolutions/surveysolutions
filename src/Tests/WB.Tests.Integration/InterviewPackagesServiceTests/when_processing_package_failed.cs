@@ -105,7 +105,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 questionnaireId: Guid.Parse("22222222222222222222222222222222"),
                 questionnaireVersion: 111,
                 userId: Guid.Parse("33333333333333333333333333333333"),
-                interviewStatus: InterviewStatus.Restarted,
+                interviewStatus: InterviewStatus.Completed,
                 createdOnClient: true,
                 synchronizedEvents:
                 new IEvent[]
