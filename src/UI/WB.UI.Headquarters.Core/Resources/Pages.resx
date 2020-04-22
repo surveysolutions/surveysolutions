@@ -1009,10 +1009,13 @@
     <value>or Google Authenticator for</value>
   </data>
   <data name="EnableAuthenticatorLine4" xml:space="preserve">
-    <value>Scan the QR Code or enter this key into your two factor authenticator app. Spaces and casing do not matter.</value>
+    <value>Scan the QR Code or enter this shared key into your two factor authenticator app. Spaces and casing do not matter.</value>
   </data>
   <data name="EnableAuthenticatorLine5" xml:space="preserve">
     <value>Once you have scanned the QR code or input the key above, your two factor authentication app will provide you with a unique code. Enter the code in the confirmation box below.</value>
+  </data>
+  <data name="EnableAuthenticatorSharedKey" xml:space="preserve">
+    <value>Shared key:</value>
   </data>
   <data name="ResetAuthenticatorLine1" xml:space="preserve">
     <value>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</value>

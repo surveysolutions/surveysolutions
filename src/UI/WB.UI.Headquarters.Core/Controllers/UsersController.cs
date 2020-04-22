@@ -350,20 +350,20 @@ namespace WB.UI.Headquarters.Controllers
                 await userManager.ResetAuthenticatorKeyAsync(user);
                 unformattedKey = await userManager.GetAuthenticatorKeyAsync(user);
             }
-
-            var sharedKey = FormatKey(unformattedKey);
+            
+            System.Uri uri = new Uri(options.Value?.BaseUrl ?? "https://mysurvey.solutions");
             var authenticatorUri =
                     string.Format(
                     AuthenticatorUriFormat,
-                    urlEncoder.Encode(options.Value?.BaseUrl ?? "mysurvey.solutions"),
-                    urlEncoder.Encode(user.UserName),
+                    urlEncoder.Encode("Survey Solutions Headquarters"),
+                    urlEncoder.Encode($"{user.UserName}@{uri.Host}"),
                     unformattedKey);
 
             return View(new
             {
                 UserInfo = new
                 {
-                    SharedKey = sharedKey,
+                    SharedKey = FormatKey(unformattedKey),
                     AuthenticatorUri = authenticatorUri,
 
                     UserId = user.Id,

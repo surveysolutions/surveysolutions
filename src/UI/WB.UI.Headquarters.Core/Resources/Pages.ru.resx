@@ -1510,10 +1510,13 @@
     <value>или Google Authenticator для</value>
   </data>
   <data name="EnableAuthenticatorLine4" xml:space="preserve">
-    <value>Сосканируйте QR Код или введите ключ в приложение. Пробелы и регистр букв не важен.</value>
+    <value>Сосканируйте QR Код или введите общий ключ в приложение. Пробелы и регистр букв не важен.</value>
   </data>
   <data name="EnableAuthenticatorLine5" xml:space="preserve">
     <value>После того, как вы отсканировали QR Код или ввели ключ вручную, ваше приложение предоставит вам уникальный код. Введите этот код в поле валидации.</value>
+  </data>
+  <data name="EnableAuthenticatorSharedKey" xml:space="preserve">
+    <value>Общий ключ:</value>
   </data>
   <data name="ResetAuthenticatorLine1" xml:space="preserve">
     <value>Если вы сбросите аутефикационный ключ, то аутефикационное приложение перестанет работать, пока вы его не перенастроите.</value>

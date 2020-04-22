@@ -898,7 +898,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scan the QR Code or enter this key into your two factor authenticator app. Spaces and casing do not matter..
+        ///   Looks up a localized string similar to Scan the QR Code or enter this shared key into your two factor authenticator app. Spaces and casing do not matter..
         /// </summary>
         public static string EnableAuthenticatorLine4 {
             get {
@@ -912,6 +912,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string EnableAuthenticatorLine5 {
             get {
                 return ResourceManager.GetString("EnableAuthenticatorLine5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shared key:.
+        /// </summary>
+        public static string EnableAuthenticatorSharedKey {
+            get {
+                return ResourceManager.GetString("EnableAuthenticatorSharedKey", resourceCulture);
             }
         }
         
