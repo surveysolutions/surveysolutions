@@ -43,7 +43,8 @@
                             <h2>{{$t('Strings.HQ_Views_GenerateRecoveryCodes_Title')}}</h2>
                         </div>
                         <div >
-                            <form-group :label="$t('Pages.AccountManage_Login')">
+                            <form-group v-if="!isOwnProfile"
+                                :label="$t('Pages.AccountManage_Login')">
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
@@ -54,7 +55,8 @@
                             <div class="alert alert-warning" 
                                 role="alert">
                                 <p>
-                                    <span class="glyphicon glyphicon-warning-sign"></span>
+                                    <span class="glyphicon glyphicon-warning-sign"
+                                        style="margin-right: 5px;"></span>
                                     <strong>{{$t('Pages.RecoveryCodesInfo')}}</strong>
                                 </p>
                                 <p>

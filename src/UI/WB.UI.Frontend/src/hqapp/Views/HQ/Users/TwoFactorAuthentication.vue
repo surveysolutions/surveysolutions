@@ -42,13 +42,14 @@
                         <div >
                             <h2>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Title')}}</h2>
                         </div>
-                        <div>
-                            <form-group :label="$t('Pages.AccountManage_Login')">
-                                <TextInput :value="userInfo.userName"
-                                    id="UserName"
-                                    disabled />
-                            </form-group>
-                        </div>
+                        <i>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Description')}}</i>
+                        <form-group v-if="!isOwnProfile"
+                            :label="$t('Pages.AccountManage_Login')">
+                            <TextInput :value="userInfo.userName"
+                                id="UserName"
+                                disabled />
+                        </form-group>
+                        
                         <div v-if="is2faEnabled">
                             <div class="alert alert-danger" 
                                 v-if="recoveryCodesLeft == 0">
@@ -78,12 +79,12 @@
 
                         <a v-if="!hasAuthenticator" 
                             id="enable-authenticator" 
-                            :href="getUrl('../../Users/EnableAuthenticator')" 
+                            :href="getUrl('../../Users/SetupAuthenticator')" 
                             class="btn btn-success">{{$t('Pages.AddAuthenticator')}}
                         </a>                
                         <a v-if="hasAuthenticator" 
                             id="enable-authenticator" 
-                            :href="getUrl('../../Users/EnableAuthenticator')" 
+                            :href="getUrl('../../Users/SetupAuthenticator')" 
                             style="margin-right: 5px;"
                             class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}
                         </a>

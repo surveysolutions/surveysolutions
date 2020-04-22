@@ -1003,16 +1003,16 @@
     <value>To use an authenticator app go through the following steps:</value>
   </data>
   <data name="EnableAuthenticatorLine2" xml:space="preserve">
-    <value>Download a two-factor authenticator app like Microsoft Authenticator for</value>
+    <value>Download a two factor authenticator app like Microsoft Authenticator for</value>
   </data>
   <data name="EnableAuthenticatorLine3" xml:space="preserve">
     <value>or Google Authenticator for</value>
   </data>
   <data name="EnableAuthenticatorLine4" xml:space="preserve">
-    <value>Scan the QR Code or enter this shared key into your two factor authenticator app. Spaces and casing do not matter.</value>
+    <value>Scan the QR Code or enter the shared key into your two factor authenticator app. Spaces and casing do not matter.</value>
   </data>
   <data name="EnableAuthenticatorLine5" xml:space="preserve">
-    <value>Once you have scanned the QR code or input the key above, your two factor authentication app will provide you with a unique code. Enter the code in the confirmation box below.</value>
+    <value>Once you have scanned the QR code or input the shared key above, your two factor authenticator app will provide you with a verification code. Enter it below and click 'Verify'.</value>
   </data>
   <data name="EnableAuthenticatorSharedKey" xml:space="preserve">
     <value>Shared key:</value>
@@ -1021,7 +1021,7 @@
     <value>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</value>
   </data>
   <data name="ResetAuthenticatorLine2" xml:space="preserve">
-    <value>This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account.</value>
+    <value>This process disables two factor authentication until you verify your authenticator app. If you do not complete your authenticator app configuration your account will be left without two factor authentication.</value>
   </data>
   <data name="Disable2faLine1" xml:space="preserve">
     <value>This action only disables 2FA</value>
