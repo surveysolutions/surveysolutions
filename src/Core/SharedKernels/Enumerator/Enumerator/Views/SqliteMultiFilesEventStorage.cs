@@ -217,15 +217,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                             storedEvent.EventSequence = lastHqEvent.EventSequence + i + 1;
                             connection.Insert(storedEvent);
                         }
-
-                        /*
-                        var commandText = $"UPDATE {nameof(EventView)} " +
-                                          $"SET {nameof(EventView.EventSequence)} = {nameof(EventView.EventSequence)} + ?" +
-                                          $"WHERE {nameof(EventView.ExistsOnHq)} != 1 AND {nameof(EventView.EventSourceId)} = ?";
-                        var sqLiteCommand = connection.CreateCommand(commandText, eventsCount, interviewId);
-                        sqLiteCommand.ExecuteNonQuery();
-                        */
-
                     });
                 }
                 catch (SQLiteException ex)
@@ -235,6 +226,20 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 }
             }
         }
+
+        public bool HasEventsWithoutHqFlag(Guid eventSourceId)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var @event = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(eventView => eventView.EventSourceId == eventSourceId
+                                                 && (eventView.ExistsOnHq == null || eventView.ExistsOnHq != 1));
+                return @event != null;
+            }
+        }
+
 
         public bool IsLastEventInSequence(Guid eventSourceId, Guid eventId)
         {
