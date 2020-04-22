@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     else
                     {
                         this.interviewFactory.MarkEventsAsReceivedByHQ(interview.InterviewId);
-                        MarkInterviewAsNonDeletedMore(interview.InterviewId);
+                        MarkInterviewAsSynchedAndNonDeletedMore(interview.InterviewId);
                         this.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount++;
                     }
                 }
@@ -150,10 +150,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected bool IsPartialSynchedInterview(InterviewView interview) => !IsNonPartialSynchedInterview(interview);
 
-        private void MarkInterviewAsNonDeletedMore(Guid interviewId)
+        private void MarkInterviewAsSynchedAndNonDeletedMore(Guid interviewId)
         {
             var interviewView = interviewViewRepository.GetById(interviewId.FormatGuid());
             interviewView.CanBeDeleted = false;
+            interviewView.FromHqSyncDateTime = DateTime.UtcNow;
             interviewViewRepository.Store(interviewView);
         }
 
