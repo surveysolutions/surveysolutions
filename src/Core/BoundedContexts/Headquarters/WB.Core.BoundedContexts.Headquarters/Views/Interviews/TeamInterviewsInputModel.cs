@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
         public long? QuestionnaireVersion { get; set; }
         public string ResponsibleName { get; set; }
         public Guid? InterviewId { get; set; }
-        public InterviewStatus? Status { get; set; }
+        public InterviewStatus[] Statuses { get; set; }
         public bool ReceivedByInterviewer { get; set; }
         public Guid? ViewerId { get; set; }
         public string SearchBy { get; set; }
