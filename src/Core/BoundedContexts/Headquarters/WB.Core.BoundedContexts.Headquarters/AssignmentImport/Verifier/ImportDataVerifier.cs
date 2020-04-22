@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public IEnumerable<PanelImportVerificationError> VerifyWebPasswords(List<PreloadingAssignmentRow> assignmentRows, IQuestionnaire questionnaire)
         {
             bool IsPrivateWebLinkWithPassword(PreloadingAssignmentRow x) => (x.WebMode?.WebMode == null || x.WebMode?.WebMode == true) && 
-                                                                            x.Quantity?.Quantity == 1 &&
+                                                                            (x.Quantity?.Quantity == 1 || x.Quantity?.Quantity == null) &&
                                                                             !string.IsNullOrEmpty(x.Password?.Value) &&
                                                                             string.IsNullOrEmpty(x.Email?.Value);
 

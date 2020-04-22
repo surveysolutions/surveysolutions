@@ -9186,11 +9186,6 @@ vue-textarea-autosize@^1.1.1:
   dependencies:
     core-js "^2.6.5"
 
-vue-timers@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/vue-timers/-/vue-timers-2.0.4.tgz#7e1c443abf2109db5eeab6e62b0f5a47e94cf70b"
-  integrity sha512-QOEVdO4V4o9WjFG6C0Kn9tfdTeeECjqvEQozcQlfL1Tn8v0qx4uUPhTYoc1+s6qoJnSbu8f68x8+nm1ZEir0kw==
-
 vue2-editor@^2.10.2:
   version "2.10.2"
   resolved "https://registry.yarnpkg.com/vue2-editor/-/vue2-editor-2.10.2.tgz#57dd2275d66a407c8078330951a9b601840f033f"
