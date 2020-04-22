@@ -262,4 +262,7 @@
   <data name="NoPermissionsToExecute" xml:space="preserve">
     <value>Пользователь не авторизован выполнять данное действие</value>
   </data>
+  <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+    <value>Смена пароля</value>
+  </data>
 </root>
