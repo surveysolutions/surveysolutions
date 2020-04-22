@@ -880,7 +880,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download a two-factor authenticator app like Microsoft Authenticator for.
+        ///   Looks up a localized string similar to Download a two factor authenticator app like Microsoft Authenticator for.
         /// </summary>
         public static string EnableAuthenticatorLine2 {
             get {
@@ -898,7 +898,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scan the QR Code or enter this shared key into your two factor authenticator app. Spaces and casing do not matter..
+        ///   Looks up a localized string similar to Scan the QR Code or enter the shared key into your two factor authenticator app. Spaces and casing do not matter..
         /// </summary>
         public static string EnableAuthenticatorLine4 {
             get {
@@ -907,7 +907,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Once you have scanned the QR code or input the key above, your two factor authentication app will provide you with a unique code. Enter the code in the confirmation box below..
+        ///   Looks up a localized string similar to Once you have scanned the QR code or input the shared key above, your two factor authenticator app will provide you with a verification code. Enter it below and click &apos;Verify&apos;..
         /// </summary>
         public static string EnableAuthenticatorLine5 {
             get {
@@ -3607,7 +3607,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account..
+        ///   Looks up a localized string similar to This process disables two factor authentication until you verify your authenticator app. If you do not complete your authenticator app configuration your account will be left without two factor authentication..
         /// </summary>
         public static string ResetAuthenticatorLine2 {
             get {

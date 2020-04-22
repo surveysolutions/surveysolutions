@@ -44,7 +44,8 @@
                             <h2>{{$t('Strings.HQ_Views_ShowRecoveryCodes_Title')}}</h2>
                         </div>
                         <div >
-                            <form-group :label="$t('Pages.AccountManage_Login')">
+                            <form-group v-if="!isOwnProfile"
+                                :label="$t('Pages.AccountManage_Login')">
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
@@ -54,6 +55,8 @@
                             <div class="alert alert-warning" 
                                 role="alert">
                                 <p>
+                                    <span class="glyphicon glyphicon-warning-sign" 
+                                        style="margin-right: 5px;"></span>
                                     <strong>{{$t('Pages.RecoveryCodesInfo')}}</strong>
                                 </p>
                                 <p>
@@ -62,7 +65,12 @@
                             </div>                    
                         </div>    
                         <div>
-                            {{recoveryCodes}}                    
+                            <ul>
+                                <li v-for="code in recoveryCodes" 
+                                    :key="code">
+                                    <code  class="recovery-code">{{code}}</code>
+                                </li>
+                            </ul>                                 
                         </div>                  
                     </div>                    
                 </div>
@@ -84,7 +92,7 @@ export default {
     },
     computed: {        
         recoveryCodes(){
-            return this.userInfo.recoveryCodes
+            return this.userInfo.recoveryCodes.split(' ')
         },
         hasAuthenticator(){
             return this.userInfo.hasAuthenticator

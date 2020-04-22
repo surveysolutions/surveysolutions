@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configure authenticator app.
+        ///   Looks up a localized string similar to Set up authenticator app.
         /// </summary>
         public static string HQ_Views_EnableAuthenticator_Title {
             get {
@@ -255,6 +255,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string HQ_Views_ShowRecoveryCodes_Title {
             get {
                 return ResourceManager.GetString("HQ_Views_ShowRecoveryCodes_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add an additional layer of security to your account to protect all your data.
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Description", resourceCulture);
             }
         }
         

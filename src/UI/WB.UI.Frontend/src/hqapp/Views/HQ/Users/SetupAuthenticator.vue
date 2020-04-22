@@ -43,7 +43,8 @@
                             <h2>{{$t('Strings.HQ_Views_EnableAuthenticator_Title')}}</h2>
                         </div>
                         <div >
-                            <form-group :label="$t('Pages.AccountManage_Login')">
+                            <form-group v-if="!isOwnProfile"
+                                :label="$t('Pages.AccountManage_Login')">
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
