@@ -202,7 +202,7 @@
     <value>отправлено {0} интервью</value>
     <comment>отправлено {0} интервью</comment>
   </data>
-  <data name="RocordsMissing" xml:space="preserve">
+  <data name="RecordsMissing" xml:space="preserve">
     <value>Еще нет записей</value>
     <comment>Аудит записи не найдены</comment>
   </data>
