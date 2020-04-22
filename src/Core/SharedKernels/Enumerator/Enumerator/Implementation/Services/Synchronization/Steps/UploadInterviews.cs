@@ -78,7 +78,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         }
                     });
 
-                    var isNonPartialSynchedInterview = IsNonPartialSynchedInterview(interview);
+                    var isPartialSynchedInterview = IsPartialSynchedInterview(interview);
+                    if (isPartialSynchedInterview && Context.Statistics.FailToPartialProcessInterviewIds.Contains(interview.InterviewId))
+                    {
+                        // don't partial synch interviews with problems on download changes and don't have last version of stream
+                        continue;
+                    }
 
                     var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(interview.InterviewId, isNeedCompress);
 
@@ -117,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         this.logger.Warn("Interview event stream is already uploaded");
                     }
 
-                    if (isNonPartialSynchedInterview)
+                    if (!isPartialSynchedInterview)
                     {
                         this.interviewFactory.RemoveInterview(interview.InterviewId);
                         this.Context.Statistics.SuccessfullyUploadedInterviewsCount++;
@@ -142,6 +147,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         protected abstract bool IsCompressEnabled();
 
         protected abstract bool IsNonPartialSynchedInterview(InterviewView interview);
+
+        protected bool IsPartialSynchedInterview(InterviewView interview) => !IsNonPartialSynchedInterview(interview);
 
         private void MarkInterviewAsNonDeletedMore(Guid interviewId)
         {

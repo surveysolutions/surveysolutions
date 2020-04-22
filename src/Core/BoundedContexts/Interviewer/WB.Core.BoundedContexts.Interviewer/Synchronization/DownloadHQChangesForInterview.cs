@@ -129,26 +129,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                         }
                     });
 
-                    List<CommittedEvent> interviewDetails = await this.synchronizationService.GetInterviewDetailsAsyncAfterEvent(
+                    List<CommittedEvent> events = await this.synchronizationService.GetInterviewDetailsAsyncAfterEvent(
                         interview.InterviewId, interview.LastHqEventId, transferProgress, cancellationToken);
 
-                    if (interviewDetails == null || interviewDetails.Count == 0)
+                    if (events == null || events.Count == 0)
                     {
                         continue;
                     }
 
-                    if (!IsCanInsertEventsInStream(interviewDetails))
+                    if (!IsCanInsertEventsInStream(events))
                     {
+                        statistics.FailToPartialProcessInterviewIds.Add(interview.InterviewId);
+                        statistics.FailedToPartialDownloadedInterviewsCount++;
                         continue;
                     }
 
-                    eventStore.InsertEventsFromHqInEventsStream(interview.InterviewId, new CommittedEventStream(interview.InterviewId, interviewDetails));
-                    eventBus.PublishCommittedEvents(interviewDetails);
+                    eventStore.InsertEventsFromHqInEventsStream(interview.InterviewId, new CommittedEventStream(interview.InterviewId, events));
+                    eventBus.PublishCommittedEvents(events);
 
                     aggregateRootRepositoryCacheCleaner.CleanCache();
 
 
-                    if (interview.IsCompleted && DoesNewEventsHaveComments(interviewDetails))
+                    if (interview.IsCompleted && DoesNewEventsHaveComments(events))
                     {
                         var userId = principal.CurrentUserIdentity.UserId;
                         var command = new RestartInterviewCommand(interview.InterviewId, userId, "reopen after get new comments", DateTime.Now);
@@ -204,7 +206,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                         return true;
 
                     default:
-                        var isAnswerEvent = @event.GetType().IsSubclassOf(typeof(QuestionAnswered));
+                        var isAnswerEvent = @event.Payload.GetType().IsSubclassOf(typeof(QuestionAnswered));
                         return !isAnswerEvent;
                 }
             });

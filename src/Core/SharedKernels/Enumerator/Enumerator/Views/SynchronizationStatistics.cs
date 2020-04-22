@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public class SynchronizationStatistics
@@ -28,5 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public int SuccessfullyPartialUploadedInterviewsCount { get; set; }
         public int FailedToPartialDownloadedInterviewsCount { get; set; }
         public int ReopenedInterviewsAfterReceivedCommentsCount { get; set; }
+
+        public HashSet<Guid> FailToPartialProcessInterviewIds { get; set; } = new HashSet<Guid>();
     }
 }
