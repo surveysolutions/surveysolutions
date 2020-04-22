@@ -2,6 +2,6 @@
 {
     public class RemoteTabletSettingsApiView
     {
-        public bool CustomSynchronizationEnabled { get; set; }
+        public bool PartialSynchronizationEnabled { get; set; }
     }
 }

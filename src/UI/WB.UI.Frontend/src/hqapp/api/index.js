@@ -332,11 +332,11 @@ class AdminSettings {
             allowInterviewerUpdateProfile: allowInterviewerUpdateProfile,
         })
     }
-    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isCustomSynchronizationEnabled) {
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled) {
         return this.http.post(`${this.base}/InterviewerSettings`, {
             interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
             notificationsEnabled: isDeviceNotificationsEnabled,
-                customSynchronizationEnabled: isCustomSynchronizationEnabled,
+            partialSynchronizationEnabled: isPartialSynchronizationEnabled,
         })
     }
     getInterviewerSettings() {

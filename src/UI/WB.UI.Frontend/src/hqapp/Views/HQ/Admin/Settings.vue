@@ -153,15 +153,15 @@
                     <div class="form-group">
                         <input
                             class="checkbox-filter single-checkbox"
-                            v-model="isCustomSynchronizationEnabled"
+                            v-model="isPartialSynchronizationEnabled"
                             @change="updateDeviceSettings"
-                            id="interviewerCustomSynchronizationEnabled"
+                            id="interviewerPartialSynchronizationEnabled"
                             type="checkbox"/>
-                        <label for="interviewerCustomSynchronizationEnabled"
+                        <label for="interviewerPartialSynchronizationEnabled"
                             style="font-weight: bold">
                             <span class="tick"></span>
-                            {{$t('Settings.InterviewerCustomSynchronization')}}
-                            <p style="font-weight: normal">{{$t('Settings.CustomSynchronizationDescription')}}</p>
+                            {{$t('Settings.InterviewerPartialSynchronization')}}
+                            <p style="font-weight: normal">{{$t('Settings.PartialSynchronizationDescription')}}</p>
                         </label>
                     </div>
                 </div>
@@ -279,7 +279,7 @@ export default {
             globalNoticeUpdated: false,
             isAllowInterviewerUpdateProfile: false,
             isInterviewerAutomaticUpdatesEnabled: false,
-            isCustomSynchronizationEnabled: false,
+            isPartialSynchronizationEnabled: false,
             isDeviceNotificationsEnabled: false,
             isEmailAllowed: false,
         }
@@ -303,7 +303,7 @@ export default {
             const interviewerSettings = await this.$hq.AdminSettings.getInterviewerSettings()
             this.isInterviewerAutomaticUpdatesEnabled = interviewerSettings.data.interviewerAutoUpdatesEnabled
             this.isDeviceNotificationsEnabled = interviewerSettings.data.notificationsEnabled
-            this.isCustomSynchronizationEnabled = interviewerSettings.data.customSynchronizationEnabled
+            this.isPartialSynchronizationEnabled = interviewerSettings.data.partialSynchronizationEnabled
 
             const webInterviewSettings = await this.$hq.AdminSettings.getWebInterviewSettings()
             this.isEmailAllowed = webInterviewSettings.data.allowEmails
@@ -350,7 +350,7 @@ export default {
             return this.$hq.AdminSettings.setInterviewerSettings(
                 this.isInterviewerAutomaticUpdatesEnabled,
                 this.isDeviceNotificationsEnabled,
-                this.isCustomSynchronizationEnabled
+                this.isPartialSynchronizationEnabled
             )
         },
         updateWebInterviewEmailNotifications() {

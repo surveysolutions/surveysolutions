@@ -233,7 +233,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var tabletSettingsApiView = new RemoteTabletSettingsApiView()
             {
-                CustomSynchronizationEnabled = false,
+                PartialSynchronizationEnabled = false,
             };
             return Task.FromResult(tabletSettingsApiView);
         }

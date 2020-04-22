@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         bool IsOfflineSynchronizationDone { get; }
         void SetOfflineSynchronizationCompleted();
 
-        bool CustomSynchronizationEnabled { get; }
-        void SetCustomSynchronizationEnabled(bool enable);
+        bool PartialSynchronizationEnabled { get; }
+        void SetPartialSynchronizationEnabled(bool enable);
     }
 }

@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             await base.ExecuteAsync();
 
             var tabletSettings = await this.synchronizationService.GetTabletSettings(Context.CancellationToken);
-            interviewerSettings.SetCustomSynchronizationEnabled(tabletSettings.CustomSynchronizationEnabled);
+            interviewerSettings.SetPartialSynchronizationEnabled(tabletSettings.PartialSynchronizationEnabled);
         }
 
 
