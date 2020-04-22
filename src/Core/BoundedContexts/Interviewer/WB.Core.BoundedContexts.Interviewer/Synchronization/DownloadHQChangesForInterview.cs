@@ -189,7 +189,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         private bool IsCanInsertEventsInStream(List<CommittedEvent> events)
         {
-            //return true;
             return events.All(@event =>
             {
                 switch (@event.Payload)

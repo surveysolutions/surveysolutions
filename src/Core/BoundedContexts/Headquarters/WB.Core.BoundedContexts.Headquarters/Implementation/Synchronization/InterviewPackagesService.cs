@@ -267,7 +267,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     $"Interview events by {interview.InterviewId} processing failed. Package status {interview.InterviewStatus}. Reason: '{exception.Message}'",
                     exception);
 
-                // don't save package for partial synch
+                // don't save package for partial synchronization
                 if (interview.InterviewStatus != InterviewStatus.Completed && interview.InterviewStatus != InterviewStatus.ApprovedBySupervisor)
                 {
                     throw;

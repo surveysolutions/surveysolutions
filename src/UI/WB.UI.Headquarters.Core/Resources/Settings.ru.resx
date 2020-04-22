@@ -303,12 +303,12 @@
     <value>Опция активирует уведомления пользователя на устройстве касательно изменений и необходимых действий</value>
   </data>
   <data name="UserProfileSettings_Title" xml:space="preserve">
-    <value>Настройки профеля пользователя</value>
-    <comment>Настройки профеля пользователя</comment>
+    <value>Настройки профиля пользователя</value>
+    <comment>Настройки профиля пользователя</comment>
+
   </data>
   <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
-    <value>Редактирование профеля интервьювера</value>
-    <comment>Редактирование своего профеля</comment>
+    <value>Редактирование профиля интервьювера</value>
   </data>
   <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
     <value>Разрешает редактирование интервьюверам их контактной информации в профиле</value>
