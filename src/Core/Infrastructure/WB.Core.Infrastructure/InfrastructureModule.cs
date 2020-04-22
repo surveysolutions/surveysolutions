@@ -12,7 +12,7 @@ using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.Infrastructure
 {
-    public class InfrastructureModule : IModule, IAppModule
+    public class InfrastructureModule : IAppModule, IModule
     {
         public void Load(IIocRegistry registry)
         {
@@ -34,14 +34,6 @@ namespace WB.Core.Infrastructure
             registry.Bind<IInScopeExecutor, NoScopeInScopeExecutor>();
         }
 
-        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
+        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

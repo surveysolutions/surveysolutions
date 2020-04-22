@@ -12,10 +12,5 @@ namespace WB.Core.BoundedContexts.Headquarters
         {
             registry.Bind<IQuestionnaireUpgradeService, QuestionnaireUpgradeService>();
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
     }
 }

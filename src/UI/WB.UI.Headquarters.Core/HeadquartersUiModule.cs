@@ -110,10 +110,5 @@ namespace WB.UI.Headquarters
 
             registry.BindToConstant(() => eventBusSettings);
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
     }
 }

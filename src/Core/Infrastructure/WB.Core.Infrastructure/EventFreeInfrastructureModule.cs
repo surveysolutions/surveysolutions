@@ -28,7 +28,7 @@ namespace WB.Core.Infrastructure
             return Task.CompletedTask;
         }
 
-        public class DummyEventStore : IEventStore
+        private class DummyEventStore : IEventStore
         {
             public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
             {
@@ -56,7 +56,7 @@ namespace WB.Core.Infrastructure
             }
         }
 
-        public class DummyEventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository
+        private class DummyEventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository
         {
             public IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
             {

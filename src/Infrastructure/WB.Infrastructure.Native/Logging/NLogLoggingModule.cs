@@ -19,7 +19,5 @@ namespace WB.Infrastructure.Native.Logging
                 return new NLogLogger("UNKNOWN");
             });
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

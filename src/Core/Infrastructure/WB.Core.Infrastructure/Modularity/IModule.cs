@@ -6,7 +6,7 @@ namespace WB.Core.Infrastructure.Modularity
     {
     }
 
-    public interface IModule<in T> : IInitModule where T: IIocRegistry
+    public interface IModule<in T>
     {
         void Load(T registry);
     }

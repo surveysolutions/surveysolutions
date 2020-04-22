@@ -30,7 +30,7 @@ using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
-    public class OrmModule : IModule
+    public class OrmModule : IModule, IInitModule
     {
         private readonly UnitOfWorkConnectionSettings connectionSettings;
 
