@@ -186,8 +186,11 @@
   <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
     <value>{0} interview(s) removed</value>
   </data>
-  <data name="SynchronizationCompleted_InterviewsPatches" xml:space="preserve">
-    <value>{0} interview(s) updated</value>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
+    <value>{0} interview(s) partial updated from server</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
+    <value>{0} interview(s) partial uploaded</value>
   </data>
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
     <value>{0} interview(s) have been reopened after receiving comments on them</value>
