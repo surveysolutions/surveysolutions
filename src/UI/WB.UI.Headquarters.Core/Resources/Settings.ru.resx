@@ -323,10 +323,10 @@
   <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
     <value>Разрешить респонденту отправлять электронные письма (применяется, если рассылка настроена)</value>
   </data>
-  <data name="CustomSynchronizationDescription" xml:space="preserve">
+  <data name="PartialSynchronizationDescription" xml:space="preserve">
     <value>Если опция включена, то планшет будет отсылать частично собранные данные</value>
   </data>
-  <data name="InterviewerCustomSynchronization" xml:space="preserve">
+  <data name="InterviewerPartialSynchronization" xml:space="preserve">
     <value>Частичная синхронизация</value>
   </data>
 </root>

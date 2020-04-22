@@ -210,11 +210,11 @@ namespace WB.UI.Shared.Enumerator.Services
         public string GetDataBaseSize() => 
             FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
 
-        public bool CustomSynchronizationEnabled => this.CurrentSettings.CustomSynchronizationEnabled ?? false;
+        public bool PartialSynchronizationEnabled => this.CurrentSettings.PartialSynchronizationEnabled ?? false;
 
-        public void SetCustomSynchronizationEnabled(bool enable)
+        public void SetPartialSynchronizationEnabled(bool enable)
         {
-            this.SaveCurrentSettings(settings => { settings.CustomSynchronizationEnabled = enable; });
+            this.SaveCurrentSettings(settings => { settings.PartialSynchronizationEnabled = enable; });
         }
     }
 }

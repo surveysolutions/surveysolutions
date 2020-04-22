@@ -124,15 +124,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When enabled then interviewer tablet will send partial collected data to server.
-        /// </summary>
-        public static string CustomSynchronizationDescription {
-            get {
-                return ResourceManager.GetString("CustomSynchronizationDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enable notifications on device.
         /// </summary>
         public static string DeviceNotifications {
@@ -540,9 +531,9 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enable partial synchronization.
         /// </summary>
-        public static string InterviewerCustomSynchronization {
+        public static string InterviewerPartialSynchronization {
             get {
-                return ResourceManager.GetString("InterviewerCustomSynchronization", resourceCulture);
+                return ResourceManager.GetString("InterviewerPartialSynchronization", resourceCulture);
             }
         }
         
@@ -606,6 +597,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string MobileAppSettings_Title {
             get {
                 return ResourceManager.GetString("MobileAppSettings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled then interviewer tablet will send partial collected data to server.
+        /// </summary>
+        public static string PartialSynchronizationDescription {
+            get {
+                return ResourceManager.GetString("PartialSynchronizationDescription", resourceCulture);
             }
         }
         
