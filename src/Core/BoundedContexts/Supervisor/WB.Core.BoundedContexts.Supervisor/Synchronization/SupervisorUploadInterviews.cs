@@ -29,6 +29,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             this.interviewViewRepository = interviewViewRepository;
         }
 
+        protected override bool IsCompressEnabled()
+        {
+            return true;
+        }
+
         protected override bool ShouldRemoveLocalInterview(InterviewView interview)
         {
             return interview.Status == InterviewStatus.ApprovedBySupervisor;
