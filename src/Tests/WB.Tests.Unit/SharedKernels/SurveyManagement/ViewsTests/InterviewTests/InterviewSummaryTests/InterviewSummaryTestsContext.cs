@@ -2,6 +2,7 @@
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Tests.Abc.TestFactories;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryTests
 {
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
 
             }, questionnaireId);
 
-            return questionnaireDocument;
+            return questionnaireDocument.WithEntityMap();
 
         }
     }

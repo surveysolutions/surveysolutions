@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
                 q = q.Where(i => i.QuestionType == QuestionType.GpsCoordinates);
 
-                return q.Select(i => i.StatExportCaption).Distinct().ToList();
+                return q.Select(i => i.StataExportCaption).Distinct().ToList();
             });
 
             return questions;
