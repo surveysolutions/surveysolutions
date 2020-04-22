@@ -27,7 +27,6 @@ using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
-
     [Authorize(Roles = "Administrator")]
     [Route("api/{controller}/{action}/{id?}")]
     public class ControlPanelApiController : ControllerBase
@@ -36,7 +35,20 @@ namespace WB.UI.Headquarters.Controllers.Api
         private const string DEFAULTEMPTYQUERY = "";
 
         private readonly IConfiguration configuration;
-        private static readonly Regex ConnectionStringPasswordRegex = new Regex("password=([^;]*);", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static readonly Regex ConnectionStringPasswordRegex =
+            new Regex("password=([^;]*);", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        public static HashSet<string> SensitiveKeys = new HashSet<string>
+        {
+            "Captcha:SecretKey", "Captcha:SiteKey",
+            "ASPNETCORE_TOKEN",
+            "ExternalStorages:OAuth2:Dropbox:ClientId", "ExternalStorages:OAuth2:Dropbox:ClientSecret",
+            "ExternalStorages:OAuth2:GoogleDrive:ClientId", "ExternalStorages:GoogleDrive:Dropbox:ClientSecret",
+            "ExternalStorages:OAuth2:OneDrive:ClientId", "ExternalStorages:OAuth2:OneDrive:ClientSecret",
+            "GoogleMap:ApiKey",
+        };
+
         private readonly ITabletInformationService tabletInformationService;
         private readonly IClientApkProvider clientApkProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -70,20 +82,23 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.dashboardStatisticsService = dashboardStatisticsService;
         }
 
-
         public ActionResult<DataTableResponse<TabletInformationView>> TabletInfos(DataTableRequest request)
         {
             var items = this.tabletInformationService.GetAllTabletInformationPackages();
 
             if (!string.IsNullOrEmpty(request.Search?.Value))
-                items = items.Where(x => x.UserName != null && x.UserName.StartsWith(request.Search.Value, StringComparison.OrdinalIgnoreCase)).ToList();
+                items = items.Where(x =>
+                    x.UserName != null &&
+                    x.UserName.StartsWith(request.Search.Value, StringComparison.OrdinalIgnoreCase)).ToList();
 
             var itemsSlice = items.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
 
             foreach (var tabletInformationView in itemsSlice)
             {
-                tabletInformationView.DownloadUrl = Url.Action("Download", new {id=tabletInformationView.PackageName});
+                tabletInformationView.DownloadUrl =
+                    Url.Action("Download", new {id = tabletInformationView.PackageName});
             }
+
             return new DataTableResponse<TabletInformationView>
             {
                 Data = itemsSlice,
@@ -92,7 +107,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 RecordsTotal = items.Count
             };
         }
-        
+
         public ActionResult<List<ApkInfo>> AppUpdates()
         {
             var folder = clientApkProvider.ApkClientsFolder();
@@ -111,7 +126,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                     if (fi.Name.EndsWith(".apk", StringComparison.OrdinalIgnoreCase))
                     {
                         var build = this.androidPackageReader.Read(fi.FullName)?.BuildNumber;
-                        if(build != null) 
+                        if (build != null)
                             result.Build = build;
                         var hash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(fi.FullName));
                         result.Hash = hash;
@@ -122,33 +137,47 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                     return result;
                 });
-            
+
             return enumerable.ToList();
         }
 
         public class ApkInfo
         {
             public string FileName { get; set; }
-            
+
             public int? Build { get; set; }
-            
+
             public string Hash { get; set; }
-            
+
             public long FileSizeInBytes { get; set; }
-            
+
             public DateTime LastWriteTimeUtc { get; set; }
         }
 
-        public ActionResult<List<KeyValuePair<string, string>>> Configuration()
+        public ActionResult<SortedList<string, KeyValuePair<string, string>>> Configuration()
         {
-            List<KeyValuePair<string, string>> keyValuePairs = configuration.AsEnumerable(true).ToList();
-            var connectionString = keyValuePairs.FirstOrDefault(x => x.Key == "ConnectionStrings:DefaultConnection");
-            keyValuePairs.Remove(connectionString);
+            var config = new SortedList<string, KeyValuePair<string, string>>();
 
-            keyValuePairs.Add(
-                new KeyValuePair<string, string>(connectionString.Key, RemovePasswordFromConnectionString(connectionString.Value)));
+            void AddConfig(string key, string value) => config.Add(key, new KeyValuePair<string, string>(key, value));
 
-            return keyValuePairs.OrderBy(x => x.Key).ToList();
+            foreach (var kv in configuration.AsEnumerable(true))
+            {
+                if (kv.Key == "ConnectionStrings:DefaultConnection")
+                {
+                    AddConfig(kv.Key, RemovePasswordFromConnectionString(kv.Value));
+                    continue;
+                }
+
+                if (SensitiveKeys.Contains(kv.Key))
+                {
+                    AddConfig(kv.Key, "***");
+                    continue;
+                }
+
+                AddConfig(kv.Key, kv.Value);
+            }
+
+            return config;
         }
 
         private static string RemovePasswordFromConnectionString(string connectionString)
@@ -167,10 +196,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         [ApiNoCache]
         public ComboboxModel ExceptionTypes(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
-            var exceptionTypes = this.brokenInterviewPackagesViewFactory.GetExceptionTypes(pageSize: pageSize, searchBy: query);
+            var exceptionTypes =
+                this.brokenInterviewPackagesViewFactory.GetExceptionTypes(pageSize: pageSize, searchBy: query);
 
             return new ComboboxModel(exceptionTypes.ExceptionTypes.Select(x => new ComboboxOptionModel(x, x)).ToArray(),
-                (int)exceptionTypes.TotalCountByQuery);
+                (int) exceptionTypes.TotalCountByQuery);
         }
 
         [HttpGet]
@@ -186,7 +216,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public ActionResult<DataTableResponse<BrokenInterviewPackageView>> InterviewPackages(DataTableInterviewPackageFilter request)
+        public ActionResult<DataTableResponse<BrokenInterviewPackageView>> InterviewPackages(
+            DataTableInterviewPackageFilter request)
         {
             var filteredItems = this.brokenInterviewPackagesViewFactory.GetFilteredItems(new InterviewPackageFilter
             {
@@ -219,7 +250,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             public DateTime? ToProcessingDateTime { get; set; }
             public string ExceptionType { get; set; }
             public bool ReturnOnlyUnknownExceptionType { get; set; }
-
         }
 
         [HttpGet]
@@ -236,23 +266,25 @@ namespace WB.UI.Headquarters.Controllers.Api
                     TypeNameHandling = TypeNameHandling.Objects
                 });
             }
+
             return Content(interviewPackage.Events);
         }
 
         [HttpPost]
-        public IActionResult ReprocessSelectedBrokenPackages([FromBody]ReprocessSelectedBrokenPackagesRequestView request)
+        public IActionResult ReprocessSelectedBrokenPackages(
+            [FromBody] ReprocessSelectedBrokenPackagesRequestView request)
         {
             this.brokenPackagesService.ReprocessSelectedBrokenPackages(request.PackageIds);
             return this.Ok();
         }
 
         [HttpPost]
-        public IActionResult MarkReasonAsKnown([FromBody]MarkKnownReasonRequest request)
+        public IActionResult MarkReasonAsKnown([FromBody] MarkKnownReasonRequest request)
         {
             this.brokenPackagesService.PutReason(request.PackageIds, request.ErrorType);
             return this.Ok();
         }
-        
+
         [HttpGet]
         public async Task<HealthReport> GetHealthResult(CancellationToken token)
         {
@@ -264,8 +296,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         public List<MetricState> GetMetricsState(CancellationToken token)
         {
             return dashboardStatisticsService.GetState() ?? new List<MetricState>();
-        }              
-        
+        }
+
         public class ReprocessSelectedBrokenPackagesRequestView
         {
             public int[] PackageIds { get; set; }
@@ -280,9 +312,8 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         public class QuestionnaireView
         {
-            public string Title{get; set; }
+            public string Title { get; set; }
             public string Identity { get; set; }
         }
     }
 }
-
