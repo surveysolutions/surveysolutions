@@ -8,7 +8,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
     public class InterviewDataExportBulkCommandBuilder : IInterviewDataExportBulkCommandBuilder
     {
-        private const int MaxParametersCountInOneCommand = 65000;
+        private const int MaxParametersCountInOneCommand = 30_000;
 
         public void AppendUpdateValueForTable(ExportBulkCommand command, string tableName, RosterTableKey rosterTableKey, IEnumerable<UpdateValueInfo> updateValueInfos)
         {

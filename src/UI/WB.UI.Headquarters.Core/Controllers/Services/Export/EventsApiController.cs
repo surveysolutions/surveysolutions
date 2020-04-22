@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Amazon.Runtime.Internal.Util;
 using FluentMigrator.Runner;
 using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Ncqrs.Eventing;
@@ -19,6 +20,7 @@ using Newtonsoft.Json;
 namespace WB.UI.Headquarters.Controllers.Services.Export
 {
     [Route("api/export/v1")]
+    [Authorize(AuthenticationSchemes = "TenantToken")]
     public class EventsApiController : Controller
     {
         private readonly IHeadquartersEventStore headquartersEventStore;
@@ -32,7 +34,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("interview/events", Name = "EventsFeed")]
-        [ServiceFilter(typeof(ServiceApiKeyAuthorization))]
         [HttpGet]
         [ResponseCache(NoStore = true)]
         public async Task<ActionResult> Get(int sequence = 0, int pageSize = 500)
@@ -91,7 +92,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("interview/events/{id:guid}", Name = "InterviewEventsFeed")]
-        [ServiceFilter(typeof(ServiceApiKeyAuthorization))]
         [HttpGet]
         [ResponseCache(NoStore = true)]
         public async Task<ActionResult<EventsFeedPage>> Get(Guid id, int lastSequence = 0, int pageSize = 500)
