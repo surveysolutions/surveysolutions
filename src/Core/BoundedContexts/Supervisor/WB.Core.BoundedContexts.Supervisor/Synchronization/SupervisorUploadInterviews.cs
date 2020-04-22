@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             return true;
         }
 
-        protected override bool ShouldRemoveLocalInterview(InterviewView interview)
+        protected override bool IsNonPartialSynchedInterview(InterviewView interview)
         {
             return interview.Status == InterviewStatus.ApprovedBySupervisor;
         }
