@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         public RemoteTabletSettingsApiView TabletSettings() =>
             new RemoteTabletSettingsApiView()
             {
-                CustomSynchronizationEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsCustomSynchronizationEnabled()
+                PartialSynchronizationEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsPartialSynchronizationEnabled()
             };
     }
 }
