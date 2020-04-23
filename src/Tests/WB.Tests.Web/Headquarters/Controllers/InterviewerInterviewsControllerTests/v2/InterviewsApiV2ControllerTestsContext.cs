@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -24,7 +26,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
             IMetaInfoBuilder metaBuilder = null,
             IJsonAllTypesSerializer synchronizationSerializer =  null)
         {
-            return new InterviewsApiV2Controller(
+            var interviewsApiV2Controller = new InterviewsApiV2Controller(
                 imageFileStorage: imageFileStorage ?? Mock.Of<IImageFileStorage>(),
                 audioFileStorage: audioFileStorage ?? Mock.Of<IAudioFileStorage>(),
                 authorizedUser: authorizedUser ?? Mock.Of<IAuthorizedUser>(),
@@ -36,6 +38,17 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 eventStore: Mock.Of<IHeadquartersEventStore>(),
                 audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
                 webHostEnvironment: Mock.Of<IWebHostEnvironment>());
+
+            var httpContext = new DefaultHttpContext(); // or mock a `HttpContext`
+
+            var controllerContext = new ControllerContext()
+            {
+                HttpContext = httpContext,
+            };
+
+            interviewsApiV2Controller.ControllerContext = controllerContext;
+
+            return interviewsApiV2Controller;
         }
     }
 }
