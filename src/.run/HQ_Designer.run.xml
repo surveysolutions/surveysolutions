@@ -1,0 +1,7 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="HQ_Designer" type="CompoundRunConfigurationType">
+    <toRun name="WB.UI.Headquarters: WB.UI.Headquarters.Core" type="LaunchSettings" />
+    <toRun name="WB.UI.Designer" type="LaunchSettings" />
+    <method v="2" />
+  </configuration>
+</component>

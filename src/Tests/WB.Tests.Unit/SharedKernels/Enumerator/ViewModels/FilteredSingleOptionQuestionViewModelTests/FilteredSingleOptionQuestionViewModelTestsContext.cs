@@ -20,7 +20,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    internal class FilteredSingleOptionQuestionViewModelTestsContext : MvxIoCSupportingTest
+    public class FilteredSingleOptionQuestionViewModelTestsContext : MvxIoCSupportingTest
     {
         public FilteredSingleOptionQuestionViewModelTestsContext()
         {

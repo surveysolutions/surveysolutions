@@ -8,6 +8,7 @@
     </PropertyGroup>
     <ItemGroup>
         <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
+        <PackageReference Include="ApprovalTests" Version="5.0.4" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
 
         <PackageReference Include="Autofac" Version="4.9.4" />

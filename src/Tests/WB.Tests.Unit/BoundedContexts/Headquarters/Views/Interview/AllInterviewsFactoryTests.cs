@@ -82,42 +82,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
             Assert.That(item, Has.Property(nameof(item.CanDelete)).EqualTo(false));
         }
 
-        [TestCase]
-        public void When_loading_interviews_without_prefilled_questions()
-        {
-            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            Guid responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            string key = "11-11-11-11";
-            DateTime updateDate = new DateTime(2017, 3, 23);
-
-            var interviewSummaryStorage = Create.Storage.InMemoryReadSideStorage<InterviewSummary>();
-            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 1, responsibleId: responsibleId, key: key, updateDate: updateDate, wasCreatedOnClient: true), Guid.NewGuid());
-            // - SearchBy
-            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 1, responsibleId: responsibleId, key: "22-22-22-22", updateDate: updateDate, wasCreatedOnClient: true), Guid.NewGuid());
-            // - CensusOnly
-            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 1, responsibleId: responsibleId, key: "11-11-11-12", updateDate: updateDate, wasCreatedOnClient: false), Guid.NewGuid());
-            // - QuestionnaireId
-            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 2, responsibleId: responsibleId, key: "11-11-11-13", updateDate: updateDate, wasCreatedOnClient: true), Guid.NewGuid());
-            // - ChangedFrom, ChangedTo
-            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 1, responsibleId: responsibleId, key: "11-11-11-14", updateDate: updateDate.AddMonths(1), wasCreatedOnClient: true), Guid.NewGuid());
-            // - InterviewerId
-            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 1, responsibleId: Guid.Parse("11111111111111111111111111111111"), key: "11-11-11-15", updateDate: updateDate, wasCreatedOnClient: true), Guid.NewGuid());
-
-            AllInterviewsFactory interviewsFactory = Create.Service.AllInterviewsFactory(interviewSummaryStorage);
-
-            var interviews = interviewsFactory.LoadInterviewsWithoutPrefilled(new InterviewsWithoutPrefilledInputModel
-            {
-                QuestionnaireId = Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
-                ChangedFrom = new DateTime(2017, 3, 22),
-                ChangedTo = new DateTime(2017, 3, 24),
-                InterviewerId = responsibleId,
-                CensusOnly = true,
-                SearchBy = "1"
-            });
-
-            Assert.That(interviews.TotalCount, Is.EqualTo(1));
-        }
-
         [Test]
         public void Should_find_interviews_by_assignment()
         {

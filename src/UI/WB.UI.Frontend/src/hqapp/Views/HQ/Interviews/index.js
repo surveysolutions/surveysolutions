@@ -1,5 +1,4 @@
 import Interviews from './HqInterviews'
-import Vue from 'vue'
 
 export default class InterviewsComponent {
     constructor(rootStore) {
@@ -13,13 +12,5 @@ export default class InterviewsComponent {
         },
         ]
     }
-    initialize() {
-        const VeeValidate = require('vee-validate')
-        Vue.use(VeeValidate)
-        // const installApi = require("~/webinterview/api").install
-
-        // installApi(Vue, {
-        //     store: this.rootStore
-        // });
-    }
+    initialize() { }
 }
