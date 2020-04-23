@@ -31,5 +31,7 @@ namespace Ncqrs.Eventing.Storage
         Task<List<CommittedEvent>> GetEventsInReverseOrderAsync(Guid aggregateRootId, int offset, int limit);
 
         Task<int> TotalEventsCountAsync(Guid aggregateRootId);
+
+        IEnumerable<CommittedEvent> Read(Guid aggregateRootId, params string[] typeNames);
     }
 }

@@ -85,16 +85,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         private bool IsNeedUpdateApp(List<InterviewApiView> interviews)
         {
-            if (webHostEnvironment.IsDevelopment())
-                return false;
-
             var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
             if (productVersion != null && productVersion >= new Version(20, 5))
                 return false;
 
             return interviews.Any(interview =>
             {
-                var events = eventStore.Read(interview.Id, 0).ToList();
+                var events = eventStore.Read(interview.Id, nameof(SubstitutionTitlesChanged));
 
                 return events.Any(e =>
                 {
