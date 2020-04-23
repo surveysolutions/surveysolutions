@@ -393,7 +393,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
 function conditionToQueryString(conditions) {
     const result = []
     conditions.forEach(c => {
-        result.push(`${c.variable},${c.field},${c.value}`)
+        result.push(`${c.variable},${c.field},${JSON.stringify(c.value)}`)
     })
     return result.length > 0 ? result : null
 }
@@ -407,7 +407,7 @@ function queryStringToCondition(queryStringArray) {
         result.push({
             variable: parts[0],
             field: parts[1],
-            value: isNaN(value) ? value : toNumber(value),
+            value: JSON.parse(value),
         })
     })
     return result
