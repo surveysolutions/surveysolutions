@@ -217,7 +217,7 @@
     <value>Enable partial synchronization</value>
   </data>
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>When enabled then interviewer tablet will send partial collected data to server</value>
+    <value>When enabled, interviewer tablet will send answers from non completed interviews to Headquarters</value>
   </data>
   <data name="EmailProvider_Amazon" xml:space="preserve">
     <value>Amazon Simple Email Service (SES)</value>
