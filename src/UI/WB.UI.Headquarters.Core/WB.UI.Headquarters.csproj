@@ -8,7 +8,6 @@
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <LangVersion>latest</LangVersion>
-    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
     <PublishSingleFile>false</PublishSingleFile>
     <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
@@ -22,6 +21,11 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="11.0.0-preview.127" />
+    <PackageReference Include="HotChocolate.AspNetCore.Voyager" Version="10.4.1" />
+    <PackageReference Include="HotChocolate.Types.Filters" Version="11.0.0-preview.127" />
+    <PackageReference Include="HotChocolate.Types.Selections" Version="11.0.0-preview.127" />
+    <PackageReference Include="HotChocolate.Types.Sorting" Version="11.0.0-preview.127" />
     <PackageReference Include="Humanizer.Core.ar" Version="2.7.9" />
     <PackageReference Include="Humanizer.Core.es" Version="2.7.9" />
     <PackageReference Include="Humanizer.Core.fr" Version="2.7.9" />
@@ -94,5 +98,18 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
     <EmbeddedResource Include="wwwroot\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\WebInterviewSettings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewSettings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\WebInterviewSettings.resx">
+      <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

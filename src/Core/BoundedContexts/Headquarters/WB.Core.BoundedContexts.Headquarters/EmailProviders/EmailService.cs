@@ -39,9 +39,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             switch (settings.Provider)
             {
                 case EmailProvider.Amazon:
-                    return await SendEmailWithAmazon(to, subject, htmlBody, textBody, settings);
+                    return await SendEmailWithAmazon(to, subject, htmlBody, textBody, settings).ConfigureAwait(false);
                 case EmailProvider.SendGrid:
-                    return await SendEmailWithSendGrid(to, subject, htmlBody, textBody, settings);
+                    return await SendEmailWithSendGrid(to, subject, htmlBody, textBody, settings).ConfigureAwait(false);
                 default:
                     throw new Exception("Email provider wasn't set up");
             }

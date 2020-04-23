@@ -61,11 +61,7 @@
                 <input
                     name="__RequestVerificationToken"
                     type="hidden"
-                    :value="this.$hq.Util.getCsrfCookie()"/>
-                <input
-                    name="Id"
-                    type="hidden"
-                    :value="$config.model.id"/>
+                    :value="this.$hq.Util.getCsrfCookie()"/>               
                 <input
                     name="Id"
                     type="hidden"

@@ -12,6 +12,8 @@ const webTesterFolder = path.join(uiFolder, "WB.UI.WebTester");
 
 const StatsPlugin = require('stats-webpack-plugin')
 const CleanupPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
+const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const locales = {
     hq: ["Assignments", "Common", "Dashboard", "DataExport", "DataTables",
@@ -159,6 +161,12 @@ module.exports = {
                     children: false
                 }]);
 
+        config.plugin("notifier")
+            .use(WebpackBuildNotifierPlugin)
+
+        config.plugin("livereload")
+            .use(LiveReloadPlugin, [{ appendScriptTag: true, delay: 1000 }])
+
         config.merge({
             optimization: {
                 splitChunks: {
@@ -191,5 +199,19 @@ module.exports = {
                 return args;
             });
         });
-    }
+    },
+
+    pluginOptions: {
+        // Apollo-related options
+        apollo: {
+            // // Enable automatic mocking
+            // enableMocks: true,
+            // // Enable Apollo Engine
+            // enableEngine: false,
+            // Enable ESLint for `.gql` files
+            lintGQL: true,
+
+            /* Other options (with default values) */
+        },
+    },
 };
