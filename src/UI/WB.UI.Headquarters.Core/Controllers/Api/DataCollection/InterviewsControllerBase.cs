@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         public virtual ActionResult<List<InterviewApiView>> Get()
         {
-            List<InterviewApiView> resultValue = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
+            List<InterviewApiView> interviewApiViews = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
                 .Select(interview => new InterviewApiView
                 {
                     Id = interview.Id,
@@ -76,10 +76,40 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     IsMarkedAsReceivedByInterviewer = interview.IsReceivedByInterviewer
                 }).ToList();
 
-            var response = resultValue;
+            var isNeedUpdateApp = IsNeedUpdateApp(interviewApiViews);
+            if (isNeedUpdateApp)
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
 
-            return response;
+            return interviewApiViews;
         }
+
+        private bool IsNeedUpdateApp(List<InterviewApiView> interviews)
+        {
+            if (webHostEnvironment.IsDevelopment())
+                return false;
+
+            var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
+            if (productVersion != null && productVersion >= new Version(20, 5))
+                return false;
+
+            return interviews.Any(interview =>
+            {
+                var events = eventStore.Read(interview.Id, 0).ToList();
+
+                return events.Any(e =>
+                {
+                    if (e.Payload is SubstitutionTitlesChanged titlesChanged)
+                    {
+                        return titlesChanged.Questions.Length == 0 && 
+                               titlesChanged.Groups.Length == 0 &&
+                               titlesChanged.StaticTexts.Length == 0;
+                    }
+
+                    return false;
+                });
+            });
+        }
+
 
         protected abstract IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId);
 
