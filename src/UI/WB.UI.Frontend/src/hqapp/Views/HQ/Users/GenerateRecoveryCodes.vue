@@ -23,21 +23,20 @@
             <h1>{{$t('Strings.HQ_Views_Manage_Title')}}</h1>
         </div>
         <div class="extra-margin-bottom">
-            <div class="profile flex-row">                
-                <div class="col-md-3">
-                    <ul class="nav flex-block">
-                        <li class="nav-item"><a class="nav-link"
-                            id="profile"
-                            :href="profileUrl">{{$t('Pages.AccountManage_Profile')}}</a></li>                            
-                        <li class="nav-item"><a class="nav-link"
-                            id="profile"
-                            v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
-                        <li class="nav-item open"><a class="nav-link active"
-                            id="two-factor"
-                            :href="tfaUrl">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>                            
-                    </ul>
-                </div>
-                <div class="col-md-9">
+            <div class="profile">
+                <ul class="nav nav-tabs extra-margin-bottom">
+                    <li class="nav-item"><a class="nav-link"
+                        id="profile"
+                        v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                        id="password"
+                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                                
+                    <li class="nav-item active"><a class="nav-link active"
+                        id="two-factor"
+                        v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
+                </ul> 
+                
+                <div class="col-sm-12">
                     <div >
                         <div >
                             <h2>{{$t('Strings.HQ_Views_GenerateRecoveryCodes_Title')}}</h2>
