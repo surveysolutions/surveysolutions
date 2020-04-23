@@ -210,7 +210,7 @@
   <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
     <value>Не все отметки были загружены</value>
   </data>
-   <data name="CreateAdmin" xml:space="preserve">
+  <data name="CreateAdmin" xml:space="preserve">
     <value>Создать администратора</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
@@ -1360,7 +1360,7 @@
   </data>
   <data name="Configuration" xml:space="preserve">
       <value>Настройки</value>
-  </data>  
+  </data>
   <data name="InterviewPackages" xml:space="preserve">
       <value>Интервью пакеты</value>
       <comment>Интервью пакеты</comment>
@@ -1553,7 +1553,7 @@
       <comment>Актуализировать</comment>
   </data>
   <data name="Admin_Reevaluate_InterviewId_Required" xml:space="preserve">
-      <value>Пустой идентификатор интервью </value>
+      <value>Пустой идентификатор интервью</value>
       <comment>Пустой идентификатор интервью </comment>
   </data>
   <data name="Admin_Reevaluate_InterviewId_Invalid" xml:space="preserve">

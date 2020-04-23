@@ -324,16 +324,16 @@ export default {
             var urlParams = {}
 
             if (this.questionnaireId != undefined) {
-                urlParams['templateId'] = this.formatGuid(this.questionnaireId.key)
-                if (this.questionnaireVersion != undefined) urlParams['templateVersion'] = this.questionnaireVersion.key
+                urlParams['questionnaireId'] = this.formatGuid(this.questionnaireId.key)
+                if (this.questionnaireVersion != undefined) urlParams['questionnaireVersion'] = this.questionnaireVersion.key
             }
 
             if (row.startDate != undefined) urlParams['unactiveDateStart'] = row.startDate
             if (row.endDate != undefined) urlParams['unactiveDateEnd'] = row.endDate
 
-            urlParams['status'] = status
+            urlParams['status'] = status.toUpperCase()
 
-            if (this.supervisorId != undefined) urlParams['responsible'] = this.supervisorId.value
+            if (this.supervisorId != undefined) urlParams['responsibleName'] = this.supervisorId.value
 
             var querystring = this.encodeQueryData(urlParams)
 

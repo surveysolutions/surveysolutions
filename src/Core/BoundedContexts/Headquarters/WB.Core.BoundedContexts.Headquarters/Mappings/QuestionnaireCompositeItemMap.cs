@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.LinkedToQuestionId, p => p.Column("linked_to_question_id"));
             Property(x => x.LinkedToRosterId, p => p.Column("linked_to_roster_id"));
             Property(x => x.QuestionnaireIdentity);
-            Property(x => x.StatExportCaption, p => p.Column("stata_export_caption"));
+            Property(x => x.StataExportCaption, p => p.Column("stata_export_caption"));
             Property(x => x.VariableLabel, p => p.Column("variable_label"));
             Property(x => x.QuestionText, p => p.Column("question_text"));
         }
