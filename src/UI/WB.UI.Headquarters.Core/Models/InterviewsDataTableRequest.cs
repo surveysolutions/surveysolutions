@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public Guid? ResponsibleId { get; set; }
         public string ResponsibleName { get; set; }
 
-        public InterviewStatus? Status { get; set; }
+        public string Status { get; set; }
     }
 
     public class InterviewsDataTableResponse : DataTableResponse<AllInterviewsViewItem>

@@ -138,7 +138,7 @@ export default {
         tableClass: {
             type: String,
             default: null,
-        },
+        },        
     },
 
     data() {
@@ -147,6 +147,7 @@ export default {
             isProcessingFlag: false,
             selectedRows: [],
             table: null,
+            errorMessage: null,
             export: {
                 excel: null,
                 csv: null,
@@ -252,7 +253,7 @@ export default {
 
             if (!options.order) options.order = [[this.selectable ? 1 : 0, 'asc']]
 
-            if (options.ajax != null) {
+            if (options.ajax != null && typeof options.ajax !== 'function') {
                 if (!options.ajax.dataSrc) {
                     options.ajax.dataSrc = json => {
                         if (json.data) {
@@ -296,12 +297,12 @@ export default {
                     }
                 }
 
-                options.ajax.complete = response => {
+                options.ajax.complete = options.ajax.complete || (response => {
                     self.$emit('totalRows', response.responseJSON.recordsTotal)
                     self.$emit('ajaxComplete', response.responseJSON)
-                }
+                })
 
-                options.ajax.error = function(response) {
+                options.ajax.error = options.ajax.error || function(response) {
                     self.errorMessage = response.responseJSON.Message
                 }
             }
@@ -363,6 +364,10 @@ export default {
 
             this.table.on('page', () => {
                 self.$emit('page')
+            })
+
+            this.table.on('order', (a,b,c) => {                
+                self.$emit('order', { args: c})
             })
 
             this.$emit('DataTableRef', this.table)

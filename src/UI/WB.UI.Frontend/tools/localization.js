@@ -187,7 +187,7 @@ module.exports = class LocalizationBuilder {
         //     // }
         // });
 
-        var result = Object.assign(initial, newone);
+        var result = Object.assign(initial || {}, newone);
         return result;
     }
 
