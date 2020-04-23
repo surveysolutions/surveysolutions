@@ -85,6 +85,7 @@
                         id="enable-authenticator" 
                         :href="getUrl('../../Users/SetupAuthenticator')" 
                         style="margin-right: 5px;"
+                        v-bind:disabled="userInfo.isObserving"
                         class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}
                     </a>
                     <a v-if="hasAuthenticator" 
