@@ -44,8 +44,10 @@
         </ModalFrame>
 
         <InterviewFilter 
+            
             v-for="condition in conditions"
             :key="'filter_' + condition.variable"
+            :id="'filter_' + condition.variable"
             :question="questionFor(condition)"
             :condition="condition"
             @change="conditionChanged">
