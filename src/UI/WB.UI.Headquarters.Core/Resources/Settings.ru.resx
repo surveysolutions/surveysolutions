@@ -324,7 +324,7 @@
     <value>Разрешить респонденту отправлять электронные письма (применяется, если рассылка настроена)</value>
   </data>
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>Если опция включена, то планшет будет отсылать частично собранные данные</value>
+    <value>Если опция включена, планшет будет отсылать частично собранные данные</value>
   </data>
   <data name="InterviewerPartialSynchronization" xml:space="preserve">
     <value>Частичная синхронизация</value>
