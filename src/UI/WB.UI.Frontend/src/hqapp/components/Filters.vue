@@ -11,6 +11,8 @@
             <h4>{{title}}</h4>
             <slot></slot>
         </div>
+        <slot name="additional">
+        </slot>
     </aside>
 </template>
 

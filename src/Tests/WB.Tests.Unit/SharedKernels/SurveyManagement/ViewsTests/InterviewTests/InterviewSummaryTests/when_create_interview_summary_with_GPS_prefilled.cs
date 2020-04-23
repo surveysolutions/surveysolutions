@@ -1,32 +1,20 @@
-using System;
-using FluentAssertions;
-
-using Main.Core.Documents;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryTests;
+using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryViewFactoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryTests
 {
     internal class when_create_interview_summary_with_GPS_prefilled : InterviewSummaryTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaireDocument = CreateQuestionnaireWithTwoPrefieldIncludingOneGPS(questionnaireId);
-            BecauseOf();
+        [Test]
+        public void should_view_model_not_be_null () {
+            var questionnaireDocument = CreateQuestionnaireWithTwoPrefieldIncludingOneGPS(Id.g1);
+
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            
+            var viewModel = new InterviewSummary(plainQuestionnaire);
+            
+            Assert.That(viewModel, Has.Property(nameof(viewModel.AnswersToFeaturedQuestions)).Count.EqualTo(1));
         }
-
-        public void BecauseOf() => viewModel = new InterviewSummary(new PlainQuestionnaire(questionnaireDocument, 1, null, new SubstitutionService()));
-
-        [NUnit.Framework.Test] public void should_view_model_not_be_null () =>
-            viewModel.Should().NotBeNull();
-
-        [NUnit.Framework.Test] public void should_ () =>
-            viewModel.AnswersToFeaturedQuestions.Count.Should().Be(1);
-
-        
-        private static QuestionnaireDocument questionnaireDocument;
-        private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-        private static InterviewSummary viewModel;
     }
 }

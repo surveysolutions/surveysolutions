@@ -173,10 +173,10 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             LogResume(interview);
-            return this.View("Index", GetInterviewModel(id, webInterviewConfig));
+            return this.View("Index", GetInterviewModel(id, interview, webInterviewConfig));
         }
 
-        private WebInterviewIndexPageModel GetInterviewModel(string interviewId, WebInterviewConfig webInterviewConfig)
+        private WebInterviewIndexPageModel GetInterviewModel(string interviewId, IStatefulInterview interview, WebInterviewConfig webInterviewConfig)
         {
             var emailSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
 
@@ -190,7 +190,15 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var askForEmail = isAskForEmailAvailable ? Request.Cookies[AskForEmail] ?? "false" : "false";
-
+            var questionnaire = this.questionnaireBrowseViewFactory.GetById(interview.QuestionnaireIdentity);
+            
+            foreach (var messageKey in webInterviewConfig.CustomMessages.Keys.ToList())
+            {
+                var oldMessage = webInterviewConfig.CustomMessages[messageKey];
+                webInterviewConfig.CustomMessages[messageKey] = 
+                    SubstituteQuestionnaireName(oldMessage, questionnaire.Title);
+            }
+            
             return new WebInterviewIndexPageModel
             {
                 Id = interviewId,
@@ -460,7 +468,7 @@ namespace WB.UI.Headquarters.Controllers
 
             LogResume(interview);
 
-            return View("Index", GetInterviewModel(id, webInterviewConfig));
+            return View("Index", GetInterviewModel(id, interview, webInterviewConfig));
         }
 
         private void LogResume(IStatefulInterview statefulInterview)
@@ -569,7 +577,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new {id, returnUrl});
             }
 
-            return View("Index", GetInterviewModel(id, webInterviewConfig));
+            return View("Index", GetInterviewModel(id, interview, webInterviewConfig));
         }
 
         [HttpPost]
@@ -697,6 +705,9 @@ namespace WB.UI.Headquarters.Controllers
                 ResumeInvitation = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(),
                     questionnaireBrowseItem.Title),
+                ResumeButton = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeButton).ToString(),
+                    questionnaireBrowseItem.Title),
                 SubmitUrl = Url.Action("Resume", "WebInterview"),
             };
         }
@@ -720,6 +731,15 @@ namespace WB.UI.Headquarters.Controllers
                 HasPassword = !string.IsNullOrWhiteSpace(assignment?.Password ?? String.Empty),
                 WelcomeText = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(),
+                    questionnaireBrowseItem.Title),
+                StartNewButton = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.StartNewButton).ToString(),
+                    questionnaireBrowseItem.Title),
+                ResumeButton = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeButton).ToString(),
+                    questionnaireBrowseItem.Title),
+                Description = SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.Invitation).ToString(),
                     questionnaireBrowseItem.Title),
                 CaptchaErrors = ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any()
                                 ? ViewData.ModelState["InvalidCaptcha"].Errors.Select(e => e.ErrorMessage).ToList()

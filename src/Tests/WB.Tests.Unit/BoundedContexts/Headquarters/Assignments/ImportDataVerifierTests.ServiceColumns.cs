@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
@@ -212,6 +213,34 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].Code, Is.EqualTo("PL0060"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(quantity));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+        
+        [Test]
+        public void when_verify_password_in_web_mode_with_no_web_mode_enabled_should_return_PL0059_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneQuestion());
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
+                assignmentPassword: Create.Entity.AssignmentPassword("ABCD123"),
+                assignmentWebMode: null);
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0059"));
+            
+            var interviewImportReference = errors[0].References.First();
+            Assert.That(interviewImportReference, Is.Not.Null, "Should provide error reference");
+            Assert.That(interviewImportReference.DataFile, Is.EqualTo(fileName));
+            Assert.That(interviewImportReference.Content, Is.EqualTo("ABCD123"));
+            Assert.That(interviewImportReference.Column, Is.EqualTo("_password"));
+            Assert.That(interviewImportReference.Type, Is.EqualTo(PreloadedDataVerificationReferenceType.Cell));
         }
     }
 }

@@ -296,20 +296,20 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToEntityId = question.linkedToEntityId;
+                        command.categoriesId = question.categoriesId;
                         command.linkedFilterExpression = question.linkedFilterExpression;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
                         command.validationExpression = question.cascadeFromQuestionId ? '' : command.validationExpression;
                         command.validationMessage = question.cascadeFromQuestionId ? '' : command.validationMessage;
-                        if (shouldGetOptionsOnServer || !_.isEmpty(command.linkedToEntityId)) {
+                        if (shouldGetOptionsOnServer || !_.isEmpty(command.linkedToEntityId) || !_.isEmpty(command.categoriesId)) {
                             command.options = null;
                         } else {
                             command.options = question.options;
                         }
                         command.showAsListThreshold = question.showAsListThreshold;
                         command.showAsList = question.showAsList;
-                        command.categoriesId = question.categoriesId;
                         break;
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
