@@ -211,7 +211,7 @@
     <value>Answer was not saved</value>
   </data>
   <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
-    <value>On Previous Answer</value>
+    <value>On previous answer</value>
   </data>
   <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
     <value>Your comment</value>
@@ -459,7 +459,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Questions with supervisor comments:</value>
   </data>
   <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
-    <value>Supervisor comments don't exist</value>
+    <value>No comments from supervisor</value>
   </data>
   <data name="Interview_Other_Comment_Caption" xml:space="preserve">
     <value>User comment</value>

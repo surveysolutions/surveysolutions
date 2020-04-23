@@ -540,7 +540,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On Previous Answer.
+        ///   Looks up a localized string similar to On previous answer.
         /// </summary>
         public static string Interview_Comment_OnPreviousAnswer {
             get {
@@ -711,7 +711,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor comments don&apos;t exist.
+        ///   Looks up a localized string similar to No comments from supervisor.
         /// </summary>
         public static string Interview_Cover_Supervisor_Comments_does_not_exists {
             get {

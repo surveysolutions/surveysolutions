@@ -90,13 +90,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     var uploadState = await this.synchronizationService.GetInterviewUploadState(interview.InterviewId,
                         interviewEventStreamContainer.Tag, Context.CancellationToken);
 
-                    await this.UploadImagesByCompletedInterviewAsync(interview, uploadState,
+                    await this.UploadImagesByInterviewAsync(interview, uploadState,
                         Context.Progress, Context.CancellationToken);
 
-                    await this.UploadAudioByCompletedInterviewAsync(interview, uploadState,
+                    await this.UploadAudioByInterviewAsync(interview, uploadState,
                         Context.Progress, Context.CancellationToken);
 
-                    await this.UploadAudioAuditByCompletedInterviewAsync(interview, uploadState,
+                    await this.UploadAudioAuditByInterviewAsync(interview, uploadState,
                         Context.Progress, Context.CancellationToken);
 
                     if (!uploadState.IsEventsUploaded)
@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     else
                     {
                         this.interviewFactory.MarkEventsAsReceivedByHQ(interview.InterviewId);
-                        MarkInterviewAsSynchedAndNonDeletedMore(interview.InterviewId);
+                        MarkInterviewAsSynchedAndNonRemovable(interview.InterviewId);
                         this.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount++;
                     }
                 }
@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected bool IsPartialSynchedInterview(InterviewView interview) => !IsNonPartialSynchedInterview(interview);
 
-        private void MarkInterviewAsSynchedAndNonDeletedMore(Guid interviewId)
+        private void MarkInterviewAsSynchedAndNonRemovable(Guid interviewId)
         {
             var interviewView = interviewViewRepository.GetById(interviewId.FormatGuid());
             interviewView.CanBeDeleted = false;
@@ -158,7 +158,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             interviewViewRepository.Store(interviewView);
         }
 
-        private async Task UploadImagesByCompletedInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
+        private async Task UploadImagesByInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
@@ -192,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
         
-        private async Task UploadAudioAuditByCompletedInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
+        private async Task UploadAudioAuditByInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
@@ -224,7 +224,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
 
-        private async Task UploadAudioByCompletedInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
+        private async Task UploadAudioByInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {

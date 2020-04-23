@@ -341,7 +341,7 @@ for further instructions</value>
     <value>{0} new interviews downloaded</value>
   </data>
   <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
-    <value>{0} interviews was updated</value>
+    <value>{0} interviews were updated</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
     <value>{0} rejected interviews returned</value>

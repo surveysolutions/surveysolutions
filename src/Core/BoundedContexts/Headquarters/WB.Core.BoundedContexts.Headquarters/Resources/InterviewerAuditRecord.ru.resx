@@ -215,17 +215,14 @@
     <comment>Назначен ответственный {0} на интервью {1}</comment>
   </data>
   <data name="AssignResponsibleToAssignment" xml:space="preserve">
-    <value>Назначен ответственный {0} на задачу №{1}
-</value>
-    <comment>Назначен ответственный {0} на задачу №{1}
-</comment>
+    <value>Назначен ответственный {0} на задачу №{1}</value>
+    <comment>Назначен ответственный {0} на задачу №{1}</comment>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
-    <value>Установка приложения закончена</value>
-    <comment>Установка приложения закончена</comment>
+    <value>Установка приложения завершена</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
-    <value>{0} интервью были обновленны</value>
+    <value>{0} интервью были обновлены</value>
   </data>
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
     <value>{0} интервью были переоткрыты после получения коментариев по ним</value>

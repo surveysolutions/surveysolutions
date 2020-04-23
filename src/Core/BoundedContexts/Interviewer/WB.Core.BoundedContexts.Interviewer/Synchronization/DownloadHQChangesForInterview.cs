@@ -74,8 +74,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
             List<InterviewApiView> remoteInterviews = await this.synchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
             var remoteInterviewWithSequence = remoteInterviews
-                .Where(i => i.LastSequenceEventId.HasValue)
-                .ToDictionary(k => k.Id, v => v.LastSequenceEventId.Value);
+                .Where(i => i.LastEventId.HasValue)
+                .ToDictionary(k => k.Id, v => v.LastEventId.Value);
 
             var localInterviews = this.interviewViewRepository.LoadAll();
             var localPartialySyncedInterviews = localInterviews
@@ -112,9 +112,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             IProgress<TransferProgress> transferProgress = progress.AsTransferReport();
 
             for (int i = 0; i < interviews.Count; i++)
+            {
+                var interview = interviews[i];
+
                 try
                 {
-                    var interview = interviews[i];
                     cancellationToken.ThrowIfCancellationRequested();
                     progress.Report(new SyncProgressInfo
                     {
@@ -129,7 +131,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                         }
                     });
 
-                    List<CommittedEvent> events = await this.synchronizationService.GetInterviewDetailsAsyncAfterEvent(
+                    List<CommittedEvent> events = await this.synchronizationService.GetInterviewDetailsAfterEventAsync(
                         interview.InterviewId, interview.LastHqEventId, transferProgress, cancellationToken);
 
                     if (events == null || events.Count == 0)
@@ -150,7 +152,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     aggregateRootRepositoryCacheCleaner.CleanCache();
 
 
-                    if (interview.IsCompleted && DoesNewEventsHaveComments(events))
+                    if (interview.IsCompleted && DoNewEventsHaveComments(events))
                     {
                         var userId = principal.CurrentUserIdentity.UserId;
                         var command = new RestartInterviewCommand(interview.InterviewId, userId, "reopen after get new comments", DateTime.Now);
@@ -162,20 +164,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                 }
                 catch (OperationCanceledException)
                 {
-
+                    throw;
                 }
                 catch (Exception exception)
                 {
                     statistics.FailedToPartialDownloadedInterviewsCount++;
 
                     await this.TrySendUnexpectedExceptionToServerAsync(exception);
+
+                    var name = principal.CurrentUserIdentity.Name;
                     this.logger.Error(
-                        "Failed to partial download hq changes for interview, interviewer",
+                        $"Failed to partial download hq changes for interview {interview.InterviewId}, interviewer {name}",
                         exception);
                 }
+            }
         }
 
-        private bool DoesNewEventsHaveComments(List<CommittedEvent> events)
+        private bool DoNewEventsHaveComments(List<CommittedEvent> events)
         {
             return events.Any(@event =>
             {
