@@ -80,7 +80,7 @@ export default {
     apollo: {
         questions:{
             query :gql`query questions($id: Uuid, $version: Long) {
-                questions(id: $id, version: $version, where: {identifying: true}) {
+                questions(id: $id, version: $version, where: { identifying: true }) {
                     questionText, type, variable
                     options { title, value, parentValue }
                 }
@@ -109,11 +109,11 @@ export default {
         },
 
         questionnaireId() {
-            this.conditions = []
+            this.conditions = this.value
         },
 
         questionnaireVersion() {
-            this.conditions = []
+            this.conditions = this.value
         },
     },
 
@@ -126,10 +126,12 @@ export default {
             const condition = find(this.conditions, {variable: question.variable})
             
             if(condition == null) {
-                this.conditions.push({variable: question.variable, value: null})
+                this.conditions.push({variable: question.variable, field: null, value: null})
             } else {
                 this.conditions = filter(this.conditions, c => c.variable != question.variable)
             }
+            
+            this.$emit('change', [...this.conditions])
         },
 
         questionFor(condition) {
