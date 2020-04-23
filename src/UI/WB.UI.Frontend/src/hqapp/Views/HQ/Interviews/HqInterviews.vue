@@ -389,7 +389,7 @@ function conditionToQueryString(conditions) {
     return result.length > 0 ? result : null
 }
 
-function queryStrignToCondition(queryStringArray) {
+function queryStringToCondition(queryStringArray) {
     const result = []
     queryStringArray.forEach(q => {
         const parts = q.split(',')
@@ -689,6 +689,7 @@ export default {
 
         whereQuery() {
             const and = []
+            const self = this
 
             if(this.where.questionnaireId) {
                 and.push({questionnaireId: this.where.questionnaireId})
@@ -707,6 +708,7 @@ export default {
                     if(cond.value == null) return
                             
                     const identifyingQuestions_some = { question: {variable: cond.variable}}
+        
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
                     identifyingQuestions_some[cond.field] = value
                     and.push({ identifyingQuestions_some })
@@ -739,7 +741,7 @@ export default {
         queryString() {
             const query = Object.assign({}, this.where)
             
-            const conditions = filter(this.conditions, c => c.value != null)
+            const conditions = this.conditions
             
             if(conditions.length > 0) {
                 query.conditions = conditionToQueryString(conditions)
@@ -1356,7 +1358,7 @@ export default {
                         self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
 
                         if(query.conditions != null) {
-                            self.conditions = queryStrignToCondition(flatten([query.conditions]))
+                            self.conditions = queryStringToCondition(flatten([query.conditions]))
                         }
                     }
                 }
