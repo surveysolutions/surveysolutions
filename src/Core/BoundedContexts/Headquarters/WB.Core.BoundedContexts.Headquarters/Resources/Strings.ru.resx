@@ -265,6 +265,10 @@
   <data name="NoPermissionsToExecute" xml:space="preserve">
     <value>Пользователь не авторизован выполнять данное действие</value>
   </data>
+  <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+    <value>Не утвержденные Хедквотером</value>
+    <comment>Все интервью кроме </comment>
+  </data>
   <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
     <value>Смена пароля</value>
   </data>
