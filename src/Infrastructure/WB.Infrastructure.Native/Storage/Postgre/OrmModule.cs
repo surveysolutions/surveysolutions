@@ -34,38 +34,31 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     {
         private readonly UnitOfWorkConnectionSettings connectionSettings;
 
-        public OrmModule(UnitOfWorkConnectionSettings connectionSettings) 
+        public OrmModule(UnitOfWorkConnectionSettings connectionSettings)
         {
             this.connectionSettings = connectionSettings;
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
+        { 
             try
             {
+                var loggerProvider = serviceLocator.GetInstance<ILoggerProvider>();
+                
                 status.Message = Modules.InitializingDb;
                 DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
                     this.connectionSettings.PlainStorageSchemaName);
 
                 status.Message = Modules.MigrateDb;
+                
                 DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                     this.connectionSettings.PlainStorageSchemaName,
                     this.connectionSettings.PlainStoreUpgradeSettings,
-                    serviceLocator.GetInstance<ILoggerProvider>());
+                    loggerProvider);
 
                 status.ClearMessage();
-            }
-            catch (Exception exc)
-            {
-                status.Error(Modules.ErrorDuringRunningMigrations, exc);
 
-                LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
-                throw new InitializationException(Subsystem.Database, null, exc);
-            }
-
-            if (this.connectionSettings.ReadSideUpgradeSettings != null)
-            {
-                try
+                if (this.connectionSettings.ReadSideUpgradeSettings != null)
                 {
                     status.Message = Modules.InitializingDb;
                     DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
@@ -73,23 +66,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                     status.Message = Modules.MigrateDb;
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
-                        this.connectionSettings.ReadSideSchemaName, this.connectionSettings.ReadSideUpgradeSettings,
-                        serviceLocator.GetInstance<ILoggerProvider>());
+                        this.connectionSettings.ReadSideSchemaName, 
+                        this.connectionSettings.ReadSideUpgradeSettings,
+                        loggerProvider);
 
                     status.ClearMessage();
                 }
-                catch (Exception exc)
-                {
-                    status.Error(Modules.ErrorDuringRunningMigrations, exc);
 
-                    LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
-                    throw new InitializationException(Subsystem.Database, null, exc);
-                }
-            }
-
-            if (this.connectionSettings.LogsUpgradeSettings != null)
-            {
-                try
+                if (this.connectionSettings.LogsUpgradeSettings != null)
                 {
                     status.Message = Modules.InitializingDb;
                     DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
@@ -99,22 +83,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                         this.connectionSettings.LogsSchemaName,
                         this.connectionSettings.LogsUpgradeSettings,
-                        serviceLocator.GetInstance<ILoggerProvider>());
+                        loggerProvider);
 
                     status.ClearMessage();
                 }
-                catch (Exception exc)
-                {
-                    status.Error(Modules.ErrorDuringRunningMigrations, exc);
 
-                    LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
-                    throw new InitializationException(Subsystem.Database, null, exc);
-                }
-            }
-
-            if (this.connectionSettings.UsersUpgradeSettings != null)
-            {
-                try
+                if (this.connectionSettings.UsersUpgradeSettings != null)
                 {
                     status.Message = Modules.InitializingDb;
                     DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
@@ -124,17 +98,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                         this.connectionSettings.UsersSchemaName,
                         this.connectionSettings.UsersUpgradeSettings,
-                        serviceLocator.GetInstance<ILoggerProvider>());
+                        loggerProvider);
 
                     status.ClearMessage();
                 }
-                catch (Exception exc)
-                {
-                    status.Error(Modules.ErrorDuringRunningMigrations, exc);
+            }
+            catch (Exception exc)
+            {
+                status.Error(Modules.ErrorDuringRunningMigrations, exc);
 
-                    LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
-                    throw new InitializationException(Subsystem.Database, null, exc);
-                }
+                LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
+                throw exc.AsInitializationException(connectionSettings.ConnectionString);
             }
 
             return Task.CompletedTask;
@@ -150,7 +124,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>));
 
             registry.Bind(typeof(IReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
-            registry.Bind(typeof(IReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>)); 
+            registry.Bind(typeof(IReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>));
 
             registry.Bind(typeof(INativeReadSideStorage<>), typeof(PostgreReadSideStorage<>));
             registry.Bind(typeof(INativeReadSideStorage<,>), typeof(PostgreReadSideStorage<,>));
@@ -197,7 +171,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private HbmMapping GetUsersMappings()
         {
             var mapper = new ModelMapper();
-            var readSideMappingTypes = this.connectionSettings.ReadSideMappingAssemblies.SelectMany(x => x.GetExportedTypes())
+            var readSideMappingTypes = this.connectionSettings.ReadSideMappingAssemblies
+                .SelectMany(x => x.GetExportedTypes())
                 .Where(x => x.GetCustomAttribute<UsersAttribute>() != null &&
                             x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
 
@@ -218,7 +193,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         /// </summary>
         protected static string Serialize(HbmMapping hbmElement)
         {
-            var setting = new XmlWriterSettings { Indent = true };
+            var setting = new XmlWriterSettings {Indent = true};
             var serializer = new XmlSerializer(typeof(HbmMapping));
             using (var memStream = new MemoryStream())
             {
@@ -237,8 +212,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private HbmMapping GetReadSideMappings()
         {
             var mapper = new ModelMapper();
-            var readSideMappingTypes = this.connectionSettings.ReadSideMappingAssemblies.SelectMany(x => x.GetExportedTypes())
-                .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() == null && 
+            var readSideMappingTypes = this.connectionSettings.ReadSideMappingAssemblies
+                .SelectMany(x => x.GetExportedTypes())
+                .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() == null &&
                             x.GetCustomAttribute<UsersAttribute>() == null &&
                             x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
 
@@ -249,7 +225,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
-        
+
         private HbmMapping GetPlainMappings()
         {
             var mapper = new ModelMapper();

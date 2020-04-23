@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Modules {
@@ -61,7 +61,25 @@ namespace WB.Core.Infrastructure.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during updating database. Please contact support..
+        ///   Looks up a localized string similar to Application cannot connect to database using provided connection string. Check application log file for details.
+        /// </summary>
+        public static string ErrorConnectingToDatabase {
+            get {
+                return ResourceManager.GetString("ErrorConnectingToDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application are not authorized to connect to database. Check application log file for details.
+        /// </summary>
+        public static string ErrorDatabaseUnauthorized {
+            get {
+                return ResourceManager.GetString("ErrorDatabaseUnauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error during database migration. Check application log file for details.
         /// </summary>
         public static string ErrorDuringRunningMigrations {
             get {
@@ -70,7 +88,7 @@ namespace WB.Core.Infrastructure.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during site initialization. Please contact support..
+        ///   Looks up a localized string similar to Error during site initialization. Check application log file for details.
         /// </summary>
         public static string ErrorDuringSiteInitialization {
             get {
@@ -79,7 +97,7 @@ namespace WB.Core.Infrastructure.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Initializing the database.
+        ///   Looks up a localized string similar to Database is initializing.
         /// </summary>
         public static string InitializingDb {
             get {
@@ -88,7 +106,7 @@ namespace WB.Core.Infrastructure.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Migrating the database to the latest version.
+        ///   Looks up a localized string similar to Database migration in progress.
         /// </summary>
         public static string MigrateDb {
             get {
