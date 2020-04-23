@@ -128,6 +128,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose question to apply filters.
+        /// </summary>
+        public static string ChooseQuestionsTitle {
+            get {
+                return ResourceManager.GetString("ChooseQuestionsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No responsible chosen for some interview(s). Please choose a responsible supervisor or interviewer..
         /// </summary>
         public static string ChooseResponsible {
@@ -197,6 +206,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string Errors {
             get {
                 return ResourceManager.GetString("Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters by questions.
+        /// </summary>
+        public static string FiltersByQuestions {
+            get {
+                return ResourceManager.GetString("FiltersByQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters by questions is only available when concrete questionnaire version is selected.
+        /// </summary>
+        public static string QuestionsFilterNotAvailable {
+            get {
+                return ResourceManager.GetString("QuestionsFilterNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions selector.
+        /// </summary>
+        public static string QuestionsSelector {
+            get {
+                return ResourceManager.GetString("QuestionsSelector", resourceCulture);
             }
         }
         
