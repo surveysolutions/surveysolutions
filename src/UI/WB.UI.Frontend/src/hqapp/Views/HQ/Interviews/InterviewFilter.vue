@@ -1,16 +1,18 @@
 <template>
     <div class="block-filter" 
         v-if="question != null && isSupported">
-        <h5 :title="question.questionText">
-            {{sanitizeHtml(question.questionText)}} <inline-selector :options="fieldOptions"
+        <h5 :title="sanitizeHtml(question.questionText)">
+            {{sanitizeHtml(question.questionText)}} 
+            <inline-selector :options="fieldOptions"
                 no-empty
+                :id="`filter_selector_${condition.variable}`"
                 v-if="fieldOptions != null"
                 v-model="field" />
         </h5>
-
+        
         <Typeahead
             v-if="question.type == 'SINGLEOPTION'"
-            :control-id="'question-' + question.variable"           
+            :control-id="'filter_input_' + condition.variable"           
             :placeholder="$t('Common.SelectOption')"            
             :values="options"
             :value="selectedOption"
@@ -19,13 +21,13 @@
         <filter-input v-if="question.type == 'TEXT'"
             :value="condition.value"
             @input="input"                
-            :id="'filter_' + condition.variable" />
+            :id="'filter_input_' + condition.variable" />
         
         <filter-input v-if="question.type == 'NUMERIC'"
             :value="condition.value"
-            type="numeric"
+            type="number"
             @input="input"                
-            :id="'filter_' + condition.variable" />
+            :id="'filter_input_' + condition.variable" />
             
     </div>   
 </template>
@@ -63,7 +65,7 @@ export default {
             this.$emit('change', {
                 variable: this.question.variable,
                 field: this.field.id,
-                value: value.toLowerCase(),
+                value: value == null ? null : value.toLowerCase(),
             })
         },
 
