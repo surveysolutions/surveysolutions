@@ -37,7 +37,7 @@ type Interview {
   questionnaireId: Uuid!
   questionnaireVersion: Long!
   "Indicator for whether the interview is on the interviewer’s tablet now"
-  receivedByInterviewer: String
+  receivedByInterviewer: Boolean
   responsibleId: Uuid
   "Login of current responsible user"
   responsibleName: String
