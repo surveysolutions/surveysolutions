@@ -1,7 +1,7 @@
 <template>
     <div class="block-filter" 
         v-if="question != null && isSupported">
-        <h5 :title="question.questionText">
+        <h5 :title="sanitizeHtml(question.questionText)">
             {{sanitizeHtml(question.questionText)}} <inline-selector :options="fieldOptions"
                 no-empty
                 v-if="fieldOptions != null"
@@ -23,7 +23,7 @@
         
         <filter-input v-if="question.type == 'NUMERIC'"
             :value="condition.value"
-            type="numeric"
+            type="number"
             @input="input"                
             :id="'filter_' + condition.variable" />
             
@@ -63,7 +63,7 @@ export default {
             this.$emit('change', {
                 variable: this.question.variable,
                 field: this.field.id,
-                value: value.toLowerCase(),
+                value: value == null ? null : value.toLowerCase(),
             })
         },
 
