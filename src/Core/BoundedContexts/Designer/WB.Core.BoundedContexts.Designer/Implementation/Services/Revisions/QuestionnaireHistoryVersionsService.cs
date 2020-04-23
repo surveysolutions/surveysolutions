@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -13,7 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.BoundedContexts.Designer.Implementation.Services
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
 {
     public class QuestionnaireHistoryVersionsService : IQuestionnaireHistoryVersionsService
     {
@@ -22,13 +23,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IOptions<QuestionnaireHistorySettings> historySettings;
         private readonly IPatchApplier patchApplier;
         private readonly IPatchGenerator patchGenerator;
+        private readonly IMemoryCache memoryCache;
+
+        private readonly object lockObject = new object();
 
         public QuestionnaireHistoryVersionsService(DesignerDbContext dbContext,
             IEntitySerializer<QuestionnaireDocument> entitySerializer,
             IOptions<QuestionnaireHistorySettings> historySettings,
             IPatchApplier patchApplier,
             IPatchGenerator patchGenerator,
-            ICommandService commandService)
+            ICommandService commandService,
+            IMemoryCache memoryCache)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             this.entitySerializer = entitySerializer;
@@ -36,9 +41,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.patchApplier = patchApplier;
             this.patchGenerator = patchGenerator;
             this.commandService = commandService;
+            this.memoryCache = memoryCache;
         }
 
+        private string CacheKey(string id) => "QuestionnaireHistoricalDocument:" + id;
+
         public QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId)
+        {
+            lock (lockObject)
+            {
+                return memoryCache.GetOrCreate(CacheKey(historyReferenceId.FormatGuid()), cache =>
+                {
+                    cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
+                    return GetByHistoryVersionInt(historyReferenceId);
+                });
+            }
+        }
+
+        private QuestionnaireDocument GetByHistoryVersionInt(Guid historyReferenceId)
         {
             var questionnaireChangeRecord = this.dbContext.QuestionnaireChangeRecords.Find(historyReferenceId.FormatGuid());
             if (questionnaireChangeRecord == null)
@@ -162,7 +182,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.dbContext.SaveChanges();
         }
 
-        public string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire)
+        private string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire)
         {
             var previousVersion = this.GetLastStoredQuestionnaireVersion(questionnaire);
             var left = this.entitySerializer.Serialize(previousVersion);

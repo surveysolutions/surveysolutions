@@ -70,6 +70,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not approved by Headquarters.
+        /// </summary>
+        public static string AllInterviewersExceptApprovedByHeadquarters {
+            get {
+                return ResourceManager.GetString("AllInterviewersExceptApprovedByHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All periods.
         /// </summary>
         public static string AllPeriods {
