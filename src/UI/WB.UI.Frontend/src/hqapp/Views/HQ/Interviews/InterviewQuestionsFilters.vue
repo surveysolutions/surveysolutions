@@ -4,7 +4,7 @@
         <h4>
             {{$t("Interviews.FiltersByQuestions")}}
         </h4>
-        <div class="block-filter">            
+        <div class="block-filter">
             <button type="button"
                 id="btnQuestionsFilter"
                 class="btn"
@@ -42,16 +42,16 @@
                     role="cancel">{{ $t("Common.Ok") }}</button>
             </div>
         </ModalFrame>
-             
+
         <InterviewFilter 
-            v-for="condition in conditions"         
+            v-for="condition in conditions"
             :key="'filter_' + condition.variable"
-            :question="questionFor(condition)"            
+            :question="questionFor(condition)"
             :condition="condition"
             @change="conditionChanged">
-        </InterviewFilter>    
+        </InterviewFilter>
     </div>
-    
+
 </template>
 <script>
 

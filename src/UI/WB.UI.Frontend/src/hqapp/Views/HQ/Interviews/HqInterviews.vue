@@ -78,7 +78,7 @@
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="rows => selectedRows = rows"
-            @page="resetSelection"           
+            @page="resetSelection"
             @ajaxComplete="isLoading = false"
             :selectable="showSelectors"
             :selectableId="'id'">
@@ -765,6 +765,7 @@ export default {
             this.conditions = conditions
             this.reloadTableAndSaveRoute()
         },
+
         togglePrefield() {
             this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
             return false
@@ -815,10 +816,12 @@ export default {
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
             this.questionnaireVersion = null
+            this.conditions = []
         },
 
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
+            this.conditions = []
         },
 
         userSelected(newValue) {
@@ -1301,6 +1304,7 @@ export default {
 
             props.forEach(iterator, this)
         },
+
         reloadTable() {
             this.isLoading = true
             this.selectedRows.splice(0, this.selectedRows.length)
@@ -1397,7 +1401,7 @@ export default {
         },
     },
 
-    mounted() {        
+    mounted() {
         this.initPageFilters()
     },
 
