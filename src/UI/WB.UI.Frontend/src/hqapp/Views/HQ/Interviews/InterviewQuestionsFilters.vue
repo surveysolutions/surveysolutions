@@ -1,10 +1,12 @@
 <template>
-    <div class="filters-container">
+    <div class="filters-container"
+        id="questionsFilters">
         <h4>
             {{$t("Interviews.FiltersByQuestions")}}
         </h4>
-        <div class="block-filter">            
+        <div class="block-filter">
             <button type="button"
+                id="btnQuestionsFilter"
                 class="btn"
                 :disabled="isDisabled"
                 :title="isDisabled ? $t('Interviews.QuestionsFilterNotAvailable'):''"
@@ -14,6 +16,7 @@
         </div>
 
         <ModalFrame ref="questionsSelector"
+            id="modalQuestionsSelector"
             :title="$t('Interviews.ChooseQuestionsTitle')">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -32,22 +35,25 @@
             </form>
             <div slot="actions">
                 <button
+                    id="btnQuestionsSelectorOk"
                     type="button"
                     class="btn btn-primary"
                     data-dismiss="modal"
                     role="cancel">{{ $t("Common.Ok") }}</button>
             </div>
         </ModalFrame>
-             
+
         <InterviewFilter 
-            v-for="condition in conditions"         
+            
+            v-for="condition in conditions"
             :key="'filter_' + condition.variable"
-            :question="questionFor(condition)"            
+            :id="'filter_' + condition.variable"
+            :question="questionFor(condition)"
             :condition="condition"
             @change="conditionChanged">
-        </InterviewFilter>    
+        </InterviewFilter>
     </div>
-    
+
 </template>
 <script>
 
@@ -80,7 +86,7 @@ export default {
     apollo: {
         questions:{
             query :gql`query questions($id: Uuid, $version: Long) {
-                questions(id: $id, version: $version, where: {identifying: true}) {
+                questions(id: $id, version: $version, where: { identifying: true }) {
                     questionText, type, variable
                     options { title, value, parentValue }
                 }
@@ -109,11 +115,11 @@ export default {
         },
 
         questionnaireId() {
-            this.conditions = []
+            this.conditions = this.value
         },
 
         questionnaireVersion() {
-            this.conditions = []
+            this.conditions = this.value
         },
     },
 
@@ -126,10 +132,12 @@ export default {
             const condition = find(this.conditions, {variable: question.variable})
             
             if(condition == null) {
-                this.conditions.push({variable: question.variable, value: null})
+                this.conditions.push({variable: question.variable, field: null, value: null})
             } else {
                 this.conditions = filter(this.conditions, c => c.variable != question.variable)
             }
+            
+            this.$emit('change', [...this.conditions])
         },
 
         questionFor(condition) {
