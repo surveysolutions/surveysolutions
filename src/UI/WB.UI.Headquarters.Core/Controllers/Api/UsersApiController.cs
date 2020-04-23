@@ -287,7 +287,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ApiNoCache]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<IActionResult> ImportUsers(ImportUsersRequest request)
         {
             if (request?.File == null)

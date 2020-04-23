@@ -23,7 +23,7 @@ using WB.UI.Headquarters.Services.Impl;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator, Headquarter")]
-    [ObserverNotAllowed]
+    [ObservingNotAllowed]
     public class WebInterviewSetupController : Controller
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;

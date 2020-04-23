@@ -24,7 +24,6 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -103,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> Manage(Guid? id)
         {
@@ -137,7 +136,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> ChangePassword(Guid? id)
         {
@@ -171,7 +170,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> TwoFactorAuthentication(Guid? id)
         {
@@ -217,7 +216,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> ResetAuthenticator(Guid? id)
         {
@@ -238,14 +237,14 @@ namespace WB.UI.Headquarters.Controllers
                 Api = new
                 {
                     ResetAuthenticatorKeyUrl = Url.Action("ResetAuthenticatorKey", new { id = id }),
-                    EnableAuthenticatorUrl = Url.Action("EnableAuthenticator", new { id = id }),
+                    EnableAuthenticatorUrl = Url.Action("SetupAuthenticator", new { id = id }),
                 }
             });
         }
 
         
         [HttpGet]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> GenerateRecoveryCodes(Guid? id)
         {
@@ -274,7 +273,8 @@ namespace WB.UI.Headquarters.Controllers
 
 
         [HttpGet]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
+        [ObservingNotAllowed]
         [AntiForgeryFilter]
         public async Task<ActionResult> ShowRecoveryCodes(Guid? id)
         {
@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> Disable2fa(Guid? id)
         {
@@ -335,7 +335,8 @@ namespace WB.UI.Headquarters.Controllers
 
 
         [HttpGet]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
+        [ObservingNotAllowed]
         [AntiForgeryFilter]
         public async Task<ActionResult> SetupAuthenticator(Guid? id)
         {
@@ -383,6 +384,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
+        [ObservingNotAllowed]
         [AntiForgeryFilter]
         public ActionResult Create(string id)
         {
@@ -405,7 +407,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.UserBatchUpload)]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public ActionResult Upload() => View(new
         {
             Api = new
@@ -428,7 +430,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [Authorize(Roles = "Administrator, Headquarter")]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserModel model)
         {
@@ -494,7 +496,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordModel model)
         {
@@ -531,7 +533,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public async Task<ActionResult> UpdateUser([FromBody] EditUserModel editModel)
         {
@@ -586,7 +588,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public async Task<ActionResult> CheckVerificationCode([FromBody] VerificationCodeModel editModel)
         {
@@ -625,7 +627,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public async Task<ActionResult> ResetAuthenticatorKey([FromBody] TwoFAUser editModel)
         {
@@ -649,7 +651,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public async Task<ActionResult> DisableTwoFactor([FromBody] TwoFAUser editModel)
         {
@@ -676,7 +678,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public async Task<ActionResult> GenerateRecoveryCodes([FromBody] TwoFAUser editModel)
         {
@@ -686,7 +688,6 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
-
 
             if (this.ModelState.IsValid)
             {
@@ -791,12 +792,15 @@ namespace WB.UI.Headquarters.Controllers
             if (this.authorizedUser.IsHeadquarter && (user.Id == this.authorizedUser.Id  || user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer)))
                 return true;
 
-            if (this.authorizedUser.IsSupervisor && user.IsInRole(UserRoles.Interviewer) && user.Profile?.SupervisorId == this.authorizedUser.Id)
+            if (this.authorizedUser.IsSupervisor && (user.Id == this.authorizedUser.Id || (user.IsInRole(UserRoles.Interviewer) && user.Profile?.SupervisorId == this.authorizedUser.Id)))
                 return true;
 
             if (this.authorizedUser.IsInterviewer 
                 && user.Id == this.authorizedUser.Id
                 && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
+                return true;
+
+            if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)
                 return true;
 
             return false;

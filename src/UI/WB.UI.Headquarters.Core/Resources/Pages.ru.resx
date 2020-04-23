@@ -1501,16 +1501,16 @@
     <value>Генерация новых ключей восстановления не меняет ключи, которые используются в аутефикационном приложении. </value>
   </data>
   <data name="EnableAuthenticatorLine1" xml:space="preserve">
-    <value>Чтобы использовать приложение аутентификатор, следуйте следующим шагам:</value>
+    <value>Чтобы использовать приложение аутентификатор, выполните следующие шаги:</value>
   </data>
   <data name="EnableAuthenticatorLine2" xml:space="preserve">
-    <value>Скачайте двухфактороное приложение аутентификатор, например, Microsoft Authenticator для</value>
+    <value>Скачайте приложение аутентификатор, например, Microsoft Authenticator для</value>
   </data>
   <data name="EnableAuthenticatorLine3" xml:space="preserve">
     <value>или Google Authenticator для</value>
   </data>
   <data name="EnableAuthenticatorLine4" xml:space="preserve">
-    <value>Сосканируйте QR Код или введите общий ключ в приложение. Пробелы и регистр букв не важен.</value>
+    <value>Отсканируйте QR код или введите общий ключ в приложение. Пробелы и регистр букв не важен.</value>
   </data>
   <data name="EnableAuthenticatorLine5" xml:space="preserve">
     <value>После того, как вы отсканировали QR Код или ввели ключ вручную, ваше приложение предоставит вам уникальный код. Введите этот код в поле валидации.</value>

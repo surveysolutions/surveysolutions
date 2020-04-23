@@ -73,8 +73,7 @@
                             <div class="block-filter">
                                 <button
                                     type="submit"
-                                    class="btn btn-danger"
-                            
+                                    class="btn btn-danger"                            
                                     id="btnGenerateRecoveryCodes"
                                     v-bind:disabled="userInfo.isObserving"
                                     @click="generateRecoveryCodes">{{$t('Pages.GenerateRecoveryCodes')}}</button>                        

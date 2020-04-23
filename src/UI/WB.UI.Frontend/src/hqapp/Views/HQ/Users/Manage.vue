@@ -191,13 +191,6 @@ export default {
         canBeLockedAsHeadquarters(){
             return this.userInfo.canBeLockedAsHeadquarters
         },
-        canChangePassword() {
-            if (this.isOwnProfile && (this.isHeadquarters || this.isAdmin))
-                return true
-            if (!this.isOwnProfile)
-                return true
-            return false
-        },
         lockMessage() {
             if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
             if (this.isSupervisor) return this.$t('Pages.Supervisor_LockWarning')
