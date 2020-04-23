@@ -1,10 +1,12 @@
 <template>
-    <div class="filters-container">
+    <div class="filters-container"
+        id="questionsFilters">
         <h4>
             {{$t("Interviews.FiltersByQuestions")}}
         </h4>
         <div class="block-filter">            
             <button type="button"
+                id="btnQuestionsFilter"
                 class="btn"
                 :disabled="isDisabled"
                 :title="isDisabled ? $t('Interviews.QuestionsFilterNotAvailable'):''"
@@ -14,6 +16,7 @@
         </div>
 
         <ModalFrame ref="questionsSelector"
+            id="modalQuestionsSelector"
             :title="$t('Interviews.ChooseQuestionsTitle')">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -32,6 +35,7 @@
             </form>
             <div slot="actions">
                 <button
+                    id="btnQuestionsSelectorOk"
                     type="button"
                     class="btn btn-primary"
                     data-dismiss="modal"
