@@ -78,7 +78,7 @@
                             </form-group>
                         </div>
 
-                        <div v-if="canChangePassword">
+                        <div>
                             <div class="block-filter">
                                 <button
                                     type="submit"
@@ -155,11 +155,10 @@ export default {
             return this.userInfo.canBeLockedAsHeadquarters
         },
         canChangePassword() {
-            if (this.isOwnProfile && (this.isHeadquarters || this.isAdmin))
-                return true
-            if (!this.isOwnProfile)
-                return true
-            return false
+            if(this.userInfo.isObserving)
+                return false 
+
+            return true            
         },
         lockMessage() {
             if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')

@@ -67,8 +67,7 @@
                             <div class="block-filter">
                                 <button
                                     type="submit"
-                                    class="btn btn-danger"
-                            
+                                    class="btn btn-danger"                            
                                     id="btnDisable2fa"
                                     v-bind:disabled="userInfo.isObserving"
                                     @click="disable2fa">{{$t('Pages.Disable2fa')}}</button>                        

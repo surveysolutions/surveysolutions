@@ -68,8 +68,7 @@
                             <div class="block-filter">
                                 <button
                                     type="submit"
-                                    class="btn btn-danger"
-                            
+                                    class="btn btn-danger"                            
                                     id="btnResetAuthenticator"
                                     v-bind:disabled="userInfo.isObserving"
                                     @click="resetAuthenticator">{{$t('Pages.ResetAuthenticator')}}</button>                        
@@ -79,10 +78,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
     </HqLayout>
 </template>
 

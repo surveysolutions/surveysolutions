@@ -136,7 +136,7 @@
     <value>Двухфакторная аутентификация</value>
   </data>
   <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
-    <value>Добавьте дополнительный уровень безопасности в свою учетную запись, чтобы защитить все ваши данные</value>
+    <value>Добавьте дополнительный уровень безопасности своей учетной записи, чтобы защитить все ваши данные</value>
   </data>
   <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
     <value>Настройка приложения аутентификатора</value>
