@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     IsRejected = interview.IsRejected,
                     ResponsibleId = interview.ResponsibleId,
                     Sequence = interview.LastEventSequence,
-                    LastSequenceEventId = interview.LastSequenceEventId,
+                    LastEventId = interview.LastEventId,
                     IsMarkedAsReceivedByInterviewer = interview.IsReceivedByInterviewer
                 }).ToList();
 

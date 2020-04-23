@@ -414,7 +414,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Events;
         }
 
-        public async Task<List<CommittedEvent>> GetInterviewDetailsAsyncAfterEvent(Guid interviewId, Guid eventId, IProgress<TransferProgress> transferProgress,
+        public async Task<List<CommittedEvent>> GetInterviewDetailsAfterEventAsync(Guid interviewId, Guid eventId, IProgress<TransferProgress> transferProgress,
             CancellationToken token = default)
         {
             var response = await this.syncClient.SendAsync<GetInterviewDetailsAfterEventRequest, GetInterviewDetailsResponse>(

@@ -193,7 +193,7 @@
     <value>{0} interview(s) partial uploaded</value>
   </data>
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
-    <value>{0} interview(s) have been reopened after receiving comments on them</value>
+    <value>{0} interview(s) have been reopened after receiving comments</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
     <value>{0} interview(s) rejected</value>

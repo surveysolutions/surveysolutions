@@ -1907,7 +1907,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interviews was updated.
+        ///   Looks up a localized string similar to {0} interviews were updated.
         /// </summary>
         public static string Synchronization_Success_State_InterviewsPartialDownloaded_Format {
             get {

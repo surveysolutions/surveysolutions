@@ -331,7 +331,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interview(s) have been reopened after receiving comments on them.
+        ///   Looks up a localized string similar to {0} interview(s) have been reopened after receiving comments.
         /// </summary>
         public static string SynchronizationCompleted_ReopenedInterviewsAfterComments {
             get {
