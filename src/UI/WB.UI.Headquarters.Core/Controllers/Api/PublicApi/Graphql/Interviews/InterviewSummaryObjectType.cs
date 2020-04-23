@@ -57,7 +57,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.UpdateDate)
                 .Description("Represents date (UTC) when interview was changed last time");
             
-            descriptor.Field(x => x.ReceivedByInterviewer)
+            descriptor.Field(x => x.ReceivedByInterviewer).Type<BooleanType>()
                 .Description("Indicator for whether the interview is on the interviewer’s tablet now");
             
             descriptor.Field(x => x.ErrorsCount)

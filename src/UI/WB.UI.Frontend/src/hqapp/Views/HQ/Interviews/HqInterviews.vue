@@ -144,7 +144,15 @@
                 </div>
                 <div id="pnlAssignToOtherTeamConfirmMessage">
                     <p
-                        v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Supervisor assigned', status2: 'Interviewer assigned', status3: 'Rejected by Supervisor'} ) : $t('Interviews.AssignToOtherTeamConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Approved by Supervisor', status2: 'Approved by Headquarters'} )"></p>
+                        v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {
+                            count: this.getFilteredToAssign().length, 
+                            status1: 'Supervisor assigned',
+                            status2: 'Interviewer assigned',
+                            status3: 'Rejected by Supervisor'} ) 
+                            : $t('Interviews.AssignToOtherTeamConfirmMessage', {
+                                count: this.getFilteredToAssign().length,
+                                status1: 'Approved by Supervisor',
+                                status2: 'Approved by Headquarters'} )"></p>
                 </div>
 
                 <div v-if="CountReceivedByInterviewerItems() > 0">
@@ -821,7 +829,7 @@ export default {
         },
 
         viewInterview() {
-            var id = this.selectedRowWithMenu.interviewId
+            var id = this.selectedRowWithMenu.id
             window.location = this.config.interviewReviewUrl + '/' + id.replace(/-/g, '')
         },
 
@@ -849,8 +857,8 @@ export default {
             }
 
             var commands = this.arrayMap(
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 }),
                 function(rowId) {
                     var item = {
@@ -907,8 +915,8 @@ export default {
 
             var command = this.getCommand(
                 self.config.isSupervisor ? 'ApproveInterviewCommand' : 'HqApproveInterviewCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 }),
                 this.statusChangeComment
             )
@@ -942,8 +950,8 @@ export default {
             if (!self.config.isSupervisor) {
                 var command = this.getCommand(
                     'HqRejectInterviewCommand',
-                    map(filteredItems, question => {
-                        return question.interviewId
+                    map(filteredItems, interview => {
+                        return interview.id
                     }),
                     this.statusChangeComment
                 )
@@ -964,8 +972,8 @@ export default {
                 if (noReassignInterviews.length > 0) {
                     var cmd = this.getCommand(
                         'RejectInterviewCommand',
-                        map(noReassignInterviews, question => {
-                            return question.interviewId
+                        map(noReassignInterviews, interview => {
+                            return interview.id
                         }),
                         this.statusChangeComment
                     )
@@ -986,8 +994,8 @@ export default {
 
                 if (toReassignInterviews.length > 0 && self.newResponsibleId != null) {
                     var commands = this.arrayMap(
-                        map(toReassignInterviews, question => {
-                            return question.interviewId
+                        map(toReassignInterviews, interview => {
+                            return interview.id
                         }),
                         function(rowId) {
                             var item = {
@@ -1086,8 +1094,8 @@ export default {
 
             var command = this.getCommand(
                 'UnapproveByHeadquarterCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 })
             )
 
@@ -1115,8 +1123,8 @@ export default {
 
             var command = this.getCommand(
                 'DeleteInterviewCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 })
             )
 
@@ -1141,7 +1149,7 @@ export default {
         async showStatusHistory() {
             var self = this
             const statusHistoryList = await this.$http.post(this.config.api.interviewStatuses, {
-                interviewId: this.selectedRowWithMenu.interviewId,
+                interviewId: this.selectedRowWithMenu.id,
             })
 
             if (statusHistoryList.data.length != 0) {
@@ -1306,7 +1314,7 @@ export default {
 
             if (!isEqual(this.$route.query, query)) {
                 this.$router.push({ query })
-                    .catch(() => {})                    
+                    .catch(() => {})
             }
         },
 
