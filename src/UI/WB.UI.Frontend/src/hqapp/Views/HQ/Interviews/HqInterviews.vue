@@ -66,7 +66,7 @@
                 </div>
             </FilterBlock>
 
-            <InterviewFilter slot="additional"                
+            <InterviewFilter slot="additional"
                 :questionnaireId="where.questionnaireId"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"
@@ -359,6 +359,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       questionnaireId
       responsibleId
       responsibleName
+      responsibleRole
       errorsCount
       assignmentId
       updateDate
@@ -593,7 +594,7 @@ export default {
                 order: [[defaultSortIndex, 'desc']],
                 deferLoading: 0,
                 columns,
-                pageLength: 10,
+                pageLength: 20,
                 ajax (data, callback, settings) {
                     const order = {}
                     const order_col = data.order[0]
@@ -1211,7 +1212,7 @@ export default {
                 callback: () => self.showStatusHistory(),
             })
 
-            if (rowData.responsibleRole === 'Interviewer') {
+            if (rowData.responsibleRole === 'INTERVIEWER') {
                 menu.push({
                     name: self.$t('Common.OpenResponsiblesProfile'),
                     callback: () => (window.location = self.config.profileUrl + '/' + rowData.responsibleId),
