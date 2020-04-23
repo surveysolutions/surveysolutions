@@ -53,7 +53,7 @@ export default {
         commentTitle() {
             var title = this.commentTitleByRole
             if (this.commentOnPreviousAnswer == true) {
-                return title + ' (' + this.$t('WebInterviewUI.CommentOnPreviousAnswer') + ')'
+                return `${title} (${this.$t('WebInterviewUI.CommentOnPreviousAnswer')})`
             }
 
             return this.$t('WebInterviewUI.Comment')

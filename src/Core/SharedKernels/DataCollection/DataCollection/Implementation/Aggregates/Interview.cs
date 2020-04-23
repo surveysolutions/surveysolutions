@@ -2075,15 +2075,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isInterviewNeedToBeCreated = command.CreatedOnClient && this.Version == 0;
             var questionnaire = this.GetQuestionnaireOrThrow();
 
-            if (isInterviewNeedToBeCreated)
-            {
-                // Version 19.02 still generates InterviewOnClientCreated created event
-                //if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewCreated))
-                {
-                    // throw new InterviewException("Create interview must be the first event");
-                }
-            }
-            else
+            if (!isInterviewNeedToBeCreated)
             {
                 if (command.InterviewStatus == InterviewStatus.Completed 
                     || command.InterviewStatus == InterviewStatus.InterviewerAssigned

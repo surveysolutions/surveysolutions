@@ -375,7 +375,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public Task<List<CommittedEvent>> GetInterviewDetailsAsyncAfterEvent(Guid interviewId, Guid eventId, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
+        public Task<List<CommittedEvent>> GetInterviewDetailsAfterEventAsync(Guid interviewId, Guid eventId, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             try
             {

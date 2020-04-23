@@ -707,7 +707,7 @@
     <value>У приложения не хватает прав для обновления. Пожалуйста разрешите этому приложению "Установку неизвестных приложений" в настройках</value>
   </data>
   <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
-    <value>Коментариев от супервизора нет</value>
+    <value>Комментариев от супервизора нет</value>
   </data>
   <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
     <value>На предыдущий ответ</value>
