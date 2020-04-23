@@ -74,7 +74,7 @@ export default {
             if(data == 0)
                 return `<span>${data}</span>`
             const responsibleName = (this.responsible || {}).value
-            const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion || ''}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
+            const url = `${this.$config.model.interviewsUrl}?questionnaireId=${row.questionnaireId}&questionnaireVersion=${row.questionnaireVersion || ''}&responsibleName=${encodeURI(responsibleName || '')}&status=${status.toUpperCase()}`
             return `<a href=${url}>${escape(formatNumber(data))}</a>`
         },
     },

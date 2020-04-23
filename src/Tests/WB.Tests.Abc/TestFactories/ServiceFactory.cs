@@ -212,9 +212,9 @@ namespace WB.Tests.Abc.TestFactories
             => new FileSystemIOAccessor();
 
         public InterviewAnswersCommandValidator InterviewAnswersCommandValidator(
-            IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
+            IAllInterviewsFactory interviewSummaryViewFactory = null)
             => new InterviewAnswersCommandValidator(
-                interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
+                interviewSummaryViewFactory ?? Mock.Of<IAllInterviewsFactory>());
 
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
             IPlainStorage<InterviewView> interviewViewRepository = null,
@@ -372,13 +372,6 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new AllInterviewsFactory(interviewSummarys ??
                                             Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
-        }
-
-        public ITeamInterviewsFactory TeamInterviewsFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)
-        {
-            return new TeamInterviewsFactory(interviewSummarys ??
-                                             Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
         public IRandomValuesSource RandomValuesSource(params int[] sequence)
