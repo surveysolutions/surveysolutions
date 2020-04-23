@@ -1223,7 +1223,7 @@ export default {
             if (rowData.responsibleRole === 'INTERVIEWER') {
                 menu.push({
                     name: self.$t('Common.OpenResponsiblesProfile'),
-                    callback: () => (window.location = self.config.profileUrl + '/' + rowData.responsibleId),
+                    callback: () => (window.location = self.config.profileUrl + '/' + rowData.responsibleId),                    
                 })
             }
 
@@ -1237,28 +1237,33 @@ export default {
                     className: 'context-menu-separator context-menu-not-selectable',
                 })
 
+                const canBeAssigned =  rowData.actionFlags.indexOf('CANBEREASSIGNED') >= 0
                 menu.push({
                     name: self.$t('Common.Assign'),
-                    className: 'primary-text',
+                    className: canBeAssigned ? 'primary-text' : '',
                     callback: () => self.assignInterview(),
+                    disabled: !canBeAssigned,
                 })
 
                 menu.push({
                     name: self.$t('Common.Approve'),
                     className: 'success-text',
                     callback: () => self.approveInterview(),
+                    disabled: rowData.actionFlags.indexOf('CANBEAPPROVED') < 0,
                 })
 
                 menu.push({
                     name: self.$t('Common.Reject'),
                     className: 'error-text',
                     callback: () => self.rejectInterview(),
+                    disabled: rowData.actionFlags.indexOf('CANBEREJECTED') < 0,
                 })
 
                 if (!self.config.isSupervisor) {
                     menu.push({
                         name: self.$t('Common.Unapprove'),
                         callback: () => self.unapproveInterview(),
+                        disabled: rowData.actionFlags.indexOf('CANBEUNAPPROVEDBYHQ') < 0,
                     })
 
                     menu.push({
@@ -1269,6 +1274,7 @@ export default {
                         name: self.$t('Common.Delete'),
                         className: 'error-text',
                         callback: () => self.deleteInterview(),
+                        disabled: rowData.actionFlags.indexOf('CANBEDELETED') < 0,
                     })
                 }
             }
