@@ -2875,10 +2875,10 @@ bootstrap-sass@^3.4.1:
   resolved "https://registry.yarnpkg.com/bootstrap-sass/-/bootstrap-sass-3.4.1.tgz#6843c73b1c258a0ac5cb2cc6f6f5285b664a8e9a"
   integrity sha512-p5rxsK/IyEDQm2CwiHxxUi0MZZtvVFbhWmyMOt4lLkA4bujDA1TGoKT0i1FKIWiugAdP+kK8T5KMDFIKQCLYIA==
 
-bootstrap-select@1.13.12:
-  version "1.13.12"
-  resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.12.tgz#81b9f1394cb8d7151aea16fb9030c112330dbf98"
-  integrity sha512-epsPt6WpgmL9Q9Y22JFntajdhhqvCwV/JKiBZF3YFvMHK9YzzDPQft/Cjqvsgq0bhF32BlvG03Qs3qA/pVRAqQ==
+bootstrap-select@^1.13.15:
+  version "1.13.15"
+  resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.15.tgz#f82511cef1e783af9935278533721b1d0f3076bb"
+  integrity sha512-Bd881wlM3U7reEadavsdv7gC2kpYm0HnjVazzpr0KckN4A1oeD20g1rIzy/dWKQICdy+xQeyd3FikZWjsKPtjA==
 
 bootstrap@^3.3.7:
   version "3.4.1"
@@ -6977,10 +6977,15 @@ jquery-mask-plugin@^1.14.16:
   resolved "https://registry.yarnpkg.com/jquery-mask-plugin/-/jquery-mask-plugin-1.14.16.tgz#9ebb55947d984da5aade45315b2fe6b113e28aae"
   integrity sha512-reywdHlYEkPbzWjTpcc1fk9XQ3PLvO5dzEAVqy8zI7NTF22tB1HbeU3iboZTLdkBEPaWAqeI2HtEjsGQ4roZKw==
 
+jquery@3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
+  integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
+
 "jquery@>= 1.0.0", jquery@>=1.12.0, jquery@>=1.6.0, jquery@>=1.7, jquery@^3.4.1:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.0.tgz#9980b97d9e4194611c36530e7dc46a58d7340fc9"
-  integrity sha512-Xb7SVYMvygPxbFMpTFQiHh1J7HClEaThguL15N/Gg37Lri/qKyhRGZYzHRyLH8Stq3Aow0LsHO2O2ci86fCrNQ==
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
+  integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
 
 js-base64@^2.1.8:
   version "2.5.2"

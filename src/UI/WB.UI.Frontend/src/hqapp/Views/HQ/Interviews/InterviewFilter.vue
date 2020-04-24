@@ -2,12 +2,14 @@
     <div class="block-filter" 
         v-if="question != null && isSupported">
         <h5 :title="sanitizeHtml(question.questionText)">
-            {{sanitizeHtml(question.questionText)}} 
-            <inline-selector :options="fieldOptions"
-                no-empty
-                :id="`filter_selector_${condition.variable}`"
-                v-if="fieldOptions != null"
-                v-model="field" />
+            {{sanitizeHtml(question.questionText)}}
+            <div>
+                <inline-selector :options="fieldOptions"
+                    no-empty
+                    :id="`filter_selector_${condition.variable}`"
+                    v-if="fieldOptions != null"
+                    v-model="field" />
+            </div>
         </h5>
         
         <Typeahead
@@ -80,6 +82,16 @@ export default {
         sanitizeHtml: sanitizeHtml,
     },
 
+    watch: {
+        field(to) {
+            this.$emit('change', {
+                variable: this.question.variable,
+                field: to.id,
+                value: this.condition.value,
+            })
+        },
+    },
+
     computed: { 
         options() {
             return this.getTypeaheadValues(sortBy(this.question.options, ['title']))
@@ -98,15 +110,15 @@ export default {
 
         fieldOptions() {
             switch(this.question.type) {
-            case 'SINGLEOPTION': return null
-            case 'TEXT': return [
-                { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
-                { id: 'answerLowerCase', value: this.$t('Common.Equals') },
+                case 'SINGLEOPTION': return null
+                case 'TEXT': return [
+                    { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
+                    { id: 'answerLowerCase', value: this.$t('Common.Equals') },
                         
-            ]
-            case 'NUMERIC': return [
-                { id: 'answer', value: this.$t('Common.Equals')},
-            ]}
+                ]
+                case 'NUMERIC': return [
+                    { id: 'answer', value: this.$t('Common.Equals')},
+                ]}
             return null
         },
     },
