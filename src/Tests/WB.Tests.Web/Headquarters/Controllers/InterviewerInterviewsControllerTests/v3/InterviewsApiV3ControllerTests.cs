@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Tests.Abc;
@@ -82,7 +83,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStore: eventStore ?? Mock.Of<IHeadquartersEventStore>(),
                 audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
-                webHostEnvironment: webHostEnvironment ?? Mock.Of<IWebHostEnvironment>());
+                webHostEnvironment: webHostEnvironment ?? Mock.Of<IWebHostEnvironment>(),
+                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>());
             controller.ControllerContext = controllerContext;
             return controller;
         }

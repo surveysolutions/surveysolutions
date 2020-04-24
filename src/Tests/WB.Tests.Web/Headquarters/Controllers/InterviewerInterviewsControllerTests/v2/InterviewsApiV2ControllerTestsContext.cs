@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -7,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
@@ -37,7 +39,9 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStore: Mock.Of<IHeadquartersEventStore>(),
                 audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
-                webHostEnvironment: Mock.Of<IWebHostEnvironment>());
+                webHostEnvironment: Mock.Of<IWebHostEnvironment>(),
+                interviewsStorage: Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(s => s.GetById(It.IsAny<string>()) == Mock.Of<InterviewSummary>())
+                );
 
             var httpContext = new DefaultHttpContext(); // or mock a `HttpContext`
 
