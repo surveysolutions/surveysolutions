@@ -122,7 +122,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             var audioQuestionsFilesMd5 = (await GetMd5Caches(await this.audioFileStorage.GetBinaryFilesForInterview(id)));
             var audioAuditFilesMd5 = (await GetMd5Caches(await this.audioAuditFileStorage.GetBinaryFilesForInterview(id)));
 
-            var interview = interviewsFactory.GetInterviewsByIds(new [] { id }).Single();
+            var interview = interviewsFactory.GetInterviewsByIds(new [] { id }).SingleOrDefault();
 
             return new InterviewUploadState
             {
@@ -132,7 +132,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 ImageQuestionsFilesMd5 = imagesQuestionsMd5,
                 AudioQuestionsFilesMd5 = audioQuestionsFilesMd5,
                 AudioAuditFilesMd5 = audioAuditFilesMd5,
-                ResponsibleId = interview.ResponsibleId,
+                ResponsibleId = interview?.ResponsibleId,
             };
         }
 
