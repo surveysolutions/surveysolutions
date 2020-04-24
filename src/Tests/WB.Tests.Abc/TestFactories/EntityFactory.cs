@@ -2500,5 +2500,14 @@ namespace WB.Tests.Abc.TestFactories
                 Value = value,
             };
         }
+
+        public InterviewApiView InterviewApiView(Guid id, Guid? lastEventId)
+        {
+            return new InterviewApiView()
+            {
+                Id = id,
+                LastEventId = lastEventId,
+            };
+        }
     }
 }
