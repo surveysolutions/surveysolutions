@@ -35,11 +35,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
     public class InterviewerUploadInterviewsTests
     {
         [Test]
-        public async Task when_hq_contains_new_event_for_interview()
+        public async Task when_localy_has_new_event_for_interview()
         {
             var interviewId = Id.g1;
             var responsibleId = Id.g2;
-            var newEventId = Id.g3;
 
             InterviewView localInterviews = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.InterviewerAssigned);
 
@@ -52,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             var eventStore = Mock.Of<IEnumeratorEventStorage>(s =>
                 s.HasEventsWithoutHqFlag(interviewId) == true);
             var eventsContainer = Create.Entity.InterviewPackageContainer(interviewId, 
-                Create.Event.CommittedEvent(eventSourceId: interviewId, eventIdentifier: newEventId));
+                Create.Event.CommittedEvent(eventSourceId: interviewId));
             var package = new InterviewPackageApiView();
             var interviewFactory = Mock.Of<IInterviewerInterviewAccessor>(f =>
                 f.GetInterviewEventStreamContainer(interviewId, false) == eventsContainer &&
@@ -63,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             await synchronizationStep.ExecuteAsync();
 
             synchronizationService.Verify(s => s.UploadInterviewAsync(interviewId,
-                It.IsAny<InterviewPackageApiView>(),
+                package,
                 It.IsAny<IProgress<TransferProgress>>(),
                 It.IsAny<CancellationToken>()),
                 Times.Once);
