@@ -34,11 +34,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
             IAudioAuditFileStorage audioAuditFileStorage,
-            IWebHostEnvironment webHostEnvironment,
-            IReadSideRepositoryReader<InterviewSummary> interviewsStorage) :
+            IWebHostEnvironment webHostEnvironment) :
             base(imageFileStorage,
                 audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder,
-                synchronizationSerializer, eventStore, audioAuditFileStorage, webHostEnvironment, interviewsStorage)
+                synchronizationSerializer, eventStore, audioAuditFileStorage, webHostEnvironment)
         {
         }
 
