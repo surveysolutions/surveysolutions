@@ -81,12 +81,12 @@ function NewRouter(store) {
 
     store.subscribeAction((action, state) => {
         switch (action.type) {
-        case 'finishInterview':
-            location.replace(router.resolve({ name: 'finish', params: { interviewId: state.route.params.interviewId } }).href)
-            break
-        case 'navigateTo':
-            router.replace(action.payload)
-            break
+            case 'finishInterview':
+                location.replace(router.resolve({ name: 'finish', params: { interviewId: state.route.params.interviewId } }).href)
+                break
+            case 'navigateTo':
+                router.replace(action.payload)
+                break
         }
     })
 
