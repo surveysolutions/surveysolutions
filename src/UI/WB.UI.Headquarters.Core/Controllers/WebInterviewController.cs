@@ -169,7 +169,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.CapchaVerificationNeededForInterview(id))
             {
                 var returnUrl = GenerateUrl(@"Section", id, sectionId);
-                return this.RedirectToAction("Resume", routeValues: new {id, returnUrl});
+                return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
             LogResume(interview);
@@ -221,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!invitation.IsWithAssignmentResolvedByPassword() && invitation.InterviewId != null)
             {
-                return this.RedirectToAction("Resume", routeValues: new {id = invitation.InterviewId});
+                return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
             }
 
             var assignment = invitation.Assignment;
@@ -311,7 +311,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public class SendLinkModel
         {
-            public string InterviewId { get;set; }
+            public string InterviewId { get; set; }
             public string Email { get; set; }
         }
 
@@ -441,7 +441,7 @@ namespace WB.UI.Headquarters.Controllers
             if (interview == null)
                 return NotFound();
 
-            return this.RedirectToAction("Resume", routeValues: new {id = invitation.InterviewId});
+            return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
         }
 
         [WebInterviewAuthorize]
@@ -455,7 +455,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.CapchaVerificationNeededForInterview(id))
             {
                 var returnUrl = GenerateUrl(nameof(Cover), id);
-                return this.RedirectToAction("Resume", routeValues: new {id = id, returnUrl = returnUrl});
+                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
             LogResume(interview);
@@ -490,7 +490,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.CapchaVerificationNeededForInterview(id))
             {
                 var returnUrl = GenerateUrl(@"Finish", id);
-                return this.RedirectToAction("Resume", routeValues: new {id = id, returnUrl = returnUrl});
+                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
             var finishWebInterview = this.GetFinishModel(interview, webInterviewConfig);
@@ -566,7 +566,7 @@ namespace WB.UI.Headquarters.Controllers
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
             {
                 var returnUrl = GenerateUrl(@"Complete", id);
-                return this.RedirectToAction("Resume", routeValues: new {id, returnUrl});
+                return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
             return View("Index", GetInterviewModel(id, webInterviewConfig));
@@ -597,7 +597,7 @@ namespace WB.UI.Headquarters.Controllers
             if (webInterviewConfig.UseCaptcha && !await this.captchaProvider.IsCaptchaValid(Request))
             {
                 var model = this.GetResumeModel(id);
-                model.CaptchaErrors = new List<string>() {Enumerator.Native.Resources.WebInterview.PleaseFillCaptcha};
+                model.CaptchaErrors = new List<string>() { Enumerator.Native.Resources.WebInterview.PleaseFillCaptcha };
                 return this.View("Resume", model);
             }
 
@@ -655,7 +655,7 @@ namespace WB.UI.Headquarters.Controllers
                 assignment.Answers.ToList(),
                 assignment.ProtectedVariables,
                 interviewer.Supervisor?.Id ?? interviewer.PublicKey,
-                interviewer.IsInterviewer() ? interviewer.PublicKey : (Guid?) null,
+                interviewer.IsInterviewer() ? interviewer.PublicKey : (Guid?)null,
                 this.keyGenerator.Get(),
                 assignment.Id,
                 assignment.AudioRecording);
@@ -697,9 +697,6 @@ namespace WB.UI.Headquarters.Controllers
                 ResumeInvitation = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(),
                     questionnaireBrowseItem.Title),
-                ResumeButton = SubstituteQuestionnaireName(
-                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeButton).ToString(),
-                    questionnaireBrowseItem.Title),
                 SubmitUrl = Url.Action("Resume", "WebInterview"),
             };
         }
@@ -723,12 +720,6 @@ namespace WB.UI.Headquarters.Controllers
                 HasPassword = !string.IsNullOrWhiteSpace(assignment?.Password ?? String.Empty),
                 WelcomeText = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(),
-                    questionnaireBrowseItem.Title),
-                StartNewButton = SubstituteQuestionnaireName(
-                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.StartNewButton).ToString(),
-                    questionnaireBrowseItem.Title),
-                ResumeButton = SubstituteQuestionnaireName(
-                    webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.ResumeButton).ToString(),
                     questionnaireBrowseItem.Title),
                 Description = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.Invitation).ToString(),
