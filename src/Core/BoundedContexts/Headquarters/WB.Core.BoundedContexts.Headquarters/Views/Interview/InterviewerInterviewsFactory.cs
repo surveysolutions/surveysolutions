@@ -170,7 +170,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 Id = interview.InterviewId,
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity),
-                IsRejected = interview.Status == InterviewStatus.RejectedBySupervisor
+                IsRejected = interview.Status == InterviewStatus.RejectedBySupervisor,
+                ResponsibleId = interview.ResponsibleId,
             });
         }
 

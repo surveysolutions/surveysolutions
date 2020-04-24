@@ -32,7 +32,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             int sortOrder, 
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewerSettings interviewerSettings,
-            IEnumeratorEventStorage eventStorage) : base(interviewFactory, interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, audioAuditFileStorage, interviewViewRepository, sortOrder)
+            IEnumeratorEventStorage eventStorage,
+            IPrincipal principal) : base(interviewFactory, interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, audioAuditFileStorage, interviewViewRepository, principal, sortOrder)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.interviewerSettings = interviewerSettings;

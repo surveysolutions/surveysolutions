@@ -9,9 +9,11 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -120,6 +122,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             var audioQuestionsFilesMd5 = (await GetMd5Caches(await this.audioFileStorage.GetBinaryFilesForInterview(id)));
             var audioAuditFilesMd5 = (await GetMd5Caches(await this.audioAuditFileStorage.GetBinaryFilesForInterview(id)));
 
+            var interview = interviewsFactory.GetInterviewsByIds(new [] { id }).Single();
+
             return new InterviewUploadState
             {
                 IsEventsUploaded = doesEventsExists,
@@ -128,6 +132,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 ImageQuestionsFilesMd5 = imagesQuestionsMd5,
                 AudioQuestionsFilesMd5 = audioQuestionsFilesMd5,
                 AudioAuditFilesMd5 = audioAuditFilesMd5,
+                ResponsibleId = interview.ResponsibleId,
             };
         }
 
