@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using Polly;
+using Polly.Retry;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
@@ -21,6 +22,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         private readonly ITenantContext tenantContext;
         private IGraphServiceClient graphServiceClient;
         private string refreshToken;
+        private readonly AsyncRetryPolicy retry;
 
         private static long MaxAllowedFileSizeByMicrosoftGraphApi = 4 * 1024 * 1024;
 
@@ -30,6 +32,19 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         {
             this.logger = logger;
             this.tenantContext = tenantContext;
+
+            this.retry = Policy.Handle<ServiceException>(e => e.StatusCode == HttpStatusCode.Unauthorized)
+                .RetryAsync(2, async (exception, span) =>
+                {
+                    this.logger.LogError(exception, $"Unauthorized exception during request to OneDrive");
+
+                    var newAccessToken = await this.tenantContext.Api
+                        .GetExternalStorageAccessTokenByRefreshTokenAsync(ExternalStorageType.OneDrive,
+                            this.refreshToken).ConfigureAwait(false);
+
+                    this.CreateClient(newAccessToken);
+
+                });
         }
 
         public void InitializeDataClient(string accessToken, string refreshToken, TenantInfo tenant)
@@ -76,7 +91,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 {
                     await fileStream.CopyToAsync(fs);
 
-                    await this.ExecuteRequestAsync(async () =>
+                    await this.retry.ExecuteAsync(async () =>
                     {
                         var session = await graphServiceClient.Drive.Root.ItemWithPath(Join(folder, fileName)).CreateUploadSession().Request()
                             .PostAsync(cancellationToken);
@@ -94,7 +109,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             {
                 logger.LogTrace("Uploading {fileName} to {folder}. Small file of size {Length}", fileName, folder, contentLength);
                 
-                await this.ExecuteRequestAsync(() =>
+                await this.retry.ExecuteAsync(() =>
                     graphServiceClient.Drive.Root.ItemWithPath(Join(folder, fileName)).Content.Request()
                         .PutAsync<DriveItem>(fileStream));
             }
@@ -102,26 +117,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         public async Task<long?> GetFreeSpaceAsync()
         {
-            var storageInfo = await this.ExecuteRequestAsync(graphServiceClient.Drive.Request().GetAsync);
+            var storageInfo = await this.retry.ExecuteAsync(graphServiceClient.Drive.Request().GetAsync);
             if (storageInfo?.Quota?.Total == null) return null;
 
             return storageInfo.Quota.Total - storageInfo.Quota.Used ?? 0;
         }
-
-        public async Task<T> ExecuteRequestAsync<T>(Func<Task<T>> request) =>
-            await Policy.Handle<ServiceException>(e => e.StatusCode == HttpStatusCode.Unauthorized)
-                .RetryAsync(2, async (exception, span) =>
-                {
-                    this.logger.LogError(exception, $"Unauthorized exception during request to OneDrive");
-
-                    var newAccessToken = await this.tenantContext.Api
-                        .GetExternalStorageAccessTokenByRefreshTokenAsync(ExternalStorageType.OneDrive,
-                            this.refreshToken).ConfigureAwait(false);
-
-                    this.CreateClient(newAccessToken);
-
-                })
-                .ExecuteAsync(async () => await request());
 
         public void Dispose() { }
     }
