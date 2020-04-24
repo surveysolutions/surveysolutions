@@ -121,15 +121,15 @@ export default {
             var message = ''
             // Check for known errors
             switch (error.code) {
-            case error.PERMISSION_DENIED:
-                message = this.$t('WebInterviewUI.GPSPermissionDenied')//"This website does not have permission to use the Geolocation API"
-                break
-            case error.POSITION_UNAVAILABLE:
-                message = this.$t('WebInterviewUI.GPSPositionUnavailable') //"The current position could not be determined.";
-                break
-            case error.TIMEOUT:
-                message = this.$t('WebInterviewUI.GPSTimeout') //"The current position could not be determined within the specified timeout period."
-                break
+                case error.PERMISSION_DENIED:
+                    message = this.$t('WebInterviewUI.GPSPermissionDenied')//"This website does not have permission to use the Geolocation API"
+                    break
+                case error.POSITION_UNAVAILABLE:
+                    message = this.$t('WebInterviewUI.GPSPositionUnavailable') //"The current position could not be determined.";
+                    break
+                case error.TIMEOUT:
+                    message = this.$t('WebInterviewUI.GPSTimeout') //"The current position could not be determined within the specified timeout period."
+                    break
             }
             // If it is an unknown error, build a message that includes
             // information that helps identify the situation so that

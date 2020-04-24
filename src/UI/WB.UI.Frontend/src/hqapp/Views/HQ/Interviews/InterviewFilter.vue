@@ -110,15 +110,15 @@ export default {
 
         fieldOptions() {
             switch(this.question.type) {
-            case 'SINGLEOPTION': return null
-            case 'TEXT': return [
-                { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
-                { id: 'answerLowerCase', value: this.$t('Common.Equals') },
+                case 'SINGLEOPTION': return null
+                case 'TEXT': return [
+                    { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
+                    { id: 'answerLowerCase', value: this.$t('Common.Equals') },
                         
-            ]
-            case 'NUMERIC': return [
-                { id: 'answer', value: this.$t('Common.Equals')},
-            ]}
+                ]
+                case 'NUMERIC': return [
+                    { id: 'answer', value: this.$t('Common.Equals')},
+                ]}
             return null
         },
     },

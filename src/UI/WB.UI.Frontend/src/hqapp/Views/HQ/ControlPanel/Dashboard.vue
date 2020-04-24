@@ -94,9 +94,9 @@ export default {
 
         statusToBs(status) {
             switch(status) {
-            case 'Healthy': return 'success'
-            case 'Degraded': return 'warning'
-            case 'Unhealthy': return 'danger'        
+                case 'Healthy': return 'success'
+                case 'Degraded': return 'warning'
+                case 'Unhealthy': return 'danger'        
             }
         },
         itemStatus(entry) {
