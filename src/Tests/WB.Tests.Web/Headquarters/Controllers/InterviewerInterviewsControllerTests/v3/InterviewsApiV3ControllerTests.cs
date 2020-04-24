@@ -83,8 +83,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStore: eventStore ?? Mock.Of<IHeadquartersEventStore>(),
                 audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
-                webHostEnvironment: webHostEnvironment ?? Mock.Of<IWebHostEnvironment>(),
-                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>());
+                webHostEnvironment: webHostEnvironment ?? Mock.Of<IWebHostEnvironment>());
             controller.ControllerContext = controllerContext;
             return controller;
         }

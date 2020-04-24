@@ -32,8 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
-            IWebHostEnvironment webHostEnvironment,
-            IReadSideRepositoryReader<InterviewSummary> interviewsStorage) :
+            IWebHostEnvironment webHostEnvironment) :
             base(imageFileStorage,
                 audioFileStorage,
                 authorizedUser,
@@ -44,8 +43,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 synchronizationSerializer,
                 eventStore,
                 audioAuditFileStorage,
-                webHostEnvironment,
-                interviewsStorage)
+                webHostEnvironment)
         {
         }
 

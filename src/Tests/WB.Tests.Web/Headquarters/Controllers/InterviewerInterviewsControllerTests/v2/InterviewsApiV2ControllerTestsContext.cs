@@ -39,9 +39,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStore: Mock.Of<IHeadquartersEventStore>(),
                 audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
-                webHostEnvironment: Mock.Of<IWebHostEnvironment>(),
-                interviewsStorage: Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(s => s.GetById(It.IsAny<string>()) == Mock.Of<InterviewSummary>())
-                );
+                webHostEnvironment: Mock.Of<IWebHostEnvironment>());
 
             var httpContext = new DefaultHttpContext(); // or mock a `HttpContext`
 

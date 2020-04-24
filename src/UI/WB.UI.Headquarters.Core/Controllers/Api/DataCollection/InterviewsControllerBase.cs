@@ -32,7 +32,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly IReadSideRepositoryReader<InterviewSummary> interviewsStorage;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
@@ -51,8 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
             IAudioAuditFileStorage audioAuditFileStorage,
-            IWebHostEnvironment webHostEnvironment, 
-            IReadSideRepositoryReader<InterviewSummary> interviewsStorage)
+            IWebHostEnvironment webHostEnvironment)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
@@ -65,7 +63,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.eventStore = eventStore;
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.webHostEnvironment = webHostEnvironment;
-            this.interviewsStorage = interviewsStorage;
         }
 
         public virtual ActionResult<List<InterviewApiView>> Get()
@@ -94,11 +91,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (productVersion != null && productVersion >= new Version(20, 5))
                 return false;
 
-            return interviews.Any(interview =>
-            {
-                var interviewSummary = interviewsStorage.GetById(interview.Id.FormatGuid());
-                return interviewSummary.HasSmallSubstitutions;
-            });
+            return interviews.Any(interview => interviewsFactory.HasAnySmallSubstitutionEvent(interview.Id));
         }
 
 
