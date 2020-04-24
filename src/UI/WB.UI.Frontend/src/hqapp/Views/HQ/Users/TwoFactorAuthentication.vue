@@ -37,10 +37,6 @@
                 </ul> 
                 
                 <div class="col-sm-12">
-                    
-                    <!-- <div >
-                            <h2>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Title')}}</h2>
-                        </div> -->
                     <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Description')}}</p>
                     <form-group v-if="!isOwnProfile"
                         :label="$t('Pages.AccountManage_Login')">
@@ -49,22 +45,12 @@
                             disabled />
                     </form-group>
                         
-                    <div v-if="is2faEnabled">
-                        <div class="alert alert-danger" 
-                            v-if="recoveryCodesLeft == 0">
-                            <strong>You have no recovery codes left.</strong>
-                            <p>You must <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
-                        </div>                                
-                    
-                        <div class="alert alert-danger" 
-                            v-if="recoveryCodesLeft == 1">
-                            <strong>You have 1 recovery code left.</strong>
-                            <p>You can <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a>.</p>
-                        </div>
+                    <div v-if="is2faEnabled">                       
+ 
                         <div class="alert alert-warning" 
                             v-if="recoveryCodesLeft <= 3">
-                            <strong>You have {{recoveryCodesLeft}} recovery codes left.</strong>
-                            <p>You should <a :href="getUrl('../../Users/GenerateRecoveryCodes')">generate a new set of recovery codes</a>.</p>
+                            <strong>{{$t('Pages.RecoveryCodesLeft')}} {{recoveryCodesLeft}}.</strong>
+                            <p>{{$t('Pages.RecoveryCodesYouCan')}} <a :href="getUrl('../../Users/GenerateRecoveryCodes')">{{$t('Pages.GenerateRecoveryCodesLink')}}</a>.</p>
                         </div>                    
     
                         <a :href="getUrl('../../Users/Disable2fa')" 
@@ -170,7 +156,7 @@ export default {
     },
     watch: {
         personName: function(val) {
-            delete this.modelState['PersonName']
+            Vue.delete(this.modelState, 'PersonName')
         },
     },
     methods: {

@@ -1488,6 +1488,15 @@
   <data name="ResetRecoveryCodes" xml:space="preserve">
     <value>Сброс ключей восстановления</value>
   </data>
+  <data name="RecoveryCodesLeft" xml:space="preserve">
+    <value>Осталось ключей восстановления:</value>
+  </data>
+  <data name="RecoveryCodesYouCan" xml:space="preserve">
+    <value>Вы можете</value>
+  </data>
+  <data name="GenerateRecoveryCodesLink" xml:space="preserve">
+    <value>сгенерировать новый набор ключей восстановления</value>
+  </data>
   <data name="Disable2fa" xml:space="preserve">
     <value>Выключить 2ФА</value>
   </data>

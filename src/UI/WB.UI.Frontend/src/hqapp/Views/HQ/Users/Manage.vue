@@ -229,22 +229,22 @@ export default {
     },
     watch: {
         personName: function(val) {
-            delete this.modelState['PersonName']
+            Vue.delete( this.modelState, 'PersonName')
         },
         email: function(val) {
-            delete this.modelState['Email']
+            Vue.delete( this.modelState, 'Email')
         },
         phoneNumber: function(val) {
-            delete this.modelState['PhoneNumber']
+            Vue.delete( this.modelState, 'PhoneNumber')
         },
         oldPassword: function(val) {
-            delete this.modelState['OldPassword']
+            Vue.delete( this.modelState, 'OldPassword')
         },
         password: function(val) {
-            delete this.modelState['Password']
+            Vue.delete( this.modelState, 'Password')
         },
         confirmPassword: function(val) {
-            delete this.modelState['ConfirmPassword']
+            Vue.delete( this.modelState, 'ConfirmPassword')
         },
     },
     methods: {        
