@@ -510,7 +510,7 @@ export default {
                         const delimiter = self.mode == 'dense' 
                         
                         var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
-                            return `<span class='question'>${sanitizeHtml(node.question.label || node.question.questionText)}</span>: <span class='answer'>${node.answer}</span>`
+                            return `${sanitizeHtml(node.question.label || node.question.questionText)}: <strong>${node.answer}</strong>`
                         })
 
                         const dom = join(questionsWithTitles, ', ')                                             
