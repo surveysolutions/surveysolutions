@@ -10,8 +10,11 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -29,6 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviewsStorage;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
@@ -37,8 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected readonly IHeadquartersEventStore eventStore;
         protected readonly IInterviewInformationFactory interviewsFactory;
 
-        protected InterviewsControllerBase(
-            IImageFileStorage imageFileStorage,
+        protected InterviewsControllerBase(IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
@@ -48,7 +51,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
             IAudioAuditFileStorage audioAuditFileStorage,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment, 
+            IReadSideRepositoryReader<InterviewSummary> interviewsStorage)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
@@ -61,6 +65,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.eventStore = eventStore;
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.webHostEnvironment = webHostEnvironment;
+            this.interviewsStorage = interviewsStorage;
         }
 
         public virtual ActionResult<List<InterviewApiView>> Get()
@@ -91,19 +96,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             return interviews.Any(interview =>
             {
-                var events = eventStore.Read(interview.Id, nameof(SubstitutionTitlesChanged));
-
-                return events.Any(e =>
-                {
-                    if (e.Payload is SubstitutionTitlesChanged titlesChanged)
-                    {
-                        return titlesChanged.Questions.Length == 0 && 
-                               titlesChanged.Groups.Length == 0 &&
-                               titlesChanged.StaticTexts.Length == 0;
-                    }
-
-                    return false;
-                });
+                var interviewSummary = interviewsStorage.GetById(interview.Id.FormatGuid());
+                return interviewSummary.HasSmallSubstitutions;
             });
         }
 

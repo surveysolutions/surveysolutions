@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -31,7 +32,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
-            IWebHostEnvironment webHostEnvironment) :
+            IWebHostEnvironment webHostEnvironment,
+            IReadSideRepositoryReader<InterviewSummary> interviewsStorage) :
             base(imageFileStorage,
                 audioFileStorage,
                 authorizedUser,
@@ -42,7 +44,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 synchronizationSerializer,
                 eventStore,
                 audioAuditFileStorage,
-                webHostEnvironment)
+                webHostEnvironment,
+                interviewsStorage)
         {
         }
 
