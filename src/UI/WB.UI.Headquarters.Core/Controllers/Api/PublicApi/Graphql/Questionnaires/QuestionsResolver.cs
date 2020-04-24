@@ -1,25 +1,35 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 {
     public class QuestionsResolver
     {
-        public IQueryable<QuestionnaireCompositeItem> Questions(Guid id, long version, string language, [Service] IUnitOfWork unitOfWork)
+        public IEnumerable<QuestionnaireCompositeItem> Questions(Guid id, long version, string language,
+            [Service] IQuestionnaireStorage storage)
         {
-            unitOfWork.DiscardChanges();
-            var qid = new QuestionnaireIdentity(id, version).ToString();
+            var questionnaire = storage.GetQuestionnaire(new QuestionnaireIdentity(id, version), language);
+            var featured = questionnaire.GetPrefilledQuestions().ToHashSet();
 
-            return unitOfWork.Session.Query<QuestionnaireCompositeItem>()
-                .Where(x => x.QuestionnaireIdentity == qid)
-                .Where(x => x.EntityType == EntityType.Question);
+            return from q in questionnaire.GetAllQuestions()
+                select new QuestionnaireCompositeItem
+                {
+                    Id = questionnaire.GetEntityIdMapValue(q),
+                    EntityId = q,
+                    EntityType = EntityType.Question,
+                    Featured = featured.Contains(q),
+                    StataExportCaption = questionnaire.GetQuestionVariableName(q),
+                    VariableLabel = questionnaire.GetQuestionExportDescription(q),
+                    QuestionType = questionnaire.GetQuestionType(q),
+                    QuestionText = questionnaire.GetQuestionTitle(q),
+                    QuestionScope = questionnaire.GetQuestionScope(q)
+                };
         }
     }
-
-
 }

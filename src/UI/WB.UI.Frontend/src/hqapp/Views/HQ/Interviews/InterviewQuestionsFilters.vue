@@ -98,7 +98,7 @@ export default {
                 }
             },
             skip() {
-                return this.questionnaireId == null
+                return this.questionnaireId == null || this.questionnaireVersion == null
             },
         },
     },
