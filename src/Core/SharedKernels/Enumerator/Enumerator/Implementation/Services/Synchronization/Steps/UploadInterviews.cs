@@ -25,6 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPrincipal principal;
 
         protected UploadInterviews(IInterviewerInterviewAccessor interviewFactory,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
@@ -34,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             ISynchronizationService synchronizationService,
             IAudioAuditFileStorage audioAuditFileStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
+            IPrincipal principal,
             int sortOrder) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
@@ -42,6 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.interviewViewRepository = interviewViewRepository;
+            this.principal = principal;
         }
 
         public override async Task ExecuteAsync()
@@ -90,14 +93,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     var uploadState = await this.synchronizationService.GetInterviewUploadState(interview.InterviewId,
                         interviewEventStreamContainer.Tag, Context.CancellationToken);
 
-                    await this.UploadImagesByInterviewAsync(interview, uploadState,
-                        Context.Progress, Context.CancellationToken);
+                    if (isPartialSynchedInterview && uploadState.ResponsibleId != principal.CurrentUserIdentity.UserId)
+                    {
+                        // don't upload if interview was reassigned
+                        continue;
+                    }
 
-                    await this.UploadAudioByInterviewAsync(interview, uploadState,
-                        Context.Progress, Context.CancellationToken);
-
-                    await this.UploadAudioAuditByInterviewAsync(interview, uploadState,
-                        Context.Progress, Context.CancellationToken);
+                    await this.UploadImagesByInterviewAsync(interview, uploadState, Context.Progress, Context.CancellationToken);
+                    await this.UploadAudioByInterviewAsync(interview, uploadState, Context.Progress, Context.CancellationToken);
+                    await this.UploadAudioAuditByInterviewAsync(interview, uploadState, Context.Progress, Context.CancellationToken);
 
                     if (!uploadState.IsEventsUploaded)
                     {

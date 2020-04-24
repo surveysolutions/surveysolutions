@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
@@ -10,5 +11,6 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public HashSet<string> ImageQuestionsFilesMd5 { get; set; }
         public HashSet<string> AudioQuestionsFilesMd5 { get; set; }
         public HashSet<string> AudioAuditFilesMd5 { get; set; }
+        public Guid ResponsibleId { get; set; }
     }
 }
