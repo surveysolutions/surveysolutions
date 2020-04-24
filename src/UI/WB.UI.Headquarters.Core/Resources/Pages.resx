@@ -987,6 +987,15 @@
   <data name="ResetRecoveryCodes" xml:space="preserve">
     <value>Reset recovery codes</value>
   </data>
+  <data name="RecoveryCodesLeft" xml:space="preserve">
+    <value>Recovery codes left:</value>
+  </data>
+  <data name="RecoveryCodesYouCan" xml:space="preserve">
+    <value>You can</value>
+  </data>
+  <data name="GenerateRecoveryCodesLink" xml:space="preserve">
+    <value>generate a new set of recovery codes</value>
+  </data>
   <data name="Disable2fa" xml:space="preserve">
     <value>Disable 2FA</value>
   </data>

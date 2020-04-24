@@ -66,10 +66,7 @@ namespace WB.UI.Headquarters.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return this.View(new LogOn2faModel
-            {
-                
-            });
+            return this.View(new LogOn2faModel());
         }
 
         [HttpGet]
@@ -85,10 +82,7 @@ namespace WB.UI.Headquarters.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return this.View(new LoginWithRecoveryCodeModel
-            {
-
-            });
+            return this.View(new LoginWithRecoveryCodeModel());
         }
 
         [HttpPost]

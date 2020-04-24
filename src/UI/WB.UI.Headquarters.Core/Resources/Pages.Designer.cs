@@ -1006,6 +1006,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to generate a new set of recovery codes.
+        /// </summary>
+        public static string GenerateRecoveryCodesLink {
+            get {
+                return ResourceManager.GetString("GenerateRecoveryCodesLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ESRI Map support is an experimental feature. Use it only if you need the advanced ESRI GIS functionality. Including this functionality will significantly increase application size and download time. .
         /// </summary>
         public static string GetEsriExtraDescription {
@@ -3558,6 +3567,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string RecoveryCodesInfo {
             get {
                 return ResourceManager.GetString("RecoveryCodesInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recovery codes left:.
+        /// </summary>
+        public static string RecoveryCodesLeft {
+            get {
+                return ResourceManager.GetString("RecoveryCodesLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can.
+        /// </summary>
+        public static string RecoveryCodesYouCan {
+            get {
+                return ResourceManager.GetString("RecoveryCodesYouCan", resourceCulture);
             }
         }
         

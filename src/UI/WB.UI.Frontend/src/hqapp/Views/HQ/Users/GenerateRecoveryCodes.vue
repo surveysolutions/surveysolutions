@@ -137,8 +137,7 @@ export default {
 
             return this.$t('Pages.Home')
         },
-        referrerUrl() {           
-
+        referrerUrl() {
             return '/'
         },
         profileUrl(){
@@ -153,7 +152,7 @@ export default {
     },
     watch: {
         personName: function(val) {
-            delete this.modelState['PersonName']
+            Vue.delete(this.modelState, 'PersonName')
         },
     },
     methods: {
@@ -187,8 +186,7 @@ export default {
             if(this.isOwnProfile)
                 return baseUrl
             else
-                return baseUrl + '/' + this.model.userInfo.userId  
-
+                return baseUrl + '/' + this.model.userInfo.userId
         },
     },
 }
