@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
     public class InterviewerUploadInterviewsTests
     {
         [Test]
-        public async Task when_localy_has_new_event_for_interview()
+        public async Task when_localy_interview_has_new_events()
         {
             var interviewId = Id.g1;
             var responsibleId = Id.g2;
@@ -68,6 +68,35 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 Times.Once);
         }
 
+        [Test]
+        public async Task when_localy_interview_has_not_new_events()
+        {
+            var interviewId = Id.g1;
+            var responsibleId = Id.g2;
+
+            InterviewView localInterviews = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.InterviewerAssigned);
+
+            InterviewUploadState remoteInterviewUploadState = Create.Entity.InterviewUploadState(responsibleId);
+            var synchronizationService = new Mock<ISynchronizationService>();
+            synchronizationService
+                .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(remoteInterviewUploadState));
+
+            var eventStore = Mock.Of<IEnumeratorEventStorage>(s =>
+                s.HasEventsWithoutHqFlag(interviewId) == false);
+            var interviewFactory = new Mock<IInterviewerInterviewAccessor>();
+
+            var synchronizationStep = CreateInterviewerUploadInterviews(responsibleId, localInterviews, synchronizationService.Object, eventStore, interviewFactory.Object);
+
+            await synchronizationStep.ExecuteAsync();
+
+            synchronizationService.Verify(s => s.UploadInterviewAsync(interviewId,
+                    It.IsAny<InterviewPackageApiView>(),
+                    It.IsAny<IProgress<TransferProgress>>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Never);
+            interviewFactory.Verify(f => f.GetInterviewEventStreamContainer(interviewId, It.IsAny<bool>()), Times.Never);
+        }
 
         private SynchronizationStep CreateInterviewerUploadInterviews(
             Guid responsibleId,
