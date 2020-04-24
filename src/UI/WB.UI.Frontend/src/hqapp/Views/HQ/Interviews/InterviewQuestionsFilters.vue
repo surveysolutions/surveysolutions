@@ -183,7 +183,10 @@ export default {
         },
 
         isDisabled() {
-            return this.questionsList == null || this.questionsList.length == 0
+            return this.questionnaireId == null 
+                || this.questionnaireVersion == null 
+                || this.questionsList == null 
+                || this.questionsList.length == 0
         },
     },
 
