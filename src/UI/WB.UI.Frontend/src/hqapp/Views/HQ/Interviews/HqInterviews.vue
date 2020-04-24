@@ -66,7 +66,7 @@
                 </div>
             </FilterBlock>
 
-            <InterviewFilter slot="additional"                
+            <InterviewFilter slot="additional"
                 :questionnaireId="where.questionnaireId"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"
@@ -78,7 +78,7 @@
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="rows => selectedRows = rows"
-            @page="resetSelection"           
+            @page="resetSelection"
             @ajaxComplete="isLoading = false"
             :selectable="showSelectors"
             :selectableId="'id'">
@@ -144,7 +144,15 @@
                 </div>
                 <div id="pnlAssignToOtherTeamConfirmMessage">
                     <p
-                        v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Supervisor assigned', status2: 'Interviewer assigned', status3: 'Rejected by Supervisor'} ) : $t('Interviews.AssignToOtherTeamConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Approved by Supervisor', status2: 'Approved by Headquarters'} )"></p>
+                        v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {
+                            count: this.getFilteredToAssign().length, 
+                            status1: 'Supervisor assigned',
+                            status2: 'Interviewer assigned',
+                            status3: 'Rejected by Supervisor'} ) 
+                            : $t('Interviews.AssignToOtherTeamConfirmMessage', {
+                                count: this.getFilteredToAssign().length,
+                                status1: 'Approved by Supervisor',
+                                status2: 'Approved by Headquarters'} )"></p>
                 </div>
 
                 <div v-if="CountReceivedByInterviewerItems() > 0">
@@ -359,6 +367,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       questionnaireId
       responsibleId
       responsibleName
+      responsibleRole
       errorsCount
       assignmentId
       updateDate
@@ -384,7 +393,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
 function conditionToQueryString(conditions) {
     const result = []
     conditions.forEach(c => {
-        result.push(`${c.variable},${c.field},${c.value}`)
+        result.push(`${c.variable},${c.field},${JSON.stringify(c.value)}`)
     })
     return result.length > 0 ? result : null
 }
@@ -398,7 +407,7 @@ function queryStringToCondition(queryStringArray) {
         result.push({
             variable: parts[0],
             field: parts[1],
-            value: isNaN(value) ? value : toNumber(value),
+            value: JSON.parse(value),
         })
     })
     return result
@@ -593,7 +602,7 @@ export default {
                 order: [[defaultSortIndex, 'desc']],
                 deferLoading: 0,
                 columns,
-                pageLength: 10,
+                pageLength: 20,
                 ajax (data, callback, settings) {
                     const order = {}
                     const order_col = data.order[0]
@@ -756,6 +765,7 @@ export default {
             this.conditions = conditions
             this.reloadTableAndSaveRoute()
         },
+
         togglePrefield() {
             this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
             return false
@@ -806,10 +816,12 @@ export default {
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
             this.questionnaireVersion = null
+            this.conditions = []
         },
 
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
+            this.conditions = []
         },
 
         userSelected(newValue) {
@@ -820,7 +832,7 @@ export default {
         },
 
         viewInterview() {
-            var id = this.selectedRowWithMenu.interviewId
+            var id = this.selectedRowWithMenu.id
             window.location = this.config.interviewReviewUrl + '/' + id.replace(/-/g, '')
         },
 
@@ -848,8 +860,8 @@ export default {
             }
 
             var commands = this.arrayMap(
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 }),
                 function(rowId) {
                     var item = {
@@ -906,8 +918,8 @@ export default {
 
             var command = this.getCommand(
                 self.config.isSupervisor ? 'ApproveInterviewCommand' : 'HqApproveInterviewCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 }),
                 this.statusChangeComment
             )
@@ -941,8 +953,8 @@ export default {
             if (!self.config.isSupervisor) {
                 var command = this.getCommand(
                     'HqRejectInterviewCommand',
-                    map(filteredItems, question => {
-                        return question.interviewId
+                    map(filteredItems, interview => {
+                        return interview.id
                     }),
                     this.statusChangeComment
                 )
@@ -963,8 +975,8 @@ export default {
                 if (noReassignInterviews.length > 0) {
                     var cmd = this.getCommand(
                         'RejectInterviewCommand',
-                        map(noReassignInterviews, question => {
-                            return question.interviewId
+                        map(noReassignInterviews, interview => {
+                            return interview.id
                         }),
                         this.statusChangeComment
                     )
@@ -985,8 +997,8 @@ export default {
 
                 if (toReassignInterviews.length > 0 && self.newResponsibleId != null) {
                     var commands = this.arrayMap(
-                        map(toReassignInterviews, question => {
-                            return question.interviewId
+                        map(toReassignInterviews, interview => {
+                            return interview.id
                         }),
                         function(rowId) {
                             var item = {
@@ -1085,8 +1097,8 @@ export default {
 
             var command = this.getCommand(
                 'UnapproveByHeadquarterCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 })
             )
 
@@ -1114,8 +1126,8 @@ export default {
 
             var command = this.getCommand(
                 'DeleteInterviewCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 })
             )
 
@@ -1140,7 +1152,7 @@ export default {
         async showStatusHistory() {
             var self = this
             const statusHistoryList = await this.$http.post(this.config.api.interviewStatuses, {
-                interviewId: this.selectedRowWithMenu.interviewId,
+                interviewId: this.selectedRowWithMenu.id,
             })
 
             if (statusHistoryList.data.length != 0) {
@@ -1211,10 +1223,10 @@ export default {
                 callback: () => self.showStatusHistory(),
             })
 
-            if (rowData.responsibleRole === 'Interviewer') {
+            if (rowData.responsibleRole === 'INTERVIEWER') {
                 menu.push({
                     name: self.$t('Common.OpenResponsiblesProfile'),
-                    callback: () => (window.location = self.config.profileUrl + '/' + rowData.responsibleId),
+                    callback: () => (window.location = self.config.profileUrl + '/' + rowData.responsibleId),                    
                 })
             }
 
@@ -1228,28 +1240,33 @@ export default {
                     className: 'context-menu-separator context-menu-not-selectable',
                 })
 
+                const canBeAssigned =  rowData.actionFlags.indexOf('CANBEREASSIGNED') >= 0
                 menu.push({
                     name: self.$t('Common.Assign'),
-                    className: 'primary-text',
+                    className: canBeAssigned ? 'primary-text' : '',
                     callback: () => self.assignInterview(),
+                    disabled: !canBeAssigned,
                 })
 
                 menu.push({
                     name: self.$t('Common.Approve'),
                     className: 'success-text',
                     callback: () => self.approveInterview(),
+                    disabled: rowData.actionFlags.indexOf('CANBEAPPROVED') < 0,
                 })
 
                 menu.push({
                     name: self.$t('Common.Reject'),
                     className: 'error-text',
                     callback: () => self.rejectInterview(),
+                    disabled: rowData.actionFlags.indexOf('CANBEREJECTED') < 0,
                 })
 
                 if (!self.config.isSupervisor) {
                     menu.push({
                         name: self.$t('Common.Unapprove'),
                         callback: () => self.unapproveInterview(),
+                        disabled: rowData.actionFlags.indexOf('CANBEUNAPPROVEDBYHQ') < 0,
                     })
 
                     menu.push({
@@ -1260,6 +1277,7 @@ export default {
                         name: self.$t('Common.Delete'),
                         className: 'error-text',
                         callback: () => self.deleteInterview(),
+                        disabled: rowData.actionFlags.indexOf('CANBEDELETED') < 0,
                     })
                 }
             }
@@ -1286,6 +1304,7 @@ export default {
 
             props.forEach(iterator, this)
         },
+
         reloadTable() {
             this.isLoading = true
             this.selectedRows.splice(0, this.selectedRows.length)
@@ -1305,7 +1324,7 @@ export default {
 
             if (!isEqual(this.$route.query, query)) {
                 this.$router.push({ query })
-                    .catch(() => {})                    
+                    .catch(() => {})
             }
         },
 
@@ -1382,7 +1401,7 @@ export default {
         },
     },
 
-    mounted() {        
+    mounted() {
         this.initPageFilters()
     },
 
