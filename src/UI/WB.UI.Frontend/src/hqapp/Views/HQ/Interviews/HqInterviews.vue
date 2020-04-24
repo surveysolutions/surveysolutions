@@ -355,6 +355,8 @@ import moment from 'moment'
 import {lowerCase, find, filter, flatten, map, 
     join, assign, isNaN, isNumber, toNumber, isEqual} from 'lodash'
 import InterviewFilter from './InterviewQuestionsFilters'
+
+import sanitizeHtml  from 'sanitize-html'
 import gql from 'graphql-tag'
 
 const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
@@ -496,6 +498,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'key')
                     },
+                    width: '50px',
                 },
                 {
                     data: 'identifyingQuestions',
@@ -504,10 +507,14 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        var questionsWithTitles = map(data, node => {
-                            return (node.question.label || node.question.questionText) + ': ' + node.answer
+                        const delimiter = self.mode == 'dense' 
+                        
+                        var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
+                            return `<span class='question'>${sanitizeHtml(node.question.label || node.question.questionText)}</span>: <span class='answer'>${node.answer}</span>`
                         })
-                        return join(questionsWithTitles, ', ')
+
+                        const dom = join(questionsWithTitles, ', ')                                             
+                        return dom
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'prefield')
@@ -521,6 +528,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'responsible')
                     },
+                    width: '100px',
                 },
                 {
                     data: 'updateDate',
@@ -537,6 +545,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'updated')
                     },
+                    width: '100px',
                 },
                 {
                     data: 'errorsCount',
@@ -549,6 +558,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
                     },
+                    width: '50px',
                 },
                 {
                     data: 'status',
@@ -561,6 +571,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'status')
                     },
+                    width: '100px',
                 },
                 {
                     data: 'receivedByInterviewer',
@@ -572,6 +583,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'received')
                     },
+                    width: '50px',
                 },
                 {
                     data: 'assignmentId',
@@ -582,6 +594,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'assignment')
                     },
+                    width: '50px',
                 },
             ]
         },

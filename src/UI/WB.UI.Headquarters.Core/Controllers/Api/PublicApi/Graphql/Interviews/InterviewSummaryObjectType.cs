@@ -77,6 +77,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                         var unitOfWork = context.Service<IUnitOfWork>();
                         var questionAnswers = await unitOfWork.Session.Query<QuestionAnswer>()
                             .Where(a => keys.Contains(a.InterviewSummary.SummaryId))
+                            .OrderBy(a => a.Position)
                             .ToListAsync()
                             .ConfigureAwait(false);
                         
