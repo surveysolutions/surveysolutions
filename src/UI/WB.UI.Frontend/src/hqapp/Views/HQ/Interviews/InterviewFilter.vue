@@ -2,12 +2,14 @@
     <div class="block-filter" 
         v-if="question != null && isSupported">
         <h5 :title="sanitizeHtml(question.questionText)">
-            {{sanitizeHtml(question.questionText)}} 
-            <inline-selector :options="fieldOptions"
-                no-empty
-                :id="`filter_selector_${condition.variable}`"
-                v-if="fieldOptions != null"
-                v-model="field" />
+            {{sanitizeHtml(question.questionText)}}
+            <div>
+                <inline-selector :options="fieldOptions"
+                    no-empty
+                    :id="`filter_selector_${condition.variable}`"
+                    v-if="fieldOptions != null"
+                    v-model="field" />
+            </div>
         </h5>
         
         <Typeahead
@@ -78,6 +80,16 @@ export default {
         },
 
         sanitizeHtml: sanitizeHtml,
+    },
+
+    watch: {
+        field(to) {
+            this.$emit('change', {
+                variable: this.question.variable,
+                field: to.id,
+                value: this.condition.value,
+            })
+        },
     },
 
     computed: { 
