@@ -24,8 +24,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
     [Route("api/interviewer/v2/interviews")]
     public class InterviewsApiV2Controller : InterviewerInterviewsControllerBase
     {
-        public InterviewsApiV2Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAudioAuditFileStorage audioAuditFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, IWebHostEnvironment webHostEnvironment, IReadSideRepositoryReader<InterviewSummary> interviewsStorage) : 
-            base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage, webHostEnvironment, interviewsStorage)
+        public InterviewsApiV2Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAudioAuditFileStorage audioAuditFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, IWebHostEnvironment webHostEnvironment) : 
+            base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage, webHostEnvironment)
         {
         }
 

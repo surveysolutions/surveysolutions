@@ -14,5 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         bool HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(Guid authorizedUserId);
         bool HasAnyInterviewsInProgressWithResolvedCommentsForSupervisor(Guid authorizedUserId);
+        bool HasAnySmallSubstitutionEvent(Guid interviewId);
     }
 }
