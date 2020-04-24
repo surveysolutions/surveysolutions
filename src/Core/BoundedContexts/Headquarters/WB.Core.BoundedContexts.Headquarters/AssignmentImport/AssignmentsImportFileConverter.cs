@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
@@ -50,62 +46,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     QuestionnaireOrRosterName = file.FileInfo.QuestionnaireOrRosterName,
                     Answers = this.ToAssignmentAnswers(preloadingRow.Cells, questionnaire).Where(x=>/*not supported question types*/ x != null).ToArray(),
                     RosterInstanceCodes = this.ToAssignmentRosterInstanceCodes(preloadingValues, questionnaire, file.FileInfo.QuestionnaireOrRosterName).ToArray(),
-                    Responsible = preloadingResponsible == null ? null : ToAssignmentResponsible(preloadingResponsible),
-                    Quantity = preloadingQuantity == null ? null : ToAssignmentQuantity(preloadingQuantity),
-                    InterviewIdValue = preloadingInterviewId == null ? null : this.ToAssignmentInterviewId(preloadingInterviewId),
-                    Email = preloadingEmail == null? null : new AssignmentEmail
-                    {
-                        Column = preloadingEmail.Column,
-                        Value = preloadingEmail.Value
-                    },
-                    Password = preloadingPassword == null ? null : new AssignmentPassword
-                    {
-                        Column = preloadingPassword.Column,
-                        Value = preloadingPassword.Value
-                    },
-                    WebMode = preloadingWebMode == null ? null : ToAssignmentWebMode(preloadingWebMode),
-                    RecordAudio = preloadingRecordAudio == null ? null : ToAssignmentRecordAudio(preloadingRecordAudio),
-                    Comments = preloadingComments == null ? null : ToAssignmentComments(preloadingComments)
+                    Responsible = preloadingResponsible?.ToAssignmentResponsible(this.userViewFactory, this.users),
+                    Quantity = preloadingQuantity?.ToAssignmentQuantity(),
+                    InterviewIdValue = preloadingInterviewId?.ToAssignmentInterviewId(),
+                    Email = preloadingEmail?.ToAssignmentEmail(),
+                    Password = preloadingPassword?.ToAssignmentPassword(),
+                    WebMode = preloadingWebMode?.ToAssignmentWebMode(),
+                    RecordAudio = preloadingRecordAudio?.ToAssignmentRecordAudio(),
+                    Comments = preloadingComments?.ToAssignmentComments()
                 };
             }
         }
 
-        private AssignmentRecordAudio ToAssignmentRecordAudio(PreloadingValue preloadingWebMode)
-        {
-            var recordAudio = new AssignmentRecordAudio
-            {
-                Column = preloadingWebMode.Column,
-                Value = preloadingWebMode.Value
-            };
-
-            if (int.TryParse(preloadingWebMode.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var intNumericValue))
-                recordAudio.DoesNeedRecord = intNumericValue == 1;
-
-            return recordAudio;
-        }
-
-        private AssignmentWebMode ToAssignmentWebMode(PreloadingValue preloadingWebMode)
-        {
-            var webMode = new AssignmentWebMode
-            {
-                Column = preloadingWebMode.Column,
-                Value = preloadingWebMode.Value
-
-            };
-
-            if (int.TryParse(preloadingWebMode.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var intNumericValue))
-                webMode.WebMode = intNumericValue == 1;
-
-            return webMode;
-        }
-
-        private AssignmentInterviewId ToAssignmentInterviewId(PreloadingValue value)
-            => new AssignmentInterviewId
-            {
-                Column = value.Column,
-                Value = value.Value
-            };
-
+        
         private IEnumerable<AssignmentRosterInstanceCode> ToAssignmentRosterInstanceCodes(
             PreloadingValue[] preloadingValues, IQuestionnaire questionnaire, string questionnaireOrRosterName)
         {
@@ -126,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     new[] {newName, oldName}.Contains(x.Column.ToLower()));
 
                 if (code != null)
-                    yield return ToAssignmentRosterInstanceCode(code);
+                    yield return code.ToAssignmentRosterInstanceCode();
             }
         }
         private bool IsQuestionnaireFile(string questionnaireOrRosterName, IQuestionnaire questionnaire)
@@ -140,217 +93,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 switch (cell)
                 {
                     case PreloadingCompositeValue compositeCell:
-                        yield return ToAssignmentAnswers(compositeCell, questionnaire);
+                        yield return compositeCell.ToAssignmentAnswers(questionnaire);
                         break;
                     case PreloadingValue regularCell:
-                        yield return ToAssignmentAnswer(regularCell, questionnaire);
+                        yield return regularCell.ToAssignmentAnswer(questionnaire);
                         break;
                 }
             }
-
         }
-
-        private static AssignmentAnswers ToAssignmentAnswers(PreloadingCompositeValue compositeValue, IQuestionnaire questionnaire)
-        {
-            var questionId = questionnaire.GetQuestionIdByVariable(compositeValue.VariableOrCodeOrPropertyName);
-            if (questionId.HasValue)
-            {
-                var answerType = questionnaire.GetAnswerType(questionId.Value);
-                switch (answerType)
-                {
-                    case AnswerType.DecimalAndStringArray:
-                        return ToAssignmentTextListAnswer(compositeValue);
-                    case AnswerType.GpsData:
-                        return ToAssignmentGpsAnswer(compositeValue);
-                    case AnswerType.OptionCodeArray:
-                    case AnswerType.YesNoArray:
-                        {
-                            compositeValue.Values.ForEach(x => x.VariableOrCodeOrPropertyName = x.VariableOrCodeOrPropertyName.Replace("n", "-"));
-                            return ToAssignmentCategoricalMultiAnswer(compositeValue);
-                        }
-                }
-            }
-
-            return null;
-        }
-
-        private static AssignmentAnswer ToGpsPropertyAnswer(PreloadingValue answer)
-            => answer.VariableOrCodeOrPropertyName == nameof(GeoPosition.Timestamp).ToLower()
-                ? ToAssignmentDateTimeAnswer(answer)
-                : ToAssignmentDoubleAnswer(answer);
-
-        private AssignmentRosterInstanceCode ToAssignmentRosterInstanceCode(PreloadingValue answer)
-        {
-            int? intValue = null;
-            if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
-                out var intNumericValue))
-                intValue = intNumericValue;
-
-            return new AssignmentRosterInstanceCode
-            {
-                Code = intValue,
-                VariableName = answer.VariableOrCodeOrPropertyName,
-                Column = answer.Column,
-                Value = answer.Value,
-            };
-        }
-
-        private static AssignmentAnswer ToAssignmentAnswer(PreloadingValue answer, IQuestionnaire questionnaire)
-        {
-            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableOrCodeOrPropertyName);
-            if (questionId.HasValue)
-            {
-                var answerType = questionnaire.GetAnswerType(questionId.Value);
-
-                switch (answerType)
-                {
-                    case AnswerType.OptionCode:
-                        return ToAssignmentCategoricalSingleAnswer(answer);
-                    case AnswerType.Integer:
-                        return ToAssignmentIntegerAnswer(answer);
-                    case AnswerType.Decimal:
-                        return ToAssignmentDoubleAnswer(answer);
-                    case AnswerType.DateTime:
-                        return ToAssignmentDateTimeAnswer(answer);
-                    case AnswerType.String:
-                    case AnswerType.DecimalAndStringArray:
-                        return ToAssignmentTextAnswer(answer);
-                }
-            }
-
-            return null;
-        }
-
-        private static AssignmentGpsAnswer ToAssignmentGpsAnswer(PreloadingCompositeValue compositeValue)
-            => new AssignmentGpsAnswer
-            {
-                VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(ToGpsPropertyAnswer).ToArray()
-            };
-
-        private static AssignmentMultiAnswer ToAssignmentTextListAnswer(PreloadingCompositeValue compositeValue)
-            => new AssignmentMultiAnswer
-            {
-                VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(ToAssignmentTextAnswer).ToArray()
-            };
-
-        private static AssignmentMultiAnswer ToAssignmentCategoricalMultiAnswer(PreloadingCompositeValue compositeValue)
-            => new AssignmentMultiAnswer
-            {
-                VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(ToAssignmentIntegerAnswer).ToArray()
-            };
-
-        private static AssignmentAnswer ToAssignmentDoubleAnswer(PreloadingValue answer)
-        {
-            double? doubleValue = null;
-            if (double.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
-                out var doubleNumericValue))
-                doubleValue = doubleNumericValue;
-
-            return new AssignmentDoubleAnswer
-            {
-                Answer = doubleValue,
-                VariableName = answer.VariableOrCodeOrPropertyName,
-                Column = answer.Column,
-                Value = answer.Value,
-            };
-        }
-
-        private static AssignmentAnswer ToAssignmentDateTimeAnswer(PreloadingValue answer)
-        {
-            DateTime? dataTimeValue = null;
-            if (DateTime.TryParse(answer.Value, null, DateTimeStyles.AdjustToUniversal, out var date))
-                dataTimeValue = date;
-
-            return new AssignmentDateTimeAnswer
-            {
-                Answer = dataTimeValue,
-                VariableName = answer.VariableOrCodeOrPropertyName,
-                Column = answer.Column,
-                Value = answer.Value,
-            };
-        }
-
-        private static AssignmentAnswer ToAssignmentCategoricalSingleAnswer(PreloadingValue answer)
-        {
-            var integerAnswer = (AssignmentIntegerAnswer)ToAssignmentIntegerAnswer(answer);
-
-            return new AssignmentCategoricalSingleAnswer
-            {
-                VariableName = integerAnswer.VariableName,
-                Value = integerAnswer.Value,
-                Column = integerAnswer.Column,
-                OptionCode = integerAnswer.Answer
-            };
-        }
-
-        private static AssignmentAnswer ToAssignmentTextAnswer(PreloadingValue answer)
-            => new AssignmentTextAnswer
-            {
-                VariableName = answer.VariableOrCodeOrPropertyName,
-                Column = answer.Column,
-                Value = answer.Value,
-            };
-
-        private static AssignmentAnswer ToAssignmentIntegerAnswer(PreloadingValue answer)
-        {
-            int? intValue = null;
-            if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
-                out var intNumericValue))
-                intValue = intNumericValue;
-
-            return new AssignmentIntegerAnswer
-            {
-                Answer = intValue,
-                VariableName = answer.VariableOrCodeOrPropertyName,
-                Column = answer.Column,
-                Value = answer.Value,
-            };
-        }
-
-        private static AssignmentQuantity ToAssignmentQuantity(PreloadingValue answer)
-        {
-            int? quantityValue = null;
-
-            if (int.TryParse(answer.Value, out var quantity))
-                quantityValue = quantity;
-
-            return new AssignmentQuantity
-            {
-                Quantity = quantityValue,
-                Column = answer.Column,
-                Value = answer.Value
-            };
-        }
-
-        private static AssignmentComments ToAssignmentComments(PreloadingValue answer) =>
-            new AssignmentComments
-            {
-                Column = answer.Column,
-                Value = answer.Value
-            };
-
+        
         private readonly Dictionary<string, UserToVerify> users = new Dictionary<string, UserToVerify>();
-        private AssignmentResponsible ToAssignmentResponsible(PreloadingValue answer)
-        {
-            var responsible = new AssignmentResponsible
-            {
-                Column = answer.Column,
-                Value = answer.Value
-            };
-
-            var responsibleName = answer.Value;
-            if (!string.IsNullOrWhiteSpace(responsibleName))
-            {
-                if (!users.ContainsKey(responsibleName))
-                    users.Add(responsibleName, this.userViewFactory.GetUsersByUserNames(new[] { responsibleName }).FirstOrDefault());
-
-                responsible.Responsible = users[responsibleName];
-            }
-
-            return responsible;
-        }
     }
 }
