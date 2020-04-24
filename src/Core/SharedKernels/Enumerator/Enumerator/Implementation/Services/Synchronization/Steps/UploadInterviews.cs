@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     var uploadState = await this.synchronizationService.GetInterviewUploadState(interview.InterviewId,
                         interviewEventStreamContainer.Tag, Context.CancellationToken);
 
-                    if (isPartialSynchedInterview && uploadState.ResponsibleId != principal.CurrentUserIdentity.UserId)
+                    if (isPartialSynchedInterview && uploadState.ResponsibleId.HasValue && uploadState.ResponsibleId != principal.CurrentUserIdentity.UserId)
                     {
                         // don't upload if interview was reassigned
                         continue;
