@@ -355,9 +355,10 @@ import moment from 'moment'
 import {lowerCase, find, filter, flatten, map, 
     join, assign, isNaN, isNumber, toNumber, isEqual} from 'lodash'
 import InterviewFilter from './InterviewQuestionsFilters'
-
-import sanitizeHtml  from 'sanitize-html'
 import gql from 'graphql-tag'
+
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
   interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
