@@ -171,10 +171,10 @@ export default {
     },
     watch: {
         personName: function(val) {
-            delete this.modelState['PersonName']
+            Vue.delete(this.modelState, 'PersonName')
         },
         verificationCode: function(val) {
-            delete this.modelState['VerificationCode']
+            Vue.delete(this.modelState, 'VerificationCode')
         },
     },
     methods: {

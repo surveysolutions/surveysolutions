@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NHibernate.Mapping.ByCode.Conformist;
+﻿using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.Services;
 
@@ -15,7 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
             Table("usertokens");
             Schema("users");
 
-
             ComposedId(m =>
             {
                 m.Property(x => x.UserId);
@@ -23,11 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
                 m.Property(x => x.Name);
             });
 
-
-            /*
-            Property(x => x.UserId);
-            Property(x => x.LoginProvider);
-            Property(x => x.Name);*/
             Property(x => x.Value);
         }
     }

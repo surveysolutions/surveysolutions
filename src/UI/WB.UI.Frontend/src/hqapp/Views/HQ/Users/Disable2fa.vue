@@ -153,7 +153,7 @@ export default {
     },
     watch: {
         personName: function(val) {
-            delete this.modelState['PersonName']
+            Vue.delete(this.modelState, 'PersonName')
         },
     },
     methods: {
