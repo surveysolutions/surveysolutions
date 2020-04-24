@@ -643,7 +643,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 await userManager.SetTwoFactorEnabledAsync(currentUser, false);
                 await userManager.ResetAuthenticatorKeyAsync(currentUser);
-                //await signInManager.RefreshSignInAsync(currentUser);
             }
 
             return this.ModelState.ErrorsToJsonResult();
