@@ -41,24 +41,18 @@
 		border-top: 2px solid $blue !important;
 	}
 }
-th.prefield-column {
+th.prefield-column{
 	font: 12px/14px $trebuchet;
 	text-transform: none;
 	font-weight: normal;
 	color: $blue;
 }
-
-td.prefield-column {
-    font-style: italic;
-    
-    .answer { font-weight: bold; }
-    .question { font-weight: normal; }
+td.prefield-column{
+	font-style: italic;
 }
-
 .prefield-column{
 	max-width: 500px;
 }
-
 .interview-id{
 	min-width: 150px !important;
 	overflow: hidden;
