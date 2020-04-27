@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="FFmpeg.Win64.Static" Version="4.1.1.1" />
-    <PackageReference Include="FluentMigrator.Runner" Version="3.2.1" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.2.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
