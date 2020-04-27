@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using AngleSharp.Network.Default;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
