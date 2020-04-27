@@ -101,6 +101,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\FieldsAndValidations.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Pages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Pages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\WebInterviewSettings.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>WebInterviewSettings.resx</DependentUpon>
@@ -108,6 +116,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.resx">
+      <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.resx">
+      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\WebInterviewSettings.resx">
       <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
     </EmbeddedResource>

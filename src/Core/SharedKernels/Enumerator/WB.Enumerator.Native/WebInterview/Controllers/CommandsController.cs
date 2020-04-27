@@ -164,7 +164,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
         }
 
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public virtual IActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
         {
             Identity identity = Identity.Parse(request.Identity);
@@ -195,7 +195,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public abstract IActionResult CompleteInterview(Guid interviewId, CompleteInterviewRequest completeInterviewRequest);
 
         public class NewCommentRequest : AnswerRequest
@@ -203,7 +203,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             public string Comment { get; set; }
         }
 
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult SendNewComment(Guid interviewId, NewCommentRequest request)
         {
@@ -214,7 +214,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         protected void ExecuteQuestionCommand(QuestionCommand command)
         {
             try

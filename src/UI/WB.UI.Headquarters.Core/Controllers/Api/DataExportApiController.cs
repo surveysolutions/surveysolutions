@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<List<long>>> GetRunningJobs()
         {
             try
@@ -74,7 +74,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<List<ExportStatusItem>>> ExportStatus()
         {
             try
@@ -110,7 +110,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<List<DataExportProcessView>>> Status([FromBody] long[] ids)
         {
             var statuses = await this.dataExportStatusReader.GetProcessStatuses(ids);
@@ -118,7 +118,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<ExportDataAvailabilityView>> DataAvailability(Guid id, long version)
         {
             ExportDataAvailabilityView result = await dataExportStatusReader.GetDataAvailabilityAsync(new QuestionnaireIdentity(id, version));
@@ -131,7 +131,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<bool>> WasExportFileRecreated(long id)
         {
             bool result = await dataExportStatusReader.WasExportFileRecreated(id);
@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         
         public async Task<ActionResult> DownloadData(long id)
         {
@@ -159,7 +159,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         
         public async Task<ActionResult> AllData(Guid id, long version, DataExportFormat format,
             InterviewStatus? status = null,
@@ -182,7 +182,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         
         public async Task<ActionResult> DDIMetadata(Guid id, long version)
         {
@@ -197,7 +197,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<DataExportUpdateRequestResult>> Regenerate(long id, string accessToken = null)
         {
             var result = await this.exportServiceApi.Regenerate(id, GetPasswordFromSettings(), null);
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<long>> RequestUpdate(Guid id, long version,
             DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
@@ -255,7 +255,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<bool>> DeleteDataExportProcess([FromQuery] long id)
         {
             try
@@ -270,7 +270,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public Task<DataExportStatusView> GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
             => this.dataExportStatusReader.GetDataExportStatusForQuestionnaireAsync(new QuestionnaireIdentity(id, version),
                 status,

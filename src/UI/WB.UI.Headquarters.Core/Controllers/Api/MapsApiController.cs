@@ -119,7 +119,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [RequestSizeLimit(500 * 1024 * 1024)]
         public async Task<JsonMapResponse> Upload(IFormFile file)
         {
@@ -197,7 +197,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public IActionResult UploadMappings(IFormFile file)
         {
             if (file == null)
@@ -337,7 +337,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             return result;
         }
 
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
         public async Task<CommandApiController.JsonCommandResponse> DeleteMap([FromBody] DeleteMapRequestModel request)
@@ -351,7 +351,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public string Map { get; set; }
         }
 
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
         public CommandApiController.JsonCommandResponse DeleteMapUser([FromBody] DeleteMapUserRequestModel request)
