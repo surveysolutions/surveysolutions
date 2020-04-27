@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                         string? language = null;
                         if (context.ScopedContextData.ContainsKey("language"))
                         {
-                            language = context.ScopedContextData["language"].ToString();
+                            language = context.ScopedContextData["language"]?.ToString();
                         }
                         
                         var questionnaires =  questions.Select(q
