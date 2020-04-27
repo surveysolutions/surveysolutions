@@ -15,7 +15,6 @@ using WB.UI.Shared.Web.Services;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    [ObserverNotAllowed]
     public class SettingsController : Controller
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;

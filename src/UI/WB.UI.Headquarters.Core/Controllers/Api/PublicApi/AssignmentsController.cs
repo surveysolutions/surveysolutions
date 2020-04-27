@@ -429,7 +429,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/recordAudio")]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
         public ActionResult AudioRecodingPatch(int id, [FromBody] UpdateRecordingRequest request)
         {
@@ -472,7 +472,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="409">Quantity cannot be changed. Assignment either archived or has web mode enabled</response>
         [HttpPost]
         [Route("{id:int}/close")]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
         public ActionResult Close(int id)
         {
