@@ -44,6 +44,9 @@ namespace WB.Tests.Integration
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<TInstance>())
                 .Returns(instance);
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance(typeof(TInstance)))
+                .Returns(instance);
         }
 
         public static SideBarSectionsViewModel SidebarSectionViewModel(QuestionnaireDocument questionnaireDocument, StatefulInterview interview)

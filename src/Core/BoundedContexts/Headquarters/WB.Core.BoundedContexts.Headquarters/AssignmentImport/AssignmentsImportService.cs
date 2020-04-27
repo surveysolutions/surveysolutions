@@ -223,18 +223,27 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public int ImportAssignment(int assignmentId, Guid defaultAssignedTo, IQuestionnaire questionnaire, Guid responsibleId)
         {
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
             var assignmentToImport = this.GetAssignmentById(assignmentId);
+            return this.ImportAssignment(assignmentToImport, questionnaire, responsibleId, defaultAssignedTo);
+        }
 
-            var assignedTo = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? assignmentToImport.Headquarters ?? defaultAssignedTo;
+        public int ImportAssignment(AssignmentToImport assignment, IQuestionnaire questionnaire, Guid responsibleId)
+            => this.ImportAssignment(assignment, questionnaire, responsibleId, responsibleId);
+        
+        private int ImportAssignment(AssignmentToImport assignmentToImport, IQuestionnaire questionnaire, Guid responsibleId, Guid defaultAssignedTo)
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
+            var assignedTo = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ??
+                assignmentToImport.Headquarters ?? defaultAssignedTo;
+            
             var assignment = this.assignmentFactory.CreateAssignment(
                 responsibleId,
                 questionnaireIdentity,
-                assignedTo, 
+                assignedTo,
                 assignmentToImport.Quantity,
-                assignmentToImport.Email, 
-                assignmentToImport.Password, 
+                assignmentToImport.Email,
+                assignmentToImport.Password,
                 assignmentToImport.WebMode,
                 assignmentToImport.IsAudioRecordingEnabled,
                 assignmentToImport.Answers,
@@ -312,10 +321,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 .GroupBy(assignmentRow => assignmentRow.InterviewIdValue?.Value ??
                                           /*for single/anvanced preloading with main file only without interview ids*/
                                           Guid.NewGuid().ToString())
-                .Select(x => ToAssignmentToImport(x, questionnaire, protectedVariables))
+                .Select(x => ConvertToAssignmentToImport(x.ToList(), questionnaire, protectedVariables))
                 .ToList();
 
-        private AssignmentToImport ToAssignmentToImport(IGrouping<string, PreloadingAssignmentRow> assignment,
+        public AssignmentToImport ConvertToAssignmentToImport(List<PreloadingAssignmentRow> assignment,
             IQuestionnaire questionnaire, List<string> protectedQuestions)
         {
             var quantity = assignment.Select(_ => _.Quantity).FirstOrDefault(_ => _ != null)?.Quantity;
