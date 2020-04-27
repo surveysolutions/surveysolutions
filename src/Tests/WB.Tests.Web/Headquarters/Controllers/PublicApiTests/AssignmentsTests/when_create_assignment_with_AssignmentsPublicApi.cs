@@ -85,25 +85,35 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         }
 
         [Test]
-        public async Task should_return_failed_verification_results_with_400_code()
+        public async Task when_invalid_in_interview_tree_then_should_return_failed_verification_results_with_400_code()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
+            var rosterQuestionId = Id.g1;
 
             var hqUser = Create.Entity.HqUser();
             
             this.SetupResponsibleUser(hqUser);
-            this.SetupQuestionnaire(Create.Entity.QuestionnaireDocument());
-
-            var assignment = Create.Entity.Assignment(1, qid);
-
-            this.mapper
-                .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
-                .Returns(assignment);
+            this.SetupQuestionnaire(Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, new IComposite[]
+            {
+                Create.Entity.TextQuestion(),
+                Create.Entity.NumericRoster(children: new []
+                {
+                    Create.Entity.TextQuestion(rosterQuestionId)
+                })
+            }));
 
             var response = await this.controller.Create(new CreateAssignmentApiRequest
             {
                 QuestionnaireId = qid.ToString(),
-                Responsible = hqUser.UserName
+                Responsible = hqUser.UserName,
+                IdentifyingData = new List<AssignmentIdentifyingDataItem>
+                {
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{rosterQuestionId:N}_0",
+                        Answer = "text"
+                    }
+                }
             });
             
             Assert.That(response.Result, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status400BadRequest));
