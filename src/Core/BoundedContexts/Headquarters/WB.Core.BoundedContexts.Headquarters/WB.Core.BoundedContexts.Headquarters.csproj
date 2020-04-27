@@ -50,7 +50,7 @@
     <PackageReference Include="AWSSDK.Core" Version="3.3.106.11" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.19" />
-    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.57" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.137" />
     <PackageReference Include="Dapper" Version="2.0.35" />

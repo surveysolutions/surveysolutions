@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -50,8 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
         {
             var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(questionnaireId, version)).IdentifyingQuestions;
 
-            byte[] templateFile = null;
-            var csvConfiguration = new Configuration
+            var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,
@@ -60,22 +60,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
                 MissingFieldFound = null,
             };
 
-            using (MemoryStream memoryStream = new MemoryStream())
+            using MemoryStream memoryStream = new MemoryStream();
+            using (StreamWriter streamWriter = new StreamWriter(memoryStream))
+            using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
             {
-                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
-                using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
+                foreach (var questionItem in featuredQuestionItems)
                 {
-                    foreach (var questionItem in featuredQuestionItems)
-                    {
-                        csvWriter.WriteField(questionItem.Caption);
-                    }
-                    csvWriter.NextRecord();
+                    csvWriter.WriteField(questionItem.Caption);
                 }
-
-                templateFile = memoryStream.ToArray();
+                csvWriter.NextRecord();
             }
 
-            return templateFile;
+            return memoryStream.ToArray();
         }
 
         public string GetFilePathToPreloadingTemplate(Guid questionnaireId, long version)
