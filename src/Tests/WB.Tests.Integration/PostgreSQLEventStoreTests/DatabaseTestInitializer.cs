@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Configuration;
-using System.Reflection;
-using Microsoft.Graph;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
