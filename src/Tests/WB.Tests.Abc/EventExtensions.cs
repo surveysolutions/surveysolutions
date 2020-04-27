@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using Moq;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Abc
 {
@@ -31,6 +32,25 @@ namespace WB.Tests.Abc
             var publishableEventMock = mock.As<IUncommittedEvent>();
             publishableEventMock.Setup(x => x.Payload).Returns(@event);
             return mock.Object;
+        }
+        public static CommittedEvent ToCommittedEvent<T>(this T @event,
+            Guid? eventSourceId = null,
+            string origin = null,
+            DateTime? eventTimeStamp = null,
+            Guid? eventId = null,
+            long? globalSequence = null)
+            where T : class, IEvent
+        {
+            var committedEvent = new CommittedEvent(
+                commitId: Guid.NewGuid(), 
+                origin: origin,
+                eventIdentifier: eventId ?? Guid.NewGuid(), 
+                eventSourceId: eventSourceId ?? Guid.NewGuid(),
+                eventSequence: eventSequence,
+                eventTimeStamp: eventTimeStamp ?? DateTime.UtcNow,
+                payload: @event,
+                globalSequence: globalSequence);
+            return committedEvent;
         }
     }
 

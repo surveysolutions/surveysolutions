@@ -118,6 +118,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 sm.Lazy(CollectionLazy.Lazy);
                 sm.Inverse(true);
             }, rel => rel.OneToMany());
+
+            Property(x => x.HasSmallSubstitutions);
         }
     }
 

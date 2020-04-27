@@ -84,6 +84,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public override void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)
         {
             base.InitializeFromHistory(eventSourceId, history);
+
+            if (QuestionnaireIdentity != null)
+            {
+                this.Tree.ReplaceSubstitutions();
+            }
+
             this.changedTree = null;
         }
 

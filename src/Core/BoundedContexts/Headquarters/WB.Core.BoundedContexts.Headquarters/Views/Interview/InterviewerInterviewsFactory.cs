@@ -111,6 +111,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return summary != null;
         }
 
+        public bool HasAnySmallSubstitutionEvent(Guid interviewId)
+        {
+            var interviewSummary = reader.GetById(interviewId.FormatGuid());
+            return interviewSummary.HasSmallSubstitutions;
+        }
+
         public List<InterviewInformation> GetInProgressInterviewsForSupervisor(Guid supervisorId)
         {
             var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
