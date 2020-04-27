@@ -56,12 +56,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                             .Where(q => keys.Contains(q.Id)).ToListAsync();
 
                         if(!questions.Any()) return new Dictionary<int, List<CategoricalOption>>();
-                    //    var lang = context.Variables.GetVariable<string>("language");
+                        
                         var questionnaireStorage = context.Service<IQuestionnaireStorage>();
+                        string? language = null;
+                        if (context.ScopedContextData.ContainsKey("language"))
+                        {
+                            language = context.ScopedContextData["language"].ToString();
+                        }
+                        
                         var questionnaires =  questions.Select(q
                                 => (q.Id, q.EntityId,
                                     questionnaireStorage.GetQuestionnaire(
-                                        QuestionnaireIdentity.Parse(q.QuestionnaireIdentity), null))).ToList();
+                                        QuestionnaireIdentity.Parse(q.QuestionnaireIdentity), language))).ToList();
 
                          return questionnaires.Where(q => q.Item3 != null).ToDictionary(
                                 q => q.Id, 
