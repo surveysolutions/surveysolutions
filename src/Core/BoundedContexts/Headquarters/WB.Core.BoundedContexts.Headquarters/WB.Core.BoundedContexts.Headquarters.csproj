@@ -53,11 +53,11 @@
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.57" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.137" />
-    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="Dropbox.Api" Version="4.9.4" />
     <PackageReference Include="EPPlus" Version="4.5.3.3" />
     <PackageReference Include="Gdal.Core" Version="1.0.0" />
-    <PackageReference Include="GeoJSON.Net" Version="1.2.14" />
+    <PackageReference Include="GeoJSON.Net" Version="1.2.15" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.45.0.1922" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -72,7 +72,7 @@
     <PackageReference Include="PasswordGenerator" Version="2.0.5" />
     <PackageReference Include="Polly" Version="7.2.0" />
     <PackageReference Include="Quartz" Version="3.0.7" />
-    <PackageReference Include="refit" Version="5.0.23" />
+    <PackageReference Include="refit" Version="5.1.67" />
     <PackageReference Include="Sendgrid" Version="9.14.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.18" />
   </ItemGroup>
