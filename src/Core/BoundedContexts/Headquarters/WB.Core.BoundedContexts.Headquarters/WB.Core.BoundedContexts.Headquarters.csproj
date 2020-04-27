@@ -72,14 +72,6 @@
     <PackageReference Include="Sendgrid" Version="9.14.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.18" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="ddidotnet">
-      <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
-    </Reference>
-    <Reference Include="StatData">
-      <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="**\*.resx">
