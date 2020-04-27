@@ -142,6 +142,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
 
                 }
+                catch (SynchronizationException ex) when (ex.Type == SynchronizationExceptionType.UpgradeRequired)
+                {
+                    statistics.FailedToCreateInterviewsCount++;
+                    throw;
+                }
                 catch (Exception exception)
                 {
                     statistics.FailedToCreateInterviewsCount++;

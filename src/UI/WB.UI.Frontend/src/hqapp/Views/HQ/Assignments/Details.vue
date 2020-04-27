@@ -234,45 +234,45 @@ export default {
                     width: '50%',
                     render(data, type, row) {
                         switch (row.Action) {
-                        case 'Created': {
-                            let createdText = self.$t('Assignments.Action_Created_Responsible', {
-                                responsible: data.Responsible,
-                            })
-                            if (data.comment) {
-                                createdText +=
-                                        '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: data.Comment})
-                            }
-                            return createdText
-                        }
-                        case 'AudioRecordingChanged':
-                            if (data.AudioRecording) {
-                                return self.$t('Assignments.Action_AudioRecordingChanged_True')
-                            } else {
-                                return self.$t('Assignments.Action_AudioRecordingChanged_False')
-                            }
-                        case 'Reassigned': {
-                            let result = self.$t('Assignments.Action_Reassigned_To', {
-                                newResponsible: data.NewResponsible,
-                            })
-                            if (data.Comment) {
-                                result += '<br/>'
-                                result += self.$t('Assignments.Action_Reassigned_To_Comment', {
-                                    comment: data.Comment,
+                            case 'Created': {
+                                let createdText = self.$t('Assignments.Action_Created_Responsible', {
+                                    responsible: data.Responsible,
                                 })
+                                if (data.comment) {
+                                    createdText +=
+                                        '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: data.Comment})
+                                }
+                                return createdText
                             }
-                            return result
-                        }
-                        case 'QuantityChanged':
-                            if (data.Quantity == null) {
-                                return self.$t('Assignments.Action_QuantityChanged_To_Unlimited')
+                            case 'AudioRecordingChanged':
+                                if (data.AudioRecording) {
+                                    return self.$t('Assignments.Action_AudioRecordingChanged_True')
+                                } else {
+                                    return self.$t('Assignments.Action_AudioRecordingChanged_False')
+                                }
+                            case 'Reassigned': {
+                                let result = self.$t('Assignments.Action_Reassigned_To', {
+                                    newResponsible: data.NewResponsible,
+                                })
+                                if (data.Comment) {
+                                    result += '<br/>'
+                                    result += self.$t('Assignments.Action_Reassigned_To_Comment', {
+                                        comment: data.Comment,
+                                    })
+                                }
+                                return result
                             }
-                            return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.Quantity})
-                        case 'WebModeChanged':
-                            if (data.WebMode) {
-                                return self.$t('Assignments.Action_WebModeChanged_True')
-                            } else {
-                                return self.$t('Assignments.Action_WebModeChanged_False')
-                            }
+                            case 'QuantityChanged':
+                                if (data.Quantity == null) {
+                                    return self.$t('Assignments.Action_QuantityChanged_To_Unlimited')
+                                }
+                                return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.Quantity})
+                            case 'WebModeChanged':
+                                if (data.WebMode) {
+                                    return self.$t('Assignments.Action_WebModeChanged_True')
+                                } else {
+                                    return self.$t('Assignments.Action_WebModeChanged_False')
+                                }
                         }
                         return ''
                     },
