@@ -35,6 +35,86 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
     public class InterviewerUploadInterviewsTests
     {
         [Test]
+        public async Task when_local_interview_should_be_partial_upload()
+        {
+            var interviewId = Id.g1;
+            var responsibleId = Id.g2;
+
+            InterviewView localInterviews = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.InterviewerAssigned);
+
+            InterviewUploadState remoteInterviewUploadState = Create.Entity.InterviewUploadState(responsibleId);
+            var synchronizationService = new Mock<ISynchronizationService>();
+            synchronizationService
+                .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(remoteInterviewUploadState));
+
+            var eventStore = Mock.Of<IEnumeratorEventStorage>(s =>
+                s.HasEventsWithoutHqFlag(interviewId) == true);
+            var eventsContainer = Create.Entity.InterviewPackageContainer(interviewId,
+                Create.Event.CommittedEvent(eventSourceId: interviewId));
+            var package = new InterviewPackageApiView();
+            var interviewFactory = Mock.Of<IInterviewerInterviewAccessor>(f =>
+                f.GetInterviewEventStreamContainer(interviewId, false) == eventsContainer &&
+                f.GetInterviewEventsPackageOrNull(eventsContainer) == package);
+
+            var synchronizationStep = CreateInterviewerUploadInterviews(responsibleId, localInterviews, synchronizationService.Object, eventStore, interviewFactory);
+
+            await synchronizationStep.ExecuteAsync();
+
+            synchronizationService.Verify(s => s.UploadInterviewAsync(interviewId,
+                    package,
+                    It.IsAny<IProgress<TransferProgress>>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+            Mock.Get(interviewFactory).Verify(f => f.MarkEventsAsReceivedByHQ(interviewId), Times.Once);
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount, Is.EqualTo(1));
+
+            Mock.Get(interviewFactory).Verify(f => f.RemoveInterview(interviewId), Times.Never);
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyUploadedInterviewsCount, Is.EqualTo(0));
+        }
+
+
+        [Test]
+        public async Task when_local_interview_should_be_fully_upload()
+        {
+            var interviewId = Id.g1;
+            var responsibleId = Id.g2;
+
+            InterviewView localInterviews = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.Completed);
+
+            InterviewUploadState remoteInterviewUploadState = Create.Entity.InterviewUploadState(responsibleId);
+            var synchronizationService = new Mock<ISynchronizationService>();
+            synchronizationService
+                .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(remoteInterviewUploadState));
+
+            var eventStore = Mock.Of<IEnumeratorEventStorage>(s =>
+                s.HasEventsWithoutHqFlag(interviewId) == true);
+            var eventsContainer = Create.Entity.InterviewPackageContainer(interviewId,
+                Create.Event.CommittedEvent(eventSourceId: interviewId));
+            var package = new InterviewPackageApiView();
+            var interviewFactory = Mock.Of<IInterviewerInterviewAccessor>(f =>
+                f.GetInterviewEventStreamContainer(interviewId, false) == eventsContainer &&
+                f.GetInterviewEventsPackageOrNull(eventsContainer) == package);
+
+            var synchronizationStep = CreateInterviewerUploadInterviews(responsibleId, localInterviews, synchronizationService.Object, eventStore, interviewFactory);
+
+            await synchronizationStep.ExecuteAsync();
+
+            synchronizationService.Verify(s => s.UploadInterviewAsync(interviewId,
+                    package,
+                    It.IsAny<IProgress<TransferProgress>>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+            Mock.Get(interviewFactory).Verify(f => f.MarkEventsAsReceivedByHQ(interviewId), Times.Never);
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount, Is.EqualTo(0));
+
+            Mock.Get(interviewFactory).Verify(f => f.RemoveInterview(interviewId), Times.Once);
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyUploadedInterviewsCount, Is.EqualTo(1));
+        }
+
+
+        [Test]
         public async Task when_localy_interview_has_new_events()
         {
             var interviewId = Id.g1;
