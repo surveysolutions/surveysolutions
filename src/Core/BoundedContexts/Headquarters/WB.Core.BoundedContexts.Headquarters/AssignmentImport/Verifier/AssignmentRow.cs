@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public AssignmentAnswer[] Values { get; set; }
     }
 
-    [DebuggerDisplay("{Responsible.InterviewerId?.ToString() ?? Responsible.SupervsorId?.ToString ?? \"No responsible\"}")]
+    [DebuggerDisplay("{Responsible?.InterviewerId?.ToString() ?? Responsible?.SupervisorId?.ToString() ?? \"No responsible\"}")]
     public class AssignmentResponsible : AssignmentValue
     {
         public UserToVerify Responsible { get; set; }
