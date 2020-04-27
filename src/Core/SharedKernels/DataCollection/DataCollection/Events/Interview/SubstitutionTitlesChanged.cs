@@ -1,21 +1,28 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class SubstitutionTitlesChanged : QuestionsPassiveEvent
+    public class SubstitutionTitlesChanged : InterviewPassiveEvent
     {
+        [JsonIgnore]
+        public Identity[] Questions { get; }
+
+        [JsonIgnore]
         public Identity[] StaticTexts { get; }
 
-        public Identity[] Groups { get; set; }
+        [JsonIgnore]
+        public Identity[] Groups { get; }
 
         public SubstitutionTitlesChanged(Identity[] questions, Identity[] staticTexts, 
             Identity[] groups, DateTimeOffset originDate)
-            : base(questions, originDate)
+            : base(originDate)
         {
-            this.StaticTexts = staticTexts?.ToArray() ?? new Identity[]{};
-            this.Groups = groups?.ToArray() ?? new Identity[] {};
+            this.Questions   = questions?.ToArray()   ?? Array.Empty<Identity>();
+            this.StaticTexts = staticTexts?.ToArray() ?? Array.Empty<Identity>();
+            this.Groups      = groups?.ToArray()      ?? Array.Empty<Identity>();
         }
     }
 }
