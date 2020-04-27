@@ -133,7 +133,7 @@ namespace WB.Tests.Abc.TestFactories
         public CommandService CommandService(
             IEventSourcedAggregateRootRepository repository = null,
             IPlainAggregateRootRepository plainRepository = null,
-            IEventBus eventBus = null,
+            ILiteEventBus eventBus = null,
             IServiceLocator serviceLocator = null,
             IAggregateLock aggregateLock = null,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner = null,
