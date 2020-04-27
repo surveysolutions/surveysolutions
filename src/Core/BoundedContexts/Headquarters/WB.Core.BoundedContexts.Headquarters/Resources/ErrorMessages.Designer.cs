@@ -70,6 +70,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid authenticator code..
+        /// </summary>
+        public static string InvalidAuthenticatorCode {
+            get {
+                return ResourceManager.GetString("InvalidAuthenticatorCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid recovery code entered..
+        /// </summary>
+        public static string InvalidRecoveryCode {
+            get {
+                return ResourceManager.GetString("InvalidRecoveryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please fill in the captcha field.
         /// </summary>
         public static string PleaseFillCaptcha {

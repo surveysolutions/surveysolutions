@@ -135,6 +135,15 @@
   <data name="AccountManage_ChangePassword" xml:space="preserve">
     <value>Change password</value>
   </data>
+  <data name="AccountManage_Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
+    <value>Two factor authentication</value>
+  </data>
+  <data name="AccountManage_AuthenticatorApp" xml:space="preserve">
+    <value>Authenticator app</value>
+  </data>
   <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
     <value>Use the form below to change the password for the account</value>
   </data>
@@ -338,6 +347,18 @@
   </data>
   <data name="LogOn_LogIn" xml:space="preserve">
     <value>Log in</value>
+  </data>
+  <data name="LogOn_TwoFactor" xml:space="preserve">
+    <value>Your login is protected with an authenticator app. Enter your authenticator code below.</value>
+  </data>
+  <data name="LogOn_LoginWithRecoveryCode" xml:space="preserve">
+    <value>You have requested to log in with a recovery code.</value>
+  </data>
+  <data name="LogOn_NoAccessToDevice" xml:space="preserve">
+    <value>Don't have access to your authenticator device? You can</value>
+  </data>
+  <data name="LogOn_LoginWithRecoveryLink" xml:space="preserve">
+    <value>log in with a recovery code</value>
   </data>
   <data name="LogOn_Legend" xml:space="preserve">
     <value>Please log in</value>
@@ -811,6 +832,9 @@
   <data name="Update" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>This action will create individual user with supervisor rights,
         &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
@@ -841,6 +865,12 @@
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="AuthenticatorCode" xml:space="preserve">
+    <value>Authenticator code</value>
+  </data>
+  <data name="RecoveryCode" xml:space="preserve">
+    <value>Recovery code</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{{name}} (ver. {{version}})</value>
@@ -944,6 +974,75 @@
   </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Reset user password</value>
+  </data>
+  <data name="ResetAuthenticator" xml:space="preserve">
+    <value>Reset authenticator</value>
+  </data>
+  <data name="SetupAuthenticator" xml:space="preserve">
+    <value>Setup authenticator</value>
+  </data>
+  <data name="AddAuthenticator" xml:space="preserve">
+    <value>Add authenticator</value>
+  </data>
+  <data name="ResetRecoveryCodes" xml:space="preserve">
+    <value>Reset recovery codes</value>
+  </data>
+  <data name="RecoveryCodesLeft" xml:space="preserve">
+    <value>Recovery codes left:</value>
+  </data>
+  <data name="RecoveryCodesYouCan" xml:space="preserve">
+    <value>You can</value>
+  </data>
+  <data name="GenerateRecoveryCodesLink" xml:space="preserve">
+    <value>generate a new set of recovery codes</value>
+  </data>
+  <data name="Disable2fa" xml:space="preserve">
+    <value>Disable 2FA</value>
+  </data>
+  <data name="RecoveryCodesInfo" xml:space="preserve">
+    <value>Put these codes in a safe place.</value>
+  </data>
+  <data name="RecoveryCodesDescription" xml:space="preserve">
+    <value>If you lose your device and don't have the recovery codes you will lose access to your account.</value>
+  </data>
+  <data name="RecoveryCodesDescriptionLine1" xml:space="preserve">
+    <value>Generating new recovery codes does not change the keys used in authenticator apps.</value>
+  </data>
+  <data name="EnableAuthenticatorLine1" xml:space="preserve">
+    <value>To use an authenticator app go through the following steps:</value>
+  </data>
+  <data name="EnableAuthenticatorLine2" xml:space="preserve">
+    <value>Download a two factor authenticator app like Microsoft Authenticator for</value>
+  </data>
+  <data name="EnableAuthenticatorLine3" xml:space="preserve">
+    <value>or Google Authenticator for</value>
+  </data>
+  <data name="EnableAuthenticatorLine4" xml:space="preserve">
+    <value>Scan the QR Code or enter the shared key into your two factor authenticator app. Spaces and casing do not matter.</value>
+  </data>
+  <data name="EnableAuthenticatorLine5" xml:space="preserve">
+    <value>Once you have scanned the QR code or input the shared key above, your two factor authenticator app will provide you with a verification code. Enter it below and click 'Verify'.</value>
+  </data>
+  <data name="EnableAuthenticatorSharedKey" xml:space="preserve">
+    <value>Shared key:</value>
+  </data>
+  <data name="ResetAuthenticatorLine1" xml:space="preserve">
+    <value>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</value>
+  </data>
+  <data name="ResetAuthenticatorLine2" xml:space="preserve">
+    <value>This process disables two factor authentication until you verify your authenticator app. If you do not complete your authenticator app configuration your account will be left without two factor authentication.</value>
+  </data>
+  <data name="Disable2faLine1" xml:space="preserve">
+    <value>This action only disables 2FA</value>
+  </data>
+  <data name="Disable2faLine2" xml:space="preserve">
+    <value>Disabling 2FA does not change the keys used in authenticator apps.</value>
+  </data>
+  <data name="ChandgeKeyLine1" xml:space="preserve">
+    <value>If you wish to change the key used in an authenticator app you should</value>
+  </data>
+  <data name="ChandgeKeyLine2" xml:space="preserve">
+    <value>reset your authenticator keys.</value>
   </data>
   <data name="Profile_ApiUsersList" xml:space="preserve">
     <value>API users</value>
@@ -1414,5 +1513,8 @@
   </data>
   <data name="CreateUser" xml:space="preserve">
     <value>Create user</value>
+  </data>
+  <data name="GenerateRecoveryCodes" xml:space="preserve">
+    <value>Generate recovery codes</value>
   </data>
 </root>
