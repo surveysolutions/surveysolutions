@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewPaused>,
         IUpdateHandler<InterviewSummary, InterviewResumed>,
         IUpdateHandler<InterviewSummary, InterviewRestored>,
-        IUpdateHandler<InterviewSummary, AnswerCommentResolved>
+        IUpdateHandler<InterviewSummary, AnswerCommentResolved>,
+        IUpdateHandler<InterviewSummary, SubstitutionTitlesChanged>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
@@ -517,6 +518,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
 
             return state;
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SubstitutionTitlesChanged> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                state.HasSmallSubstitutions = true;
+            });
         }
     }
 }
