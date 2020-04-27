@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -105,25 +106,25 @@ namespace WB.Tests.Web.TestFactories
             IPreloadedDataVerifier verifier = null,
             ICommandTransformator commandTransformator = null,
             ICommandService commandService = null,
-            IAuthorizedUser authorizedUser = null
-            )
+            IAuthorizedUser authorizedUser = null,
+            IUserViewFactory userViewFactory = null,
+            IAssignmentsImportService assignmentsImportService = null,
+            ISerializer serializer = null)
         {
-            var result = new AssignmentsController(assignmentViewFactory,
+            var result = new AssignmentsController(
+                assignmentViewFactory,
                 assignmentsService,
                 mapper,
                 userManager,
                 questionnaireStorage,
                 auditLog,
-                interviewCreatorFromAssignment,
                 verifier,
-                Abc.Create.Service.AssignmentFactory(),
-                Mock.Of<IInvitationService>(),
-                Mock.Of<IAssignmentPasswordGenerator>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<IUnitOfWork>(),
-                commandTransformator
-                );
+                userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                assignmentsImportService ?? Mock.Of<IAssignmentsImportService>(),
+                serializer ?? Mock.Of<ISerializer>());
 
             return result;
         }

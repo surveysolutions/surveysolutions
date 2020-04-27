@@ -1,20 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -23,6 +31,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
@@ -31,8 +40,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected readonly IHeadquartersEventStore eventStore;
         protected readonly IInterviewInformationFactory interviewsFactory;
 
-        protected InterviewsControllerBase(
-            IImageFileStorage imageFileStorage,
+        protected InterviewsControllerBase(IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
@@ -41,7 +49,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
-            IAudioAuditFileStorage audioAuditFileStorage)
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IWebHostEnvironment webHostEnvironment)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
@@ -53,11 +62,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStore = eventStore;
             this.audioAuditFileStorage = audioAuditFileStorage;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         public virtual ActionResult<List<InterviewApiView>> Get()
         {
-            List<InterviewApiView> resultValue = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
+            List<InterviewApiView> interviewApiViews = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
                 .Select(interview => new InterviewApiView
                 {
                     Id = interview.Id,
@@ -68,10 +78,22 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     IsMarkedAsReceivedByInterviewer = interview.IsReceivedByInterviewer
                 }).ToList();
 
-            var response = resultValue;
+            var isNeedUpdateApp = IsNeedUpdateApp(interviewApiViews);
+            if (isNeedUpdateApp)
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
 
-            return response;
+            return interviewApiViews;
         }
+
+        private bool IsNeedUpdateApp(List<InterviewApiView> interviews)
+        {
+            var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
+            if (productVersion != null && productVersion >= new Version(20, 5))
+                return false;
+
+            return interviews.Any(interview => interviewsFactory.HasAnySmallSubstitutionEvent(interview.Id));
+        }
+
 
         protected abstract IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId);
 
@@ -80,6 +102,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.authorizedUser.Id));
             return StatusCode(StatusCodes.Status204NoContent);
         }
+
+        protected abstract string ProductName { get; }
         
         public virtual IActionResult PostImage([FromBody] PostFileRequest request)
         {
@@ -122,7 +146,33 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected IActionResult DetailsV3(Guid id)
         {
             var allEvents = eventStore.Read(id, 0).ToList();
+
+            var isNeedUpdateApp = IsNeedUpdateApp(allEvents);
+
+            if (isNeedUpdateApp)
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
+
             return new JsonResult(allEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
+        }
+
+        private bool IsNeedUpdateApp(List<CommittedEvent> allEvents)
+        {
+            if (webHostEnvironment.IsDevelopment())
+                return false;
+
+            var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
+            if (productVersion != null && productVersion >= new Version(20, 5))
+                return false;
+
+            return allEvents.Any(e =>
+            {
+                if (e.Payload is SubstitutionTitlesChanged titlesChanged)
+                {
+                    return titlesChanged.Questions.Length == 0 && titlesChanged.Groups.Length == 0 && titlesChanged.StaticTexts.Length == 0;
+                }
+
+                return false;
+            });
         }
 
         protected IActionResult PostV3(InterviewPackageApiView package)

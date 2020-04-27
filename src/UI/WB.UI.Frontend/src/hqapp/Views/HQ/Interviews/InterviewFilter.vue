@@ -94,7 +94,7 @@ export default {
 
     computed: { 
         options() {
-            return this.getTypeaheadValues(sortBy(this.question.options, ['title']))
+            return this.getTypeaheadValues(this.question.options)
         },
 
         selectedOption() {
