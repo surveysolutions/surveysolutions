@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return Enum.GetValues(typeof(InterviewStatus))
                 .OfType<InterviewStatus>()
                 .Where(i => !ignoreStatuses.Contains(i))
-                .Select(i => AsComboboxItem(i))
+                .Select(i => AsComboboxItem(i, i))
                 .OrderBy(s => s.Key);
         }
 

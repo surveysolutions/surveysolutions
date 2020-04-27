@@ -2,6 +2,7 @@
 using System.Linq;
 using HotChocolate.Resolvers;
 using HotChocolate.Types;
+using Humanizer;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -29,7 +30,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Login of current responsible user");
             
             descriptor.Field(x => x.ResponsibleNameLowerCase).Type<StringType>()
-                .Description($"Lower cased version of {nameof(InterviewSummary.ResponsibleName)} field");
+                .Description($"Lower cased version of {nameof(InterviewSummary.ResponsibleName).Camelize()} field");
 
             descriptor.Field(x => x.ResponsibleId).Type<UuidType>();
             descriptor.Field(x => x.ResponsibleRole).Type<EnumType<UserRoles>>();
