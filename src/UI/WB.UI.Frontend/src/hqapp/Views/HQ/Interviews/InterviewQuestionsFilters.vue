@@ -60,7 +60,8 @@
 import gql from 'graphql-tag'
 import InterviewFilter from './InterviewFilter'
 import { find, filter } from 'lodash'
-import sanitizeHtml  from 'sanitize-html'
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 export default {
     data() {
@@ -183,7 +184,10 @@ export default {
         },
 
         isDisabled() {
-            return this.questionsList == null || this.questionsList.length == 0
+            return this.questionnaireId == null 
+                || this.questionnaireVersion == null 
+                || this.questionsList == null 
+                || this.questionsList.length == 0
         },
     },
 
