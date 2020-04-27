@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var records = auditLogService.GetAllRecords(id);
 
-            var csvConfiguration = new Configuration
+            var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 using System.Text;
 using CsvHelper;
@@ -39,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             return Encoding.UTF8.GetBytes(sb.ToString());
         }
 
-        private Configuration CreateCsvConfiguration() => new Configuration
+        private CsvConfiguration CreateCsvConfiguration() => new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HasHeaderRecord = false,
             TrimOptions = TrimOptions.Trim,

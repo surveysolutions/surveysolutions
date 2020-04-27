@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using CsvHelper;
@@ -16,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             this.delimiter = delimiter;
             this.streamWriter = new StreamWriter(stream, Encoding.UTF8);
-            this.csvWriter = new CsvWriter(this.streamWriter);
+            this.csvWriter = new CsvWriter(this.streamWriter, CultureInfo.InvariantCulture);
             this.csvWriter.Configuration.Delimiter = this.delimiter;
         }
 

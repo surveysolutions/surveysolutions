@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return ReadCategories(file, cfg, importedOptions);
         }
 
-        private static ImportCategoricalOptionsResult ReadCategories(Stream file, Configuration cfg,
+        private static ImportCategoricalOptionsResult ReadCategories(Stream file, CsvConfiguration cfg,
             List<QuestionnaireCategoricalOption> importedOptions)
         {
             var importErrors = new List<string>();
@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
         }
         
-        private Configuration CreateCsvConfiguration() => new Configuration
+        private CsvConfiguration CreateCsvConfiguration() => new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HasHeaderRecord = false,
             TrimOptions = TrimOptions.Trim,
