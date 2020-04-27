@@ -2228,10 +2228,10 @@
       <Version>2.8.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>2.6.4</Version>
+      <Version>3.2.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>2.6.4</Version>
+      <Version>3.2.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp">
       <Version>4.7.0</Version>
