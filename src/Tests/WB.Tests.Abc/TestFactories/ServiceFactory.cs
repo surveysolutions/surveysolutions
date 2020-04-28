@@ -229,10 +229,11 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceStorage = null,
             IInterviewEventStreamOptimizer eventStreamOptimizer = null,
             ILiteEventBus eventBus = null,
-            ILogger logger = null)
+            ILogger logger = null,
+            IPlainStorage<PrefilledQuestionView> prefilledQuestions = null)
             => new InterviewerInterviewAccessor(
                 questionnaireRepository ?? Mock.Of<IPlainStorage<QuestionnaireView>>(),
-                Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
+                prefilledQuestions ?? Mock.Of<IPlainStorage<PrefilledQuestionView>>() ,
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 interviewMultimediaViewRepository ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewRepository ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
