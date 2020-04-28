@@ -490,13 +490,28 @@ namespace WB.Tests.Abc.TestFactories
             int eventSequence = 1)
         {
             return new CommittedEvent(
-                Guid.Parse("33330000333330000003333300003333"),
+                Guid.NewGuid(),
                 origin,
-                eventIdentifier ?? Guid.Parse("44440000444440000004444400004444"),
-                eventSourceId ?? Guid.Parse("55550000555550000005555500005555"),
+                eventIdentifier ?? Guid.NewGuid(),
+                eventSourceId ?? Guid.NewGuid(),
                 eventSequence,
                 new DateTime(2014, 10, 22),
                 0,
+                payload ?? Mock.Of<WB.Core.Infrastructure.EventBus.IEvent>());
+        }
+        public UncommittedEvent UncommittedEvent(
+            Guid? eventSourceId = null,
+            WB.Core.Infrastructure.EventBus.IEvent payload = null,
+            Guid? eventIdentifier = null,
+            int eventSequence = 1,
+            int version = 1)
+        {
+            return new UncommittedEvent(
+                eventIdentifier ?? Guid.NewGuid(),
+                eventSourceId ?? Guid.NewGuid(),
+                eventSequence,
+                version,
+                new DateTime(2014, 10, 22),
                 payload ?? Mock.Of<WB.Core.Infrastructure.EventBus.IEvent>());
         }
 
