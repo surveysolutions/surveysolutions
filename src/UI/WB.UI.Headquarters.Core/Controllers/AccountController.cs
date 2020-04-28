@@ -41,15 +41,18 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        public IActionResult LogOn(string returnUrl)
+        public async Task<IActionResult> LogOn(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = returnUrl;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
 
+            var providers = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             return this.View(new LogOnModel
             {
-                RequireCaptcha = this.captchaService.ShouldShowCaptcha(null)
+                RequireCaptcha = this.captchaService.ShouldShowCaptcha(null),
+                ExternalLogins = providers
             });
         }
 
@@ -202,6 +205,75 @@ namespace WB.UI.Headquarters.Controllers
             this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.InvalidRecoveryCode);
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ExternalLogin()
+        {
+            return this.RedirectToAction("LogOn");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            // Request a redirect to the external login provider.
+            var redirectUrl = Url.Action("ExternalLoginCallback", new { returnUrl });
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+            if (remoteError != null)
+            {
+                //ErrorMessage = $"Error from external provider: {remoteError}";
+                return RedirectToAction("LogOn", new { ReturnUrl = returnUrl });
+            }
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                //ErrorMessage = "Error loading external login information.";
+                return RedirectToAction("LogOn", new { ReturnUrl = returnUrl });
+            }
+
+            // Sign in the user with this external login provider if the user already has a login.
+            var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (result.Succeeded)
+            {
+                //logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
+                return LocalRedirect(returnUrl);
+            }
+
+            //display that account doesn't exists
+            return RedirectToAction("LogOn", new { ReturnUrl = returnUrl });
+
+            //add 2fa support
+
+            //handle locked
+            /*if (result.IsLockedOut)
+            {
+                return RedirectToPage("./Lockout");
+            }*/
+
+            /*else
+            {
+                // If the user does not have an account, then ask the user to create an account.
+                ReturnUrl = returnUrl;
+                LoginProvider = info.LoginProvider;
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+                {
+                    Input = new InputModel
+                    {
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                    };
+                }
+                return Page();
+            }*/
+        }
+
 
         public IActionResult LogOff()
         {

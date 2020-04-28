@@ -80,6 +80,23 @@
                                 <button class="btn btn-success btn-lg" type="submit">@Pages.LogOn_LogIn</button>
                             </div>
                         }
+                        
+                        @if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                        {
+                            using (Html.BeginForm("ExternalLogin", "Account",
+                                new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { id = "external-log-in", @class = "log-in" }))
+                            {
+                                <div>
+                                    <p>
+                                        @foreach (var provider in Model.ExternalLogins)
+                                        {
+                                            <button type="submit" class="btn btn-primary" name="provider" 
+                                                    value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                        }
+                                    </p>
+                                </div>
+                            }
+                        }
                     </div>
                 </div>
             </div>

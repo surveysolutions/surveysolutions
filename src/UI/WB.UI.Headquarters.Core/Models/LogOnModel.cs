@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
@@ -24,5 +27,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public string Password { get; set; }
 
         public bool RequireCaptcha { get; set; } = false;
+
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
+        [TempData]
+        public string ErrorMessage { get; set; }
     }
 }

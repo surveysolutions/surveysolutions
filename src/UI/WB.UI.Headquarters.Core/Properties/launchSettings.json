@@ -7,8 +7,8 @@
       "sslPort": 0
     },
     "iisExpress": {
-      "applicationUrl": "https://localhost:5000",
-      "sslPort": 5000
+      "applicationUrl": "http://localhost:3110/",
+      "sslPort": 0
     }
   },
   "profiles": {
@@ -22,7 +22,7 @@
     "WB.UI.Headquarters.Core": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:5000",
+      "launchUrl": "http://localhost:3110",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

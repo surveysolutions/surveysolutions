@@ -233,7 +233,7 @@ namespace WB.UI.Headquarters
             services.AddRazorPages();
             services.AddHttpContextAccessor();
 
-            services.AddHqAuthorization();
+            services.AddHqAuthorization(Configuration);
             services.AddDatabaseStoredExceptional(environment, Configuration);
 
             services.AddScoped<UnitOfWorkActionFilter>();
