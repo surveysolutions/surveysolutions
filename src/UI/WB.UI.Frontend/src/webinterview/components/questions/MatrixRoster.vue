@@ -32,7 +32,7 @@ import { GroupStatus } from './index'
 import { debounce, every, some, map } from 'lodash'
 import { AgGridVue } from 'ag-grid-vue'
 
-import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'    
+import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
 import MatrixRoster_QuestionTitle from './MatrixRoster.QuestionTitle'
 import MatrixRoster_CategoricalSingle from './MatrixRoster.CategoricalSingle'
@@ -40,7 +40,7 @@ import MatrixRoster_CategoricalSingle from './MatrixRoster.CategoricalSingle'
 export default {
     name: 'MatrixRoster',
     mixins: [entityDetails],
-        
+
     data() {
         return {
             defaultColDef: null,
@@ -51,12 +51,12 @@ export default {
             columnApi: null,
             countOfInstances: 0,
             title: null,
-            instructions: null,                
+            instructions: null,
         }
     },
 
     components: {
-        AgGridVue,            
+        AgGridVue,
         MatrixRoster_QuestionEditor,
         MatrixRoster_RosterTitle,
         MatrixRoster_QuestionTitle,
@@ -65,7 +65,7 @@ export default {
 
     beforeMount() {
         this.countOfInstances = this.$me.instances.length
-        this.title = this.$me.questions.length > 0 ? this.$me.questions[0].title : null            
+        this.title = this.$me.questions.length > 0 ? this.$me.questions[0].title : null
         this.instructions = this.$me.questions.length > 0 ? this.$me.questions[0].instruction : null
 
         this.defaultColDef = {
@@ -86,7 +86,7 @@ export default {
         },
         ['$me.instances']() {
             if (this.countOfInstances != this.$me.instances.length) {
-                this.countOfInstances = this.$me.instances.length                    
+                this.countOfInstances = this.$me.instances.length
                 this.initQuestionsInRows()
                 this.setTableRosterHeight()
             }
@@ -122,7 +122,7 @@ export default {
                 this.$me.questions,
                 (question, key) => {
                     return {
-                        headerName: question.title, 
+                        headerName: question.title,
                         headerComponentFramework: 'MatrixRoster_QuestionTitle',
                         headerComponentParams: {
                             //title: question.title,
@@ -130,15 +130,15 @@ export default {
                             question: question,
                         },
                         width:question.options.length * 180,
-                            
-                        field: question.id, 
+
+                        field: question.id,
                         cellRendererFramework: 'MatrixRoster_QuestionEditor',
                         cellRendererParams: {
                             id: question.id,
                             question: question,
                             value: question,
                         },
-                        //cellEditorFramework: 'MatrixRoster_QuestionEditor', 
+                        //cellEditorFramework: 'MatrixRoster_QuestionEditor',
                         //cellEditorParams: {
                         //    id: question.id,
                         //    value: question,
@@ -147,12 +147,12 @@ export default {
                 }
             )
             columnsFromQuestions.unshift({
-                headerName: '',//this.$me.title, 
-                field: 'rosterTitle', 
-                autoHeight: true, 
-                pinned: true, 
-                editable: false,                     
-                cellStyle: {minHeight: '40px'}, 
+                headerName: '',//this.$me.title,
+                field: 'rosterTitle',
+                autoHeight: true,
+                pinned: true,
+                editable: false,
+                cellStyle: {minHeight: '40px'},
                 cellRendererFramework: 'MatrixRoster_RosterTitle',
                 cellRendererParams: { },
             })
@@ -162,15 +162,15 @@ export default {
         initQuestionsInRows() {
             var self = this
 
-            var rosterInstancesWithQuestionsAsRows = map(                                       
+            var rosterInstancesWithQuestionsAsRows = map(
                 this.$me.instances,
                 (instance, key) => {
                     var instanceAsRow = {
                         rosterVector: instance.rosterVector,
-                        rosterTitle: { 
+                        rosterTitle: {
                             matrixRoster: self,
                             rowIndex: key,
-                        }, 
+                        },
                     }
                     self.$me.questions.forEach(question => {
                         var questionIdentity = question.id + instance.rosterVector
@@ -179,7 +179,7 @@ export default {
                             type     : question.entityType,
                         }
                     })
-                        
+
                     return instanceAsRow
                 }
             )
@@ -236,7 +236,7 @@ export default {
 
         scroll() {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
-                this.doScroll() 
+                this.doScroll()
             }
         },
     },

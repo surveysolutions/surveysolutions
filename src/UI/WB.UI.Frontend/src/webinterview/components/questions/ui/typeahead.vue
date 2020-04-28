@@ -42,7 +42,7 @@
 </template>
 <script lang="js">
 import { escape, escapeRegExp } from 'lodash'
-    
+
 export default {
     name: 'wb-typeahead',
     props: {
@@ -128,7 +128,7 @@ export default {
     mounted() {
         const jqEl = $(this.$el)
         const focusTo = jqEl.find(`#${this.searchBoxId}`)
-            
+
         jqEl.on('shown.bs.dropdown', () => {
             focusTo.focus()
             this.loadOptions(this.searchTerm)

@@ -28,7 +28,7 @@ export default {
                 this.visible = to
             }
         },
-            
+
         '$store.state.webinterview.connection.isDisconnected' (to) {
             if (to) {
                 this.visible = false

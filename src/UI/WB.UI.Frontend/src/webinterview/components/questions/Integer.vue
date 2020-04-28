@@ -37,9 +37,9 @@
                             @blur="answerIntegerQuestion"
                             v-numericFormatting="{
                                 digitGroupSeparator: groupSeparator,
-                                decimalCharacter: decimalSeparator,  
-                                decimalPlaces: 0, 
-                                minimumValue: '-2147483648', 
+                                decimalCharacter: decimalSeparator,
+                                decimalPlaces: 0,
+                                minimumValue: '-2147483648',
                                 maximumValue: '2147483647'
                             }"/>
                         <wb-remove-answer
@@ -89,7 +89,7 @@ export default {
     name: 'Integer',
     mixins: [entityDetails],
     props: ['noComments'],
-    computed: { 
+    computed: {
         isSpecialValueSelected(){
             if (this.$me.answer == null || this.$me.answer == undefined)
                 return undefined
@@ -175,7 +175,7 @@ export default {
                             this.fetch()
                             if(this.autoNumericElement)
                                 this.autoNumericElement.set(this.$me.answer)
-                                
+
                             return
                         }
                     })
@@ -192,10 +192,10 @@ export default {
             if (!this.$me.isAnswered) {
                 return
             }
-                
+
             if(this.autoNumericElement)
                 this.autoNumericElement.clear()
-                
+
             if (!this.$me.isRosterSize) {
                 this.$store.dispatch('removeAnswer', this.id)
                 return
@@ -209,8 +209,8 @@ export default {
                     if (result) {
                         this.$store.dispatch('removeAnswer', this.id)
                     } else {
-                        this.fetch() 
-                            
+                        this.fetch()
+
                         if(this.autoNumericElement)
                             this.autoNumericElement.set(this.$me.answer)
                     }
