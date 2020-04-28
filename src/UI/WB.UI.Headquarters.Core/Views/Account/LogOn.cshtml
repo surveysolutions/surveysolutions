@@ -81,7 +81,7 @@
                             </div>
                         }
                         
-                        @if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                        @if ((Model.ExternalLogins?.Count ?? 0) > 0)
                         {
                             using (Html.BeginForm("ExternalLogin", "Account",
                                 new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { id = "external-log-in", @class = "log-in" }))
