@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Translation Translation { get; }
 
         string VariableName { get; }
+        bool HideIfDisabled { get; }
         Type ExpressionStorageType { get; set; }
         IReadOnlyList<Translation> Translations { get; }
 
