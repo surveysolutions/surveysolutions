@@ -11,7 +11,7 @@
                             :value="$me.answer"
                             :disabled="!$me.acceptAnswer"
                             :optionsSource="optionsSource"
-                            @input="answerComboboxQuestion" 
+                            @input="answerComboboxQuestion"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
                         <wb-remove-answer />
                     </div>
@@ -42,7 +42,7 @@ export default {
             this.answerComboboxQuestion(newValue)
         },
     },
-        
+
     methods: {
         answerComboboxQuestion(newValue) {
             this.sendAnswer(() => {

@@ -160,16 +160,16 @@ export default {
             this.usersCount = formatNumber(data.recordsTotal)
             this.allInterviewers = data.data
         },
-        async archiveInterviewersAsync(isArchive) {            
+        async archiveInterviewersAsync(isArchive) {
             var response = await this.$http.post(this.model.archiveUsersUrl, {
                 archive: isArchive,
                 userIds: this.selectedInterviewers,
             })
-            
+
             if(!response.data.isSuccess)
                 toastr.warning(response.data.domainException)
-            
-            this.loadData()            
+
+            this.loadData()
         },
         archiveInterviewers() {
             var self = this

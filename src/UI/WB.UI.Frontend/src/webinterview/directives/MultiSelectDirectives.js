@@ -10,7 +10,7 @@ Vue.directive('disabledWhenUnchecked', {
             el.disabled = true
             return
         }
-        
+
         if(binding.value.answerNotAllowed){
             el.disabled = true
             return
@@ -21,7 +21,7 @@ Vue.directive('disabledWhenUnchecked', {
 
         if(binding.value.forceDisabled){
             if(el.disabled) return
-            
+
             el.disabled = true
             return
         }

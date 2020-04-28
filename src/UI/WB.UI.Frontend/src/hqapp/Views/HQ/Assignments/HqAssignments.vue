@@ -9,7 +9,7 @@
                 :title="$t('Common.Questionnaire')"
                 :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
                 <Typeahead
-                    control-id="questionnaireId"                    
+                    control-id="questionnaireId"
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="questionnaireId"
                     :values="config.questionnaires"
@@ -20,7 +20,7 @@
                 :title="$t('Common.QuestionnaireVersion')"
                 :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
                 <Typeahead
-                    control-id="questionnaireVersion"                    
+                    control-id="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
                     :values="questionnaireId == null ? null : questionnaireId.versions"
                     :value="questionnaireVersion"
@@ -233,7 +233,7 @@
                         placeholder="1"
                         :disabled="!canEditQuantity"/>
                     <span
-                        class="text-danger">{{ errors.first('editedQuantity') }}</span>                    
+                        class="text-danger">{{ errors.first('editedQuantity') }}</span>
                 </div>
             </form>
             <div class="modal-footer">
@@ -500,7 +500,7 @@ export default {
                     tooltip: this.$t('Assignments.Tooltip_Table_WebMode'),
                     searchable: false,
                     render(data) {
-                        return data === false ? self.$t('Common.No') : self.$t('Common.Yes') 
+                        return data === false ? self.$t('Common.No') : self.$t('Common.Yes')
                     },
                 },
             ]
@@ -635,7 +635,7 @@ export default {
 
         upateAudioRecording() {
             this.$hq.Assignments.setAudioSettings(this.editedRowId, this.editedAudioRecordingEnabled).then(() => {
-                this.$refs.editAudioEnabledModal.hide()                
+                this.$refs.editAudioEnabledModal.hide()
                 this.reloadTable()
             })
         },
@@ -694,7 +694,7 @@ export default {
                 this.$hq.Assignments.quantitySettings(this.editedRowId).then(data => {
                     this.canEditQuantity = data.CanChangeQuantity
                     this.$refs.editQuantityModal.modal('show')
-                })                
+                })
             }
             if (columnName === 'AudioRecording' && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = parsedRowId
@@ -702,7 +702,7 @@ export default {
                 this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
                     this.editedAudioRecordingEnabled = data.Enabled
                     this.$refs.editAudioEnabledModal.modal('show')
-                })                
+                })
             }
         },
         async updateQuantity() {

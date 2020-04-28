@@ -168,7 +168,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public IActionResult ImportStatus() => this.Ok(this.assignmentsImportService.GetImportStatus());
 
         [HttpGet]
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Questionnaires)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<IActionResult> Upload(AssignmentUploadModel model)
         {
             if (!QuestionnaireIdentity.TryParse(model.QuestionnaireId, out QuestionnaireIdentity questionnaireIdentity))
@@ -332,7 +332,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [Authorize(Roles = "Administrator, Headquarter")]
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public IActionResult GetInvalidAssignmentsByLastImport()
         {
             var sb = new StringBuilder();

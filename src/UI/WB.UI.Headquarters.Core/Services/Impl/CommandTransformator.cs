@@ -103,7 +103,7 @@ namespace WB.UI.Headquarters.Services.Impl
             return resultCommand;
         }
 
-        public KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer, IQuestionnaire questionnaire)
+        private KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer, IQuestionnaire questionnaire)
         {
             string answerAsString = answer.Answer.ToString();
             AbstractAnswer answerValue = null;

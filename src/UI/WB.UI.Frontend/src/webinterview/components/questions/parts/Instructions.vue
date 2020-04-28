@@ -2,7 +2,7 @@
     <div v-if="$me.instructions && !$me.isDisabled"
         class="instructions-wrapper">
         <div class="information-block instruction"
-            v-if="!$me.hideInstructions || shown">            
+            v-if="!$me.hideInstructions || shown">
             <p v-dateTimeFormatting
                 v-html="$me.instructions"></p>
         </div>

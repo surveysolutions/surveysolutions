@@ -23,8 +23,8 @@
                             v-numericFormatting="{minimumValue:'-99999999999999.99999999999999',
                                                   maximumValue:'99999999999999.99999999999999',
                                                   digitGroupSeparator: groupSeparator,
-                                                  decimalCharacter:decimalSeparator, 
-                                                  decimalPlaces: decimalPlacesCount, 
+                                                  decimalCharacter:decimalSeparator,
+                                                  decimalPlaces: decimalPlacesCount,
                                                   allowDecimalPadding: false}"/>
                         <wb-remove-answer v-if="!isSpecialValueSelected"
                             :on-remove="removeAnswer" />
@@ -61,7 +61,7 @@
 import { entityDetails } from '../mixins'
 import * as $ from 'jquery'
 import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from './question_helpers'
-    
+
 export default {
     data() {
         return {
@@ -86,7 +86,7 @@ export default {
             return getDecimalSeparator(this.$me)
         },
         decimalPlacesCount() {
-            return getDecimalPlacesCount(this.$me)    
+            return getDecimalPlacesCount(this.$me)
         },
         specialValue: {
             get() {
@@ -96,7 +96,7 @@ export default {
                 this.saveAnswer(value, true)
             },
         },
-    },        
+    },
     methods: {
         answerDoubleQuestion(evnt) {
             const answerString = this.autoNumericElement.getNumericString()
@@ -136,10 +136,10 @@ export default {
             }
             return false
         },
-        removeAnswer() {                                
+        removeAnswer() {
             if(this.autoNumericElement)
                 this.autoNumericElement.clear()
-                
+
             this.$store.dispatch('removeAnswer', this.id)
             return
         },

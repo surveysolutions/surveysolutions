@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers
             this.hqConfig = hqConfig;
         }
 
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public ActionResult New()
         {
             this.ViewBag.ActivePage = MenuItem.DataExport;

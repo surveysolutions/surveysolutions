@@ -49,7 +49,6 @@ namespace WB.UI.Headquarters.Controllers
                 IsObserving = this.currentUser.IsObserving,
                 IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator,
                 Title = title,
-                AllInterviews = this.currentUser.IsSupervisor ? Url.Content(@"~/api/InterviewApi/GetTeamInterviews") : Url.Content(@"~/api/InterviewApi/Interviews"),
                 AssignmentsUrl = @Url.Action("Index", "Assignments"),
                 InterviewReviewUrl = Url.Action("Review", "Interview"),
                 ProfileUrl = Url.Action("Profile", "Interviewer"),

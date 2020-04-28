@@ -1,6 +1,6 @@
 <template>
     <button type="button"
-        class="btn-link button-flag" 
+        class="btn-link button-flag"
         @click="setFlag"
         :class="{ flagged: hasFlag }"
         :title="flagBtnTitle"

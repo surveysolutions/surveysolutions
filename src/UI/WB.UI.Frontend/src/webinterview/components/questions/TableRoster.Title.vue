@@ -15,7 +15,7 @@ export default {
         return {
             title: null,
         }
-    }, 
+    },
     created() {
         this.title = this.params.title
     },

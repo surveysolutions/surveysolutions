@@ -1,15 +1,15 @@
 <template>
-    <input :ref="'input'" 
-        type="text" 
-        autocomplete="off" 
-        inputmode="numeric" 
-        class="ag-cell-edit-input" 
-        :value="$me.answer" 
+    <input :ref="'input'"
+        type="text"
+        autocomplete="off"
+        inputmode="numeric"
+        class="ag-cell-edit-input"
+        :value="$me.answer"
         v-numericFormatting="{
-            digitGroupSeparator: groupSeparator, 
+            digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
-            decimalPlaces: 0, 
-            minimumValue: '-2147483648', 
+            decimalPlaces: 0,
+            minimumValue: '-2147483648',
             maximumValue: '2147483647'
         }"/>
 </template>
@@ -23,7 +23,7 @@ import modal from '@/shared/modal'
 export default {
     name: 'TableRoster_Integer',
     mixins: [entityDetails, tableCellEditor],
-        
+
     data() {
         return {
             autoNumericElement: null,
@@ -60,7 +60,7 @@ export default {
                 }
 
                 const previousAnswer = this.$me.answer
-                    
+
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse'))
                     return
@@ -99,7 +99,7 @@ export default {
                 if(amountOfRostersToRemove > 0){
                     modal.confirm(confirmMessage, result => {
                         if (result) {
-                            this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                                
+                            this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                             return
                         } else {
                             this.fetch()
@@ -109,7 +109,7 @@ export default {
                 }
                 else
                 {
-                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                        
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                     return
                 }
             })

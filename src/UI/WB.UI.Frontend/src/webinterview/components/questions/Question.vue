@@ -9,9 +9,9 @@
         <div class="dropdown aside-menu"
             v-if="showSideMenu">
             <button type="button"
-                data-toggle="dropdown" 
-                aria-haspopup="true" 
-                aria-expanded="false" 
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
                 class="btn btn-link"
                 :id="`btn_${this.question.id}_ContextMenuToggle`">
                 <span></span>
@@ -19,7 +19,7 @@
             <ul class="dropdown-menu">
                 <li v-if="!isShowingAddCommentDialog">
                     <a href="javascript:void(0)"
-                        @click="showAddComment" 
+                        @click="showAddComment"
                         :disabled="!$store.getters.addCommentsAllowed"
                         :id="`btn_${this.question.id}_ShowAddComment`">
                         {{ $t("WebInterviewUI.CommentAdd") }}
@@ -86,7 +86,7 @@ export default {
 
         highlight() {
             if(!this.$store.getters.isReviewMode) return false
-                
+
             return !this.$store.state.webinterview.sidebar.searchResultsHidden && this.$store.state.route.hash === '#' + this.id
         },
 
@@ -109,22 +109,22 @@ export default {
             return this.$store.state.webinterview.fetch.state[this.id] != null
         },
         isVisible() {
-            return !this.question.isLoading && 
+            return !this.question.isLoading &&
                     !(this.question.isDisabled && this.question.hideIfDisabled && !this.$store.getters.isReviewMode)
         },
         disabled() {
             return this.isDisabled || this.question.isDisabled
         },
         hasFlag(){
-            if(this.$store.getters.isReviewMode === true) 
+            if(this.$store.getters.isReviewMode === true)
                 return this.$store.getters.flags[this.id]
-                    
+
             return false
         },
         questionClass() {
-            return [{ 
+            return [{
                 'mark': this.highlight,
-                'disabled-question': this.disabled, 
+                'disabled-question': this.disabled,
                 'with-flag': this.hasFlag,
             }, this.questionDivCssClassName]
         },
@@ -156,7 +156,7 @@ export default {
 
         scroll() {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
-                this.doScroll() 
+                this.doScroll()
             }
         },
 
