@@ -924,7 +924,8 @@
     <value>Обновление интервью данными с сервера</value>
   </data>
   <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
-    <value>{0} интервью было обновленно</value>
+    <value>{0} интервью было обновлено</value>
+
   </data>
   <data name="Synchronization_PartialInterviews" xml:space="preserve">
     <value>изменения по интервью </value>

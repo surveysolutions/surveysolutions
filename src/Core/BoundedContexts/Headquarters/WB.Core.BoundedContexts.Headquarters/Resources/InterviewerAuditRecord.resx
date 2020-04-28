@@ -187,13 +187,15 @@
     <value>{0} interview(s) removed</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
-    <value>{0} interview(s) partial updated from server</value>
+    <value>{0} interview(s) updated from Headquarters</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
-    <value>{0} interview(s) partial uploaded</value>
+    <value>{0} interview(s) partially uploaded</value>
+
   </data>
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
-    <value>{0} interview(s) have been reopened after receiving comments</value>
+    <value>{0} interview(s) were reopened after receiving comments</value>
+
   </data>
   <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
     <value>{0} interview(s) rejected</value>
