@@ -43,6 +43,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
             string[] sectionIds,
             bool isReviewMode)
         {
+            bool IsSectionVisible(InterviewTreeGroup x) =>
+                !x.IsDisabled() ||
+                x.IsDisabled() &&
+                !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id) &&
+                !questionnaire.HideIfDisabled;
+
             Sidebar result = new Sidebar();
             HashSet<Identity> visibleSections = new HashSet<Identity>();
 
@@ -60,14 +66,15 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             foreach (var parentId in sectionIds.Distinct())
             {
-                var children = parentId == null || parentId == "null"
-                    ? interview.GetEnabledSections()
-                    : interview.GetGroup(Identity.Parse(parentId))?.Children
-                        .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
+                var childGroups = parentId == null || parentId == "null"
+                    ? interview.GetAllSections()
+                    : interview.GetGroup(Identity.Parse(parentId))?.Children;
 
-                children = children.Where(e => !questionnaire.IsCustomViewRoster(e.Identity.Id));
+                var children = (childGroups ?? Array.Empty<InterviewTreeGroup>())
+                    .OfType<InterviewTreeGroup>()
+                    .Where(e => IsSectionVisible(e) && !questionnaire.IsCustomViewRoster(e.Identity.Id));
 
-                foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
+                foreach (var child in children)
                 {
                     var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, SidebarMapOptions);
                     sidebar.HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(child.Identity.Id);
@@ -85,7 +92,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
                         sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => 
-                            !c.IsDisabled() 
+                            IsSectionVisible(c) 
                             && !questionnaire.IsCustomViewRoster(c.Identity.Id));
                     });
                 }
