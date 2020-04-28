@@ -225,7 +225,8 @@
     <value>{0} интервью были обновлены</value>
   </data>
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
-    <value>{0} интервью были переоткрыты после получения коментариев по ним</value>
+    <value>{0} интервью были переоткрыты после получения комментариев по ним</value>
+
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
     <value>{0} интервью частично отправлены</value>
