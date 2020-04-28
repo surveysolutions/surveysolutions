@@ -30,12 +30,12 @@
                         v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
                     <li class="nav-item"><a class="nav-link"
                         id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                                
+                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
                     <li class="nav-item active"><a class="nav-link active"
                         id="two-factor"
                         v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul> 
-                
+                </ul>
+
                 <div class="col-sm-12">
                     <div >
                         <div >
@@ -47,11 +47,11 @@
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
-                            </form-group>                    
+                            </form-group>
                         </div>
 
-                        <div > 
-                            <div class="alert alert-warning" 
+                        <div >
+                            <div class="alert alert-warning"
                                 role="alert">
                                 <p>
                                     <span class="glyphicon glyphicon-warning-sign"
@@ -64,22 +64,22 @@
                                 <p>
                                     {{$t('Pages.RecoveryCodesDescriptionLine1')}}
 
-                                    {{$t('Pages.ChandgeKeyLine1')}} <a v-bind:href="getUrl('../../Users/ResetAuthenticator')">{{$t('Pages.ChandgeKeyLine2')}}</a>                                   
-                                    
+                                    {{$t('Pages.ChandgeKeyLine1')}} <a v-bind:href="getUrl('../../Users/ResetAuthenticator')">{{$t('Pages.ChandgeKeyLine2')}}</a>
+
                                 </p>
-                            </div>                                  
-                        </div> 
+                            </div>
+                        </div>
                         <div >
                             <div class="block-filter">
                                 <button
                                     type="submit"
-                                    class="btn btn-danger"                            
+                                    class="btn btn-danger"
                                     id="btnGenerateRecoveryCodes"
                                     v-bind:disabled="userInfo.isObserving"
-                                    @click="generateRecoveryCodes">{{$t('Pages.GenerateRecoveryCodes')}}</button>                        
+                                    @click="generateRecoveryCodes">{{$t('Pages.GenerateRecoveryCodes')}}</button>
                             </div>
-                        </div>              
-                    </div>                    
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -97,7 +97,7 @@ export default {
             personName: null,
         }
     },
-    computed: {        
+    computed: {
         recoveryCodes(){
             return this.userInfo.recoveryCodes
         },
@@ -110,7 +110,7 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
-        
+
         isAdmin() {
             return this.userInfo.role == 'Administrator'
         },
@@ -129,11 +129,11 @@ export default {
         isApiUser() {
             return this.userInfo.role == 'ApiUser'
         },
-        
+
         isOwnProfile() {
             return this.userInfo.isOwnProfile
         },
-        referrerTitle() {        
+        referrerTitle() {
 
             return this.$t('Pages.Home')
         },
@@ -148,7 +148,7 @@ export default {
         },
     },
     mounted() {
-        this.personName = this.userInfo.personName        
+        this.personName = this.userInfo.personName
     },
     watch: {
         personName: function(val) {
@@ -167,14 +167,14 @@ export default {
                 method: 'post',
                 url: this.model.api.generateRecoveryCodesUrl,
                 data: {
-                    userId: self.userInfo.userId,                                     
+                    userId: self.userInfo.userId,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
                 },
             }).then(
                 response => {
-                    window.location.href = self.model.api.showRecoveryCodesUrl                    
+                    window.location.href = self.model.api.showRecoveryCodesUrl
                 },
                 error => {
                     self.processModelState(error.response.data, self)

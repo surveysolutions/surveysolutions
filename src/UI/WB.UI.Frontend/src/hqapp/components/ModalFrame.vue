@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
 </template>
 
 <script>
@@ -59,6 +59,6 @@ export default {
             $(this.$refs.modal).appendTo('body').modal(params || {})
         },
     },
-    
+
 }
 </script>

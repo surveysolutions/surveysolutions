@@ -30,18 +30,18 @@
                         v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
                     <li class="nav-item"><a class="nav-link"
                         id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                                
+                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
                     <li class="nav-item"><a class="nav-link "
                         id="two-factor"
                         v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul> 
-                
+                </ul>
+
                 <div class="col-sm-12">
                     <div >
                         <!-- <div >
                             <h2>{{$t('Pages.AccountManage_Profile')}}</h2>
                         </div> -->
-                        <div>                            
+                        <div>
                             <form-group v-if="!isOwnProfile"
                                 :label="$t('Pages.AccountManage_Login')">
                                 <TextInput :value="userInfo.userName"
@@ -80,14 +80,14 @@
                                     id="PhoneNumber"/>
                             </form-group>
                             <p v-if="!isOwnProfile && lockMessage != null">{{lockMessage}}</p>
-                            <form-group v-if="!isOwnProfile && canBeLockedAsHeadquarters" 
+                            <form-group v-if="!isOwnProfile && canBeLockedAsHeadquarters"
                                 :error="modelState['IsLockedByHeadquarters']">
                                 <div>
                                     <input
                                         class="checkbox-filter single-checkbox"
                                         id="IsLocked"
                                         name="IsLocked"
-                                        type="checkbox"                                
+                                        type="checkbox"
                                         v-model="isLockedByHeadquarters"/>
                                     <label for="IsLocked"
                                         style="font-weight: bold">
@@ -96,7 +96,7 @@
                                     </label>
                                 </div>
                             </form-group>
-                            <form-group v-if="!isOwnProfile && canLockBySupervisor" 
+                            <form-group v-if="!isOwnProfile && canLockBySupervisor"
                                 :error="modelState['IsLockedBySupervisor']">
                                 <div>
                                     <input
@@ -131,7 +131,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
@@ -218,7 +218,7 @@ export default {
             }
 
             return '/'
-        },        
+        },
     },
     mounted() {
         this.personName = this.userInfo.personName
@@ -247,7 +247,7 @@ export default {
             Vue.delete( this.modelState, 'ConfirmPassword')
         },
     },
-    methods: {        
+    methods: {
         updateAccount: function(event) {
             this.successMessage = null
             for (var error in this.modelState) {
@@ -299,7 +299,7 @@ export default {
             if(this.isOwnProfile)
                 return baseUrl
             else
-                return baseUrl + '/' + this.model.userInfo.userId  
+                return baseUrl + '/' + this.model.userInfo.userId
 
         },
     },

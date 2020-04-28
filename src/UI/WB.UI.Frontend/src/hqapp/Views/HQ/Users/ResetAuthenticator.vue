@@ -31,12 +31,12 @@
                         v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
                     <li class="nav-item"><a class="nav-link"
                         id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                                
+                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
                     <li class="nav-item active"><a class="nav-link active"
                         id="two-factor"
                         v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul> 
-                
+                </ul>
+
                 <div class="col-sm-12">
                     <div >
                         <div >
@@ -48,14 +48,14 @@
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
-                            </form-group>                    
+                            </form-group>
                         </div>
 
-                        <div  >                    
-                            <div class="alert alert-warning" 
+                        <div  >
+                            <div class="alert alert-warning"
                                 role="alert">
                                 <p>
-                                    <span class="glyphicon glyphicon-warning-sign" 
+                                    <span class="glyphicon glyphicon-warning-sign"
                                         style="margin-right: 5px;"></span>
                                     <strong>{{$t('Pages.ResetAuthenticatorLine1')}}</strong>
                                 </p>
@@ -68,13 +68,13 @@
                             <div class="block-filter">
                                 <button
                                     type="submit"
-                                    class="btn btn-danger"                            
+                                    class="btn btn-danger"
                                     id="btnResetAuthenticator"
                                     v-bind:disabled="userInfo.isObserving"
-                                    @click="resetAuthenticator">{{$t('Pages.ResetAuthenticator')}}</button>                        
+                                    @click="resetAuthenticator">{{$t('Pages.ResetAuthenticator')}}</button>
                             </div>
-                        </div>                 
-                    </div>                    
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
-        
+
         isAdmin() {
             return this.userInfo.role == 'Administrator'
         },
@@ -127,15 +127,15 @@ export default {
         isApiUser() {
             return this.userInfo.role == 'ApiUser'
         },
-        
+
         isOwnProfile() {
             return this.userInfo.isOwnProfile
         },
-        referrerTitle() {        
+        referrerTitle() {
 
             return this.$t('Pages.Home')
         },
-        referrerUrl() {           
+        referrerUrl() {
 
             return '/'
         },
@@ -143,11 +143,11 @@ export default {
             return this.getUrl('../../Users/Manage')
         },
         tfaUrl(){
-            return this.getUrl('../../Users/TwoFactorAuthentication') 
+            return this.getUrl('../../Users/TwoFactorAuthentication')
         },
     },
     mounted() {
-        this.personName = this.userInfo.personName        
+        this.personName = this.userInfo.personName
     },
     watch: {
         personName: function(val) {
@@ -166,14 +166,14 @@ export default {
                 method: 'post',
                 url: this.model.api.resetAuthenticatorKeyUrl,
                 data: {
-                    userId: self.userInfo.userId,                                     
+                    userId: self.userInfo.userId,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
                 },
             }).then(
                 response => {
-                    window.location.href = self.model.api.enableAuthenticatorUrl                    
+                    window.location.href = self.model.api.enableAuthenticatorUrl
                 },
                 error => {
                     self.processModelState(error.response.data, self)
@@ -185,7 +185,7 @@ export default {
             if(this.isOwnProfile)
                 return baseUrl
             else
-                return baseUrl + '/' + this.model.userInfo.userId  
+                return baseUrl + '/' + this.model.userInfo.userId
 
         },
     },

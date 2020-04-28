@@ -30,12 +30,12 @@
                         v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
                     <li class="nav-item"><a class="nav-link"
                         id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                                
+                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
                     <li class="nav-item active"><a class="nav-link active"
                         id="two-factor"
                         v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul> 
-                
+                </ul>
+
                 <div class="col-sm-12">
                     <div >
                         <div >
@@ -47,10 +47,10 @@
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
-                            </form-group>                    
+                            </form-group>
                         </div>
 
-                        <div >                 
+                        <div >
                             <p>{{$t('Pages.EnableAuthenticatorLine1')}}</p>
                             <ol class="list">
                                 <li>
@@ -58,10 +58,10 @@
                                         {{$t('Pages.EnableAuthenticatorLine2')}}
                                         <a href="https://go.microsoft.com/fwlink/?Linkid=825071">Windows Phone</a>,
                                         <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a>,
-                                        <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a> 
-                                        
+                                        <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a>
+
                                         {{$t('Pages.EnableAuthenticatorLine3')}}
-                                        
+
                                         <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</a>,
                                         <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>.
                                     </p>
@@ -70,7 +70,7 @@
                                     <p>{{$t('Pages.EnableAuthenticatorLine4')}}</p>
                                     <p><b>{{$t('Pages.EnableAuthenticatorSharedKey')}} </b><kbd>{{sharedKey}}</kbd></p>
                                     <canvas id="qrCode"></canvas>
-                                    <div id="qrCodeData" 
+                                    <div id="qrCodeData"
                                         data-url="{{authenticatorUri}}"></div>
                                 </li>
                                 <li>
@@ -90,19 +90,19 @@
                                         <button
                                             type="submit"
                                             class="btn btn-success"
-                                    
+
                                             id="btnVerify"
                                             v-bind:disabled="userInfo.isObserving"
-                                            @click="verify">{{$t('Pages.Verify')}}</button>                                
+                                            @click="verify">{{$t('Pages.Verify')}}</button>
                                     </div>
 
                                 </li>
                             </ol>
-                        </div>                
-                    </div>                    
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>        
+        </div>
     </HqLayout>
 </template>
 
@@ -116,7 +116,7 @@ export default {
         return {
             modelState: {},
             personName: null,
-            verificationCode: null,            
+            verificationCode: null,
         }
     },
     computed: {
@@ -141,24 +141,24 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
-        
+
         isObserver() {
             return this.userInfo.role == 'Observer'
         },
-        
+
         isOwnProfile() {
             return this.userInfo.isOwnProfile
         },
-        referrerTitle() {        
+        referrerTitle() {
 
             return this.$t('Pages.Home')
         },
-        referrerUrl() {           
+        referrerUrl() {
 
             return '/'
         },
         profileUrl(){
-            return this.getUrl('../../Users/Manage') 
+            return this.getUrl('../../Users/Manage')
         },
         tfaUrl(){
             return this.getUrl('../../Users/TwoFactorAuthentication')
@@ -166,7 +166,7 @@ export default {
     },
     mounted() {
         this.personName = this.userInfo.personName
-        
+
         QRCode.toCanvas(document.getElementById('qrCode'), this.authenticatorUri)
     },
     watch: {
@@ -191,14 +191,14 @@ export default {
                 data: {
                     userId: self.userInfo.userId,
                     personName: self.personName,
-                    verificationCode: self.verificationCode == '' ? null : self.verificationCode,                    
+                    verificationCode: self.verificationCode == '' ? null : self.verificationCode,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
                 },
             }).then(
                 response => {
-                    window.location.href = self.model.api.showRecoveryCodesUrl                    
+                    window.location.href = self.model.api.showRecoveryCodesUrl
                 },
                 error => {
                     self.processModelState(error.response.data, self)
@@ -226,7 +226,7 @@ export default {
             if(this.isOwnProfile)
                 return baseUrl
             else
-                return baseUrl + '/' + this.model.userInfo.userId  
+                return baseUrl + '/' + this.model.userInfo.userId
 
         },
     },

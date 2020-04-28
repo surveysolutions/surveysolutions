@@ -8,21 +8,21 @@
                     :key="row.value">
                     <div class="field answered"
                         v-bind:class="{ 'unavailable-option locked-option': row.isProtected }">
-                        <textarea-autosize 
-                            autocomplete="off" 
-                            type="text" 
+                        <textarea-autosize
+                            autocomplete="off"
+                            type="text"
                             class="field-to-fill"
-                            rows="1" 
+                            rows="1"
                             :min-height="41"
                             :maxlength="$me.maxLength"
                             :important="true"
                             :value="row.text"
                             :disabled="!$me.acceptAnswer || row.isProtected"
-                            v-blurOnEnterKey 
+                            v-blurOnEnterKey
                             @blur.native="updateRow($event, row)"
                             @blur="updateRow($event, row)"/>
                         <button type="submit"
-                            class="btn btn-link btn-clear" 
+                            class="btn btn-link btn-clear"
                             v-if="$me.acceptAnswer && !row.isProtected"
                             tabindex="-1"
                             @click="confirmAndRemoveRow(index)"><span></span></button>
@@ -33,13 +33,13 @@
                     v-if="canAddNewItem">
                     <div class="field answered">
                         <textarea-autosize
-                            ref="inputTextArea" 
-                            autocomplete="off" 
-                            type="text" 
+                            ref="inputTextArea"
+                            autocomplete="off"
+                            type="text"
                             rows="1"
                             class="field-to-fill"
                             :disabled="!canAnswer"
-                            :placeholder="noAnswerWatermark" 
+                            :placeholder="noAnswerWatermark"
                             v-blurOnEnterKey
                             :maxlength="$me.maxLength"
                             @blur.native="addRow"
@@ -142,10 +142,10 @@ export default {
             this.$me.rows.push(new TextListAnswerRow(newRowValue, text))
 
             this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
-                
+
             this.$refs.inputTextArea.val = undefined
             target.val(undefined)
-                                
+
             setTimeout(() => {
                 target.focus()
             })

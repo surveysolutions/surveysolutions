@@ -30,13 +30,13 @@ import { AgGridVue } from 'ag-grid-vue'
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
 import TableRoster_RosterTitle from './TableRoster.RosterTitle'
-import TableRoster_QuestionTitle from './TableRoster.QuestionTitle'    
-import TableRoster_Title from './TableRoster.Title'    
+import TableRoster_QuestionTitle from './TableRoster.QuestionTitle'
+import TableRoster_Title from './TableRoster.Title'
 
 export default {
     name: 'TableRoster',
     mixins: [entityDetails],
-        
+
     data() {
         return {
             defaultColDef: null,
@@ -108,20 +108,20 @@ export default {
                 this.$me.questions,
                 (question, key) => {
                     return {
-                        headerName: question.title, 
+                        headerName: question.title,
                         headerComponentFramework: 'TableRoster_QuestionTitle',
                         headerComponentParams: {
                             title: question.title,
                             instruction: question.instruction,
                             questionId: question.id,
                         },
-                        field: question.id, 
+                        field: question.id,
                         cellRendererFramework: 'TableRoster_ViewAnswer',
                         cellRendererParams: {
                             id: question.id,
                             question: question,
                         },
-                        cellEditorFramework: 'TableRoster_QuestionEditor', 
+                        cellEditorFramework: 'TableRoster_QuestionEditor',
                         cellEditorParams: {
                             id: question.id,
                             value: question,
@@ -130,16 +130,16 @@ export default {
                 }
             )
             columnsFromQuestions.unshift({
-                headerName: this.$me.title, 
+                headerName: this.$me.title,
                 headerComponentFramework: 'TableRoster_Title',
                 headerComponentParams: {
                     title: this.$me.title,
                 },
-                field: 'rosterTitle', 
-                autoHeight: true, 
-                pinned: true, 
-                editable: false,                     
-                cellStyle: {minHeight: '40px'}, 
+                field: 'rosterTitle',
+                autoHeight: true,
+                pinned: true,
+                editable: false,
+                cellStyle: {minHeight: '40px'},
                 cellRendererFramework: 'TableRoster_RosterTitle',
                 cellRendererParams: { },
             })
@@ -154,10 +154,10 @@ export default {
                 (instance, key) => {
                     var instanceAsRow = {
                         rosterVector: instance.rosterVector,
-                        rosterTitle: { 
+                        rosterTitle: {
                             tableRoster: self,
                             rowIndex: key,
-                        }, 
+                        },
                     }
                     self.$me.questions.forEach(question => {
                         var questionIdentity = question.id + instance.rosterVector
@@ -166,7 +166,7 @@ export default {
                             type     : question.entityType,
                         }
                     })
-                        
+
                     return instanceAsRow
                 }
             )
@@ -223,7 +223,7 @@ export default {
 
         scroll() {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
-                this.doScroll() 
+                this.doScroll()
             }
         },
 

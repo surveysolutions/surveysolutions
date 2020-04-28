@@ -32,28 +32,28 @@
                         v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
                     <li class="nav-item"><a class="nav-link"
                         id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                                
+                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
                     <li class="nav-item active"><a class="nav-link active"
                         id="two-factor"
                         v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul> 
-                
+                </ul>
+
                 <div class="col-sm-12">
                     <div >
                         <div >
                             <h2>{{$t('Strings.HQ_Views_DisableTwoFactorAuth_Title')}}</h2>
                         </div>
                         <div >
-                            <form-group v-if="!isOwnProfile" 
+                            <form-group v-if="!isOwnProfile"
                                 :label="$t('Pages.AccountManage_Login')">
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
-                            </form-group>                    
+                            </form-group>
                         </div>
 
-                        <div  >                    
-                            <div class="alert alert-warning" 
+                        <div  >
+                            <div class="alert alert-warning"
                                 role="alert">
                                 <p>
                                     <strong>{{$t('Pages.Disable2faLine1')}}</strong>
@@ -67,13 +67,13 @@
                             <div class="block-filter">
                                 <button
                                     type="submit"
-                                    class="btn btn-danger"                            
+                                    class="btn btn-danger"
                                     id="btnDisable2fa"
                                     v-bind:disabled="userInfo.isObserving"
-                                    @click="disable2fa">{{$t('Pages.Disable2fa')}}</button>                        
+                                    @click="disable2fa">{{$t('Pages.Disable2fa')}}</button>
                             </div>
-                        </div>                
-                    </div>                    
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,7 +110,7 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
-        
+
         isAdmin() {
             return this.userInfo.role == 'Administrator'
         },
@@ -129,15 +129,15 @@ export default {
         isApiUser() {
             return this.userInfo.role == 'ApiUser'
         },
-        
+
         isOwnProfile() {
             return this.userInfo.isOwnProfile
         },
-        referrerTitle() {        
+        referrerTitle() {
 
             return this.$t('Pages.Home')
         },
-        referrerUrl() {           
+        referrerUrl() {
 
             return '/'
         },
@@ -149,7 +149,7 @@ export default {
         },
     },
     mounted() {
-        this.personName = this.userInfo.personName        
+        this.personName = this.userInfo.personName
     },
     watch: {
         personName: function(val) {
@@ -168,26 +168,26 @@ export default {
                 method: 'post',
                 url: this.model.api.disable2faUrl,
                 data: {
-                    userId: self.userInfo.userId,                                     
+                    userId: self.userInfo.userId,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
                 },
             }).then(
                 response => {
-                    window.location.href = self.model.api.redirectUrl                    
+                    window.location.href = self.model.api.redirectUrl
                 },
                 error => {
                     self.processModelState(error.response.data, self)
                 }
             )
-            
+
         },
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
                 return baseUrl
             else
-                return baseUrl + '/' + this.model.userInfo.userId  
+                return baseUrl + '/' + this.model.userInfo.userId
 
         },
     },

@@ -155,18 +155,18 @@ export default {
             return momentDate.local().format(DateFormats.dateTime)
         },
         recordAudioChanged() {
-            if (this.audioAudit) 
+            if (this.audioAudit)
                 this.$refs.audioAuditModal.modal({
                     backdrop: 'static',
                     keyboard: false,
                 })
-            else 
+            else
                 return this.recordAudioSend()
         },
         async recordAudioSend() {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
                 .AudioAudit(this.audioAudit)
-            if(response.status !== 204) 
+            if(response.status !== 204)
                 this.audioAudit = !this.audioAudit
             this.$refs.audioAuditModal.modal('hide')
         },

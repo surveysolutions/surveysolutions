@@ -20,8 +20,8 @@
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block preloading-done-with-errors active-preloading">
                 <div class="import-progress">
-                    
-                </div> 
+
+                </div>
             </div>
         </div>
         <div class="row">
@@ -71,8 +71,8 @@
                     <a :href="$config.model.api.surveySetupUrl"
                         class="back-link">
                         Back to survey setup
-                    </a>  
-                </div> 
+                    </a>
+                </div>
             </div>
         </div>
     </HqLayout>
@@ -126,9 +126,9 @@ export default {
                     self.processedCount = status.processedCount || 0
                     self.withErrorsCount = status.withErrorsCount || 0
                     self.totalCount = status.totalCount || 0
-                    self.status = status.status 
+                    self.status = status.status
                 })
-                .catch(function (error) { 
+                .catch(function (error) {
                     Vue.config.errorHandler(error, self)
                 })
         },

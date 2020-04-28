@@ -20,11 +20,11 @@
                 role="menu">
                 <li v-if="!noSearch">
                     <input type="text"
-                        ref="searchBox" 
-                        :id="inputId" 
+                        ref="searchBox"
+                        :id="inputId"
                         :placeholder="$t('Common.Search')"
-                        @input="updateOptionsList" 
-                        @keyup.down="onSearchBoxDownKey" 
+                        @input="updateOptionsList"
+                        @keyup.down="onSearchBoxDownKey"
                         v-model="searchTerm" />
                 </li>
                 <li v-if="forceLoadingState">
@@ -33,10 +33,10 @@
                 <template v-if="!forceLoadingState" >
                     <li v-for="option in options"
                         :key="keyFunc(option.item)">
-                        <a 
+                        <a
                             :class="[option.item.iconClass]"
                             href="javascript:void(0);"
-                            @click="selectOption(option.item)" 
+                            @click="selectOption(option.item)"
                             v-html="highlight(option, searchTerm)"
                             @keydown.up="onOptionUpKey"></a>
                     </li>
@@ -95,7 +95,7 @@ export default {
         selectedValue: {
             type: String,
             default: null,
-        },    
+        },
     },
     watch: {
         fetchUrl (val) {
@@ -108,9 +108,9 @@ export default {
             }
         },
         disabled(val){
-            if(val) 
+            if(val)
                 this.clear()
-            else 
+            else
                 this.fetchOptions()
         },
     },
@@ -209,7 +209,7 @@ export default {
                 .catch(() => (self.isLoading = false))
         },
         fetchLocalOptions(){
-            if (this.searchTerm != '') {                
+            if (this.searchTerm != '') {
                 const search = this.searchTerm.toLowerCase()
                 const filtered = filter(this.values, v => v.value.toLowerCase().indexOf(search) >= 0)
                 this.options = this.setOptions(filtered)
@@ -256,7 +256,7 @@ export default {
             if(itemToSelect != null) {
                 this.selectOption(itemToSelect.item)
             }
-        },        
+        },
         updateOptionsList(e) {
             this.searchTerm = e.target.value
             this.fetchOptions()
@@ -283,7 +283,7 @@ export default {
             }
         },
         keyFunc(item) {
-            return item == null ? 'null' : item.key + '$' + item.value 
+            return item == null ? 'null' : item.key + '$' + item.value
         },
     },
 }

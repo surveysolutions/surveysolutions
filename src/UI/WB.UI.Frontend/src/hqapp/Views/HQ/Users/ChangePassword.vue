@@ -30,13 +30,13 @@
                         v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
                     <li class="nav-item active"><a class="nav-link active"
                         id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                                
+                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
                     <li class="nav-item"><a class="nav-link"
                         id="two-factor"
                         v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul> 
-                
-                <div class="col-sm-12">                    
+                </ul>
+
+                <div class="col-sm-12">
                     <div>
                         <!-- <div >
                             <h2>{{$t('Pages.AccountManage_ChangePassword')}}</h2>
@@ -156,9 +156,9 @@ export default {
         },
         canChangePassword() {
             if(this.userInfo.isObserving)
-                return false 
+                return false
 
-            return true            
+            return true
         },
         lockMessage() {
             if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
@@ -187,7 +187,7 @@ export default {
             }
 
             return '/'
-        },        
+        },
     },
     mounted() {
         this.personName = this.userInfo.personName
@@ -244,7 +244,7 @@ export default {
                     self.processModelState(error.response.data, self)
                 }
             )
-        },        
+        },
         processModelState: function(response, vm) {
             if (response) {
                 each(response, function(state) {
@@ -266,7 +266,7 @@ export default {
             if(this.isOwnProfile)
                 return baseUrl
             else
-                return baseUrl + '/' + this.model.userInfo.userId  
+                return baseUrl + '/' + this.model.userInfo.userId
 
         },
     },
