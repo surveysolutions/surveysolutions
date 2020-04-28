@@ -1,16 +1,16 @@
 <template>
     <div class="information-block comments-block">
         <button href="javascript:void(0);"
-            class="btn btn-link show-resolved-comments" 
+            class="btn btn-link show-resolved-comments"
             v-if="showResolvedVisible"
             @click="showResolved = !showResolved">
             <span>{{ showResolved ? this.$t('WebInterviewUI.HideResolved') : this.$t('WebInterviewUI.ShowResolved')}}</span>
         </button>
 
         <template v-for="comment in visibleComments">
-            <wb-comment-item :userRole="comment.userRole" 
-                :text="comment.text" 
-                :isOwnComment="comment.isOwnComment" 
+            <wb-comment-item :userRole="comment.userRole"
+                :text="comment.text"
+                :isOwnComment="comment.isOwnComment"
                 :key="comment.commentTimeUtc"
                 :date="comment.commentTimeUtc"
                 :resolved="comment.resolved" />
@@ -27,7 +27,7 @@
                             class="form-control"
                             v-on:keyup.enter="postComment"
                             v-model="comment"
-                            :placeholder='$t("WebInterviewUI.CommentEnter")' 
+                            :placeholder='$t("WebInterviewUI.CommentEnter")'
                             :disabled="!$store.getters.addCommentsAllowed"
                             :id="inpAddCommentId"
                             :title="inputTitle"
@@ -35,8 +35,8 @@
                         <div class="input-group-btn">
                             <button type="button"
                                 class="btn btn-default btn-post-comment"
-                                :class="buttonClass" 
-                                @click="postComment($event)" 
+                                :class="buttonClass"
+                                @click="postComment($event)"
                                 :disabled="!allowPostComment"
                                 :id="btnAddCommentId">
                                 {{ postBtnText }}
@@ -46,7 +46,7 @@
                 </div>
             </form>
             <button href="javascript:void(0);"
-                class="btn btn-link resolve-comments" 
+                class="btn btn-link resolve-comments"
                 :disabled="isResolving"
                 v-if="resolveAllowed"
                 @click="resolve"
@@ -111,9 +111,9 @@ export default {
             return this.$me.comments.length > 0 && (find(this.$me.comments, cmt => cmt.resolved) != null)
         },
         allowPostComment() {
-            return this.comment && 
+            return this.comment &&
                        this.comment.trim().length > 0 &&
-                       !this.$me.postingComment 
+                       !this.$me.postingComment
                        && this.$store.getters.addCommentsAllowed
         },
         resolveAllowed() {

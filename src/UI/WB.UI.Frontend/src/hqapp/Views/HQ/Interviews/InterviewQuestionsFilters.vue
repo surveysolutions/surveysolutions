@@ -43,8 +43,8 @@
             </div>
         </ModalFrame>
 
-        <InterviewFilter 
-            
+        <InterviewFilter
+
             v-for="condition in conditions"
             :key="'filter_' + condition.variable"
             :id="'filter_' + condition.variable"
@@ -131,13 +131,13 @@ export default {
 
         check(question) {
             const condition = find(this.conditions, {variable: question.variable})
-            
+
             if(condition == null) {
                 this.conditions.push({variable: question.variable, field: null, value: null})
             } else {
                 this.conditions = filter(this.conditions, c => c.variable != question.variable)
             }
-            
+
             this.$emit('change', [...this.conditions])
         },
 
@@ -175,18 +175,18 @@ export default {
     computed: {
         questionsList() {
             const array = filter([...(this.questions || [])], q => {
-                return q.type == 'SINGLEOPTION' 
+                return q.type == 'SINGLEOPTION'
                     || q.type == 'TEXT'
                     || q.type == 'NUMERIC'
             })
-           
+
             return array
         },
 
         isDisabled() {
-            return this.questionnaireId == null 
-                || this.questionnaireVersion == null 
-                || this.questionsList == null 
+            return this.questionnaireId == null
+                || this.questionnaireVersion == null
+                || this.questionsList == null
                 || this.questionsList.length == 0
         },
     },

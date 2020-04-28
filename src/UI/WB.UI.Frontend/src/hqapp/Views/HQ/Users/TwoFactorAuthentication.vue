@@ -30,12 +30,12 @@
                         v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
                     <li class="nav-item"><a class="nav-link"
                         id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                                
+                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
                     <li class="nav-item active"><a class="nav-link active"
                         id="two-factor"
                         v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul> 
-                
+                </ul>
+
                 <div class="col-sm-12">
                     <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Description')}}</p>
                     <form-group v-if="!isOwnProfile"
@@ -44,42 +44,42 @@
                             id="UserName"
                             disabled />
                     </form-group>
-                        
-                    <div v-if="is2faEnabled">                       
- 
-                        <div class="alert alert-warning" 
+
+                    <div v-if="is2faEnabled">
+
+                        <div class="alert alert-warning"
                             v-if="recoveryCodesLeft <= 3">
                             <strong>{{$t('Pages.RecoveryCodesLeft')}} {{recoveryCodesLeft}}.</strong>
                             <p>{{$t('Pages.RecoveryCodesYouCan')}} <a :href="getUrl('../../Users/GenerateRecoveryCodes')">{{$t('Pages.GenerateRecoveryCodesLink')}}</a>.</p>
-                        </div>                    
-    
-                        <a :href="getUrl('../../Users/Disable2fa')" 
+                        </div>
+
+                        <a :href="getUrl('../../Users/Disable2fa')"
                             class="btn btn-success"
                             style="margin-right: 5px;">{{$t('Pages.Disable2fa')}}</a>
-                        <a :href="getUrl('../../Users/GenerateRecoveryCodes')" 
+                        <a :href="getUrl('../../Users/GenerateRecoveryCodes')"
                             class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </a>
                     </div>
 
                     <h5>{{$t('Pages.AccountManage_AuthenticatorApp')}}</h5>
 
-                    <a v-if="!hasAuthenticator" 
-                        id="enable-authenticator" 
-                        :href="getUrl('../../Users/SetupAuthenticator')" 
+                    <a v-if="!hasAuthenticator"
+                        id="enable-authenticator"
+                        :href="getUrl('../../Users/SetupAuthenticator')"
                         class="btn btn-success">{{$t('Pages.AddAuthenticator')}}
-                    </a>                
-                    <a v-if="hasAuthenticator" 
-                        id="enable-authenticator" 
-                        :href="getUrl('../../Users/SetupAuthenticator')" 
+                    </a>
+                    <a v-if="hasAuthenticator"
+                        id="enable-authenticator"
+                        :href="getUrl('../../Users/SetupAuthenticator')"
                         style="margin-right: 5px;"
                         v-bind:disabled="userInfo.isObserving"
                         class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}
                     </a>
-                    <a v-if="hasAuthenticator" 
-                        id="reset-authenticator" 
-                        :href="getUrl('../../Users/ResetAuthenticator')" 
+                    <a v-if="hasAuthenticator"
+                        id="reset-authenticator"
+                        :href="getUrl('../../Users/ResetAuthenticator')"
                         class="btn btn-success">{{$t('Pages.ResetAuthenticator')}}
-                    </a>               
-                    
+                    </a>
+
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
-        
+
         isAdmin() {
             return this.userInfo.role == 'Administrator'
         },
@@ -132,15 +132,15 @@ export default {
         isApiUser() {
             return this.userInfo.role == 'ApiUser'
         },
-        
+
         isOwnProfile() {
             return this.userInfo.isOwnProfile
         },
-        referrerTitle() {        
+        referrerTitle() {
 
             return this.$t('Pages.Home')
         },
-        referrerUrl() {           
+        referrerUrl() {
 
             return '/'
         },
@@ -149,10 +149,10 @@ export default {
         },
         tfaUrl(){
             return this.getUrl('../../Users/TwoFactorAuthentication')
-        },        
+        },
     },
     mounted() {
-        this.personName = this.userInfo.personName        
+        this.personName = this.userInfo.personName
     },
     watch: {
         personName: function(val) {
@@ -164,7 +164,7 @@ export default {
             if(this.isOwnProfile)
                 return baseUrl
             else
-                return baseUrl + '/' + this.model.userInfo.userId  
+                return baseUrl + '/' + this.model.userInfo.userId
 
         },
     },

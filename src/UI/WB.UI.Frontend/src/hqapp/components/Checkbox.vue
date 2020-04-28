@@ -1,10 +1,10 @@
 <template>
     <div class="form-group"
         :title="tooltip">
-        <input class="checkbox-filter" 
+        <input class="checkbox-filter"
             :id="name"
             type="checkbox"
-            :disabled="!enabled ? 'disabled': null" 
+            :disabled="!enabled ? 'disabled': null"
             :name="name"
             :checked="checked"
             @change="checkedChange" />
@@ -46,8 +46,8 @@ export default {
         checked() {
             if(this.inputType == 'checkbox') {
                 return this.value
-            } 
-    
+            }
+
             return this.value == this.radioGroup
         },
 

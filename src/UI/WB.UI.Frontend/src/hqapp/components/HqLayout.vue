@@ -1,6 +1,6 @@
 <template>
     <main :class="mainClass">
-        <div :class="{ 'container' : fixedWidth, 'container-fluid': !fixedWidth }" > 
+        <div :class="{ 'container' : fixedWidth, 'container-fluid': !fixedWidth }" >
             <div :class="{ 'row' : hasRow }">
                 <slot name="filters" />
                 <div :class="information">
@@ -25,7 +25,7 @@
                     </div>
                     <slot />
                 </div>
-            </div>           
+            </div>
             <slot name="modals" />
             <ModalFrame id="pendingProgress"
                 ref="pending"

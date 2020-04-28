@@ -16,7 +16,7 @@
 import SectionProgress from './SectionLoadProgress'
 // import Vue from 'vue'
 import { GroupStatus } from './questions'
-    
+
 // async function checkSectionPermission(to) {
 //       if (to.name === "section") {
 //           const sectionId = to.params["sectionId"]

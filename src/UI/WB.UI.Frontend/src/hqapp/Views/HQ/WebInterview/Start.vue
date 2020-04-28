@@ -7,7 +7,7 @@
             </p>
         </div>
 
-        <StartOrResumeForm :buttonTitle="$config.model.startNewButton" 
+        <StartOrResumeForm :buttonTitle="$config.model.startNewButton"
             :resumeButtonTitle="$config.model.resumeButton" />
     </div>
 </template>
