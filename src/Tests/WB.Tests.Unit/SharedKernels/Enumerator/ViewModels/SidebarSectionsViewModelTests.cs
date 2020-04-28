@@ -214,5 +214,114 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Assert.That(viewModel.AllVisibleSections.Count, Is.EqualTo(6));
             Assert.That(viewModel.AllVisibleSections.ToList().IndexOf(addedDisabledSectionViewModel), Is.EqualTo(2));
         }
+        
+        [Test]
+        public void When_section_disabled_and_hide_if_disabled_Then_view_model_of_that_section_should_not_be_visible()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+
+            //arrange
+            var section1Id = Guid.Parse("11111111111111111111111111111111");
+            var disabledSectionId = Guid.Parse("22222222222222222222222222222222");
+            var section3Id = Guid.Parse("33333333333333333333333333333333");
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithHideIfDisabled(hideIfDisabled: false, children: new IComposite[]
+            {
+                Create.Entity.Group(section1Id),
+                Create.Entity.Group(disabledSectionId, hideIfDisabled: true, title: "disabled group"),
+                Create.Entity.Group(section3Id)
+            });
+
+            var eventRegistry = Create.Service.LiteEventRegistry();
+
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
+            interview.Apply(Create.Event.GroupsDisabled(disabledSectionId, RosterVector.Empty));
+
+            var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry);
+            
+
+            //act
+            var viewModelsWithoutDisabled = viewModel.AllVisibleSections.ToList();;
+            //assert
+            Assert.That(viewModelsWithoutDisabled, Has.Exactly(5).Items);
+            Assert.That(viewModelsWithoutDisabled.Find(x=>x.Title.PlainText == "disabled group"), Is.Null);
+        }
+        
+        [Test]
+        public void When_section_disabled_and_set_hide_if_disabled_for_questionnaire_Then_view_model_of_that_section_should_not_be_visible()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+
+            //arrange
+            var section1Id = Guid.Parse("11111111111111111111111111111111");
+            var disabledSectionId = Guid.Parse("22222222222222222222222222222222");
+            var section3Id = Guid.Parse("33333333333333333333333333333333");
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithHideIfDisabled(hideIfDisabled: true, children: new IComposite[]
+            {
+                Create.Entity.Group(section1Id),
+                Create.Entity.Group(disabledSectionId, hideIfDisabled: false, title: "disabled group"),
+                Create.Entity.Group(section3Id)
+            });
+
+            var eventRegistry = Create.Service.LiteEventRegistry();
+
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
+            interview.Apply(Create.Event.GroupsDisabled(disabledSectionId, RosterVector.Empty));
+
+            var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry);
+            
+
+            //act
+            var viewModelsWithoutDisabled = viewModel.AllVisibleSections.ToList();;
+            //assert
+            Assert.That(viewModelsWithoutDisabled, Has.Exactly(5).Items);
+            Assert.That(viewModelsWithoutDisabled.Find(x=>x.Title.PlainText == "disabled group"), Is.Null);
+        }
+        
+        [Test]
+        public void When_section_disabled_and_hide_if_disabled_for_questionnaire_is_not_set_Then_view_model_of_that_section_should_be_visible()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+
+            //arrange
+            var section1Id = Guid.Parse("11111111111111111111111111111111");
+            var disabledSectionId = Guid.Parse("22222222222222222222222222222222");
+            var section3Id = Guid.Parse("33333333333333333333333333333333");
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithHideIfDisabled(hideIfDisabled: false, children: new IComposite[]
+            {
+                Create.Entity.Group(section1Id),
+                Create.Entity.Group(disabledSectionId, title: "disabled group"),
+                Create.Entity.Group(section3Id)
+            });
+
+            var eventRegistry = Create.Service.LiteEventRegistry();
+
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
+            interview.Apply(Create.Event.GroupsDisabled(disabledSectionId, RosterVector.Empty));
+
+            var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry);
+            
+
+            //act
+            var viewModelsWithDisabled = viewModel.AllVisibleSections.ToList();;
+            //assert
+            Assert.That(viewModelsWithDisabled, Has.Exactly(6).Items);
+            Assert.That(viewModelsWithDisabled.Find(x=>x.Title.PlainText == "disabled group"), Is.Not.Null);
+            Assert.That(viewModelsWithDisabled.FindIndex(x => x.Title.PlainText == "disabled group"), Is.EqualTo(2));
+        }
     }
 }
