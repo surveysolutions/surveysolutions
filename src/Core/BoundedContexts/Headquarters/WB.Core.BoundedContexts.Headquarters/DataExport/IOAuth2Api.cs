@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Refit;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport
@@ -39,15 +40,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
     public class ExternalStorageTokenResponse
     {
-        [AliasAs("access_token")]
+        [JsonProperty(PropertyName="access_token")]
         public string AccessToken { get; set; }
-        [AliasAs("expires_in")]
+        [JsonProperty(PropertyName="expires_in")]
         public int ExpiresIn { get; set; }
-        [AliasAs("token_type")]
+        [JsonProperty(PropertyName="token_type")]
         public string TokenType { get; set; }
-        [AliasAs("scope")]
+        [JsonProperty(PropertyName="scope")]
         public string Scope { get; set; }
-        [AliasAs("refresh_token")]
+        [JsonProperty(PropertyName="refresh_token")]
         public string RefreshToken { get; set; }
     }
 }
