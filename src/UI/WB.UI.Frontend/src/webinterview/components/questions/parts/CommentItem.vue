@@ -56,7 +56,7 @@ export default {
                 return `${title} (${this.$t('WebInterviewUI.CommentOnPreviousAnswer')})`
             }
 
-            return this.$t('WebInterviewUI.Comment')
+            return title
         },
         commentTitleByRole() {
             if (this.isOwnComment == true) {
