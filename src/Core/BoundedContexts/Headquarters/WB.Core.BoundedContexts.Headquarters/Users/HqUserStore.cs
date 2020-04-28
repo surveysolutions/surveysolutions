@@ -122,12 +122,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         protected override Task<HqUserToken> FindTokenAsync(HqUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return unitOfWork.Session.Query<HqUserToken>()
+                .Where(x => x.LoginProvider == loginProvider 
+                            && x.Name == name 
+                            && x.UserId == user.Id)
+                .SingleOrDefaultAsync(cancellationToken: cancellationToken);
         }
 
-        protected override Task AddUserTokenAsync(HqUserToken token)
+        protected override async Task AddUserTokenAsync(HqUserToken token)
         {
-            throw new NotImplementedException();
+            await unitOfWork.Session.SaveAsync(token);
         }
 
         protected override Task RemoveUserTokenAsync(HqUserToken token)

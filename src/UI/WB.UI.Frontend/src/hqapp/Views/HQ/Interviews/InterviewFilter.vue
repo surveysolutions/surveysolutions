@@ -1,5 +1,5 @@
 <template>
-    <div class="block-filter" 
+    <div class="block-filter"
         v-if="question != null && isSupported">
         <h5 :title="sanitizeHtml(question.questionText)">
             {{sanitizeHtml(question.questionText)}}
@@ -11,27 +11,27 @@
                     v-model="field" />
             </div>
         </h5>
-        
+
         <Typeahead
             v-if="question.type == 'SINGLEOPTION'"
-            :control-id="'filter_input_' + condition.variable"           
-            :placeholder="$t('Common.SelectOption')"            
+            :control-id="'filter_input_' + condition.variable"
+            :placeholder="$t('Common.SelectOption')"
             :values="options"
             :value="selectedOption"
             v-on:selected="optionSelected"/>
-        
+
         <filter-input v-if="question.type == 'TEXT'"
             :value="condition.value"
-            @input="input"                
+            @input="input"
             :id="'filter_input_' + condition.variable" />
-        
+
         <filter-input v-if="question.type == 'NUMERIC'"
             :value="condition.value"
             type="number"
-            @input="input"                
+            @input="input"
             :id="'filter_input_' + condition.variable" />
-            
-    </div>   
+
+    </div>
 </template>
 <script>
 
@@ -42,7 +42,7 @@ import sanitizeHtml  from 'sanitize-html'
 export default {
     props: {
         question: {type: Object },
-        
+
         /** @type: {variable: string, value: string} */
         condition: { type: Object },
     },
@@ -92,9 +92,9 @@ export default {
         },
     },
 
-    computed: { 
+    computed: {
         options() {
-            return this.getTypeaheadValues(sortBy(this.question.options, ['title']))
+            return this.getTypeaheadValues(this.question.options)
         },
 
         selectedOption() {
@@ -102,7 +102,7 @@ export default {
             if(key != null) key = key.toString()
             return find(this.options, { key })
         },
-        
+
         isSupported() {
             const supported = ['SINGLEOPTION', 'TEXT', 'NUMERIC']
             return find(supported, s => s == this.question.type)
@@ -114,7 +114,7 @@ export default {
                 case 'TEXT': return [
                     { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
                     { id: 'answerLowerCase', value: this.$t('Common.Equals') },
-                        
+
                 ]
                 case 'NUMERIC': return [
                     { id: 'answer', value: this.$t('Common.Equals')},

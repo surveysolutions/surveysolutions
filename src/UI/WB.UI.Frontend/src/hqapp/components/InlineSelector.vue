@@ -13,7 +13,7 @@
                 <a href="javascript:void(0)"
                     v-html="item[valueSelector]" /></li>
         </ul>
-    </span>  
+    </span>
 </template>
 <script>
 
@@ -21,7 +21,7 @@ export default {
     props: {
         options: {
             type: Array,
-            required: true,            
+            required: true,
         },
         value: {
             required: true,

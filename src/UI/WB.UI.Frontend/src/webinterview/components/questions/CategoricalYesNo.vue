@@ -79,7 +79,7 @@ import * as $ from 'jquery'
 import modal from '@/shared/modal'
 import { find, findIndex, filter } from 'lodash'
 import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
-    
+
 export default {
     name: 'CategoricalYesNo',
     data(){
@@ -106,10 +106,10 @@ export default {
         answeredOrAllOptions(){
             if(!this.shouldShowAnsweredOptionsOnly)
                 return this.$me.options
-                
+
             var self = this
             return filter(this.$me.options, function(option) {
-                return $.grep(self.answer, (e) => { return e.value == option.value }).length != 0 
+                return $.grep(self.answer, (e) => { return e.value == option.value }).length != 0
             })
         },
         noOptions() {

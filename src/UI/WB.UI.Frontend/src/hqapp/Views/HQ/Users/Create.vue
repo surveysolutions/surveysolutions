@@ -144,7 +144,7 @@
 import Vue from 'vue'
 import {each} from 'lodash'
 import VuePageTitle from 'vue-page-title'
- 
+
 Vue.use(VuePageTitle, {})
 
 export default {

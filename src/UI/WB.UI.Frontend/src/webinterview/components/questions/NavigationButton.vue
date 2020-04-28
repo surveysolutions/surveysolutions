@@ -26,7 +26,7 @@ export default {
             return [{
                 'btn-success': isValid && status == GroupStatus.Completed,
                 'btn-danger': isValid == false || status == GroupStatus.Invalid || status == GroupStatus.StartedInvalid || status == GroupStatus.CompletedInvalid,
-                'btn-primary': isValid && (status == GroupStatus.NotStarted || status == GroupStatus.Started), 
+                'btn-primary': isValid && (status == GroupStatus.NotStarted || status == GroupStatus.Started),
                 'btn-back': this.isParentButton,
             }]
         },

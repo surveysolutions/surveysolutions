@@ -10,7 +10,7 @@
             </ol>
             <h1>{{$t('QuestionnaireClonning.CloneQuestionnaireTitle')}}</h1>
         </div>
-        
+
         <div class="row">
             <div class="col-sm-8">
                 <h2>
@@ -61,7 +61,7 @@
                 <input
                     name="__RequestVerificationToken"
                     type="hidden"
-                    :value="this.$hq.Util.getCsrfCookie()"/>               
+                    :value="this.$hq.Util.getCsrfCookie()"/>
                 <input
                     name="Id"
                     type="hidden"
@@ -78,7 +78,7 @@
                     name="IsCensus"
                     type="hidden"
                     :value="$config.model.isCensus"/>
-                
+
                 <div class="action-buttons">
                     <button type="submit"
                         class="btn btn-success">

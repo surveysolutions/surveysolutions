@@ -17,24 +17,22 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.6.0" />
-    <PackageReference Include="AntiXSS.NetStandard" Version="0.1.87" />
+    <PackageReference Include="AntiXSS.NetStandard" Version="0.1.111" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="11.0.0-preview.127" />
-    <PackageReference Include="HotChocolate.AspNetCore.Voyager" Version="10.4.1" />
     <PackageReference Include="HotChocolate.Types.Filters" Version="11.0.0-preview.127" />
     <PackageReference Include="HotChocolate.Types.Selections" Version="11.0.0-preview.127" />
     <PackageReference Include="HotChocolate.Types.Sorting" Version="11.0.0-preview.127" />
-    <PackageReference Include="Humanizer.Core.ar" Version="2.7.9" />
-    <PackageReference Include="Humanizer.Core.es" Version="2.7.9" />
-    <PackageReference Include="Humanizer.Core.fr" Version="2.7.9" />
-    <PackageReference Include="Humanizer.Core.id" Version="2.7.9" />
-    <PackageReference Include="Humanizer.Core.pt" Version="2.7.9" />
-    <PackageReference Include="Humanizer.Core.ru" Version="2.7.9" />
-    <PackageReference Include="Humanizer.Core.zh-CN" Version="2.7.9" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
-    <PackageReference Include="prometheus-net.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Humanizer.Core.ar" Version="2.8.2" />
+    <PackageReference Include="Humanizer.Core.es" Version="2.8.2" />
+    <PackageReference Include="Humanizer.Core.fr" Version="2.8.2" />
+    <PackageReference Include="Humanizer.Core.id" Version="2.8.2" />
+    <PackageReference Include="Humanizer.Core.pt" Version="2.8.2" />
+    <PackageReference Include="Humanizer.Core.ru" Version="2.8.2" />
+    <PackageReference Include="Humanizer.Core.zh-CN" Version="2.8.2" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="3.5.0" />
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
 
@@ -46,26 +44,24 @@
     <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
       
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.1" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.3.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.3.3" />
     <PackageReference Include="UAParser" Version="3.1.44" />
-    <PackageReference Include="SkiaSharp.QrCode" Version="0.3.1" />
+    <PackageReference Include="SkiaSharp.QrCode" Version="0.3.2" />
     <PackageReference Include="SkiaSharp" Version="1.68.1.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -101,6 +97,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\FieldsAndValidations.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Pages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Pages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\WebInterviewSettings.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>WebInterviewSettings.resx</DependentUpon>
@@ -108,6 +112,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.resx">
+      <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.resx">
+      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\WebInterviewSettings.resx">
       <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
     </EmbeddedResource>

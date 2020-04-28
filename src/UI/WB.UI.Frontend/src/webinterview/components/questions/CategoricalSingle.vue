@@ -24,8 +24,8 @@
                     </div>
                 </div>
                 <button type="button"
-                    class="btn btn-link btn-horizontal-hamburger" 
-                    @click="toggleOptions" 
+                    class="btn btn-link btn-horizontal-hamburger"
+                    @click="toggleOptions"
                     v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
                     :id="`btn_${$me.id}_ShowAllOptions`">
                     <span></span>
@@ -59,7 +59,7 @@ export default {
         answeredOrAllOptions(){
             if(!this.shouldShowAnsweredOptionsOnly)
                 return this.$me.options
-                
+
             var self = this
             return [find(this.$me.options, function(o) { return o.value == self.answer })]
         },

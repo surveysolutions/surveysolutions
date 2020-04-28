@@ -699,7 +699,7 @@ namespace WB.Tests.Abc.TestFactories
             IQuestionOptionsRepository optionsRepository = null,
             IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
-                interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
+                interviewTreeBuilder ?? Create.Service.InterviewTreeBuilder(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 optionsRepository ?? Mock.Of<IQuestionOptionsRepository>(),
                 assignmentsRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>());
@@ -760,7 +760,8 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
             IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage = null,
             IAssignmentsImportFileConverter assignmentsImportFileConverter = null,
-            IInvitationService invitationService = null)
+            IInvitationService invitationService = null,
+            IAssignmentFactory assignmentFactory = null)
         {
             var session = Mock.Of<ISession>(x =>
                 x.Query<AssignmentsImportProcess>() == GetNhQueryable<AssignmentsImportProcess>() &&
@@ -776,7 +777,7 @@ namespace WB.Tests.Abc.TestFactories
                 importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
-                Create.Service.AssignmentFactory(),
+                assignmentFactory ?? Create.Service.AssignmentFactory(),
                 invitationService ?? Mock.Of<IInvitationService>(),
                 Mock.Of<IAssignmentPasswordGenerator>());
         }
@@ -1173,6 +1174,9 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new SupportedVersionProvider(new InMemoryKeyValueStorage<QuestionnaireVersion>());
         }
+        
+        public ISerializer NewtonJsonSerializer()
+            => new NewtonJsonSerializer();
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler

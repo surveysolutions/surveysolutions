@@ -1,5 +1,5 @@
 <template>
-    <div class="input-group">        
+    <div class="input-group">
         <input
             class="form-control with-clear-btn"
             :placeholder="placeholder"

@@ -22,10 +22,10 @@
             <div class="col-sm-12">
                 <h3>{{$t('Assignments.SelectQuestionnaireToUpgradeFrom')}}</h3>
                 <Typeahead control-id="questionnaire"
-                    noSearch 
-                    :placeholder="$t('Common.Questionnaire')" 
-                    :values="questionnaires" 
-                    :value="questionnaireId" 
+                    noSearch
+                    :placeholder="$t('Common.Questionnaire')"
+                    :values="questionnaires"
+                    :value="questionnaireId"
                     @selected="selectQuestionnaire" />
             </div>
         </div>

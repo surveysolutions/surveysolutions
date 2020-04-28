@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <wb-lock />
-            </div>            
+            </div>
         </div>
     </wb-question>
 </template>
@@ -75,7 +75,7 @@ export default {
     },
     computed: {
         noAnswerWatermark() {
-            return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
+            return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') :
                 (this.$me.isTimestamp ? this.$t('WebInterviewUI.RecordCurrentTime') : this.$t('WebInterviewUI.EnterDate'))
         },
         answer() {
@@ -103,7 +103,7 @@ export default {
                         }
                     }
                     else {
-                        this.$store.dispatch('answerDateQuestion', { 
+                        this.$store.dispatch('answerDateQuestion', {
                             identity: this.$me.id,
                             date: moment().format().substring(0, 19), // remove timezone information from date to prevent server conversion to server timezone
                         })

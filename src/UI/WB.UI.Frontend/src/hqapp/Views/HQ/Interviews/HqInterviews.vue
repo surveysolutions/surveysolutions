@@ -144,10 +144,10 @@
                 <div id="pnlAssignToOtherTeamConfirmMessage">
                     <p
                         v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {
-                            count: this.getFilteredToAssign().length, 
+                            count: this.getFilteredToAssign().length,
                             status1: 'Supervisor assigned',
                             status2: 'Interviewer assigned',
-                            status3: 'Rejected by Supervisor'} ) 
+                            status3: 'Rejected by Supervisor'} )
                             : $t('Interviews.AssignToOtherTeamConfirmMessage', {
                                 count: this.getFilteredToAssign().length,
                                 status1: 'Approved by Supervisor',
@@ -356,7 +356,7 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
-import {lowerCase, find, filter, flatten, map, 
+import {lowerCase, find, filter, flatten, map,
     join, assign, isNaN, isNumber, toNumber, isEqual} from 'lodash'
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
@@ -394,7 +394,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
 }`
 
 /** convert
- * [{variable, field, value}, {variable, field, value}] 
+ * [{variable, field, value}, {variable, field, value}]
  * ["variable,field,value", "variable,field,value"]
  */
 function conditionToQueryString(conditions) {
@@ -410,7 +410,7 @@ function queryStringToCondition(queryStringArray) {
     queryStringArray.forEach(q => {
         const parts = q.split(',')
         const value = parts.slice(2).join(',')
-        
+
         result.push({
             variable: parts[0],
             field: parts[1],
@@ -444,7 +444,7 @@ export default {
             unactiveDateStart: null,
             unactiveDateEnd: null,
             statuses: this.$config.model.statuses,
-           
+
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
 
@@ -483,7 +483,7 @@ export default {
             const result = this.selectedRowWithMenu != null ? lowerCase(this.selectedRowWithMenu.responsibleRole) : ''
             return result
         },
-        
+
         tableColumns() {
             const self = this
             return [
@@ -512,13 +512,13 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        const delimiter = self.mode == 'dense' 
-                        
+                        const delimiter = self.mode == 'dense'
+
                         var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
                             return `${sanitizeHtml(node.question.label || node.question.questionText)}: <strong>${node.answer}</strong>`
                         })
 
-                        const dom = join(questionsWithTitles, ', ')                                             
+                        const dom = join(questionsWithTitles, ', ')
                         return dom
                     },
                     createdCell(td, cellData, rowData, row, col) {
@@ -608,11 +608,11 @@ export default {
             const columns = this.tableColumns.filter(x => x.if == null || x.if())
 
             var defaultSortIndex = 3 //findIndex(columns, { name: "UpdateDate" });
-            
+
             if (this.showSelectors) defaultSortIndex += 1
 
             const self = this
-            
+
             var tableOptions = {
                 rowId: function(row) {
                     return `row_${row.id}`
@@ -625,7 +625,7 @@ export default {
                     const order = {}
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
-                    
+
                     order[column.data] = order_col.dir.toUpperCase()
 
                     const variables = {
@@ -634,10 +634,10 @@ export default {
                         take: data.length,
                     }
 
-                    const where = { 
+                    const where = {
                         AND: [...self.whereQuery],
                     }
-                   
+
                     const search = data.search.value
 
                     if(search && search != '') {
@@ -657,7 +657,7 @@ export default {
                     }
 
                     self.$apollo.query({
-                        query, 
+                        query,
                         variables: variables,
                         fetchPolicy: 'network-only',
                     }).then(response => {
@@ -710,7 +710,7 @@ export default {
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
             if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
             if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
-            
+
             return data
         },
 
@@ -733,9 +733,9 @@ export default {
             if(this.conditions != null && this.conditions.length > 0) {
                 this.conditions.forEach(cond => {
                     if(cond.value == null) return
-                            
+
                     const identifyingQuestions_some = { question: {variable: cond.variable}}
-        
+
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
                     identifyingQuestions_some[cond.field] = value
                     and.push({ identifyingQuestions_some })
@@ -743,7 +743,7 @@ export default {
             }
 
             if(this.responsibleId) {
-                and.push({ 
+                and.push({
                     OR: [
                         { responsibleName: this.responsibleId.value },
                         { teamLeadName: this.responsibleId.value },
@@ -753,7 +753,7 @@ export default {
             if(this.unactiveDateStart) {
                 and.push({ updateDate_gte: this.unactiveDateStart})
             }
-            
+
             if(this.unactiveDateEnd) {
                 and.push({ updateDate_lte: this.unactiveDateEnd})
             }
@@ -767,9 +767,9 @@ export default {
 
         queryString() {
             const query = Object.assign({}, this.where)
-            
+
             const conditions = this.conditions
-            
+
             if(conditions.length > 0) {
                 query.conditions = conditionToQueryString(conditions)
             }
@@ -1244,7 +1244,7 @@ export default {
             if (rowData.responsibleRole === 'INTERVIEWER') {
                 menu.push({
                     name: self.$t('Common.OpenResponsiblesProfile'),
-                    callback: () => (window.location = self.config.profileUrl + '/' + rowData.responsibleId),                    
+                    callback: () => (window.location = self.config.profileUrl + '/' + rowData.responsibleId),
                 })
             }
 
@@ -1310,7 +1310,7 @@ export default {
         clearAssignmentFilter() {
             this.assignmentId = null
         },
-        
+
         formatNumber(value) {
             if (value == null || value == undefined) return value
             var language =
@@ -1326,7 +1326,7 @@ export default {
         reloadTable() {
             this.isLoading = true
             this.selectedRows.splice(0, this.selectedRows.length)
-            
+
             if (this.$refs.table) {
                 this.$refs.table.reload()
             }
@@ -1400,18 +1400,18 @@ export default {
                     }
                 }
             })
-            
+
             self.loadResponsibleIdByName(responsibleId => {
                 if (responsibleId != undefined)
                     self.responsibleId = {key: responsibleId, value: query.responsibleName}
-                else 
+                else
                     self.responsibleId = null
 
                 self.startWatchers(
                     ['responsibleId',
-                        'questionnaireId', 
-                        'status', 
-                        'assignmentId', 
+                        'questionnaireId',
+                        'status',
+                        'assignmentId',
                         'questionnaireVersion'],
                     self.reloadTableAndSaveRoute.bind(self)
                 )

@@ -1,7 +1,4 @@
-﻿using System.Net.Http;
-using System.Net.Http.Headers;
-using AngleSharp.Network;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;

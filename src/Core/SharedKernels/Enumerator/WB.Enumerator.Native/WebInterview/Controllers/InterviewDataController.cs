@@ -88,7 +88,10 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
                 QuestionnaireVersion = questionnaire.Version,
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
-                InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.IsCurrentUserObserving(),
+                InterviewCannotBeChanged = 
+                    statefulInterview.ReceivedByInterviewer 
+                    || statefulInterview.Status == InterviewStatus.ApprovedByHeadquarters
+                    || this.IsCurrentUserObserving(),
                 CanAddComments = statefulInterview.Status != InterviewStatus.ApprovedByHeadquarters && !this.IsCurrentUserObserving(),
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
                 IsCurrentUserObserving = this.IsCurrentUserObserving(),

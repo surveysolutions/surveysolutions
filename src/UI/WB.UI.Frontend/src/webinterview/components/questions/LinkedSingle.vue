@@ -9,9 +9,9 @@
                     :key="$me.id + '_' + option.value">
                     <div class="field">
                         <input class="wb-radio"
-                            type="radio" 
-                            :id="$me.id + '_' + option.value" 
-                            :name="$me.id" 
+                            type="radio"
+                            :id="$me.id + '_' + option.value"
+                            :name="$me.id"
                             :value="option.value"
                             :disabled="!$me.acceptAnswer"
                             v-model="answer">
@@ -32,7 +32,7 @@
                     {{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}
                 </div>
                 <wb-lock />
-            </div>            
+            </div>
         </div>
     </wb-question>
 </template>
@@ -55,7 +55,7 @@ export default {
         answeredOrAllOptions(){
             if(!this.shouldShowAnsweredOptionsOnly)
                 return this.$me.options
-                
+
             var self = this
             return [find(this.$me.options, function(o) { return o.value == self.answer })]
         },
@@ -68,7 +68,7 @@ export default {
             set(value) {
                 this.sendAnswer(() => {
                     const selectedOption = find(this.$me.options, { 'value': value })
-                    this.$store.dispatch('answerLinkedSingleOptionQuestion', { 
+                    this.$store.dispatch('answerLinkedSingleOptionQuestion', {
                         answer: selectedOption.rosterVector,
                         identity: this.$me.id })
                 })

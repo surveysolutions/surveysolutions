@@ -75,6 +75,7 @@ namespace WB.UI.Headquarters.Services
                 case MenuItem.AuditLog: return AuditLog.PageTitle;
                 case MenuItem.Maps: return MainMenu.Maps;
                 case MenuItem.SurveyStatistics: return MainMenu.SurveyStatistics;
+                case MenuItem.ChangePassword: return Strings.SurverManagement_MainMenu_ChangePassword;
                 default: return String.Empty;
             }
         }

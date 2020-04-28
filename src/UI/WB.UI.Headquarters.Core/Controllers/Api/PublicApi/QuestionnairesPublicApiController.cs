@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public ActionResult RecordAudio(Guid id, long version, [FromBody]RecordAudioRequest requestData)
         {
             var questionnaire = 

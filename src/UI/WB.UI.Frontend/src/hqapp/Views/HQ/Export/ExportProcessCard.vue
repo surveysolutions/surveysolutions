@@ -170,7 +170,7 @@ export default {
             return this.data.jobStatus == 'Completed' || this.data.jobStatus == 'Canceled' || this.data.jobStatus == 'Fail'
         },
     },
-    
+
     methods: {
         cancel() {
             modal.confirm(this.$t('DataExport.ConfirmStop') + ' ' + this.$t('DataExport.export') + '?', result => {
