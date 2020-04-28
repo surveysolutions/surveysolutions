@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.SignalR;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -21,6 +22,15 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var http = this.Context.GetHttpContext();
                 return http.Request.Query["interviewId"];
+            }
+        }
+        
+        private string CallerMode
+        {
+            get
+            {
+                var http = this.Context.GetHttpContext();
+                return http.Request.Query["mode"];
             }
         }
 
@@ -57,7 +67,10 @@ namespace WB.Enumerator.Native.WebInterview
         {
             var interviewId = CallerInterviewId;
             await Groups.AddToGroupAsync(Context.ConnectionId, interviewId);
-            await Clients.OthersInGroup(interviewId).SendAsync("closeInterview");
+            if (CallerMode != "review")
+            {
+                await Clients.OthersInGroup(interviewId).SendAsync("closeInterview");
+            }
         }
 
         private async Task UnRegisterClient()
