@@ -146,15 +146,15 @@ export default {
         pickLocation() {
             var self = this
 
-            box.dialog({ 
+            box.dialog({
                 title: self.$t('WebInterviewUI.PickLocation'),
                 message: '<div id="locationPicker"><div style="height: 400px;" id="map_canvas"></div></div>',
                 size: 'large',
                 onShow: () => {
                     self.pickedLocation = null
                     var latlng = new google.maps.LatLng(-34.397, 150.644)
-                    
-                    var mapOptions = 
+
+                    var mapOptions =
                     {
                         zoom: 14,
                         center:latlng,
@@ -190,10 +190,10 @@ export default {
                             pushpin = new google.maps.Marker({
                                 position: location,
                                 map: map,
-                            }) 
+                            })
                         }
                         else {
-                            pushpin.setPosition(location) 
+                            pushpin.setPosition(location)
                         }
                     }
                 },
@@ -208,7 +208,7 @@ export default {
                                         latitude: self.pickedLocation.latitude,
                                         longitude: self.pickedLocation.longitude,
                                     },
-                                }, this.id) 
+                                }, this.id)
                             }
                         },
                     },

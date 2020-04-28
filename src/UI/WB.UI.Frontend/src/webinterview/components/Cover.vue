@@ -99,7 +99,7 @@ export default {
             default: true,
         },
     },
-    
+
     beforeMount() {
         this.fetch()
     },
@@ -133,7 +133,7 @@ export default {
             return !isEmpty(this.$store.state.webinterview.coverInfo.supervisorRejectComment)
         },
         hasBrokenPackage() {
-            return this.$store.state.webinterview.doesBrokenPackageExist == undefined 
+            return this.$store.state.webinterview.doesBrokenPackageExist == undefined
                 ? false
                 : this.$store.state.webinterview.doesBrokenPackageExist
         },
@@ -170,7 +170,7 @@ export default {
                     sectionId: commentedQuestion.parentId,
                     interviewId: this.$route.params.interviewId,
                 },
-                hash: '#' + commentedQuestion.id, 
+                hash: '#' + commentedQuestion.id,
             }
 
             this.$router.push(navigateToEntity)

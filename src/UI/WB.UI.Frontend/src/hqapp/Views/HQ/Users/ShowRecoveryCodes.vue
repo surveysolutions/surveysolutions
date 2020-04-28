@@ -31,12 +31,12 @@
                         v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
                     <li class="nav-item"><a class="nav-link"
                         id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>                                
+                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
                     <li class="nav-item active"><a class="nav-link active"
                         id="two-factor"
                         v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul> 
-                
+                </ul>
+
                 <div class="col-sm-12">
                     <div >
                         <div >
@@ -48,30 +48,30 @@
                                 <TextInput :value="userInfo.userName"
                                     id="UserName"
                                     disabled />
-                            </form-group>                    
+                            </form-group>
                         </div>
-                        <div>                     
-                            <div class="alert alert-warning" 
+                        <div>
+                            <div class="alert alert-warning"
                                 role="alert">
                                 <p>
-                                    <span class="glyphicon glyphicon-warning-sign" 
+                                    <span class="glyphicon glyphicon-warning-sign"
                                         style="margin-right: 5px;"></span>
                                     <strong>{{$t('Pages.RecoveryCodesInfo')}}</strong>
                                 </p>
                                 <p>
-                                    {{$t('Pages.RecoveryCodesDescription')}}                                    
+                                    {{$t('Pages.RecoveryCodesDescription')}}
                                 </p>
-                            </div>                    
-                        </div>    
+                            </div>
+                        </div>
                         <div>
                             <ul>
-                                <li v-for="code in recoveryCodes" 
+                                <li v-for="code in recoveryCodes"
                                     :key="code">
                                     <code  class="recovery-code">{{code}}</code>
                                 </li>
-                            </ul>                                 
-                        </div>                  
-                    </div>                    
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@ export default {
             personName: null,
         }
     },
-    computed: {        
+    computed: {
         recoveryCodes(){
             return this.userInfo.recoveryCodes.split(' ')
         },
@@ -102,7 +102,7 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
-        
+
         isAdmin() {
             return this.userInfo.role == 'Administrator'
         },
@@ -121,15 +121,15 @@ export default {
         isApiUser() {
             return this.userInfo.role == 'ApiUser'
         },
-        
+
         isOwnProfile() {
             return this.userInfo.isOwnProfile
         },
-        referrerTitle() {        
+        referrerTitle() {
 
             return this.$t('Pages.Home')
         },
-        referrerUrl() {           
+        referrerUrl() {
 
             return '/'
         },
@@ -141,7 +141,7 @@ export default {
         },
     },
     mounted() {
-        this.personName = this.userInfo.personName        
+        this.personName = this.userInfo.personName
     },
     watch: {
         personName: function(val) {
@@ -152,7 +152,7 @@ export default {
         if(this.isOwnProfile)
             return baseUrl
         else
-            return baseUrl + '/' + this.model.userInfo.userId  
+            return baseUrl + '/' + this.model.userInfo.userId
 
     }},
 }

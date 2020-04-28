@@ -69,7 +69,7 @@ import modal from '@/shared/modal'
 export default {
     name: 'MatrixRoster_CategoricalMulti',
     mixins: [entityDetails, tableCellEditor],
-        
+
     data() {
         return {
             showAllOptions: false,
@@ -78,7 +78,7 @@ export default {
             lastUpdate: null,
             questionId: null,
         }
-    }, 
+    },
     watch: {
         ['$watchedQuestion'](watchedQuestion) {
             if (watchedQuestion.updatedAt != this.lastUpdate) {
@@ -89,9 +89,9 @@ export default {
     },
     computed: {
         $watchedQuestion() {
-            return this.$store.state.webinterview.entityDetails[this.questionId] 
+            return this.$store.state.webinterview.entityDetails[this.questionId]
         },
-            
+
         disabled() {
             if (this.$me.isDisabled || this.$me.isLocked || !this.$me.acceptAnswer)
                 return true
@@ -114,7 +114,7 @@ export default {
                 'not-applicable' : this.question.isLocked,
                 'syncing': this.isFetchInProgress,
             }, 'cell-unit', 'options-group', ' h-100',' d-flex']
-        }, 
+        },
     },
     methods: {
         cacheQuestionData() {
@@ -167,7 +167,7 @@ export default {
         },
         isProtected(answerValue) {
             if (!this.$me.protectedAnswer) return false
-                
+
             var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
             return answerIndex > -1
         },

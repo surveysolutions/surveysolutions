@@ -1,6 +1,6 @@
 <template>
     <div class="information-block text-warning"
-        v-if="$me.validity.warnings.length > 0">        
+        v-if="$me.validity.warnings.length > 0">
         <template v-for="message in $me.validity.warnings">
             <p v-dateTimeFormatting
                 v-html="message"

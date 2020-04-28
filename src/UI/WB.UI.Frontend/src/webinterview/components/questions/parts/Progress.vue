@@ -10,7 +10,7 @@
 </template>
 <script lang="js">
 import { delay } from 'lodash'
-    
+
 export default {
     name: 'wb-progress',
     props: {

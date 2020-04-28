@@ -34,10 +34,10 @@
                     :src="$config.model.mapPreviewUrl"></iframe>
                 <p>{{ $t("Pages.MapDetails_MapDisclaimer") }} </p>
             </div>
-    
+
             <div id="list"
                 class="col-md-5 col-sm-6">
-                <DataTables ref="table" 
+                <DataTables ref="table"
                     :tableOptions="tableOptions"
                     :addParamsToRequest="addParamsToRequest"
                     :contextMenuItems="contextMenuItems">
@@ -58,29 +58,29 @@ export default {
     mounted() {
         this.reload()
     },
-    methods: {     
+    methods: {
         reload() {
             if (this.$refs.table){
                 this.$refs.table.reload()
             }
-        },   
+        },
         addParamsToRequest(requestData) {
             requestData.mapName = this.$config.model.fileName
         },
         contextMenuItems({ rowData }) {
             return [{
                 name: this.$t('Pages.MapDetails_DelinkUser'),
-                callback: () => { this.delinkUserFromMap(rowData.userName, this.$config.model.fileName)},                    
+                callback: () => { this.delinkUserFromMap(rowData.userName, this.$config.model.fileName)},
             }]
         },
 
-        delinkUserFromMap(userName, fileName) 
+        delinkUserFromMap(userName, fileName)
         {
             const self = this
-            this.$refs.confirmDiscard.promt(ok => 
+            this.$refs.confirmDiscard.promt(ok =>
             {
-                if (ok) 
-                {                  
+                if (ok)
+                {
                     this.$http({
                         method: 'delete',
                         url: this.$config.model.deleteMapUserLinkUrl,
@@ -89,9 +89,9 @@ export default {
                     this.$refs.table.reload()
                 }
             })
-        },        
+        },
     },
-    computed: {        
+    computed: {
         config() {
             return this.$config.model
         },
@@ -105,8 +105,8 @@ export default {
                         name: 'UserName', // case-sensitive!
                         'class': 'title',
                         title: this.$t('Pages.MapDetails_InterviewerName'),
-                        orderable: true,                       
-                    },                    
+                        orderable: true,
+                    },
                 ],
                 ajax: {
                     url: this.$config.model.dataUrl,
@@ -114,7 +114,7 @@ export default {
                 },
                 responsive: false,
                 order: [[0, 'asc']],
-                sDom: 'rf<"table-with-scroll"t>ip',                
+                sDom: 'rf<"table-with-scroll"t>ip',
             }
         },
     },

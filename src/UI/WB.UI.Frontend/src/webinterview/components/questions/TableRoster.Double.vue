@@ -13,8 +13,8 @@
             minimumValue:'-99999999999999.99999999999999',
             maximumValue:'99999999999999.99999999999999',
             digitGroupSeparator: groupSeparator,
-            decimalCharacter:decimalSeparator, 
-            decimalPlaces: decimalPlacesCount, 
+            decimalCharacter:decimalSeparator,
+            decimalPlaces: decimalPlacesCount,
             allowDecimalPadding: false
         }"/>
 </template>
@@ -23,11 +23,11 @@
 import Vue from 'vue'
 import { entityDetails, tableCellEditor } from '../mixins'
 import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from './question_helpers'
-        
+
 export default {
     name: 'TableRoster_Double',
     mixins: [entityDetails, tableCellEditor],
-        
+
     data() {
         return {
             autoNumericElement: null,
@@ -45,7 +45,7 @@ export default {
             return getDecimalSeparator(this.$me)
         },
         decimalPlacesCount() {
-            return getDecimalPlacesCount(this.$me)    
+            return getDecimalPlacesCount(this.$me)
         },
     },
     methods: {
@@ -71,7 +71,7 @@ export default {
                 if(this.handleEmptyAnswer(answer)) {
                     return
                 }
-                    
+
                 if (answer > 999999999999999 || answer < -999999999999999) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse'))
                     return
