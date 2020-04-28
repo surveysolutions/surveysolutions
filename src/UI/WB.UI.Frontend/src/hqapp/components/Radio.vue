@@ -4,8 +4,8 @@
             :title="tooltip">
             <input class="wb-radio"
                 type="radio"
-                :id="name + '_' + radioGroup" 
-                :disabled="!enabled ? 'disabled': null" 
+                :id="name + '_' + radioGroup"
+                :disabled="!enabled ? 'disabled': null"
                 :name="name"
                 :checked="checked"
                 @change="checkedChange"
@@ -21,7 +21,7 @@
 
 export default {
     props: {
-        radioGroup: {            
+        radioGroup: {
             default: null,
         },
 
@@ -55,8 +55,8 @@ export default {
         checked() {
             if(this.inputType == 'checkbox') {
                 return this.value
-            } 
-    
+            }
+
             return this.value == this.radioGroup
         },
 

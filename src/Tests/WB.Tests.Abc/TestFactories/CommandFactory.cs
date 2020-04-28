@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Dropbox.Api.Files;
 using Main.Core.Documents;
 using Main.Core.Events;
 using WB.Core.BoundedContexts.Headquarters.Commands;

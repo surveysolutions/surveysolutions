@@ -292,7 +292,7 @@ export default {
                     contentType: 'application/json',
                     dataSrc: function ( responseJson ) {
                         responseJson.recordsTotal = responseJson.RecordsFiltered
-                        responseJson.recordsFiltered = responseJson.RecordsFiltered 
+                        responseJson.recordsFiltered = responseJson.RecordsFiltered
                         return responseJson.History
                     },
                 },

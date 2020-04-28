@@ -205,9 +205,9 @@
                 <input
                     name="__RequestVerificationToken"
                     type="hidden"
-                    
+
                     :value="this.$hq.Util.getCsrfCookie()"/>
-                <div class="block-filter"> 
+                <div class="block-filter">
                     <div class="form-group"
                         :class="{ 'has-error': this.$config.model.invalidImage }">
                         <label for="companyLogo">
@@ -317,7 +317,7 @@ export default {
                     cancel: {
                         label: self.$t('Common.No'),
                     },
-                    
+
                     success: {
                         label: self.$t('Common.Yes'),
                         callback: async () => {

@@ -7,7 +7,7 @@
                 @click="hideSearchResults">
                 <span class="cancel"></span>
             </button>
-            
+
             <h2 v-if="searchResult.count > 0">
                 {{ $t("Details.SearchResult_Count", { count: searchResult.count })}}
             </h2>
@@ -15,7 +15,7 @@
                 {{ $t("Details.NoSearchResults")}}
             </h2>
 
-            <search-section-result 
+            <search-section-result
                 v-for="(search, index) in searchResult.results"
                 :key="search.sectionId + index"
                 :search="search">
@@ -48,9 +48,9 @@ export default {
             const self = this
 
             this.$store.dispatch('fetchSearchResults')
-                .then(() => { 
+                .then(() => {
                     $state.loaded()
-                    
+
                     if(self.searchResult.skip >= self.searchResult.count) {
                         $state.complete()
                     }

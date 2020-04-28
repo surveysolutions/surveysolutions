@@ -24,7 +24,7 @@
     <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="Moq" Version="4.14.0" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.4.2" />
     <PackageReference Include="NHibernate" Version="5.2.7" />
     <PackageReference Include="NSubstitute" Version="4.2.1" />

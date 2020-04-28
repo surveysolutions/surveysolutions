@@ -87,7 +87,7 @@
                 <h4 v-html="selectedQuestionnaireTitle" />
             </div>
         </div>
-        
+
         <DataTables
             ref="table"
             v-if="mounted"
@@ -138,7 +138,7 @@ export default {
         }
 
         if (this.query.reportType) {
-            this.reportTypeId = find(this.model.reportTypes, {key: this.query.reportType})          
+            this.reportTypeId = find(this.model.reportTypes, {key: this.query.reportType})
             if(this.reportTypeId == null) {
                 this.reportTypeId = this.model.reportTypes[0]
             }
@@ -169,7 +169,7 @@ export default {
         this.loadReportData()
         this.mounted = true
     },
-    
+
     methods: {
         loadReportData(reloadPage = false) {
             if(reloadPage) return // reload will happen when route change
@@ -232,7 +232,7 @@ export default {
                     },
                 })
             }
-            
+
             columns.push({
                 data: 'average',
                 name: 'Average',
@@ -392,12 +392,12 @@ export default {
             this.updateDateColumnsInfo()
         },
     },
-    watch: { 
+    watch: {
         selectedDate(to) {
             this.onChange(query => {
                 query.from = to
             })
-            
+
         },
     },
     computed: {

@@ -14,7 +14,7 @@ export default {
             rowIndex : null,
             tableRoster : null,
         }
-    }, 
+    },
     computed: {
         roster(){
             return this.tableRoster.$me.instances[this.rowIndex]
