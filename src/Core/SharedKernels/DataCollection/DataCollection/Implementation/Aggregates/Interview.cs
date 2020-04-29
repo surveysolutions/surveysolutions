@@ -2101,7 +2101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (AggregateRootEvent synchronizedEvent in command.SynchronizedEvents)
             {
                 var @event = synchronizedEvent.Payload;
-                this.ApplyEvent(synchronizedEvent.EventIdentifier, synchronizedEvent.EventTimeStamp, @event);
+                this.ApplyEvent(synchronizedEvent.EventIdentifier, DateTime.UtcNow, @event);
             }
 
             var sourceInterview = GetChangedTree();
