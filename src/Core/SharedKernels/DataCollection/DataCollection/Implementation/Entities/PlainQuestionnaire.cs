@@ -237,7 +237,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Translation Translation => this.translation;
         public string VariableName => this.innerDocument.VariableName;
-        public bool HideIfDisabled => this.innerDocument.HideIfDisabled;
         public Type ExpressionStorageType { get; set; }
 
         public bool HasQuestion(Guid questionId) => this.GetQuestion(questionId) != null;
