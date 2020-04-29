@@ -472,4 +472,7 @@
   <data name="Action_Created_Responsible" xml:space="preserve">
     <value>Assigned to {{responsible}}</value>
   </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>Start web interview</value>
+  </data>
 </root>

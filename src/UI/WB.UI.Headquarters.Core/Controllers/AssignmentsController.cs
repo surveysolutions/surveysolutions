@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -53,6 +54,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPreloadedDataVerifier dataVerifier;
         private readonly ILogger<AssignmentsController> logger;
         private readonly IArchiveUtils archiver;
+        private readonly IInvitationService invitationService;
 
         public AssignmentsController(IAuthorizedUser currentUser, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
@@ -67,7 +69,8 @@ namespace WB.UI.Headquarters.Controllers
             IAssignmentsImportReader assignmentsImportReader,
             IPreloadedDataVerifier dataVerifier,
             ILogger<AssignmentsController> logger,
-            IArchiveUtils archiver)
+            IArchiveUtils archiver,
+            IInvitationService invitationService)
         {
             this.currentUser = currentUser;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -83,6 +86,7 @@ namespace WB.UI.Headquarters.Controllers
             this.dataVerifier = dataVerifier;
             this.logger = logger;
             this.archiver = archiver;
+            this.invitationService = invitationService;
         }
         
         [ActivePage(MenuItem.Assignments)]
@@ -162,7 +166,8 @@ namespace WB.UI.Headquarters.Controllers
                 WebMode = assignment.WebMode,
                 IsHeadquarters = this.currentUser.IsAdministrator || this.currentUser.IsHeadquarter,
                 Comments = assignment.Comments,
-                IsArchived = assignment.Archived
+                IsArchived = assignment.Archived,
+                InvitationToken = this.invitationService.GetInvitationByAssignmentId(assignment.Id)?.Token
             });
         }
 
