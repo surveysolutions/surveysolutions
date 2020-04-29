@@ -40,7 +40,6 @@
             <div class="field"
                 style="width:180px;">
                 <input
-                    v-if="!disabled && answeredOrAllOptions.some(e => e.value === option.value)"
                     class="wb-checkbox"
                     type="checkbox"
                     :id="$me.id + '_' + option.value"
@@ -83,6 +82,7 @@ export default {
         ['$watchedQuestion'](watchedQuestion) {
             if (watchedQuestion.updatedAt != this.lastUpdate) {
                 this.question = watchedQuestion
+                this.answer = watchedQuestion.answer
                 this.cacheQuestionData()
             }
         },
