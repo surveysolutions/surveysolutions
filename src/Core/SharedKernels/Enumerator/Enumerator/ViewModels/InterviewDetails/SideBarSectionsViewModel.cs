@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             bool IsSectionVisible(InterviewTreeGroup group) => !@group.IsDisabled() ||
-                @group.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(@group.Identity.Id) && !questionnaire.HideIfDisabled;
+                @group.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(@group.Identity.Id);
 
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
             var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup);
