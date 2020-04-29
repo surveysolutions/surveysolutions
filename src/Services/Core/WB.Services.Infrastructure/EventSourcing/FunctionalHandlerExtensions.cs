@@ -53,7 +53,11 @@ namespace WB.Services.Infrastructure.EventSourcing
 
         public static async Task Handle(this IStatefulDenormalizer eventsHandler, Event ev, CancellationToken token = default)
         {
+            if (eventsHandler == null) { throw new ArgumentNullException(nameof(eventsHandler)); }
+            if (ev == null) { throw new ArgumentNullException(nameof(ev)); }
+
             var handler = eventsHandler.GetEventHandlersMap();
+            if (handler == null) { throw new ArgumentNullException(nameof(handler)); }
 
             if (handler.TryGetValue(ev.Payload.GetType(), out var method))
             {
@@ -71,14 +75,11 @@ namespace WB.Services.Infrastructure.EventSourcing
                         method.Invoke(eventsHandler, new[] {ev.AsPublishedEvent()});
                     }
                 }
-                catch (TargetInvocationException tie)
+                catch (Exception exception)
                 {
-                    var exception = tie.InnerException ?? tie;
-
-                    exception.Data.Add("handlerMethod",
+                    exception.Data.Add("WB:handlerMethod",
                             $"{eventsHandler.GetType().Name}.{method.Name}<{ev.Payload.GetType().Name}>(...)");
-                    
-                    throw exception;
+                    throw;
                 }
             }
         }
