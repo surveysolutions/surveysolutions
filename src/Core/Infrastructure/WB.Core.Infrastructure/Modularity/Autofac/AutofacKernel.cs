@@ -118,8 +118,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 {
                     status.Error(Modules.ErrorDuringSiteInitialization, e);
 
-                    log.LogCritical("Exception during site initialization",
-                        e.WithFatalType(FatalExceptionType.HqErrorDuringSiteInitialization));
+                    log.LogCritical(e.WithFatalType(FatalExceptionType.HqErrorDuringSiteInitialization), 
+                        "Exception during site initialization");
                 }
                 
                 init.Stop();
