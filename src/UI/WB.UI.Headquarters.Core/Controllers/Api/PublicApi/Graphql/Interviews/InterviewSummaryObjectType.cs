@@ -36,6 +36,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.ResponsibleRole).Type<EnumType<UserRoles>>();
 
             descriptor.Field(x => x.TeamLeadName).Type<StringType>()
+                .Name("supervisorName")
                 .Description("Supervisor login who is responsible for interview");
             descriptor.Field(x => x.ReceivedByInterviewer)
                 .Type<StringType>();
@@ -43,7 +44,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Indicates if interview was ever completed by interviewer")
                 .Type<StringType>();
             descriptor.Field(x => x.TeamLeadNameLowerCase)
-                .Description("Lowercased version of team lead name")
+                .Name("supervisorNameLowerCase")
+                .Description("Lowercased version of supervisor login who is responsible for interview")
                 .Type<StringType>();
 
             descriptor.Field(x => x.AssignmentId).Type<IntType>()
