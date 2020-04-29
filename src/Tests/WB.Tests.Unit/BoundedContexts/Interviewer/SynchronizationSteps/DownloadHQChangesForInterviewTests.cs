@@ -14,6 +14,8 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -22,12 +24,85 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
 {
     [TestFixture]
     public class DownloadHqChangesForInterviewTests
     {
+        [Test]
+        public async Task when_hq_contains_new_event_for_interview_should_correct_download_and_insert_in_event_store()
+        {
+            var interviewId = Id.g1;
+            var lastLocalEventId = Id.g2;
+            var newEventIdFromHq = Id.g3;
+
+
+            var localInterview = Create.Entity.InterviewView(interviewId: interviewId);
+            var localInterviewStorage = Create.Storage.SqliteInmemoryStorage<InterviewView>();
+            localInterviewStorage.Store(localInterview);
+
+            var synchronizationService = new Mock<ISynchronizationService>();
+            var remoteInterview = Create.Entity.InterviewApiView(interviewId, newEventIdFromHq);
+            synchronizationService
+                .Setup(s => s.GetInterviewsAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new List<InterviewApiView>() { remoteInterview }));
+            var remoteEvents = new List<CommittedEvent>()
+            {
+                Create.Event.CommittedEvent(eventSourceId: interviewId, eventIdentifier: newEventIdFromHq, payload: Create.Event.AnswerCommented(comment: "comment"))
+            };
+            synchronizationService
+                .Setup(s => s.GetInterviewDetailsAfterEventAsync(interviewId, lastLocalEventId, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(remoteEvents));
+
+            var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
+            eventStore.StoreEvents(new CommittedEventStream(interviewId, new []
+            {
+                Create.Event.CommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
+                Create.Event.CommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId), eventIdentifier: lastLocalEventId)
+            }));
+            eventStore.Store(new UncommittedEventStream(null, new[]{
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.TextQuestionAnswered(Guid.NewGuid(), answer: "text")),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:4, payload: Create.Event.NumericIntegerQuestionAnswered(Guid.NewGuid(), answer: 7))
+            }));
+
+            var eventBus = Mock.Of<ILiteEventBus>();
+            var aggregateRootRepositoryCacheCleaner = Mock.Of<IEventSourcedAggregateRootRepositoryCacheCleaner>();
+
+            var synchronizationStep = CreateDownloadHQChangesForInterview(synchronizationService.Object,
+                localInterviewStorage,
+                eventStore: eventStore,
+                eventBus: eventBus,
+                aggregateRootRepositoryCacheCleaner: aggregateRootRepositoryCacheCleaner);
+
+            await synchronizationStep.ExecuteAsync();
+
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyPartialDownloadedInterviewsCount, Is.EqualTo(1));
+
+            Mock.Get(aggregateRootRepositoryCacheCleaner).Verify(a => a.CleanCache(), Times.Once);
+
+            var eventsAfterSynch = eventStore.Read(interviewId, 1).ToList();
+            Assert.That(eventsAfterSynch.Count, Is.EqualTo(5));
+            Assert.That(eventsAfterSynch[0].Payload is InterviewCreated, Is.True);
+            Assert.That(eventsAfterSynch[1].Payload is InterviewerAssigned, Is.True);
+            Assert.That(eventsAfterSynch[2].Payload is AnswerCommented, Is.True);
+            Assert.That(eventsAfterSynch[3].Payload is TextQuestionAnswered, Is.True);
+            Assert.That(eventsAfterSynch[4].Payload is NumericIntegerQuestionAnswered, Is.True);
+
+            Assert.That(eventsAfterSynch[0].EventSequence, Is.EqualTo(1));
+            Assert.That(eventsAfterSynch[1].EventSequence, Is.EqualTo(2));
+            Assert.That(eventsAfterSynch[2].EventSequence, Is.EqualTo(3));
+            Assert.That(eventsAfterSynch[3].EventSequence, Is.EqualTo(4));
+            Assert.That(eventsAfterSynch[4].EventSequence, Is.EqualTo(5));
+
+            var hasEventsWithoutHqFlag = eventStore.HasEventsWithoutHqFlag(interviewId);
+            Assert.That(hasEventsWithoutHqFlag, Is.True);
+
+            var lastEventIdUploadedToHqAfterSynch = eventStore.GetLastEventIdUploadedToHq(interviewId);
+            Assert.That(lastEventIdUploadedToHqAfterSynch, Is.EqualTo(newEventIdFromHq));
+        }
+
         [Test]
         public async Task when_hq_contains_new_event_for_interview()
         {

@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             var responsibleId = Id.g2;
 
             InterviewView localInterview = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.InterviewerAssigned);
-            var localInterviewStorage = new SqliteInmemoryStorage<InterviewView>();
+            var localInterviewStorage = Create.Storage.SqliteInmemoryStorage<InterviewView>();
             localInterviewStorage.Store(localInterview);
 
             InterviewUploadState remoteInterviewUploadState = Create.Entity.InterviewUploadState(responsibleId);
@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             var responsibleId = Id.g2;
 
             InterviewView localInterview = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.Completed);
-            var localInterviewStorage = new SqliteInmemoryStorage<InterviewView>();
+            var localInterviewStorage = Create.Storage.SqliteInmemoryStorage<InterviewView>();
             localInterviewStorage.Store(localInterview);
 
             InterviewUploadState remoteInterviewUploadState = Create.Entity.InterviewUploadState(responsibleId);
