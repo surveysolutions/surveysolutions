@@ -44,10 +44,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
             bool isReviewMode)
         {
             bool IsSectionVisible(InterviewTreeGroup x) =>
-                !x.IsDisabled() ||
-                x.IsDisabled() &&
-                !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id) &&
-                !questionnaire.HideIfDisabled;
+                (!x.IsDisabled() || x.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id))
+                && !questionnaire.IsCustomViewRoster(x.Identity.Id);
 
             Sidebar result = new Sidebar();
             HashSet<Identity> visibleSections = new HashSet<Identity>();
@@ -72,7 +70,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 var children = (childGroups ?? Array.Empty<InterviewTreeGroup>())
                     .OfType<InterviewTreeGroup>()
-                    .Where(e => IsSectionVisible(e) && !questionnaire.IsCustomViewRoster(e.Identity.Id));
+                    .Where(IsSectionVisible);
 
                 foreach (var child in children)
                 {
@@ -91,9 +89,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         this.ApplyValidity(sidebarPanel.Validity, sidebarPanel.Status);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
-                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => 
-                            IsSectionVisible(c) 
-                            && !questionnaire.IsCustomViewRoster(c.Identity.Id));
+                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(IsSectionVisible);
                     });
                 }
             }
