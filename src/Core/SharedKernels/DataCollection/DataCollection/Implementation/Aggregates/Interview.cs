@@ -2072,7 +2072,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command)
+        public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command) 
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
 
@@ -2101,7 +2101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (AggregateRootEvent synchronizedEvent in command.SynchronizedEvents)
             {
                 var @event = synchronizedEvent.Payload;
-                this.ApplyEvent(synchronizedEvent.EventIdentifier, synchronizedEvent.EventTimeStamp, @event);
+                this.ApplyEvent(synchronizedEvent.EventIdentifier, DateTime.UtcNow /*synchronizedEvent.EventTimeStamp*/, @event);
             }
 
             var sourceInterview = GetChangedTree();
