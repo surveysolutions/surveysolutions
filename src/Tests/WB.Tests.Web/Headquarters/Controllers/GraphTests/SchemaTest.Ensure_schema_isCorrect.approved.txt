@@ -46,9 +46,9 @@ type Interview {
   responsibleRole: UserRoles
   status: InterviewStatus
   "Supervisor login who is responsible for interview"
-  teamLeadName: String
-  "Lowercased version of team lead name"
-  teamLeadNameLowerCase: String
+  supervisorName: String
+  "Lowercased version of supervisor login who is responsible for interview"
+  supervisorNameLowerCase: String
   "Represents date (UTC) when interview was changed last time"
   updateDate: DateTime!
   "Indicates if interview was ever completed by interviewer"
