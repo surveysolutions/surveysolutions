@@ -75,11 +75,13 @@ namespace WB.Services.Infrastructure.EventSourcing
                         method.Invoke(eventsHandler, new[] {ev.AsPublishedEvent()});
                     }
                 }
-                catch (Exception exception)
+                catch (TargetInvocationException tie)
                 {
+                    var exception = tie.InnerException ?? tie;
+
                     exception.Data.Add("WB:handlerMethod",
                             $"{eventsHandler.GetType().Name}.{method.Name}<{ev.Payload.GetType().Name}>(...)");
-                    throw;
+                    throw exception;
                 }
             }
         }
