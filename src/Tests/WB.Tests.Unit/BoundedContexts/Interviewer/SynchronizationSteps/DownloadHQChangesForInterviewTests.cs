@@ -16,6 +16,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -39,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             var newEventIdFromHq = Id.g3;
 
 
-            var localInterview = Create.Entity.InterviewView(interviewId: interviewId);
+            var localInterview = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.InterviewerAssigned);
             var localInterviewStorage = Create.Storage.SqliteInmemoryStorage<InterviewView>();
             localInterviewStorage.Store(localInterview);
 
