@@ -20,9 +20,9 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.95.2" />
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="DotNetZip" Version="1.13.7" />
-    <PackageReference Include="EPPlus" Version="4.5.3.3" />
     <PackageReference Include="FluentMigrator" Version="3.2.6" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.6" />
     <PackageReference Include="HtmlSanitizer" Version="5.0.310" />

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using ClosedXML.Excel;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using OfficeOpenXml;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -43,7 +44,7 @@ namespace WB.Infrastructure.Native.Questionnaire
         
         private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
-            using (ExcelPackage excelPackage = new ExcelPackage())
+            using (XLWorkbook excelPackage = new XLWorkbook())
             {
                 var textsToTranslateGroupedBySheets = GetTranslatedTexts(questionnaire, translation, categoriesService)
                     .OrderByDescending(x => x.Sheet)
@@ -52,21 +53,21 @@ namespace WB.Infrastructure.Native.Questionnaire
 
                 foreach (var textsToTranslate in textsToTranslateGroupedBySheets)
                 {
-                    string workSheetName = this.GenerateWorksheetName(excelPackage.Workbook.Worksheets.Select(sheet => sheet.Name).ToList(),
+                    string workSheetName = this.GenerateWorksheetName(excelPackage.Worksheets.Select(sheet => sheet.Name).ToList(),
                         textsToTranslate.Key);
 
-                    var worksheet = excelPackage.Workbook.Worksheets.Add(workSheetName);
+                    IXLWorksheet worksheet = excelPackage.Worksheets.Add(workSheetName);
 
-                    worksheet.Cells["A1"].Value = TranslationExcelOptions.EntityIdColumnName;
-                    worksheet.Cells["B1"].Value = "Variable";
-                    worksheet.Cells["C1"].Value = TranslationExcelOptions.TranslationTypeColumnName;
-                    worksheet.Cells["D1"].Value = TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName;
-                    worksheet.Cells["E1"].Value = "Original text";
-                    worksheet.Cells["F1"].Value = TranslationExcelOptions.TranslationTextColumnName;
+                    worksheet.Cell("A1").Value = TranslationExcelOptions.EntityIdColumnName;
+                    worksheet.Cell("B1").Value = "Variable";
+                    worksheet.Cell("C1").Value = TranslationExcelOptions.TranslationTypeColumnName;
+                    worksheet.Cell("D1").Value = TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName;
+                    worksheet.Cell("E1").Value = "Original text";
+                    worksheet.Cell("F1").Value = TranslationExcelOptions.TranslationTextColumnName;
 
                     void FormatCell(string address)
                     {
-                        var cell = worksheet.Cells[address];
+                        var cell = worksheet.Cell(address);
                         cell.Style.Font.Bold = true;
                     }
 
@@ -85,18 +86,18 @@ namespace WB.Infrastructure.Native.Questionnaire
 
                         currentRowNumber++;
 
-                        worksheet.Cells[$"A{currentRowNumber}"].Value = translationRow.EntityId;
-                        worksheet.Cells[$"A{currentRowNumber}"].Style.WrapText = true;
-                        worksheet.Cells[$"B{currentRowNumber}"].Value = translationRow.Variable;
-                        worksheet.Cells[$"B{currentRowNumber}"].Style.WrapText = true;
-                        worksheet.Cells[$"C{currentRowNumber}"].Value = translationRow.Type;
-                        worksheet.Cells[$"C{currentRowNumber}"].Style.WrapText = true;
-                        worksheet.Cells[$"D{currentRowNumber}"].Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
-                        worksheet.Cells[$"D{currentRowNumber}"].Style.WrapText = true;
-                        worksheet.Cells[$"E{currentRowNumber}"].Value = CleanUpString(translationRow.OriginalText);
-                        worksheet.Cells[$"E{currentRowNumber}"].Style.WrapText = true;
-                        worksheet.Cells[$"F{currentRowNumber}"].Value = CleanUpString(translationRow.Translation);
-                        worksheet.Cells[$"F{currentRowNumber}"].Style.WrapText = true;
+                        worksheet.Cell($"A{currentRowNumber}").Value = translationRow.EntityId;
+                        worksheet.Cell($"A{currentRowNumber}").Style.Alignment.WrapText = true;
+                        worksheet.Cell($"B{currentRowNumber}").Value = translationRow.Variable;
+                        worksheet.Cell($"B{currentRowNumber}").Style.Alignment.WrapText = true;
+                        worksheet.Cell($"C{currentRowNumber}").Value = translationRow.Type;
+                        worksheet.Cell($"C{currentRowNumber}").Style.Alignment.WrapText = true;
+                        worksheet.Cell($"D{currentRowNumber}").Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
+                        worksheet.Cell($"D{currentRowNumber}").Style.Alignment.WrapText = true;
+                        worksheet.Cell($"E{currentRowNumber}").Value = CleanUpString(translationRow.OriginalText);
+                        worksheet.Cell($"E{currentRowNumber}").Style.Alignment.WrapText = true;
+                        worksheet.Cell($"F{currentRowNumber}").Value = CleanUpString(translationRow.Translation);
+                        worksheet.Cell($"F{currentRowNumber}").Style.Alignment.WrapText = true;
                     }
 
                     for (int i = 1; i <= 5; i++)
@@ -104,16 +105,17 @@ namespace WB.Infrastructure.Native.Questionnaire
                         LockAndAutofitColumn(worksheet, i);
                     }
 
-                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-
-                    worksheet.Column(6).AutoFit();
-                    worksheet.Protection.AllowFormatColumns = true;
+                    worksheet.Columns().AdjustToContents();
+                    worksheet.Protection.AllowElement(XLSheetProtectionElements.FormatColumns);
                 }
 
-                if (excelPackage.Workbook.Worksheets.Count == 0)
-                    excelPackage.Workbook.Worksheets.Add(TranslationExcelOptions.WorksheetName);
+                if (excelPackage.Worksheets.Count == 0)
+                    excelPackage.Worksheets.Add(TranslationExcelOptions.WorksheetName);
 
-                return excelPackage.GetAsByteArray();
+                var stream = new MemoryStream();
+                excelPackage.SaveAs(stream);
+                
+                return stream.ToArray();
             }
         }
 
@@ -138,11 +140,11 @@ namespace WB.Infrastructure.Native.Questionnaire
             return new string(text.Where(c => char.IsWhiteSpace(c) || !char.IsControl(c)).ToArray());
         }
 
-        private static void LockAndAutofitColumn(ExcelWorksheet worksheet, int i)
+        private static void LockAndAutofitColumn(IXLWorksheet worksheet, int i)
         {
-            worksheet.Column(i).Style.Locked = true;
-            worksheet.Column(i).Style.WrapText = true;
-            worksheet.Column(i).AutoFit();
+            worksheet.Column(i).Style.Protection.Locked = true;
+            worksheet.Column(i).Style.Alignment.WrapText = true;
+            worksheet.Column(i).AdjustToContents();
         }
 
         private IEnumerable<TranslationRow> GetTranslatedTexts(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
