@@ -67,7 +67,7 @@ export default {
             this.$emit('change', {
                 variable: this.question.variable,
                 field: this.field.id,
-                value: value == null ? null : value.toLowerCase(),
+                value: (value == null || value == '') ? null : value.toLowerCase(),
             })
         },
 
