@@ -62,9 +62,9 @@ namespace WB.Services.Export.Events
                             }
                             catch (Exception e)
                             {
-                                e.Data.Add("Event", ev.EventTypeName);
-                                e.Data.Add("GlobalSequence", ev.GlobalSequence);
-                                e.Data.Add("InterviewId", ev.EventSourceId);
+                                e.Data.Add("WB:Event", ev.EventTypeName);
+                                e.Data.Add("WB:GlobalSequence", ev.GlobalSequence);
+                                e.Data.Add("WB:InterviewId", ev.EventSourceId);
                                 throw;
                             }
                         }
@@ -102,9 +102,21 @@ namespace WB.Services.Export.Events
             }
             catch (Exception e)
             {
-                e.Data.Add("Events", $"{feed.Events.FirstOrDefault()?.GlobalSequence ?? -1}" +
+                e.Data.Add("WB:Events", $"{feed.Events.FirstOrDefault()?.GlobalSequence ?? -1}" +
                                      $":{feed.Events.LastOrDefault()?.GlobalSequence ?? -1}");
-                logger.LogCritical(e, e.Message);
+
+                var exc = e;
+                while (exc != null)
+                {
+                    logger.LogCritical(exc, exc.Message);
+                    foreach (var key in exc.Data.Keys)
+                    {
+                        if (key is string keyAsString && keyAsString.StartsWith("WB:"))
+                            logger.LogCritical($"Exception Data : {keyAsString} : {exc.Data[key]}");
+                    }
+                    exc = exc.InnerException;
+                }
+
                 throw;
             }
         }
