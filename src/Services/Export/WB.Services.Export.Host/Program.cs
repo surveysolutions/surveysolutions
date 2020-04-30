@@ -13,7 +13,8 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
-using Serilog.Formatting.Json;
+using Serilog.Formatting.Compact;
+using WB.Infrastructure.AspNetCore;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Infrastructure.Logging;
 
@@ -61,26 +62,14 @@ namespace WB.Services.Export.Host
         private static void ConfigureSerilog(LoggerConfiguration logConfig, IConfiguration configuration)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
 
-            var fileLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
-            var verboseLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-verbose-.log");
             var connectionString = GetConnectionString(configuration);
 
             logConfig
                 .ReadFrom.Configuration(configuration)
-                .Enrich.FromLogContext()
-                .Enrich.WithExceptionDetails()
-                .Enrich.WithProperty("AppType", "ExportService")
+                .ConfigureSurveySolutionsLogging(Directory.GetCurrentDirectory(), "export-service")
                 .Enrich.WithProperty("workerId", "root")
-                .Enrich.WithProperty("Version", fvi.FileVersion)
-                .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
-                .Enrich.WithProperty("Host", Environment.MachineName)
-                .WriteTo.Postgres(connectionString, LogEventLevel.Error)
-                .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose,
-                    retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
-                .WriteTo.File(new JsonFormatter(renderMessage: true), Path.GetFullPath(fileLog),
-                    rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5);
+                .WriteTo.Postgres(connectionString, LogEventLevel.Error);
 
             var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
             if (!string.IsNullOrWhiteSpace(hook))
