@@ -150,7 +150,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var sessionImpl = (SessionImpl)criteriaImpl.Session;
             var factory = (SessionFactoryImpl)sessionImpl.SessionFactory;
             var implementors = factory.GetImplementors(criteriaImpl.EntityOrClassName);
-            var loader = new CriteriaLoader((IOuterJoinLoadable)factory.GetEntityPersister(implementors[0]), factory, criteriaImpl, implementors[0], sessionImpl.EnabledFilters);
+            var entityPersister = factory.GetEntityPersister(implementors[0]) as AbstractEntityPersister;
+            var outerJoinLoadable = (IOuterJoinLoadable)entityPersister; 
+            var loader = new CriteriaLoader(outerJoinLoadable, factory, criteriaImpl, implementors[0], sessionImpl.EnabledFilters);
 
             if (loader.Translator.ProjectedColumnAliases.Length != 1)
             {
@@ -158,8 +160,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
 
             var aliasName = loader.Translator.ProjectedColumnAliases[0];
-            var propertyProjection = (PropertyProjection)criteriaImpl.Projection;
-            var columnName = propertyProjection.PropertyName;
+            PropertyProjection propertyProjection = (PropertyProjection)criteriaImpl.Projection;
+
+            var columnName = entityPersister.GetPropertyColumnNames(propertyProjection.PropertyName).First();
 
             var result = session.CreateSQLQuery($"WITH RECURSIVE t AS ( ({loader.SqlString} ORDER BY {columnName} LIMIT 1) " +
                                                 $"UNION ALL SELECT({loader.SqlString} and {columnName} > t.{aliasName} ORDER BY {columnName} LIMIT 1) FROM t WHERE t.{aliasName} IS NOT NULL)" +

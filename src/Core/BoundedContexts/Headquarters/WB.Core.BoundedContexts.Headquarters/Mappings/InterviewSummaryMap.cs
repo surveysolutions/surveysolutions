@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.QuestionnaireVariable, pm => pm.Column("questionnaire_variable"));
             Property(x => x.ResponsibleName);
             Property(x => x.ResponsibleNameLowerCase, pm => pm.Column("responsible_name_lower_case"));
-            Property(x => x.SupervisorId, pm => pm.Column(cm => cm.Name("teamleadid")));
+            Property(x => x.SupervisorId, pm => pm.Column("teamleadid"));
             Property(x => x.SupervisorName, pm => pm.Column("teamleadname"));
             Property(x => x.SupervisorNameLowerCase, pm => pm.Column("teamlead_name_lower_case"));
             Property(x => x.ResponsibleRole);
