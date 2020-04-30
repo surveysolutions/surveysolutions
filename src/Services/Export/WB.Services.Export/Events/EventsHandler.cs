@@ -64,7 +64,7 @@ namespace WB.Services.Export.Events
                             {
                                 e.Data.Add("WB:Event", ev.EventTypeName);
                                 e.Data.Add("WB:GlobalSequence", ev.GlobalSequence);
-                                e.Data.Add("WB:InterviewId", ev.EventSourceId);
+                                e.Data.Add("WB:EventSourceId", ev.EventSourceId);
                                 throw;
                             }
                         }
