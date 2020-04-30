@@ -15,8 +15,11 @@ type HeadquartersQuery {
 }
 
 type IPagedConnection {
+  "Filtered count of nodes without paging"
+  filteredCount: Int
   "A flattened list of the nodes."
   nodes: [Interview]
+  "Total count of nodes without filtering applied"
   totalCount: Int
 }
 

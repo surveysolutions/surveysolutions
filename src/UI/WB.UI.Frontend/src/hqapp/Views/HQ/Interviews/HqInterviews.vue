@@ -363,6 +363,7 @@ const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttr
 const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
   interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
     totalCount
+    filteredCount
     nodes {
       id
       key
@@ -429,7 +430,8 @@ export default {
             isLoading: false,
             selectedRows: [],
             selectedRowWithMenu: null,
-            totalRows: 0,
+            totalRows: 0, filteredCount: 0,
+            draw: 0,
             assignmentId: null,
             responsibleId: null,
             responsibleParams: {showArchived: true, showLocked: true},
@@ -659,9 +661,11 @@ export default {
                     }).then(response => {
                         const data = response.data.interviews
                         self.totalRows = data.totalCount
+                        self.filteredCount = data.filteredCount
                         callback({
                             recordsTotal: data.totalCount,
-                            recordsFiltered: data.totalCount,
+                            recordsFiltered: data.filteredCount,
+                            draw: ++this.draw,
                             data: data.nodes,
                         })
                     }).catch(err => {
@@ -679,17 +683,20 @@ export default {
                     selector: 'td>.checkbox-filter',
                     info: false,
                 },
+                dom: 'fritp',
                 sDom: 'rf<"table-with-scroll"t>ip',
                 searchHighlight: true,
             }
 
             return tableOptions
         },
+
         showSelectors() {
             return !this.config.isObserver && !this.config.isObserving
         },
+
         title() {
-            return this.$t('Common.Interviews') + ' (' + this.formatNumber(this.totalRows) + ')'
+            return this.$t('Common.Interviews') + ' (' + this.formatNumber(this.filteredCount) + ')'
         },
 
         config() {
