@@ -715,7 +715,8 @@ export default {
             const self = this
 
             if(this.where.questionnaireId) {
-                and.push({questionnaireId: this.where.questionnaireId})
+                const questionnaire = find(this.$config.model.questionnaires, {'key': this.where.questionnaireId})
+                and.push({questionnaireVariable: questionnaire.alias})
 
                 if(this.where.questionnaireVersion) {
                     and.push({questionnaireVersion: this.where.questionnaireVersion})
