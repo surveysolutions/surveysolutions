@@ -156,7 +156,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     if (interview.IsCompleted && DoNewEventsHaveComments(events))
                     {
                         var supervisorId = principal.CurrentUserIdentity.SupervisorId;
-                        var command = new RestartInterviewCommand(interview.InterviewId, supervisorId, "[system: Reopen after receive new comments]", DateTime.Now);
+                        var command = new RestartInterviewCommand(interview.InterviewId, supervisorId, "[system: Reopened after getting new comments]", DateTime.Now);
                         commandService.Execute(command);
                         statistics.ReopenedInterviewsAfterReceivedCommentsCount++;
                     }
