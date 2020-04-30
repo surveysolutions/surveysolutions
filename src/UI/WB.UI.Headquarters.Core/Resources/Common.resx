@@ -324,6 +324,9 @@
   <data name="Equals" xml:space="preserve">
     <value>Equals</value>
   </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Not equals</value>
+  </data>
   <data name="SelectOption" xml:space="preserve">
     <value>Select option</value>
   </data>
