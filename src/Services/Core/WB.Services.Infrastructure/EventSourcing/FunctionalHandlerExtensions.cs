@@ -81,6 +81,9 @@ namespace WB.Services.Infrastructure.EventSourcing
 
                     exception.Data.Add("WB:handlerMethod",
                             $"{eventsHandler.GetType().Name}.{method.Name}<{ev.Payload.GetType().Name}>(...)");
+
+                    exception.Data.Add("WB:initialException", tie.ToString());//saves original call stack and also inner exception info
+
                     throw exception;
                 }
             }
