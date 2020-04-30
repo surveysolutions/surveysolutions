@@ -11,6 +11,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.AspNetCore;
 
 namespace WB.UI.Headquarters
 {
@@ -37,22 +38,10 @@ namespace WB.UI.Headquarters
             Host.CreateDefaultBuilder(args)
                 .UseSerilog((host, loggerConfig) =>
                 {
-                    var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs",
-                        "headquarters.log");
-                    var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs",
-                        "headquarters.verbose.json.log");
-
                     loggerConfig
-                        .MinimumLevel.Verbose()
-                        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-                        //.MinimumLevel.Override("Serilog.AspNetCore", LogEventLevel.Warning)
-                        .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
-                        .MinimumLevel.Override("Anemonis.AspNetCore", LogEventLevel.Warning)
-                        .Enrich.FromLogContext()
-                        .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day,
-                            restrictedToMinimumLevel: LogEventLevel.Information)
-                        .WriteTo.File(new JsonFormatter(renderMessage: true), verboseLog, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 2);
-
+                        .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "Headquarters")
+                        .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning);
+                    
                     if (host.HostingEnvironment.IsDevelopment())
                     {
                         // To debug logitems source add {SourceContext} to output template
