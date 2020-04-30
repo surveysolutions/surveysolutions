@@ -7,6 +7,7 @@ using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -271,7 +272,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             IEnumeratorEventStorage eventStore = null,
             ILiteEventBus eventBus = null,
             ICommandService commandService =null,
-            IPrincipal principal = null,
+            IInterviewerPrincipal principal = null,
             IEventSourcedAggregateRootRepositoryCacheCleaner aggregateRootRepositoryCacheCleaner = null,
             IInterviewerSettings interviewerSettings = null)
         {
@@ -283,7 +284,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                principal ?? Mock.Of<IPrincipal>(),
+                principal ?? Mock.Of<IInterviewerPrincipal>(),
                 aggregateRootRepositoryCacheCleaner ?? Mock.Of<IEventSourcedAggregateRootRepositoryCacheCleaner>(),
                 interviewerSettings ?? Mock.Of<IInterviewerSettings>(s => s.PartialSynchronizationEnabled == true && s.AllowSyncWithHq == true));
 
