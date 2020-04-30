@@ -67,7 +67,7 @@
             </FilterBlock>
 
             <InterviewFilter slot="additional"
-                :questionnaireId="where.questionnaireId"
+                :questionnaireVariable="where.questionnaireVariable"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"
                 @change="questionFilterChanged" />
@@ -697,10 +697,15 @@ export default {
         },
 
         where() {
-            const data = {}
+            let data = {}
 
             if (this.status) data.status = this.status.key
-            if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
+            if (this.questionnaireId) {
+                data.questionnaireId = this.questionnaireId.key
+                const questionnaire = find(this.$config.model.questionnaires, {'key': this.questionnaireId.key})
+                data.questionnaireVariable = questionnaire.alias
+            }
+
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
@@ -715,8 +720,7 @@ export default {
             const self = this
 
             if(this.where.questionnaireId) {
-                const questionnaire = find(this.$config.model.questionnaires, {'key': this.where.questionnaireId})
-                and.push({questionnaireVariable: questionnaire.alias})
+                and.push({questionnaireVariable: this.where.questionnaireVariable})
 
                 if(this.where.questionnaireVersion) {
                     and.push({questionnaireVersion: this.where.questionnaireVersion})

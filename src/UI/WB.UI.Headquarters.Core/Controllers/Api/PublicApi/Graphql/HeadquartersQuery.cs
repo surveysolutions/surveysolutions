@@ -1,5 +1,4 @@
 #nullable enable
-using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
@@ -22,13 +21,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             descriptor.Field<QuestionsResolver>(x => x.Questions(default, default, default, default, default, default))
                 .Authorize()
                 .Type<ListType<QuestionItemObjectType>>()
-                .Argument("id", a => a.Description("Questionnaire id").Type<UuidType>())
+                .Argument("variable", a => a.Description("Questionnaire variable").Type<StringType>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<LongType>())
                 .Argument("language", a => a.Description("Questionnaire language").Type<StringType?>())
                 .UseFiltering<QuestionsFilterType>();
 
             descriptor.Field<UsersResolver>(x => x.GetViewer(default))
-                .Authorize(ApplyPolicy.BeforeResolver)
+                .Authorize()
                 .Type<UserType>().Name("viewer");
         }
     }

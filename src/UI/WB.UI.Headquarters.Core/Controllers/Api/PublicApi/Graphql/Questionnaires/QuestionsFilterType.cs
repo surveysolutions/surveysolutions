@@ -1,6 +1,4 @@
-using System;
 using HotChocolate.Types.Filters;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
