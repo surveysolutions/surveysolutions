@@ -26,6 +26,14 @@
                 <div class="col-sm-6">
                     <h3>
                         {{$t('Assignments.AssignmentInfo')}}
+                        <a
+                            v-if="model.webMode"
+                            :href="webInterviewUrl"
+                            target="_blank">
+                            <span
+                                :title="$t('Assignments.StartWebInterview')"
+                                class="glyphicon glyphicon-link"/>
+                        </a>
                         <span v-if="this.model.isArchived"
                             class="label label-default">{{$t('Common.Archived')}}</span>
                     </h3>
@@ -197,6 +205,9 @@ export default {
         },
         interviewsUrl() {
             return '../Interviews?assignmentId=' + this.model.id
+        },
+        webInterviewUrl() {
+            return `../WebInterview/${this.model.invitationToken}/Start`
         },
         quantity() {
             return this.model.quantity == null ? this.$t('Assignments.Unlimited') : this.model.quantity

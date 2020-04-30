@@ -349,9 +349,6 @@ Agradeceríamos que intente abordar todos los problemas marcados en su respuesta
   <data name="ResumeInterview" xml:space="preserve">
     <value>Reanudar entrevista</value>
   </data>
-  <data name="ResumeInterviewDescription" xml:space="preserve">
-    <value>Hemos notado que ya ha comenzado esta entrevista, pero no la terminó.</value>
-  </data>
   <data name="Start" xml:space="preserve">
     <value>Iniciar nueva entrevista</value>
   </data>

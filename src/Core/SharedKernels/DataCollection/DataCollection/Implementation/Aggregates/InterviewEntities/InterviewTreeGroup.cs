@@ -340,6 +340,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => this.Children.OfType<InterviewTreeGroup>()
                 .Where(group => !group.IsDisabled())
                 .Select(group => group.Identity);
+        
+        public IEnumerable<InterviewTreeGroup> GetAllSubGroups()
+            => this.Children.OfType<InterviewTreeGroup>();
 
         public List<Identity> DisableChildNodes()
         {

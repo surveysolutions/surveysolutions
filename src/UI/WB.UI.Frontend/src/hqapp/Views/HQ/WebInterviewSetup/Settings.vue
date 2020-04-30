@@ -419,9 +419,6 @@
                                                     <div class="row-element mb-40">
                                                         <p  class="font-bold">{{previewText(webInterviewPageMessages['resumeInvitation'].text)}}</p>
                                                     </div>
-                                                    <div class="row-element mb-40">
-                                                        <p  class="font-bold primary-text">{{$t('WebInterview.ResumeInterviewDescription')}}</p>
-                                                    </div>
                                                     <div class="row-element">
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-success btn-lg mb-1">
