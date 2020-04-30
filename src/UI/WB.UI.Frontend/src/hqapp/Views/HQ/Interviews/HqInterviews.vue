@@ -752,7 +752,7 @@ export default {
                 and.push({
                     OR: [
                         { responsibleName: this.responsibleId.value },
-                        { teamLeadName: this.responsibleId.value },
+                        { supervisorName: this.responsibleId.value },
                     ]})
             }
 

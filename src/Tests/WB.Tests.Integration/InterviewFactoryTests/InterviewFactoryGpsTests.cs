@@ -493,7 +493,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 var interviewSummary = new InterviewSummary
                 {
                     Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
-                    TeamLeadId = gpsAnswer.TeamLeadId ?? Guid.Empty,
+                    SupervisorId = gpsAnswer.TeamLeadId ?? Guid.Empty,
                     InterviewId = gpsAnswer.InterviewId,
                     ReceivedByInterviewer = false,
                     QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
