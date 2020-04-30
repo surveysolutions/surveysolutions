@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     QuestionnaireVersion = x.QuestionnaireVersion,
                     AssignmentId = x.AssignmentId,
                     ReceivedByInterviewer = x.ReceivedByInterviewer,
-                    TeamLeadName = x.TeamLeadName,
+                    TeamLeadName = x.SupervisorName,
                     Key = x.Key,
                     ClientKey = x.ClientKey
                 }).ToList()
@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (!string.IsNullOrWhiteSpace(input.SupervisorOrInterviewerName))
             {
-                items = items.Where(x => x.TeamLeadName == input.SupervisorOrInterviewerName || x.ResponsibleName == input.SupervisorOrInterviewerName);
+                items = items.Where(x => x.SupervisorName == input.SupervisorOrInterviewerName || x.ResponsibleName == input.SupervisorOrInterviewerName);
             }
 
             if (input.ResponsibleId.HasValue)
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (input.TeamId.HasValue)
             {
-                items = items.Where(x => x.ResponsibleId == input.TeamId || x.TeamLeadId == input.TeamId);
+                items = items.Where(x => x.ResponsibleId == input.TeamId || x.SupervisorId == input.TeamId);
             }
 
             if (input.QuestionnaireId.HasValue)
