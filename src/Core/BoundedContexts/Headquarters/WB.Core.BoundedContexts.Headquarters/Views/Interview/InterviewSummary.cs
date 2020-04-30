@@ -41,6 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 this.AnswersToFeaturedQuestions.Add(result);
             }
+
+            this.QuestionnaireVariable = questionnaire.VariableName;
         }
 
         public override Guid InterviewId

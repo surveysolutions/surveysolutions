@@ -10,11 +10,15 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             Create.Column("questionnaire_variable").OnTable("interviewsummaries")
                 .AsString()
                 .NotNullable().SetExistingRowsTo("");
-            
-            Execute.Sql(@"update readside.interviewsummaries s
+
+            if (Schema.Schema("plainstore").Table("questionnairebrowseitems").Exists())
+            {
+                Execute.Sql(@"update readside.interviewsummaries s
             set questionnaire_variable = variable 
             from (select variable, questionnaireid, ""version"" from plainstore.questionnairebrowseitems) q
                 where s.questionnaireid = q.questionnaireid  and questionnaireversion = q.""version""");
+            }
+            
 
             Create.Index().OnTable("interviewsummaries").OnColumn("questionnaire_variable");
         }
