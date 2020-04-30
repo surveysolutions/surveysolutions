@@ -333,9 +333,6 @@
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (الإصدار. {1})</value>
   </data>
-  <data name="ResumeInterviewDescription" xml:space="preserve">
-    <value>لقد لاحظنا أنك بدأت بالفعل هذه المقابلة ، لكنك لم تنته منها</value>
-  </data>
   <data name="Warning" xml:space="preserve">
     <value>تحذير</value>
   </data>
