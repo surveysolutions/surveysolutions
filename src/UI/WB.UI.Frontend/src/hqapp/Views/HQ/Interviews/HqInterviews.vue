@@ -644,7 +644,7 @@ export default {
                         where.AND.push({ OR: [
                             { key_starts_with: search.toLowerCase() },
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
-                            { teamLeadNameLowerCase_starts_with: search.toLowerCase() },
+                            { supervisorNameLowerCase_starts_with: search.toLowerCase() },
                             { identifyingQuestions_some: {
                                 answerLowerCase_starts_with: search.toLowerCase(),
                             },

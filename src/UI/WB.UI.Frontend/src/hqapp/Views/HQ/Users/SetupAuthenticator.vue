@@ -70,8 +70,6 @@
                                     <p>{{$t('Pages.EnableAuthenticatorLine4')}}</p>
                                     <p><b>{{$t('Pages.EnableAuthenticatorSharedKey')}} </b><kbd>{{sharedKey}}</kbd></p>
                                     <canvas id="qrCode"></canvas>
-                                    <div id="qrCodeData"
-                                        data-url="{{authenticatorUri}}"></div>
                                 </li>
                                 <li>
                                     <p>

@@ -9,7 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using Serilog.Formatting.Json;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.AspNetCore;
 
 namespace WB.UI.Headquarters
 {
@@ -22,7 +24,7 @@ namespace WB.UI.Headquarters
             {
                 return await new SupportTool.SupportTool(host).Run(args.Skip(1).ToArray());
             }
-            
+
             var version = host.Services.GetRequiredService<IProductVersion>();
             var applicationVersion = version.ToString();
             var logger = host.Services.GetRequiredService<ILogger>();
@@ -36,18 +38,10 @@ namespace WB.UI.Headquarters
             Host.CreateDefaultBuilder(args)
                 .UseSerilog((host, loggerConfig) =>
                 {
-                    var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "headquarters.log");
-                    var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "headquarters.verbose.log");
-
                     loggerConfig
-                        //.MinimumLevel.Debug()
-                        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-                        .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
-                        .Enrich.FromLogContext()
-                        .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day,
-                            restrictedToMinimumLevel: LogEventLevel.Warning)
-                        .WriteTo.File(verboseLog, rollingInterval: RollingInterval.Day,
-                            restrictedToMinimumLevel: LogEventLevel.Verbose, retainedFileCountLimit: 2);
+                        .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "Headquarters")
+                        .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning);
+                    
                     if (host.HostingEnvironment.IsDevelopment())
                     {
                         // To debug logitems source add {SourceContext} to output template
@@ -66,7 +60,7 @@ namespace WB.UI.Headquarters
                     c.AddEnvironmentVariables("HQ_");
                     c.AddCommandLine(args);
 
-                    if(hostingContext.HostingEnvironment.IsDevelopment())
+                    if (hostingContext.HostingEnvironment.IsDevelopment())
                     {
                         c.AddUserSecrets<Startup>();
                     }

@@ -859,6 +859,14 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children) => new QuestionnaireDocument
         {
+            HideIfDisabled = true,
+            PublicKey = id ?? Guid.NewGuid(),
+            Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+        }.WithEntityMap();
+        
+        public QuestionnaireDocument QuestionnaireDocumentWithHideIfDisabled(Guid? id = null, bool hideIfDisabled = true, params IComposite[] children) => new QuestionnaireDocument
+        {
+            HideIfDisabled = hideIfDisabled,
             PublicKey = id ?? Guid.NewGuid(),
             Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
         }.WithEntityMap();

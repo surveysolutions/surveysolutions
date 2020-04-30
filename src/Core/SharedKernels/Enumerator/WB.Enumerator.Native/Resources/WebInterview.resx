@@ -214,9 +214,6 @@
   <data name="ResumeInterview" xml:space="preserve">
     <value>Resume interview</value>
   </data>
-  <data name="ResumeInterviewDescription" xml:space="preserve">
-    <value>We have noticed that you have already started this interview, but did not finish it</value>
-  </data>
   <data name="DiscardAndStart" xml:space="preserve">
     <value>Reopen</value>
   </data>

@@ -28,6 +28,8 @@ namespace WB.UI.Headquarters.Models
         public string MainPdfUrl { get; set; }
         public string DesignerUrl { get; internal set; }
         public string Comment { get; set; }
+        
+        public string Variable { get; set; }
 
         public class User
         {
