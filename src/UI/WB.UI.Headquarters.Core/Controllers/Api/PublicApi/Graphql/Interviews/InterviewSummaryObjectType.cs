@@ -68,6 +68,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Type<IntType>();
 
             descriptor.Field(x => x.QuestionnaireId);
+            descriptor.Field(x => x.QuestionnaireVariable);
             descriptor.Field(x => x.QuestionnaireVersion);
             
             descriptor.Field(x => x.AnswersToFeaturedQuestions)
