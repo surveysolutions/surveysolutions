@@ -116,12 +116,12 @@ input InterviewFilter {
   status: InterviewStatus
   status_in: [InterviewStatus!]
   status_not: InterviewStatus
-  teamLeadName: String
-  teamLeadNameLowerCase: String
-  teamLeadNameLowerCase_in: [String]
-  teamLeadNameLowerCase_starts_with: String
-  teamLeadName_in: [String]
-  teamLeadName_starts_with: String
+  supervisorName: String
+  supervisorNameLowerCase: String
+  supervisorNameLowerCase_in: [String]
+  supervisorNameLowerCase_starts_with: String
+  supervisorName_in: [String]
+  supervisorName_starts_with: String
   updateDate_gt: DateTime
   updateDate_gte: DateTime
   updateDate_lt: DateTime
