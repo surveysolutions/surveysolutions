@@ -55,7 +55,6 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
                 })
             );
             this.plainQuestionnaire = new PlainQuestionnaire(this.questionnaire, 1, null, new SubstitutionService());
-
             interviewId = Guid.NewGuid();
 
             var questionnaireStorageLocal = PrepareQuestionnaire(questionnaire, 1);
@@ -138,6 +137,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
                 InterviewId = interviewId,
                 Status = InterviewStatus.Completed,
                 ResponsibleName = "responsible",
+                QuestionnaireVariable = plainQuestionnaire.VariableName,
                 ResponsibleId = Id.gC,
                 QuestionnaireId = questionnaire.PublicKey,
                 QuestionnaireVersion = 1,
