@@ -85,7 +85,8 @@ namespace WB.UI.Headquarters.Controllers
                 AudioAudit = browseItem.IsAudioRecordingEnabled,
                 DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
                               $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
-                Comment = browseItem.Comment
+                Comment = browseItem.Comment,
+                Variable = browseItem.Variable
             };
 
             if (browseItem.ImportedBy.HasValue && browseItem.ImportedBy != Guid.Empty)

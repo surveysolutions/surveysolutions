@@ -168,6 +168,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
+            bool IsSectionVisible(InterviewTreeGroup group) => !@group.IsDisabled() ||
+                @group.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(@group.Identity.Id);
+
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
             var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup);
             List<Identity> parentsOfCurrentGroup = GetCurrentSectionAndItsParentsIdentities(interview, this.navigationState.CurrentGroup);
@@ -184,10 +187,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             foreach (var identity in itemsToBeExpanded)
             {
                 itemsToBeExpandedAndTheirImmidiateChildren.Add(identity);
-                interview.GetGroup(identity)?.GetEnabledSubGroups().ForEach(x => itemsToBeExpandedAndTheirImmidiateChildren.Add(x));
+                interview.GetGroup(identity)?.GetAllSubGroups().Where(IsSectionVisible)
+                    .ForEach(x => itemsToBeExpandedAndTheirImmidiateChildren.Add(x.Identity));
             }
 
-            foreach (var sectionOrSubSection in interview.GetAllEnabledGroupsAndRosters().Where(x => !questionnaire.IsFlatRoster(x.Identity.Id)))
+            foreach (var sectionOrSubSection in  interview.GetAllGroupsAndRosters().Where(x =>
+                IsSectionVisible(x) && !questionnaire.IsFlatRoster(x.Identity.Id)))
             {
                 if (sectionOrSubSection is InterviewTreeSection)
                     yield return sectionOrSubSection.Identity;

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Infrastructure.AspNetCore\WB.Infrastructure.AspNetCore.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Designer\WB.Persistence.Designer.csproj" />
     <ProjectReference Include="..\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj" />
   </ItemGroup>
