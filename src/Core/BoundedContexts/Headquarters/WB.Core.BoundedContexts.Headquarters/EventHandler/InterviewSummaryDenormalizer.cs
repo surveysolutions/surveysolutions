@@ -146,6 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireVersion = questionnaireVersion,
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString(),
                 QuestionnaireTitle = questionnaire.Title,
+                QuestionnaireVariable = questionnaire.VariableName,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
                 ResponsibleRole = responsible?.Roles.First() ?? UserRoles.Interviewer,

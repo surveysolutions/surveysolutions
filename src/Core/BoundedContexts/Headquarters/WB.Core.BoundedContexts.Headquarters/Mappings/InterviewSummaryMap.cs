@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.PropertyKeyAlias(x => x.SummaryId, id => summary => summary.SummaryId == id);
 
             Property(x => x.QuestionnaireTitle);
+            Property(x => x.QuestionnaireVariable, pm => pm.Column("questionnaire_variable"));
             Property(x => x.ResponsibleName);
             Property(x => x.ResponsibleNameLowerCase, pm => pm.Column("responsible_name_lower_case"));
             Property(x => x.TeamLeadId, pm => pm.Column(cm => cm.Index("InterviewSummaries_TeamLeadId")));
