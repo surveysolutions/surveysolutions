@@ -1,8 +1,8 @@
 <template>
     <div class="block-filter"
         v-if="question != null && isSupported">
-        <h5 :title="sanitizeHtml(question.questionText)">
-            {{sanitizeHtml(question.questionText)}}
+        <h5 :title="sanitizeHtml(question.label || question.questionText)">
+            {{sanitizeHtml(question.label || question.questionText)}}
             <div>
                 <inline-selector :options="fieldOptions"
                     no-empty
