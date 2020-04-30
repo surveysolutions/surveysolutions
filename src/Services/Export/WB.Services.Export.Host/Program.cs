@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
+using Serilog.Formatting.Json;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Infrastructure.Logging;
 
@@ -78,11 +79,8 @@ namespace WB.Services.Export.Host
                 .WriteTo.Postgres(connectionString, LogEventLevel.Error)
                 .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose,
                     retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
-                .WriteTo
-                    .File(Path.GetFullPath(fileLog), LogEventLevel.Debug,
-                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
-                    rollingInterval: RollingInterval.Day);
-
+                .WriteTo.File(new JsonFormatter(renderMessage: true), Path.GetFullPath(fileLog),
+                    rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5);
 
             var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
             if (!string.IsNullOrWhiteSpace(hook))
