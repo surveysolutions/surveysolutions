@@ -14,7 +14,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             if (Schema.Schema("plainstore").Table("questionnairebrowseitems").Exists())
             {
                 Execute.Sql(@"update readside.interviewsummaries s
-            set questionnaire_variable = variable 
+            set questionnaire_variable = coalesce(variable, q.questionnaireid::text) 
             from (select variable, questionnaireid, ""version"" from plainstore.questionnairebrowseitems) q
                 where s.questionnaireid = q.questionnaireid  and questionnaireversion = q.""version""");
             }
