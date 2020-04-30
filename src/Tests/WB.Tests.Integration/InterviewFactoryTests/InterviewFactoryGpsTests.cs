@@ -499,7 +499,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
                     QuestionnaireId = gpsAnswer.QuestionnaireId.QuestionnaireId,
                     QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version,
-                    ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid()
+                    ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid(),
+                    QuestionnaireVariable = "automation"
                 };
                 interviewSummaryRepositoryLocal.Store(interviewSummary, gpsAnswer.InterviewId.FormatGuid());
 

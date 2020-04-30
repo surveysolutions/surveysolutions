@@ -457,6 +457,7 @@ namespace WB.Tests.Abc.TestFactories
                 WasCompleted = wasCompleted,
                 InterviewDuration = interviewingTotalTime,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
+                QuestionnaireVariable = "automation",
                 TimeSpansBetweenStatuses = timeSpans != null ? timeSpans.ToHashSet() : new HashSet<TimeSpanBetweenStatuses>()
             };
         }
