@@ -67,7 +67,7 @@
             </FilterBlock>
 
             <InterviewFilter slot="additional"
-                :questionnaireVariable="where.questionnaireVariable"
+                :questionnaireVariable="questionnaireVariable"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"
                 @change="questionFilterChanged" />
@@ -702,8 +702,6 @@ export default {
             if (this.status) data.status = this.status.key
             if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId.key
-                const questionnaire = find(this.$config.model.questionnaires, {'key': this.questionnaireId.key})
-                data.questionnaireVariable = questionnaire.alias
             }
 
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
@@ -714,13 +712,20 @@ export default {
 
             return data
         },
+        questionnaireVariable() {
+            if(this.where.questionnaireId == null)
+                return ''
+
+            const questionnaire = find(this.config.questionnaires, {'key': this.where.questionnaireId})
+            return questionnaire.alias
+        },
 
         whereQuery() {
             const and = []
             const self = this
 
             if(this.where.questionnaireId) {
-                and.push({questionnaireVariable: this.where.questionnaireVariable})
+                and.push({questionnaireVariable: this.questionnaireVariable})
 
                 if(this.where.questionnaireVersion) {
                     and.push({questionnaireVersion: this.where.questionnaireVersion})
