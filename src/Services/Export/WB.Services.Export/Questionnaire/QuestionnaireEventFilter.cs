@@ -89,7 +89,7 @@ namespace WB.Services.Export.Questionnaire
                 {
                     e.Data.Add("WB:Event", @event.EventTypeName);
                     e.Data.Add("WB:GlobalSequence", @event.GlobalSequence);
-                    e.Data.Add("WB:InterviewId", @event.EventSourceId);
+                    e.Data.Add("WB:EventSourceId", @event.EventSourceId);
 
                     throw;
                 }
