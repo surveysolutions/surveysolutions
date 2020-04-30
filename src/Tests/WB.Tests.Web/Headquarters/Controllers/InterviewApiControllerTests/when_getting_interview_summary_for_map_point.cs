@@ -19,7 +19,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
             var interviewSummary = new InterviewSummary()
             {
                 ResponsibleName = interviewerName,
-                TeamLeadName = supervisorName
+                SupervisorName = supervisorName
             };
             interviewSummary.Status = lastStatus;
             interviewSummary.UpdateDate = lastStatusDateTime;
