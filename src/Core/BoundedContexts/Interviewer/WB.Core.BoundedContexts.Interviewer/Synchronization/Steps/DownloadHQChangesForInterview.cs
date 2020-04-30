@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
         private readonly IEnumeratorEventStorage eventStore;
         private readonly ILiteEventBus eventBus;
         private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
+        private readonly IInterviewerPrincipal principal;
         private readonly IEventSourcedAggregateRootRepositoryCacheCleaner aggregateRootRepositoryCacheCleaner;
         private readonly IInterviewerSettings interviewerSettings;
 
@@ -52,7 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             IEnumeratorEventStorage eventStore,
             ILiteEventBus eventBus,
             ICommandService commandService,
-            IPrincipal principal,
+            IInterviewerPrincipal principal,
             IEventSourcedAggregateRootRepositoryCacheCleaner aggregateRootRepositoryCacheCleaner,
             IInterviewerSettings interviewerSettings) 
             : base(sortOrder, synchronizationService, logger)
@@ -154,8 +155,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
                     if (interview.IsCompleted && DoNewEventsHaveComments(events))
                     {
-                        var userId = principal.CurrentUserIdentity.UserId;
-                        var command = new RestartInterviewCommand(interview.InterviewId, userId, "reopen after get new comments", DateTime.Now);
+                        var supervisorId = principal.CurrentUserIdentity.SupervisorId;
+                        var command = new RestartInterviewCommand(interview.InterviewId, supervisorId, "[system: Reopen after receive new comments]", DateTime.Now);
                         commandService.Execute(command);
                         statistics.ReopenedInterviewsAfterReceivedCommentsCount++;
                     }
