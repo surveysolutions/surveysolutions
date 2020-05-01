@@ -42,8 +42,7 @@
                     <div class="block-filter">
                         <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Description')}}</p>
                     </div>
-                    <div class="block-filter"
-                        style="text-align: center;">
+                    <div class="block-filter">
                         <h3>
                             {{$t('Pages.AccountManage_Status2fa')}}
                             <span style="color:green;"
