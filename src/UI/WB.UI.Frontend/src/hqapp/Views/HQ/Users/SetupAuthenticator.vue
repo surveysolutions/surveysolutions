@@ -188,7 +188,7 @@ export default {
             for (var error in this.modelState) {
                 delete this.modelState[error]
             }
-
+            event.preventDefault()
             var self = this
             this.$http({
                 method: 'post',

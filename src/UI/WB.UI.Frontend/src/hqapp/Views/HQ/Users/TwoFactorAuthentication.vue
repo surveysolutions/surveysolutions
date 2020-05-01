@@ -71,12 +71,12 @@
                                         <span>{{$t('Strings.HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description')}}</span>
                                     </div>
                                     <div >
-                                        <a id="enable-authenticator"
-                                            :href="userInfo.isObserving ? '': getUrl('../../Users/SetupAuthenticator')"
+                                        <button id="enable-authenticator"
+                                            type="submit"
+                                            @click="navigateTo('../../Users/SetupAuthenticator')"
                                             style="display: inline-block;"
                                             v-bind:disabled="userInfo.isObserving"
-                                            class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}
-                                        </a>
+                                            class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}</button>
                                     </div>
                                 </div>
                             </div>
@@ -89,12 +89,13 @@
                                         <span>{{$t('Strings.HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description')}}</span>
                                     </div>
                                     <div>
-                                        <a id="reset-authenticator"
-                                            :href="userInfo.isObserving ? '': getUrl('../../Users/ResetAuthenticator')"
+                                        <button id="reset-authenticator"
+                                            type="submit"
+                                            @click="navigateTo('../../Users/ResetAuthenticator')"
                                             style="display: inline-block;"
                                             v-bind:disabled="userInfo.isObserving"
                                             class="btn btn-success">{{$t('Pages.ResetAuthenticator')}}
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -108,10 +109,12 @@
                                         <span>{{$t('Strings.HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description')}}</span>
                                     </div>
                                     <div >
-                                        <a :href="userInfo.isObserving ? '': getUrl('../../Users/GenerateRecoveryCodes')"
+                                        <button id="reset-codes"
+                                            type="submit"
+                                            @click="navigateTo('../../Users/ResetRecoveryCodes')"
                                             style="display: inline-block;"
                                             v-bind:disabled="userInfo.isObserving"
-                                            class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </a>
+                                            class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </button>
                                     </div>
                                 </div>
                             </div>
@@ -120,9 +123,12 @@
 
                     <div v-if="is2faEnabled">
                         <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Disable2fa_Description')}}</p>
-                        <a :href="userInfo.isObserving ? '': getUrl('../../Users/Disable2fa')"
+                        <button
+                            id="disable-2fa"
+                            type="submit"
+                            @click="navigateTo('../../Users/Disable2fa')"
                             class="btn btn-danger"
-                            v-bind:disabled="userInfo.isObserving">{{$t('Pages.Disable2fa')}}</a>
+                            v-bind:disabled="userInfo.isObserving">{{$t('Pages.Disable2fa')}}</button>
                     </div >
                 </div>
             </div>
@@ -224,6 +230,10 @@ export default {
             else
                 return baseUrl + '/' + this.model.userInfo.userId
 
+        },
+        navigateTo: function(location){
+            window.location.href = this.getUrl(location)
+            return false
         },
     },
 }
