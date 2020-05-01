@@ -20,7 +20,9 @@
                     <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
                 </li>
             </ol>
-            <h1>{{$t('Strings.HQ_Views_Manage_Title')}}</h1>
+            <h1>{{$t('Strings.HQ_Views_Manage_Title')}} <b v-if="!isOwnProfile">
+                : {{userInfo.userName}}
+            </b></h1>
         </div>
         <div class="extra-margin-bottom">
             <div class="profile">
@@ -38,16 +40,7 @@
 
                 <div class="col-sm-12">
                     <div>
-                        <!-- <div >
-                            <h2>{{$t('Pages.AccountManage_ChangePassword')}}</h2>
-                        </div> -->
                         <div >
-                            <form-group v-if="!isOwnProfile"
-                                :label="$t('Pages.AccountManage_Login')">
-                                <TextInput :value="userInfo.userName"
-                                    id="UserName"
-                                    disabled />
-                            </form-group>
                             <form-group
                                 v-if="isOwnProfile"
                                 :label="$t('FieldsAndValidations.OldPasswordFieldName')"

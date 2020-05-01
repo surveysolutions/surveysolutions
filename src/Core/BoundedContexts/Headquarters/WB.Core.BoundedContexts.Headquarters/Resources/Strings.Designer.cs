@@ -268,11 +268,65 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add an additional layer of security to your account to protect all your data.
+        ///   Looks up a localized string similar to Two factor authentication is an advanced security feature that makes it harder for a hacker to sign in to your account with just a stolen password..
         /// </summary>
         public static string HQ_Views_TwoFactorAuthentication_Description {
             get {
                 return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch off two factor authentication leaving the account protected only by the password..
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Disable2fa_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Disable2fa_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to disabled.
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Disabled {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to enabled.
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Enabled {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to a new secret code if any of your devices used for the two factor authentication is lost or stolen..
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalidate any unused recovery codes and generate 10 new ones..
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set up a new device for two factor authentication. You can set up several devices simultaneously..
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description", resourceCulture);
             }
         }
         

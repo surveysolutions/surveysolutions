@@ -142,6 +142,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Two factor authentication is currently .
+        /// </summary>
+        public static string AccountManage_Status2fa {
+            get {
+                return ResourceManager.GetString("AccountManage_Status2fa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit {0} profile.
         /// </summary>
         public static string AccountManage_Title {
