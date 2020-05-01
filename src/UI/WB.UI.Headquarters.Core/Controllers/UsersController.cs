@@ -497,7 +497,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
