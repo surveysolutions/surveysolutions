@@ -3634,7 +3634,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you reset your authenticator key your authenticator app will not work until you reconfigure it..
+        ///   Looks up a localized string similar to If you reset your authenticator key your authenticator app will not allow to log in until you reconfigure it..
         /// </summary>
         public static string ResetAuthenticatorLine1 {
             get {

@@ -68,25 +68,25 @@
                                     <p>
                                         {{$t('Pages.EnableAuthenticatorLine5')}}
                                     </p>
+                                    <form>
+                                        <form-group
+                                            :label="$t('FieldsAndValidations.VerificationCodeFieldName')"
+                                            :error="modelState['VerificationCode']">
+                                            <TextInput
+                                                v-model.trim="verificationCode"
+                                                :haserror="modelState['VerificationCode'] !== undefined"
+                                                id="VerificationCode"/>
+                                        </form-group>
+                                        <div class="block-filter">
+                                            <button
+                                                type="submit"
+                                                class="btn btn-success"
 
-                                    <form-group
-                                        :label="$t('FieldsAndValidations.VerificationCodeFieldName')"
-                                        :error="modelState['VerificationCode']">
-                                        <TextInput
-                                            v-model.trim="verificationCode"
-                                            :haserror="modelState['VerificationCode'] !== undefined"
-                                            id="VerificationCode"/>
-                                    </form-group>
-                                    <div class="block-filter">
-                                        <button
-                                            type="submit"
-                                            class="btn btn-success"
-
-                                            id="btnVerify"
-                                            v-bind:disabled="userInfo.isObserving"
-                                            @click="verify">{{$t('Pages.Verify')}}</button>
-                                    </div>
-
+                                                id="btnVerify"
+                                                v-bind:disabled="userInfo.isObserving"
+                                                @click="verify">{{$t('Pages.Verify')}}</button>
+                                        </div>
+                                    </form>
                                 </li>
                             </ol>
                         </div>
