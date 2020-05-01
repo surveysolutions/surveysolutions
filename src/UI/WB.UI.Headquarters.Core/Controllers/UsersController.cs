@@ -356,7 +356,7 @@ namespace WB.UI.Headquarters.Controllers
             var authenticatorUri =
                     string.Format(
                     AuthenticatorUriFormat,
-                    urlEncoder.Encode("Survey Solutions Headquarters"),
+                    urlEncoder.Encode("Survey Solutions"),
                     urlEncoder.Encode($"{user.UserName}@{uri.Host}"),
                     unformattedKey);
 

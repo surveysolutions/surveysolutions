@@ -20,7 +20,9 @@
                     <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
                 </li>
             </ol>
-            <h1>{{$t('Strings.HQ_Views_Manage_Title')}}</h1>
+            <h1>{{$t('Strings.HQ_Views_Manage_Title')}} <b v-if="!isOwnProfile">
+                : {{userInfo.userName}}
+            </b></h1>
         </div>
         <div class="extra-margin-bottom">
             <div class="profile">
@@ -37,49 +39,91 @@
                 </ul>
 
                 <div class="col-sm-12">
-                    <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Description')}}</p>
-                    <form-group v-if="!isOwnProfile"
-                        :label="$t('Pages.AccountManage_Login')">
-                        <TextInput :value="userInfo.userName"
-                            id="UserName"
-                            disabled />
-                    </form-group>
-
-                    <div v-if="is2faEnabled">
-
-                        <div class="alert alert-warning"
-                            v-if="recoveryCodesLeft <= 3">
-                            <strong>{{$t('Pages.RecoveryCodesLeft')}} {{recoveryCodesLeft}}.</strong>
-                            <p>{{$t('Pages.RecoveryCodesYouCan')}} <a :href="getUrl('../../Users/GenerateRecoveryCodes')">{{$t('Pages.GenerateRecoveryCodesLink')}}</a>.</p>
-                        </div>
-
-                        <a :href="getUrl('../../Users/Disable2fa')"
-                            class="btn btn-success"
-                            style="margin-right: 5px;">{{$t('Pages.Disable2fa')}}</a>
-                        <a :href="getUrl('../../Users/GenerateRecoveryCodes')"
-                            class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </a>
+                    <div class="block-filter">
+                        <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Description')}}</p>
+                    </div>
+                    <div class="block-filter"
+                        style="text-align: center;">
+                        <h3>
+                            {{$t('Pages.AccountManage_Status2fa')}}
+                            <span style="color:green;"
+                                v-if="is2faEnabled"> {{$t('Strings.HQ_Views_TwoFactorAuthentication_Enabled')}}
+                            </span>
+                            <span style="color:red;"
+                                v-if="!is2faEnabled"> {{$t('Strings.HQ_Views_TwoFactorAuthentication_Disabled')}}
+                            </span>
+                        </h3>
                     </div>
 
-                    <h5>{{$t('Pages.AccountManage_AuthenticatorApp')}}</h5>
+                    <div class="alert alert-warning"
+                        v-if="is2faEnabled && recoveryCodesLeft <= 3">
+                        <strong>{{$t('Pages.RecoveryCodesLeft')}} {{recoveryCodesLeft}}.</strong>
+                        <p>{{$t('Pages.RecoveryCodesYouCan')}} <a :href="getUrl('../../Users/GenerateRecoveryCodes')">{{$t('Pages.GenerateRecoveryCodesLink')}}</a>.</p>
+                    </div>
 
-                    <a v-if="!hasAuthenticator"
-                        id="enable-authenticator"
-                        :href="getUrl('../../Users/SetupAuthenticator')"
-                        class="btn btn-success">{{$t('Pages.AddAuthenticator')}}
-                    </a>
-                    <a v-if="hasAuthenticator"
-                        id="enable-authenticator"
-                        :href="getUrl('../../Users/SetupAuthenticator')"
-                        style="margin-right: 5px;"
-                        v-bind:disabled="userInfo.isObserving"
-                        class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}
-                    </a>
-                    <a v-if="hasAuthenticator"
-                        id="reset-authenticator"
-                        :href="getUrl('../../Users/ResetAuthenticator')"
-                        class="btn btn-success">{{$t('Pages.ResetAuthenticator')}}
-                    </a>
+                    <div class="row flex-row">
 
+                        <div class="col-sm-4">
+                            <div class="flex-block selection-box">
+                                <div class="block">
+                                    <div class="block-filter">
+                                        <h3>{{$t('Pages.SetupAuthenticator')}}</h3>
+                                        <span>{{$t('Strings.HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description')}}</span>
+                                    </div>
+                                    <div >
+                                        <a id="enable-authenticator"
+                                            :href="userInfo.isObserving ? '': getUrl('../../Users/SetupAuthenticator')"
+                                            style="display: inline-block;"
+                                            v-bind:disabled="userInfo.isObserving"
+                                            class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="flex-block selection-box">
+                                <div class="block">
+                                    <div class="block-filter">
+                                        <h3>{{$t('Pages.ResetAuthenticator')}}</h3>
+                                        <span>{{$t('Strings.HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description')}}</span>
+                                    </div>
+                                    <div>
+                                        <a id="reset-authenticator"
+                                            :href="userInfo.isObserving ? '': getUrl('../../Users/ResetAuthenticator')"
+                                            style="display: inline-block;"
+                                            v-bind:disabled="userInfo.isObserving"
+                                            class="btn btn-success">{{$t('Pages.ResetAuthenticator')}}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4"
+                            v-if="is2faEnabled">
+                            <div class="flex-block selection-box">
+                                <div class="block">
+                                    <div class="block-filter">
+                                        <h3>{{$t('Pages.ResetRecoveryCodes')}}</h3>
+                                        <span>{{$t('Strings.HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description')}}</span>
+                                    </div>
+                                    <div >
+                                        <a :href="userInfo.isObserving ? '': getUrl('../../Users/GenerateRecoveryCodes')"
+                                            style="display: inline-block;"
+                                            v-bind:disabled="userInfo.isObserving"
+                                            class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="is2faEnabled">
+                        <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Disable2fa_Description')}}</p>
+                        <a :href="userInfo.isObserving ? '': getUrl('../../Users/Disable2fa')"
+                            class="btn btn-danger"
+                            v-bind:disabled="userInfo.isObserving">{{$t('Pages.Disable2fa')}}</a>
+                    </div >
                 </div>
             </div>
         </div>
@@ -137,10 +181,24 @@ export default {
             return this.userInfo.isOwnProfile
         },
         referrerTitle() {
+            if (!this.isOwnProfile) {
+                if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
+                if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
+                if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
+                if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
+                if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
+            }
 
             return this.$t('Pages.Home')
         },
         referrerUrl() {
+            if (!this.isOwnProfile) {
+                if (this.isHeadquarters) return '../../Headquarters'
+                if (this.isSupervisor) return '../../Supervisors'
+                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
+                if (this.isObserver) return '../../Observers'
+                if (this.isApiUser) return '../../ApiUsers'
+            }
 
             return '/'
         },
