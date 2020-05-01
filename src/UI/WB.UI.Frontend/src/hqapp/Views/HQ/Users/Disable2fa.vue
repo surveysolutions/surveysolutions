@@ -21,6 +21,9 @@
                 </li>
             </ol>
             <h1>{{$t('Strings.HQ_Views_Manage_Title')}}</h1>
+            <h1>{{$t('Strings.HQ_Views_Manage_Title')}} <b v-if="!isOwnProfile">
+                : {{userInfo.userName}}
+            </b></h1>
         </div>
 
 
@@ -43,15 +46,6 @@
                         <div >
                             <h2>{{$t('Strings.HQ_Views_DisableTwoFactorAuth_Title')}}</h2>
                         </div>
-                        <div >
-                            <form-group v-if="!isOwnProfile"
-                                :label="$t('Pages.AccountManage_Login')">
-                                <TextInput :value="userInfo.userName"
-                                    id="UserName"
-                                    disabled />
-                            </form-group>
-                        </div>
-
                         <div  >
                             <div class="alert alert-warning"
                                 role="alert">
@@ -134,10 +128,24 @@ export default {
             return this.userInfo.isOwnProfile
         },
         referrerTitle() {
+            if (!this.isOwnProfile) {
+                if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
+                if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
+                if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
+                if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
+                if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
+            }
 
             return this.$t('Pages.Home')
         },
         referrerUrl() {
+            if (!this.isOwnProfile) {
+                if (this.isHeadquarters) return '../../Headquarters'
+                if (this.isSupervisor) return '../../Supervisors'
+                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
+                if (this.isObserver) return '../../Observers'
+                if (this.isApiUser) return '../../ApiUsers'
+            }
 
             return '/'
         },
