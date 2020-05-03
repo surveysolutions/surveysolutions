@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
                 map.Key(k =>
                 {
                     k.Column("\"UserId\"");
-                    k.Update(false); // to prevent extra update afer insert
+                    k.Update(false); // to prevent extra update after insert
                 });
                 map.Cascade(Cascade.None);
             }, rel =>
@@ -78,7 +78,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
                     {
                         comp.Property(p => p.LoginProvider);
                         comp.Property(p => p.ProviderKey);
+                        //comp.Property(p => p.UserId, m=> m.Column("UserId"));
                     });
+                    
                 });
 
             Set(x => x.DeviceSyncInfos, s =>

@@ -81,7 +81,7 @@ namespace WB.UI.Headquarters.Code.Authentication
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                //options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
             });
 
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Code.Authentication
 
             //adding AzureAD
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+                .AddAzureAD(options => Configuration.Bind("AzureAdWB", options));
             
             services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
             {

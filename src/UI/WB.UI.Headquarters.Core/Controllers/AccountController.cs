@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -14,8 +15,8 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
-using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Services;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -26,18 +27,21 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICaptchaProvider captchaProvider;
         private readonly SignInManager<HqUser> signInManager;
         protected readonly IAuthorizedUser authorizedUser;
-        
+        private readonly ILogger<AccountController> logger;
+
         public AccountController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
             ICaptchaService captchaService,
             ICaptchaProvider captchaProvider,
             SignInManager<HqUser> signInManager,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            ILogger<AccountController> logger)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.captchaService = captchaService;
             this.captchaProvider = captchaProvider;
             this.signInManager = signInManager;
             this.authorizedUser = authorizedUser;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -246,9 +250,37 @@ namespace WB.UI.Headquarters.Controllers
                 //logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return LocalRedirect(returnUrl);
             }
+            //user was not found by login
+            else if (result == SignInResult.Failed)
+            {
+                var preferredUsername = info.Principal.FindFirstValue("preferred_username");
 
-            //display that account doesn't exists
+                if (!string.IsNullOrEmpty(preferredUsername))
+                {
+                    var user = await signInManager.UserManager.FindByEmailAsync(preferredUsername);
+                    if (user != null)
+                    {
+                        var addLoginResult = await signInManager.UserManager.AddLoginAsync(user, info);
+                        if (addLoginResult.Succeeded)
+                        {
+                            logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                            
+                            await signInManager.SignInAsync(user, isPersistent: false);
+                            
+                            return LocalRedirect(returnUrl);
+                        }
+                    }
+                }
+                else
+                {
+
+                }
+            }
+
+
             return RedirectToAction("LogOn", new { ReturnUrl = returnUrl });
+            //display that account doesn't exists
+            //return RedirectToAction("LogOn", new { ReturnUrl = returnUrl });
 
             //add 2fa support
 

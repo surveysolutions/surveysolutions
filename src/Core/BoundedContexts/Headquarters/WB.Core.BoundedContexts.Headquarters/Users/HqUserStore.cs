@@ -77,9 +77,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
                 x.ProviderKey?.Equals(providerKey) == true);
         }
 
-        protected override Task<HqUserLogin> FindUserLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        protected override async Task<HqUserLogin> FindUserLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            return Task.FromResult((HqUserLogin)null);
+            var hqUser = await Users.SingleOrDefaultAsync(x =>
+                x.Logins.Any(y => y.ProviderKey == providerKey && y.LoginProvider == loginProvider), cancellationToken);
+
+
+            /*
+            await unitOfWork.Session.Query<HqUserLogin>()
+            .SingleOrDefaultAsync(userLogin => userLogin.LoginProvider == loginProvider
+                                               && userLogin.ProviderKey == providerKey, cancellationToken);*/
+                                               
+            var login = hqUser?.Logins.SingleOrDefault(y => y.ProviderKey == providerKey && y.LoginProvider == loginProvider);
+            if (login == null)
+                return null;
+            
+            //temp fix ambiguous column names and not full mapping 
+            login.UserId = hqUser.Id;
+            return login;
         }
 
         public override Task<IList<Claim>> GetClaimsAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
