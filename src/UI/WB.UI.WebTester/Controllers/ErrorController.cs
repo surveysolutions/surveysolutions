@@ -6,6 +6,6 @@ namespace WB.UI.WebTester.Controllers
     {
         public IActionResult QuestionnaireWithErrors() => View();
 
-        public IActionResult NotFound() => View();   
+        public new IActionResult NotFound() => View();   
     }
 }

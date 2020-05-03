@@ -208,8 +208,21 @@ namespace WB.UI.Interviewer.ViewModel
                 var sameInterview = pendingPause.InterviewId == interviewId;
                 var samePendingCommand = pendingPause.CommandIdentifier == cmdid;
 
-                if (pendingPause != null && delay > PauseResumeThrottling && sameInterview && samePendingCommand)
-                    commandService.Execute(pendingPause);
+                if (pendingPause != null 
+                    && delay > PauseResumeThrottling 
+                    && sameInterview 
+                    && samePendingCommand 
+                    && interviewRepository.Get(this.InterviewId) != null)//could be synced and deleted
+                {
+                    try
+                    {
+                        commandService.Execute(pendingPause);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Info($"Was not able to save pause event for {pendingPause.InterviewId}", e);
+                    }
+                }
 
                 pendingPause = null;
             }

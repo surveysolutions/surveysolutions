@@ -34,7 +34,6 @@
                                             class="form-group"
                                             :class="{ 'has-error': errors.has('questionnaireId') }">
                                             <Typeahead
-                                                fuzzy
                                                 control-id="questionnaireId"
                                                 :value="questionnaireId"
                                                 :placeholder="$t('Common.AllQuestionnaires')"
@@ -72,7 +71,6 @@
                                         <h5>{{$t('DataExport.StatusOfExportTitle')}}</h5>
                                         <Typeahead
                                             control-id="status"
-                                            fuzzy
                                             :selectedKey="pageState.status"
                                             data-vv-name="status"
                                             data-vv-as="status"
@@ -314,14 +312,11 @@
 <script>
 import Vue from 'vue'
 import ExportProcessCard from './ExportProcessCard'
-import {mixin as VueTimers} from 'vue-timers'
 
 const dataFormatNum = {Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6}
 const ExternalStorageType = {dropbox: 1, oneDrive: 2, googleDrive: 3}
 
 export default {
-    mixins: [VueTimers],
-
     data() {
         return {
             dataType: 'surveyData',
@@ -473,18 +468,18 @@ export default {
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
-            case 'surveyData':
-                format = dataFormatNum[dataFormat]
-                break
-            case 'binaryData':
-                format = dataFormatNum.Binary
-                break
-            case 'ddiData':
-                format = dataFormatNum.Ddi
-                break
-            case 'paraData':
-                format = dataFormatNum.Paradata
-                break
+                case 'surveyData':
+                    format = dataFormatNum[dataFormat]
+                    break
+                case 'binaryData':
+                    format = dataFormatNum.Binary
+                    break
+                case 'ddiData':
+                    format = dataFormatNum.Ddi
+                    break
+                case 'paraData':
+                    format = dataFormatNum.Paradata
+                    break
             }
 
             const status = (statusOption || {key: null}).key

@@ -138,10 +138,7 @@
                 }
                 padding: 15px;
                 vertical-align: middle;
-                height: 35px;
-                span{
-                    color: $gray_light;
-                }
+                height: 35px;              
                 .pull-right .glyphicon-remove, .caret{
                     color: #fff;
                 }
@@ -350,6 +347,7 @@
         td, th{
             &.checkbox-cell{
                 max-width: 40px;
+                width: 40px;
                 text-align: center;
                 padding: 15px 3px 15px 10px;
                 outline: none;

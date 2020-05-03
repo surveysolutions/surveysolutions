@@ -21,7 +21,6 @@
                 <Typeahead
                     ref="supervisorControl"
                     control-id="supervisor"
-                    fuzzy
                     data-vv-name="supervisor"
                     data-vv-as="supervisor"
                     :placeholder="$t('Common.AllSupervisors')"
@@ -35,7 +34,6 @@
                 <Typeahead
                     ref="facetControl"
                     control-id="facet"
-                    fuzzy
                     no-clear
                     data-vv-name="facet"
                     data-vv-as="facet"
@@ -50,7 +48,6 @@
                 <Typeahead
                     ref="archiveStatusControl"
                     control-id="archiveStatus"
-                    fuzzy
                     no-clear
                     :noPaging="false"
                     data-vv-name="archiveStatus"
@@ -163,16 +160,16 @@ export default {
             this.usersCount = formatNumber(data.recordsTotal)
             this.allInterviewers = data.data
         },
-        async archiveInterviewersAsync(isArchive) {            
+        async archiveInterviewersAsync(isArchive) {
             var response = await this.$http.post(this.model.archiveUsersUrl, {
                 archive: isArchive,
                 userIds: this.selectedInterviewers,
             })
-            
+
             if(!response.data.isSuccess)
                 toastr.warning(response.data.domainException)
-            
-            this.loadData()            
+
+            this.loadData()
         },
         archiveInterviewers() {
             var self = this

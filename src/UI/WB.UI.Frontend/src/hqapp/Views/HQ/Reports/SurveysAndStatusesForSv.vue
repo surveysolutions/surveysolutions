@@ -17,7 +17,7 @@
                     data-vv-name="responsibleId"
                     data-vv-as="responsible"
                     :placeholder="$t('Strings.AllInterviewers')"
-                    :value="responsible" 
+                    :value="responsible"
                     v-on:selected="selectResponsible"
                     :fetch-url="$config.model.responsiblesUrl"/>
             </FilterBlock>
@@ -54,7 +54,7 @@ export default {
             if (this.responsible) {
                 data.responsibleName = this.responsible.value
             }
-          
+
             if(this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId
             }
@@ -74,7 +74,7 @@ export default {
             if(data == 0)
                 return `<span>${data}</span>`
             const responsibleName = (this.responsible || {}).value
-            const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion || ''}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
+            const url = `${this.$config.model.interviewsUrl}?questionnaireId=${row.questionnaireId}&questionnaireVersion=${row.questionnaireVersion || ''}&responsibleName=${encodeURI(responsibleName || '')}&status=${status.toUpperCase()}`
             return `<a href=${url}>${escape(formatNumber(data))}</a>`
         },
     },
@@ -99,7 +99,7 @@ export default {
                             }
                             return escape(data)
                         }
-                        
+
                         return `<a href=${self.$config.model.selfUrl}?questionnaireId=${row.questionnaireId}>${escape(data)}</a>`
                     },
                 },
@@ -196,7 +196,7 @@ export default {
             ]
 
             if(self.questionnaireId) {
-                columns.splice(1, 0, 
+                columns.splice(1, 0,
                     {
                         data: 'questionnaireVersion',
                         className: 'type-numeric version centered-italic',

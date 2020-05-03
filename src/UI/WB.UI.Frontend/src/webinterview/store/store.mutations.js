@@ -51,7 +51,7 @@ export default {
     },
     SET_INTERVIEW_INFO(state, interviewInfo) {
         if(interviewInfo == null) return
-        
+
         state.questionnaireTitle = interviewInfo.questionnaireTitle
         state.firstSectionId = interviewInfo.firstSectionId
         state.interviewKey = interviewInfo.interviewKey

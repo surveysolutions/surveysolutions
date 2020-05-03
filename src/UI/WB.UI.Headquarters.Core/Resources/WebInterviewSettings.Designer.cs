@@ -369,6 +369,15 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Resume.
         /// </summary>
+        public static string Resume {
+            get {
+                return ResourceManager.GetString("Resume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume.
+        /// </summary>
         public static string ResumeEmailMessage {
             get {
                 return ResourceManager.GetString("ResumeEmailMessage", resourceCulture);
@@ -426,6 +435,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string StartInterviewButton {
             get {
                 return ResourceManager.GetString("StartInterviewButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start new interview.
+        /// </summary>
+        public static string StartNew {
+            get {
+                return ResourceManager.GetString("StartNew", resourceCulture);
             }
         }
         

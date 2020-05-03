@@ -22,6 +22,7 @@ namespace WB.UI.Headquarters.SupportTool
 
             this.Add(UsersCreateCommand());
             this.Add(ResetPasswordCommand());
+            this.Add(Disable2faCommand());
         }
 
         private Command UsersCreateCommand()
@@ -126,6 +127,54 @@ namespace WB.UI.Headquarters.SupportTool
                     else
                     {
                         logger.LogError($"Failed to reset password for user {username}");
+                        foreach (var error in result.Errors)
+                        {
+                            logger.LogError(error.Description);
+                        }
+
+                        unitOfWork.DiscardChanges();
+                    }
+                });
+
+            });
+            return cmd;
+        }
+
+        private Command Disable2faCommand()
+        {
+            var cmd = new Command("disable2fa")
+            {
+                new Option(new [] { "--username", "--login" })
+                {
+                    Required = true,
+                    Argument = new Argument<string>()
+                }
+            };
+
+            cmd.Handler = CommandHandler.Create<string>(async (username) =>
+            {
+                var inScopeExecutor = this.host.Services.GetRequiredService<IInScopeExecutor>();
+                await inScopeExecutor.ExecuteAsync(async (locator, unitOfWork) =>
+                {
+                    var loggerProvider = locator.GetInstance<ILoggerProvider>();
+                    var logger = loggerProvider.CreateLogger(nameof(Disable2faCommand));
+                    var userManager = locator.GetInstance<UserManager<HqUser>>();
+                    var user = await userManager.FindByNameAsync(username);
+                    if (user == null)
+                    {
+                        logger.LogError($"User {username} not found");
+                        unitOfWork.DiscardChanges();
+                        return;
+                    }
+                    
+                    var result = await userManager.SetTwoFactorEnabledAsync(user, false);
+                    if (result.Succeeded)
+                    {
+                        logger.LogInformation($"Disable 2fa for user {username} succeeded");
+                    }
+                    else
+                    {
+                        logger.LogError($"Failed to disable 2fa for user {username}");
                         foreach (var error in result.Errors)
                         {
                             logger.LogError(error.Description);

@@ -19,7 +19,7 @@ import { debounce } from 'lodash'
 export default {
     name: 'GroupTitle',
     mixins: [entityDetails],
-        
+
     watch: {
         ['$store.getters.scrollState']() {
             this.scroll()
@@ -63,7 +63,7 @@ export default {
             {
                 'answered': this.isCompleted,
             }]
-        },           
+        },
     },
     methods : {
         doScroll: debounce(function() {
@@ -75,7 +75,7 @@ export default {
 
         scroll() {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
-                this.doScroll() 
+                this.doScroll()
             }
         },
     },

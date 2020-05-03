@@ -14,6 +14,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
 
     public class ComboboxViewItem
     {
+        public ComboboxViewItem()
+        {
+            
+        }
+
+        public ComboboxViewItem(string key, string value, string alias = null)
+        {
+            Key = key;
+            Value = value;
+            Alias = alias;
+        }
+
+        public ComboboxViewItem(Enum key, string value, string alias = null)
+        {
+            Key = key.ToString();
+            Value = value;
+            Alias = alias;
+        }
+
         public string Key { get; set; }
         public string Value { get; set; }
         public string Alias { get; set; }

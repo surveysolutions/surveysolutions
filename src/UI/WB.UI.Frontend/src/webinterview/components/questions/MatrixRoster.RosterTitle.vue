@@ -14,7 +14,7 @@ export default {
             rowIndex : null,
             matrixRoster : null,
         }
-    }, 
+    },
     computed: {
         roster(){
             return this.matrixRoster.$me.instances[this.rowIndex]

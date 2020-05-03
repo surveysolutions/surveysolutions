@@ -9,7 +9,7 @@
             </ol>
             <h1>
                 {{$t( isDone ? 'Assignments.UpgradeProgressDoneTitle' : 'Assignments.UpgradeProgressTitle', {
-                    to: questionnaireName(progress.migrateTo), 
+                    to: questionnaireName(progress.migrateTo),
                     from: questionnaireName(progress.migrateFrom)
                 })}}
             </h1>

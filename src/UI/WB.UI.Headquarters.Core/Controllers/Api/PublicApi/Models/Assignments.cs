@@ -21,6 +21,10 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class AssignmentIdentifyingDataItem
     {
+        /// <summary>
+        /// Question identity
+        /// Expected format: GuidWithoutDashes_Int1-Int2, where _Int1-Int2 - codes of parent rosters (empty if question is not inside any roster). For example: 11111111111111111111111111111111_0-1 should be used for question on the second level
+        /// </summary>
         [DataMember]
         public string Identity { get; set; }
 
@@ -68,17 +72,17 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// Archived status to filter by. True or False
         /// </summary>
         [DataMember]
-        public bool Archived { get; set; } = false;
+        public bool Archived { get; set; }
 
         /// <summary>
-        /// Date when assignment were created
+        /// Date (UTC) when assignment were created
         /// Can be used for ordering
         /// </summary>
         [DataMember]
         public DateTime CreatedAtUtc { get; set; }
 
         /// <summary>
-        /// Last Update Date of assignment
+        /// Last Update Date (UTC) of assignment
         /// Can be used for ordering
         /// </summary>
         [DataMember]
@@ -92,6 +96,18 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember]
         public bool? WebMode { get; set; }
+        
+        /// <summary>
+        /// Represents date (UTC) when assignment was received by tablet
+        /// </summary>
+        [DataMember]
+        public DateTime? ReceivedByTabletAtUtc { get; set; }
+
+        /// <summary>
+        /// Determines if interview from this assignment must record voice during interview (only on tablet)
+        /// </summary>
+        [DataMember]
+        public bool IsAudioRecordingEnabled { get; set; }
     }
 
     public class AssignmentAssignRequest
@@ -185,7 +201,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember] public string Password { get; set; }
 
-        [DataMember] public bool? WebMode { get; set; }
+        [DataMember] public bool WebMode { get; set; }
 
         [DataMember] public bool? IsAudioRecordingEnabled { get; set; }
         [DataMember] public string Comments { get; set; }

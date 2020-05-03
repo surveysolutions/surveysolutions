@@ -16,16 +16,12 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
         protected static InterviewApiController CreateController(ICommandService commandService = null,
             IAuthorizedUser authorizedUser = null, ILogger logger = null,
             IAllInterviewsFactory allInterviewsViewFactory = null,
-            ITeamInterviewsFactory teamInterviewViewFactory = null,
-            IChangeStatusFactory changeStatusFactory = null,
-            IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
+            IChangeStatusFactory changeStatusFactory = null)
         {
             return new InterviewApiController(
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(), 
                 allInterviewsViewFactory ?? Stub<IAllInterviewsFactory>.WithNotEmptyValues,
-                teamInterviewViewFactory ?? Stub<ITeamInterviewsFactory>.WithNotEmptyValues,
-                changeStatusFactory ?? Stub<IChangeStatusFactory>.WithNotEmptyValues,
-                interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues);
+                changeStatusFactory ?? Stub<IChangeStatusFactory>.WithNotEmptyValues);
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <HqLayout>
-        <div class="row">            
+        <div class="row">
             <div class="col-md-6 col-xs-12">
                 <div class="panel"
                     :class="panelStatus">
@@ -12,8 +12,8 @@
                             Health status: {{report.status}}
                         </h3>
                     </div>
-                    <div class="panel-body">            
-                        <ul class="list-group">                        
+                    <div class="panel-body">
+                        <ul class="list-group">
                             <a class="list-group-item"
                                 v-for="entry in entries"
                                 :key="entry.name"
@@ -24,9 +24,9 @@
                                 <div class="well"
                                     v-if="entry.item.exception">{{ entry.item.exception.Message}}</div>
                             </a>
-                        </ul>        
+                        </ul>
                     </div>
-                </div>            
+                </div>
             </div>
             <div class="col-md-6 col-xs-12">
                 <div class="panel panel-default">
@@ -42,7 +42,7 @@
                                 :key="metric.name">
                                 <b>{{metric.name}}: </b>{{metric.value}}
                             </li>
-                        </ul>       
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -94,9 +94,9 @@ export default {
 
         statusToBs(status) {
             switch(status) {
-            case 'Healthy': return 'success'
-            case 'Degraded': return 'warning'
-            case 'Unhealthy': return 'danger'        
+                case 'Healthy': return 'success'
+                case 'Degraded': return 'warning'
+                case 'Unhealthy': return 'danger'
             }
         },
         itemStatus(entry) {
@@ -104,6 +104,6 @@ export default {
         },
     },
 }
-</script> 
+</script>
 
 <style></style>

@@ -58,6 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
 
 
         [Test]
+        [Platform(Exclude = "MacOsX", Reason = "Macos has no Eastern Standard Time timezone")]
         public void should_not_use_local_user_timezone_of_date_question_for_timestamp_question()
         {
             TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");

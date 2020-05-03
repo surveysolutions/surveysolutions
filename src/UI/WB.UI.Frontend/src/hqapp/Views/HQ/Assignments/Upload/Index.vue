@@ -2,7 +2,7 @@
     <HqLayout :hasFilter="false"
         :fixedWidth="true"
         :hasRow="false">
-        
+
         <template slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -11,7 +11,7 @@
             </ol>
             <h1>{{$t('BatchUpload.CreatingMultipleAssignments')}}</h1>
         </template>
-            
+
         <div class="row">
             <div class="col-sm-8">
                 <h2>

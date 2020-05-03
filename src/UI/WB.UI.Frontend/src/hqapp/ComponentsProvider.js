@@ -2,16 +2,16 @@ import { safeStore } from '~/webinterview/errors'
 /**
  * Components provider combine all view components and expose routes for router
  * Each component expect to have following interface
- * 
+ *
  * {
  *   constructor(rootStore);
  *   get routes()  # return array or routes that handle view component
  *   initialize()  # called once per view on first route navigation
  *   modules()     # object with VUEX modules that need to be registered for view
- * } 
- * 
+ * }
+ *
  * all interface functions/properties are optional
- * 
+ *
  */
 export default class ComponentsProvider {
     constructor(rootStore, initialComponents) {
@@ -58,8 +58,8 @@ export default class ComponentsProvider {
                             component._isInitialized = true
                         }
 
-                        if(beforeEnter != null){ 
-                            beforeEnter(to, from, next) 
+                        if(beforeEnter != null){
+                            beforeEnter(to, from, next)
                         }
                         else next()
                     }

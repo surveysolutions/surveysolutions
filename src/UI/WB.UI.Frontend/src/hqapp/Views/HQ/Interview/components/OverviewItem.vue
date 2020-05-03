@@ -34,8 +34,8 @@
                 </div>
                 <div v-else-if="item.controlType === 'audio'">
                     <audio controls
-                        preload="auto" 
-                        style="width:300px" 
+                        preload="auto"
+                        style="width:300px"
                         :src="audioRecordPath">
                     </audio>
                 </div>
@@ -110,11 +110,11 @@ export default {
     },
     methods: {
         showAdditionalDetails(){
-            if (this.item.isGroup || this.item.isSection) 
+            if (this.item.isGroup || this.item.isSection)
                 return
-            
-            const cantLeaveCommentAndNoWarningsNoErrors = !this.item.supportsComments 
-                && !this.item.hasWarnings 
+
+            const cantLeaveCommentAndNoWarningsNoErrors = !this.item.supportsComments
+                && !this.item.hasWarnings
                 && !this.item.hasErrors
 
             if (cantLeaveCommentAndNoWarningsNoErrors)
@@ -165,7 +165,7 @@ export default {
             return true
         },
         answerDate(){
-            if (!this.hasDate) return   
+            if (!this.hasDate) return
             let local = moment.utc(this.item.answerTimeUtc).local()
             return local.format('MMM DD')
         },
