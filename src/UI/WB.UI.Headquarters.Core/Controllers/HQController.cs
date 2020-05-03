@@ -43,7 +43,6 @@ namespace WB.UI.Headquarters.Controllers
             return RedirectToActionPermanent("Index", "Interviews");
         }
        
-        [ObserverNotAllowed]
         [Authorize(Roles = "Administrator")]
         public IActionResult ExportQuestionnaire(Guid id, long version)
         {

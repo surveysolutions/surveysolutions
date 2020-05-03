@@ -17,21 +17,21 @@
 
             this.onmessage = function (e) {
                 switch (e.data.command) {
-                case 'init':
-                    init(e.data.config)
-                    break
-                case 'record':
-                    record(e.data.buffer)
-                    break
-                case 'exportWAV':
-                    exportWAV(e.data.type)
-                    break
-                case 'getBuffers':
-                    getBuffers()
-                    break
-                case 'clear':
-                    clear()
-                    break
+                    case 'init':
+                        init(e.data.config)
+                        break
+                    case 'record':
+                        record(e.data.buffer)
+                        break
+                    case 'exportWAV':
+                        exportWAV(e.data.type)
+                        break
+                    case 'getBuffers':
+                        getBuffers()
+                        break
+                    case 'clear':
+                        clear()
+                        break
                 }
             }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
         {
             var invitationsToExport = this.GetInvitations(questionnaire);
 
-            var csvConfiguration = new Configuration
+            var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,

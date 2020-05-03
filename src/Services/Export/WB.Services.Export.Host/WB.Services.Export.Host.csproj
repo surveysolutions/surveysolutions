@@ -54,6 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Infrastructure.AspNetCore\WB.Infrastructure.AspNetCore.csproj" />
     <ProjectReference Include="..\..\Core\WB.Services.Scheduler\WB.Services.Scheduler.csproj" />
     <ProjectReference Include="..\WB.Services.Export\WB.Services.Export.csproj" />
   </ItemGroup>

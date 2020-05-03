@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {
             var dbQuestionnaires = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
-            var dbAssignments = this.assignmentsRepository.LoadAll();
+            var dbAssignments = this.assignmentsRepository.LoadAll().SortAssignments();
             
             if (dbQuestionnaires.Count > 0 || dbAssignments.Count > 0)
             {

@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     compositeItem.IsFilteredCombobox = abstractQuestion.IsFilteredCombobox ?? false;
                     compositeItem.QuestionText = abstractQuestion.QuestionText;
                     compositeItem.VariableLabel = abstractQuestion.VariableLabel;
-                    compositeItem.StatExportCaption = abstractQuestion.StataExportCaption;
+                    compositeItem.StataExportCaption = abstractQuestion.StataExportCaption;
                 }
 
                 questionnaireItemsWriter.Store(compositeItem);

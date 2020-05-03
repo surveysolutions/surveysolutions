@@ -49,7 +49,7 @@ export default {
         changeSection(to, from) {
             return this.$store.dispatch('changeSection', { to, from })
         },
-            
+
         connected() {
             this.changeSection(this.$route.params.sectionId)
             this.$store.dispatch('getLanguageInfo')

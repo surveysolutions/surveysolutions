@@ -10,6 +10,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.Security.Application;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using UAParser;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -32,7 +33,7 @@ namespace WB.UI.Headquarters.Code
 
         private static Regex buildVersionRegex = new Regex("build (\\d+)", RegexOptions.Compiled);
 
-        public static int? GetBuildNumberFromUserAgent(this HttpRequest request)
+        public static int? GetBuildNumberFromUserAgent(this HttpRequest request) 
         {
             if (request?.Headers?.ContainsKey(HeaderNames.UserAgent) != true) return null;
 
@@ -123,6 +124,41 @@ namespace WB.UI.Headquarters.Code
                 originalSource.AsSpan().CopyTo(resultSpan);
                 resultSpan[0] = Char.ToUpper(resultSpan[0]);
             });
+        }
+
+        private static Regex tabletVersionRegex = new Regex(@"org\.worldbank\.solutions\.(?<appname>\w+)/(?<version>[\d\.]+) \(build (?<build>\d+)\)", RegexOptions.Compiled);
+
+
+        public static Version GetProductVersionFromUserAgent(this HttpRequest request, string productName)
+        {
+            string userAgentString = request.Headers["User-Agent"].ToString();
+ 
+            if (userAgentString?.StartsWith(productName, StringComparison.OrdinalIgnoreCase) ?? false)
+            {
+                var parser = Parser.GetDefault();
+                var userAgent = parser.ParseUserAgent(userAgentString);
+
+                if (userAgent.Family == Parser.Other)
+                {
+                    var match = tabletVersionRegex.Match(userAgentString);
+                    if (match.Success)
+                    {
+                        var versionString = match.Groups["version"].Value;
+                        return new Version(versionString);
+                    }
+                }
+
+                if (int.TryParse(userAgent.Major, out int major)
+                    && int.TryParse(userAgent.Minor, out int minor))
+                {
+                    if (int.TryParse(userAgent.Patch, out int patch))
+                        return new Version(major, minor, patch);
+                    else 
+                        return new Version(major, minor);
+                }
+            }
+
+            return null;
         }
     }
 }

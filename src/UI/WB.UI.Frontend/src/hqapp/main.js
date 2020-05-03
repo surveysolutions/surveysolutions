@@ -5,6 +5,9 @@ import '../assets/css/markup.scss'
 import '../assets/css/markup-specific.scss'
 
 import Vue from 'vue'
+import VueApollo from 'vue-apollo'
+
+Vue.use(VueApollo)
 import { sync } from 'vuex-router-sync'
 import Vuei18n from '~/shared/plugins/locale'
 import http from '~/shared/plugins/http'
@@ -29,6 +32,7 @@ import * as poly from 'smoothscroll-polyfill'
 poly.polyfill()
 
 import hqApi from './api'
+import apolloClient from './api/graphql'
 
 import { browserLanguage } from '~/shared/helpers'
 moment.locale(browserLanguage)
@@ -56,4 +60,7 @@ export default new Vue({
     render: h => h('router-view'),
     store,
     router,
+    apolloProvider: new VueApollo({
+        defaultClient: apolloClient,
+    }),
 })

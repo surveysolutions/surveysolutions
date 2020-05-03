@@ -17,7 +17,7 @@
                     data-vv-name="responsibleId"
                     data-vv-as="responsible"
                     :placeholder="$t('Strings.AllTeams')"
-                    :value="responsible" 
+                    :value="responsible"
                     v-on:selected="selectResponsible"
                     :fetch-url="$config.model.responsiblesUrl"/>
             </FilterBlock>
@@ -55,7 +55,7 @@ export default {
             if (this.responsible) {
                 data.responsibleName = this.responsible.value
             }
-          
+
             if(this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId
             }
@@ -76,7 +76,7 @@ export default {
             if (value == 0)
                 return '<span>0</span>'
             const responsibleName = (this.responsible || {}).value
-            const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion || ''}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
+            const url = `${this.$config.model.interviewsUrl}?questionnaireId=${row.questionnaireId}&questionnaireVersion=${row.questionnaireVersion || ''}&responsibleName=${encodeURI(responsibleName || '')}&status=${status.toUpperCase()}`
             return `<a href=${url}>${formatNumber(value)}</a>`
         },
     },
@@ -100,7 +100,7 @@ export default {
                         }
 
                         if(self.questionnaireId != null) {
-                           
+
                             return escape(data)
                         }
 
@@ -110,7 +110,7 @@ export default {
                         else
                             url += '?'
                         url += `questionnaireId=${row.questionnaireId}`
-                        
+
                         return `<a href=${url}>${escape(data)}</a>`
                     },
                 },
@@ -213,7 +213,7 @@ export default {
             ]
 
             if(self.questionnaireId) {
-                columns.splice(1, 0, 
+                columns.splice(1, 0,
                     {
                         data: 'questionnaireVersion',
                         name: 'QuestionnaireVersion',

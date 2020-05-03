@@ -26,6 +26,14 @@
                 <div class="col-sm-6">
                     <h3>
                         {{$t('Assignments.AssignmentInfo')}}
+                        <a
+                            v-if="model.webMode"
+                            :href="webInterviewUrl"
+                            target="_blank">
+                            <span
+                                :title="$t('Assignments.StartWebInterview')"
+                                class="glyphicon glyphicon-link"/>
+                        </a>
                         <span v-if="this.model.isArchived"
                             class="label label-default">{{$t('Common.Archived')}}</span>
                     </h3>
@@ -180,7 +188,7 @@ export default {
             return this.model.receivedByTabletAtUtc != null ? this.$t('Common.Yes') : this.$t('Common.No')
         },
         isWebMode() {
-            return this.model.webMode ? this.$t('Common.Yes') : this.$t('Common.No')
+            return this.model.webMode === false ?  this.$t('Common.No') : this.$t('Common.Yes')
         },
         interviewsCount() {
             if (this.model.quantity == null || this.model.quantity < 0) return this.$t('Assignments.Unlimited')
@@ -197,6 +205,9 @@ export default {
         },
         interviewsUrl() {
             return '../Interviews?assignmentId=' + this.model.id
+        },
+        webInterviewUrl() {
+            return `../WebInterview/${this.model.invitationToken}/Start`
         },
         quantity() {
             return this.model.quantity == null ? this.$t('Assignments.Unlimited') : this.model.quantity
@@ -234,45 +245,45 @@ export default {
                     width: '50%',
                     render(data, type, row) {
                         switch (row.Action) {
-                        case 'Created': {
-                            let createdText = self.$t('Assignments.Action_Created_Responsible', {
-                                responsible: data.Responsible,
-                            })
-                            if (data.comment) {
-                                createdText +=
-                                        '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: data.Comment})
-                            }
-                            return createdText
-                        }
-                        case 'AudioRecordingChanged':
-                            if (data.AudioRecording) {
-                                return self.$t('Assignments.Action_AudioRecordingChanged_True')
-                            } else {
-                                return self.$t('Assignments.Action_AudioRecordingChanged_False')
-                            }
-                        case 'Reassigned': {
-                            let result = self.$t('Assignments.Action_Reassigned_To', {
-                                newResponsible: data.NewResponsible,
-                            })
-                            if (data.Comment) {
-                                result += '<br/>'
-                                result += self.$t('Assignments.Action_Reassigned_To_Comment', {
-                                    comment: data.Comment,
+                            case 'Created': {
+                                let createdText = self.$t('Assignments.Action_Created_Responsible', {
+                                    responsible: data.Responsible,
                                 })
+                                if (data.comment) {
+                                    createdText +=
+                                        '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: data.Comment})
+                                }
+                                return createdText
                             }
-                            return result
-                        }
-                        case 'QuantityChanged':
-                            if (data.Quantity == null) {
-                                return self.$t('Assignments.Action_QuantityChanged_To_Unlimited')
+                            case 'AudioRecordingChanged':
+                                if (data.AudioRecording) {
+                                    return self.$t('Assignments.Action_AudioRecordingChanged_True')
+                                } else {
+                                    return self.$t('Assignments.Action_AudioRecordingChanged_False')
+                                }
+                            case 'Reassigned': {
+                                let result = self.$t('Assignments.Action_Reassigned_To', {
+                                    newResponsible: data.NewResponsible,
+                                })
+                                if (data.Comment) {
+                                    result += '<br/>'
+                                    result += self.$t('Assignments.Action_Reassigned_To_Comment', {
+                                        comment: data.Comment,
+                                    })
+                                }
+                                return result
                             }
-                            return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.Quantity})
-                        case 'WebModeChanged':
-                            if (data.WebMode) {
-                                return self.$t('Assignments.Action_WebModeChanged_True')
-                            } else {
-                                return self.$t('Assignments.Action_WebModeChanged_False')
-                            }
+                            case 'QuantityChanged':
+                                if (data.Quantity == null) {
+                                    return self.$t('Assignments.Action_QuantityChanged_To_Unlimited')
+                                }
+                                return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.Quantity})
+                            case 'WebModeChanged':
+                                if (data.WebMode) {
+                                    return self.$t('Assignments.Action_WebModeChanged_True')
+                                } else {
+                                    return self.$t('Assignments.Action_WebModeChanged_False')
+                                }
                         }
                         return ''
                     },
@@ -292,7 +303,7 @@ export default {
                     contentType: 'application/json',
                     dataSrc: function ( responseJson ) {
                         responseJson.recordsTotal = responseJson.RecordsFiltered
-                        responseJson.recordsFiltered = responseJson.RecordsFiltered 
+                        responseJson.recordsFiltered = responseJson.RecordsFiltered
                         return responseJson.History
                     },
                 },

@@ -22,9 +22,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         ICommandValidator<StatefulInterview, AnswerQRBarcodeQuestionCommand>,
         ICommandValidator<StatefulInterview, AnswerTextListQuestionCommand>
     {
-        private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
+        private readonly IAllInterviewsFactory interviewSummaryViewFactory;
 
-        public InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory)
+        public InterviewAnswersCommandValidator(IAllInterviewsFactory interviewSummaryViewFactory)
         {
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
         }

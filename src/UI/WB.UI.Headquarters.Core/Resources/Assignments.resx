@@ -418,7 +418,7 @@
     <value>Received by tablet</value>
   </data>
   <data name="Action_UnArchived" xml:space="preserve">
-    <value>Unarchived </value>
+    <value>Unarchived</value>
   </data>
   <data name="Action_Reassigned" xml:space="preserve">
     <value>Reassigned</value>
@@ -471,5 +471,8 @@
   </data>
   <data name="Action_Created_Responsible" xml:space="preserve">
     <value>Assigned to {{responsible}}</value>
+  </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>Start web interview</value>
   </data>
 </root>

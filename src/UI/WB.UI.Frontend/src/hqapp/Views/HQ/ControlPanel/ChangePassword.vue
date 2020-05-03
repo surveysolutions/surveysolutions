@@ -38,7 +38,7 @@
                             :haserror="modelState['ConfirmPassword'] != null"/>
                     </form-group>
                     <div class="form-group">
-                    
+
                         <button type="submit"
                             class="btn btn-primary">
                             {{$t('Users.ResetPassword')}}
@@ -48,7 +48,7 @@
                             v-text="$config.model.succeededText">
                         </span>
                     </div>
-                    
+
                 </fieldset>
             </form>
         </div>

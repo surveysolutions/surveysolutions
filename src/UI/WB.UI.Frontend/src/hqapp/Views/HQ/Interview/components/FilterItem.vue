@@ -44,7 +44,7 @@ export default {
 
     computed: {
         found() {
-            return this.$store.state.review.filters.stats[this.option] 
+            return this.$store.state.review.filters.stats[this.option]
         },
         state() {
             return  this.$store.getters.filteringState[this.option]

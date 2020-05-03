@@ -25,7 +25,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    internal class FilteredSingleOptionQuestionViewModelTests : FilteredSingleOptionQuestionViewModelTestsContext
+    public class FilteredSingleOptionQuestionViewModelTests : FilteredSingleOptionQuestionViewModelTestsContext
     {
         [Test]
         public void when_entering_filter_text()

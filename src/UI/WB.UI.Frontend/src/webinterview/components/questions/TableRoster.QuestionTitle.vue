@@ -31,7 +31,7 @@ export default {
             hasInstructions: false,
             questionId: null,
         }
-    }, 
+    },
     computed: {
 
     },
