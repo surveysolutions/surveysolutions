@@ -6,7 +6,8 @@
                 {{$config.model.description}}
             </p>
         </div>
-        <StartOrResumeForm :buttonTitle="$t('WebInterview.Start')" />
+        <StartOrResumeForm :buttonTitle="$config.model.startNewButton"
+            :resumeButtonTitle="$config.model.resumeButton" />
     </div>
 </template>
 

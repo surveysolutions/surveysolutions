@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var title = Common.Interviews;
 
-            var statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.currentUser.IsSupervisor).ToList();
+            var statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.currentUser).ToList();
 
             var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
@@ -49,14 +49,11 @@ namespace WB.UI.Headquarters.Controllers
                 IsObserving = this.currentUser.IsObserving,
                 IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator,
                 Title = title,
-                AllInterviews = this.currentUser.IsSupervisor ? Url.Content(@"~/api/InterviewApi/GetTeamInterviews") : Url.Content(@"~/api/InterviewApi/Interviews"),
                 AssignmentsUrl = @Url.Action("Index", "Assignments"),
                 InterviewReviewUrl = Url.Action("Review", "Interview"),
                 ProfileUrl = Url.Action("Profile", "Interviewer"),
                 CommandsUrl = Url.Action("ExecuteCommands", "CommandApi"),
-                Statuses = statuses
-                    .Select(item => new ComboboxViewItem { Key = ((int)item.Status).ToString(), Value = item.Status.ToLocalizeString(), Alias = item.Status.ToString() })
-                    .ToArray(),
+                Statuses = statuses.ToArray(),
                 Questionnaires = questionnaires
             };
 

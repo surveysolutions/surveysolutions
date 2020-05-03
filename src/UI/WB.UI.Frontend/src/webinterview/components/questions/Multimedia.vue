@@ -15,7 +15,7 @@
                     ref="uploader"
                     v-show="false"
                     accept="image/*"
-                    type="file" 
+                    type="file"
                     @change="onFileChange"
                     class="btn btn-default btn-lg btn-action-questionnaire" />
                 <button type="button"
@@ -24,7 +24,7 @@
                     v-if="!$me.isAnswered && !inFetchState"
                     @click="$refs.uploader.click()">{{ $t("WebInterviewUI.PhotoUpload") }}</button>
                 <wb-lock />
-            </div>            
+            </div>
         </div>
     </wb-question>
 </template>

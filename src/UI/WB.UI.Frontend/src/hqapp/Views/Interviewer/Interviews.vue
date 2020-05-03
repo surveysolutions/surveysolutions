@@ -5,7 +5,6 @@
             <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead
                     control-id="questionnaireId"
-                    fuzzy
                     data-vv-name="questionnaireId"
                     data-vv-as="questionnaire"
                     :placeholder="$t('Common.AllQuestionnaires')"
@@ -17,7 +16,6 @@
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
                 <Typeahead
                     control-id="questionnaireVersion"
-                    fuzzy
                     data-vv-name="questionnaireVersion"
                     data-vv-as="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
@@ -47,8 +45,7 @@
         <DataTables
             ref="table"
             :tableOptions="tableOptions"
-            :addParamsToRequest="addFilteringParams"
-            :contextMenuItems="contextMenuItems"></DataTables>
+            :contextMenuItems="contextMenuItems" />
 
         <Confirm ref="confirmRestart"
             id="restartModal"
@@ -76,7 +73,30 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
-import {map, join} from 'lodash'
+import {map, join, toNumber} from 'lodash'
+import gql from 'graphql-tag'
+
+const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
+  interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
+    totalCount
+    nodes {
+      id
+      key
+      assignmentId
+      updateDate
+      status
+      receivedByInterviewer
+      actionFlags
+      identifyingQuestions {
+        question {
+          questionText
+          label
+        }
+        answer
+      }
+    }
+  }
+}`
 
 export default {
     data() {
@@ -104,16 +124,96 @@ export default {
         title() {
             return this.$config.title
         },
+        where() {
+            const data = {}
 
+            if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
+            if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
+            if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
+
+            return data
+        },
+        whereQuery() {
+            const and = []
+
+            if(this.where.questionnaireId) {
+                and.push({questionnaireId: this.where.questionnaireId})
+
+                if(this.where.questionnaireVersion) {
+                    and.push({questionnaireVersion: this.where.questionnaireVersion})
+                }
+            }
+            if(this.where.assignmentId){
+                and.push({assignmentId: this.where.assignmentId})
+            }
+
+            and.push({ status_in: this.$config.model.statuses})
+
+            return and
+        },
         tableOptions() {
+            const self = this
             return {
                 rowId: 'id',
                 order: [[3, 'desc']],
                 deferLoading: 0,
                 columns: this.getTableColumns(),
-                ajax: {
-                    url: this.$config.model.allInterviews,
-                    type: 'GET',
+                ajax(data, callback, _) {
+                    const order = {}
+                    const order_col = data.order[0]
+                    const column = data.columns[order_col.column]
+
+                    order[column.data] = order_col.dir.toUpperCase()
+
+                    const variables = {
+                        order: order,
+                        skip: data.start,
+                        take: data.length,
+                    }
+
+                    const where = {
+                        AND: [...self.whereQuery],
+                    }
+
+                    const search = data.search.value
+
+                    if(search && search != '') {
+                        where.AND.push(
+                            {
+                                OR: [
+                                    { key_starts_with: search.toLowerCase() },
+                                    { identifyingQuestions_some: {
+                                        answerLowerCase_starts_with: search.toLowerCase(),
+                                    },
+                                    }],
+                            })
+                    }
+
+                    if(where.AND.length > 0) {
+                        variables.where = where
+                    }
+
+                    self.$apollo.query({
+                        query,
+                        variables: variables,
+                        fetchPolicy: 'network-only',
+                    }).then(response => {
+                        const data = response.data.interviews
+                        self.totalRows = data.totalCount
+                        callback({
+                            recordsTotal: data.totalCount,
+                            recordsFiltered: data.totalCount,
+                            data: data.nodes,
+                        })
+                    }).catch(err => {
+                        callback({
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: [],
+                            error: err.toString(),
+                        })
+                        console.error(err)
+                    })
                 },
                 select: {
                     style: 'multi',
@@ -142,28 +242,28 @@ export default {
             const menu = []
             const self = this
 
-            if (rowData.status != 'Completed') {
+            if (rowData.actionFlags.indexOf('CANBEOPENED') >= 0) {
                 menu.push({
                     name: self.$t('Pages.InterviewerHq_OpenInterview'),
-                    callback: () => self.$store.dispatch('openInterview', rowData.interviewId),
+                    callback: () => self.$store.dispatch('openInterview', rowData.id),
                 })
             }
 
-            if (rowData.canDelete) {
+            if (rowData.actionFlags.indexOf('CANBEDELETED') >= 0) {
                 menu.push({
                     name: self.$t('Pages.InterviewerHq_DiscardInterview'),
                     callback() {
-                        self.discardInterview(rowData.interviewId, rowIndex)
+                        self.discardInterview(rowData.id, rowIndex)
                     },
                 })
             }
 
-            if (rowData.status == 'Completed') {
+            if (rowData.actionFlags.indexOf('CANBERESTARTED') >= 0) {
                 menu.push({
                     name: self.$t('Pages.InterviewerHq_RestartInterview'),
                     callback: () => {
                         self.$refs.table.disableRow(rowIndex)
-                        self.restartInterview(rowData.interviewId)
+                        self.restartInterview(rowData.id)
                     },
                 })
             }
@@ -231,22 +331,21 @@ export default {
                     searchable: false,
                 },
                 {
-                    data: 'featuredQuestions',
+                    data: 'identifyingQuestions',
                     title: this.$t('Assignments.IdentifyingQuestions'),
                     class: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        var questionsWithTitles = map(data, question => {
-                            return question.question + ': ' + question.answer
+                        var questionsWithTitles = map(data, node => {
+                            return (node.question.label || node.question.questionText) + ': ' + node.answer
                         })
                         return join(questionsWithTitles, ', ')
                     },
                     responsivePriority: 4,
                 },
                 {
-                    data: 'lastEntryDateUtc',
-                    name: 'UpdateDate',
+                    data: 'updateDate',
                     title: this.$t('Assignments.UpdatedAt'),
                     searchable: false,
                     render(data) {

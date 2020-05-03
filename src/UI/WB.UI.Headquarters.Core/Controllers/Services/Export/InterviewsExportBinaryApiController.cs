@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using AngleSharp.Network.Default;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Operations;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -15,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.UI.Headquarters.Controllers.Services.Export
 {
+    [Authorize(AuthenticationSchemes = "TenantToken")]
     public class InterviewsExportBinaryApiController : Controller
     {
         private readonly IExternalFileStorage fileStorage;
@@ -38,7 +35,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("api/export/v1/interview/{interviewId}/image/{answer}")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
         public async Task<ActionResult> GetInterviewImage(Guid interviewId, string answer)
@@ -61,7 +57,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("api/export/v1/interview/{interviewId}/audio/{fileName}")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
         public async Task<ActionResult> GetInterviewAudio(Guid interviewId, string fileName)
@@ -75,7 +70,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("api/export/v1/interviews/batch/audioAudit")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
         public async Task<ActionResult> GetAudioAuditDescriptorsForInterviews([FromQuery]Guid[] id)
@@ -105,7 +99,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("api/export/v1/interview/{interviewId}/audioAudit/{fileName}")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
         public async Task<ActionResult> GetAudioAudit(Guid interviewId, string fileName)
@@ -119,7 +112,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("api/export/v1/questionnaire/{id}/audioAudit")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
         public ActionResult DoesSupportAudioAudit(string id)

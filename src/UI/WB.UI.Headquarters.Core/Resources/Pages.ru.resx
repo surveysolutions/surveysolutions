@@ -123,6 +123,15 @@
   <data name="AccountManage_SaveChanges" xml:space="preserve">
     <value>Сохранить изменения</value>
   </data>
+  <data name="AccountManage_Profile" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
+  <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
+    <value>Двухфакторная аутентификация</value>
+  </data>
+  <data name="AccountManage_AuthenticatorApp" xml:space="preserve">
+    <value>Приложение аутентификатор</value>
+  </data>
   <data name="AnyOption" xml:space="preserve">
     <value>Любой</value>
   </data>
@@ -201,7 +210,7 @@
   <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
     <value>Не все отметки были загружены</value>
   </data>
-   <data name="CreateAdmin" xml:space="preserve">
+  <data name="CreateAdmin" xml:space="preserve">
     <value>Создать администратора</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
@@ -414,6 +423,18 @@
   <data name="LogOn_Title" xml:space="preserve">
     <value>Вход</value>
   </data>
+  <data name="LogOn_TwoFactor" xml:space="preserve">
+    <value>Ваш вход в систему защищен с помощью приложения аутентификатора. Введите ниже аутентификационный код.</value>
+  </data>
+  <data name="LogOn_LoginWithRecoveryCode" xml:space="preserve">
+    <value>Вы запросили вход с помощью ключа восстановления.</value>
+  </data>
+  <data name="LogOn_NoAccessToDevice" xml:space="preserve">
+    <value>Если у вас нет доступа к устройству аутентификатору, вы можете</value>
+  </data>
+  <data name="LogOn_LoginWithRecoveryLink" xml:space="preserve">
+    <value>войти с ключем восстановления</value>
+  </data>
   <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
     <value>Вход не выполнен. Пожалуйста, исправьте ошибки и повторите попытку.</value>
   </data>
@@ -608,6 +629,12 @@
   </data>
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
+  </data>
+  <data name="AuthenticatorCode" xml:space="preserve">
+    <value>Аутентификационный код</value>
+  </data>
+  <data name="RecoveryCode" xml:space="preserve">
+    <value>Ключ восстановления</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Дата создания учетной записи интервьюера</value>
@@ -809,6 +836,9 @@
   <data name="Update" xml:space="preserve">
     <value>Обновить</value>
     <comment>Обновить</comment>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Проверить</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
     <value>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</value>
@@ -1330,7 +1360,7 @@
   </data>
   <data name="Configuration" xml:space="preserve">
       <value>Настройки</value>
-  </data>  
+  </data>
   <data name="InterviewPackages" xml:space="preserve">
       <value>Интервью пакеты</value>
       <comment>Интервью пакеты</comment>
@@ -1446,6 +1476,75 @@
   <data name="ChangePassword" xml:space="preserve">
       <value>Сброс пользовательского пароля</value>
   </data>
+  <data name="ResetAuthenticator" xml:space="preserve">
+    <value>Сброс аутентификатора</value>
+  </data>
+  <data name="SetupAuthenticator" xml:space="preserve">
+    <value>Установка аутентификатора</value>
+  </data>
+  <data name="AddAuthenticator" xml:space="preserve">
+    <value>Добавить аутентификатор</value>
+  </data>
+  <data name="ResetRecoveryCodes" xml:space="preserve">
+    <value>Сброс ключей восстановления</value>
+  </data>
+  <data name="RecoveryCodesLeft" xml:space="preserve">
+    <value>Осталось ключей восстановления:</value>
+  </data>
+  <data name="RecoveryCodesYouCan" xml:space="preserve">
+    <value>Вы можете</value>
+  </data>
+  <data name="GenerateRecoveryCodesLink" xml:space="preserve">
+    <value>сгенерировать новый набор ключей восстановления</value>
+  </data>
+  <data name="Disable2fa" xml:space="preserve">
+    <value>Выключить 2ФА</value>
+  </data>
+  <data name="RecoveryCodesInfo" xml:space="preserve">
+    <value>Сохраните ключи в надежном месте.</value>
+  </data>
+  <data name="RecoveryCodesDescription" xml:space="preserve">
+    <value>Если вы потеряете устройство и ключи восстановления вы не сможете войти в систему.</value>
+  </data>
+  <data name="RecoveryCodesDescriptionLine1" xml:space="preserve">
+    <value>Генерация новых ключей восстановления не меняет ключи, которые используются в аутефикационном приложении. </value>
+  </data>
+  <data name="EnableAuthenticatorLine1" xml:space="preserve">
+    <value>Чтобы использовать приложение аутентификатор, выполните следующие шаги:</value>
+  </data>
+  <data name="EnableAuthenticatorLine2" xml:space="preserve">
+    <value>Скачайте приложение аутентификатор, например, Microsoft Authenticator для</value>
+  </data>
+  <data name="EnableAuthenticatorLine3" xml:space="preserve">
+    <value>или Google Authenticator для</value>
+  </data>
+  <data name="EnableAuthenticatorLine4" xml:space="preserve">
+    <value>Отсканируйте QR код или введите общий ключ в приложение. Пробелы и регистр букв не важен.</value>
+  </data>
+  <data name="EnableAuthenticatorLine5" xml:space="preserve">
+    <value>После того, как вы отсканировали QR Код или ввели ключ вручную, ваше приложение предоставит вам уникальный код. Введите этот код в поле валидации.</value>
+  </data>
+  <data name="EnableAuthenticatorSharedKey" xml:space="preserve">
+    <value>Общий ключ:</value>
+  </data>
+  <data name="ResetAuthenticatorLine1" xml:space="preserve">
+    <value>Если вы сбросите аутефикационный ключ, то аутефикационное приложение перестанет работать, пока вы его не перенастроите.</value>
+  </data>
+  <data name="ResetAuthenticatorLine2" xml:space="preserve">
+    <value>Это действие отключает двухфакторную аутефикацию, пока вы не верефицируете ваше аутефикационное приложение. Если вы не закончите конфигурацию вашего аутефикационного приложения, то ваша учетная запись останется без двухфакторной аутефикации.</value>
+  </data>
+  <data name="Disable2faLine1" xml:space="preserve">
+    <value>Это действие только отключает 2ФА</value>
+  </data>
+  <data name="Disable2faLine2" xml:space="preserve">
+    <value>Отключение 2ФА не меняет ключи, которые используются в аутефикационном приложении. </value>
+  </data>
+  <data name="ChandgeKeyLine1" xml:space="preserve">
+    <value>Если вы хотите изменить ключ, используемый в аутефикационном приложении, вам нужно</value>
+  </data>
+  <data name="ChandgeKeyLine2" xml:space="preserve">
+    <value>сбросить аутефикационный ключ.</value>
+  </data>
   <data name="ReevaluateInterview" xml:space="preserve">
       <value>Актуализировать интервью</value>
       <comment>Актуализировать интервью</comment>
@@ -1463,7 +1562,7 @@
       <comment>Актуализировать</comment>
   </data>
   <data name="Admin_Reevaluate_InterviewId_Required" xml:space="preserve">
-      <value>Пустой идентификатор интервью </value>
+      <value>Пустой идентификатор интервью</value>
       <comment>Пустой идентификатор интервью </comment>
   </data>
   <data name="Admin_Reevaluate_InterviewId_Invalid" xml:space="preserve">
@@ -1473,5 +1572,8 @@
   <data name="Admin_Reevaluate_Success" xml:space="preserve">
       <value>Интервью успешно актуализировано</value>
       <comment>Интервью успешно актуализировано</comment>
+  </data>
+  <data name="GenerateRecoveryCodes" xml:space="preserve">
+    <value>Сгенерировать ключи восстановления</value>
   </data>
 </root>

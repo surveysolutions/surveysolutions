@@ -121,15 +121,15 @@ export default {
             var message = ''
             // Check for known errors
             switch (error.code) {
-            case error.PERMISSION_DENIED:
-                message = this.$t('WebInterviewUI.GPSPermissionDenied')//"This website does not have permission to use the Geolocation API"
-                break
-            case error.POSITION_UNAVAILABLE:
-                message = this.$t('WebInterviewUI.GPSPositionUnavailable') //"The current position could not be determined.";
-                break
-            case error.TIMEOUT:
-                message = this.$t('WebInterviewUI.GPSTimeout') //"The current position could not be determined within the specified timeout period."
-                break
+                case error.PERMISSION_DENIED:
+                    message = this.$t('WebInterviewUI.GPSPermissionDenied')//"This website does not have permission to use the Geolocation API"
+                    break
+                case error.POSITION_UNAVAILABLE:
+                    message = this.$t('WebInterviewUI.GPSPositionUnavailable') //"The current position could not be determined.";
+                    break
+                case error.TIMEOUT:
+                    message = this.$t('WebInterviewUI.GPSTimeout') //"The current position could not be determined within the specified timeout period."
+                    break
             }
             // If it is an unknown error, build a message that includes
             // information that helps identify the situation so that
@@ -146,15 +146,15 @@ export default {
         pickLocation() {
             var self = this
 
-            box.dialog({ 
+            box.dialog({
                 title: self.$t('WebInterviewUI.PickLocation'),
                 message: '<div id="locationPicker"><div style="height: 400px;" id="map_canvas"></div></div>',
                 size: 'large',
                 onShow: () => {
                     self.pickedLocation = null
                     var latlng = new google.maps.LatLng(-34.397, 150.644)
-                    
-                    var mapOptions = 
+
+                    var mapOptions =
                     {
                         zoom: 14,
                         center:latlng,
@@ -190,10 +190,10 @@ export default {
                             pushpin = new google.maps.Marker({
                                 position: location,
                                 map: map,
-                            }) 
+                            })
                         }
                         else {
-                            pushpin.setPosition(location) 
+                            pushpin.setPosition(location)
                         }
                     }
                 },
@@ -208,7 +208,7 @@ export default {
                                         latitude: self.pickedLocation.latitude,
                                         longitude: self.pickedLocation.longitude,
                                     },
-                                }, this.id) 
+                                }, this.id)
                             }
                         },
                     },

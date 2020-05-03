@@ -85,7 +85,8 @@ namespace WB.UI.Headquarters.Controllers
                 AudioAudit = browseItem.IsAudioRecordingEnabled,
                 DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
                               $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
-                Comment = browseItem.Comment
+                Comment = browseItem.Comment,
+                Variable = browseItem.Variable
             };
 
             if (browseItem.ImportedBy.HasValue && browseItem.ImportedBy != Guid.Empty)
@@ -129,7 +130,7 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        [ObserverNotAllowed]
+        [AntiForgeryFilter]
         [Authorize(Roles = "Administrator")]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Clone(Guid id, long version)
@@ -150,7 +151,6 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
         [Authorize(Roles = "Administrator")]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Clone(CloneQuestionnaireModel model)
@@ -167,13 +167,15 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (QuestionnaireException exception)
             {
+                this.logger.LogError(exception, $"Error occurred while cloning questionnaire (id: {model?.Id}, version: {model?.Version}).");
+
                 model.Error = exception.Message;
 
                 return this.View(model);
             }
             catch (Exception exception)
             {
-                this.logger.LogError(exception, "Unexpected error occurred while cloning questionnaire (id: {id}, version: {version}).", model.Id, model.Version);
+                this.logger.LogError(exception, $"Unexpected error occurred while cloning questionnaire (id: {model.Id}, version: {model.Version}).");
                 model.Error = QuestionnaireClonning.UnexpectedError;
                 return this.View(model);
             }

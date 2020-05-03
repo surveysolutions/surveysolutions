@@ -21,9 +21,6 @@ export default {
             commit('SET_UPDATE_IN_PROGRESS', true)
 
             const api = Vue.$config.model.api
-
-            dispatch('showProgress')
-
             const jobsToUpdate = []
 
             try {
@@ -61,8 +58,6 @@ export default {
             } catch (error) {
                 Vue.config.errorHandler(error)
             } finally {
-                dispatch('hideProgress')
-
                 await new Promise(r => setTimeout(r, jobsToUpdate.length > 0 ? 1000 : 2000))
                 commit('SET_UPDATE_IN_PROGRESS', false)
                 dispatch('getExportStatus')

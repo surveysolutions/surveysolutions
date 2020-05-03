@@ -14,10 +14,10 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
         [NUnit.Framework.OneTimeSetUp]
         public void context()
         {
-            var interviewSummaryViewFactoryMock = new Mock<IInterviewSummaryViewFactory>();
+            var interviewSummaryViewFactoryMock = new Mock<IAllInterviewsFactory>();
             interviewSummaryViewFactoryMock.Setup(_ => _.Load(interviewId)).Returns(() => null);
 
-            controller = CreateController(interviewSummaryViewFactory: interviewSummaryViewFactoryMock.Object);
+            controller = CreateController(allInterviewsViewFactory: interviewSummaryViewFactoryMock.Object);
             BecauseOf();
         }
 

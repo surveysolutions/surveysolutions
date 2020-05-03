@@ -1,7 +1,0 @@
-﻿@model bool
-<div class="block-filter">
-    <div class="form-group">
-        @Html.CheckBoxFor(v => v, new {@class = @"checkbox-filter single-checkbox" })
-        <label for="@ViewData.ModelMetadata.PropertyName" style="font-weight: bold"><span class="tick"></span>@ViewData.ModelMetadata.DisplayName</label>
-    </div>
-</div>

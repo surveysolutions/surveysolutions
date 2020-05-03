@@ -69,7 +69,7 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <a href="javascript:void(0);" 
+                <a href="javascript:void(0);"
                     id="btnComplete"
                     class="btn btn-lg"
                     v-bind:class="{

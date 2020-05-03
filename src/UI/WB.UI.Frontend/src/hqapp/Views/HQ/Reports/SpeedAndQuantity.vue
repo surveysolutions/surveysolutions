@@ -18,7 +18,6 @@
                     ref="reportTypeControl"
                     control-id="reportTypeId"
                     no-clear
-                    fuzzy
                     data-vv-name="reportTypeId"
                     data-vv-as="reportType"
                     :placeholder="$t('PeriodicStatusReport.InterviewActions')"
@@ -31,7 +30,6 @@
                 <Typeahead
                     ref="questionnaireIdControl"
                     control-id="questionnaireId"
-                    fuzzy
                     data-vv-name="questionnaireId"
                     data-vv-as="questionnaire"
                     :placeholder="$t('Common.AllQuestionnaires')"
@@ -44,7 +42,6 @@
                 <Typeahead
                     ref="questionnaireVersionControl"
                     control-id="questionnaireVersion"
-                    fuzzy
                     data-vv-name="questionnaireVersion"
                     data-vv-as="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
@@ -57,7 +54,6 @@
                 <Typeahead
                     ref="overTheLast"
                     control-id="overTheLast"
-                    fuzzy
                     no-clear
                     data-vv-name="overTheLast"
                     data-vv-as="overTheLast"
@@ -71,7 +67,6 @@
                 <Typeahead
                     ref="period"
                     control-id="period"
-                    fuzzy
                     no-clear
                     :placeholder="$t('PeriodicStatusReport.Period')"
                     data-vv-name="period"
@@ -92,7 +87,7 @@
                 <h4 v-html="selectedQuestionnaireTitle" />
             </div>
         </div>
-        
+
         <DataTables
             ref="table"
             v-if="mounted"
@@ -143,7 +138,7 @@ export default {
         }
 
         if (this.query.reportType) {
-            this.reportTypeId = find(this.model.reportTypes, {key: this.query.reportType})          
+            this.reportTypeId = find(this.model.reportTypes, {key: this.query.reportType})
             if(this.reportTypeId == null) {
                 this.reportTypeId = this.model.reportTypes[0]
             }
@@ -174,7 +169,7 @@ export default {
         this.loadReportData()
         this.mounted = true
     },
-    
+
     methods: {
         loadReportData(reloadPage = false) {
             if(reloadPage) return // reload will happen when route change
@@ -237,7 +232,7 @@ export default {
                     },
                 })
             }
-            
+
             columns.push({
                 data: 'average',
                 name: 'Average',
@@ -397,12 +392,12 @@ export default {
             this.updateDateColumnsInfo()
         },
     },
-    watch: { 
+    watch: {
         selectedDate(to) {
             this.onChange(query => {
                 query.from = to
             })
-            
+
         },
     },
     computed: {

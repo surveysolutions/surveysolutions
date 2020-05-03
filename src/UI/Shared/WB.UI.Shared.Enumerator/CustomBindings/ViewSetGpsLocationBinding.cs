@@ -15,8 +15,18 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(MapView view, GpsLocation value)
         {
-            if (value == null) 
-                view.OnDestroy();
+            if (value == null)
+            {
+                try
+                {
+                    view.OnDestroy();
+                }
+                catch (Exception)
+                {
+                    // We don't know when MapView has map, so we just destroy MapView each time when we need to clear map.
+                    // When we destroy MapView second time, java control throw NullPointerException because no map inside, so we just om nom nom exception and what's it
+                }
+            }
             else
             {
                 view.OnCreate(null);

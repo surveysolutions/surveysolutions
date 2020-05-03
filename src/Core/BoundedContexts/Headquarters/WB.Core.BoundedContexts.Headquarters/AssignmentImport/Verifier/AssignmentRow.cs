@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     public class PreloadingAssignmentRow
     {
         public BaseAssignmentValue[] Answers { get; set; }
-        public AssignmentRosterInstanceCode[] RosterInstanceCodes { get; set; }
+        public AssignmentRosterInstanceCode[] RosterInstanceCodes { get; set; } = new AssignmentRosterInstanceCode[0];
         public int Row { get; set; }
         public AssignmentValue InterviewIdValue { get; set; }
         public AssignmentQuantity Quantity { get; set; }
@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public AssignmentAnswer[] Values { get; set; }
     }
 
-    [DebuggerDisplay("{Responsible.InterviewerId?.ToString() ?? Responsible.SupervsorId?.ToString ?? \"No responsible\"}")]
+    [DebuggerDisplay("{Responsible?.InterviewerId?.ToString() ?? Responsible?.SupervisorId?.ToString() ?? \"No responsible\"}")]
     public class AssignmentResponsible : AssignmentValue
     {
         public UserToVerify Responsible { get; set; }
