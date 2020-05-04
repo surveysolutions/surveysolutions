@@ -1,8 +1,8 @@
 <template>
     <div class="block-filter"
         v-if="question != null && isSupported">
-        <h5 :title="sanitizeHtml(question.questionText)">
-            {{sanitizeHtml(question.questionText)}}
+        <h5 :title="sanitizeHtml(question.label || question.questionText)">
+            {{sanitizeHtml(question.label || question.questionText)}}
             <div>
                 <inline-selector :options="fieldOptions"
                     no-empty
@@ -110,7 +110,10 @@ export default {
 
         fieldOptions() {
             switch(this.question.type) {
-                case 'SINGLEOPTION': return null
+                case 'SINGLEOPTION': return [
+                    { id: 'answerCode', value: this.$t('Common.Equals') },
+                    { id: 'answerCode_not', value: this.$t('Common.NotEquals') },
+                ]
                 case 'TEXT': return [
                     { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
                     { id: 'answerLowerCase', value: this.$t('Common.Equals') },

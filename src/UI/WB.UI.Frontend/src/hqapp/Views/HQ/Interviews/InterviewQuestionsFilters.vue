@@ -44,7 +44,6 @@
         </ModalFrame>
 
         <InterviewFilter
-
             v-for="condition in conditions"
             :key="'filter_' + condition.variable"
             :id="'filter_' + condition.variable"
@@ -74,7 +73,7 @@ export default {
     },
 
     props: {
-        questionnaireId: {
+        questionnaireVariable: {
             type: String, required: false,
         },
         questionnaireVersion : {
@@ -86,20 +85,20 @@ export default {
 
     apollo: {
         questions:{
-            query :gql`query questions($id: Uuid, $version: Long) {
-                questions(id: $id, version: $version, where: { identifying: true }) {
+            query :gql`query questions($variable: String, $version: Long) {
+                questions(variable: $variable, version: $version, where: { identifying: true }) {
                     questionText, type, variable
                     options { title, value, parentValue }
                 }
             }`,
             variables() {
                 return {
-                    id: (this.questionnaireId || '').replace(/-/g, ''),
+                    variable: (this.questionnaireVariable || ''),
                     version: this.questionnaireVersion,
                 }
             },
             skip() {
-                return this.questionnaireId == null || this.questionnaireVersion == null
+                return this.questionnaireVariable == null || this.questionnaireVersion == null
             },
         },
     },
@@ -115,7 +114,7 @@ export default {
             this.conditions = this.value
         },
 
-        questionnaireId() {
+        questionnaireVariable() {
             this.conditions = this.value
         },
 
@@ -184,7 +183,7 @@ export default {
         },
 
         isDisabled() {
-            return this.questionnaireId == null
+            return this.questionnaireVariable == null
                 || this.questionnaireVersion == null
                 || this.questionsList == null
                 || this.questionsList.length == 0

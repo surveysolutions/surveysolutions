@@ -41,6 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 this.AnswersToFeaturedQuestions.Add(result);
             }
+
+            this.QuestionnaireVariable = questionnaire.VariableName;
         }
 
         public override Guid InterviewId
@@ -74,9 +76,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }
         }
 
-        public virtual Guid TeamLeadId { get; set; }
-        public virtual string TeamLeadName { get; set; }
-        public virtual string TeamLeadNameLowerCase { get; set; }
+        public virtual Guid SupervisorId { get; set; }
+        public virtual string SupervisorName { get; set; }
+        public virtual string SupervisorNameLowerCase { get; set; }
 
         public virtual UserRoles ResponsibleRole { get; set; }
         public virtual DateTime UpdateDate { get; set; }

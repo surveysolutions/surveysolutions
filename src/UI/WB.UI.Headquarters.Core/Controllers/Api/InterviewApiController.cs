@@ -157,7 +157,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var interviewSummaryForMapPointView = new InterviewSummaryForMapPointView
             {
                 InterviewerName = interviewSummaryView.ResponsibleName,
-                SupervisorName = interviewSummaryView.TeamLeadName,
+                SupervisorName = interviewSummaryView.SupervisorName,
                 InterviewKey = interviewSummaryView.Key,
                 AssignmentId = interviewSummaryView.AssignmentId,
                 LastStatus = interviewSummaryView.Status.ToLocalizeString(),

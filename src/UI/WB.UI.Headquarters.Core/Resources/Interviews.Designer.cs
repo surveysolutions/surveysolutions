@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Interviews {
@@ -128,7 +128,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose question to apply filters.
+        ///   Looks up a localized string similar to Choose identifying questions to use in the filter.
         /// </summary>
         public static string ChooseQuestionsTitle {
             get {
@@ -219,7 +219,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filters by questions is only available when concrete questionnaire version is selected.
+        ///   Looks up a localized string similar to Filters by questions is only available when specific questionnaire version is selected.
         /// </summary>
         public static string QuestionsFilterNotAvailable {
             get {

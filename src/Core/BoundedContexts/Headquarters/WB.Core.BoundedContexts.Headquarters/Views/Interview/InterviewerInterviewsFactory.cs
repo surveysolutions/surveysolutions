@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                                                   (interview.Status == InterviewStatus.SupervisorAssigned || interview.Status == InterviewStatus.RejectedByHeadquarters)
                                               ) ||
                                               ( // assigned on interviewers on his team
-                                                  interview.TeamLeadId == authorizedUserId &&
+                                                  interview.SupervisorId == authorizedUserId &&
                                                   (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor || interview.Status == InterviewStatus.RejectedByHeadquarters)
                                               )
                                               && interview.HasResolvedComments)
@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                             (interview.Status == InterviewStatus.SupervisorAssigned || interview.Status == InterviewStatus.RejectedByHeadquarters)
                         ) ||
                         ( // assigned on interviewers on his team
-                            interview.TeamLeadId == supervisorId &&
+                            interview.SupervisorId == supervisorId &&
                             (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor || interview.Status == InterviewStatus.RejectedByHeadquarters)
                         )
                     )
