@@ -21,21 +21,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var databaseName = masterDbConnectionString.Database;
             masterDbConnectionString.Database = "postgres"; // System DB name.
 
-            using (var connection = new NpgsqlConnection(masterDbConnectionString.ConnectionString))
-            {
-                connection.Open();
-                var checkDbExistsCommand = connection.CreateCommand();
-                checkDbExistsCommand.CommandText = "SELECT 1 FROM pg_catalog.pg_database WHERE lower(datname) = lower(:dbName);";
-                checkDbExistsCommand.Parameters.AddWithValue("dbName", databaseName);
-                var dbExists = checkDbExistsCommand.ExecuteScalar();
+            using var connection = new NpgsqlConnection(masterDbConnectionString.ConnectionString);
+            connection.Open();
+            var checkDbExistsCommand = connection.CreateCommand();
+            checkDbExistsCommand.CommandText = "SELECT 1 FROM pg_catalog.pg_database WHERE lower(datname) = lower(:dbName);";
+            checkDbExistsCommand.Parameters.AddWithValue("dbName", databaseName);
+            var dbExists = checkDbExistsCommand.ExecuteScalar();
 
-                if (dbExists == null)
-                {
-                    var createCommand = connection.CreateCommand();
-                    createCommand.CommandText = $@"CREATE DATABASE ""{databaseName}"" ENCODING = 'UTF8'";
-                    // unfortunately there is no way to use parameters based syntax here 
-                    createCommand.ExecuteNonQuery();
-                }
+            if (dbExists == null)
+            {
+                var createCommand = connection.CreateCommand();
+                createCommand.CommandText = $@"CREATE DATABASE ""{databaseName}"" ENCODING = 'UTF8'";
+                // unfortunately there is no way to use parameters based syntax here 
+                createCommand.ExecuteNonQuery();
             }
         }
 
@@ -51,17 +49,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        public static IFluentSyntax CreateTableIfNotExists(this MigrationBase self, string tableName, Func<ICreateTableWithColumnOrSchemaOrDescriptionSyntax, IFluentSyntax> constructTableFunction)
+        public static IFluentSyntax CreateTableIfNotExists(this MigrationBase self, string tableName,
+            Func<ICreateTableWithColumnOrSchemaOrDescriptionSyntax, IFluentSyntax> constructTableFunction)
         {
             return !self.Schema.Table(tableName).Exists() ? constructTableFunction(self.Create.Table(tableName)) : null;
         }
 
-        public static IFluentSyntax CreateForeignKeyFromTableIfNotExists(this MigrationBase self, string constraintName, string tableName, Func<ICreateForeignKeyForeignColumnOrInSchemaSyntax, IFluentSyntax> constructTableFunction)
+        public static IFluentSyntax CreateForeignKeyFromTableIfNotExists(this MigrationBase self, string constraintName,
+            string tableName,
+            Func<ICreateForeignKeyForeignColumnOrInSchemaSyntax, IFluentSyntax> constructTableFunction)
         {
-            return !self.Schema.Table(tableName).Constraint(constraintName).Exists() 
+            return !self.Schema.Table(tableName).Constraint(constraintName).Exists()
                 ? constructTableFunction(self.Create.ForeignKey(constraintName).FromTable(tableName))
                 : null;
         }
-
     }
 }

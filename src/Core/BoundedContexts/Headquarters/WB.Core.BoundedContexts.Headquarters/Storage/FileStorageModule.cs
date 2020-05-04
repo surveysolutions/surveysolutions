@@ -64,11 +64,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
 
             registry.BindToMethod<ITransferUtility>(c => new TransferUtility(c.Get<IAmazonS3>()));
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
     }
 
     public static class StorageExtensions

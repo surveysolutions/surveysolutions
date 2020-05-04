@@ -1,5 +1,8 @@
 #nullable enable
+using System.Linq;
+using HotChocolate.Language;
 using HotChocolate.Types;
+
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
 {
@@ -21,6 +24,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
             return descriptor
                 .Argument("skip", a => a.Type<IntType>())
                 .Argument("take", a => a.Type<IntType>());
+        }
+
+        public static bool HasSelectedField(this SelectionSetNode? selection, string fieldName)
+        {
+            return selection?.Selections.Any(a => a is FieldNode field && field.Name.Value == fieldName) ?? false;
         }
     }
 }

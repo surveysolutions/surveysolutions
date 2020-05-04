@@ -74,6 +74,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             });
         }
 
+        public QuestionnaireBrowseItem GetByVariableName(string variable, long version)
+        {
+            return this.reader.Query(_ => _.FirstOrDefault(x => x.Variable == variable && x.Version == version));
+        }
+
         public QuestionnaireBrowseItem GetById(QuestionnaireIdentity identity)
         {
             return this.reader.GetById(identity.ToString());

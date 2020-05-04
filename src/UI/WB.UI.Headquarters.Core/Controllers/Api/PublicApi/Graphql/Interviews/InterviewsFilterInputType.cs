@@ -1,3 +1,4 @@
+using AngleSharp.Common;
 using HotChocolate.Types.Filters;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
@@ -14,7 +15,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowNotEquals().And().AllowIn();
 
-            descriptor.Filter(x => x.QuestionnaireId)
+            descriptor.Filter(x => x.QuestionnaireVariable)
                 .BindFiltersExplicitly()
                 .AllowEquals();
 
@@ -48,11 +49,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowStartsWith().And().AllowIn().And().AllowNotIn();
 
-            descriptor.Filter(x => x.TeamLeadName)
+            descriptor.Filter(x => x.SupervisorName)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowStartsWith().And().AllowIn().And().AllowNotIn();
 
-            descriptor.Filter(x => x.TeamLeadNameLowerCase)
+            descriptor.Filter(x => x.SupervisorNameLowerCase)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowStartsWith().And().AllowIn().And().AllowNotIn();
 

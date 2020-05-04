@@ -461,6 +461,12 @@ export default {
                 scope: storageSettings.scope,
             }
 
+            if(this.dataDestination === 'googleDrive')
+            {
+                request.access_type = 'offline'
+                request.prompt = 'consent'
+            }
+
             window.location = storageSettings.authorizationUri + '?' + decodeURIComponent($.param(request))
         },
 

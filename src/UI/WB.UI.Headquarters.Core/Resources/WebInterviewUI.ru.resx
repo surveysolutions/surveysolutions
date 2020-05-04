@@ -476,4 +476,7 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="PickLocation" xml:space="preserve">
     <value>Указать на карте</value>
   </data>
+  <data name="CommentOnPreviousAnswer" xml:space="preserve">
+    <value>На предыдущий ответ</value>
+  </data>
 </root>

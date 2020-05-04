@@ -7,7 +7,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Shared.Web.Versions
 {
-    public class ProductVersionModule : IModule
+    public class ProductVersionModule : IModule, IInitModule
     {
         private readonly bool shouldStoreVersionToDb;
         private readonly ProductVersion productVersion;

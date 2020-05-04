@@ -1400,6 +1400,9 @@
   <data name="Questionnaire_SubSectionsCount" xml:space="preserve">
     <value>Number of sub-sections</value>
   </data>
+  <data name="Questionnaire_Variable" xml:space="preserve">
+    <value>Variable name</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>

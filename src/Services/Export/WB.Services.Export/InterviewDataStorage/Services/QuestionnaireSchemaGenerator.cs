@@ -66,8 +66,8 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             }
             catch (Exception e)
             {
-                e.Data.Add("questionnaireId", questionnaireDocument.QuestionnaireId.ToString());
-                e.Data.Add("questionnaireTitle", questionnaireDocument.Title);
+                e.Data.Add("WB:questionnaireId", questionnaireDocument.QuestionnaireId.ToString());
+                e.Data.Add("WB:questionnaireTitle", questionnaireDocument.Title);
                 throw;
             }
         }
@@ -90,8 +90,8 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             }
             catch (Exception e)
             {
-                e.Data.Add("questionnaireId", questionnaireDocument.QuestionnaireId.ToString());
-                e.Data.Add("questionnaireTitle", questionnaireDocument.Title);
+                e.Data.Add("WB:questionnaireId", questionnaireDocument.QuestionnaireId.ToString());
+                e.Data.Add("WB:questionnaireTitle", questionnaireDocument.Title);
                 throw;
             }
         }

@@ -240,6 +240,10 @@
   <data name="GetInterviewPackageV3" xml:space="preserve">
     <value>&lt;b&gt;V3&lt;/b&gt; Download interview package: {0}</value>
   </data>
+  <data name="GetInterviewPatch" xml:space="preserve">
+    <value>Download interview changes from HQ: {0}</value>
+    <comment>{0} - count of affected interviews</comment>
+  </data>
   <data name="PostPackageV3" xml:space="preserve">
     <value>&lt;b&gt;V3&lt;/b&gt; Upload interview: {0}</value>
   </data>

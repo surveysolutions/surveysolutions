@@ -468,4 +468,7 @@
   <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
     <value>Размер изменён на Не ограничено</value>
   </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>Начать Web интервью</value>
+  </data>
 </root>

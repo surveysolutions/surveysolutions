@@ -16,6 +16,8 @@ namespace WB.Core.BoundedContexts.Interviewer
         {
             registry.BindWithConstructorArgument<ISynchronizationStep, OfflineInterviewerUpdateApplication>("sortOrder", 0);
             registry.BindWithConstructorArgument<ISynchronizationStep, UpdateEncryptionKey>("sortOrder", 1);
+            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUpdateAppSettings>("sortOrder", 2);
+            registry.BindWithConstructorArgument<ISynchronizationStep, DownloadHQChangesForInterview>("sortOrder", 4);
             registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUploadInterviews>("sortOrder", 5);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 10);
             registry.BindWithConstructorArgument<ISynchronizationStep, CensusQuestionnairesSynchronization>("sortOrder", 20);
@@ -24,12 +26,6 @@ namespace WB.Core.BoundedContexts.Interviewer
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeLogo>("sortOrder", 50);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 60);
             registry.BindWithConstructorArgument<ISynchronizationStep, IUpdateApplicationSynchronizationStep, InterviewerUpdateApplication>("sortOrder", 70);
-            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUpdateAppSettings>("sortOrder", 80);
-        }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
         }
     }
 }
