@@ -138,7 +138,7 @@ export default {
         tableClass: {
             type: String,
             default: null,
-        },        
+        },
     },
 
     data() {
@@ -366,7 +366,7 @@ export default {
                 self.$emit('page')
             })
 
-            this.table.on('order', (a,b,c) => {                
+            this.table.on('order', (a,b,c) => {
                 self.$emit('order', { args: c})
             })
 

@@ -30,7 +30,7 @@
                         class="success-text">{{$t('WebInterviewSetup.Invitations_ToSend', {count: notSentInvitationsCount})}}</p>
                     <p v-else
                         class="error-text">{{$t('WebInterviewSetup.Invitations_NothingToSend')}}</p>
-                </div> 
+                </div>
             </div>
             <div v-if="hasSetupError"
                 class="col-sm-7 col-xs-12">
@@ -38,7 +38,7 @@
                     <div class="validation-summary-errors">
                         <ul class="list-unstyled">
                             <li>{{$t('WebInterviewSetup.Invitations_SetupError')}}</li>
-                            <li v-if="emailProviderIsNotSetUp">SI001: {{$t('WebInterviewSetup.Invitations_EmailIsNotSetUp')}} 
+                            <li v-if="emailProviderIsNotSetUp">SI001: {{$t('WebInterviewSetup.Invitations_EmailIsNotSetUp')}}
                                 <span v-if="$config.model.isAdmin"
                                     v-html="$t('WebInterviewSetup.Invitations_ChangeEmailSettingsAdmin', { url: emailProviderUrl})"></span>
                                 <span v-else>{{$t('WebInterviewSetup.Invitations_ChangeEmailSettingsNotAdmin')}}</span>
@@ -65,7 +65,7 @@
                     <a :href="$config.model.api.surveySetupUrl"
                         class="back-link">
                         {{$t('WebInterviewSetup.BackToQuestionnaires')}}
-                    </a>  
+                    </a>
                 </div>
             </form>
         </div>
@@ -107,7 +107,7 @@ export default {
                 self.sentInvitationsCount =  invitationsInfo.sentInvitationsCount || 0
                 self.emailProvider = ((invitationsInfo.emailProvider || '') + '').toLocaleLowerCase()
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 Vue.config.errorHandler(error, self)
             })
             .then(function () {
@@ -116,7 +116,7 @@ export default {
     },
     computed:{
         emailProviderIsNotSetUp(){
-            return this.emailProvider === 'none' 
+            return this.emailProvider === 'none'
         },
         hasSetupError(){
             return this.emailProviderIsNotSetUp || this.started == false

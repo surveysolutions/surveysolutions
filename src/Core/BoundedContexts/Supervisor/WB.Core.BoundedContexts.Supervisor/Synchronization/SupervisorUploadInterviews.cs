@@ -23,10 +23,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             ISynchronizationService synchronizationService, 
             IAudioAuditFileStorage audioAuditFileStorage,
             int sortOrder,
-            IPlainStorage<InterviewView> interviewViewRepository) : base(interviewFactory,
-            interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, audioAuditFileStorage, sortOrder)
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IPrincipal principal) : base(interviewFactory,
+            interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, audioAuditFileStorage, interviewViewRepository, principal, sortOrder)
         {
             this.interviewViewRepository = interviewViewRepository;
+        }
+
+        protected override bool IsCompressEnabled()
+        {
+            return true;
+        }
+
+        protected override bool IsNonPartialSynchedInterview(InterviewView interview)
+        {
+            return interview.Status == InterviewStatus.ApprovedBySupervisor;
         }
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()

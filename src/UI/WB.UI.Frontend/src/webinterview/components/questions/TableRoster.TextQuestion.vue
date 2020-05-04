@@ -19,18 +19,18 @@ import { entityDetails, tableCellEditor } from '../mixins'
 export default {
     name: 'TableRoster_TextQuestion',
     mixins: [entityDetails, tableCellEditor],
-        
+
     data() {
         return {
-                
+
         }
-    }, 
+    },
     computed: {
         hasMask(){
             return this.$me.mask != null
         },
         noAnswerWatermark() {
-            return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
+            return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') :
                 this.$t('WebInterviewUI.TextEnterMasked', {userFriendlyMask: this.userFriendlyMask})
         },
         userFriendlyMask() {

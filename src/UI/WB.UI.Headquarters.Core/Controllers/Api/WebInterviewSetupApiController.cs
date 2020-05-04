@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Globalization;
+using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Authorization;
@@ -117,22 +119,20 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (status == null)
                 return NotFound();
 
-            using (MemoryStream resultStream = new MemoryStream())
-            using (var streamWriter = new StreamWriter(resultStream))
-            using (var csvWriter = new CsvWriter(streamWriter, new Configuration{Delimiter = "\t"}))
-            {
-                csvWriter.WriteHeader<InvitationSendError>();
+            using MemoryStream resultStream = new MemoryStream();
+            using var streamWriter = new StreamWriter(resultStream);
+            using var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) {Delimiter = "\t"});
+            csvWriter.WriteHeader<InvitationSendError>();
 
-                csvWriter.NextRecord();
-                csvWriter.WriteRecords(status.Errors);
-                csvWriter.Flush();
-                streamWriter.Flush();
+            csvWriter.NextRecord();
+            csvWriter.WriteRecords((IEnumerable) status.Errors);
+            csvWriter.Flush();
+            streamWriter.Flush();
 
-                return File(archiveUtils.CompressStream(resultStream, "notSentInvitations.tab"),
-                    "application/octet-stream",
-                    "notSentInvitations.zip",
-                    null, null);
-            }
+            return File(archiveUtils.CompressStream(resultStream, "notSentInvitations.tab"),
+                "application/octet-stream",
+                "notSentInvitations.zip",
+                null, null);
         }
 
         [HttpPost]

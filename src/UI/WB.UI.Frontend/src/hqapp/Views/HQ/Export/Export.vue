@@ -461,6 +461,12 @@ export default {
                 scope: storageSettings.scope,
             }
 
+            if(this.dataDestination === 'googleDrive')
+            {
+                request.access_type = 'offline'
+                request.prompt = 'consent'
+            }
+
             window.location = storageSettings.authorizationUri + '?' + decodeURIComponent($.param(request))
         },
 
@@ -468,18 +474,18 @@ export default {
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
-            case 'surveyData':
-                format = dataFormatNum[dataFormat]
-                break
-            case 'binaryData':
-                format = dataFormatNum.Binary
-                break
-            case 'ddiData':
-                format = dataFormatNum.Ddi
-                break
-            case 'paraData':
-                format = dataFormatNum.Paradata
-                break
+                case 'surveyData':
+                    format = dataFormatNum[dataFormat]
+                    break
+                case 'binaryData':
+                    format = dataFormatNum.Binary
+                    break
+                case 'ddiData':
+                    format = dataFormatNum.Ddi
+                    break
+                case 'paraData':
+                    format = dataFormatNum.Paradata
+                    break
             }
 
             const status = (statusOption || {key: null}).key

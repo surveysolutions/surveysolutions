@@ -8,8 +8,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         void RemoveInterview(Guid interviewId);
         InterviewPackageApiView GetInterviewEventsPackageOrNull(InterviewPackageContainer packageContainer);
         
-        InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId);
+        InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId, bool needCompress);
 
         void CheckAndProcessInterviewsToFixViews();
+
+        void MarkEventsAsReceivedByHQ(Guid interviewId);
     }
 }

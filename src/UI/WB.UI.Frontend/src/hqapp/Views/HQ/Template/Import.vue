@@ -17,7 +17,7 @@
             <h1>{{this.$t('ImportQuestionnaire.PageHeader')}}</h1>
             <div class="signed-name">
                 {{this.$t('ImportQuestionnaire.SignedInBlock', {user: this.$config.model.designerUserName })}}
-                
+
                 <a :href="this.$config.model.logoutFromDesigner">
                     {{this.$t('ImportQuestionnaire.SignOut')}}
                 </a>
@@ -55,7 +55,7 @@ export default {
                         'class': 'changed-recently',
                         title: this.$t('ImportQuestionnaire.Table_LastModified'),
                         render: function(data) {
-                            if (data === null || data === undefined || data === '') 
+                            if (data === null || data === undefined || data === '')
                                 return ''
                             return new moment(data).format(DateFormats.dateTime)
                         },

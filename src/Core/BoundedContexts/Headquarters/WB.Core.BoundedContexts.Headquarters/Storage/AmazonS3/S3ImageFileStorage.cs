@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             {
                 var filename = file.Path.Substring(prefix.Length);
                 return new InterviewBinaryDataDescriptor(interviewId, filename, "image/jpg",
-                    () => this.GetInterviewBinaryDataAsync(interviewId, GetPath(interviewId, filename)));
+                    () => this.GetInterviewBinaryDataAsync(interviewId, filename));
             }).ToList();
         }
 

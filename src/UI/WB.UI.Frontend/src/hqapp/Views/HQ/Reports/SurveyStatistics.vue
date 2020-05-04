@@ -5,7 +5,7 @@
         :subtitle="$t('Pages.SurveyStatisticsDescription')">
         <div class="clearfix">
             <div class="col-sm-8">
-                <h4>{{this.filter.questionnaire == null ? $t('Common.AllQuestionnaires') : this.filter.questionnaire.Title}}, 
+                <h4>{{this.filter.questionnaire == null ? $t('Common.AllQuestionnaires') : this.filter.questionnaire.Title}},
                     {{this.filter.version == null ? $t('Common.AllVersions').toLowerCase() : ('ver. ' + this.filter.version)}}</h4>
             </div>
         </div>

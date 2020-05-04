@@ -34,7 +34,7 @@
                         method="post">
                         <input class="btn btn-success"
                             type="button"
-                            :value="$t('Pages.Unarchive')" 
+                            :value="$t('Pages.Unarchive')"
                             @click="unArchive"/>
                     </form>
                 </li>
@@ -581,7 +581,7 @@ export default {
                     strokeWeight: 2,
                     scale: 0.4,
                 }
-  
+
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(point.latitude, point.longitude),
                     label: {text: point.index === -1 ? '' : point.index + '', color: 'white'},

@@ -19,7 +19,9 @@
         public class ExternalStorageOAuth2Settings
         {
             public string ClientId { get; set; }
+            public string ClientSecret { get; set; }
             public string AuthorizationUri { get; set; }
+            public string TokenUri { get; set; }
             public string Scope { get; set; }
         }
 

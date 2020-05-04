@@ -14,14 +14,14 @@
         </div>
         <div class="additional-info-block">
             <ul class="list-unstyled">
-                <li v-if="$config.model.startedDate" 
+                <li v-if="$config.model.startedDate"
                     v-dateTimeFormatting>
-                    {{ $t('WebInterview.InterviewStartDateFormatText') }} 
+                    {{ $t('WebInterview.InterviewStartDateFormatText') }}
                     <time :datetime="$config.model.startedDate"></time>
                 </li>
-                <li v-if="$config.model.completedDate" 
+                <li v-if="$config.model.completedDate"
                     v-dateTimeFormatting>
-                    {{ $t('WebInterview.InterviewCompletionDateFormatText') }} 
+                    {{ $t('WebInterview.InterviewCompletionDateFormatText') }}
                     <time :datetime="$config.model.completedDate"></time>
                 </li>
             </ul>

@@ -113,7 +113,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [ActionName("Get")]
         public IActionResult Delete([FromBody]int[] ids)
         {
@@ -130,7 +130,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public IActionResult Unarchive([FromBody]int[] ids)
         {
             if (ids == null) return this.BadRequest();
@@ -145,7 +145,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public IActionResult Assign([FromBody] AssignRequest request)
         {
             if (request?.Ids == null) return this.BadRequest();
@@ -162,7 +162,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public IActionResult Create([FromBody] CreateAssignmentRequest request)
         {
             if (!this.authorizedUser.IsAdministrator && !this.authorizedUser.IsHeadquarter)

@@ -118,11 +118,11 @@
                                 :value="(questionnaireId||{}).key">
                             <div class="form-group">
                                 <Typeahead control-id="questionnaire"
-                                    noSearch 
+                                    noSearch
                                     noClear
-                                    :placeholder="$t('Common.Questionnaire')" 
+                                    :placeholder="$t('Common.Questionnaire')"
                                     :values="this.$config.model.questionnairesToUpgradeFrom"
-                                    :value="questionnaireId" 
+                                    :value="questionnaireId"
                                     @selected="selectQuestionnaire" />
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                             <button v-if="!isImporting"
                                 type="submit"
                                 class="btn btn-primary">{{$t('QuestionnaireImport.RegularImportTitle')}}</button>
-                            <span v-if="isImporting" 
+                            <span v-if="isImporting"
                                 v-text="progressText"></span>
                         </div>
                     </div>
@@ -173,7 +173,7 @@ export default {
     data() {
         return {
             shouldMigrateAssignments: false,
-            questionnaireId: null, 
+            questionnaireId: null,
             isImporting: false,
             progressPercent: 0,
             errorMessage: null,
@@ -202,7 +202,7 @@ export default {
             await this.timeout(1000)
 
             while (currentStatus.data.status.status == 'Prepare'
-                    || currentStatus.data.status.status == 'Progress' 
+                    || currentStatus.data.status.status == 'Progress'
                     || currentStatus.data.status.status == 'NotStarted') {
                 this.progressPercent = currentStatus.data.status.progressPercent
 
@@ -214,7 +214,7 @@ export default {
                     this.errorMessage = currentStatus.data.status.importError
                     break
                 }
-                
+
                 await this.timeout(1000)
 
                 this.dotsCount++
@@ -222,7 +222,7 @@ export default {
                     this.dotsCount = 1
 
                 currentStatus = await this.$http.get(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.processId)
-            } 
+            }
 
             if (currentStatus.data.status.status == 'Error') {
                 this.errorMessage = currentStatus.data.status.importError

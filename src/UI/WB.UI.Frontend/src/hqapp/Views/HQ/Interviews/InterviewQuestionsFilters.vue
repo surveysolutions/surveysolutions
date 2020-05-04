@@ -1,10 +1,12 @@
 <template>
-    <div class="filters-container">
+    <div class="filters-container"
+        id="questionsFilters">
         <h4>
             {{$t("Interviews.FiltersByQuestions")}}
         </h4>
-        <div class="block-filter">            
+        <div class="block-filter">
             <button type="button"
+                id="btnQuestionsFilter"
                 class="btn"
                 :disabled="isDisabled"
                 :title="isDisabled ? $t('Interviews.QuestionsFilterNotAvailable'):''"
@@ -14,6 +16,7 @@
         </div>
 
         <ModalFrame ref="questionsSelector"
+            id="modalQuestionsSelector"
             :title="$t('Interviews.ChooseQuestionsTitle')">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -32,29 +35,32 @@
             </form>
             <div slot="actions">
                 <button
+                    id="btnQuestionsSelectorOk"
                     type="button"
                     class="btn btn-primary"
                     data-dismiss="modal"
                     role="cancel">{{ $t("Common.Ok") }}</button>
             </div>
         </ModalFrame>
-             
-        <InterviewFilter 
-            v-for="condition in conditions"         
+
+        <InterviewFilter
+            v-for="condition in conditions"
             :key="'filter_' + condition.variable"
-            :question="questionFor(condition)"            
+            :id="'filter_' + condition.variable"
+            :question="questionFor(condition)"
             :condition="condition"
             @change="conditionChanged">
-        </InterviewFilter>    
+        </InterviewFilter>
     </div>
-    
+
 </template>
 <script>
 
 import gql from 'graphql-tag'
 import InterviewFilter from './InterviewFilter'
 import { find, filter } from 'lodash'
-import sanitizeHtml  from 'sanitize-html'
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 export default {
     data() {
@@ -67,7 +73,7 @@ export default {
     },
 
     props: {
-        questionnaireId: {
+        questionnaireVariable: {
             type: String, required: false,
         },
         questionnaireVersion : {
@@ -79,20 +85,20 @@ export default {
 
     apollo: {
         questions:{
-            query :gql`query questions($id: Uuid, $version: Long) {
-                questions(id: $id, version: $version, where: {identifying: true}) {
+            query :gql`query questions($variable: String, $version: Long) {
+                questions(variable: $variable, version: $version, where: { identifying: true }) {
                     questionText, type, variable
                     options { title, value, parentValue }
                 }
             }`,
             variables() {
                 return {
-                    id: (this.questionnaireId || '').replace(/-/g, ''),
+                    variable: (this.questionnaireVariable || ''),
                     version: this.questionnaireVersion,
                 }
             },
             skip() {
-                return this.questionnaireId == null
+                return this.questionnaireVariable == null || this.questionnaireVersion == null
             },
         },
     },
@@ -108,12 +114,12 @@ export default {
             this.conditions = this.value
         },
 
-        questionnaireId() {
-            this.conditions = []
+        questionnaireVariable() {
+            this.conditions = this.value
         },
 
         questionnaireVersion() {
-            this.conditions = []
+            this.conditions = this.value
         },
     },
 
@@ -124,12 +130,14 @@ export default {
 
         check(question) {
             const condition = find(this.conditions, {variable: question.variable})
-            
+
             if(condition == null) {
-                this.conditions.push({variable: question.variable, value: null})
+                this.conditions.push({variable: question.variable, field: null, value: null})
             } else {
                 this.conditions = filter(this.conditions, c => c.variable != question.variable)
             }
+
+            this.$emit('change', [...this.conditions])
         },
 
         questionFor(condition) {
@@ -166,16 +174,19 @@ export default {
     computed: {
         questionsList() {
             const array = filter([...(this.questions || [])], q => {
-                return q.type == 'SINGLEOPTION' 
+                return q.type == 'SINGLEOPTION'
                     || q.type == 'TEXT'
                     || q.type == 'NUMERIC'
             })
-           
+
             return array
         },
 
         isDisabled() {
-            return this.questionsList == null || this.questionsList.length == 0
+            return this.questionnaireVariable == null
+                || this.questionnaireVersion == null
+                || this.questionsList == null
+                || this.questionsList.length == 0
         },
     },
 

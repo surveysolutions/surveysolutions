@@ -2,6 +2,7 @@
 using System.Linq;
 using HotChocolate.Resolvers;
 using HotChocolate.Types;
+using Humanizer;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -29,20 +30,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Login of current responsible user");
             
             descriptor.Field(x => x.ResponsibleNameLowerCase).Type<StringType>()
-                .Description($"Lower cased version of {nameof(InterviewSummary.ResponsibleName)} field");
+                .Description($"Lower cased version of {nameof(InterviewSummary.ResponsibleName).Camelize()} field");
 
             descriptor.Field(x => x.ResponsibleId).Type<UuidType>();
             descriptor.Field(x => x.ResponsibleRole).Type<EnumType<UserRoles>>();
 
-            descriptor.Field(x => x.TeamLeadName).Type<StringType>()
+            descriptor.Field(x => x.SupervisorName).Type<StringType>()
                 .Description("Supervisor login who is responsible for interview");
             descriptor.Field(x => x.ReceivedByInterviewer)
                 .Type<StringType>();
             descriptor.Field(x => x.WasCompleted)
                 .Description("Indicates if interview was ever completed by interviewer")
                 .Type<StringType>();
-            descriptor.Field(x => x.TeamLeadNameLowerCase)
-                .Description("Lowercased version of team lead name")
+            descriptor.Field(x => x.SupervisorNameLowerCase)
+                .Description("Lowercased version of supervisor login who is responsible for interview")
                 .Type<StringType>();
 
             descriptor.Field(x => x.AssignmentId).Type<IntType>()
@@ -57,7 +58,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.UpdateDate)
                 .Description("Represents date (UTC) when interview was changed last time");
             
-            descriptor.Field(x => x.ReceivedByInterviewer)
+            descriptor.Field(x => x.ReceivedByInterviewer).Type<BooleanType>()
                 .Description("Indicator for whether the interview is on the interviewer’s tablet now");
             
             descriptor.Field(x => x.ErrorsCount)
@@ -65,6 +66,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Type<IntType>();
 
             descriptor.Field(x => x.QuestionnaireId);
+            descriptor.Field(x => x.QuestionnaireVariable);
             descriptor.Field(x => x.QuestionnaireVersion);
             
             descriptor.Field(x => x.AnswersToFeaturedQuestions)
@@ -77,6 +79,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                         var unitOfWork = context.Service<IUnitOfWork>();
                         var questionAnswers = await unitOfWork.Session.Query<QuestionAnswer>()
                             .Where(a => keys.Contains(a.InterviewSummary.SummaryId))
+                            .OrderBy(a => a.Position)
                             .ToListAsync()
                             .ConfigureAwait(false);
                         

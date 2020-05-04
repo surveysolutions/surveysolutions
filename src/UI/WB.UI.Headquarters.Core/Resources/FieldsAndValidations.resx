@@ -171,6 +171,9 @@
   <data name="PhoneNumberFieldName" xml:space="preserve">
     <value>Phone number</value>
   </data>
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>Verification code</value>
+  </data>
   <data name="PhoneErrorMessage" xml:space="preserve">
     <value>Invalid phone number</value>
   </data>
