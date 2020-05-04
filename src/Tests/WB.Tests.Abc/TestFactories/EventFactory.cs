@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Events;
+using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.GenericSubdomains.Portable;
@@ -481,5 +482,38 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new InterviewClosedBySupervisor(Guid.NewGuid(), localTime ?? DateTime.Now);
         }
+
+        public CommittedEvent CommittedEvent(string origin = null,
+            Guid? eventSourceId = null,
+            WB.Core.Infrastructure.EventBus.IEvent payload = null,
+            Guid? eventIdentifier = null,
+            int eventSequence = 1)
+        {
+            return new CommittedEvent(
+                Guid.NewGuid(),
+                origin,
+                eventIdentifier ?? Guid.NewGuid(),
+                eventSourceId ?? Guid.NewGuid(),
+                eventSequence,
+                new DateTime(2014, 10, 22),
+                0,
+                payload ?? Mock.Of<WB.Core.Infrastructure.EventBus.IEvent>());
+        }
+        public UncommittedEvent UncommittedEvent(
+            Guid? eventSourceId = null,
+            WB.Core.Infrastructure.EventBus.IEvent payload = null,
+            Guid? eventIdentifier = null,
+            int eventSequence = 1,
+            int version = 1)
+        {
+            return new UncommittedEvent(
+                eventIdentifier ?? Guid.NewGuid(),
+                eventSourceId ?? Guid.NewGuid(),
+                eventSequence,
+                version,
+                new DateTime(2014, 10, 22),
+                payload ?? Mock.Of<WB.Core.Infrastructure.EventBus.IEvent>());
+        }
+
     }
 }

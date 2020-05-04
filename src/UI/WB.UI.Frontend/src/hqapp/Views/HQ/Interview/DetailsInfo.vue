@@ -32,14 +32,14 @@
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
-                        <li id="detailsInfo_StatusListItem"><span class="data-label">{{this.$t('Details.Status')}}</span> 
+                        <li id="detailsInfo_StatusListItem"><span class="data-label">{{this.$t('Details.Status')}}</span>
                             <span class="data">{{this.$config.model.statusName}}</span>
                             <button type="button"
                                 class="btn btn-link gray-action-unit"
                                 @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
                         </li>
-                        <li id="detailsInfo_lastUpdatedListItem"><span class="data-label">{{this.$t('Details.LastUpdated')}}:</span> 
-                            <span class="data">{{lastUpdateDate}}</span>                            
+                        <li id="detailsInfo_lastUpdatedListItem"><span class="data-label">{{this.$t('Details.LastUpdated')}}:</span>
+                            <span class="data">{{lastUpdateDate}}</span>
                             <button id="btn_ShowOverview"
                                 type="button"
                                 class="btn btn-link gray-action-unit"
@@ -103,8 +103,8 @@
 
         <Confirm ref="rejectConfirm"
             id="rejectConfirm"
-            slot="modals" 
-            :title="showUnapproveButton ? $t('Pages.ApproveRejectPartialView_UnapproveLabel') : $t('Pages.ApproveRejectPartialView_RejectLAbel')" 
+            slot="modals"
+            :title="showUnapproveButton ? $t('Pages.ApproveRejectPartialView_UnapproveLabel') : $t('Pages.ApproveRejectPartialView_RejectLAbel')"
             :disableOk="interviewerShouldbeSelected && !newResponsibleId">
             <form v-if="interviewerShouldbeSelected"
                 onsubmit="return false;">
@@ -186,7 +186,7 @@ export default {
             this.$refs.overview.show()
         },
     },
-  
+
     computed: {
         responsibleRole() {
             return this.$config.model.responsibleRole.toLowerCase()
@@ -200,7 +200,7 @@ export default {
         rejectCharsLeft() {
             return `${this.rejectComment.length} / ${this.commentMaxLength}`
         },
-        showApproveButton() {      
+        showApproveButton() {
             return (
                 this.$config.model.approveReject.supervisorApproveAllowed ||
         this.$config.model.approveReject.hqOrAdminApproveAllowed
@@ -209,20 +209,20 @@ export default {
         showUnapproveButton() {
             return this.$config.model.approveReject.hqOrAdminUnapproveAllowed
         },
-        showRejectButton() {      
+        showRejectButton() {
             return (
                 this.$config.model.approveReject.supervisorRejectAllowed ||
         this.$config.model.approveReject.hqOrAdminRejectAllowed
             )
         },
         lastUpdateDate() {
-            return moment.utc(this.$config.model.lastUpdatedAtUtc).fromNow()      
+            return moment.utc(this.$config.model.lastUpdatedAtUtc).fromNow()
         },
         canChangeLanguage() {
             return (
                 this.$store.state.webinterview.languages != undefined &&
         this.$store.state.webinterview.languages.length > 0
-            )      
+            )
         },
         changeLanguageDisabled() {
             return this.$store.state.webinterview.interviewCannotBeChanged

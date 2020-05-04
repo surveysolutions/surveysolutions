@@ -34,8 +34,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             {
                 throw new ArgumentException("Cannot find appropriate external storage data client for type: " + state.StorageType);
             }
+
+            dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.ProcessArgs.RefreshToken,
+                state.Settings.Tenant);
             
-            using (dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.Settings.Tenant))
+            using (dataClient)
             {
                 var applicationFolder = await dataClient.CreateApplicationFolderAsync("Binary Data");
 

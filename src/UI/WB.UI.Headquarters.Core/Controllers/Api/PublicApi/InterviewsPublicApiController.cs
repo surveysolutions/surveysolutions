@@ -81,6 +81,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <returns></returns>
         [HttpGet]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [Obsolete("Use /graphql endpoint instead")]
         public InterviewApiView InterviewsFiltered(Guid? questionnaireId = null, long? questionnaireVersion = null,
             InterviewStatus? status = null, Guid? interviewId = null, int pageSize = 10, int page = 1)
         {

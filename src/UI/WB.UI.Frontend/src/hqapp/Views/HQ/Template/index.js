@@ -6,7 +6,7 @@ import Vue from 'vue'
 export default class Template{
     get routes() {
         return [{
-            path: '/Template/LoginToDesigner', 
+            path: '/Template/LoginToDesigner',
             component: LoginToDesigner,
         },
         {

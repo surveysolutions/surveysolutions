@@ -10,14 +10,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
             this List<QuestionnaireBrowseItem> questionnaireBrowseItems)
         {
             return questionnaireBrowseItems
-                .GroupBy(questionnaire => new { questionnaire.QuestionnaireId, questionnaire.Title })
+                .GroupBy(questionnaire => new { questionnaire.QuestionnaireId, questionnaire.Title, questionnaire.Variable })
                 .Select(g => new QuestionnaireVersionsComboboxViewItem
                 {
                     Key = g.Key.QuestionnaireId.ToString(),
                     Value = g.Key.Title,
                     Versions = g.OrderByDescending(v => v.Version)
                         .Select(v => new ComboboxViewItem { Key = v.Version.ToString(), Value = $"ver. {v.Version}" })
-                        .ToList()
+                        .ToList(),
+                    Alias = g.Key.Variable
                 })
                 .OrderBy(q => q.Value)
                 .ToList();

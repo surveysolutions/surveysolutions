@@ -85,7 +85,8 @@ namespace WB.UI.Headquarters.Controllers
                 AudioAudit = browseItem.IsAudioRecordingEnabled,
                 DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
                               $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
-                Comment = browseItem.Comment
+                Comment = browseItem.Comment,
+                Variable = browseItem.Variable
             };
 
             if (browseItem.ImportedBy.HasValue && browseItem.ImportedBy != Guid.Empty)
@@ -130,7 +131,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AntiForgeryFilter]
-        [ObserverNotAllowed]
         [Authorize(Roles = "Administrator")]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Clone(Guid id, long version)
@@ -151,7 +151,6 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
         [Authorize(Roles = "Administrator")]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Clone(CloneQuestionnaireModel model)

@@ -6,10 +6,10 @@
         <template v-if="syncInfo.hasStatistics">
             <li>{{$t('Pages.InterviewerProfile_TotalSyncTime')}}: {{syncInfo.totalSyncDuration}}</li>
             <li>
-                {{$t('Pages.InterviewerProfile_ConnectionSpeed')}}: 
+                {{$t('Pages.InterviewerProfile_ConnectionSpeed')}}:
                 {{ouputBytes(syncInfo.totalConnectionSpeed)}}/s
                 <text v-if="syncInfo.NetworkType == 'WIFI'">({{$t('Pages.InterviewerProfile_ConnectionWifiFormat', {networkType: syncInfo.NetworkType})}})</text>
-                <text v-else>({{$t('Pages.InterviewerProfile_ConnectionMobileFormat', 
+                <text v-else>({{$t('Pages.InterviewerProfile_ConnectionMobileFormat',
                                    {
                                        networkType: syncInfo.NetworkType,
                                        networkSubType: syncInfo.NetworkSubType,

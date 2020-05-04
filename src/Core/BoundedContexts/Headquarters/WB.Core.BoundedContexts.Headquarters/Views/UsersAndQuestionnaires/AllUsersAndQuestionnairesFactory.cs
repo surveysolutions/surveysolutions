@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
         {
             var allUsers =
                 this.interviewSummaryReader.Query(
-                    _ => _.GroupBy(x => new { x.TeamLeadId, x.TeamLeadName })
+                    _ => _.GroupBy(x => new { TeamLeadId = x.SupervisorId, TeamLeadName = x.SupervisorName })
                             .Where(x => x.Count() > 0)
                             .Select(x => new UsersViewItem { UserId = x.Key.TeamLeadId, UserName = x.Key.TeamLeadName })
                             .OrderBy(x => x.UserName).ToList());

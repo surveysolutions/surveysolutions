@@ -64,7 +64,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
 
             var localInterviewIdsToRemove = localInterviewsToRemove
-                
                 .Select(interview => interview.InterviewId)
                 .Concat(obsoleteInterviews)
                 .ToArray();
@@ -142,6 +141,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 catch (OperationCanceledException)
                 {
 
+                }
+                catch (SynchronizationException ex) when (ex.Type == SynchronizationExceptionType.UpgradeRequired)
+                {
+                    statistics.FailedToCreateInterviewsCount++;
+                    throw;
                 }
                 catch (Exception exception)
                 {

@@ -18,8 +18,8 @@
                 <div v-if="$me.isAnswered"
                     class="action-btn-holder time-question">
                     <audio controls
-                        preload="auto" 
-                        style="width:300px" 
+                        preload="auto"
+                        style="width:300px"
                         :src="audioRecordPath">
                     </audio>
                 </div>
@@ -196,6 +196,6 @@ export default {
             var diff = moment.utc(this.currentTime() - this.startRecordingTime)
             this.formattedTimer = diff.format('mm:ss:SS')
         },
-    },   
+    },
 }
 </script>

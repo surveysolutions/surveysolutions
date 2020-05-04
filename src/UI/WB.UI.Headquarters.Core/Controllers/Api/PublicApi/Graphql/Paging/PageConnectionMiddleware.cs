@@ -18,15 +18,21 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
         {
             await this.next(context).ConfigureAwait(false);
 
-            PageDetails pageDetails = new PageDetails
+            PageRequestInfo pageRequestInfo = new PageRequestInfo
             {
                 Skip = context.Argument<int>("skip"),
                 Take = context.Argument<int>("take"),
+                HasTotalCount = context.FieldSelection.SelectionSet.HasSelectedField("totalCount"),
+                HasFilteredCount =  context.FieldSelection.SelectionSet.HasSelectedField("filteredCount"),
             };
 
             if (context.Result is IQueryable<TClrType> source)
             {
-                context.Result = await new PagedConnectionResolver<TClrType, TSchemaType>(source, pageDetails)
+                var fieldQuery = pageRequestInfo.HasTotalCount 
+                    ? await context.Field.Resolver.Invoke(context) as IQueryable<TClrType> 
+                    : null;
+                
+                context.Result = await new PagedConnectionResolver<TClrType, TSchemaType>(fieldQuery, source, pageRequestInfo)
                     .ResolveAsync(context.RequestAborted)
                     .ConfigureAwait(false);
             }

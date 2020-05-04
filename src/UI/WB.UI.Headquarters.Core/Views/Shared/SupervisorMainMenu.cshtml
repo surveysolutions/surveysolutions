@@ -1,5 +1,6 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Services
+@using WB.Core.BoundedContexts.Headquarters.Resources
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -31,6 +32,7 @@
            title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
             <li>@Html.ActionLink(Common.DownloadSupervisor, "Supervisor", "Download", new { area = string.Empty }, null)</li>
+            @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new { area = string.Empty }, null)</li>
         </ul>
     </li>

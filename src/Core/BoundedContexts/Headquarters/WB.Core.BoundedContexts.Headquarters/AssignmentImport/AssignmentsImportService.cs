@@ -226,14 +226,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var assignmentToImport = this.GetAssignmentById(assignmentId);
             return this.ImportAssignment(assignmentToImport, questionnaire, responsibleId, defaultAssignedTo);
         }
-
+        
         public int ImportAssignment(AssignmentToImport assignment, IQuestionnaire questionnaire, Guid responsibleId)
         {
             assignment = this.GetAssignmentWithoutEmptyAnswersAndFillPasswords(assignment);
             
             return this.ImportAssignment(assignment, questionnaire, responsibleId, responsibleId);
         }
-
+        
         private int ImportAssignment(AssignmentToImport assignmentToImport, IQuestionnaire questionnaire, Guid responsibleId, Guid defaultAssignedTo)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);

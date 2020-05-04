@@ -356,6 +356,7 @@
 .export-destination{
 	position: relative;
 	padding-left: 80px;
+	word-break: break-all; 
 }
 .format-data{
 	&:before{
@@ -426,7 +427,7 @@
 	border-radius: 5px;
 	position: relative;
 	border: 2px solid transparent;
-	@include transition(box-shadow, 0.2s);
+	@include transition(all, 0.1s);
 	&:hover {
 		box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.08), 0 5px 15px 0 rgba(0, 0, 0, 0.08);
 		border-color: #dbdfe2;

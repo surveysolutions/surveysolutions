@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dropbox.Api.FileRequests;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -42,6 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 this.AnswersToFeaturedQuestions.Add(result);
             }
+
+            this.QuestionnaireVariable = questionnaire.VariableName;
         }
 
         public override Guid InterviewId
@@ -75,9 +76,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }
         }
 
-        public virtual Guid TeamLeadId { get; set; }
-        public virtual string TeamLeadName { get; set; }
-        public virtual string TeamLeadNameLowerCase { get; set; }
+        public virtual Guid SupervisorId { get; set; }
+        public virtual string SupervisorName { get; set; }
+        public virtual string SupervisorNameLowerCase { get; set; }
 
         public virtual UserRoles ResponsibleRole { get; set; }
         public virtual DateTime UpdateDate { get; set; }
@@ -121,6 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual bool HasResolvedComments { get; set; }
         public virtual string ResponsibleNameLowerCase { get; protected set; }
+        public virtual bool HasSmallSubstitutions { get; set; }
 
         public virtual void AnswerFeaturedQuestion(int questionId, string answer, decimal? optionCode = null)
         {

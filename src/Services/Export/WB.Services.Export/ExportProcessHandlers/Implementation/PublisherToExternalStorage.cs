@@ -32,8 +32,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 state.ArchiveFilePath, state.StorageType);
 
             var dataClient = externalStorageDataClientFactory.GetDataClient(state.StorageType);
-
-            using (dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.Settings.Tenant))
+            dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.ProcessArgs.RefreshToken,
+                state.Settings.Tenant);
+            
+            using (dataClient)
             {
                 var applicationFolder = await dataClient.CreateApplicationFolderAsync("Data Export");
 

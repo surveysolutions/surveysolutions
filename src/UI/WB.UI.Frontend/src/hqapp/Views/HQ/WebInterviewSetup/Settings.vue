@@ -8,14 +8,14 @@
                 </li>
             </ol>
             <h1>
-                {{this.$t('WebInterviewSettings.WebInterviewSetupFor_Title')}} 
-                <b> 
-                    {{ $t('Pages.QuestionnaireNameFormat', 
-                          { 
-                              name: this.$config.model.questionnaireTitle, 
-                              version: this.$config.model.questionnaireVersion 
+                {{this.$t('WebInterviewSettings.WebInterviewSetupFor_Title')}}
+                <b>
+                    {{ $t('Pages.QuestionnaireNameFormat',
+                          {
+                              name: this.$config.model.questionnaireTitle,
+                              version: this.$config.model.questionnaireVersion
                           })
-                    }} 
+                    }}
                 </b>
             </h1>
         </div>
@@ -66,14 +66,14 @@
                                                 :class="{ 'has-error': errors.has('welcomePage.welcomeTextTitle') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['welcomeText'].text }">
-                                                    <textarea-autosize 
-                                                        v-model="webInterviewPageMessages['welcomeText'].text" 
+                                                    <textarea-autosize
+                                                        v-model="webInterviewPageMessages['welcomeText'].text"
                                                         v-validate="'required'"
                                                         data-vv-name="welcomeTextTitle"
                                                         ref="welcomeTextTitle"
                                                         :min-height="77"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea h2" 
+                                                        class="form-control js-elasticArea h2"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -94,14 +94,14 @@
                                                 :class="{ 'has-error': errors.has('welcomePage.welcomeTextDescription') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['invitation'].text }">
-                                                    <textarea-autosize 
-                                                        v-model="webInterviewPageMessages['invitation'].text" 
+                                                    <textarea-autosize
+                                                        v-model="webInterviewPageMessages['invitation'].text"
                                                         v-validate="'required'"
                                                         data-vv-name="welcomeTextDescription"
                                                         ref="welcomeTextDescription"
                                                         :min-height="56"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea font-bold" 
+                                                        class="form-control js-elasticArea font-bold"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -124,8 +124,8 @@
                                                 :class="{ 'has-error': errors.has('welcomePage.startNewButton') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['startNewButton'].text }">
-                                                    <input type="text" 
-                                                        v-model="webInterviewPageMessages['startNewButton'].text"  
+                                                    <input type="text"
+                                                        v-model="webInterviewPageMessages['startNewButton'].text"
                                                         v-validate="'required'"
                                                         data-vv-name="startNewButton"
                                                         ref="startNewButton"
@@ -162,7 +162,7 @@
                                         <div class="browser-mockup mb-30">
                                             <div class="mockup-block d-flex f-row">
                                                 <div class="icon">
-                                                    
+
                                                 </div>
 
                                                 <div class="text-example">
@@ -217,7 +217,7 @@
                                                                     <path d="M138.389 27.8415C137.529 30.1284 136.165 31.0726 133.479 31.0726C132.682 31.0726 131.884 31.0096 131.087 30.9257V27.6947C131.821 27.7786 132.598 27.8625 133.374 27.8415C134.402 27.7366 134.885 26.9393 134.885 26.0582C134.885 25.7644 134.822 25.4497 134.717 25.177L129.702 11.8122H133.899L137.13 21.5683H137.193L140.299 11.8122H144.349L138.389 27.8415Z"
                                                                         fill="#303030"/>
                                                                 </svg>
-                                                                    
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -235,11 +235,11 @@
                                                             {{previewText(webInterviewPageMessages['startNewButton'].text)}}
                                                         </a>
                                                     </div>
-                                                </div>            
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>									
+                                </div>
                             </form>
                         </div>
                         <div role="tabpanel"
@@ -258,14 +258,14 @@
                                                 :class="{ 'has-error': errors.has('resumePage.resumeWelcome') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['resumeWelcome'].text }">
-                                                    <textarea-autosize 
-                                                        v-model="webInterviewPageMessages['resumeWelcome'].text"  
+                                                    <textarea-autosize
+                                                        v-model="webInterviewPageMessages['resumeWelcome'].text"
                                                         v-validate="'required'"
                                                         data-vv-name="resumeWelcome"
                                                         ref="resumeWelcome"
                                                         :min-height="77"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea h2" 
+                                                        class="form-control js-elasticArea h2"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -286,14 +286,14 @@
                                                 :class="{ 'has-error': errors.has('resumePage.resumeInvitation') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['resumeInvitation'].text }">
-                                                    <textarea-autosize 
-                                                        v-model="webInterviewPageMessages['resumeInvitation'].text" 
+                                                    <textarea-autosize
+                                                        v-model="webInterviewPageMessages['resumeInvitation'].text"
                                                         v-validate="'required'"
-                                                        data-vv-name="resumeInvitation" 
+                                                        data-vv-name="resumeInvitation"
                                                         ref="resumeInvitation"
-                                                        :min-height="56"   
-                                                        maxlength="200"                                                        
-                                                        class="form-control js-elasticArea font-bold" 
+                                                        :min-height="56"
+                                                        maxlength="200"
+                                                        class="form-control js-elasticArea font-bold"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -315,8 +315,8 @@
                                                 :class="{ 'has-error': errors.has('resumePage.resumeButton') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['resumeButton'].text }">
-                                                    <input type="text" 
-                                                        v-model="webInterviewPageMessages['resumeButton'].text"  
+                                                    <input type="text"
+                                                        v-model="webInterviewPageMessages['resumeButton'].text"
                                                         v-validate="'required'"
                                                         data-vv-name="resumeButton"
                                                         ref="resumeButton"
@@ -352,7 +352,7 @@
                                         <div class="browser-mockup mb-30">
                                             <div class="mockup-block d-flex f-row">
                                                 <div class="icon">
-                                                    
+
                                                 </div>
 
                                                 <div class="text-example">
@@ -407,7 +407,7 @@
                                                                     <path d="M138.389 27.8415C137.529 30.1284 136.165 31.0726 133.479 31.0726C132.682 31.0726 131.884 31.0096 131.087 30.9257V27.6947C131.821 27.7786 132.598 27.8625 133.374 27.8415C134.402 27.7366 134.885 26.9393 134.885 26.0582C134.885 25.7644 134.822 25.4497 134.717 25.177L129.702 11.8122H133.899L137.13 21.5683H137.193L140.299 11.8122H144.349L138.389 27.8415Z"
                                                                         fill="#303030"/>
                                                                 </svg>
-                                                                    
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -419,16 +419,13 @@
                                                     <div class="row-element mb-40">
                                                         <p  class="font-bold">{{previewText(webInterviewPageMessages['resumeInvitation'].text)}}</p>
                                                     </div>
-                                                    <div class="row-element mb-40">
-                                                        <p  class="font-bold primary-text">{{$t('WebInterview.ResumeInterviewDescription')}}</p>
-                                                    </div>
                                                     <div class="row-element">
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-success btn-lg mb-1">
                                                             {{previewText(webInterviewPageMessages['resumeButton'].text)}}
                                                         </a>
                                                     </div>
-                                                </div>            
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -451,8 +448,8 @@
                                                 :class="{ 'has-error': errors.has('completePage.noteToSupervisor') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['completeNoteToSupervisor'].text }">
-                                                    <textarea-autosize 
-                                                        v-model="webInterviewPageMessages['completeNoteToSupervisor'].text"  
+                                                    <textarea-autosize
+                                                        v-model="webInterviewPageMessages['completeNoteToSupervisor'].text"
                                                         v-validate="'required'"
                                                         data-vv-name="completeNoteToSupervisor"
                                                         ref="completeNoteToSupervisor"
@@ -478,8 +475,8 @@
                                                 :class="{ 'has-error': errors.has('completePage.completeButton') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['completeButton'].text }">
-                                                    <input type="text" 
-                                                        v-model="webInterviewPageMessages['completeButton'].text"  
+                                                    <input type="text"
+                                                        v-model="webInterviewPageMessages['completeButton'].text"
                                                         v-validate="'required'"
                                                         data-vv-name="completeButton"
                                                         ref="completeButton"
@@ -558,14 +555,14 @@
                                                 :class="{ 'has-error': errors.has('finishPage.webSurveyHeader') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['webSurveyHeader'].text }">
-                                                    <textarea-autosize  
+                                                    <textarea-autosize
                                                         v-model="webInterviewPageMessages['webSurveyHeader'].text"
                                                         v-validate="'required'"
-                                                        data-vv-name="webSurveyHeader"   
+                                                        data-vv-name="webSurveyHeader"
                                                         ref="webSurveyHeader"
-                                                        :min-height="77" 
-                                                        maxlength="200"                                                         
-                                                        class="form-control js-elasticArea h2" 
+                                                        :min-height="77"
+                                                        maxlength="200"
+                                                        class="form-control js-elasticArea h2"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -586,14 +583,14 @@
                                                 :class="{ 'has-error': errors.has('finishPage.finishInterview') }">
                                                 <div class="field"
                                                     :class="{ 'answered': webInterviewPageMessages['finishInterview'].text }">
-                                                    <textarea-autosize 
+                                                    <textarea-autosize
                                                         v-model="webInterviewPageMessages['finishInterview'].text"
                                                         v-validate="'required'"
-                                                        data-vv-name="finishInterview" 
-                                                        ref="finishInterview" 
-                                                        :min-height="56" 
-                                                        maxlength="200"                                                           
-                                                        class="form-control js-elasticArea font-bold" 
+                                                        data-vv-name="finishInterview"
+                                                        ref="finishInterview"
+                                                        :min-height="56"
+                                                        maxlength="200"
+                                                        class="form-control js-elasticArea font-bold"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -625,7 +622,7 @@
                                         <div class="browser-mockup mb-30">
                                             <div class="mockup-block d-flex f-row">
                                                 <div class="icon">
-                                                    
+
                                                 </div>
 
                                                 <div class="text-example">
@@ -680,7 +677,7 @@
                                                                     <path d="M138.389 27.8415C137.529 30.1284 136.165 31.0726 133.479 31.0726C132.682 31.0726 131.884 31.0096 131.087 30.9257V27.6947C131.821 27.7786 132.598 27.8625 133.374 27.8415C134.402 27.7366 134.885 26.9393 134.885 26.0582C134.885 25.7644 134.822 25.4497 134.717 25.177L129.702 11.8122H133.899L137.13 21.5683H137.193L140.299 11.8122H144.349L138.389 27.8415Z"
                                                                         fill="#303030"/>
                                                                 </svg>
-                                                                    
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -692,7 +689,7 @@
                                                     <div class="row-element mb-40">
                                                         <p  class="font-bold">{{previewText(webInterviewPageMessages['finishInterview'].text)}}</p>
                                                     </div>
-                                                </div>            
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -749,7 +746,7 @@
                                                             v-validate="'required'"
                                                             data-vv-name="subject"
                                                             maxlength="200"
-                                                            class="form-control with-clear-btn" 
+                                                            class="form-control with-clear-btn"
                                                             placeholder="Please enter the subject">
                                                         <button type="button"
                                                             @click="clearField(emailTemplate, 'subject')"
@@ -771,12 +768,12 @@
                                                         :class="{ 'answered': emailTemplate.message }">
                                                         <textarea-autosize v-model="emailTemplate.message"
                                                             data-vv-as="Please enter the main text"
-                                                            v-validate="'required'" 
+                                                            v-validate="'required'"
                                                             data-vv-name="message"
                                                             :ref="'message' + emailTemplate.value"
                                                             maxlength="1000"
                                                             :min-height="79"
-                                                            class="form-control js-elasticArea" 
+                                                            class="form-control js-elasticArea"
                                                             placeholder="Please enter the main text">
                                                         </textarea-autosize>
                                                         <button type="button"
@@ -800,13 +797,13 @@
                                                     :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.passwordDescription') }">
                                                     <div class="field"
                                                         :class="{ 'answered': emailTemplate.passwordDescription }">
-                                                        <input type="text" 
-                                                            v-model="emailTemplate.passwordDescription" 
+                                                        <input type="text"
+                                                            v-model="emailTemplate.passwordDescription"
                                                             data-vv-name="passwordDescription"
                                                             data-vv-as="Please enter password description"
                                                             v-validate="'required'"
                                                             maxlength="500"
-                                                            class="form-control with-clear-btn" 
+                                                            class="form-control with-clear-btn"
                                                             placeholder="Please enter password description">
                                                         <button type="button"
                                                             @click="clearField(emailTemplate, 'passwordDescription')"
@@ -827,18 +824,18 @@
                                                     <div class="field"
                                                         :class="{ 'answered': emailTemplate.linkText }">
                                                         <span class="wrapper-dynamic">
-                                                            <input type="text" 
-                                                                v-model="emailTemplate.linkText" 
-                                                                v-validate="'required'" 
+                                                            <input type="text"
+                                                                v-model="emailTemplate.linkText"
+                                                                v-validate="'required'"
                                                                 data-vv-name="linkText"
                                                                 maxlength="200"
-                                                                class="form-control with-clear-btn width-dynamic" 
+                                                                class="form-control with-clear-btn width-dynamic"
                                                                 placeholder="Please enter the text" />
                                                             <button type="button"
                                                                 @click="clearField(emailTemplate, 'linkText')"
                                                                 class="btn btn-link btn-clear">
                                                                 <span></span>
-                                                            </button>    
+                                                            </button>
                                                             <span class="help-block"
                                                                 v-if="errors.first('emailTemplateData' + emailTemplate.value + '.linkText')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
                                                         </span>
@@ -1118,7 +1115,7 @@
                     </div>
                 </form>
             </div>
-        </div>  
+        </div>
         <hr />
         <div class="row">
             <div class="col-md-12">
@@ -1144,8 +1141,8 @@
                     </a>
                 </div>
             </div>
-        </div> 
-    </HqLayout>    
+        </div>
+    </HqLayout>
 </template>
 <script>
 import Vue from 'vue'
@@ -1242,9 +1239,9 @@ export default {
         },
         setPageActive(titleType, messageType) {
             var self = this
-            this.$nextTick(function() { 
+            this.$nextTick(function() {
                 if(titleType)
-                    self.$refs[titleType].resize() 
+                    self.$refs[titleType].resize()
                 if(messageType)
                     self.$refs[messageType].resize()
             })
@@ -1307,7 +1304,7 @@ export default {
                         editTitleText.cancelText = editTitleText.text
                         editDescriptionText.cancelText = editDescriptionText.text
 
-                        if(buttonText !== undefined)                       
+                        if(buttonText !== undefined)
                             self.webInterviewPageMessages[buttonText].cancelText = self.webInterviewPageMessages[buttonText].text
                         self.$validator.reset(scope)
                     })
@@ -1327,7 +1324,7 @@ export default {
 
             if(buttonText !== undefined)
             {
-                var editButtonText = this.webInterviewPageMessages[buttonText]            
+                var editButtonText = this.webInterviewPageMessages[buttonText]
                 editButtonText.text = editButtonText.cancelText
             }
             this.$validator.reset(scope)
@@ -1370,7 +1367,7 @@ export default {
                 this.singleResponseIsEnabled)
                 .then(function (response) {
                     self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled
-                    self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse 
+                    self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse
                     self.cancelReminderAfterDaysIfPartialResponse = self.reminderAfterDaysIfPartialResponse
                     self.cancelSingleResponseIsEnabled = self.singleResponseIsEnabled
                     self.$validator.reset('additionalSettings')
@@ -1388,7 +1385,7 @@ export default {
             this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse
             this.singleResponseIsEnabled = this.cancelSingleResponseIsEnabled
             this.$validator.reset('additionalSettings')
-        }, 
+        },
         previewText(text) {
             if (text == null)
                 return ''

@@ -66,8 +66,8 @@
                 </div>
             </FilterBlock>
 
-            <InterviewFilter slot="additional"                
-                :questionnaireId="where.questionnaireId"
+            <InterviewFilter slot="additional"
+                :questionnaireVariable="questionnaireVariable"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"
                 @change="questionFilterChanged" />
@@ -78,7 +78,7 @@
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="rows => selectedRows = rows"
-            @page="resetSelection"           
+            @page="resetSelection"
             @ajaxComplete="isLoading = false"
             :selectable="showSelectors"
             :selectableId="'id'">
@@ -130,7 +130,6 @@
             <form onsubmit="return false;">
                 <div class="form-group"
                     v-if="getFilteredToAssign().length > 0">
-                    <p>{{$t("Interviews.ChooseResponsible")}}</p>
                     <label
                         class="control-label"
                         for="newResponsibleId">{{$t("Assignments.SelectResponsible")}}</label>
@@ -144,7 +143,15 @@
                 </div>
                 <div id="pnlAssignToOtherTeamConfirmMessage">
                     <p
-                        v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Supervisor assigned', status2: 'Interviewer assigned', status3: 'Rejected by Supervisor'} ) : $t('Interviews.AssignToOtherTeamConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Approved by Supervisor', status2: 'Approved by Headquarters'} )"></p>
+                        v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {
+                            count: this.getFilteredToAssign().length,
+                            status1: 'Supervisor assigned',
+                            status2: 'Interviewer assigned',
+                            status3: 'Rejected by Supervisor'} )
+                            : $t('Interviews.AssignToOtherTeamConfirmMessage', {
+                                count: this.getFilteredToAssign().length,
+                                status1: 'Approved by Supervisor',
+                                status2: 'Approved by Headquarters'} )"></p>
                 </div>
 
                 <div v-if="CountReceivedByInterviewerItems() > 0">
@@ -159,6 +166,11 @@
                         <span class="tick"></span>
                         {{$t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems())}}
                     </label>
+                    <br />
+                    <span v-if="isReassignReceivedByInterviewer"
+                        class="text-warning">
+                        {{$t("Interviews.AssignReceivedWarning")}}
+                    </span>
                 </div>
             </form>
             <div slot="actions">
@@ -344,14 +356,18 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
-import {lowerCase, find, filter, flatten, map, 
+import {lowerCase, find, filter, flatten, map,
     join, assign, isNaN, isNumber, toNumber, isEqual} from 'lodash'
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+
 const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
   interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
     totalCount
+    filteredCount
     nodes {
       id
       key
@@ -359,6 +375,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       questionnaireId
       responsibleId
       responsibleName
+      responsibleRole
       errorsCount
       assignmentId
       updateDate
@@ -378,27 +395,27 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
 }`
 
 /** convert
- * [{variable, field, value}, {variable, field, value}] 
+ * [{variable, field, value}, {variable, field, value}]
  * ["variable,field,value", "variable,field,value"]
  */
 function conditionToQueryString(conditions) {
     const result = []
     conditions.forEach(c => {
-        result.push(`${c.variable},${c.field},${c.value}`)
+        result.push(`${c.variable},${c.field},${JSON.stringify(c.value)}`)
     })
     return result.length > 0 ? result : null
 }
 
-function queryStrignToCondition(queryStringArray) {
+function queryStringToCondition(queryStringArray) {
     const result = []
     queryStringArray.forEach(q => {
         const parts = q.split(',')
         const value = parts.slice(2).join(',')
-        
+
         result.push({
             variable: parts[0],
             field: parts[1],
-            value: isNaN(value) ? value : toNumber(value),
+            value: JSON.parse(value),
         })
     })
     return result
@@ -417,7 +434,8 @@ export default {
             isLoading: false,
             selectedRows: [],
             selectedRowWithMenu: null,
-            totalRows: 0,
+            totalRows: 0, filteredCount: 0,
+            draw: 0,
             assignmentId: null,
             responsibleId: null,
             responsibleParams: {showArchived: true, showLocked: true},
@@ -428,7 +446,7 @@ export default {
             unactiveDateStart: null,
             unactiveDateEnd: null,
             statuses: this.$config.model.statuses,
-           
+
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
 
@@ -467,7 +485,7 @@ export default {
             const result = this.selectedRowWithMenu != null ? lowerCase(this.selectedRowWithMenu.responsibleRole) : ''
             return result
         },
-        
+
         tableColumns() {
             const self = this
             return [
@@ -487,6 +505,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'key')
                     },
+                    width: '50px',
                 },
                 {
                     data: 'identifyingQuestions',
@@ -495,10 +514,14 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        var questionsWithTitles = map(data, node => {
-                            return (node.question.label || node.question.questionText) + ': ' + node.answer
+                        const delimiter = self.mode == 'dense'
+
+                        var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
+                            return `${sanitizeHtml(node.question.label || node.question.questionText)}: <strong>${node.answer}</strong>`
                         })
-                        return join(questionsWithTitles, ', ')
+
+                        const dom = join(questionsWithTitles, ', ')
+                        return dom
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'prefield')
@@ -512,6 +535,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'responsible')
                     },
+                    width: '100px',
                 },
                 {
                     data: 'updateDate',
@@ -528,6 +552,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'updated')
                     },
+                    width: '100px',
                 },
                 {
                     data: 'errorsCount',
@@ -540,6 +565,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
                     },
+                    width: '50px',
                 },
                 {
                     data: 'status',
@@ -552,6 +578,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'status')
                     },
+                    width: '100px',
                 },
                 {
                     data: 'receivedByInterviewer',
@@ -563,6 +590,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'received')
                     },
+                    width: '50px',
                 },
                 {
                     data: 'assignmentId',
@@ -573,6 +601,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'assignment')
                     },
+                    width: '50px',
                 },
             ]
         },
@@ -581,11 +610,11 @@ export default {
             const columns = this.tableColumns.filter(x => x.if == null || x.if())
 
             var defaultSortIndex = 3 //findIndex(columns, { name: "UpdateDate" });
-            
+
             if (this.showSelectors) defaultSortIndex += 1
 
             const self = this
-            
+
             var tableOptions = {
                 rowId: function(row) {
                     return `row_${row.id}`
@@ -593,12 +622,12 @@ export default {
                 order: [[defaultSortIndex, 'desc']],
                 deferLoading: 0,
                 columns,
-                pageLength: 10,
+                pageLength: 20,
                 ajax (data, callback, settings) {
                     const order = {}
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
-                    
+
                     order[column.data] = order_col.dir.toUpperCase()
 
                     const variables = {
@@ -607,17 +636,17 @@ export default {
                         take: data.length,
                     }
 
-                    const where = { 
+                    const where = {
                         AND: [...self.whereQuery],
                     }
-                   
+
                     const search = data.search.value
 
                     if(search && search != '') {
                         where.AND.push({ OR: [
                             { key_starts_with: search.toLowerCase() },
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
-                            { teamLeadNameLowerCase_starts_with: search.toLowerCase() },
+                            { supervisorNameLowerCase_starts_with: search.toLowerCase() },
                             { identifyingQuestions_some: {
                                 answerLowerCase_starts_with: search.toLowerCase(),
                             },
@@ -630,15 +659,17 @@ export default {
                     }
 
                     self.$apollo.query({
-                        query, 
+                        query,
                         variables: variables,
                         fetchPolicy: 'network-only',
                     }).then(response => {
                         const data = response.data.interviews
                         self.totalRows = data.totalCount
+                        self.filteredCount = data.filteredCount
                         callback({
                             recordsTotal: data.totalCount,
-                            recordsFiltered: data.totalCount,
+                            recordsFiltered: data.filteredCount,
+                            draw: ++this.draw,
                             data: data.nodes,
                         })
                     }).catch(err => {
@@ -656,17 +687,20 @@ export default {
                     selector: 'td>.checkbox-filter',
                     info: false,
                 },
+                dom: 'fritp',
                 sDom: 'rf<"table-with-scroll"t>ip',
                 searchHighlight: true,
             }
 
             return tableOptions
         },
+
         showSelectors() {
             return !this.config.isObserver && !this.config.isObserving
         },
+
         title() {
-            return this.$t('Common.Interviews') + ' (' + this.formatNumber(this.totalRows) + ')'
+            return this.$t('Common.Interviews') + ' (' + this.formatNumber(this.filteredCount) + ')'
         },
 
         config() {
@@ -674,24 +708,35 @@ export default {
         },
 
         where() {
-            const data = {}
+            let data = {}
 
             if (this.status) data.status = this.status.key
-            if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
+            if (this.questionnaireId) {
+                data.questionnaireId = this.questionnaireId.key
+            }
+
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
             if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
             if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
-            
+
             return data
+        },
+        questionnaireVariable() {
+            if(this.where.questionnaireId == null)
+                return ''
+
+            const questionnaire = find(this.config.questionnaires, {'key': this.where.questionnaireId})
+            return questionnaire.alias
         },
 
         whereQuery() {
             const and = []
+            const self = this
 
             if(this.where.questionnaireId) {
-                and.push({questionnaireId: this.where.questionnaireId})
+                and.push({questionnaireVariable: this.questionnaireVariable})
 
                 if(this.where.questionnaireVersion) {
                     and.push({questionnaireVersion: this.where.questionnaireVersion})
@@ -705,8 +750,9 @@ export default {
             if(this.conditions != null && this.conditions.length > 0) {
                 this.conditions.forEach(cond => {
                     if(cond.value == null) return
-                            
+
                     const identifyingQuestions_some = { question: {variable: cond.variable}}
+
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
                     identifyingQuestions_some[cond.field] = value
                     and.push({ identifyingQuestions_some })
@@ -714,17 +760,17 @@ export default {
             }
 
             if(this.responsibleId) {
-                and.push({ 
+                and.push({
                     OR: [
                         { responsibleName: this.responsibleId.value },
-                        { teamLeadName: this.responsibleId.value },
+                        { supervisorName: this.responsibleId.value },
                     ]})
             }
 
             if(this.unactiveDateStart) {
                 and.push({ updateDate_gte: this.unactiveDateStart})
             }
-            
+
             if(this.unactiveDateEnd) {
                 and.push({ updateDate_lte: this.unactiveDateEnd})
             }
@@ -738,9 +784,9 @@ export default {
 
         queryString() {
             const query = Object.assign({}, this.where)
-            
-            const conditions = filter(this.conditions, c => c.value != null)
-            
+
+            const conditions = this.conditions
+
             if(conditions.length > 0) {
                 query.conditions = conditionToQueryString(conditions)
             }
@@ -754,6 +800,7 @@ export default {
             this.conditions = conditions
             this.reloadTableAndSaveRoute()
         },
+
         togglePrefield() {
             this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
             return false
@@ -804,10 +851,12 @@ export default {
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
             this.questionnaireVersion = null
+            this.conditions = []
         },
 
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
+            this.conditions = []
         },
 
         userSelected(newValue) {
@@ -818,7 +867,7 @@ export default {
         },
 
         viewInterview() {
-            var id = this.selectedRowWithMenu.interviewId
+            var id = this.selectedRowWithMenu.id
             window.location = this.config.interviewReviewUrl + '/' + id.replace(/-/g, '')
         },
 
@@ -846,8 +895,8 @@ export default {
             }
 
             var commands = this.arrayMap(
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 }),
                 function(rowId) {
                     var item = {
@@ -904,8 +953,8 @@ export default {
 
             var command = this.getCommand(
                 self.config.isSupervisor ? 'ApproveInterviewCommand' : 'HqApproveInterviewCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 }),
                 this.statusChangeComment
             )
@@ -939,8 +988,8 @@ export default {
             if (!self.config.isSupervisor) {
                 var command = this.getCommand(
                     'HqRejectInterviewCommand',
-                    map(filteredItems, question => {
-                        return question.interviewId
+                    map(filteredItems, interview => {
+                        return interview.id
                     }),
                     this.statusChangeComment
                 )
@@ -961,8 +1010,8 @@ export default {
                 if (noReassignInterviews.length > 0) {
                     var cmd = this.getCommand(
                         'RejectInterviewCommand',
-                        map(noReassignInterviews, question => {
-                            return question.interviewId
+                        map(noReassignInterviews, interview => {
+                            return interview.id
                         }),
                         this.statusChangeComment
                     )
@@ -983,8 +1032,8 @@ export default {
 
                 if (toReassignInterviews.length > 0 && self.newResponsibleId != null) {
                     var commands = this.arrayMap(
-                        map(toReassignInterviews, question => {
-                            return question.interviewId
+                        map(toReassignInterviews, interview => {
+                            return interview.id
                         }),
                         function(rowId) {
                             var item = {
@@ -1083,8 +1132,8 @@ export default {
 
             var command = this.getCommand(
                 'UnapproveByHeadquarterCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 })
             )
 
@@ -1112,8 +1161,8 @@ export default {
 
             var command = this.getCommand(
                 'DeleteInterviewCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 })
             )
 
@@ -1138,7 +1187,7 @@ export default {
         async showStatusHistory() {
             var self = this
             const statusHistoryList = await this.$http.post(this.config.api.interviewStatuses, {
-                interviewId: this.selectedRowWithMenu.interviewId,
+                interviewId: this.selectedRowWithMenu.id,
             })
 
             if (statusHistoryList.data.length != 0) {
@@ -1209,7 +1258,7 @@ export default {
                 callback: () => self.showStatusHistory(),
             })
 
-            if (rowData.responsibleRole === 'Interviewer') {
+            if (rowData.responsibleRole === 'INTERVIEWER') {
                 menu.push({
                     name: self.$t('Common.OpenResponsiblesProfile'),
                     callback: () => (window.location = self.config.profileUrl + '/' + rowData.responsibleId),
@@ -1226,28 +1275,33 @@ export default {
                     className: 'context-menu-separator context-menu-not-selectable',
                 })
 
+                const canBeAssigned =  rowData.actionFlags.indexOf('CANBEREASSIGNED') >= 0
                 menu.push({
                     name: self.$t('Common.Assign'),
-                    className: 'primary-text',
+                    className: canBeAssigned ? 'primary-text' : '',
                     callback: () => self.assignInterview(),
+                    disabled: !canBeAssigned,
                 })
 
                 menu.push({
                     name: self.$t('Common.Approve'),
                     className: 'success-text',
                     callback: () => self.approveInterview(),
+                    disabled: rowData.actionFlags.indexOf('CANBEAPPROVED') < 0,
                 })
 
                 menu.push({
                     name: self.$t('Common.Reject'),
                     className: 'error-text',
                     callback: () => self.rejectInterview(),
+                    disabled: rowData.actionFlags.indexOf('CANBEREJECTED') < 0,
                 })
 
                 if (!self.config.isSupervisor) {
                     menu.push({
                         name: self.$t('Common.Unapprove'),
                         callback: () => self.unapproveInterview(),
+                        disabled: rowData.actionFlags.indexOf('CANBEUNAPPROVEDBYHQ') < 0,
                     })
 
                     menu.push({
@@ -1258,6 +1312,7 @@ export default {
                         name: self.$t('Common.Delete'),
                         className: 'error-text',
                         callback: () => self.deleteInterview(),
+                        disabled: rowData.actionFlags.indexOf('CANBEDELETED') < 0,
                     })
                 }
             }
@@ -1272,7 +1327,7 @@ export default {
         clearAssignmentFilter() {
             this.assignmentId = null
         },
-        
+
         formatNumber(value) {
             if (value == null || value == undefined) return value
             var language =
@@ -1284,10 +1339,11 @@ export default {
 
             props.forEach(iterator, this)
         },
+
         reloadTable() {
             this.isLoading = true
             this.selectedRows.splice(0, this.selectedRows.length)
-            
+
             if (this.$refs.table) {
                 this.$refs.table.reload()
             }
@@ -1303,7 +1359,7 @@ export default {
 
             if (!isEqual(this.$route.query, query)) {
                 this.$router.push({ query })
-                    .catch(() => {})                    
+                    .catch(() => {})
             }
         },
 
@@ -1356,23 +1412,23 @@ export default {
                         self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
 
                         if(query.conditions != null) {
-                            self.conditions = queryStrignToCondition(flatten([query.conditions]))
+                            self.conditions = queryStringToCondition(flatten([query.conditions]))
                         }
                     }
                 }
             })
-            
+
             self.loadResponsibleIdByName(responsibleId => {
                 if (responsibleId != undefined)
                     self.responsibleId = {key: responsibleId, value: query.responsibleName}
-                else 
+                else
                     self.responsibleId = null
 
                 self.startWatchers(
                     ['responsibleId',
-                        'questionnaireId', 
-                        'status', 
-                        'assignmentId', 
+                        'questionnaireId',
+                        'status',
+                        'assignmentId',
                         'questionnaireVersion'],
                     self.reloadTableAndSaveRoute.bind(self)
                 )
@@ -1380,7 +1436,7 @@ export default {
         },
     },
 
-    mounted() {        
+    mounted() {
         this.initPageFilters()
     },
 
