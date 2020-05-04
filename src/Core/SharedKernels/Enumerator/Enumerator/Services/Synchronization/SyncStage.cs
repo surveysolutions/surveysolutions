@@ -27,6 +27,8 @@
         AttachmentsCleanup,
         UpdatingAssignments,
         UpdatingQuestionnaires,
-        FailedUnauthorized
+        FailedUnauthorized,
+        UpdatingInterviews,
+        UpdatingInterviewsChanges,
     }
 }

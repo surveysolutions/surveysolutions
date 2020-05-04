@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using WB.Infrastructure.AspNetCore;
 
 namespace WB.UI.WebTester
 {
@@ -39,18 +40,9 @@ namespace WB.UI.WebTester
             Host.CreateDefaultBuilder(args)
                 .UseSerilog((host, loggerConfig) =>
                 {
-                    var logsFileLocation = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "log.log");
-                    var verboseLog = Path.Combine(host.HostingEnvironment.ContentRootPath, "..", "logs", "verbose.log");
-
                     loggerConfig
-                        //.MinimumLevel.Debug()
-                        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-                        .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
-                        .Enrich.FromLogContext()
-                        .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day,
-                            restrictedToMinimumLevel: LogEventLevel.Warning)
-                        .WriteTo.File(verboseLog, rollingInterval: RollingInterval.Day,
-                            restrictedToMinimumLevel: LogEventLevel.Verbose, retainedFileCountLimit: 2);
+                        .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "webTester");
+                        
                     if (host.HostingEnvironment.IsDevelopment())
                     {
                         // To debug logitems source add {SourceContext} to output template

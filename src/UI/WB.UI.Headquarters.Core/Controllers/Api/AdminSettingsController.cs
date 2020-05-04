@@ -33,6 +33,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             public bool InterviewerAutoUpdatesEnabled { get; set; }
             public bool NotificationsEnabled { get; set; }
+            public bool PartialSynchronizationEnabled { get; set; }
         }
 
         public class WebInterviewSettingsModel
@@ -119,7 +120,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             return new InterviewerSettingsModel
             {
                 InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled(),
-                NotificationsEnabled = interviewerSettings.IsDeviceNotificationsEnabled()
+                NotificationsEnabled = interviewerSettings.IsDeviceNotificationsEnabled(),
+                PartialSynchronizationEnabled = interviewerSettings.IsPartialSynchronizationEnabled(),
             };
         }
 
@@ -130,7 +132,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 new InterviewerSettings
                 {
                     AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled,
-                    DeviceNotificationsEnabled = message.NotificationsEnabled
+                    DeviceNotificationsEnabled = message.NotificationsEnabled,
+                    PartialSynchronizationEnabled = message.PartialSynchronizationEnabled,
                 },
                 AppSetting.InterviewerSettings);
 

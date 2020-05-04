@@ -351,10 +351,6 @@
     <value>Продолжить интервью</value>
     <comment>Продолжить интервью</comment>
   </data>
-  <data name="ResumeInterviewDescription" xml:space="preserve">
-    <value>Мы напоминаем что вы начали интервью, но его еще не закончили</value>
-    <comment>Мы напоминаем что вы начали интервью, но его еще не закончили</comment>
-  </data>
   <data name="Complete" xml:space="preserve">
     <value>Завершить</value>
   </data>

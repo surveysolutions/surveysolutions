@@ -48,7 +48,7 @@ using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.UI.WebTester
 {
-    public class WebTesterModule : IModule
+    public class WebTesterModule : IModule, IInitModule
     {
         private readonly string designerAddress;
 

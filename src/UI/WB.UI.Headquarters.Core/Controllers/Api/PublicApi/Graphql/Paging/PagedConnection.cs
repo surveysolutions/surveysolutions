@@ -11,16 +11,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
         {
         }
 
-        public PagedConnection(long totalCount, IList nodes)
+        public PagedConnection(long totalCount, long filteredCount, IList nodes)
         {
             TotalCount = totalCount;
+            FilteredCount = filteredCount;
             Nodes = nodes;
         }
 
-        public long TotalCount { get; set; }
-        public IList Nodes { get; set; }
+        public long TotalCount { get; }
+        public long FilteredCount { get; }
+        public IList Nodes { get; }
 
-        protected new static void Configure(IObjectTypeDescriptor<IPagedConnection> descriptor)
+        private new static void Configure(IObjectTypeDescriptor<IPagedConnection> descriptor)
         {
             descriptor.BindFields(BindingBehavior.Explicit);
 
@@ -32,7 +34,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
 
             descriptor.Field("totalCount")
                 .Type<IntType>()
+                .Description("Total count of nodes without filtering applied")
                 .Resolver(x => x.Parent<IPagedConnection>().TotalCount);
+
+            descriptor.Field("filteredCount")
+                .Type<IntType>()
+                .Description("Filtered count of nodes without paging")
+                .Resolver(x => x.Parent<IPagedConnection>().FilteredCount);
         }
     }
 }

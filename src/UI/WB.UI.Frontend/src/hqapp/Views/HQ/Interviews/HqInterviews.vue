@@ -67,7 +67,7 @@
             </FilterBlock>
 
             <InterviewFilter slot="additional"
-                :questionnaireId="where.questionnaireId"
+                :questionnaireVariable="questionnaireVariable"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"
                 @change="questionFilterChanged" />
@@ -130,7 +130,6 @@
             <form onsubmit="return false;">
                 <div class="form-group"
                     v-if="getFilteredToAssign().length > 0">
-                    <p>{{$t("Interviews.ChooseResponsible")}}</p>
                     <label
                         class="control-label"
                         for="newResponsibleId">{{$t("Assignments.SelectResponsible")}}</label>
@@ -167,6 +166,11 @@
                         <span class="tick"></span>
                         {{$t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems())}}
                     </label>
+                    <br />
+                    <span v-if="isReassignReceivedByInterviewer"
+                        class="text-warning">
+                        {{$t("Interviews.AssignReceivedWarning")}}
+                    </span>
                 </div>
             </form>
             <div slot="actions">
@@ -363,6 +367,7 @@ const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttr
 const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
   interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
     totalCount
+    filteredCount
     nodes {
       id
       key
@@ -429,7 +434,8 @@ export default {
             isLoading: false,
             selectedRows: [],
             selectedRowWithMenu: null,
-            totalRows: 0,
+            totalRows: 0, filteredCount: 0,
+            draw: 0,
             assignmentId: null,
             responsibleId: null,
             responsibleParams: {showArchived: true, showLocked: true},
@@ -640,7 +646,7 @@ export default {
                         where.AND.push({ OR: [
                             { key_starts_with: search.toLowerCase() },
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
-                            { teamLeadNameLowerCase_starts_with: search.toLowerCase() },
+                            { supervisorNameLowerCase_starts_with: search.toLowerCase() },
                             { identifyingQuestions_some: {
                                 answerLowerCase_starts_with: search.toLowerCase(),
                             },
@@ -659,9 +665,11 @@ export default {
                     }).then(response => {
                         const data = response.data.interviews
                         self.totalRows = data.totalCount
+                        self.filteredCount = data.filteredCount
                         callback({
                             recordsTotal: data.totalCount,
-                            recordsFiltered: data.totalCount,
+                            recordsFiltered: data.filteredCount,
+                            draw: ++this.draw,
                             data: data.nodes,
                         })
                     }).catch(err => {
@@ -679,17 +687,20 @@ export default {
                     selector: 'td>.checkbox-filter',
                     info: false,
                 },
+                dom: 'fritp',
                 sDom: 'rf<"table-with-scroll"t>ip',
                 searchHighlight: true,
             }
 
             return tableOptions
         },
+
         showSelectors() {
             return !this.config.isObserver && !this.config.isObserving
         },
+
         title() {
-            return this.$t('Common.Interviews') + ' (' + this.formatNumber(this.totalRows) + ')'
+            return this.$t('Common.Interviews') + ' (' + this.formatNumber(this.filteredCount) + ')'
         },
 
         config() {
@@ -697,10 +708,13 @@ export default {
         },
 
         where() {
-            const data = {}
+            let data = {}
 
             if (this.status) data.status = this.status.key
-            if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
+            if (this.questionnaireId) {
+                data.questionnaireId = this.questionnaireId.key
+            }
+
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
@@ -709,13 +723,20 @@ export default {
 
             return data
         },
+        questionnaireVariable() {
+            if(this.where.questionnaireId == null)
+                return ''
+
+            const questionnaire = find(this.config.questionnaires, {'key': this.where.questionnaireId})
+            return questionnaire.alias
+        },
 
         whereQuery() {
             const and = []
             const self = this
 
             if(this.where.questionnaireId) {
-                and.push({questionnaireId: this.where.questionnaireId})
+                and.push({questionnaireVariable: this.questionnaireVariable})
 
                 if(this.where.questionnaireVersion) {
                     and.push({questionnaireVersion: this.where.questionnaireVersion})
@@ -742,7 +763,7 @@ export default {
                 and.push({
                     OR: [
                         { responsibleName: this.responsibleId.value },
-                        { teamLeadName: this.responsibleId.value },
+                        { supervisorName: this.responsibleId.value },
                     ]})
             }
 
