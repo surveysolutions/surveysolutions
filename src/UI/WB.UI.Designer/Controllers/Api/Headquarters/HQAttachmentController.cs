@@ -8,7 +8,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Route("api/hq/attachment")]
     [Authorize]
-    [AllowOnlyFromWhitelistIP]
     public class HQAttachmentController : ControllerBase
     {
         private readonly IAttachmentService attachmentService;
