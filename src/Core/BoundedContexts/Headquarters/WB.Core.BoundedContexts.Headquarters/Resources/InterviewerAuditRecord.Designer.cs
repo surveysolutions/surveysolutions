@@ -196,6 +196,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No records yet.
+        /// </summary>
+        public static string RecordsMissing {
+            get {
+                return ResourceManager.GetString("RecordsMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview {0} rejected.
         /// </summary>
         public static string RejectInterview {
@@ -210,15 +219,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string Relink {
             get {
                 return ResourceManager.GetString("Relink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No records yet.
-        /// </summary>
-        public static string RocordsMissing {
-            get {
-                return ResourceManager.GetString("RocordsMissing", resourceCulture);
             }
         }
         
@@ -277,6 +277,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} interview(s) partial updated from server.
+        /// </summary>
+        public static string SynchronizationCompleted_InterviewsPartialDownloaded {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_InterviewsPartialDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interview(s) partial uploaded.
+        /// </summary>
+        public static string SynchronizationCompleted_InterviewsPartialUploaded {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_InterviewsPartialUploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} interview(s) rejected.
         /// </summary>
         public static string SynchronizationCompleted_InterviewsRejected {
@@ -309,6 +327,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string SynchronizationCompleted_NothingToSync {
             get {
                 return ResourceManager.GetString("SynchronizationCompleted_NothingToSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interview(s) have been reopened after receiving comments.
+        /// </summary>
+        public static string SynchronizationCompleted_ReopenedInterviewsAfterComments {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_ReopenedInterviewsAfterComments", resourceCulture);
             }
         }
         
