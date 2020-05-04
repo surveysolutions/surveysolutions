@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             if (input.ViewerId.HasValue)
             {
-                _ = _.Where(x => x.TeamLeadId == input.ViewerId);
+                _ = _.Where(x => x.SupervisorId == input.ViewerId);
             }
 
             return _;
@@ -83,8 +83,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             if (input.ViewerId.HasValue)
             {
                 result = result == null 
-                    ? x => x.TeamLeadId == input.ViewerId
-                    : result.AndCondition(x => x.TeamLeadId == input.ViewerId);
+                    ? x => x.SupervisorId == input.ViewerId
+                    : result.AndCondition(x => x.SupervisorId == input.ViewerId);
             }
 
             return result ?? (x => x.SummaryId != null); 
@@ -95,8 +95,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var query = this.interviewsReader.Query(_ => FilterByQuestionnaireOrTeamLead(_, input)
                 .Select(x => new
                 {
-                    ResponsibleId = forAdminOrHq ? x.TeamLeadId : x.ResponsibleId,
-                    Responsible = forAdminOrHq ? x.TeamLeadName : x.ResponsibleName,
+                    ResponsibleId = forAdminOrHq ? x.SupervisorId : x.ResponsibleId,
+                    Responsible = forAdminOrHq ? x.SupervisorName : x.ResponsibleName,
                     SupervisorAssignedCount = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
                     InterviewerAssignedCount = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
                     CompletedCount = x.Status == InterviewStatus.Completed ? 1 : 0,
@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 x = x.Where(CreateFilterExpression(input));
 
-                if (forAdminOrHq) x.Select(y => y.TeamLeadId);
+                if (forAdminOrHq) x.Select(y => y.SupervisorId);
                 else x.Select(y => y.ResponsibleId);
 
                 return x;

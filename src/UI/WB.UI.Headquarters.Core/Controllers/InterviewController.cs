@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
                 return true;
 
-            if (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId)
+            if (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.SupervisorId)
             {
                 var hasSupervisorAccessToInterview = interviewSummary.Status == InterviewStatus.InterviewerAssigned
                                                     || interviewSummary.Status == InterviewStatus.SupervisorAssigned
@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 LastUpdatedAtUtc = interviewSummary.UpdateDate,
                 StatusName = interviewSummary.Status.ToLocalizeString(),
                 Responsible = interviewSummary.ResponsibleName,
-                Supervisor = interviewSummary.TeamLeadName,
+                Supervisor = interviewSummary.SupervisorName,
                 AssignmentId = interviewSummary.AssignmentId,
                 QuestionnaireTitle = interviewSummary.QuestionnaireTitle,
                 QuestionnaireVersion = interviewSummary.QuestionnaireVersion,

@@ -338,4 +338,7 @@
   <data name="StartsWith" xml:space="preserve">
     <value>Начинается с</value>
   </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Не равно</value>
+  </data>
 </root>

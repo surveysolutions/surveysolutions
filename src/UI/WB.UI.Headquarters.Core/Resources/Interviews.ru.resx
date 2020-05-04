@@ -217,7 +217,7 @@
     <value>Отображает общее количество вопросов и статических текстов с ошибкой. Несколько ошибок на одном и том же объекте в интервью считается одной ошибкой.</value>
   </data>
   <data name="ChooseQuestionsTitle" xml:space="preserve">
-    <value>Выберите вопросы для фильтрации</value>
+    <value>Выберите идентефикационные вопросы для фильтрации</value>
   </data>
   <data name="FiltersByQuestions" xml:space="preserve">
     <value>Фильтр по вопросам</value>
@@ -226,7 +226,7 @@
     <value>Выбор вопросов</value>
   </data>
   <data name="QuestionsFilterNotAvailable" xml:space="preserve">
-    <value>Фильтр по вопросам доступен только когда выбрана конкретная версия опросника</value>
+    <value>Фильтр по вопросам доступен только тогда, когда выбрана конкретная версия опросника</value>
   </data>
   <data name="AssignReceivedWarning" xml:space="preserve">
     <value>Текущие интервьюверы не будут уведомлены о смене ответственного. Данные, которые они начали собирать, будут удалены.</value>
