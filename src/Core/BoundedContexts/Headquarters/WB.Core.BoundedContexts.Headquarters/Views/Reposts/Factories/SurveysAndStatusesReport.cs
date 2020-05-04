@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     x.QuestionnaireVersion,
                     x.QuestionnaireTitle,
                     x.ResponsibleName,
-                    x.TeamLeadName,
+                    TeamLeadName = x.SupervisorName,
                     SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
                     InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
                     Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                             x.QuestionnaireVersion,
                             x.QuestionnaireTitle,
                             x.ResponsibleName,
-                            x.TeamLeadName,
+                            TeamLeadName = x.SupervisorName,
                             SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
                             InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
                             Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 _ = _.Where(x => x.ResponsibleName.ToLower() == responsible);
 
             if (!string.IsNullOrWhiteSpace(teamLead))
-                _ = _.Where(x => x.TeamLeadName.ToLower() == teamLead);
+                _ = _.Where(x => x.SupervisorName.ToLower() == teamLead);
             if (questionnaireId.HasValue)
             {
                 _ = _.Where(x => x.QuestionnaireId == questionnaireId);

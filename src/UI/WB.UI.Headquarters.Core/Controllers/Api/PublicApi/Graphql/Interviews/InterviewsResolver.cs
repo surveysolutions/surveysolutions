@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             {
                 interviewSummaries = interviewSummaries
                     .Where(x => !NotForSupervisor.Contains(x.Status)
-                                && (x.TeamLeadId == user.Id || x.ResponsibleId == user.Id));
+                                && (x.SupervisorId == user.Id || x.ResponsibleId == user.Id));
 
             }
 
