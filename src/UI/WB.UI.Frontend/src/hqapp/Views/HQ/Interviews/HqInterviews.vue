@@ -130,7 +130,6 @@
             <form onsubmit="return false;">
                 <div class="form-group"
                     v-if="getFilteredToAssign().length > 0">
-                    <p>{{$t("Interviews.ChooseResponsible")}}</p>
                     <label
                         class="control-label"
                         for="newResponsibleId">{{$t("Assignments.SelectResponsible")}}</label>
@@ -167,6 +166,11 @@
                         <span class="tick"></span>
                         {{$t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems())}}
                     </label>
+                    <br />
+                    <span v-if="isReassignReceivedByInterviewer"
+                        class="text-warning">
+                        {{$t("Interviews.AssignReceivedWarning")}}
+                    </span>
                 </div>
             </form>
             <div slot="actions">

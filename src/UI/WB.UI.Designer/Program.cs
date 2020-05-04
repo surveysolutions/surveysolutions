@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.AspNetCore;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Migrations.Logs;
 using WB.UI.Designer.Migrations.PlainStore;
@@ -20,19 +21,10 @@ namespace WB.UI.Designer
         public static void Main(string[] args)
         {
             var appRoot = Path.GetDirectoryName(typeof(Program).Assembly.Location);
-            var logsFileLocation = Path.Combine(appRoot, "..", "logs", "log.log");
-            var verboseLog = Path.Combine(appRoot, "..", "logs", "verbose.log");
 
             Log.Logger = new LoggerConfiguration()
+                .ConfigureSurveySolutionsLogging(appRoot, "designer")
                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-                
-                .Enrich.FromLogContext()
-                .WriteTo.Console() //outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
-                .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day, 
-                        restrictedToMinimumLevel: LogEventLevel.Warning)
-                .WriteTo.File(verboseLog, rollingInterval: RollingInterval.Day,
-                        restrictedToMinimumLevel: LogEventLevel.Verbose, retainedFileCountLimit: 2)
-                
                 .CreateLogger();
 
             try
