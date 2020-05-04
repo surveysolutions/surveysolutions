@@ -156,14 +156,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public new void Apply(SubstitutionTitlesChanged @event)
         {
-            foreach (var @group in @event.Groups)
-                this.Tree.GetGroup(@group)?.ReplaceSubstitutions();
-
-            foreach (var @question in @event.Questions)
-                this.Tree.GetQuestion(@question)?.ReplaceSubstitutions();
-
-            foreach (var @staticText in @event.StaticTexts)
-                this.Tree.GetStaticText(@staticText)?.ReplaceSubstitutions();
+            base.Apply(@event);
         }
 
         public new void Apply(InterviewCompleted @event)

@@ -12,6 +12,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
 using Moq;
+using Ncqrs.Eventing;
 using NUnit.Framework;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -91,6 +92,7 @@ using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -445,8 +447,8 @@ namespace WB.Tests.Abc.TestFactories
                 Status = status.GetValueOrDefault(),
                 ResponsibleId = responsibleId.GetValueOrDefault(),
                 ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
-                TeamLeadId = teamLeadId.GetValueOrDefault(),
-                TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
+                SupervisorId = teamLeadId.GetValueOrDefault(),
+                SupervisorName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
                 ResponsibleRole = role,
                 Key = key,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
@@ -457,6 +459,7 @@ namespace WB.Tests.Abc.TestFactories
                 WasCompleted = wasCompleted,
                 InterviewDuration = interviewingTotalTime,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
+                QuestionnaireVariable = "automation",
                 TimeSpansBetweenStatuses = timeSpans != null ? timeSpans.ToHashSet() : new HashSet<TimeSpanBetweenStatuses>()
             };
         }
@@ -857,6 +860,14 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children) => new QuestionnaireDocument
         {
+            HideIfDisabled = true,
+            PublicKey = id ?? Guid.NewGuid(),
+            Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+        }.WithEntityMap();
+        
+        public QuestionnaireDocument QuestionnaireDocumentWithHideIfDisabled(Guid? id = null, bool hideIfDisabled = true, params IComposite[] children) => new QuestionnaireDocument
+        {
+            HideIfDisabled = hideIfDisabled,
             PublicKey = id ?? Guid.NewGuid(),
             Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
         }.WithEntityMap();
@@ -2499,6 +2510,40 @@ namespace WB.Tests.Abc.TestFactories
                 Title = title,
                 Value = value,
             };
+        }
+
+        public InterviewApiView InterviewApiView(Guid id, Guid? lastEventId)
+        {
+            return new InterviewApiView()
+            {
+                Id = id,
+                LastEventId = lastEventId,
+            };
+        }
+
+        public InterviewUploadState InterviewUploadState(
+            Guid responsibleId,
+            bool isEventsUploaded = false,
+            HashSet<string> imagesQuestionsMd5 = null,
+            HashSet<string> audioQuestionsFilesMd5 = null,
+            HashSet<string> audioAuditFilesMd5 = null
+            )
+        {
+            return new InterviewUploadState()
+            {
+                IsEventsUploaded = isEventsUploaded,
+                ImagesFilesNames = new HashSet<string>(),
+                AudioFilesNames = new HashSet<string>(),
+                ImageQuestionsFilesMd5 = imagesQuestionsMd5 ?? new HashSet<string>(),
+                AudioQuestionsFilesMd5 = audioQuestionsFilesMd5 ?? new HashSet<string>(),
+                AudioAuditFilesMd5 = audioAuditFilesMd5 ?? new HashSet<string>(),
+                ResponsibleId = responsibleId,
+            };
+        }
+
+        public InterviewPackageContainer InterviewPackageContainer(Guid interviewId, params CommittedEvent[] events)
+        {
+            return new InterviewPackageContainer(interviewId, events.ToReadOnlyCollection());
         }
     }
 }

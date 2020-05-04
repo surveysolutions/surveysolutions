@@ -18,7 +18,7 @@
             </div>
         </div>
         <form method="post">
-            
+
             <div class="checkbox info-block">
                 <input checked="checked"
                     class="checkbox-filter"
@@ -50,7 +50,7 @@
 <script>
 
 export default {
-  
+
 }
 </script>
 

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Dropbox.Api.Files;
+using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Events;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -192,7 +193,7 @@ namespace WB.Tests.Abc.TestFactories
                 uId, 
                 qId, 
                 qVersion,
-                synchronizedEvents ?? new IEvent[1] { Create.Event.InterviewCreated(qId, qVersion) }, 
+                synchronizedEvents?.Select(Create.Event.AggregateRootEvent).ToArray() ?? new AggregateRootEvent[1] { Create.Event.AggregateRootEvent(Create.Event.InterviewCreated(qId, qVersion)) }, 
                 interviewStatus, 
                 createdOnClient,
                 interviewKey ?? new InterviewKey(Guid.NewGuid().GetHashCode()),

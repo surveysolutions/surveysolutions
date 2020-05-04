@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<InterviewHardDeleted>,
                                          IEventHandler<InterviewerAssigned>,
                                          IEventHandler<SupervisorAssigned>,
+                                         IEventHandler<InterviewRestarted>,
                                          
                                          IEventHandler<TextQuestionAnswered>,
                                          IEventHandler<MultipleOptionsQuestionAnswered>,
@@ -557,6 +558,19 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             interviewView.ResponsibleId = @event.Payload.SupervisorId;
             interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            this.interviewViewRepository.Store(interviewView);
+        }
+
+        public void Handle(IPublishedEvent<InterviewRestarted> @event)
+        {
+            if (string.IsNullOrEmpty(@event.Payload.Comment))
+                return;
+
+            InterviewView interviewView = this.interviewViewRepository.GetById(@event.EventSourceId.FormatGuid());
+            if (interviewView == null)
+                return;
+
+            interviewView.LastInterviewerOrSupervisorComment = @event.Payload.Comment;
             this.interviewViewRepository.Store(interviewView);
         }
     }

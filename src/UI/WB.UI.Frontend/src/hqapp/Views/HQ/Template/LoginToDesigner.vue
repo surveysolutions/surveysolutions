@@ -49,9 +49,9 @@
                                 <input type="text"
                                     name="UserName"
                                     class="form-control"
-                                    autofocus="autofocus" 
+                                    autofocus="autofocus"
                                     v-model="userName"
-                                    v-validate="'required'" 
+                                    v-validate="'required'"
                                     :placeholder="this.$t('LoginToDesigner.LoginWatermark')" />
                             </div>
                             <div class="form-group"
@@ -60,7 +60,7 @@
                                     name="Password"
                                     class="form-control"
                                     v-model="password"
-                                    v-validate="'required'" 
+                                    v-validate="'required'"
                                     :placeholder="this.$t('FieldsAndValidations.PasswordFieldName')" />
                             </div>
                             <div class="form-actions">
@@ -80,7 +80,7 @@
 <script>
 export default {
     data() {
-        return { 
+        return {
             userName: null,
             password: null,
             errorMessage: null,
@@ -93,7 +93,7 @@ export default {
             if(validationResult) {
                 this.$http({
                     method: 'post',
-                    url: this.$config.model.loginAction, 
+                    url: this.$config.model.loginAction,
                     data: {
                         userName: this.userName,
                         password: this.password,

@@ -8,7 +8,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
     public interface IQuestionnaireHistoryVersionsService
     {
         QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId);
-        string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire);
         
         void AddQuestionnaireChangeItem(
             Guid questionnaireId,

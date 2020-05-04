@@ -72,7 +72,7 @@ export default {
             this.answer = to
         }, { immediate: true })
     },
-        
+
     computed: {
         shouldShowAnsweredOptionsOnly(){
             return shouldShowAnsweredOptionsOnlyForMulti(this)
@@ -81,13 +81,13 @@ export default {
             if(!this.shouldShowAnsweredOptionsOnly){
                 return this.$me.options
             }
-                
+
             var self = this
-            return filter(this.$me.options, function(o) { 
-                return self.$me.answer.indexOf(o.value) >= 0 
+            return filter(this.$me.options, function(o) {
+                return self.$me.answer.indexOf(o.value) >= 0
             })
         },
-            
+
         noOptions() {
             return this.$me.options == null || this.$me.options.length == 0
         },
@@ -106,7 +106,7 @@ export default {
         },
         isProtected(answerValue) {
             if (!this.$me.protectedAnswer) return false
-                
+
             var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
             return answerIndex > -1
         },

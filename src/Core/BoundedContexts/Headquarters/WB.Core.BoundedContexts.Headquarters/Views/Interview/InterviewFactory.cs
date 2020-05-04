@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (supervisorId.HasValue)
             {
                 gpsQuery = gpsQuery
-                    .Where(x => x.InterviewSummary.TeamLeadId == supervisorId.Value 
+                    .Where(x => x.InterviewSummary.SupervisorId == supervisorId.Value 
                                 && !DisabledStatusesForGps.Contains(x.InterviewSummary.Status));
             }
 

@@ -1,7 +1,7 @@
 <template>
     <div :class="{'resolved-comment': resolved, 'enumerators-comment': isInterviewersComment }">
         <h6>{{ commentTitle }} <span class="publication-date"
-            :title="this.commentedAtDate">({{this.commentedAt}})</span></h6> 
+            :title="this.commentedAtDate">({{this.commentedAt}})</span></h6>
         <p :class="{'overloaded': isCollapsed}"> <span v-html="text"></span>
             <button v-if="isCollapsed"
                 type="button"
@@ -14,7 +14,7 @@
 <script lang="js">
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
-    
+
 export default {
     props: {
         userRole: {
@@ -36,6 +36,10 @@ export default {
         date: {
             type: String,
         },
+        commentOnPreviousAnswer: {
+            required: true,
+            type: Boolean,
+        },
     },
     data() {
         return {
@@ -47,6 +51,14 @@ export default {
             return this.userRole == 'Interviewer'
         },
         commentTitle() {
+            var title = this.commentTitleByRole
+            if (this.commentOnPreviousAnswer == true) {
+                return `${title} (${this.$t('WebInterviewUI.CommentOnPreviousAnswer')})`
+            }
+
+            return title
+        },
+        commentTitleByRole() {
             if (this.isOwnComment == true) {
                 return this.$t('WebInterviewUI.CommentYours')
             }

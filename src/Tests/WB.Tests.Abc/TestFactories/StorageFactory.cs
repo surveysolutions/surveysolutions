@@ -50,6 +50,8 @@ namespace WB.Tests.Abc.TestFactories
             => new InMemoryPlainStorage<TEntity, TKey>(logger ?? Mock.Of<ILogger>());
         public InMemoryPlainStorage<TEntity> InMemorySqlitePlainStorage<TEntity>(ILogger logger = null) where TEntity : class, IPlainStorageEntity, new()
             => new InMemoryPlainStorage<TEntity>(logger ?? Mock.Of<ILogger>());
+        public IEnumeratorEventStorage InMemorySqliteMultiFilesEventStorage(IEnumeratorSettings enumeratorSettings = null) 
+            => new InMemorySqliteMultiFilesEventStorage(enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(s => s.EventChunkSize == 100));
 
         public IPlainStorageAccessor<TEntity> InMemoryPlainStorage<TEntity>() where TEntity : class => new InMemoryPlainStorageAccessor<TEntity>();
         public TestInMemoryWriter<TEntity> InMemoryReadSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();

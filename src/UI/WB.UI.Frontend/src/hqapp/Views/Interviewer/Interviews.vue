@@ -130,7 +130,7 @@ export default {
             if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
-            
+
             return data
         },
         whereQuery() {
@@ -148,7 +148,7 @@ export default {
             }
 
             and.push({ status_in: this.$config.model.statuses})
-            
+
             return and
         },
         tableOptions() {
@@ -162,7 +162,7 @@ export default {
                     const order = {}
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
-                    
+
                     order[column.data] = order_col.dir.toUpperCase()
 
                     const variables = {
@@ -171,15 +171,15 @@ export default {
                         take: data.length,
                     }
 
-                    const where = { 
+                    const where = {
                         AND: [...self.whereQuery],
                     }
-                   
+
                     const search = data.search.value
 
                     if(search && search != '') {
                         where.AND.push(
-                            { 
+                            {
                                 OR: [
                                     { key_starts_with: search.toLowerCase() },
                                     { identifyingQuestions_some: {
@@ -194,7 +194,7 @@ export default {
                     }
 
                     self.$apollo.query({
-                        query, 
+                        query,
                         variables: variables,
                         fetchPolicy: 'network-only',
                     }).then(response => {

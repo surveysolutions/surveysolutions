@@ -34,8 +34,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     ApplyFilterByTeamLead(searchBy: searchBy, interviews: interviews)
                         .Select(x => new UsersViewItem
                         {
-                            UserId = x.TeamLeadId,
-                            UserName = x.TeamLeadName
+                            UserId = x.SupervisorId,
+                            UserName = x.SupervisorName
                         })
                         .OrderBy(x => x.UserName)
                         .Distinct()
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
                 TotalCountByQuery = this.interviewSummaryReader.Query(interviews =>
                     ApplyFilterByTeamLead(searchBy: searchBy, interviews: interviews)
-                        .Select(x => x.TeamLeadId)
+                        .Select(x => x.SupervisorId)
                         .Distinct()
                         .Count())
             };
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         private static IQueryable<UsersViewItem> ApplyFilterByResponsible(string searchBy, Guid supervisorId, IQueryable<InterviewSummary> interviews)
         {
-            interviews = interviews.Where(interview => interview.TeamLeadId == supervisorId);
+            interviews = interviews.Where(interview => interview.SupervisorId == supervisorId);
 
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
-                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadName.ToLower().Contains(searchBy.ToLower()));
+                filteredInterviews = filteredInterviews.Where(x => x.SupervisorName.ToLower().Contains(searchBy.ToLower()));
             }
 
             return filteredInterviews;

@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -252,7 +253,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                             interviewKey: shouldChangeInterviewKey
                                 ? serviceLocator.GetInstance<IInterviewUniqueKeyGenerator>().Get()
                                 : null,
-                            synchronizedEvents: serializedEvents,
+                            synchronizedEvents: aggregateRootEvents,
                             newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null),
                         this.syncSettings.Origin);
 
@@ -263,8 +264,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             catch (Exception exception)
             {
                 this.logger.Error(
-                    $"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'",
+                    $"Interview events by {interview.InterviewId} processing failed. Package status {interview.InterviewStatus}. Reason: '{exception.Message}'",
                     exception);
+
+                // don't save package for partial synchronization
+                if (interview.InterviewStatus != InterviewStatus.Completed && interview.InterviewStatus != InterviewStatus.ApprovedBySupervisor)
+                {
+                    throw;
+                }
 
                 var interviewException = exception as InterviewException;
                 if (interviewException == null)

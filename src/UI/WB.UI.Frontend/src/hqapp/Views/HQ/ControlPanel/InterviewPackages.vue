@@ -176,7 +176,7 @@ export default {
                 requestData.fromProcessingDateTime = moment(this.dateRange.startDate).format(DateFormats.date)
                 requestData.toProcessingDateTime = moment(this.dateRange.endDate).format(DateFormats.date)
             }
-            
+
             requestData.exceptionType = (this.exceptionType || {}).key
             requestData.returnOnlyUnknownExceptionType = this.returnOnlyUnknownExceptionType
         },
@@ -301,7 +301,7 @@ export default {
                             `<div class="accordion-body collapse" id="show${row.id}">` +
                                 `<pre class="accordion-inner margin-left10">${row.exceptionStackTrace}</pre>` +
                             '</div>' +
-                        '</div>' 
+                        '</div>'
                         },
                     },
                 ],

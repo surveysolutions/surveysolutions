@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             this.verifier = verifier;
         }
 
-        private static Configuration CreateCsvConfiguration() => new Configuration
+        private static CsvConfiguration CreateCsvConfiguration() => new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HasHeaderRecord = false,
             TrimOptions = TrimOptions.Trim,

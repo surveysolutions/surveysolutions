@@ -1,33 +1,37 @@
 <template>
-    <div class="block-filter" 
+    <div class="block-filter"
         v-if="question != null && isSupported">
-        <h5 :title="question.questionText">
-            {{sanitizeHtml(question.questionText)}} <inline-selector :options="fieldOptions"
-                no-empty
-                v-if="fieldOptions != null"
-                v-model="field" />
+        <h5 :title="sanitizeHtml(question.label || question.questionText)">
+            {{sanitizeHtml(question.label || question.questionText)}}
+            <div>
+                <inline-selector :options="fieldOptions"
+                    no-empty
+                    :id="`filter_selector_${condition.variable}`"
+                    v-if="fieldOptions != null"
+                    v-model="field" />
+            </div>
         </h5>
 
         <Typeahead
             v-if="question.type == 'SINGLEOPTION'"
-            :control-id="'question-' + question.variable"           
-            :placeholder="$t('Common.SelectOption')"            
+            :control-id="'filter_input_' + condition.variable"
+            :placeholder="$t('Common.SelectOption')"
             :values="options"
             :value="selectedOption"
             v-on:selected="optionSelected"/>
-        
+
         <filter-input v-if="question.type == 'TEXT'"
             :value="condition.value"
-            @input="input"                
-            :id="'filter_' + condition.variable" />
-        
+            @input="input"
+            :id="'filter_input_' + condition.variable" />
+
         <filter-input v-if="question.type == 'NUMERIC'"
             :value="condition.value"
-            type="numeric"
-            @input="input"                
-            :id="'filter_' + condition.variable" />
-            
-    </div>   
+            type="number"
+            @input="input"
+            :id="'filter_input_' + condition.variable" />
+
+    </div>
 </template>
 <script>
 
@@ -38,7 +42,7 @@ import sanitizeHtml  from 'sanitize-html'
 export default {
     props: {
         question: {type: Object },
-        
+
         /** @type: {variable: string, value: string} */
         condition: { type: Object },
     },
@@ -63,7 +67,7 @@ export default {
             this.$emit('change', {
                 variable: this.question.variable,
                 field: this.field.id,
-                value: value.toLowerCase(),
+                value: (value == null || value == '') ? null : value.toLowerCase(),
             })
         },
 
@@ -78,9 +82,19 @@ export default {
         sanitizeHtml: sanitizeHtml,
     },
 
-    computed: { 
+    watch: {
+        field(to) {
+            this.$emit('change', {
+                variable: this.question.variable,
+                field: to.id,
+                value: this.condition.value,
+            })
+        },
+    },
+
+    computed: {
         options() {
-            return this.getTypeaheadValues(sortBy(this.question.options, ['title']))
+            return this.getTypeaheadValues(this.question.options)
         },
 
         selectedOption() {
@@ -88,7 +102,7 @@ export default {
             if(key != null) key = key.toString()
             return find(this.options, { key })
         },
-        
+
         isSupported() {
             const supported = ['SINGLEOPTION', 'TEXT', 'NUMERIC']
             return find(supported, s => s == this.question.type)
@@ -96,15 +110,18 @@ export default {
 
         fieldOptions() {
             switch(this.question.type) {
-            case 'SINGLEOPTION': return null
-            case 'TEXT': return [
-                { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
-                { id: 'answerLowerCase', value: this.$t('Common.Equals') },
-                        
-            ]
-            case 'NUMERIC': return [
-                { id: 'answer', value: this.$t('Common.Equals')},
-            ]}
+                case 'SINGLEOPTION': return [
+                    { id: 'answerCode', value: this.$t('Common.Equals') },
+                    { id: 'answerCode_not', value: this.$t('Common.NotEquals') },
+                ]
+                case 'TEXT': return [
+                    { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
+                    { id: 'answerLowerCase', value: this.$t('Common.Equals') },
+
+                ]
+                case 'NUMERIC': return [
+                    { id: 'answer', value: this.$t('Common.Equals')},
+                ]}
             return null
         },
     },

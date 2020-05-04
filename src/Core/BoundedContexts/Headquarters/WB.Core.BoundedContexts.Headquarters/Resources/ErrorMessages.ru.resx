@@ -146,4 +146,10 @@
     <value>Опросник уже загружается</value>
     <comment>Опросник уже загружается</comment>
   </data>
+  <data name="InvalidAuthenticatorCode" xml:space="preserve">
+    <value>Неправильный аутентификационный код.</value>
+  </data>
+  <data name="InvalidRecoveryCode" xml:space="preserve">
+    <value>Неправильный ключ восстановления.</value>
+  </data>
 </root>

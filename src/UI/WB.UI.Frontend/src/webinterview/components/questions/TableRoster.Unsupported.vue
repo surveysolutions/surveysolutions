@@ -7,7 +7,7 @@ export default {
     name: 'TableRoster_ViewAnswer',
     computed: {
         $me() {
-            return this.$store.state.webinterview.entityDetails[this.params.value.identity] 
+            return this.$store.state.webinterview.entityDetails[this.params.value.identity]
         },
         answer() {
             return this.$me.answer

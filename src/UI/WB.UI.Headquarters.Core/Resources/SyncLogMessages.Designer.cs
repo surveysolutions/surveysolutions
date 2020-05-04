@@ -268,6 +268,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download interview changes from HQ: {0}.
+        /// </summary>
+        public static string GetInterviewPatch {
+            get {
+                return ResourceManager.GetString("GetInterviewPatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download list of interviews. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;.
         /// </summary>
         public static string GetInterviews {
