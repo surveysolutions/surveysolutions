@@ -12,6 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public string Comment { get; private set; }
         public Identity QuestionIdentity { get; private set; }
         public bool Resolved { get; set; }
+        public bool CommentOnPreviousAnswer { get; set; } = false;
 
         public AnswerComment(Guid userId, UserRoles userRole, DateTime commentTime, string comment, Identity questionIdentity, Guid? id, bool resolved)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
@@ -20,7 +21,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
         {
             this.interviewerSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
         }
-        
+
+        public override async Task ExecuteAsync()
+        {
+            await base.ExecuteAsync();
+
+            var tabletSettings = await this.synchronizationService.GetTabletSettings(Context.CancellationToken);
+            interviewerSettings.SetPartialSynchronizationEnabled(tabletSettings.PartialSynchronizationEnabled);
+        }
+
+
         protected override void UpdateNotificationsSetting(bool notificationsEnabled)
         {
             interviewerSettings.SetNotifications(notificationsEnabled);

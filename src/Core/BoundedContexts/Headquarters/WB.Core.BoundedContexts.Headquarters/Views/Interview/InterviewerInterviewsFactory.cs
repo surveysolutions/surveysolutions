@@ -38,9 +38,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.eventStore = eventStore;
         }
 
-        public IEnumerable<InterviewInformation> GetInProgressInterviewsForInterviewer(Guid interviewerId)
+        public List<InterviewInformation> GetInProgressInterviewsForInterviewer(Guid interviewerId)
         {
-            var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
+            var processingPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
             var inProgressInterviews =  this.reader.Query(interviews =>
                 interviews
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var filteredInterviews = inProgressInterviews.Where(
                     interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.Equals(interview.QuestionnaireIdentity))
-                                 && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
+                                 && !processingPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
                 .Select(interview => new InterviewInformation
                 {
                     Id = interview.InterviewId,
@@ -71,15 +71,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     IsRejected = interview.WasRejectedBySupervisor,
                     ResponsibleId = interview.ResponsibleId,
                     IsReceivedByInterviewer = interview.ReceivedByInterviewer,
-                    LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
-                    
+                    LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
+                    LastEventId = eventStore.GetLastEventId(interview.InterviewId),
                 }).ToList();
             
             return filteredInterviews;
         }
 
-        private readonly Expression<Func<InterviewSummary, bool>> ForInterviewer = summary => summary.Status == InterviewStatus.InterviewerAssigned ||
-                                                                                     summary.Status == InterviewStatus.RejectedBySupervisor;
+        private readonly Expression<Func<InterviewSummary, bool>> ForInterviewer = summary => 
+            summary.Status == InterviewStatus.InterviewerAssigned 
+            || summary.Status == InterviewStatus.RejectedBySupervisor;
+
         public bool HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(Guid authorizedUserId)
         {
             var summary = this.reader.Query(interviews =>
@@ -158,7 +160,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     IsRejected = interview.WasRejectedBySupervisor,
                     ResponsibleId = interview.ResponsibleId,
                     IsReceivedByInterviewer = interview.ReceivedByInterviewer,
-                    LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
+                    LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
+                    LastEventId = eventStore.GetLastEventId(interview.InterviewId),
                 }).ToList();
 
             return filteredInterviews;
@@ -173,7 +176,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 Id = interview.InterviewId,
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity),
-                IsRejected = interview.Status == InterviewStatus.RejectedBySupervisor
+                IsRejected = interview.Status == InterviewStatus.RejectedBySupervisor,
+                ResponsibleId = interview.ResponsibleId,
             });
         }
 

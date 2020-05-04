@@ -228,4 +228,7 @@
   <data name="QuestionsFilterNotAvailable" xml:space="preserve">
     <value>Фильтр по вопросам доступен только когда выбрана конкретная версия опросника</value>
   </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Текущие интервьюверы не будут уведомлены о смене ответственного. Данные, которые они начали собирать, будут удалены.</value>
+  </data>
 </root>
