@@ -560,6 +560,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 Responsible = new PreloadingValue {Value = assignmentInfo.Responsible, Column = nameof(assignmentInfo.Responsible)}.ToAssignmentResponsible(
                     this.userViewFactory, new Dictionary<string, UserToVerify>()),
                 Answers = identifyingAnswers.Select(x => this.ToPreloadAnswer(x, questionnaire)).ToArray(),
+                Comments = new PreloadingValue{Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments()
             };
 
             var rosterRows = rosterAnswers

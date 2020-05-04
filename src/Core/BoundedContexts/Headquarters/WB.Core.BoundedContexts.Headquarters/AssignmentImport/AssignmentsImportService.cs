@@ -228,8 +228,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         }
 
         public int ImportAssignment(AssignmentToImport assignment, IQuestionnaire questionnaire, Guid responsibleId)
-            => this.ImportAssignment(assignment, questionnaire, responsibleId, responsibleId);
-        
+        {
+            assignment = this.GetAssignmentWithoutEmptyAnswersAndFillPasswords(assignment);
+            
+            return this.ImportAssignment(assignment, questionnaire, responsibleId, responsibleId);
+        }
+
         private int ImportAssignment(AssignmentToImport assignmentToImport, IQuestionnaire questionnaire, Guid responsibleId, Guid defaultAssignedTo)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
@@ -302,17 +306,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private void SaveAssignments(IList<AssignmentToImport> assignments)
         {
-            AssignmentToImport GetAssignmentWithoutEmptyAnswersAndFillPasswords(AssignmentToImport assignmentToImport)
-            {
-                assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
-
-                assignmentToImport.Password = passwordGenerator.GetPassword(assignmentToImport.Password);
-
-                return assignmentToImport;
-            }
-
             this.importAssignmentsRepository.Store(assignments.Select(x =>
                 new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswersAndFillPasswords(x), x.Id)));
+        }
+
+        private AssignmentToImport GetAssignmentWithoutEmptyAnswersAndFillPasswords(AssignmentToImport assignmentToImport)
+        {
+            assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
+
+            assignmentToImport.Password = passwordGenerator.GetPassword(assignmentToImport.Password);
+
+            return assignmentToImport;
         }
 
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
