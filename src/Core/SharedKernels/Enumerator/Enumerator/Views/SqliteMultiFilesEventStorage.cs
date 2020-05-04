@@ -185,6 +185,98 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
 
+        public void InsertEventsFromHqInEventsStream(Guid interviewId, CommittedEventStream events)
+        {
+            var connection = this.GetOrCreateConnection(events.SourceId);
+            using (connection.Lock())
+            {
+                try
+                {
+                    connection.RunInTransaction(() =>
+                    {
+                        var lastHqEvent = connection.Table<EventView>()
+                            .Where(eventView => eventView.EventSourceId == interviewId && eventView.ExistsOnHq == 1)
+                            .OrderByDescending(e => e.EventSequence)
+                            .FirstOrDefault();
+
+                        var localEvents = connection.Table<EventView>()
+                            .Where(eventView => eventView.EventSourceId == interviewId && (eventView.ExistsOnHq == null || eventView.ExistsOnHq != 1))
+                            .OrderByDescending(e => e.EventSequence);
+
+                        var eventsCount = events.Count;
+                        foreach (var localEvent in localEvents)
+                        {
+                            localEvent.EventSequence += eventsCount;
+                            connection.Update(localEvent);
+                        }
+
+                        var storedEvents = events.Select(x => ToStoredEvent(x, eventSerializer)).ToList();
+                        for (int i = 0; i < storedEvents.Count; i++)
+                        {
+                            var storedEvent = storedEvents[i];
+                            storedEvent.EventSequence = lastHqEvent.EventSequence + i + 1;
+                            connection.Insert(storedEvent);
+                        }
+                    });
+                }
+                catch (SQLiteException ex)
+                {
+                    this.logger.Fatal($"Failed to persist eventstream {events.SourceId}", ex);
+                    throw;
+                }
+            }
+        }
+
+        public bool HasEventsWithoutHqFlag(Guid eventSourceId)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var @event = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(eventView => eventView.EventSourceId == eventSourceId
+                                                 && (eventView.ExistsOnHq == null || eventView.ExistsOnHq != 1));
+                return @event != null;
+            }
+        }
+
+
+        public bool IsLastEventInSequence(Guid eventSourceId, Guid eventId)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var @eventById = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(ev => ev.EventId == eventId
+                                          && ev.EventSourceId == eventSourceId);
+
+                if (eventById == null)
+                    return false;
+
+                var @anyFreshEvent = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(ev => ev.EventSequence > @eventById.EventSequence
+                                          && ev.EventSourceId == eventSourceId);
+                return @anyFreshEvent != null;
+            }
+        }
+
+        public Guid? GetLastEventIdUploadedToHq(Guid eventSourceId)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var @event = connection
+                    .Table<EventView>()
+                    .Where(ev => ev.EventSourceId == eventSourceId && ev.ExistsOnHq == 1)
+                    .OrderByDescending(ev => ev.EventSequence)
+                    .FirstOrDefault();
+
+                return @event?.EventId;
+            }
+        }
+
         public List<CommittedEvent> GetPendingEvents(Guid interviewId)
         {
             var eventSourceFilePath = this.GetEventSourceConnectionString(interviewId);
@@ -266,6 +358,30 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 .Where(x => Guid.TryParse(x, out item)).Select(x => item).ToList();
 
             return files;
+        }
+
+        public void MarkAllEventsAsReceivedByHq(Guid interviewId)
+        {
+            var connection = this.GetOrCreateConnection(interviewId);
+            using (connection.Lock())
+            {
+                try
+                {
+                    connection.BeginTransaction();
+                    var commandText = $"UPDATE {nameof(EventView)} " +
+                                      $"SET {nameof(EventView.ExistsOnHq)} = 1 " +
+                                      $"WHERE ({nameof(EventView.ExistsOnHq)} != 1 OR {nameof(EventView.ExistsOnHq)} is NULL)" +
+                                      $" AND {nameof(EventView.EventSourceId)} = ?";
+                    var sqLiteCommand = connection.CreateCommand(commandText, interviewId);
+                    sqLiteCommand.ExecuteNonQuery();
+                    connection.Commit();
+                }
+                catch
+                {
+                    connection.Rollback();
+                    throw;
+                }
+            }
         }
 
         public int GetLastEventKnownToHq(Guid interviewId)

@@ -21,6 +21,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string FirstSectionId { get; set; }
         public string InterviewKey { get; set; }
         public bool InterviewCannotBeChanged { get; set; }
+        public bool CanAddComments { get; set; }
         public bool ReceivedByInterviewer { get; set; }
         public bool IsCurrentUserObserving { get; set; }
         public bool DoesBrokenPackageExist { get; set; }
@@ -222,6 +223,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public DateTime CommentTimeUtc { get; set; }
         public Guid? Id { get; set; }
         public bool Resolved { get; set; }
+        public bool CommentOnPreviousAnswer { get; set; }
     }
 
     public abstract class InterviewEntity

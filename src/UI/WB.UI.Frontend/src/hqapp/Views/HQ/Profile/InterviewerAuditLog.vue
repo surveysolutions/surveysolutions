@@ -37,7 +37,7 @@
                     {{$t('InterviewerAuditRecord.DownloadTabLog')}}
                 </a>
                 <template v-else>
-                    {{$t('InterviewerAuditRecord.RocordsMissing')}}
+                    {{$t('InterviewerAuditRecord.RecordsMissing')}}
                 </template>
             </div>
         </div>

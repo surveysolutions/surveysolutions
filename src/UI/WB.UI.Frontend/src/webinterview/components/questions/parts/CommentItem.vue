@@ -36,6 +36,10 @@ export default {
         date: {
             type: String,
         },
+        commentOnPreviousAnswer: {
+            required: true,
+            type: Boolean,
+        },
     },
     data() {
         return {
@@ -47,6 +51,14 @@ export default {
             return this.userRole == 'Interviewer'
         },
         commentTitle() {
+            var title = this.commentTitleByRole
+            if (this.commentOnPreviousAnswer == true) {
+                return `${title} (${this.$t('WebInterviewUI.CommentOnPreviousAnswer')})`
+            }
+
+            return title
+        },
+        commentTitleByRole() {
             if (this.isOwnComment == true) {
                 return this.$t('WebInterviewUI.CommentYours')
             }
