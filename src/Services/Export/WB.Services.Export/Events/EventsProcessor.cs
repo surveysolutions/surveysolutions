@@ -91,7 +91,7 @@ namespace WB.Services.Export.Events
                     catch(Exception e)
                     {
                         var feedRangesDebugData = string.Join(", ", feedRanges.Select(f => f.ToString()));
-                        e.Data.Add("feedRanges", feedRangesDebugData);
+                        e.Data.Add("WB:feedRanges", feedRangesDebugData);
                         throw;
                     }
                 });

@@ -15,7 +15,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         Task<DataExportUpdateRequestResult> Regenerate(
             long processId,
             string archivePassword,
-            string accessToken);
+            string accessToken,
+            string refreshToken);
 
         [Put("/api/v1/job/generate")]
         Task<DataExportUpdateRequestResult> RequestUpdate(
@@ -26,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             DateTime? to,
             string archivePassword,
             string accessToken,
+            string refreshToken,
             ExternalStorageType? storageType);
 
         [Get("/api/v1/job/status")]

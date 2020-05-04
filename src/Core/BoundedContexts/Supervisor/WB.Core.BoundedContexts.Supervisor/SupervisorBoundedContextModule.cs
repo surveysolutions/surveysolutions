@@ -26,10 +26,5 @@ namespace WB.Core.BoundedContexts.Supervisor
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUpdateAppSettings>("sortOrder", 115);
             registry.BindWithConstructorArgument<ISynchronizationStep, DownloadInterviewerApplications>("sortOrder", 120);
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
     }
 }

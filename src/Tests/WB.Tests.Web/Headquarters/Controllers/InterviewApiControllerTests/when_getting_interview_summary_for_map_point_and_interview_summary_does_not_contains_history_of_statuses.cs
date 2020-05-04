@@ -14,7 +14,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
             interviewSummaryViewFactoryMock.Setup(_ => _.Load(interviewId)).Returns(new InterviewSummary()
             {
                 ResponsibleName = interviewerName,
-                TeamLeadName = supervisorName
+                SupervisorName = supervisorName
             });
 
             controller = CreateController(allInterviewsViewFactory: interviewSummaryViewFactoryMock.Object);

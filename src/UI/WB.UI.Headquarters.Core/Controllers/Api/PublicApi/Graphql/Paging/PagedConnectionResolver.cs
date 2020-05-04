@@ -1,3 +1,4 @@
+#nullable enable
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,25 +11,28 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
         where TClrType : class
         where TSchemaType : class, IType
     {
+        private readonly IQueryable<TClrType>? unfilteredQuery;
         private readonly IQueryable<TClrType> source;
-        private readonly PageDetails pageDetails;
+        private readonly PageRequestInfo pageRequestInfo;
 
-        public PagedConnectionResolver(IQueryable<TClrType> source, PageDetails pageDetails)
+        public PagedConnectionResolver(IQueryable<TClrType>? unfilteredQuery, IQueryable<TClrType> source, PageRequestInfo pageRequestInfo)
         {
+            this.unfilteredQuery = unfilteredQuery;
             this.source = source;
-            this.pageDetails = pageDetails;
+            this.pageRequestInfo = pageRequestInfo;
         }
 
         public async Task<IPagedConnection> ResolveAsync(CancellationToken cancellationToken)
         {
-            var count = await this.source.CountAsync(cancellationToken);
+            var filteredCount = pageRequestInfo.HasFilteredCount ? await this.source.CountAsync(cancellationToken) : 0;
+            var totalCount = pageRequestInfo.HasTotalCount ? await this.unfilteredQuery.CountAsync(cancellationToken) : 0;
 
             var data = await this.source
-                .Skip(this.pageDetails.Skip)
-                .Take(this.pageDetails.Take)
+                .Skip(this.pageRequestInfo.Skip)
+                .Take(this.pageRequestInfo.Take)
                 .ToListAsync(cancellationToken);
 
-            return new PagedConnection<TSchemaType>(count, data);
+            return new PagedConnection<TSchemaType>(totalCount, filteredCount, data);
         }
     }
 }

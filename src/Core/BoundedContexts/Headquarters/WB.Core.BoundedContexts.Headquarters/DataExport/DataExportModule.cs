@@ -28,10 +28,5 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             services.AddTransient<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
             services.AddTransient<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
     }
 }

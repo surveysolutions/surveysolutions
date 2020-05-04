@@ -493,13 +493,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 var interviewSummary = new InterviewSummary
                 {
                     Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
-                    TeamLeadId = gpsAnswer.TeamLeadId ?? Guid.Empty,
+                    SupervisorId = gpsAnswer.TeamLeadId ?? Guid.Empty,
                     InterviewId = gpsAnswer.InterviewId,
                     ReceivedByInterviewer = false,
                     QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
                     QuestionnaireId = gpsAnswer.QuestionnaireId.QuestionnaireId,
                     QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version,
-                    ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid()
+                    ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid(),
+                    QuestionnaireVariable = "automation"
                 };
                 interviewSummaryRepositoryLocal.Store(interviewSummary, gpsAnswer.InterviewId.FormatGuid());
 

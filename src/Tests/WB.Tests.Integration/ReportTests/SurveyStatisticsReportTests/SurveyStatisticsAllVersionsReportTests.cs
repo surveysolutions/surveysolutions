@@ -200,8 +200,8 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
                 Status = InterviewStatus.Completed,
                 ResponsibleName = "responsible",
                 ResponsibleId = Id.gC,
-                TeamLeadId = Id.gE,
-                TeamLeadName = teamLeadName
+                SupervisorId = Id.gE,
+                SupervisorName = teamLeadName
             };
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, version));
 

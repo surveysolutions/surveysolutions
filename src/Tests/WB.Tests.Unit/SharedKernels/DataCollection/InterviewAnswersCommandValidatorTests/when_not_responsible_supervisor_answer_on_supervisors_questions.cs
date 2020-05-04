@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
             var mockOfInterviewSummaryViewFactory = new Mock<IAllInterviewsFactory>();
             mockOfInterviewSummaryViewFactory.Setup(x => x.Load(interviewId)).Returns(new InterviewSummary
             {
-                TeamLeadId = Guid.NewGuid()
+                SupervisorId = Guid.NewGuid()
             });
             commandValidator = Create.Service.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
             BecauseOf();
