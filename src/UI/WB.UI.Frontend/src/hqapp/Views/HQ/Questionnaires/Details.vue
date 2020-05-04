@@ -89,6 +89,10 @@
                 <table class="table table-striped table-bordered">
                     <tbody>
                         <tr>
+                            <td>{{$t('Pages.Questionnaire_Variable')}}</td>
+                            <td>{{model.variable}}</td>
+                        </tr>
+                        <tr>
                             <td>{{$t('Pages.Questionnaire_SectionsCount')}}</td>
                             <td>{{model.sectionsCount}}</td>
                         </tr>
