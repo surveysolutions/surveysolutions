@@ -153,7 +153,7 @@
   <data name="Relink" xml:space="preserve">
     <value>Utilizatorul a fost reautentificat pe o tabletă nouă</value>
   </data>
-  <data name="RocordsMissing" xml:space="preserve">
+  <data name="RecordsMissing" xml:space="preserve">
     <value>Nu există încă înregistrări</value>
   </data>
   <data name="ShowPrevious7Days" xml:space="preserve">

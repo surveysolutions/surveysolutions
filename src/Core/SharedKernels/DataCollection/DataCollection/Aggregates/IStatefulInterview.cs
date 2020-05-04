@@ -17,6 +17,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string QuestionnaireId { get; }
         InterviewStatus Status { get; }
         bool IsDeleted { get; }
+        bool WasCompleted { get; }
+        bool WasRejected { get; }
         Guid Id { get; }
         string InterviewerCompleteComment { get; }
         string SupervisorRejectComment { get; }
