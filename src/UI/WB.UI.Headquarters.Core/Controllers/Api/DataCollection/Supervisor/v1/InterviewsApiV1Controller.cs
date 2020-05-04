@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -83,7 +84,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
         [Route("{id:guid}/getInterviewUploadState")]
-        public InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
+        public Task<InterviewUploadState> GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
             => base.GetInterviewUploadStateImpl(id, eventStreamSignatureTag);
     }
 }

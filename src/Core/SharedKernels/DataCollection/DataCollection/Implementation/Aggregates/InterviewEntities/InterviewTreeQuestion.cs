@@ -184,6 +184,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
 
+        public void MarkCommentsAsCommentsOnPreviousAnswer()
+        {
+            this.AnswerComments.ForEach(comment => comment.CommentOnPreviousAnswer = true);
+        }
+
         public sealed override SubstitutionText Title { get; protected set; }
 
         public SubstitutionText[] ValidationMessages { get; private set; }
@@ -382,6 +387,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
                 this.InterviewQuestion.SetAnswerTime(answerTimeUtc);
             }
+
+            this.MarkCommentsAsCommentsOnPreviousAnswer();
         }
 
         public override string ToString()

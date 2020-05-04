@@ -10,5 +10,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         bool AllowSyncWithHq { get; }
         bool IsOfflineSynchronizationDone { get; }
         void SetOfflineSynchronizationCompleted();
+
+        bool PartialSynchronizationEnabled { get; }
+        void SetPartialSynchronizationEnabled(bool enable);
     }
 }

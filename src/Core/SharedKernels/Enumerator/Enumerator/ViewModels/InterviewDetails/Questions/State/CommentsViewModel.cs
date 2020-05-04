@@ -118,6 +118,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var isCurrentUserComment = comment.UserId == this.principal.CurrentUserIdentity.UserId;
             var commentCaption = GetCommentCaption(comment);
 
+            var onPreviousAnswer = comment.CommentOnPreviousAnswer;
+            if (onPreviousAnswer)
+                commentCaption = $"{commentCaption} ({UIResources.Interview_Comment_OnPreviousAnswer})"; 
+
             CommentState commentState;
             if (comment.Resolved)
             {
@@ -134,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 CommentCaption = commentCaption,
                 Identity = this.Identity,
                 CommentState = commentState,
-                UserRole = comment.UserRole
+                UserRole = comment.UserRole,
             };
         }
 

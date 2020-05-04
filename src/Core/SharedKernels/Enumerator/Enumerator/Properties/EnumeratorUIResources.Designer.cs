@@ -1736,6 +1736,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} partial interviews downloaded.
+        /// </summary>
+        public static string Synchronization_Fail_State_InterviewsPartialDownloaded_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_InterviewsPartialDownloaded_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} new interviews downloaded.
         /// </summary>
         public static string Synchronization_Fail_State_NewInterviews_Format {
@@ -1835,6 +1844,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to interview changes.
+        /// </summary>
+        public static string Synchronization_PartialInterviews {
+            get {
+                return ResourceManager.GetString("Synchronization_PartialInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to questionnaires.
         /// </summary>
         public static string Synchronization_Questionnaires {
@@ -1889,11 +1907,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} interviews were updated.
+        /// </summary>
+        public static string Synchronization_Success_State_InterviewsPartialDownloaded_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_InterviewsPartialDownloaded_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} new interviews downloaded.
         /// </summary>
         public static string Synchronization_Success_State_NewInterviews_Format {
             get {
                 return ResourceManager.GetString("Synchronization_Success_State_NewInterviews_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews partial uploaded.
+        /// </summary>
+        public static string Synchronization_Success_State_PartialUploadInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_PartialUploadInterviews_Format", resourceCulture);
             }
         }
         
@@ -1939,6 +1975,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_SupervisorShouldDoOnlineSync_Title {
             get {
                 return ResourceManager.GetString("Synchronization_SupervisorShouldDoOnlineSync_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating local interviews with changes from server.
+        /// </summary>
+        public static string Synchronization_Update_Interviews_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_Update_Interviews_Title", resourceCulture);
             }
         }
         

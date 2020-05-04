@@ -51,7 +51,7 @@ const store = safeStore({
             return result
         },
         addCommentsAllowed(state) {
-            return !state.interviewCannotBeChanged
+            return true
         },
         basePath() {
             return window.CONFIG.basePath

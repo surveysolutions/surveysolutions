@@ -112,6 +112,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAudi
                         statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_InterviewsRejected.FormatString(synchronizationCompletedAuditLogEntity.RejectedInterviewsCount));
                     if (synchronizationCompletedAuditLogEntity.DeletedInterviewsCount > 0)
                         statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_InterviewsRemoved.FormatString(synchronizationCompletedAuditLogEntity.DeletedInterviewsCount));
+                    if (synchronizationCompletedAuditLogEntity.SuccessfullyPartialDownloadedInterviewsCount > 0)
+                        statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_InterviewsPartialDownloaded.FormatString(synchronizationCompletedAuditLogEntity.SuccessfullyPartialDownloadedInterviewsCount));
+                    if (synchronizationCompletedAuditLogEntity.SuccessfullyPartialUploadedInterviewsCount > 0)
+                        statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_InterviewsPartialUploaded.FormatString(synchronizationCompletedAuditLogEntity.SuccessfullyPartialUploadedInterviewsCount));
+                    if (synchronizationCompletedAuditLogEntity.ReopenedInterviewsAfterReceivedCommentsCount > 0)
+                        statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_ReopenedInterviewsAfterComments.FormatString(synchronizationCompletedAuditLogEntity.ReopenedInterviewsAfterReceivedCommentsCount));
 
                     string statusMessage = statusMessages.Count == 0
                         ? InterviewerAuditRecord.SynchronizationCompleted_NothingToSync

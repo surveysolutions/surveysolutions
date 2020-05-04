@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid ResponsibleId { get; set; }
         public int? LastEventSequence { get; set; }
         public bool IsReceivedByInterviewer { get; set; }
+        public Guid? LastEventId { get; set; }
     }
 }
