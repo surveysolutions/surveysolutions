@@ -1,97 +1,58 @@
 <template>
-    <HqLayout :hasFilter="false">
-        <div slot="filters">
-            <div v-if="successMessage != null"
-                id="alerts"
-                class="alerts">
-                <div class="alert alert-success">
-                    <button class="close"
-                        data-dismiss="alert"
-                        aria-hidden="true">
-                        ×
-                    </button>
-                    {{successMessage}}
-                </div>
+    <ProfileLayout ref="profile"
+        :role="userInfo.role"
+        :isOwnProfile="userInfo.isOwnProfile"
+        :userName="userInfo.userName"
+        :userId="userInfo.userId"
+        :currentTab="currentTab">
+        <div >
+            <form-group
+                v-if="isOwnProfile"
+                :label="$t('FieldsAndValidations.OldPasswordFieldName')"
+                :error="modelState['OldPassword']">
+                <TextInput
+                    type="password"
+                    v-model.trim="oldPassword"
+                    :haserror="modelState['OldPassword'] !== undefined"
+                    id="OldPassword"/>
+            </form-group>
+            <form-group
+                :label="$t('FieldsAndValidations.NewPasswordFieldName')"
+                :error="modelState['Password']">
+                <TextInput
+                    type="password"
+                    v-model.trim="password"
+                    :haserror="modelState['Password'] !== undefined"
+                    id="Password"/>
+            </form-group>
+            <form-group
+                :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
+                :error="modelState['ConfirmPassword']">
+                <TextInput
+                    type="password"
+                    v-model.trim="confirmPassword"
+                    :haserror="modelState['ConfirmPassword'] !== undefined"
+                    id="ConfirmPassword"/>
+            </form-group>
+        </div>
+
+        <div>
+            <div class="block-filter">
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                    style="margin-right:5px"
+                    id="btnUpdatePassword"
+                    v-bind:disabled="userInfo.isObserving"
+                    @click="updatePassword">{{$t('Pages.Update')}}</button>
+                <a class="btn btn-default"
+                    v-bind:href="referrerUrl"
+                    id="lnkCancelUpdatePassword">
+                    {{$t('Common.Cancel')}}
+                </a>
             </div>
         </div>
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
-                </li>
-            </ol>
-            <h1>{{$t('Strings.HQ_Views_Manage_Title')}} <b v-if="!isOwnProfile">
-                : {{userInfo.userName}}
-            </b></h1>
-        </div>
-        <div class="extra-margin-bottom">
-            <div class="profile">
-                <ul class="nav nav-tabs extra-margin-bottom">
-                    <li class="nav-item"><a class="nav-link"
-                        id="profile"
-                        v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
-                    <li class="nav-item active"><a class="nav-link active"
-                        id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
-                    <li class="nav-item"><a class="nav-link"
-                        id="two-factor"
-                        v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul>
-
-                <div class="col-sm-12">
-                    <div>
-                        <div >
-                            <form-group
-                                v-if="isOwnProfile"
-                                :label="$t('FieldsAndValidations.OldPasswordFieldName')"
-                                :error="modelState['OldPassword']">
-                                <TextInput
-                                    type="password"
-                                    v-model.trim="oldPassword"
-                                    :haserror="modelState['OldPassword'] !== undefined"
-                                    id="OldPassword"/>
-                            </form-group>
-                            <form-group
-                                :label="$t('FieldsAndValidations.NewPasswordFieldName')"
-                                :error="modelState['Password']">
-                                <TextInput
-                                    type="password"
-                                    v-model.trim="password"
-                                    :haserror="modelState['Password'] !== undefined"
-                                    id="Password"/>
-                            </form-group>
-                            <form-group
-                                :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
-                                :error="modelState['ConfirmPassword']">
-                                <TextInput
-                                    type="password"
-                                    v-model.trim="confirmPassword"
-                                    :haserror="modelState['ConfirmPassword'] !== undefined"
-                                    id="ConfirmPassword"/>
-                            </form-group>
-                        </div>
-
-                        <div>
-                            <div class="block-filter">
-                                <button
-                                    type="submit"
-                                    class="btn btn-success"
-                                    style="margin-right:5px"
-                                    id="btnUpdatePassword"
-                                    v-bind:disabled="userInfo.isObserving"
-                                    @click="updatePassword">{{$t('Pages.Update')}}</button>
-                                <a class="btn btn-default"
-                                    v-bind:href="referrerUrl"
-                                    id="lnkCancelUpdatePassword">
-                                    {{$t('Common.Cancel')}}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </HqLayout>
+    </ProfileLayout>
 </template>
 
 <script>
@@ -102,50 +63,23 @@ export default {
     data() {
         return {
             modelState: {},
-            personName: null,
-            email: null,
-            phoneNumber: null,
             oldPassword: null,
             password: null,
             confirmPassword: null,
-            isLockedByHeadquarters: false,
-            isLockedBySupervisor: false,
-            successMessage: null,
         }
     },
     computed: {
+        currentTab(){
+            return 'password'
+        },
         model() {
             return this.$config.model
         },
         userInfo() {
             return this.model.userInfo
         },
-        isAdmin() {
-            return this.userInfo.role == 'Administrator'
-        },
-        isHeadquarters() {
-            return this.userInfo.role == 'Headquarter'
-        },
-        isSupervisor() {
-            return this.userInfo.role == 'Supervisor'
-        },
-        isInterviewer() {
-            return this.userInfo.role == 'Interviewer'
-        },
-        isObserver() {
-            return this.userInfo.role == 'Observer'
-        },
-        isApiUser() {
-            return this.userInfo.role == 'ApiUser'
-        },
         isOwnProfile() {
             return this.userInfo.isOwnProfile
-        },
-        canLockBySupervisor() {
-            return this.isInterviewer
-        },
-        canBeLockedAsHeadquarters(){
-            return this.userInfo.canBeLockedAsHeadquarters
         },
         canChangePassword() {
             if(this.userInfo.isObserving)
@@ -153,52 +87,11 @@ export default {
 
             return true
         },
-        lockMessage() {
-            if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
-            if (this.isSupervisor) return this.$t('Pages.Supervisor_LockWarning')
-            if (this.isInterviewer) return this.$t('Pages.Interviewer_LockWarning')
-            return null
-        },
-        referrerTitle() {
-            if (!this.isOwnProfile) {
-                if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
-                if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
-                if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
-                if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
-                if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
-            }
-
-            return this.$t('Pages.Home')
-        },
         referrerUrl() {
-            if (!this.isOwnProfile) {
-                if (this.isHeadquarters) return '../../Headquarters'
-                if (this.isSupervisor) return '../../Supervisors'
-                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
-                if (this.isObserver) return '../../Observers'
-                if (this.isApiUser) return '../../ApiUsers'
-            }
-
             return '/'
         },
     },
-    mounted() {
-        this.personName = this.userInfo.personName
-        this.email = this.userInfo.email
-        this.phoneNumber = this.userInfo.phoneNumber
-        this.isLockedByHeadquarters = this.userInfo.isLockedByHeadquarters
-        this.isLockedBySupervisor = this.userInfo.isLockedBySupervisor
-    },
     watch: {
-        personName: function(val) {
-            Vue.delete(this.modelState, 'PersonName')
-        },
-        email: function(val) {
-            Vue.delete(this.modelState, 'Email')
-        },
-        phoneNumber: function(val) {
-            Vue.delete(this.modelState, 'PhoneNumber')
-        },
         oldPassword: function(val) {
             Vue.delete(this.modelState, 'OldPassword')
         },
@@ -231,7 +124,7 @@ export default {
                 },
             }).then(
                 response => {
-                    self.successMessage = self.$t('Strings.HQ_AccountController_AccountPasswordChangedSuccessfully')
+                    self.$refs.profile.successMessage = self.$t('Strings.HQ_AccountController_AccountPasswordChangedSuccessfully')
                 },
                 error => {
                     self.processModelState(error.response.data, self)
@@ -254,13 +147,6 @@ export default {
                     }
                 })
             }
-        },
-        getUrl: function(baseUrl){
-            if(this.isOwnProfile)
-                return baseUrl
-            else
-                return baseUrl + '/' + this.model.userInfo.userId
-
         },
     },
 }

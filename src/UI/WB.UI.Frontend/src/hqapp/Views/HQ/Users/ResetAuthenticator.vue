@@ -1,77 +1,38 @@
 <template>
-    <HqLayout :hasFilter="false">
-        <div slot="filters">
-            <div v-if="successMessage != null"
-                id="alerts"
-                class="alerts">
-                <div class="alert alert-success">
-                    <button class="close"
-                        data-dismiss="alert"
-                        aria-hidden="true">
-                        ×
-                    </button>
-                    {{successMessage}}
-                </div>
+    <ProfileLayout ref="profile"
+        :role="userInfo.role"
+        :isOwnProfile="userInfo.isOwnProfile"
+        :userName="userInfo.userName"
+        :userId="userInfo.userId"
+        :currentTab="currentTab">
+
+        <div >
+            <h2>{{$t('Strings.HQ_Views_ResetAuthenticator_Title')}}</h2>
+        </div>
+        <div>
+            <div class="alert alert-warning"
+                role="alert">
+                <p>
+                    <span class="glyphicon glyphicon-warning-sign"
+                        style="margin-right: 5px;"></span>
+                    <strong>{{$t('Pages.ResetAuthenticatorLine1')}}</strong>
+                </p>
+                <p>
+                    {{$t('Pages.ResetAuthenticatorLine2')}}
+                </p>
             </div>
         </div>
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
-                </li>
-            </ol>
-            <h1>{{$t('Strings.HQ_Views_Manage_Title')}} <b v-if="!isOwnProfile">
-                : {{userInfo.userName}}
-            </b></h1>
-        </div>
-
-        <div class="extra-margin-bottom">
-            <div class="profile">
-                <ul class="nav nav-tabs extra-margin-bottom">
-                    <li class="nav-item"><a class="nav-link"
-                        id="profile"
-                        v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
-                    <li class="nav-item"><a class="nav-link"
-                        id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
-                    <li class="nav-item active"><a class="nav-link active"
-                        id="two-factor"
-                        v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul>
-
-                <div class="col-sm-12">
-                    <div >
-                        <div >
-                            <h2>{{$t('Strings.HQ_Views_ResetAuthenticator_Title')}}</h2>
-                        </div>
-                        <div>
-                            <div class="alert alert-warning"
-                                role="alert">
-                                <p>
-                                    <span class="glyphicon glyphicon-warning-sign"
-                                        style="margin-right: 5px;"></span>
-                                    <strong>{{$t('Pages.ResetAuthenticatorLine1')}}</strong>
-                                </p>
-                                <p>
-                                    {{$t('Pages.ResetAuthenticatorLine2')}}
-                                </p>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="block-filter">
-                                <button
-                                    type="submit"
-                                    class="btn btn-danger"
-                                    id="btnResetAuthenticator"
-                                    v-bind:disabled="userInfo.isObserving"
-                                    @click="resetAuthenticator">{{$t('Pages.ResetAuthenticator')}}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div>
+            <div class="block-filter">
+                <button
+                    type="submit"
+                    class="btn btn-danger"
+                    id="btnResetAuthenticator"
+                    v-bind:disabled="userInfo.isObserving"
+                    @click="resetAuthenticator">{{$t('Pages.ResetAuthenticator')}}</button>
             </div>
         </div>
-    </HqLayout>
+    </ProfileLayout>
 </template>
 
 <script>
@@ -86,6 +47,9 @@ export default {
         }
     },
     computed: {
+        currentTab(){
+            return 'two-factor'
+        },
         is2faEnabled(){
             return this.userInfo.is2faEnabled
         },
@@ -101,64 +65,8 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
-
-        isAdmin() {
-            return this.userInfo.role == 'Administrator'
-        },
-        isHeadquarters() {
-            return this.userInfo.role == 'Headquarter'
-        },
-        isSupervisor() {
-            return this.userInfo.role == 'Supervisor'
-        },
-        isInterviewer() {
-            return this.userInfo.role == 'Interviewer'
-        },
-        isObserver() {
-            return this.userInfo.role == 'Observer'
-        },
-        isApiUser() {
-            return this.userInfo.role == 'ApiUser'
-        },
-
         isOwnProfile() {
             return this.userInfo.isOwnProfile
-        },
-        referrerTitle() {
-            if (!this.isOwnProfile) {
-                if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
-                if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
-                if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
-                if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
-                if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
-            }
-
-            return this.$t('Pages.Home')
-        },
-        referrerUrl() {
-            if (!this.isOwnProfile) {
-                if (this.isHeadquarters) return '../../Headquarters'
-                if (this.isSupervisor) return '../../Supervisors'
-                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
-                if (this.isObserver) return '../../Observers'
-                if (this.isApiUser) return '../../ApiUsers'
-            }
-
-            return '/'
-        },
-        profileUrl(){
-            return this.getUrl('../../Users/Manage')
-        },
-        tfaUrl(){
-            return this.getUrl('../../Users/TwoFactorAuthentication')
-        },
-    },
-    mounted() {
-        this.personName = this.userInfo.personName
-    },
-    watch: {
-        personName: function(val) {
-            Vue.delete(this.modelState, 'PersonName')
         },
     },
     methods: {
@@ -186,13 +94,6 @@ export default {
                     self.processModelState(error.response.data, self)
                 }
             )
-
-        },
-        getUrl: function(baseUrl){
-            if(this.isOwnProfile)
-                return baseUrl
-            else
-                return baseUrl + '/' + this.model.userInfo.userId
 
         },
     },
