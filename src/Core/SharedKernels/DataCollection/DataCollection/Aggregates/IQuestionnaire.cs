@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid QuestionnaireId { get; }
 
         string Title { get; }
+        string DefaultLanguageName { get; }
         
         Translation Translation { get; }
 
