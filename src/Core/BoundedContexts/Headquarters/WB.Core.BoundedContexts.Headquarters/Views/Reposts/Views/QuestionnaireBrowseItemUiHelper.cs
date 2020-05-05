@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
             this List<QuestionnaireBrowseItem> questionnaireBrowseItems)
         {
             return questionnaireBrowseItems
-                .GroupBy(questionnaire => new { questionnaire.QuestionnaireId, questionnaire.Title, questionnaire.Variable })
+                .GroupBy(questionnaire => new { questionnaire.QuestionnaireId, questionnaire.Title})
                 .Select(g => new QuestionnaireVersionsComboboxViewItem
                 {
                     Key = g.Key.QuestionnaireId.ToString(),
@@ -18,7 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
                     Versions = g.OrderByDescending(v => v.Version)
                         .Select(v => new ComboboxViewItem { Key = v.Version.ToString(), Value = $"ver. {v.Version}" })
                         .ToList(),
-                    Alias = g.Key.Variable
                 })
                 .OrderBy(q => q.Value)
                 .ToList();
