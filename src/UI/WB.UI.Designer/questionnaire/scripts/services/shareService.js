@@ -32,13 +32,14 @@
                 });
             };
 
-            shareService.udpateQuestionnaire = function(questionnaireId, title, variable, hideifDisabled, isPublic) {
+            shareService.udpateQuestionnaire = function(questionnaireId, title, variable, hideifDisabled, isPublic, defaultLanguageName) {
                 return commandService.execute("UpdateQuestionnaire", {
                     title: title,
                     variable: variable,
                     questionnaireId: questionnaireId,
                     hideifDisabled: hideifDisabled, 
-                    isPublic: isPublic
+                    isPublic: isPublic,
+                    defaultLanguageName : defaultLanguageName
                 });
             };
 

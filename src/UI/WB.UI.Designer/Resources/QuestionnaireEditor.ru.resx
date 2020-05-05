@@ -1444,4 +1444,10 @@
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Текстовое название категории (отображается интервьюеру)</value>
   </data>
+  <data name="SettingsQuestionnaireDefaultLanguageName" xml:space="preserve">
+  <value>Язык опросника</value>
+  </data>
+  <data name="HelpQuestionnaireDefaultLanguageName" xml:space="preserve">
+  <value>Если в опроснике больше чем один язык, то это имя будет использовано как название языка по умолчанию в списке языков опросника</value>
+  </data>
 </root>
