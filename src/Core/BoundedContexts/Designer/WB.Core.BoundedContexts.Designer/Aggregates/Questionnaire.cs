@@ -224,6 +224,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.VariableName = System.Web.HttpUtility.HtmlDecode(command.Variable);
             this.innerDocument.IsPublic = command.IsPublic;
             this.innerDocument.HideIfDisabled = command.HideIfDisabled;
+            this.innerDocument.DefaultLanguageName = command.DefaultLanguageName;
         }
 
         public void DeleteQuestionnaire()
