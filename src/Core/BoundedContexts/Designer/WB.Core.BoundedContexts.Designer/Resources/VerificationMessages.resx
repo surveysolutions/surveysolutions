@@ -387,7 +387,7 @@
   <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
     <value>Lookup table has too many columns</value>
   </data>
-  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+  <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
     <value>Lookup table has too many rows</value>
   </data>
   <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">

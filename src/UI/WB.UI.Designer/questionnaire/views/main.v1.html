@@ -242,7 +242,7 @@
                                         </div>
                                         <div class="permanent-actions clearfix">
                                             <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
-                                            <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="1MB" type="file">
+                                            <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="2MB" type="file">
                                                 <span ng-hide="table.hasUploadedFile" ng-i18next="SideBarLookupTableSelectFile">Select file</span>
                                                 <span ng-show="table.hasUploadedFile" ng-i18next="SideBarLookupTableUpdateFile">Update file</span>
                                             </button>
