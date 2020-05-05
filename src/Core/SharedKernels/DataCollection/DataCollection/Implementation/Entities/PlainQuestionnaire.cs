@@ -234,6 +234,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid QuestionnaireId => this.innerDocument.PublicKey;
 
         public string Title => this.innerDocument.Title;
+        public string DefaultLanguageName => this.innerDocument.DefaultLanguageName;
 
         public Translation Translation => this.translation;
         public string VariableName => this.innerDocument.VariableName;
