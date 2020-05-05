@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 Variable = questionnaireDocument.VariableName,
                 Chapters = new List<ChapterInfoView>(),
                 IsPublic = questionnaireDocument.IsPublic,
-                HideIfDisabled = questionnaireDocument.HideIfDisabled
+                HideIfDisabled = questionnaireDocument.HideIfDisabled,
+                DefaultLanguageName = questionnaireDocument.DefaultLanguageName
             };
 
             foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
