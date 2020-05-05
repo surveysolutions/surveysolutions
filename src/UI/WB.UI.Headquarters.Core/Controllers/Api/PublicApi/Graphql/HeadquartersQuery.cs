@@ -18,10 +18,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .UseFiltering<InterviewsFilterInputType>()
                 .UseSorting<InterviewsSortInputType>();
 
-            descriptor.Field<QuestionsResolver>(x => x.Questions(default, default, default, default, default, default))
+            descriptor.Field<QuestionsResolver>(x => x.Questions(default, default, default, default, default))
                 .Authorize()
                 .Type<ListType<QuestionItemObjectType>>()
-                .Argument("variable", a => a.Description("Questionnaire variable").Type<StringType>())
+                .Argument("id", a => a.Description("Questionnaire id").Type<UuidType>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<LongType>())
                 .Argument("language", a => a.Description("Questionnaire language").Type<StringType?>())
                 .UseFiltering<QuestionsFilterType>();

@@ -10,7 +10,7 @@ type CategoricalOption {
 
 type HeadquartersQuery {
   interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnection @authorize(apply: BEFORE_RESOLVER)
-  questions("Questionnaire language" language: String "Questionnaire variable" variable: String "Questionnaire version" version: Long where: QuestionFilter): [Question] @authorize(apply: BEFORE_RESOLVER)
+  questions("Questionnaire id" id: Uuid "Questionnaire language" language: String "Questionnaire version" version: Long where: QuestionFilter): [Question] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
 }
 
@@ -106,6 +106,7 @@ input InterviewFilter {
   key_in: [String]
   key_starts_with: String
   OR: [InterviewFilter!]
+  questionnaireId: Uuid
   questionnaireVariable: String
   questionnaireVersion: Long
   receivedByInterviewer: Boolean
