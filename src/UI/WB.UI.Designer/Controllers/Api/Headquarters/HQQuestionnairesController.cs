@@ -26,7 +26,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Route("api/hq/v3/questionnaires")]
     [Authorize]
-    [AllowOnlyFromWhitelistIP]
     public class HQQuestionnairesController : ControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
