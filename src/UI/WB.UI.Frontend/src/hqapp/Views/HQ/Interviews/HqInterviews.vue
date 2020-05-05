@@ -67,7 +67,7 @@
             </FilterBlock>
 
             <InterviewFilter slot="additional"
-                :questionnaireVariable="questionnaireVariable"
+                :questionnaireId="where.questionnaireId"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"
                 @change="questionFilterChanged" />
@@ -360,6 +360,7 @@ import {lowerCase, find, filter, flatten, map,
     join, assign, isNaN, isNumber, toNumber, isEqual} from 'lodash'
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
+import * as toastr from 'toastr'
 
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
@@ -680,6 +681,7 @@ export default {
                             error: err.toString(),
                         })
                         console.error(err)
+                        toastr.error(err.message.toString())
                     })
                 },
                 select: {
@@ -708,13 +710,10 @@ export default {
         },
 
         where() {
-            let data = {}
+            const data = {}
 
             if (this.status) data.status = this.status.key
-            if (this.questionnaireId) {
-                data.questionnaireId = this.questionnaireId.key
-            }
-
+            if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
@@ -723,20 +722,13 @@ export default {
 
             return data
         },
-        questionnaireVariable() {
-            if(this.where.questionnaireId == null)
-                return ''
-
-            const questionnaire = find(this.config.questionnaires, {'key': this.where.questionnaireId})
-            return questionnaire.alias
-        },
 
         whereQuery() {
             const and = []
             const self = this
 
             if(this.where.questionnaireId) {
-                and.push({questionnaireVariable: this.questionnaireVariable})
+                and.push({questionnaireId: this.where.questionnaireId})
 
                 if(this.where.questionnaireVersion) {
                     and.push({questionnaireVersion: this.where.questionnaireVersion})
@@ -850,7 +842,13 @@ export default {
         },
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
-            this.questionnaireVersion = null
+
+            if(newValue != null && newValue.versions != null && newValue.versions.length == 1) {
+                this.questionnaireVersion = newValue.versions[0]
+            }
+            else {
+                this.questionnaireVersion = null
+            }
             this.conditions = []
         },
 
@@ -1385,8 +1383,6 @@ export default {
         },
 
         loadQuestionnaireId(onDone) {
-            let requestParams = null
-
             const questionnaireId = this.$route.query.questionnaireId
             const version = this.$route.query.questionnaireVersion
 
@@ -1401,25 +1397,29 @@ export default {
             this.unactiveDateEnd = query.unactiveDateEnd
             this.assignmentId = query.assignmentId
 
-            if (query.status != undefined) {
+            if (query.status != null) {
                 self.status = self.statuses.find(o => o.key === query.status)
             }
 
             self.loadQuestionnaireId((questionnaireId, version) => {
-                if (questionnaireId != undefined) {
+                if (questionnaireId != null) {
                     self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
-                    if (version != undefined && self.questionnaireId != undefined) {
+                    if (version != null && self.questionnaireId != null) {
                         self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
 
                         if(query.conditions != null) {
                             self.conditions = queryStringToCondition(flatten([query.conditions]))
+                        }
+                    } else {
+                        if(version == null && self.questionnaireId.versions.length == 1) {
+                            self.questionnaireVersionSelected(self.questionnaireId.versions[0])
                         }
                     }
                 }
             })
 
             self.loadResponsibleIdByName(responsibleId => {
-                if (responsibleId != undefined)
+                if (responsibleId != null)
                     self.responsibleId = {key: responsibleId, value: query.responsibleName}
                 else
                     self.responsibleId = null

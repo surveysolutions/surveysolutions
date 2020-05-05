@@ -11,10 +11,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
         {
             descriptor.BindFieldsExplicitly();
             descriptor.Name("InterviewFilter");
+            
             descriptor.Filter(x => x.Status)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowNotEquals().And().AllowIn();
 
+            descriptor.Filter(x => x.QuestionnaireId)
+                .BindFiltersExplicitly()
+                .AllowEquals();
+            
             descriptor.Filter(x => x.QuestionnaireVariable)
                 .BindFiltersExplicitly()
                 .AllowEquals();
