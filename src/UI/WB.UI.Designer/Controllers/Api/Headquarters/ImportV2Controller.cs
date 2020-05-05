@@ -17,7 +17,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Obsolete("Since v5.11")]
     [Authorize]
-    [AllowOnlyFromWhitelistIP()]
     [Route("api/v2/import")]
     public class ImportV2Controller : ImportControllerBase
     {
