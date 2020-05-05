@@ -23,7 +23,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         public TransferProgress TransferProgress { get; set; }
 
         public bool HasErrors => this.Statistics.FailedToUploadInterviewsCount != 0 || 
-                                 this.Statistics.FailedToCreateInterviewsCount != 0;
+                                 this.Statistics.FailedToCreateInterviewsCount != 0 ||
+                                 this.Statistics.FailedToPartialDownloadedInterviewsCount != 0;
 
         public bool IsRunning => this.Status == SynchronizationStatus.Download || 
                                  this.Status == SynchronizationStatus.Started ||

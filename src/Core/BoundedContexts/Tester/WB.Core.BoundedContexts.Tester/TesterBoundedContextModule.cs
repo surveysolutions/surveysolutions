@@ -29,10 +29,5 @@ namespace WB.Core.BoundedContexts.Tester
             registry.BindAsSingleton<ICommandService, TesterCommandService>();
 
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
     }
 }

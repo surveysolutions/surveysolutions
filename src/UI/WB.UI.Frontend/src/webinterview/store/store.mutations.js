@@ -11,7 +11,7 @@ export default {
             }
         })
     },
-    SET_ANSWER(state, {identity, answer}) {
+    SET_ANSWER(state, { identity, answer }) {
         const e = state.entityDetails[identity]
         e.answer = answer
     },
@@ -23,7 +23,7 @@ export default {
         })
         state.entities = sectionData
     },
-    CLEAR_ENTITIES(state, {ids}) {
+    CLEAR_ENTITIES(state, { ids }) {
         forEach(ids, id => {
             Vue.delete(state.entityDetails, id)
         })
@@ -43,14 +43,14 @@ export default {
         Vue.set(state, 'breadcrumbs', crumps)
     },
     SET_LANGUAGE_INFO(state, languageInfo) {
-        if(languageInfo == null) return
+        if (languageInfo == null) return
 
         Vue.set(state, 'originalLanguageName', languageInfo.originalLanguageName)
         Vue.set(state, 'currentLanguage', languageInfo.currentLanguage)
         Vue.set(state, 'languages', languageInfo.languages)
     },
     SET_INTERVIEW_INFO(state, interviewInfo) {
-        if(interviewInfo == null) return
+        if (interviewInfo == null) return
 
         state.questionnaireTitle = interviewInfo.questionnaireTitle
         state.firstSectionId = interviewInfo.firstSectionId
@@ -59,6 +59,7 @@ export default {
         state.interviewCannotBeChanged = interviewInfo.interviewCannotBeChanged
         state.isCurrentUserObserving = interviewInfo.isCurrentUserObserving
         state.doesBrokenPackageExist = interviewInfo.doesBrokenPackageExist
+        state.canAddComments = interviewInfo.canAddComments
     },
     SET_COVER_INFO(state, coverInfo) {
         state.coverInfo = coverInfo
@@ -69,20 +70,20 @@ export default {
     SET_INTERVIEW_STATUS(state, interviewState) {
         Vue.set(state, 'interviewState', interviewState)
     },
-    SET_INTERVIEW_SHUTDOWN(state){
+    SET_INTERVIEW_SHUTDOWN(state) {
         state.interviewShutdown = true
     },
     SET_HAS_COVER_PAGE(state, hasCoverPage) {
         state.hasCoverPage = hasCoverPage
     },
-    POSTING_COMMENT(state, {questionId}){
+    POSTING_COMMENT(state, { questionId }) {
         const question = state.entityDetails[questionId]
-        if (question){ // can be posted from overview and question is not loaded
+        if (question) { // can be posted from overview and question is not loaded
             question.postingComment = true
         }
     },
 
-    LOG_LAST_ACTIVITY(state){
+    LOG_LAST_ACTIVITY(state) {
         state.lastActivityTimestamp = new Date()
     },
     COMPLETE_INTERVIEW(state) {

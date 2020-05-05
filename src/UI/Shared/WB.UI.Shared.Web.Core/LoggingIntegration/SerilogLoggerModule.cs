@@ -20,10 +20,5 @@ namespace WB.UI.Shared.Web.LoggingIntegration
                 return new SerilogLogger();
             });
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
     }
 }

@@ -87,9 +87,9 @@ namespace WB.Services.Export.Questionnaire
                 }
                 catch (Exception e)
                 {
-                    e.Data.Add("Event", @event.EventTypeName);
-                    e.Data.Add("GlobalSequence", @event.GlobalSequence);
-                    e.Data.Add("InterviewId", @event.EventSourceId);
+                    e.Data.Add("WB:Event", @event.EventTypeName);
+                    e.Data.Add("WB:GlobalSequence", @event.GlobalSequence);
+                    e.Data.Add("WB:EventSourceId", @event.EventSourceId);
 
                     throw;
                 }

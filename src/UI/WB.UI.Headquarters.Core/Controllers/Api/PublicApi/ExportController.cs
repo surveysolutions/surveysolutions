@@ -86,7 +86,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                         return StatusCode(StatusCodes.Status400BadRequest, @"Questionnaire not found");
 
                     var result = await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
-                        exportType, status.ToInterviewStatus(), from, to, GetPasswordFromSettings(), null, null);
+                        exportType, status.ToInterviewStatus(), from, to, GetPasswordFromSettings(), null, null, null);
 
                     jobId = result.JobId;
 

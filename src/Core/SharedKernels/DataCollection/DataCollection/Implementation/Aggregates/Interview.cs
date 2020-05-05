@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
@@ -727,6 +728,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
 
         public bool UsesExpressionStorage { get; protected set; } = false;
+        public bool WasCompleted => this.properties.WasCompleted;
+        public bool WasRejected => this.properties.WasRejected;
         
         public string QuestionnaireId => this.QuestionnaireIdentity?.ToString();
 
@@ -2069,7 +2072,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command)
+        public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command) 
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
 
@@ -2078,17 +2081,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isInterviewNeedToBeCreated = command.CreatedOnClient && this.Version == 0;
             var questionnaire = this.GetQuestionnaireOrThrow();
 
-            if (isInterviewNeedToBeCreated)
+            if (!isInterviewNeedToBeCreated)
             {
-                if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewCreated))
-                {
-                    // Version 19.02 still generates InterviewOnClientCreated created event
-                    // throw new InterviewException("Create interview must be the first event");
-                }
-            }
-            else
-            {
-                if (command.InterviewStatus == InterviewStatus.Completed)
+                if (command.InterviewStatus == InterviewStatus.Completed 
+                    || command.InterviewStatus == InterviewStatus.InterviewerAssigned
+                    || command.InterviewStatus == InterviewStatus.Restarted
+                    || command.InterviewStatus == InterviewStatus.RejectedBySupervisor
+                    )
                 {
                     propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(command.UserId);
                 }
@@ -2099,9 +2098,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(command.InterviewStatus);
             }
 
-            foreach (IEvent synchronizedEvent in command.SynchronizedEvents)
+            foreach (AggregateRootEvent synchronizedEvent in command.SynchronizedEvents)
             {
-                this.ApplyEvent(synchronizedEvent);
+                var @event = synchronizedEvent.Payload;
+                this.ApplyEvent(synchronizedEvent.EventIdentifier, DateTime.UtcNow /*synchronizedEvent.EventTimeStamp*/, @event);
             }
 
             var sourceInterview = GetChangedTree();

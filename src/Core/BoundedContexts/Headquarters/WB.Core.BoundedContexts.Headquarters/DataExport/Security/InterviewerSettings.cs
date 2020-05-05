@@ -6,9 +6,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
     {
         public const bool AutoUpdateEnabledDefault = true;
         public const bool DeviceNotificationsEnabledDefault = true;
+        public const bool PartialSynchronizationEnabledDefault = false;
 
         public bool AutoUpdateEnabled { get; set; }
         public bool? DeviceNotificationsEnabled { get; set; }
+        public bool? PartialSynchronizationEnabled { get; set; }
     }
 
     public static class InterviewerSettingsExtensions
@@ -26,6 +28,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
                 return InterviewerSettings.DeviceNotificationsEnabledDefault;
 
             return settings.DeviceNotificationsEnabled.Value;
+        }
+
+        public static bool IsPartialSynchronizationEnabled(this InterviewerSettings settings)
+        {
+            if (settings?.PartialSynchronizationEnabled == null)
+                return InterviewerSettings.PartialSynchronizationEnabledDefault;
+
+            return settings.PartialSynchronizationEnabled.Value;
         }
     }
 }

@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId);
 
         Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
+        Task<List<CommittedEvent>> GetInterviewDetailsAfterEventAsync(Guid interviewId, Guid eventId, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
         Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken token = default);
         Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
         Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
@@ -62,5 +63,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken);
         Task<bool> AreNotificationsEnabledAsync(CancellationToken token);
         Task<List<ReusableCategoriesDto>> GetQuestionnaireReusableCategoriesAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken);
+        Task<RemoteTabletSettingsApiView> GetTabletSettings(CancellationToken cancellationToken);
     }
 }

@@ -1351,6 +1351,9 @@
   <data name="Questionnaire_SubSectionsCount" xml:space="preserve">
     <value>Количество подсекций</value>
   </data>
+  <data name="Questionnaire_Variable" xml:space="preserve">
+    <value>Имя переменной</value>
+  </data>
   <data name="Home" xml:space="preserve">
       <value>Домой</value>
       <comment>Домой</comment>

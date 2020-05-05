@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         public IActionResult Post([FromBody]InterviewPackageApiView package)
         {
             if (string.IsNullOrEmpty(package.Events))
-                return this.BadRequest("Server cannot accept empty package content.");
+                return BadRequest("Server cannot accept empty package content.");
 
             var interviewPackage = new InterviewPackage
             {
@@ -61,8 +61,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 
             this.packagesService.StoreOrProcessPackage(interviewPackage);
 
-            return this.Ok ();
+            return Ok();
         }
+
         [HttpPost]
         [Route("{id:guid}/image")]
         public override IActionResult PostImage(PostFileRequest request) => base.PostImage(request);

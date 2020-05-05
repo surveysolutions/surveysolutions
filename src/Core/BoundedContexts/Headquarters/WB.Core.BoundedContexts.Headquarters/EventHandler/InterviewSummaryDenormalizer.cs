@@ -146,6 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireVersion = questionnaireVersion,
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString(),
                 QuestionnaireTitle = questionnaire.Title,
+                QuestionnaireVariable = questionnaire.VariableName,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
                 ResponsibleRole = responsible?.Roles.First() ?? UserRoles.Interviewer,
@@ -227,19 +228,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interview.ResponsibleId = @event.Payload.SupervisorId;
                 interview.ResponsibleName = supervisorName;
                 interview.ResponsibleRole = UserRoles.Supervisor;
-                interview.TeamLeadId = @event.Payload.SupervisorId;
-                interview.TeamLeadName = supervisorName;
+                interview.SupervisorId = @event.Payload.SupervisorId;
+                interview.SupervisorName = supervisorName;
                 interview.IsAssignedToInterviewer = false;
                 interview.ReceivedByInterviewer = false;
 
                 if (interview.FirstSupervisorId == null)
                 {
-                    interview.FirstSupervisorId = interview.TeamLeadId;
+                    interview.FirstSupervisorId = interview.SupervisorId;
                 }
 
                 if (interview.FirstSupervisorName == null)
                 {
-                    interview.FirstSupervisorName = interview.TeamLeadName;
+                    interview.FirstSupervisorName = interview.SupervisorName;
                 }
             });
         }
@@ -337,8 +338,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 }
                 else
                 {
-                    interview.ResponsibleId = interview.TeamLeadId;
-                    interview.ResponsibleName = interview.TeamLeadName;
+                    interview.ResponsibleId = interview.SupervisorId;
+                    interview.ResponsibleName = interview.SupervisorName;
                     interview.ResponsibleRole = UserRoles.Supervisor;
                     interview.IsAssignedToInterviewer = false;
                     interview.ReceivedByInterviewer = false;
@@ -404,8 +405,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     var responsible = this.users.GetUser(state.ResponsibleId);
                     if (responsible?.Supervisor != null)
                     {
-                        state.TeamLeadId = responsible.Supervisor.Id;
-                        state.TeamLeadName = responsible.Supervisor.Name;
+                        state.SupervisorId = responsible.Supervisor.Id;
+                        state.SupervisorName = responsible.Supervisor.Name;
                     }
                     state.Status = @event.Payload.Status;
                 }

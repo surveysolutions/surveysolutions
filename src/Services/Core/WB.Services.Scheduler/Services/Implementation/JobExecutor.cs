@@ -54,6 +54,12 @@ namespace WB.Services.Scheduler.Services.Implementation
                     {
                         await using var tr = await db.Database.BeginTransactionAsync(token);
 
+                        if (!await db.TryAcquireLockAsync(job.Id))
+                        {
+                            logger.LogWarning("Job {jobId} is already in process", job.Id);
+                            return;
+                        }
+
                         var exportJob = serviceProvider.GetService(runner) as IJob;
 
                         if (exportJob == null)
