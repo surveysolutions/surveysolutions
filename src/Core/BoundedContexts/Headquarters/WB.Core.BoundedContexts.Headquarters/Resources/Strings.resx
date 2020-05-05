@@ -180,7 +180,7 @@
   <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
     <value>Disable two-factor authentication</value>
   </data>
-  <data name="HQ_Views_GenerateRecoveryCodes_Title" xml:space="preserve">
+  <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
     <value>Reset recovery codes</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">

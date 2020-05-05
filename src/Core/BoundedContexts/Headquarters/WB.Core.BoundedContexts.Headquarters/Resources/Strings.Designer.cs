@@ -232,15 +232,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset recovery codes.
-        /// </summary>
-        public static string HQ_Views_GenerateRecoveryCodes_Title {
-            get {
-                return ResourceManager.GetString("HQ_Views_GenerateRecoveryCodes_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Manage account.
         /// </summary>
         public static string HQ_Views_Manage_Title {
@@ -255,6 +246,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string HQ_Views_ResetAuthenticator_Title {
             get {
                 return ResourceManager.GetString("HQ_Views_ResetAuthenticator_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset recovery codes.
+        /// </summary>
+        public static string HQ_Views_ResetRecoveryCodes_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_ResetRecoveryCodes_Title", resourceCulture);
             }
         }
         
