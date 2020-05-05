@@ -303,16 +303,16 @@
     <value>Опция активирует уведомления пользователя на устройстве касательно изменений и необходимых действий</value>
   </data>
   <data name="UserProfileSettings_Title" xml:space="preserve">
-      <value>Настройки профеля пользователя</value>
-      <comment>Настройки профеля пользователя</comment>
+    <value>Настройки профиля пользователя</value>
+    <comment>Настройки профиля пользователя</comment>
+
   </data>
   <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
-      <value>Редактирование профеля интервьювера</value>
-      <comment>Редактирование своего профеля</comment>
+    <value>Редактирование профиля интервьювера</value>
   </data>
   <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
-      <value>Разрешает редактирование интервьюверам их контактной информации в профиле</value>
-      <comment>Разрешает редактирование всем пользователям их контактной информации в профиле</comment>
+    <value>Разрешает редактирование интервьюверам их контактной информации в профиле</value>
+    <comment>Разрешает редактирование всем пользователям их контактной информации в профиле</comment>
   </data>
   <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
     <value>Настройки веб интервью</value>
@@ -322,5 +322,11 @@
   </data>
   <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
     <value>Разрешить респонденту отправлять электронные письма (применяется, если рассылка настроена)</value>
+  </data>
+  <data name="PartialSynchronizationDescription" xml:space="preserve">
+    <value>Если опция включена, планшет будет отсылать частично собранные данные</value>
+  </data>
+  <data name="InterviewerPartialSynchronization" xml:space="preserve">
+    <value>Частичная синхронизация</value>
   </data>
 </root>

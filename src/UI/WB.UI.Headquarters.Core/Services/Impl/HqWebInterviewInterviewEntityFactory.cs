@@ -41,7 +41,8 @@ namespace WB.UI.Headquarters.Services.Impl
                                      ((this.authorizedUser.IsSupervisor || this.authorizedUser.IsHeadquarter) && !this.authorizedUser.IsObserving);
             result.AcceptAnswer = result.IsForSupervisor;
 
-            if (!callerInterview.ReceivedByInterviewer && question.AnswerComments.Any(x => !x.Resolved && x.Id.HasValue))
+            if (callerInterview.Status < InterviewStatus.ApprovedByHeadquarters
+                && question.AnswerComments.Any(x => !x.Resolved && x.Id.HasValue))
             {
                 if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
                 {
@@ -69,7 +70,8 @@ namespace WB.UI.Headquarters.Services.Impl
                             UserRole = ac.UserRole,
                             CommentTimeUtc = ac.CommentTime,
                             Id = ac.Id,
-                            Resolved = ac.Resolved
+                            Resolved = ac.Resolved,
+                            CommentOnPreviousAnswer = ac.CommentOnPreviousAnswer
                         };
 
                         return comment;

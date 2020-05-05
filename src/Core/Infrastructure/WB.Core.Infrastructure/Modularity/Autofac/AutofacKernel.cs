@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using Autofac.Core;
-using Autofac.Features.ResolveAnything;
+using Microsoft.Extensions.Logging;
+using Polly;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
+
 using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Resources;
 using WB.Infrastructure.Native;
@@ -30,21 +31,23 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 onBuildAction?.Invoke(container);
             });
 
-            this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
+            this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>()
+                .InstancePerLifetimeScope();
 
             var status = new UnderConstructionInfo();
             this.containerBuilder.Register((ctx, p) => status).SingleInstance();
         }
 
-        protected readonly ContainerBuilder containerBuilder;
+        private readonly ContainerBuilder containerBuilder;
 
-        protected readonly List<IInitModule> initModules = new List<IInitModule>();
+        private readonly List<IInitModule> initModules = new List<IInitModule>();
 
         public ContainerBuilder ContainerBuilder => containerBuilder;
 
-        public ILifetimeScope Container { get; set; }
+        private ILifetimeScope Container { get; set; }
 
-        public virtual void Load<T>(params IModule<T>[] modules) where T: IIocRegistry
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+        public virtual void Load<T>(params IModule<T>[] modules) where T : IIocRegistry
         {
             var autofacModules = modules.Select(module =>
             {
@@ -61,10 +64,9 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             {
                 this.containerBuilder.RegisterModule(autofacModule);
             }
-
-            initModules.AddRange(modules);
+            
+            initModules.AddRange(modules.OfType<IInitModule>());
         }
-
 
         public Task InitAsync(bool restartOnInitializationError)
         {
@@ -72,7 +74,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 throw new ArgumentException("Container should be build before init");
 
             if (restartOnInitializationError && !Container.IsRegistered<IApplicationRestarter>())
-                throw new ArgumentException("For restart application need implement and register IApplicationRestarter");
+                throw new ArgumentException(
+                    "For restart application need implement and register IApplicationRestarter");
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
@@ -83,55 +86,52 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         private async Task InitModules(ILifetimeScope container, bool restartOnInitializationError)
         {
             var status = Container.Resolve<UnderConstructionInfo>();
-
+            var log = Container.Resolve<ILogger<AutofacKernel>>();
             status.Run();
+            
+            using var scope = container.BeginLifetimeScope();
 
-            try
+            var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
+            var global = Stopwatch.StartNew();
+            log.LogDebug("Initiating modules");
+            
+            foreach (var module in initModules)
             {
-                using (var scope = container.BeginLifetimeScope())
+                var init = Stopwatch.StartNew();
+                status.ClearMessage();
+                
+                try
                 {
-                    var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
-                    foreach (var module in initModules)
-                    {
-                        status.ClearMessage();
-                        await module.Init(serviceLocatorLocal, status);
-                    }
+                    await Policy.Handle<InitializationException>(e => e.IsTransient)
+                        .WaitAndRetryAsync(10, i => TimeSpan.FromSeconds(i),
+                            (exception, span) => status.Error(exception.Message, exception))
+                        .ExecuteAsync(async () => await module.Init(serviceLocatorLocal, status));
+                    status.Run();
                 }
+                catch (InitializationException ie) when (ie.Subsystem == Subsystem.Database)
+                {
+                    status.Error(Modules.ErrorDuringRunningMigrations, ie);
+                    log.LogCritical(ie.WithFatalType(FatalExceptionType.HqErrorDuringRunningMigrations),
+                        "Exception during running migrations. Connection string: " + ie.Data["ConnectionString"]);
+                }
+                catch (Exception e)
+                {
+                    status.Error(Modules.ErrorDuringSiteInitialization, e);
 
+                    log.LogCritical(e.WithFatalType(FatalExceptionType.HqErrorDuringSiteInitialization), 
+                        "Exception during site initialization");
+                }
+                
+                init.Stop();
+                log.LogTrace("[{module}] Initialized in {seconds:0.00}s", module.GetType().Name, init.Elapsed.TotalSeconds);
+            }
+
+            log.LogDebug("All modules are initialized in {seconds:0.00}s", global.Elapsed.TotalSeconds);
+            
+            if (status.Status != UnderConstructionStatus.Error)
+            {
                 status.Finish();
             }
-            catch (InitializationException ie)  when(ie.Subsystem == Subsystem.Database)
-            {
-                status.Error(Modules.ErrorDuringRunningMigrations, ie);
-                container.Resolve<ILogger>().Fatal("Exception during running migrations", 
-                    ie.WithFatalType(FatalExceptionType.HqErrorDuringRunningMigrations));
-                ScheduleAppReboot();
-            }
-            catch(Exception e)
-            {
-                status.Error(Modules.ErrorDuringSiteInitialization, e);
-                
-                container.Resolve<ILogger>().Fatal("Exception during site initialization",
-                    e.WithFatalType(FatalExceptionType.HqErrorDuringSiteInitialization));
-                ScheduleAppReboot();
-            }
-
-            void ScheduleAppReboot()
-            {
-                if (restartOnInitializationError && !scheduledAppReboot)
-                {
-                    container.Resolve<ILogger>().Error("Scheduled application pool reboot in 10 seconds");
-
-                    scheduledAppReboot = true;
-                    Task.Run(async () =>
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(10));
-                        container.Resolve<IApplicationRestarter>().Restart();
-                    });
-                }
-            }
         }
-
-        private static bool scheduledAppReboot = false;
     }
 }

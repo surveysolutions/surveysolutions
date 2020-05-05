@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
             var mockOfInterviewSummaryViewFactory = new Mock<IAllInterviewsFactory>();
             mockOfInterviewSummaryViewFactory.Setup(x => x.Load(interviewId)).Returns(new InterviewSummary
             {
-                TeamLeadId = responsibleId
+                SupervisorId = responsibleId
             });
             
             interview.Apply(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, supervisorId: responsibleId.FormatGuid()).Payload);

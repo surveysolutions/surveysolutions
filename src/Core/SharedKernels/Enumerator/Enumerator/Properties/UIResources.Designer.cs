@@ -540,6 +540,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On previous answer.
+        /// </summary>
+        public static string Interview_Comment_OnPreviousAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Comment_OnPreviousAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resolve.
         /// </summary>
         public static string Interview_Comment_Resolve {
@@ -698,6 +707,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Cover_Screen_Title {
             get {
                 return ResourceManager.GetString("Interview_Cover_Screen_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No comments from supervisor.
+        /// </summary>
+        public static string Interview_Cover_Supervisor_Comments_does_not_exists {
+            get {
+                return ResourceManager.GetString("Interview_Cover_Supervisor_Comments_does_not_exists", resourceCulture);
             }
         }
         

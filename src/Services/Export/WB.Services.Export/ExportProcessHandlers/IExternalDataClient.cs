@@ -6,9 +6,9 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    interface IExternalDataClient
+    interface IExternalDataClient : IDisposable
     {
-        IDisposable InitializeDataClient(string accessToken, TenantInfo tenant);
+        void InitializeDataClient(string accessToken, string refreshToken, TenantInfo tenant);
         /// <summary>
         /// Create if needed application folder on external storage and return it's id
         /// </summary>

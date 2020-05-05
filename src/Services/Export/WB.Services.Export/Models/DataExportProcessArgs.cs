@@ -32,6 +32,7 @@ namespace WB.Services.Export.Models
         public string NaturalId => $"{this.StorageTypeString}${ExportSettings?.NaturalId ?? "noSettings"}";
 
         public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
         public ExternalStorageType? StorageType { get; set; }
         public long ProcessId { get; set; }
 

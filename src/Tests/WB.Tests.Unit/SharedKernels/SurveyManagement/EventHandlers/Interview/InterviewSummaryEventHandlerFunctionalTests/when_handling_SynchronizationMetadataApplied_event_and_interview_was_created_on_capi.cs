@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     Create.PublishedEvent.SynchronizationMetadataApplied(status: interviewStatus));
 
             // Assert
-            viewModel.TeamLeadId.Should().Be(supervisorId);
-            viewModel.TeamLeadName.Should().Be(supervisorName);
+            viewModel.SupervisorId.Should().Be(supervisorId);
+            viewModel.SupervisorName.Should().Be(supervisorName);
             viewModel.Status.Should().Be(interviewStatus);
         }
          

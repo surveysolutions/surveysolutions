@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Ncqrs.Eventing;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 {
@@ -12,10 +10,5 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         {
             InterviewId = interviewId;
         }
-    }
-
-    public class GetInterviewDetailsResponse : ICommunicationMessage
-    {
-        public List<CommittedEvent> Events { get; set; }
     }
 }

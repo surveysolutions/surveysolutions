@@ -529,6 +529,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable partial synchronization.
+        /// </summary>
+        public static string InterviewerPartialSynchronization {
+            get {
+                return ResourceManager.GetString("InterviewerPartialSynchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company logo.
         /// </summary>
         public static string Logo {
@@ -588,6 +597,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string MobileAppSettings_Title {
             get {
                 return ResourceManager.GetString("MobileAppSettings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled then interviewer tablet will send partial collected data to server.
+        /// </summary>
+        public static string PartialSynchronizationDescription {
+            get {
+                return ResourceManager.GetString("PartialSynchronizationDescription", resourceCulture);
             }
         }
         
