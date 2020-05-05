@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -56,6 +57,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         [WriteToSyncLog(SynchronizationLogType.GetInterviewV3)]
         public IActionResult Details(Guid id) => base.DetailsV3(id);
 
+        [HttpGet]
+        [Route("{id:guid}/{eventId:guid}")]
+        [WriteToSyncLog(SynchronizationLogType.GetInterviewPatch)]
+        public IActionResult DetailsAfter(Guid id, Guid eventId) => base.DetailsAfter(id, eventId);
+
         [HttpPost]
         [Route("{id:guid}")]
         [WriteToSyncLog(SynchronizationLogType.PostInterviewV3)]
@@ -93,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         [HttpPost]
         [Route("{id:guid}/getInterviewUploadState")]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
-        public InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
+        public Task<InterviewUploadState> GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
             => base.GetInterviewUploadStateImpl(id, eventStreamSignatureTag);
     }
 }

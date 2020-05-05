@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ncqrs.Eventing.Storage;
 using NLog;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Resources;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -12,12 +12,13 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
-    public class PostgresWriteSideModule : IModule
+    public class PostgresWriteSideModule : IModule, IInitModule
     {
         private readonly PostgreConnectionSettings eventStoreSettings;
         private readonly DbUpgradeSettings dbUpgradeSettings;
 
-        public PostgresWriteSideModule(PostgreConnectionSettings eventStoreSettings, DbUpgradeSettings dbUpgradeSettings)
+        public PostgresWriteSideModule(PostgreConnectionSettings eventStoreSettings,
+            DbUpgradeSettings dbUpgradeSettings)
         {
             this.eventStoreSettings = eventStoreSettings;
             this.dbUpgradeSettings = dbUpgradeSettings;
@@ -25,8 +26,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindWithConstructorArgument<IHeadquartersEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
-            registry.BindWithConstructorArgument<IEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
+            registry.BindWithConstructorArgument<IHeadquartersEventStore, PostgresEventStore>("connectionSettings",
+                this.eventStoreSettings);
+            registry.BindWithConstructorArgument<IEventStore, PostgresEventStore>("connectionSettings",
+                this.eventStoreSettings);
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
@@ -34,10 +37,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             try
             {
                 status.Message = Modules.InitializingDb;
-                DatabaseManagement.InitDatabase(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName);
+                DatabaseManagement.InitDatabase(this.eventStoreSettings.ConnectionString,
+                    this.eventStoreSettings.SchemaName);
+            }
+            catch (Exception exc)
+            {
+                throw exc.AsInitializationException(this.eventStoreSettings.ConnectionString);
+            }
 
+            try
+            {
                 status.Message = Modules.MigrateDb;
-                DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings,
+                DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString,
+                    this.eventStoreSettings.SchemaName, this.dbUpgradeSettings,
                     serviceLocator.GetInstance<ILoggerProvider>());
 
                 status.ClearMessage();
@@ -46,8 +58,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 status.Error(Modules.ErrorDuringRunningMigrations, exc);
 
-                LogManager.GetLogger("migration", typeof(PostgresWriteSideModule)).Fatal(exc, "Error during db initialization.");
-                throw new InitializationException(Subsystem.Database, null, exc);
+                LogManager.GetLogger("migration", typeof(PostgresWriteSideModule))
+                    .Fatal(exc, "Error during db initialization.");
+                throw exc.AsInitializationException(this.eventStoreSettings.ConnectionString);
             }
 
             return Task.CompletedTask;

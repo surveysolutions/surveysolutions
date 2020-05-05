@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         GetSupervisorApkPatch,
         CheckIsPackageDuplicated,
         AssignmentReceived,
-        DownloadReusableCategories
+        DownloadReusableCategories,
+        GetInterviewPatch,
     }
 }

@@ -229,6 +229,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Categories;
         }
 
+        public Task<RemoteTabletSettingsApiView> GetTabletSettings(CancellationToken cancellationToken)
+        {
+            var tabletSettingsApiView = new RemoteTabletSettingsApiView()
+            {
+                PartialSynchronizationEnabled = false,
+            };
+            return Task.FromResult(tabletSettingsApiView);
+        }
+
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken token = default)
         {
             return this.syncClient.SendAsync(new UploadAuditLogEntityRequest
@@ -402,6 +411,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var response = await this.syncClient.SendAsync<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(
                 new GetInterviewDetailsRequest(interviewId), token, transferProgress);
+            return response.Events;
+        }
+
+        public async Task<List<CommittedEvent>> GetInterviewDetailsAfterEventAsync(Guid interviewId, Guid eventId, IProgress<TransferProgress> transferProgress,
+            CancellationToken token = default)
+        {
+            var response = await this.syncClient.SendAsync<GetInterviewDetailsAfterEventRequest, GetInterviewDetailsResponse>(
+                new GetInterviewDetailsAfterEventRequest(interviewId, eventId), token, transferProgress);
             return response.Events;
         }
     }
