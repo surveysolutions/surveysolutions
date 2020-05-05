@@ -7,16 +7,25 @@
         :currentTab="currentTab">
 
         <div >
-            <h2>{{$t('Strings.HQ_Views_DisableTwoFactorAuth_Title')}}</h2>
+            <h2>{{$t('Strings.HQ_Views_ResetRecoveryCodes_Title')}}</h2>
         </div>
-        <div  >
+
+        <div >
             <div class="alert alert-warning"
                 role="alert">
                 <p>
-                    <strong>{{$t('Pages.Disable2faLine1')}}</strong>
+                    <span class="glyphicon glyphicon-warning-sign"
+                        style="margin-right: 5px;"></span>
+                    <strong>{{$t('Pages.RecoveryCodesInfo')}}</strong>
                 </p>
                 <p>
+                    {{$t('Pages.RecoveryCodesDescription')}}
+                </p>
+                <p>
+                    {{$t('Pages.RecoveryCodesDescriptionLine1')}}
+
                     {{$t('Pages.ChandgeKeyLine1')}} <a v-bind:href="getUrl('../../Users/ResetAuthenticator')">{{$t('Pages.ChandgeKeyLine2')}}</a>
+
                 </p>
             </div>
         </div>
@@ -25,12 +34,11 @@
                 <button
                     type="submit"
                     class="btn btn-danger"
-                    id="btnDisable2fa"
+                    id="btnGenerateRecoveryCodes"
                     v-bind:disabled="userInfo.isObserving"
-                    @click="disable2fa">{{$t('Pages.Disable2fa')}}</button>
+                    @click="generateRecoveryCodes">{{$t('Pages.GenerateRecoveryCodes')}}</button>
             </div>
         </div>
-
     </ProfileLayout>
 </template>
 
@@ -42,11 +50,18 @@ export default {
     data() {
         return {
             modelState: {},
+            personName: null,
         }
     },
     computed: {
         currentTab(){
             return 'two-factor'
+        },
+        recoveryCodes(){
+            return this.userInfo.recoveryCodes
+        },
+        hasAuthenticator(){
+            return this.userInfo.hasAuthenticator
         },
         model() {
             return this.$config.model
@@ -54,12 +69,13 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
+
         isOwnProfile() {
             return this.userInfo.isOwnProfile
         },
     },
     methods: {
-        disable2fa(){
+        generateRecoveryCodes(){
             this.successMessage = null
             for (var error in this.modelState) {
                 delete this.modelState[error]
@@ -68,7 +84,7 @@ export default {
             var self = this
             this.$http({
                 method: 'post',
-                url: this.model.api.disable2faUrl,
+                url: this.model.api.generateRecoveryCodesUrl,
                 data: {
                     userId: self.userInfo.userId,
                 },
@@ -77,7 +93,7 @@ export default {
                 },
             }).then(
                 response => {
-                    window.location.href = self.model.api.redirectUrl
+                    window.location.href = self.model.api.showRecoveryCodesUrl
                 },
                 error => {
                     self.processModelState(error.response.data, self)
@@ -90,7 +106,6 @@ export default {
                 return baseUrl
             else
                 return baseUrl + '/' + this.model.userInfo.userId
-
         },
     },
 }
