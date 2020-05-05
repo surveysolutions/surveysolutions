@@ -243,7 +243,7 @@
   <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
     <value>La table de référence comporte trop de colonnes</value>
   </data>
-  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+  <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
     <value>La table de référence comporte trop de lignes</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
