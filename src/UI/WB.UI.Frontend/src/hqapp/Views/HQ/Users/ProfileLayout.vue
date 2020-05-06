@@ -29,19 +29,19 @@
                 <ul class="nav nav-tabs extra-margin-bottom">
                     <li class="nav-item"
                         v-bind:class=" {'active': currentTab == 'account'}" >
-                        <a class="nav-link"
-                            id="profile"
-                            v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
+                        <router-link :to="{ name: 'usersManage', params: { userId }}"
+                            id="profile" >{{$t('Pages.AccountManage_Profile')}}</router-link>
+                    </li>
                     <li class="nav-item"
                         v-bind:class="{'active': currentTab=='password'}">
-                        <a class="nav-link"
-                            id="password"
-                            v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
+                        <router-link :to="{ name: 'usersChangePassword', params: { userId }}"
+                            id="password" >{{$t('Pages.AccountManage_ChangePassword')}}</router-link>
+                    </li>
                     <li class="nav-item"
                         v-bind:class="{'active': currentTab=='two-factor'}">
-                        <a class="nav-link"
-                            id="two-factor"
-                            v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
+                        <router-link :to="{ name: 'users2fa', params: { userId }}"
+                            id="two-factor" >{{$t('Pages.AccountManage_TwoFactorAuth')}}</router-link>
+                    </li>
                 </ul>
 
                 <div class="col-sm-12">
@@ -101,7 +101,7 @@ export default {
             if (!this.isOwnProfile) {
                 if (this.isHeadquarters) return '../../Headquarters'
                 if (this.isSupervisor) return '../../Supervisors'
-                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
+                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userId
                 if (this.isObserver) return '../../Observers'
                 if (this.isApiUser) return '../../ApiUsers'
             }
