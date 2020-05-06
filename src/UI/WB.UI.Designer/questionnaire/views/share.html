@@ -37,16 +37,6 @@
                                type="text" class="form-control questionaire-title" ng-model="questionnaire.editedVariable"
                             maxlength="32" spellcheck="false">
                     </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="questionnaireDefaultLanguageName">{{'SettingsQuestionnaireDefaultLanguageName' | i18next }}
-                            <help key="questionnaireDefaultLanguageName" />
-                        </label>
-                        <input id="questionnaireDefaultLanguageName"
-                               ng-disabled="questionnaire.isReadOnlyForUser"
-                               type="text" class="form-control questionaire-title" ng-model="questionnaire.editedDefaultLanguageName"
-                               maxlength="32" spellcheck="false">
-                    </div>
                 
                     <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
                     <div class="form-group" style="margin-left: -8px;">

@@ -27,7 +27,6 @@
         $scope.passConfirmationOpen = null;
         $scope.questionnaire.editedTitle = questionnaire.title;
         $scope.questionnaire.editedVariable = questionnaire.variable;
-        $scope.questionnaire.editedDefaultLanguageName = questionnaire.defaultLanguageName;
         $scope.questionnaire.editedHideIfDisabled =
             questionnaire.hideIfDisabled;
 
@@ -96,7 +95,7 @@
                 $scope.questionnaire.editedVariable,
                 $scope.questionnaire.editedHideIfDisabled,
                 $scope.questionnaire.isPublic,
-                $scope.questionnaire.editedDefaultLanguageName
+                $scope.questionnaire.defaultLanguageName
             );
             updateRequest.then(function() {
                 $scope.questionnaire.title = $scope.questionnaire.editedTitle;
@@ -167,7 +166,8 @@
                 $scope.questionnaire.title,
                 $scope.questionnaire.variable,
                 $scope.questionnaire.editedHideIfDisabled,
-                !$scope.questionnaire.isPublic
+                !$scope.questionnaire.isPublic,
+                $scope.questionnaire.defaultLanguageName
             );
 
             updateRequest.then(function() {
