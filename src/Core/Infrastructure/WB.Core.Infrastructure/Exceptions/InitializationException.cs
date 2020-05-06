@@ -33,5 +33,10 @@ namespace WB.Infrastructure.Native
         {
         }
 
+        /// <summary>
+        /// Specifies whether the exception is considered transient, that is, whether retrying to operation could
+        /// succeed (e.g. a network error or a timeout).
+        /// </summary>
+        public bool IsTransient { get; set; }
     }
 }

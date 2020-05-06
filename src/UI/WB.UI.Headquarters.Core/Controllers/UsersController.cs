@@ -246,7 +246,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
-        public async Task<ActionResult> GenerateRecoveryCodes(Guid? id)
+        public async Task<ActionResult> ResetRecoveryCodes(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
@@ -356,7 +356,7 @@ namespace WB.UI.Headquarters.Controllers
             var authenticatorUri =
                     string.Format(
                     AuthenticatorUriFormat,
-                    urlEncoder.Encode("Survey Solutions Headquarters"),
+                    urlEncoder.Encode("Survey Solutions"),
                     urlEncoder.Encode($"{user.UserName}@{uri.Host}"),
                     unformattedKey);
 
@@ -497,7 +497,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();

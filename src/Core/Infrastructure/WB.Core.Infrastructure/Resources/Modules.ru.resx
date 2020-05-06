@@ -118,15 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorDuringRunningMigrations" xml:space="preserve">
-    <value>Ошибка при обновлении базы данных. Обратитесь в службу поддержки.</value>
+    <value>Ошибка при миграции базы данных. Детали ошибки доступны в логах приложения</value>
   </data>
   <data name="ErrorDuringSiteInitialization" xml:space="preserve">
-    <value>Ошибка при запуске сайта. Обратитесь в службу поддержки.</value>
+    <value>Ошибка при запуске сайта. Детали ошибки доступны в логах приложения</value>
   </data>
   <data name="InitializingDb" xml:space="preserve">
     <value>Инициализация базы данных</value>
   </data>
   <data name="MigrateDb" xml:space="preserve">
-    <value>Миграция данных на последнюю версию</value>
+    <value>Миграция базы данных</value>
+  </data>
+  <data name="ErrorConnectingToDatabase" xml:space="preserve">
+    <value>Приложение не может соединится с базой данных. Детали ошибки доступны в логах приложения</value>
+  </data>
+  <data name="ErrorDatabaseUnauthorized" xml:space="preserve">
+    <value>Ошибка авторизации при соедниии приложения с базой данных</value>
   </data>
 </root>
