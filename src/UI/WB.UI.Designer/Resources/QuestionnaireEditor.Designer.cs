@@ -1042,15 +1042,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If questionnaire has more than one language, it will be showed as default language name in languages list of questionnaire.
-        /// </summary>
-        public static string HelpQuestionnaireDefaultLanguageName {
-            get {
-                return ResourceManager.GetString("HelpQuestionnaireDefaultLanguageName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Questionnaire variable is used as prefix in forming names for the export files. Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _..
         /// </summary>
         public static string HelpQuestionnaireVarible {
@@ -2509,15 +2500,6 @@ namespace WB.UI.Designer.Resources {
         public static string SettingsPublic {
             get {
                 return ResourceManager.GetString("SettingsPublic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Questionnaire language name.
-        /// </summary>
-        public static string SettingsQuestionnaireDefaultLanguageName {
-            get {
-                return ResourceManager.GetString("SettingsQuestionnaireDefaultLanguageName", resourceCulture);
             }
         }
         

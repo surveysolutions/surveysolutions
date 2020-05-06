@@ -1341,8 +1341,8 @@
     <comment>Повторить экспорт в PDF</comment>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Оргинальный</value>
-    <comment>Оргинальный</comment>
+    <value>Оригинальный</value>
+    <comment>Оригинальный</comment>
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Сохранить как</value>
@@ -1443,11 +1443,5 @@
   </data>
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Текстовое название категории (отображается интервьюеру)</value>
-  </data>
-  <data name="SettingsQuestionnaireDefaultLanguageName" xml:space="preserve">
-  <value>Язык опросника</value>
-  </data>
-  <data name="HelpQuestionnaireDefaultLanguageName" xml:space="preserve">
-  <value>Если в опроснике больше чем один язык, то это имя будет использовано как название языка по умолчанию в списке языков опросника</value>
   </data>
 </root>
