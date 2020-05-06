@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Scenarios;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -53,8 +52,6 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
         public DbSet<QuestionnaireChangeReference> QuestionnaireChangeReferences { get; set; }
 
-        public DbSet<AllowedAddress> AllowedAddress { get; set; }
-
         public DbSet<StoredLookupTable> LookupTableContents { get; set; }
 
         public DbSet<StoredQuestionnaireDocument> QuestionnaireDocuments { get; set; }
@@ -83,7 +80,6 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             builder.ApplyConfiguration(new QuestionnaireChangeRecordTypeConfig());
             builder.ApplyConfiguration(new QuestionnaireChangeReferenceTypeConfig());
             builder.ApplyConfiguration(new QuestionnaireCompilationVersionTypeConfig());
-            builder.ApplyConfiguration(new AllowedAddressTypeConfig());
             builder.ApplyConfiguration(new CommentInstanceTypeConfig());
             builder.ApplyConfiguration(new ClassificationEntityTypeConfig());
             builder.ApplyConfiguration(new ProductVersionChangeTypeConfig());

@@ -10,7 +10,6 @@ using WB.UI.Designer.Code.Attributes;
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Authorize]
-    [AllowOnlyFromWhitelistIP]
     [Route("api/hq/categories")]
     public class HQReusableCategoriesController : ControllerBase
     {

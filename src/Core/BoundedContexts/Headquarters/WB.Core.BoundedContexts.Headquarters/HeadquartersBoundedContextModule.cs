@@ -99,7 +99,7 @@ using WB.Infrastructure.Native.Storage;
 namespace WB.Core.BoundedContexts.Headquarters
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class HeadquartersBoundedContextModule : IModule
+    public class HeadquartersBoundedContextModule : IModule, IInitModule
     {
         private readonly ExternalStoragesSettings externalStoragesSettings;
         private readonly FileSystemEmailServiceSettings fileSystemEmailServiceSettings;
