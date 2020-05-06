@@ -20,7 +20,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
-    public class QuartzModule : IModule
+    public class QuartzModule : IModule, IInitModule
     {
         private readonly Assembly migrationsAssembly;
         private readonly string nameSpace;

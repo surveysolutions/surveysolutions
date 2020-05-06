@@ -1027,7 +1027,7 @@
     <value>Shared key:</value>
   </data>
   <data name="ResetAuthenticatorLine1" xml:space="preserve">
-    <value>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</value>
+    <value>If you reset your authenticator key your authenticator app will not allow to log in until you reconfigure it.</value>
   </data>
   <data name="ResetAuthenticatorLine2" xml:space="preserve">
     <value>This process disables two factor authentication until you verify your authenticator app. If you do not complete your authenticator app configuration your account will be left without two factor authentication.</value>
@@ -1519,5 +1519,8 @@
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Generate recovery codes</value>
+  </data>
+  <data name="AccountManage_Status2fa" xml:space="preserve">
+    <value>Two factor authentication is currently </value>
   </data>
 </root>

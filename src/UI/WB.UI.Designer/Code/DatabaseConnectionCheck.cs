@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Code
         {
             try
             {
-                await this.dbContext.AllowedAddress.FirstOrDefaultAsync(cancellationToken);
+                await this.dbContext.ProductVersionChanges.FirstOrDefaultAsync(cancellationToken);
             }
             catch
             {

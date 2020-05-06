@@ -243,7 +243,7 @@
   <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
     <value>查询表的列数过多</value>
   </data>
-  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+  <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
     <value>查询表的行数过多</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">

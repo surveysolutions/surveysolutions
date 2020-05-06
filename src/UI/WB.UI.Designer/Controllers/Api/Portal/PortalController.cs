@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
@@ -21,15 +19,12 @@ namespace WB.UI.Designer.Api.Portal
     {
         private readonly UserManager<DesignerIdentityUser> accountRepository;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IAllowedAddressService allowedAddressService;
 
         public PortalController(UserManager<DesignerIdentityUser> accountRepository, 
-            IQuestionnaireHelper questionnaireHelper,
-            IAllowedAddressService allowedAddressService)
+            IQuestionnaireHelper questionnaireHelper)
         {
             this.accountRepository = accountRepository;
             this.questionnaireHelper = questionnaireHelper;
-            this.allowedAddressService = allowedAddressService;
         }
 
         [Route("user/{userId}")]
@@ -85,48 +80,6 @@ namespace WB.UI.Designer.Api.Portal
                     }).ToList()
             };
             return Ok(result);
-        }
-
-        [Route("servers")]
-        [HttpGet]
-        public IActionResult GetServers() => Ok(this.allowedAddressService.GetAddresses().Select(ToAllowedAddress));
-
-        [Route("servers/add")]
-        [HttpPost]
-        public IActionResult AddServer(string ipAddress, string description)
-        {
-            this.allowedAddressService.Add(new AllowedAddress
-            {
-                Description = description,
-                Address = ipAddress
-            });
-
-            return Ok();
-        }
-
-        [Route("servers/delete")]
-        [HttpPost]
-        public IActionResult DeleteServer(string ipAddress)
-        {
-            var address = this.allowedAddressService.GetAddresses().FirstOrDefault(x => Equals(x.Address, ipAddress));
-            if (address != null)
-                this.allowedAddressService.Remove(address.Id);
-            return Ok();
-        }
-
-        private ServerAddress ToAllowedAddress(AllowedAddress address)
-            => new ServerAddress
-            {
-                Id = address.Id,
-                Description = address.Description,
-                Address = address.Address
-            };
-
-        public class ServerAddress
-        {
-            public int Id { get; set; }
-            public string Description { get; set; }
-            public string Address { get; set; }
         }
     }
 }

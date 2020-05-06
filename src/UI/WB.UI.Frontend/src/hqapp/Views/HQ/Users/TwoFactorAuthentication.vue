@@ -1,89 +1,101 @@
 <template>
-    <HqLayout :hasFilter="false">
-        <div slot="filters">
-            <div v-if="successMessage != null"
-                id="alerts"
-                class="alerts">
-                <div class="alert alert-success">
-                    <button class="close"
-                        data-dismiss="alert"
-                        aria-hidden="true">
-                        ×
-                    </button>
-                    {{successMessage}}
-                </div>
-            </div>
+    <ProfileLayout ref="profile"
+        :role="userInfo.role"
+        :isOwnProfile="userInfo.isOwnProfile"
+        :userName="userInfo.userName"
+        :userId="userInfo.userId"
+        :currentTab="currentTab">
+        <div class="block-filter">
+            <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Description')}}</p>
         </div>
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
-                </li>
-            </ol>
-            <h1>{{$t('Strings.HQ_Views_Manage_Title')}}</h1>
+        <div class="block-filter">
+            <h3>
+                {{$t('Pages.AccountManage_Status2fa')}}
+                <span style="color:green;"
+                    v-if="is2faEnabled"> {{$t('Strings.HQ_Views_TwoFactorAuthentication_Enabled')}}
+                </span>
+                <span style="color:red;"
+                    v-if="!is2faEnabled"> {{$t('Strings.HQ_Views_TwoFactorAuthentication_Disabled')}}
+                </span>
+            </h3>
         </div>
-        <div class="extra-margin-bottom">
-            <div class="profile">
-                <ul class="nav nav-tabs extra-margin-bottom">
-                    <li class="nav-item"><a class="nav-link"
-                        id="profile"
-                        v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
-                    <li class="nav-item"><a class="nav-link"
-                        id="password"
-                        v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
-                    <li class="nav-item active"><a class="nav-link active"
-                        id="two-factor"
-                        v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
-                </ul>
 
-                <div class="col-sm-12">
-                    <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Description')}}</p>
-                    <form-group v-if="!isOwnProfile"
-                        :label="$t('Pages.AccountManage_Login')">
-                        <TextInput :value="userInfo.userName"
-                            id="UserName"
-                            disabled />
-                    </form-group>
+        <div class="alert alert-warning"
+            v-if="is2faEnabled && recoveryCodesLeft <= 3">
+            <strong>{{$t('Pages.RecoveryCodesLeft')}} {{recoveryCodesLeft}}.</strong>
+            <p>{{$t('Pages.RecoveryCodesYouCan')}} <a :href="getUrl('../../Users/GenerateRecoveryCodes')">{{$t('Pages.GenerateRecoveryCodesLink')}}</a>.</p>
+        </div>
 
-                    <div v-if="is2faEnabled">
+        <div class="row flex-row">
 
-                        <div class="alert alert-warning"
-                            v-if="recoveryCodesLeft <= 3">
-                            <strong>{{$t('Pages.RecoveryCodesLeft')}} {{recoveryCodesLeft}}.</strong>
-                            <p>{{$t('Pages.RecoveryCodesYouCan')}} <a :href="getUrl('../../Users/GenerateRecoveryCodes')">{{$t('Pages.GenerateRecoveryCodesLink')}}</a>.</p>
+            <div class="col-sm-4">
+                <div class="flex-block selection-box">
+                    <div class="block">
+                        <div class="block-filter">
+                            <h3>{{$t('Pages.SetupAuthenticator')}}</h3>
+                            <span>{{$t('Strings.HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description')}}</span>
                         </div>
-
-                        <a :href="getUrl('../../Users/Disable2fa')"
-                            class="btn btn-success"
-                            style="margin-right: 5px;">{{$t('Pages.Disable2fa')}}</a>
-                        <a :href="getUrl('../../Users/GenerateRecoveryCodes')"
-                            class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </a>
+                        <div >
+                            <button id="enable-authenticator"
+                                type="submit"
+                                @click="navigate('two-fa-setup')"
+                                style="display: inline-block;"
+                                v-bind:disabled="userInfo.isObserving"
+                                class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}</button>
+                        </div>
                     </div>
-
-                    <h5>{{$t('Pages.AccountManage_AuthenticatorApp')}}</h5>
-
-                    <a v-if="!hasAuthenticator"
-                        id="enable-authenticator"
-                        :href="getUrl('../../Users/SetupAuthenticator')"
-                        class="btn btn-success">{{$t('Pages.AddAuthenticator')}}
-                    </a>
-                    <a v-if="hasAuthenticator"
-                        id="enable-authenticator"
-                        :href="getUrl('../../Users/SetupAuthenticator')"
-                        style="margin-right: 5px;"
-                        v-bind:disabled="userInfo.isObserving"
-                        class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}
-                    </a>
-                    <a v-if="hasAuthenticator"
-                        id="reset-authenticator"
-                        :href="getUrl('../../Users/ResetAuthenticator')"
-                        class="btn btn-success">{{$t('Pages.ResetAuthenticator')}}
-                    </a>
-
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="flex-block selection-box">
+                    <div class="block">
+                        <div class="block-filter">
+                            <h3>{{$t('Pages.ResetAuthenticator')}}</h3>
+                            <span>{{$t('Strings.HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description')}}</span>
+                        </div>
+                        <div>
+                            <button id="reset-authenticator"
+                                type="submit"
+                                @click="navigate('two-fa-reset-authenticator')"
+                                style="display: inline-block;"
+                                v-bind:disabled="userInfo.isObserving"
+                                class="btn btn-success">{{$t('Pages.ResetAuthenticator')}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4"
+                v-if="is2faEnabled">
+                <div class="flex-block selection-box">
+                    <div class="block">
+                        <div class="block-filter">
+                            <h3>{{$t('Pages.ResetRecoveryCodes')}}</h3>
+                            <span>{{$t('Strings.HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description')}}</span>
+                        </div>
+                        <div >
+                            <button id="reset-codes"
+                                type="submit"
+                                @click="navigate('two-fa-reset-recovery-codes')"
+                                style="display: inline-block;"
+                                v-bind:disabled="userInfo.isObserving"
+                                class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </HqLayout>
+
+        <div v-if="is2faEnabled">
+            <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Disable2fa_Description')}}</p>
+            <button
+                id="disable-2fa"
+                type="submit"
+                @click="navigate('two-fa-disable')"
+                class="btn btn-danger"
+                v-bind:disabled="userInfo.isObserving">{{$t('Pages.Disable2fa')}}</button>
+        </div >
+    </ProfileLayout>
 </template>
 
 <script>
@@ -94,69 +106,23 @@ export default {
     data() {
         return {
             modelState: {},
-            personName: null,
         }
     },
     computed: {
+        currentTab(){
+            return 'two-factor'
+        },
         is2faEnabled(){
             return this.userInfo.is2faEnabled
         },
         recoveryCodesLeft(){
             return this.userInfo.recoveryCodesLeft
         },
-        hasAuthenticator(){
-            return this.userInfo.hasAuthenticator
-        },
         model() {
             return this.$config.model
         },
         userInfo() {
             return this.model.userInfo
-        },
-
-        isAdmin() {
-            return this.userInfo.role == 'Administrator'
-        },
-        isHeadquarters() {
-            return this.userInfo.role == 'Headquarter'
-        },
-        isSupervisor() {
-            return this.userInfo.role == 'Supervisor'
-        },
-        isInterviewer() {
-            return this.userInfo.role == 'Interviewer'
-        },
-        isObserver() {
-            return this.userInfo.role == 'Observer'
-        },
-        isApiUser() {
-            return this.userInfo.role == 'ApiUser'
-        },
-
-        isOwnProfile() {
-            return this.userInfo.isOwnProfile
-        },
-        referrerTitle() {
-
-            return this.$t('Pages.Home')
-        },
-        referrerUrl() {
-
-            return '/'
-        },
-        profileUrl(){
-            return this.getUrl('../../Users/Manage')
-        },
-        tfaUrl(){
-            return this.getUrl('../../Users/TwoFactorAuthentication')
-        },
-    },
-    mounted() {
-        this.personName = this.userInfo.personName
-    },
-    watch: {
-        personName: function(val) {
-            Vue.delete(this.modelState, 'PersonName')
         },
     },
     methods: {
@@ -165,7 +131,9 @@ export default {
                 return baseUrl
             else
                 return baseUrl + '/' + this.model.userInfo.userId
-
+        },
+        navigate: function(target){
+            this.$router.push({ name: target, params: {userId: this.isOwnProfile ? '' :this.model.userInfo.userId}})
         },
     },
 }
