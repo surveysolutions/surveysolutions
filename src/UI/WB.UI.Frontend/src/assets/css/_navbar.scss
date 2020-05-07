@@ -445,7 +445,12 @@ $width-right-menu-small: 380px;
 	.wide-navbar{
 		.navbar-header {
 			float: none;
+			display: flex;
+			width: 100%;
+			flex-wrap: nowrap;
+
 			.navbar-brand{
+				order: 1;
 				.logo{
 					margin-top: 5px;
 					//transform: rotate(270deg);
@@ -454,18 +459,28 @@ $width-right-menu-small: 380px;
 			& > .interview-ID{
 				padding: 15px 9px;
 				display: inline-block;
+				order: 2;
+				margin-left: auto;
+				margin-right: auto;				
 			}
 			.btn-icon,
 			.badge.badge_nav{
 				display: block;
-				float: right;
+				float: none;
 				position: relative;
 				top: 0;
 				left: 0;
 				margin: 10px;
+				order: 3;
 			}
 			.active-page{
+				margin-left: auto;
+				margin-right: auto;
+			}
+			.active-page,
+			.number-of-synchronized-interviews{
 				display: inline-block;
+				order: 2;
 			}
 		}
 		.navbar-left,.navbar-right {
@@ -473,6 +488,7 @@ $width-right-menu-small: 380px;
 		}
 		.navbar-toggle {
 			display: block;
+			order: 4;
 		}
 
 		.navbar-collapse.collapse {
@@ -680,9 +696,9 @@ $width-right-menu-small: 380px;
 }
 @media (max-width: $screen-xs-min) {
 	.navbar{
-		white-space: nowrap;
 		.navbar-header{
 			& > .interview-ID{
+				display: inline-block;
 				padding-left: 5px;
 				padding-right: 5px;
 			}
@@ -691,7 +707,7 @@ $width-right-menu-small: 380px;
 			}
 		}
 		.container-fluid{
-			padding: 0px 12px;
+			padding: 0px 12px !important;
 		}
 	}
 }
