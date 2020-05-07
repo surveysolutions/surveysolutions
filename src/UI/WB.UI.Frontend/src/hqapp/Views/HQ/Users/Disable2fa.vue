@@ -77,7 +77,7 @@ export default {
                 },
             }).then(
                 response => {
-                    window.location.href = self.model.api.redirectUrl
+                    window.location.href = self.model.api.twoFactorAuthenticationUrl
                 },
                 error => {
                     self.processModelState(error.response.data, self)

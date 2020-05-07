@@ -133,7 +133,7 @@ export default {
                 return baseUrl + '/' + this.model.userInfo.userId
         },
         navigate: function(target){
-            this.$router.push({ name: target, params: {userId: this.isOwnProfile ? '' :this.model.userInfo.userId}})
+            this.$router.push({ name: target, params: {userId: this.isOwnProfile ? '' : this.model.userInfo.userId}}, () => this.$router.go(0))
         },
     },
 }
