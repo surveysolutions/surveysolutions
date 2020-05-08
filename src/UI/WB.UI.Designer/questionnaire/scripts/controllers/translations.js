@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('TranslationsCtrl',
-        function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
+        function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment, shareService) {
             'use strict';
 
             $scope.downloadBaseUrl = '../../translations';
@@ -26,6 +26,16 @@
                 translation.isDefault = translationDto.isDefault;
                 translation.content = {};
                 translation.content.details = {};
+                translation.downloadUrl = $scope.downloadBaseUrl + '/' + $scope.questionnaire.questionnaireId  + '/xlsx/' + translationDto.translationId;
+                translation.canUpdate = true;
+                translation.onSave = function ($event) {
+                    $scope.saveTranslation(translation);
+                    $event.stopPropagation();
+                };
+                translation.onCancel = function($event) {
+                    $scope.cancel(translation);
+                    $event.stopPropagation();
+                };
 
                 if (!_.isUndefined(translationDto.content) && !_.isNull(translationDto.content)) {
                     translation.content.size = translationDto.content.size;
@@ -38,9 +48,44 @@
                 }
             };
 
-            $scope.loadTranslations = function () {
+            $scope.loadTranslations = function () {                
                 if ($scope.questionnaire === null)
                     return;
+
+                var defaultTranslation = {
+                    translationId: null,
+                    name: $scope.questionnaire.defaultLanguageName == null ? $i18next.t("Translation_Original") : $scope.questionnaire.defaultLanguageName,
+                    file: null,
+                    isDefault: !_.any($scope.questionnaire.translations, {isDefault: true}),
+                    content: {details: {}},
+                    downloadUrl: $scope.downloadBaseUrl + '/' + $scope.questionnaire.questionnaireId + '/template',
+                    canUpdate: false
+                };
+                defaultTranslation.checkpoint  = { name : defaultTranslation.name };
+                
+                defaultTranslation.onSave = function ($event) {
+                    shareService.udpateQuestionnaire(
+                        $scope.questionnaire.questionnaireId,
+                        $scope.questionnaire.title,
+                        $scope.questionnaire.variable,
+                        $scope.questionnaire.editedHideIfDisabled,
+                        $scope.questionnaire.isPublic,
+                        defaultTranslation.name
+                    ).then(function () {
+                        defaultTranslation.checkpoint.name = defaultTranslation.name;
+                        defaultTranslation.form.$setPristine();
+                    });
+
+                    $event.stopPropagation();
+                };
+                defaultTranslation.onCancel = function($event) {
+                    defaultTranslation.name = defaultTranslation.checkpoint.name;
+                    defaultTranslation.form.$setPristine();
+                    
+                    $event.stopPropagation();
+                };
+                
+                $scope.translations.push(defaultTranslation);
 
                 $scope.isReadOnlyForUser = $scope.questionnaire.isReadOnlyForUser || false;
 
@@ -123,7 +168,7 @@
                 if (!_.isUndefined(callback)) {
                     callback();
                 }
-            }
+            };
 
             $scope.saveTranslation = function (translation) {
                 commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {

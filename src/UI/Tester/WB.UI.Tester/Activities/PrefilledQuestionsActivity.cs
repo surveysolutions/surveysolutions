@@ -47,7 +47,7 @@ namespace WB.UI.Tester.Activities
             },
             {
                 Resource.Id.prefilled_questions_language_original,
-                TesterUIResources.MenuItem_Title_Language_Original
+                this.ViewModel.DefaultLanguageName ?? TesterUIResources.MenuItem_Title_Language_Original
             },
         };
         
