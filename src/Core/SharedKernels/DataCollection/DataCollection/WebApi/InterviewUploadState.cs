@@ -12,5 +12,6 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public HashSet<string> AudioQuestionsFilesMd5 { get; set; }
         public HashSet<string> AudioAuditFilesMd5 { get; set; }
         public Guid? ResponsibleId { get; set; }
+        public bool IsReceivedByInterviewer { get; set; }
     }
 }
