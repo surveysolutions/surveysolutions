@@ -146,6 +146,7 @@ namespace Main.Core.Documents
         public Dictionary<Guid, int> EntitiesIdMap { get; set; }
 
         public bool CustomRosterTitle => false;
+        public string DefaultLanguageName { get; set; }
 
         public void Insert(int index, IComposite c, Guid? parentId)
         {

@@ -65,10 +65,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var statefulInterview = this.GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
 
+            var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
+            
             return new LanguageInfo
             {
-                OriginalLanguageName = Resources.WebInterview.Original_Language,
-                Languages = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity).GetTranslationLanguages(),
+                OriginalLanguageName = questionnaire.DefaultLanguageName ?? Resources.WebInterview.Original_Language,
+                Languages = questionnaire.GetTranslationLanguages(),
                 CurrentLanguage = statefulInterview.Language
             };
         }
