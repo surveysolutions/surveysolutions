@@ -73,12 +73,16 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
-import {map, join, toNumber} from 'lodash'
+import {map, join, toNumber, filter} from 'lodash'
 import gql from 'graphql-tag'
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+
 
 const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
   interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
     totalCount
+    filteredCount
     nodes {
       id
       key
@@ -105,6 +109,7 @@ export default {
             questionnaireId: null,
             questionnaireVersion: null,
             assignmentId: null,
+            draw: 0,
         }
     },
 
@@ -158,6 +163,8 @@ export default {
                 order: [[3, 'desc']],
                 deferLoading: 0,
                 columns: this.getTableColumns(),
+                pageLength: 20,
+
                 ajax(data, callback, _) {
                     const order = {}
                     const order_col = data.order[0]
@@ -199,10 +206,11 @@ export default {
                         fetchPolicy: 'network-only',
                     }).then(response => {
                         const data = response.data.interviews
-                        self.totalRows = data.totalCount
+
                         callback({
                             recordsTotal: data.totalCount,
-                            recordsFiltered: data.totalCount,
+                            recordsFiltered: data.filteredCount,
+                            draw: ++this.draw,
                             data: data.nodes,
                         })
                     }).catch(err => {
@@ -322,6 +330,7 @@ export default {
                     title: this.$t('Common.InterviewKey'),
                     orderable: true,
                     searchable: true,
+                    width: '180px',
                 },
                 {
                     data: 'assignmentId',
@@ -329,6 +338,7 @@ export default {
                     title: this.$t('Common.Assignment'),
                     orderable: false,
                     searchable: false,
+                    width: '50px',
                 },
                 {
                     data: 'identifyingQuestions',
@@ -337,10 +347,14 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        var questionsWithTitles = map(data, node => {
-                            return (node.question.label || node.question.questionText) + ': ' + node.answer
+                        const delimiter = self.mode == 'dense'
+
+                        var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
+                            return `${sanitizeHtml(node.question.label || node.question.questionText)}: <strong>${node.answer}</strong>`
                         })
-                        return join(questionsWithTitles, ', ')
+
+                        const dom = join(questionsWithTitles, ', ')
+                        return dom
                     },
                     responsivePriority: 4,
                 },
@@ -354,6 +368,7 @@ export default {
                             .local()
                             .format(DateFormats.dateTimeInList)
                     },
+                    width: '180px',
                 },
             ]
 
