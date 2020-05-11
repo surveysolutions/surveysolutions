@@ -48,5 +48,27 @@ namespace WB.Services.Export.CsvExport.Exporters
         {
             return GetUserRoleNumericValue(userRole).ToString(CultureInfo.InvariantCulture);
         }
+
+        public static int GetParadataRole(string recordOriginatorRole)
+        {
+            if (string.IsNullOrWhiteSpace(recordOriginatorRole))
+                return 0;
+
+            switch (recordOriginatorRole.ToLower())
+            {
+                case "interviewer":
+                    return 1;
+                case "supervisor":
+                    return 2;
+                case "headquarter":
+                    return 3;
+                case "administrator":
+                    return 4;
+                case "apiuser":
+                    return 5;
+                default:
+                    return 0;
+            }
+        }
     }
 }
