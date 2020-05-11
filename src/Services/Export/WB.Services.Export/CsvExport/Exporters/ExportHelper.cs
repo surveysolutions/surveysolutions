@@ -22,7 +22,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {Supervisor, "Supervisor" },
             {Headquarter,"Headquarter"},
             {Administrator, "Administrator"},
-            {ApiUser, "Api User" }
+            {ApiUser, "API User" }
         };
 
         private static int GetUserRoleNumericValue(UserRoles userRole)
