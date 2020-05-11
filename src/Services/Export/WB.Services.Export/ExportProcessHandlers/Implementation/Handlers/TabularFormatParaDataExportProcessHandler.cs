@@ -133,7 +133,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             doFileContent.AppendLine("label variable responsible `\"Login name of the person who initiated the event\"'");
             
             doFileContent.AppendLine("label define role " 
-                                     + string.Join("", ExportHelper.RolesMap.Select(x=> $"{x.Key} `\"{x.Value}\"'")));
+                                     + string.Join("", ExportHelper.RolesMap.Select(x=> $"{x.Key} `\"{x.Value}\"' ")));
             doFileContent.AppendLine("label values role role");
             doFileContent.AppendLine("label variable role `\"System role of the person who initiated the event\"'");
             
