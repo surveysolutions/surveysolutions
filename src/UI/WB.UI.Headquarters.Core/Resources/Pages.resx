@@ -1256,7 +1256,7 @@
     <value>Map File</value>
   </data>
   <data name="MapList_Name" xml:space="preserve">
-    <value>Interviewer Name</value>
+    <value>Name</value>
   </data>
   <data name="MapList_Size" xml:space="preserve">
     <value>Size (MB)</value>
