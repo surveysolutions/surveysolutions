@@ -48,8 +48,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                         .And().AllowNotEquals().Description("Allows not equals comparison of user")
                         .And().AllowStartsWith().Description("Allows starts with comparison of user")
                         .And().AllowNotStartsWith().Description("Allows not starts with comparison of user");
-                    
-                }).Name("usersFilter");
+                }).Name("users_some");
         }
     }
 }
