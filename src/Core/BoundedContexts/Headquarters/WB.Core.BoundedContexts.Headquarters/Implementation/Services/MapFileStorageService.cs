@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using System.Xml;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
+using NHibernate.Linq;
 using OSGeo.GDAL;
 using OSGeo.OGR;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -21,6 +23,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -31,6 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
         private readonly IExternalFileStorage externalFileStorage;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
 
@@ -48,7 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IPlainStorageAccessor<UserMap> userMapsStorage,
             ISerializer serializer,
             IUserRepository userStorage,
-            IExternalFileStorage externalFileStorage)
+            IExternalFileStorage externalFileStorage,
+            IUnitOfWork unitOfWork)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -58,6 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.userStorage = userStorage;
 
             this.externalFileStorage = externalFileStorage;
+            this.unitOfWork = unitOfWork;
 
             this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -232,7 +238,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return item;
         }
 
-        public async Task DeleteMap(string mapName)
+        public async Task<MapBrowseItem> DeleteMap(string mapName)
         {
             var map = this.mapPlainStorageAccessor.GetById(mapName);
             if (map != null)
@@ -249,16 +255,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 if (this.fileSystemAccessor.IsFileExists(filePath))
                     fileSystemAccessor.DeleteFile(filePath);
             }
+
+            return map;
         }
 
-        public void DeleteMapUserLink(string map, string user)
+        public MapBrowseItem DeleteMapUserLink(string mapName, string user)
         {
-            if(string.IsNullOrWhiteSpace(map)||string.IsNullOrWhiteSpace(user))
-                return;
+            var map = this.mapPlainStorageAccessor.GetById(mapName);
 
-            var mapUsers = this.userMapsStorage.Query(q=> q.Where(x=>x.Map==map && x.UserName == user)).ToList();
-            if (mapUsers.Count > 0)
-                this.userMapsStorage.Remove(mapUsers);
+            if (map == null || string.IsNullOrWhiteSpace(mapName) || string.IsNullOrWhiteSpace(user))
+                return null;
+
+            var mapUsers = this.userMapsStorage
+                .Query(q => q.Where(x => x.Map == mapName && x.UserName == user))
+                .ToList();
+            
+            if (mapUsers.Count > 0) this.userMapsStorage.Remove(mapUsers);
+
+            return map;
         }
 
         public ReportView GetAllMapUsersReportView()
@@ -350,6 +364,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         .Select(y => y.Map)
                         .Distinct();
             }).ToArray();
+        }
+
+        public IQueryable<MapBrowseItem> GetAllMaps() => this.unitOfWork.Session.Query<MapBrowseItem>();
+        public MapBrowseItem GetMapById(string id) => this.mapPlainStorageAccessor.GetById(id);
+        public MapBrowseItem AddUserToMap(string id, string userName)
+        {
+            var map = this.mapPlainStorageAccessor.GetById(id);
+            if (map == null)
+                throw new ArgumentException($@"Map was not found {id}", nameof(id));
+            
+            var userNameLowerCase = userName.ToLower();
+            var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+
+            var dbUser = this.userStorage.Users
+                .FirstOrDefault(x => x.UserName.ToLower() == userNameLowerCase &&
+                                     x.IsArchived == false && 
+                                     x.Roles.Any(role => role.Id == interviewerRoleId));
+
+            if (dbUser != null)
+            {
+                var userMap = this.userMapsStorage
+                    .Query(x => x.FirstOrDefault(x => x.Map == id && x.UserName == userName));
+
+                if (userMap == null)
+                {
+                    userMapsStorage.Store(new UserMap
+                    {
+                        Map = id,
+                        UserName = userName
+                    }, null);
+                }
+            }
+
+            return map;
         }
 
         public string[] GetAllMapsForInterviewer(string userName)
