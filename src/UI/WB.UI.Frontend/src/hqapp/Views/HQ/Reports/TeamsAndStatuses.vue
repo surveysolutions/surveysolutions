@@ -271,7 +271,10 @@ export default {
                         data: 'approvedBySupervisorCount',
                         name: 'ApprovedBySupervisorCount',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(data, row, 'ApprovedBySupervisor')
+                            if (self.$config.model.isSupervisorMode) {
+                                const formatedNumber = formatNumber(data)
+                                return `<span>${formatedNumber}</span>`
+                            } else return self.getLinkToInterviews(data, row, 'ApprovedBySupervisor')
                         },
                         title: this.$t('Reports.ApprovedBySupervisor'),
                     },
