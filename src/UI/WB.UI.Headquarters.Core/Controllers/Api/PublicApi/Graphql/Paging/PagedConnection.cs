@@ -3,7 +3,7 @@ using HotChocolate.Types;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
 {
-    class PagedConnection<T> : ObjectType<IPagedConnection>, IPagedConnection
+    class PagedConnection<T> : ObjectType<IPagedConnection<T>>, IPagedConnection
         where T : class, IType
     {
         public PagedConnection()
@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
         public long FilteredCount { get; }
         public IList Nodes { get; }
 
-        private new static void Configure(IObjectTypeDescriptor<IPagedConnection> descriptor)
+        private new static void Configure(IObjectTypeDescriptor<IPagedConnection<T>> descriptor)
         {
             descriptor.BindFields(BindingBehavior.Explicit);
 
