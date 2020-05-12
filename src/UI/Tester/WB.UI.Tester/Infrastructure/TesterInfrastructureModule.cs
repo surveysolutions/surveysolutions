@@ -82,10 +82,5 @@ namespace WB.UI.Tester.Infrastructure
             registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, TesterImageFileStorage>("rootDirectoryPath", basePath);
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
     }
 }
