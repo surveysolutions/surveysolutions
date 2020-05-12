@@ -3,6 +3,7 @@ using HotChocolate.AspNetCore;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
@@ -17,7 +18,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         public static ISchema HeadquartersSchema => SchemaBuilder.New()
             .AddAuthorizeDirectiveType()
             .AddType(new PaginationAmountType(200))
-            .AddQueryType<HeadquartersQuery>().Create(); 
+            .AddQueryType<HeadquartersQuery>()
+            .AddMutationType<HeadquartersMutations>().Create(); 
 
         public static IApplicationBuilder UseGraphQLApi(this IApplicationBuilder app)
         {

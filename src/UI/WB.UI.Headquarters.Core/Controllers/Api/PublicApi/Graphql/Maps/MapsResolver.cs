@@ -1,24 +1,21 @@
 ﻿using System.Linq;
-using HotChocolate;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
 {
     public class MapsResolver
     {
-        public IQueryable<MapBrowseItem> GetMaps([Service] IUnitOfWork unitOfWork)
+        private readonly IMapStorageService mapStorageService;
+
+        public MapsResolver(IMapStorageService mapStorageService)
         {
-            unitOfWork.DiscardChanges();
-
-            return unitOfWork.Session.Query<MapBrowseItem>();
+            this.mapStorageService = mapStorageService;
         }
-
-        public MapBrowseItem GetMap(string id, [Service] IUnitOfWork unitOfWork)
-        {
-            unitOfWork.DiscardChanges();
-
-            return unitOfWork.Session.Query<MapBrowseItem>().FirstOrDefault(x => x.Id == id);
-        }
+        public IQueryable<MapBrowseItem> GetMaps() => this.mapStorageService.GetAllMaps();
+        public MapBrowseItem GetMap(string id) => this.mapStorageService.GetMapById(id);
+        public MapBrowseItem DeleteMap(string id) => this.mapStorageService.DeleteMap(id).Result;
+        public object DeleteUserFromMap(string id, string userName) => this.mapStorageService.DeleteMapUserLink(id, userName);
+        public object AddUserToMap(string id, string userName) => this.mapStorageService.AddUserToMap(id, userName);
     }
 }

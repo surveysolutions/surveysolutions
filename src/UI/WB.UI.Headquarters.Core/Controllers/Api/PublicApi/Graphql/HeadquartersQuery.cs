@@ -32,16 +32,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .Authorize()
                 .Type<UserType>().Name("viewer");
 
-            descriptor.Field<MapsResolver>(x => x.GetMaps(default))
+            descriptor.Field<MapsResolver>(x => x.GetMaps())
                 .Authorize()
                 .UseSimplePaging<Map, MapBrowseItem>()
                 .UseFiltering<MapsFilterInputType>()
                 .UseSorting<MapsSortInputType>();
 
-            descriptor.Field<MapsResolver>(x => x.GetMap(default, default))
+            descriptor.Field<MapsResolver>(x => x.GetMap(default))
                 .Authorize()
                 .Type<Map>()
-                .Argument("id", a => a.Description("Map file name").Type<StringType>())
+                .Argument("id", a => a.Description("Map file name").Type<NonNullType<StringType>>())
                 .Name("map");
         }
     }
