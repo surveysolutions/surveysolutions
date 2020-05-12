@@ -223,9 +223,8 @@ export default {
                 return
             }
 
-            this.selectQuestionnaireVersion(null)
-
-            await this.loadQuestions(id.key, null)
+            await this.selectQuestionnaireVersion(id)
+            //await this.loadQuestions(id.key, null)
 
             this.selectCondition(null)
             this.onChange(q => (q.name = id.value))
@@ -234,13 +233,12 @@ export default {
             this.selectQuestion(question)
         },
 
-        selectQuestionnaireVersion(id) {
+        async selectQuestionnaireVersion(id) {
             const version = id == null ? null : id.key
             if (this.selectedQuestionnaire == null) return
 
-            this.loadQuestions(this.selectedQuestionnaire.key, version).then(() => {
-                this.onChange(query => (query.version = version))
-            })
+            await this.loadQuestions(this.selectedQuestionnaire.key, version)
+            this.onChange(query => (query.version = version))
         },
 
         selectQuestion(id) {

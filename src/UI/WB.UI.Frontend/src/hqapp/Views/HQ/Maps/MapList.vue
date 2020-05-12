@@ -169,7 +169,7 @@ export default {
                         data: 'fileName',
                         name: 'FileName',
                         class: 'title',
-                        title: this.$t('Pages.MapList_Name'),
+                        title: this.$t('Pages.MapList_MapName'),
                     },
                     {
                         data: 'size',

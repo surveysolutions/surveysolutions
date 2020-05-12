@@ -22,7 +22,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {Supervisor, "Supervisor" },
             {Headquarter,"Headquarter"},
             {Administrator, "Administrator"},
-            {ApiUser, "Api User" }
+            {ApiUser, "API User" }
         };
 
         private static int GetUserRoleNumericValue(UserRoles userRole)
@@ -47,6 +47,28 @@ namespace WB.Services.Export.CsvExport.Exporters
         public static string GetUserRoleDisplayValue(UserRoles userRole)
         {
             return GetUserRoleNumericValue(userRole).ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static int GetParadataRole(string recordOriginatorRole)
+        {
+            if (string.IsNullOrWhiteSpace(recordOriginatorRole))
+                return 0;
+
+            switch (recordOriginatorRole.ToLower())
+            {
+                case "interviewer":
+                    return 1;
+                case "supervisor":
+                    return 2;
+                case "headquarter":
+                    return 3;
+                case "administrator":
+                    return 4;
+                case "apiuser":
+                    return 5;
+                default:
+                    return 0;
+            }
         }
     }
 }
