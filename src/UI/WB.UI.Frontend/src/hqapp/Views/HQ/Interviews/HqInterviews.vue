@@ -168,7 +168,7 @@
                     </label>
                     <br />
                     <span v-if="isReassignReceivedByInterviewer"
-                        class="text-warning">
+                        class="text-danger">
                         {{$t("Interviews.AssignReceivedWarning")}}
                     </span>
                 </div>

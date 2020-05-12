@@ -48,16 +48,43 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     {
         public GpsAnswer ToInterviewAnswer()
         {
-            var doubleAnswers = this.Values.OfType<AssignmentDoubleAnswer>();
-            var longitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower())?.Answer;
-            var latitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower())?.Answer;
-            var altitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Altitude).ToLower())?.Answer;
-            var accuracy = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Accuracy).ToLower())?.Answer;
-            var timestamp = this.Values.OfType<AssignmentDateTimeAnswer>()
-                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Timestamp).ToLower())?.Answer;
+            double? longitude = null;
+            double? latitude = null;
+            double? altitude = null;
+            double? accuracy = null;
+            DateTime? timestamp = null;
 
-            return GpsAnswer.FromGeoPosition(new GeoPosition(latitude ?? 0, longitude ?? 0,
-                accuracy ?? 0, altitude ?? 0, timestamp ?? DateTimeOffset.MinValue));
+            foreach (var value in Values)
+            {
+                switch (value)
+                {
+                    case AssignmentDoubleAnswer answer
+                        when answer.VariableName.Equals(nameof(GeoPosition.Longitude), StringComparison.OrdinalIgnoreCase):
+                        longitude = answer.Answer;
+                        break;
+                    case AssignmentDoubleAnswer answer
+                        when answer.VariableName.Equals(nameof(GeoPosition.Latitude), StringComparison.OrdinalIgnoreCase):
+                        latitude = answer.Answer;
+                        break;
+                    case AssignmentDoubleAnswer answer
+                        when answer.VariableName.Equals( nameof(GeoPosition.Altitude), StringComparison.OrdinalIgnoreCase):
+                        altitude = answer.Answer;
+                        break;
+                    case AssignmentDoubleAnswer answer
+                        when answer.VariableName.Equals(nameof(GeoPosition.Accuracy), StringComparison.OrdinalIgnoreCase):
+                        accuracy = answer.Answer;
+                        break;
+                    case AssignmentDateTimeAnswer dateAnswer
+                        when dateAnswer.VariableName.Equals(nameof(GeoPosition.Timestamp), StringComparison.OrdinalIgnoreCase):
+                        timestamp = dateAnswer.Answer;
+                        break;
+                }
+            }
+            
+            return GpsAnswer.FromGeoPosition(new GeoPosition(
+                latitude ?? 0, longitude ?? 0,
+                accuracy ?? 0, altitude ?? 0,
+                timestamp ?? DateTimeOffset.FromUnixTimeSeconds(0)));
         }
     }
 
@@ -100,7 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var ynOrderedAnswers = this.Values
                 .OfType<AssignmentIntegerAnswer>()
                 .Where(x => x.Answer.HasValue)
-                .Select(x => new { code = Convert.ToInt32(x.VariableName), answer = x.Answer })
+                .Select(x => new {code = Convert.ToInt32(x.VariableName), answer = x.Answer})
                 .Where(x => x.answer > -1)
                 .OrderBy(x => x.answer)
                 .Select(x => new AnsweredYesNoOption(x.code, x.answer != 0))
@@ -114,7 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var orderedAnswers = this.Values
                 .OfType<AssignmentIntegerAnswer>()
                 .Where(x => x.Answer.HasValue)
-                .Select(x => new { code = Convert.ToInt32(x.VariableName), answer = x.Answer })
+                .Select(x => new {code = Convert.ToInt32(x.VariableName), answer = x.Answer})
                 .Where(x => x.answer > 0)
                 .OrderBy(x => x.answer)
                 .Select(x => x.code)

@@ -143,28 +143,46 @@ namespace WB.Services.Export.Services
         {
             for (int index = 0; index < meta.Variables.Length; index++)
             {
-                if (!questionnaireLevelLabels.ContainsVariable(meta.Variables[index].VarName))
+                var variableName = meta.Variables[index].VarName;
+
+                if (!questionnaireLevelLabels.ContainsVariable(variableName))
                     continue;
 
-                var variableLabels = questionnaireLevelLabels[meta.Variables[index].VarName];
+                var variableLabels = questionnaireLevelLabels[variableName];
 
-                meta.Variables[index] = new DatasetVariable(meta.Variables[index].VarName)
+                meta.Variables[index] = new DatasetVariable(variableName)
                 {
-                    Storage = GetStorageType(variableLabels.ValueType)
+                    Storage = GetStorageType(variableLabels.ValueType), VarLabel = variableLabels.VariableLabel
                 };
-
-                meta.Variables[index].VarLabel = variableLabels.VariableLabel;
 
                 var valueSet = new ValueSet();
 
-                foreach (var variableValueLabel in variableLabels.Value.VariableValues)
+                if (variableLabels.Value.IsReference)
                 {
-                    double value;
-                    if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
-                        valueSet.Add(value, variableValueLabel.Label);
+                    var labels =
+                        questionnaireLevelLabels.PredefinedLabels.FirstOrDefault(x =>
+                            x.Name == variableLabels.Value.Name);
+                    if (labels != null)
+                    {
+                        foreach (var variableValueLabel in labels.VariableValues)
+                        {
+                            if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture,
+                                out double value))
+                                valueSet.Add(value, variableValueLabel.Label);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var variableValueLabel in variableLabels.Value.VariableValues)
+                    {
+                        if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture,
+                            out var value))
+                            valueSet.Add(value, variableValueLabel.Label);
+                    }
                 }
 
-                meta.AssociateValueSet(meta.Variables[index].VarName, valueSet);
+                meta.AssociateValueSet(variableName, valueSet);
             }
         }
 

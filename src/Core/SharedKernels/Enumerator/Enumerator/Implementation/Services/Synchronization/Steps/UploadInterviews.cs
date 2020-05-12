@@ -135,6 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     {
                         this.interviewFactory.MarkEventsAsReceivedByHQ(interview.InterviewId);
                         MarkInterviewAsSynchedAndNonRemovable(interview.InterviewId);
+                        await MarkInterviewAsReceivedByInterviewerOnHqAsync(interview.InterviewId, uploadState);
                         this.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount++;
                     }
                 }
@@ -146,6 +147,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.logger.Error($"Failed to synchronize interview", syncException);
                 }
             }
+        }
+
+        private async Task MarkInterviewAsReceivedByInterviewerOnHqAsync(Guid interviewId, InterviewUploadState uploadState)
+        {
+            if (uploadState.IsReceivedByInterviewer)
+                return;
+
+            await synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interviewId);
         }
 
         protected abstract bool IsCompressEnabled();

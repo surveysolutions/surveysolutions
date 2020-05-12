@@ -34,7 +34,7 @@ using WB.UI.Supervisor.Services.Implementation;
 
 namespace WB.UI.Supervisor.ServiceLocation
 {
-    internal class SupervisorUiModule : IModule
+    internal class SupervisorUiModule : IModule, IInitModule
     {
         public void Load(IIocRegistry registry)
         {

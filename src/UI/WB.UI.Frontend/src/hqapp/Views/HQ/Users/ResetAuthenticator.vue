@@ -88,7 +88,7 @@ export default {
                 },
             }).then(
                 response => {
-                    window.location.href = self.model.api.enableAuthenticatorUrl
+                    window.location.href = self.model.api.setupAuthenticatorUrl
                 },
                 error => {
                     self.processModelState(error.response.data, self)
