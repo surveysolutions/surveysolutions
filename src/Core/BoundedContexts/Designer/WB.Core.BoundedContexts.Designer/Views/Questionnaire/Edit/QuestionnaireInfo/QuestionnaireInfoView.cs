@@ -53,5 +53,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public List<CategoriesView> Categories { get; set; }
         
         public int? PreviewRevision { get; set; }
+        public string DefaultLanguageName { get; set; }
     }
 }

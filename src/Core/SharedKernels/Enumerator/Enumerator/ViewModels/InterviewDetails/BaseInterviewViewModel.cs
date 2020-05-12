@@ -124,6 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = interview.Language;
+            this.defaultLanguageName = questionnaire.DefaultLanguageName;
 
             this.BreadCrumbs.Init(InterviewId, this.navigationState);
             this.Sections.Init(InterviewId, this.navigationState);
@@ -328,6 +329,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private string currentLanguage;
         public override string CurrentLanguage => this.currentLanguage;
+        
+        public string defaultLanguageName;
+        public override string DefaultLanguageName => this.defaultLanguageName;
 
         private IReadOnlyCollection<string> availableLanguages;
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;

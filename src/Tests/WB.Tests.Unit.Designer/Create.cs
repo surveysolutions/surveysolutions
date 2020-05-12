@@ -1240,9 +1240,9 @@ namespace WB.Tests.Unit.Designer
                     new VariableData(variableType, name, expression, label, doNotExport), responsibleId, parentId, index);
             }
 
-            public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", string variable = "questionnaire", bool isPublic = false, bool isResponsibleAdmin = false)
+            public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", string variable = "questionnaire", bool isPublic = false, bool isResponsibleAdmin = false, string defaultLanguageName = "Original")
             {
-                return new UpdateQuestionnaire(questionnaireId, title, variable, false, isPublic, responsibleId, isResponsibleAdmin);
+                return new UpdateQuestionnaire(questionnaireId, title, variable, false, isPublic, defaultLanguageName, responsibleId, isResponsibleAdmin);
             }
             public static DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, Guid responsibleId)
             {
@@ -1433,8 +1433,8 @@ namespace WB.Tests.Unit.Designer
             return new DeskAuthenticationService(Mock.Of<IOptions<DeskSettings>>(x => x.Value == new DeskSettings(multipassKey, returnUrlFormat, siteKey)));
         }
 
-        public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false, string variable = "questionnaire")
-            => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, false, isPublic, responsibleId, isResponsibleAdmin);
+        public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false, string variable = "questionnaire", string defaultLanguageName = "Original")
+            => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, false, isPublic, defaultLanguageName, responsibleId, isResponsibleAdmin);
 
         public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, SharedPerson[] sharedPersons = null)
             => QuestionnaireListViewItem(id ?? Guid.Empty, isPublic, null, null, sharedPersons);
