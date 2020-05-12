@@ -37,6 +37,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .UseSimplePaging<Map, MapBrowseItem>()
                 .UseFiltering<MapsFilterInputType>()
                 .UseSorting<MapsSortInputType>();
+
+            descriptor.Field<MapsResolver>(x => x.GetMap(default, default))
+                .Authorize()
+                .Type<Map>()
+                .Argument("id", a => a.Description("Map file name").Type<StringType>())
+                .Name("map");
         }
     }
 }

@@ -13,5 +13,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
 
             return unitOfWork.Session.Query<MapBrowseItem>();
         }
+
+        public MapBrowseItem GetMap(string id, [Service] IUnitOfWork unitOfWork)
+        {
+            unitOfWork.DiscardChanges();
+
+            return unitOfWork.Session.Query<MapBrowseItem>().FirstOrDefault(x => x.Id == id);
+        }
     }
 }
