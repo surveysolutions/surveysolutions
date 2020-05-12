@@ -1,7 +1,9 @@
 #nullable enable
 using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users;
@@ -14,7 +16,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         {
             descriptor.Field<InterviewsResolver>(x => x.GetInterviews(default, default))
                 .Authorize()
-                .UseSimplePaging<InterviewSummaryObjectType, InterviewSummary>()
+                .UseSimplePaging<Interview, InterviewSummary>()
                 .UseFiltering<InterviewsFilterInputType>()
                 .UseSorting<InterviewsSortInputType>();
 
@@ -29,6 +31,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             descriptor.Field<UsersResolver>(x => x.GetViewer(default))
                 .Authorize()
                 .Type<UserType>().Name("viewer");
+
+            descriptor.Field<MapsResolver>(x => x.GetMaps(default))
+                .Authorize()
+                .UseSimplePaging<Map, MapBrowseItem>()
+                .UseFiltering<MapsFilterInputType>()
+                .UseSorting<MapsSortInputType>();
         }
     }
 }

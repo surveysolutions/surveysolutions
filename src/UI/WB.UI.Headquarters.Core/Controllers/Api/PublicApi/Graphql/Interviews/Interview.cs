@@ -12,7 +12,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 {
-    public class InterviewSummaryObjectType : ObjectType<InterviewSummary>
+    public class Interview : ObjectType<InterviewSummary>
     {
         protected override void Configure(IObjectTypeDescriptor<InterviewSummary> descriptor)
         {
