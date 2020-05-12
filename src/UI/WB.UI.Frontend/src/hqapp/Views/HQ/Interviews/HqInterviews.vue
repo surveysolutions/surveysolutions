@@ -1368,6 +1368,8 @@ export default {
                         query: this.$route.query.responsibleName,
                         pageSize: 1,
                         cache: false,
+                        showArchived: true,
+                        showLocked: true,
                     },
                     this.ajaxParams
                 )
