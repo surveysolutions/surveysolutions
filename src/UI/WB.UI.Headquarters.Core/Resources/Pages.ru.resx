@@ -1182,7 +1182,7 @@
     <value>Файл карты</value>
   </data>
   <data name="MapList_Name" xml:space="preserve">
-    <value>Имя интервьюера</value>
+    <value>Имя</value>
   </data>
   <data name="MapList_Size" xml:space="preserve">
     <value>Размер (MB)</value>
