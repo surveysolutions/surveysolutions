@@ -1,5 +1,4 @@
-﻿using NHibernate.Mapping.ByCode;
-using NHibernate.Mapping.ByCode.Conformist;
+﻿using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -25,16 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Property(x => x.MaxScale);
             Property(x => x.MinScale);
-
-            Bag(x => x.Users, map =>
-                {
-                    map.Table("usermaps");
-                    map.Key(key => key.Column("map"));
-                    map.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                    map.Inverse(true);
-                },
-                rel => rel.OneToMany()
-            );
         }
     }
 }
