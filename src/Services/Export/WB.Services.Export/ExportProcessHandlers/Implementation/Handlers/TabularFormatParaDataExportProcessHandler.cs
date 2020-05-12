@@ -133,7 +133,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             doFileContent.AppendLine("label variable responsible `\"Login name of the person who initiated the event\"'");
             
             doFileContent.AppendLine("label define role " 
-                                     + string.Join("", ExportHelper.RolesMap.Select(x=> $"{x.Key} `\"{x.Value}\"'")));
+                                     + string.Join("", ExportHelper.RolesMap.Select(x=> $"{x.Key} `\"{x.Value}\"' ")));
             doFileContent.AppendLine("label values role role");
             doFileContent.AppendLine("label variable role `\"System role of the person who initiated the event\"'");
             
@@ -157,7 +157,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                     writer.WriteField(i + 1);
                     writer.WriteField(record.Action);
                     writer.WriteField(record.OriginatorName);
-                    writer.WriteField(record.OriginatorRole);
+                    writer.WriteField(ExportHelper.GetParadataRole(record.OriginatorRole));
                     writer.WriteField(record.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
                     writer.WriteField(record.Offset != null ? record.Offset.Value.ToString() : "");
                     writer.WriteField(String.Join("||", record.Parameters.Values.Select(v => v.RemoveNewLine())));
