@@ -30,7 +30,7 @@ using WB.UI.Shared.Enumerator.Settings;
 
 namespace WB.UI.Interviewer.ServiceLocation
 {
-    public class InterviewerUIModule : IModule
+    public class InterviewerUIModule : IModule, IInitModule
     {
         public void Load(IIocRegistry registry)
         {
