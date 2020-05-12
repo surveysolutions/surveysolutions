@@ -14,7 +14,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         {
             descriptor.Field<InterviewsResolver>(x => x.GetInterviews(default, default))
                 .Authorize()
-                .UseSimplePaging<InterviewSummaryObjectType, InterviewSummary>()
+                .UseSimplePaging<Interview, InterviewSummary>()
                 .UseFiltering<InterviewsFilterInputType>()
                 .UseSorting<InterviewsSortInputType>();
 
