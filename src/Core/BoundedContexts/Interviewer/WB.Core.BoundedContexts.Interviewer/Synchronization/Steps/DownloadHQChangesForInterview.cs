@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
     public class DownloadHQChangesForInterview : SynchronizationStep
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly ILiteEventBus eventBus;
         private readonly ICommandService commandService;
@@ -49,7 +48,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             ISynchronizationService synchronizationService, 
             ILogger logger,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
             IEnumeratorEventStorage eventStore,
             ILiteEventBus eventBus,
             ICommandService commandService,
@@ -59,7 +57,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             : base(sortOrder, synchronizationService, logger)
         {
             this.interviewViewRepository = interviewViewRepository;
-            this.interviewSequenceViewRepository = interviewSequenceViewRepository;
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.commandService = commandService;
