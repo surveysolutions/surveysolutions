@@ -5,14 +5,13 @@ using HotChocolate.Types;
 using Humanizer;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
-using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 {
-    public class InterviewSummaryObjectType : ObjectType<InterviewSummary>
+    public class Interview : ObjectType<InterviewSummary>
     {
         protected override void Configure(IObjectTypeDescriptor<InterviewSummary> descriptor)
         {
