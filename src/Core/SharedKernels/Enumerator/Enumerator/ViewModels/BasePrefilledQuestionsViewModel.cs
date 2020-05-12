@@ -60,6 +60,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private string currentLanguage;
         public override string CurrentLanguage => this.currentLanguage;
+        
+        private string defaultLanguageName;
+        public override string DefaultLanguageName => this.defaultLanguageName;
 
         private IReadOnlyCollection<string> availableLanguages;
         private StartInterviewViewModel startButton;
@@ -96,6 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = interview.Language;
+            this.defaultLanguageName = questionnaire.DefaultLanguageName;
 
             this.IsAudioRecordingEnabled = interview.GetIsAudioRecordingEnabled();
 
