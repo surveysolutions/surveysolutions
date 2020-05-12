@@ -20,8 +20,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
 
             PageRequestInfo pageRequestInfo = new PageRequestInfo
             {
-                Skip = context.Argument<int>("skip"),
-                Take = context.Argument<int>("take"),
+                Skip = context.Argument<int?>("skip"),
+                Take = context.Argument<int?>("take"),
                 HasTotalCount = context.FieldSelection.SelectionSet.HasSelectedField("totalCount"),
                 HasFilteredCount =  context.FieldSelection.SelectionSet.HasSelectedField("filteredCount"),
             };
