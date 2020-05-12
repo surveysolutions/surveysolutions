@@ -48,7 +48,7 @@ namespace WB.UI.Supervisor.Activities.Interview
             },
             {
                 Resource.Id.interview_language_original,
-                EnumeratorUIResources.MenuItem_Title_Language_Original
+                this.ViewModel.DefaultLanguageName ?? EnumeratorUIResources.MenuItem_Title_Language_Original
             },
         };
 

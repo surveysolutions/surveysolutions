@@ -1341,8 +1341,8 @@
     <comment>Повторить экспорт в PDF</comment>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Оргинальный</value>
-    <comment>Оргинальный</comment>
+    <value>Оригинальный</value>
+    <comment>Оригинальный</comment>
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Сохранить как</value>
