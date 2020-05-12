@@ -268,7 +268,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
         private SynchronizationStep CreateDownloadHQChangesForInterview(
             ISynchronizationService synchronizationService = null,
             IPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository = null,
             IEnumeratorEventStorage eventStore = null,
             ILiteEventBus eventBus = null,
             ICommandService commandService =null,
@@ -280,7 +279,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 Mock.Of<ILogger>(),
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
-                interviewSequenceViewRepository ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
                 eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 commandService ?? Mock.Of<ICommandService>(),
