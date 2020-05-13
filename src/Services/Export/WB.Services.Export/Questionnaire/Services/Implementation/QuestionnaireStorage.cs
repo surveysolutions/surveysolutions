@@ -28,7 +28,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         public async Task<QuestionnaireDocument> GetQuestionnaireAsync(
             QuestionnaireId questionnaireId,
-            CancellationToken token = default)
+            CancellationToken token)
         {
             if (cache.TryGetValue(questionnaireId, out var result))
             {
@@ -51,7 +51,8 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
                 foreach (var category in questionnaire.Categories)
                 {
-                    category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
+                    category.Values =
+                        await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
                 }
 
                 logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
@@ -60,6 +61,13 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                 cache.Set(questionnaireId, questionnaire);
 
                 return questionnaire;
+            }
+            catch (TaskCanceledException tce)
+            {
+                if(tce.CancellationToken.IsCancellationRequested)
+                    logger.LogWarning("Task was canceled on getting questionnaire: {tenantName}. {questionnaireId}",
+                        this.tenantContext.Tenant.Name, questionnaireId);
+                throw;
             }
             finally
             {
