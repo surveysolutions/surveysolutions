@@ -153,20 +153,30 @@ export default {
                 },
                 {
                     name: this.$t('Pages.MapList_DeleteMap'),
-                    callback: () => this.deleteMap(rowData.fileName),
+                    callback: () => this.confirmDeleteMap(rowData.fileName),
                 },
             ]
         },
-        deleteMap(fileName) {
+        confirmDeleteMap(fileName) {
             const self = this
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
-                    this.$http({
-                        method: 'delete',
-                        url: this.config.deleteMapLinkUrl,
-                        data: {map: fileName}})
-
-                    self.$refs.table.reload()
+                    self.$apollo.mutate({
+                        mutation: gql`
+                                mutation deleteMap($id: String!) {
+                                    deleteMap(id: $id) {
+                                        fileName
+                                    }
+                                }`,
+                        variables: {
+                            'id' : fileName,
+                        },
+                    }).then(response => {
+                        self.$refs.table.reload()
+                    }).catch(err => {
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 }
             })
         },

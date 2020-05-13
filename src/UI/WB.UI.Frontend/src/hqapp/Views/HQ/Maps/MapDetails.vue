@@ -58,7 +58,7 @@
 import {orderBy} from 'lodash'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
-const query = gql`query map($id: String) {
+const query = gql`query map($id: String!) {
   map(id: $id) {
     users {
       userName
@@ -93,12 +93,23 @@ export default {
             {
                 if (ok)
                 {
-                    this.$http({
-                        method: 'delete',
-                        url: this.$config.model.deleteMapUserLinkUrl,
-                        data: {user:userName, map: fileName}})
-
-                    this.$refs.table.reload()
+                    self.$apollo.mutate({
+                        mutation: gql`
+                                mutation deleteUserFromMap($id: String!, $userName: String!) {
+                                    deleteUserFromMap(id: $id, userName: $userName) {
+                                        fileName
+                                    }
+                                }`,
+                        variables: {
+                            'id' : fileName,
+                            'userName': userName,
+                        },
+                    }).then(response => {
+                        self.$refs.table.reload()
+                    }).catch(err => {
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 }
             })
         },
