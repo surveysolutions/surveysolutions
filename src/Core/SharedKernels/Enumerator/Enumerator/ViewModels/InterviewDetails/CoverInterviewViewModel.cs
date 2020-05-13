@@ -9,6 +9,7 @@ using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -62,6 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public IList<EntityWithCommentsViewModel> CommentedEntities { get; private set; }
 
+        public bool DoesShowCommentsBlock { get; set; }
         public string CommentedEntitiesDescription { get; set; }
         public int CountOfCommentedQuestions { get; set; }
 
@@ -101,9 +103,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CountOfCommentedQuestions = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Count();
             this.CommentedEntities = entitiesListViewModelFactory.GetEntitiesWithComments(interviewId, navigationState).ToList();
 
-            this.CommentedEntitiesDescription = CommentedEntities.Count == this.CountOfCommentedQuestions
-                ? UIResources.Interview_Cover_Questions_With_Comments
-                : string.Format(UIResources.Interview_Cover_First_n_Questions_With_Comments, entitiesListViewModelFactory.MaxNumberOfEntities);
+            this.CommentedEntitiesDescription = CountOfCommentedQuestions == 0
+                ? UIResources.Interview_Cover_Supervisor_Comments_does_not_exists
+                : CommentedEntities.Count == this.CountOfCommentedQuestions
+                    ? UIResources.Interview_Cover_Questions_With_Comments
+                    : string.Format(UIResources.Interview_Cover_First_n_Questions_With_Comments, entitiesListViewModelFactory.MaxNumberOfEntities);
+
+            this.DoesShowCommentsBlock = CountOfCommentedQuestions > 0 || interview.WasCompleted || interview.WasRejected;
 
             this.SupervisorNote = interview.GetLastSupervisorComment();
         }

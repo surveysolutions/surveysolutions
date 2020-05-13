@@ -23,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly ISerializer serializer; 
 
-        public EmailService(IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage, ISerializer serializer)
+        public EmailService(IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage, 
+            ISerializer serializer)
         {
             this.emailProviderSettingsStorage = emailProviderSettingsStorage;
             this.serializer = serializer;
@@ -38,9 +39,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             switch (settings.Provider)
             {
                 case EmailProvider.Amazon:
-                    return await SendEmailWithAmazon(to, subject, htmlBody, textBody, settings);
+                    return await SendEmailWithAmazon(to, subject, htmlBody, textBody, settings).ConfigureAwait(false);
                 case EmailProvider.SendGrid:
-                    return await SendEmailWithSendGrid(to, subject, htmlBody, textBody, settings);
+                    return await SendEmailWithSendGrid(to, subject, htmlBody, textBody, settings).ConfigureAwait(false);
                 default:
                     throw new Exception("Email provider wasn't set up");
             }
@@ -94,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 return messageIdHeader.Value;
             }
 
-            string body = await response.Body.ReadAsStringAsync();
+            string body = await response.Body.ReadAsStringAsync().ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(body))
             {
                 var responseErrors = serializer.Deserialize<SendGridResponseErrors>(body);
@@ -123,51 +124,50 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
         public async Task<string> SendEmailWithAmazon(string to, string subject, string htmlBody, string textBody, IAmazonEmailSettings settings)
         {
             var credentials = new BasicAWSCredentials(settings.AwsAccessKeyId, settings.AwsSecretAccessKey);
-            using (var client = new AmazonSimpleEmailServiceClient(credentials, RegionEndpoint.USEast1))
+            using var client = new AmazonSimpleEmailServiceClient(credentials, RegionEndpoint.USEast1);
+            
+            var sendRequest = new SendEmailRequest
             {
-                var sendRequest = new SendEmailRequest
+                Source = settings.SenderAddress,
+                Destination = new Destination
                 {
-                    Source = settings.SenderAddress,
-                    Destination = new Destination
+                    ToAddresses = new List<string> { to }
+                },
+                Message = new Message
+                {
+                    Subject = new AmazonContent(subject),
+                    Body = new Body
                     {
-                        ToAddresses = new List<string> { to }
-                    },
-                    Message = new Message
-                    {
-                        Subject = new AmazonContent(subject),
-                        Body = new Body
+                        Html = new AmazonContent
                         {
-                            Html = new AmazonContent
-                            {
-                                Charset = "UTF-8",
-                                Data = htmlBody
-                            },
-                            Text = new AmazonContent
-                            {
-                                Charset = "UTF-8",
-                                Data = textBody
-                            }
+                            Charset = "UTF-8",
+                            Data = htmlBody
+                        },
+                        Text = new AmazonContent
+                        {
+                            Charset = "UTF-8",
+                            Data = textBody
                         }
                     }
-                };
+                }
+            };
 
-                if (!string.IsNullOrWhiteSpace(settings.ReplyAddress))
-                    sendRequest.ReplyToAddresses = new List<string>() {settings.ReplyAddress};
+            if (!string.IsNullOrWhiteSpace(settings.ReplyAddress))
+                sendRequest.ReplyToAddresses = new List<string>() {settings.ReplyAddress};
 
-                try
-                {
-                    var response = await client.SendEmailAsync(sendRequest).ConfigureAwait(false);
-                    return response.MessageId;
-                }
-                catch (AggregateException ae)
-                {
-                    throw new EmailServiceException(to, HttpStatusCode.Accepted, ae, 
-                        ae.UnwrapAllInnerExceptions().Select(x => x.Message).ToArray());
-                }
-                catch (Exception ex)
-                {
-                    throw new EmailServiceException(to, HttpStatusCode.Accepted, ex, ex.Message);
-                }
+            try
+            {
+                var response = await client.SendEmailAsync(sendRequest).ConfigureAwait(false);
+                return response.MessageId;
+            }
+            catch (AggregateException ae)
+            {
+                throw new EmailServiceException(to, HttpStatusCode.Accepted, ae, 
+                    ae.UnwrapAllInnerExceptions().Select(x => x.Message).ToArray());
+            }
+            catch (Exception ex)
+            {
+                throw new EmailServiceException(to, HttpStatusCode.Accepted, ex, ex.Message);
             }
         }
     }

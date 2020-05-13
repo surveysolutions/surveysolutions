@@ -8,10 +8,10 @@
                     v-for="option in answeredOrAllOptions"
                     :key="$me.id + '_' + option.value">
                     <input class="wb-checkbox"
-                        type="checkbox" 
-                        :id="$me.id + '_' + option.value" 
-                        :name="$me.id" 
-                        :value="option.value" 
+                        type="checkbox"
+                        :id="$me.id + '_' + option.value"
+                        :name="$me.id"
+                        :value="option.value"
                         :disabled="!$me.acceptAnswer"
                         v-model="answer"
                         v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}">
@@ -35,7 +35,7 @@
                     {{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}
                 </div>
                 <wb-lock />
-            </div>            
+            </div>
         </div>
     </wb-question>
 </template>
@@ -44,7 +44,7 @@ import { entityDetails } from '../mixins'
 
 import { map, find, isEqual, filter } from 'lodash'
 import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
-    
+
 export default {
     name: 'LinkedMulti',
     data(){
@@ -59,12 +59,12 @@ export default {
         answeredOrAllOptions(){
             if(!this.shouldShowAnsweredOptionsOnly)
                 return this.$me.options
-                
+
             var self = this
             return filter(this.$me.options, function(o) {
                 return find(self.$me.answer, (a) => {
                     return isEqual(a, o.rosterVector)
-                })               
+                })
             })
         },
         answer: {
@@ -80,7 +80,7 @@ export default {
         },
         allAnswersGiven() {
             const maxReached = this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-            return maxReached               
+            return maxReached
         },
         noOptions() {
             return this.$me.options == null || this.$me.options.length == 0

@@ -292,8 +292,14 @@ for further instructions</value>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Updating assignments</value>
   </data>
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>Updating local interviews with changes from server</value>
+  </data>
   <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
     <value>{0} of {1} new interviews downloaded</value>
+  </data>
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} of {1} partial interviews downloaded</value>
   </data>
   <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
     <value>{0} of {1} rejected interviews returned</value>
@@ -309,6 +315,9 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Interviews" xml:space="preserve">
     <value>interviews</value>
+  </data>
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>interview changes</value>
   </data>
   <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
     <value>Assignments are locked until synchronization is complete</value>
@@ -331,11 +340,17 @@ for further instructions</value>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
     <value>{0} new interviews downloaded</value>
   </data>
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} interviews were updated</value>
+  </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
     <value>{0} rejected interviews returned</value>
   </data>
   <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} completed interviews uploaded</value>
+  </data>
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} interviews partial uploaded</value>
   </data>
   <data name="Synchronization_Success_Title" xml:space="preserve">
     <value>Synchronization successfully completed</value>

@@ -202,26 +202,33 @@
     <value>отправлено {0} интервью</value>
     <comment>отправлено {0} интервью</comment>
   </data>
-    <data name="RocordsMissing" xml:space="preserve">
+  <data name="RecordsMissing" xml:space="preserve">
     <value>Еще нет записей</value>
     <comment>Аудит записи не найдены</comment>
   </data>
-    <data name="PageTitle" xml:space="preserve">
+  <data name="PageTitle" xml:space="preserve">
     <value>Лог действий</value>
     <comment>Лог действий</comment>
   </data>
-    <data name="AssignResponsibleToInterview" xml:space="preserve">
+  <data name="AssignResponsibleToInterview" xml:space="preserve">
     <value>Назначен ответственный {0} на интервью {1}</value>
     <comment>Назначен ответственный {0} на интервью {1}</comment>
   </data>
-    <data name="AssignResponsibleToAssignment" xml:space="preserve">
-    <value>Назначен ответственный {0} на задачу №{1}
-</value>
-    <comment>Назначен ответственный {0} на задачу №{1}
-</comment>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve">
+    <value>Назначен ответственный {0} на задачу №{1}</value>
+    <comment>Назначен ответственный {0} на задачу №{1}</comment>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
-      <value>Установка приложения закончена</value>
-      <comment>Установка приложения закончена</comment>
+    <value>Установка приложения завершена</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
+    <value>{0} интервью были обновлены</value>
+  </data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
+    <value>{0} интервью были переоткрыты после получения комментариев по ним</value>
+
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
+    <value>{0} интервью частично отправлены</value>
   </data>
 </root>

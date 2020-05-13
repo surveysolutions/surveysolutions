@@ -348,6 +348,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
+				//try to stop service first to avoid crash
+				await this.MapView.LocationDisplay.DataSource.StopAsync();
+
                 await this.MapView.LocationDisplay.DataSource.StartAsync();
                 this.MapView.LocationDisplay.IsEnabled = true;
                 this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;                

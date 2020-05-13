@@ -63,6 +63,8 @@ namespace WB.UI.Headquarters.Configs
     {
         private const string clientId = "clientId";
         private const string authorizationUri = "authorizationUri";
+        private const string tokenUri = "tokenUri";
+        private const string clientSecret = "clientSecret";
         private const string scope = "scope";
 
         [ConfigurationProperty(clientId, DefaultValue = "", IsKey = true, IsRequired = true)]
@@ -77,6 +79,20 @@ namespace WB.UI.Headquarters.Configs
         {
             get => (string)base[authorizationUri];
             set => base[authorizationUri] = value;
+        }
+        
+        [ConfigurationProperty(clientSecret, DefaultValue = "", IsKey = true, IsRequired = true)]
+        public string ClientSecret
+        {
+            get => (string)base[clientSecret];
+            set => base[clientSecret] = value;
+        }
+        
+        [ConfigurationProperty(tokenUri, DefaultValue = "", IsKey = true, IsRequired = true)]
+        public string TokenUri
+        {
+            get => (string)base[tokenUri];
+            set => base[tokenUri] = value;
         }
 
         [ConfigurationProperty(scope, DefaultValue = "", IsKey = true, IsRequired = false)]

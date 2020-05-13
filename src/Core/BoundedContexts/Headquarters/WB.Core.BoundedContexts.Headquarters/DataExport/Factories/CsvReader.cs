@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
@@ -23,34 +24,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
         public IEnumerable<string[]> ReadRowsWithHeader(Stream csvFileStream, string delimiter)
         {
-            using (var csvReader = new CsvHelper.CsvReader(new StreamReader(csvFileStream)))
+            using var csvReader = new CsvHelper.CsvReader(new StreamReader(csvFileStream), CultureInfo.InvariantCulture);
+            csvReader.Configuration.Delimiter = delimiter;
+            csvReader.Configuration.IgnoreQuotes = true;
+            csvReader.Read();
+            csvReader.ReadHeader();
+
+            if (csvReader.Context.HeaderRecord != null && csvReader.Context.HeaderRecord.Length > 0)
             {
-                csvReader.Configuration.Delimiter = delimiter;
-                csvReader.Configuration.IgnoreQuotes = true;
-                csvReader.Read();
-                csvReader.ReadHeader();
-
-                if (csvReader.Context.HeaderRecord != null && csvReader.Context.HeaderRecord.Length > 0)
-                {
-                    yield return csvReader.Context.HeaderRecord;
-                }
-
-                while (csvReader.Read())
-                    yield return csvReader.Context.HeaderRecord.Select((x, index) =>
-                        index < csvReader.Context.Record.Length ? csvReader.GetField(x) : null).ToArray();
+                yield return csvReader.Context.HeaderRecord;
             }
+
+            while (csvReader.Read())
+                yield return csvReader.Context.HeaderRecord.Select((x, index) =>
+                    index < csvReader.Context.Record.Length ? csvReader.GetField(x) : null).ToArray();
         }
 
         public IEnumerable<dynamic> GetRecords(Stream csvFileStream, string delimiter)
         {
             csvFileStream.Seek(0, SeekOrigin.Begin);
 
-            using (var reader = new CsvHelper.CsvReader(new StreamReader(csvFileStream),
-                GetConfiguration(delimiter, true), true))
-            {
-                foreach (var record in reader.GetRecords<dynamic>())
-                    yield return record;
-            }
+            using var reader = new CsvHelper.CsvReader(new StreamReader(csvFileStream), GetConfiguration(delimiter, true), true);
+
+            foreach (var record in reader.GetRecords<dynamic>())
+                yield return record;
         }
 
         public string[] ReadHeader(Stream csvFileStream, string delimiter)
@@ -64,9 +61,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             }
         }
 
-        private static Configuration GetConfiguration(string delimiter, bool hasHeaderRow, bool ignoreCameCase = false)
+        private static CsvConfiguration GetConfiguration(string delimiter, bool hasHeaderRow, bool ignoreCameCase = false)
         {
-            var configuration = new Configuration
+            var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 MissingFieldFound = null,
                 Delimiter = delimiter,

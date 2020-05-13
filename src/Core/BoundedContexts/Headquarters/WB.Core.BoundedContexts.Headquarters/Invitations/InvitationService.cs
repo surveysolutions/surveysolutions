@@ -4,8 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -163,6 +167,45 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 .ToList());
 
             return noResponseInvitationsWithoutReminders.Union(noResponseInvitationsWithReminders).ToList();
+        }
+
+        public IEnumerable<int> GetInvitationsWithRejectedInterview(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var list = invitationStorage.Query(_ => _
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(HasRejectedInterview())
+                .Where(NoRejectedInterviewEmailSent())
+                .Select(x => x.Id)
+                .ToList());
+            return list;
+        }
+
+        public void MarkRejectedInterviewReminderSent(int invitationId, string emailId)
+        {
+            var invitation = this.invitationStorage.GetById(invitationId);
+            var lastRejectedStatus =
+                invitation.Interview.InterviewCommentedStatuses.Last(x =>
+                    x.Status == InterviewExportedAction.RejectedBySupervisor);
+            invitation.RejectedReminderSent(emailId, lastRejectedStatus.Position);
+        }
+
+        public void RejectedInterviewReminderWasNotSent(int invitationId)
+        {
+            var invitation = this.invitationStorage.GetById(invitationId);
+            invitation.RejectedReminderWasNotSent();
+        }
+
+        private Expression<Func<Invitation,bool>> NoRejectedInterviewEmailSent()
+        {
+            return x => 
+                        x.Interview.InterviewCommentedStatuses
+                                   .Any(s => s.Status == InterviewExportedAction.RejectedBySupervisor &&
+                                             (x.LastRejectedStatusPosition == null || s.Position > x.LastRejectedStatusPosition));
+        }
+
+        private Expression<Func<Invitation,bool>> HasRejectedInterview()
+        {
+            return x => x.Interview.Status == InterviewStatus.RejectedBySupervisor;
         }
 
         public List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity)
@@ -364,41 +407,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version;
         }
 
-    }
-
-    public interface IInvitationService
-    {
-        void CreateInvitationForWebInterview(Assignment assignment);
-        int CreateInvitationForPublicLink(Assignment assignment, string interviewId);
-
-        int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity);
-        int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity);
-        int GetCountOfSentInvitations(QuestionnaireIdentity questionnaireIdentity);
-        InvitationDistributionStatus GetEmailDistributionStatus();
-        List<int> GetInvitationIdsToSend(QuestionnaireIdentity questionnaireIdentity);
-        Invitation GetInvitation(int invitationId);
-        void InvitationWasNotSent(int invitationId, int assignmentId, string email, string reason);
-        void MarkInvitationAsSent(int invitationId, string emailId);
-        void MarkInvitationAsReminded(int invitationId, string emailId);
-
-        void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string questionnaireTitle);
-
-        void StartEmailDistribution();
-        void CompleteEmailDistribution();
-        void EmailDistributionFailed();
-        void EmailDistributionCanceled();
-        void CancelEmailDistribution();
-        CancellationToken GetCancellationToken();
-        IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity identity, int thresholdDays);
-        IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity identity, int thresholdDays);
-        void ReminderWasNotSent(int invitationId, int assignmentId, string address, string message);
-        List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity);
-        IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations();
-        Invitation GetInvitationByToken(string token);
-        Invitation GetInvitationByTokenAndPassword(string token, string password);
-        Invitation GetInvitationByAssignmentId(int assignmentId);
-        void InterviewWasCreated(int invitationId, string interviewId);
-        bool IsValidTokenAndPassword(string token, string password);
-        void MigrateInvitationToNewAssignment(int oldAssignmentId, int newAssignmentId);
     }
 }

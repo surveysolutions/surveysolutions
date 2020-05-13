@@ -48,7 +48,7 @@ using WB.UI.Shared.Enumerator.Utils;
 namespace WB.UI.Shared.Enumerator
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class EnumeratorUIModule : IModule
+    public class EnumeratorUIModule : IModule, IInitModule
     {
         public void Load(IIocRegistry registry)
         {

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -66,6 +66,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string AllInterviewers {
             get {
                 return ResourceManager.GetString("AllInterviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not approved by Headquarters.
+        /// </summary>
+        public static string AllInterviewersExceptApprovedByHeadquarters {
+            get {
+                return ResourceManager.GetString("AllInterviewersExceptApprovedByHeadquarters", resourceCulture);
             }
         }
         
@@ -205,11 +214,128 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable two-factor authentication.
+        /// </summary>
+        public static string HQ_Views_DisableTwoFactorAuth_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_DisableTwoFactorAuth_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set up authenticator app.
+        /// </summary>
+        public static string HQ_Views_EnableAuthenticator_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_EnableAuthenticator_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage account.
         /// </summary>
         public static string HQ_Views_Manage_Title {
             get {
                 return ResourceManager.GetString("HQ_Views_Manage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset authenticator key.
+        /// </summary>
+        public static string HQ_Views_ResetAuthenticator_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_ResetAuthenticator_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset recovery codes.
+        /// </summary>
+        public static string HQ_Views_ResetRecoveryCodes_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_ResetRecoveryCodes_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recovery codes.
+        /// </summary>
+        public static string HQ_Views_ShowRecoveryCodes_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_ShowRecoveryCodes_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Two factor authentication is an advanced security feature that makes it harder for a hacker to sign in to your account with just a stolen password..
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch off two factor authentication leaving the account protected only by the password..
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Disable2fa_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Disable2fa_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to disabled.
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Disabled {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to enabled.
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Enabled {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to a new secret code if any of your devices used for the two factor authentication is lost or stolen..
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalidate any unused recovery codes and generate 10 new ones..
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set up a new device for two factor authentication. You can set up several devices simultaneously..
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Two factor authentication.
+        /// </summary>
+        public static string HQ_Views_TwoFactorAuthentication_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_TwoFactorAuthentication_Title", resourceCulture);
             }
         }
         
@@ -354,6 +480,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string ObserverNotAllowed {
             get {
                 return ResourceManager.GetString("ObserverNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change password.
+        /// </summary>
+        public static string SurverManagement_MainMenu_ChangePassword {
+            get {
+                return ResourceManager.GetString("SurverManagement_MainMenu_ChangePassword", resourceCulture);
             }
         }
         

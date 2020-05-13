@@ -12,6 +12,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
 using Moq;
+using Ncqrs.Eventing;
 using NUnit.Framework;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -91,9 +92,20 @@ using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Abc.TestFactories
 {
+    internal static class EntityFactoryExtensions
+    {
+        public static QuestionnaireDocument WithEntityMap(this QuestionnaireDocument doc)
+        {
+            int counter = 0;
+            doc.EntitiesIdMap = doc.GetAllQuestions().ToDictionary(q => q.PublicKey, q => counter++);
+            return doc;
+        }
+    }
+
     internal class EntityFactory
     {
         public Answer Answer(string answer, decimal value, decimal? parentValue = null)
@@ -374,40 +386,6 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewSummary = interviewSummary
             };
 
-        public InterviewData InterviewData(
-            bool createdOnClient = false,
-            InterviewStatus status = InterviewStatus.Created,
-            Guid? interviewId = null,
-            Guid? responsibleId = null,
-            Guid? questionnaireId = null)
-            => new InterviewData
-            {
-                CreatedOnClient = createdOnClient,
-                Status = status,
-                InterviewId = interviewId.GetValueOrDefault(),
-                ResponsibleId = responsibleId.GetValueOrDefault(),
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid()
-            };
-
-        public InterviewData InterviewData(params InterviewQuestion[] topLevelQuestions)
-        {
-            var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
-            foreach (var interviewQuestion in topLevelQuestions)
-            {
-                interviewData.Levels["#"].QuestionsSearchCache.Add(interviewQuestion.Id, interviewQuestion);
-            }
-            return interviewData;
-        }
-
-        public InterviewData InterviewData(Guid variableId, object topLevelVariable)
-        {
-            var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
-            interviewData.Levels["#"].Variables.Add(variableId, topLevelVariable);
-            return interviewData;
-        }
-
         public InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
             => new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
 
@@ -431,25 +409,8 @@ namespace WB.Tests.Abc.TestFactories
                    Id = id
                };
 
-        public InterviewDataExportView InterviewDataExportView(
-            Guid? interviewId = null,
-            Guid? questionnaireId = null,
-            long questionnaireVersion = 1,
-            params InterviewDataExportLevelView[] levels)
-            => new InterviewDataExportView(interviewId ?? Guid.NewGuid(), levels);
-
         public InterviewItemId InterviewItemId(Guid id, decimal[] rosterVector = null)
             => new InterviewItemId(id, rosterVector);
-
-        public InterviewQuestion InterviewQuestion(Guid? questionId = null, object answer = null)
-        {
-            var interviewQuestion = new InterviewQuestion(questionId ?? Guid.NewGuid()) { Answer = answer };
-            if (answer != null)
-            {
-                interviewQuestion.QuestionState |= QuestionState.Answered;
-            }
-            return interviewQuestion;
-        }
 
         public InterviewSummary InterviewSummary()
             => new InterviewSummary();
@@ -486,8 +447,8 @@ namespace WB.Tests.Abc.TestFactories
                 Status = status.GetValueOrDefault(),
                 ResponsibleId = responsibleId.GetValueOrDefault(),
                 ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
-                TeamLeadId = teamLeadId.GetValueOrDefault(),
-                TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
+                SupervisorId = teamLeadId.GetValueOrDefault(),
+                SupervisorName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
                 ResponsibleRole = role,
                 Key = key,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
@@ -498,6 +459,7 @@ namespace WB.Tests.Abc.TestFactories
                 WasCompleted = wasCompleted,
                 InterviewDuration = interviewingTotalTime,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
+                QuestionnaireVariable = "automation",
                 TimeSpansBetweenStatuses = timeSpans != null ? timeSpans.ToHashSet() : new HashSet<TimeSpanBetweenStatuses>()
             };
         }
@@ -896,12 +858,19 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true, string comment = null, Guid? importedBy = null)
             => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments, allowExportVariables, comment, importedBy);
 
-        public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-            => new QuestionnaireDocument
-            {
-                PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
-            };
+        public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children) => new QuestionnaireDocument
+        {
+            HideIfDisabled = true,
+            PublicKey = id ?? Guid.NewGuid(),
+            Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+        }.WithEntityMap();
+        
+        public QuestionnaireDocument QuestionnaireDocumentWithHideIfDisabled(Guid? id = null, bool hideIfDisabled = true, params IComposite[] children) => new QuestionnaireDocument
+        {
+            HideIfDisabled = hideIfDisabled,
+            PublicKey = id ?? Guid.NewGuid(),
+            Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+        }.WithEntityMap();
 
         public QuestionnaireDocument QuestionnaireDocumentWithAttachments(Guid? chapterId = null, params Attachment[] attachments)
             => new QuestionnaireDocument
@@ -911,13 +880,13 @@ namespace WB.Tests.Abc.TestFactories
                     new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
                 }.ToReadOnlyCollection(),
                 Attachments = attachments.ToList()
-            };
+            }.WithEntityMap();
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
-            => this.QuestionnaireDocumentWithOneChapter(chapterId, null, children);
+            => this.QuestionnaireDocumentWithOneChapter(chapterId, null, children).WithEntityMap();
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
-            => this.QuestionnaireDocumentWithOneChapter(null, null, children);
+            => this.QuestionnaireDocumentWithOneChapter(null, null, children).WithEntityMap();
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapterAndLanguages(Guid chapterId, string[] languages, params IComposite[] children)
             => new QuestionnaireDocument
@@ -933,8 +902,7 @@ namespace WB.Tests.Abc.TestFactories
                     }
                 }.ToReadOnlyCollection(),
                 Translations = new List<Translation>(languages.Select(x=>Create.Entity.Translation(Guid.NewGuid(), x)))
-            };
-
+            }.WithEntityMap();
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapterAndLanguages(Guid chapterId, 
             List<Translation> translations, Guid? defaultTranslation, params IComposite[] children)
@@ -952,7 +920,7 @@ namespace WB.Tests.Abc.TestFactories
                 }.ToReadOnlyCollection(),
                 DefaultTranslation = defaultTranslation,
                 Translations = translations
-            };
+            }.WithEntityMap();
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
@@ -969,7 +937,7 @@ namespace WB.Tests.Abc.TestFactories
                         Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
                     }
                 }.ToReadOnlyCollection()
-            };
+            }.WithEntityMap();
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneQuestion(Guid? questionId = null, Guid? questionnaireId = null)
            => this.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: Create.Entity.TextQuestion(questionId));
@@ -2442,9 +2410,11 @@ namespace WB.Tests.Abc.TestFactories
             Title = title
         };
 
-        public Invitation Invitation(int id, Assignment assignment, 
+        public Invitation Invitation(int id, 
+            Assignment assignment, 
             string token = null,
-            string interviewId = null)
+            string interviewId = null,
+            InterviewSummary interview = null)
         {
             var invitation = new Invitation();
 
@@ -2454,7 +2424,8 @@ namespace WB.Tests.Abc.TestFactories
             asDynamic.Assignment = assignment;
             asDynamic.Token = token;
             asDynamic.InterviewId = interviewId;
-
+            asDynamic.Interview = interview;
+            
             return invitation;
         }
 
@@ -2539,6 +2510,40 @@ namespace WB.Tests.Abc.TestFactories
                 Title = title,
                 Value = value,
             };
+        }
+
+        public InterviewApiView InterviewApiView(Guid id, Guid? lastEventId)
+        {
+            return new InterviewApiView()
+            {
+                Id = id,
+                LastEventId = lastEventId,
+            };
+        }
+
+        public InterviewUploadState InterviewUploadState(
+            Guid responsibleId,
+            bool isEventsUploaded = false,
+            HashSet<string> imagesQuestionsMd5 = null,
+            HashSet<string> audioQuestionsFilesMd5 = null,
+            HashSet<string> audioAuditFilesMd5 = null
+            )
+        {
+            return new InterviewUploadState()
+            {
+                IsEventsUploaded = isEventsUploaded,
+                ImagesFilesNames = new HashSet<string>(),
+                AudioFilesNames = new HashSet<string>(),
+                ImageQuestionsFilesMd5 = imagesQuestionsMd5 ?? new HashSet<string>(),
+                AudioQuestionsFilesMd5 = audioQuestionsFilesMd5 ?? new HashSet<string>(),
+                AudioAuditFilesMd5 = audioAuditFilesMd5 ?? new HashSet<string>(),
+                ResponsibleId = responsibleId,
+            };
+        }
+
+        public InterviewPackageContainer InterviewPackageContainer(Guid interviewId, params CommittedEvent[] events)
+        {
+            return new InterviewPackageContainer(interviewId, events.ToReadOnlyCollection());
         }
     }
 }

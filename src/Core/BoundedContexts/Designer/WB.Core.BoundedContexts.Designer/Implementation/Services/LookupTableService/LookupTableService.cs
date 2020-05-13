@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$", RegexOptions.Compiled);
         private const string ROWCODE = "rowcode";
         private const string DELIMETER = "\t";
-        private const int MAX_ROWS_COUNT = 5000;
+        private const int MAX_ROWS_COUNT = 15000;
         private const int MAX_COLS_COUNT = 11;
 
         public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage,
@@ -33,8 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string fileContent)
         {
-            var lookupTableContent = string.IsNullOrWhiteSpace(fileContent) 
-                ? this.GetLookupTableContent(questionnaireId, lookupTableId) 
+            var lookupTableContent = string.IsNullOrWhiteSpace(fileContent)
+                ? this.GetLookupTableContent(questionnaireId, lookupTableId)
                 : this.CreateLookupTableContent(fileContent);
 
             if (lookupTableContent == null)
@@ -295,9 +295,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return !VariableNameRegex.IsMatch(variableName);
         }
 
-        private Configuration CreateCsvConfiguration()
+        private CsvConfiguration CreateCsvConfiguration()
         {
-            return new Configuration { HasHeaderRecord = true, TrimOptions = TrimOptions.Trim, IgnoreQuotes = false, Delimiter = DELIMETER, MissingFieldFound = null };
+            return new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = true,
+                TrimOptions = TrimOptions.Trim,
+                IgnoreQuotes = false,
+                Delimiter = DELIMETER,
+                MissingFieldFound = null
+            };
         }
     }
 }

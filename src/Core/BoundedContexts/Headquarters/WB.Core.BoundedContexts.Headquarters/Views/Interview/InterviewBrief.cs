@@ -10,6 +10,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual Guid InterviewId { get; set; }
         public virtual Guid QuestionnaireId { get; set; }
         public virtual long QuestionnaireVersion { get; set; }
+        
+        public virtual string QuestionnaireVariable { get; set; }
+
         public virtual Guid ResponsibleId { get; set; }
         public virtual InterviewStatus Status { get; set; }
         public virtual int ErrorsCount { get; set; }

@@ -335,7 +335,7 @@ export default {
             var self = this
             let prompt = modal.prompt({
                 title: this.$t('WebInterviewUI.EmailLink_Header'),
-                    
+
                 inputType: 'email',
                 callback: function(result) {
                     if(result === null || result === undefined) return
@@ -361,9 +361,9 @@ export default {
         },
         sendEmailWithPersonalLink(email){
             var self = this
-            axios.post(this.$config.sendLinkUri, { 
+            axios.post(this.$config.sendLinkUri, {
                 interviewId:  this.$route.params.interviewId,
-                email: email, 
+                email: email,
             }).then(function(response){
                 self.showEmailPersonalLink = false
             }) .catch(function (error) {
@@ -411,11 +411,11 @@ export default {
             try {
                 const scenarioContentResponse = await axios.get(`${this.getScenarioUrl}/${this.$route.params.interviewId}`)
                 const scenario = scenarioContentResponse.data
-                    
+
                 await axios({
                     method: 'POST',
                     url: this.saveScenarioUrl,
-                    data: { 
+                    data: {
                         scenarioText: JSON.stringify(scenario),
                         scenarioId: this.selectedSaveOption === 'updateExisting' ? this.selectedScenarioOption : '',
                         scenarioTitle: this.newScenarioName,

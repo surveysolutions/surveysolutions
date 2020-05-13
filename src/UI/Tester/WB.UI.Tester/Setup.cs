@@ -54,7 +54,7 @@ namespace WB.UI.Tester
             var status = new UnderConstructionInfo();
             status.Run();
 
-            foreach (var module in modules)
+            foreach (var module in modules.OfType<IInitModule>())
             {
                 module.Init(ServiceLocator.Current, status).Wait();
             }

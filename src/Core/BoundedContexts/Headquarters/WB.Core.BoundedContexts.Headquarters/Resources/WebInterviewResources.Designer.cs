@@ -124,6 +124,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resume interview.
+        /// </summary>
+        public static string ResumeInterview {
+            get {
+                return ResourceManager.GetString("ResumeInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start new interview.
+        /// </summary>
+        public static string StartNewInterview {
+            get {
+                return ResourceManager.GetString("StartNewInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Survey: &quot;%QUESTIONNAIRE%&quot;.
         /// </summary>
         public static string SurveyFormatText {

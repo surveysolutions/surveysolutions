@@ -28,7 +28,5 @@ namespace WB.Core.Infrastructure
             registry.Bind<IInScopeExecutor, NoScopeInScopeExecutor>();
             registry.Bind<ICommandExecutor, CommandExecutor>();
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

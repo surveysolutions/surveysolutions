@@ -16,18 +16,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         private DropboxClient client;
         private TenantInfo tenant;
-
+        
         public DropboxDataClient(ILogger<DropboxDataClient> logger)
         {
             this.logger = logger;
         }
 
-        public IDisposable InitializeDataClient(string accessToken, TenantInfo tenant)
+        public void InitializeDataClient(string accessToken, string refreshToken, TenantInfo tenant)
         {
             this.client = new DropboxClient(accessToken);
             this.tenant = tenant;
             logger.LogTrace("Got Dropbox client");
-            return client;
         }
 
         private string Join(params string[] path) 
@@ -61,6 +60,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             if (allocated == null) return null;
 
             return (long)(allocated - storageInfo.Used);
+        }
+
+        public void Dispose()
+        {
+            this.client?.Dispose();
+            this.client = null;
         }
     }
 }

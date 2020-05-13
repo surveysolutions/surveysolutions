@@ -234,7 +234,7 @@
   <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
     <value>يحتوي جدول البحث على عدد كبير جدا من الأعمدة</value>
   </data>
-  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+  <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
     <value>يحتوي جدول البحث على عدد كبير جدا من الصفوف</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">

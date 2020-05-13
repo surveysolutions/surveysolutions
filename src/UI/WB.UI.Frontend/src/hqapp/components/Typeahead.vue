@@ -20,11 +20,11 @@
                 role="menu">
                 <li v-if="!noSearch">
                     <input type="text"
-                        ref="searchBox" 
-                        :id="inputId" 
+                        ref="searchBox"
+                        :id="inputId"
                         :placeholder="$t('Common.Search')"
-                        @input="updateOptionsList" 
-                        @keyup.down="onSearchBoxDownKey" 
+                        @input="updateOptionsList"
+                        @keyup.down="onSearchBoxDownKey"
                         v-model="searchTerm" />
                 </li>
                 <li v-if="forceLoadingState">
@@ -33,10 +33,10 @@
                 <template v-if="!forceLoadingState" >
                     <li v-for="option in options"
                         :key="keyFunc(option.item)">
-                        <a 
+                        <a
                             :class="[option.item.iconClass]"
                             href="javascript:void(0);"
-                            @click="selectOption(option.item)" 
+                            @click="selectOption(option.item)"
                             v-html="highlight(option, searchTerm)"
                             @keydown.up="onOptionUpKey"></a>
                     </li>
@@ -59,8 +59,7 @@
 </template>
 
 <script>
-import Fuse from 'fuse.js'
-import { assign, chain, find, escape, escapeRegExp } from 'lodash'
+import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash'
 
 export default {
     name: 'Typeahead',
@@ -85,10 +84,6 @@ export default {
             type: Boolean,
             default: false,
         },
-        fuzzy: {
-            type: Boolean,
-            default: false,
-        },
         selectFirst: {
             type: Boolean,
             default: false,
@@ -100,7 +95,7 @@ export default {
         selectedValue: {
             type: String,
             default: null,
-        },    
+        },
     },
     watch: {
         fetchUrl (val) {
@@ -113,9 +108,9 @@ export default {
             }
         },
         disabled(val){
-            if(val) 
+            if(val)
                 this.clear()
-            else 
+            else
                 this.fetchOptions()
         },
     },
@@ -151,17 +146,6 @@ export default {
         jqEl.on('hidden.bs.dropdown', () => {
             this.searchTerm = ''
         })
-
-        this.fuseOptions = {
-            shouldSort: true,
-            includeMatches: true,
-            threshold: this.fuzzy ? 0.35 : 0,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-            keys: ['value'],
-        }
 
         this.fetchOptions(this.searchTerm || this.selectedValue)
     },
@@ -226,8 +210,9 @@ export default {
         },
         fetchLocalOptions(){
             if (this.searchTerm != '') {
-                const fuse = new Fuse(this.values, this.fuseOptions)
-                this.options = this.setOptions(fuse.search(this.searchTerm), false)
+                const search = this.searchTerm.toLowerCase()
+                const filtered = filter(this.values, v => v.value.toLowerCase().indexOf(search) >= 0)
+                this.options = this.setOptions(filtered)
             } else {
                 this.options = this.setOptions(this.values)
             }
@@ -271,7 +256,7 @@ export default {
             if(itemToSelect != null) {
                 this.selectOption(itemToSelect.item)
             }
-        },        
+        },
         updateOptionsList(e) {
             this.searchTerm = e.target.value
             this.fetchOptions()
@@ -298,7 +283,7 @@ export default {
             }
         },
         keyFunc(item) {
-            return item == null ? 'null' : item.key + '$' + item.value 
+            return item == null ? 'null' : item.key + '$' + item.value
         },
     },
 }

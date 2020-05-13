@@ -13,7 +13,7 @@
                             {{row.title}}
                         </div>
                         <button type="submit"
-                            class="btn btn-link btn-clear" 
+                            class="btn btn-link btn-clear"
                             v-if="$me.acceptAnswer && !isProtected(row.value)"
                             tabindex="-1"
                             @click="confirmAndRemoveRow(row.value)"><span></span>
@@ -26,7 +26,7 @@
                     <div class="field"
                         :class="{answered: $me.isAnswered}">
                         <wb-typeahead :questionId="$me.id"
-                            @input="appendCompboboxItem" 
+                            @input="appendCompboboxItem"
                             :disabled="!$me.acceptAnswer || allAnswersGiven"
                             :optionsSource="optionsSource"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
@@ -44,7 +44,7 @@ import { entityDetails } from '../mixins'
 import Vue from 'vue'
 import modal from '@/shared/modal'
 import {find, map, includes, without, filter as loFilter} from 'lodash'
-    
+
 export default {
     name: 'MultiComboboxQuestion',
     mixins: [entityDetails],
@@ -95,14 +95,14 @@ export default {
             if(!includes(this.$me.answer, valueToRemove)) return
 
             const newAnswer = without(this.$me.answer, valueToRemove)
-                
+
             if (this.$me.isRosterSize) {
                 const confirmMessage = this.$t('WebInterviewUI.ConfirmRosterRemove')
                 modal.confirm(confirmMessage, result => {
                     if (result) {
                         this.$store.dispatch('answerMultiOptionQuestion', { answer: newAnswer, identity: this.$me.id })
                         return
-                    } 
+                    }
                 })
             }
             else {

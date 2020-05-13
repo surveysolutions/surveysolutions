@@ -10,7 +10,7 @@
             </ol>
             <h1>{{$t('QuestionnaireClonning.CloneQuestionnaireTitle')}}</h1>
         </div>
-        
+
         <div class="row">
             <div class="col-sm-8">
                 <h2>
@@ -67,10 +67,6 @@
                     type="hidden"
                     :value="$config.model.id"/>
                 <input
-                    name="Id"
-                    type="hidden"
-                    :value="$config.model.id"/>
-                <input
                     name="Version"
                     type="hidden"
                     :value="$config.model.version"/>
@@ -82,7 +78,7 @@
                     name="IsCensus"
                     type="hidden"
                     :value="$config.model.isCensus"/>
-                
+
                 <div class="action-buttons">
                     <button type="submit"
                         class="btn btn-success">

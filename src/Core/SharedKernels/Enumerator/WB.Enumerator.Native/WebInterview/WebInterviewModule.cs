@@ -7,7 +7,7 @@ using WB.Enumerator.Native.WebInterview.Services;
 
 namespace WB.Enumerator.Native.WebInterview
 {
-    public class WebInterviewModule : IModule
+    public class WebInterviewModule : IModule, IInitModule
     {
         public void Load(IIocRegistry registry)
         {

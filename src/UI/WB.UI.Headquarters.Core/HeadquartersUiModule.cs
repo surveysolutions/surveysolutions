@@ -41,8 +41,6 @@ namespace WB.UI.Headquarters
         {
             var services = registry;
 
-            services.AddScoped<ServiceApiKeyAuthorization>();
-
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
             registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
@@ -54,7 +52,8 @@ namespace WB.UI.Headquarters
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.Bind<IViewRenderService, ViewRenderService>();
-            registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
+            registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
+            registry.Bind<WebInterviewNotificationService>();
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
@@ -111,11 +110,6 @@ namespace WB.UI.Headquarters
             };
 
             registry.BindToConstant(() => eventBusSettings);
-        }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
         }
     }
 }

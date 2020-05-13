@@ -180,6 +180,9 @@
   <data name="PhoneNumberFieldName" xml:space="preserve">
     <value>Номер телефона</value>
   </data>
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>Проверочный код</value>
+  </data>
   <data name="RequiredEmailErrorMessage" xml:space="preserve">
     <value>Укажите адрес электронной почты</value>
   </data>

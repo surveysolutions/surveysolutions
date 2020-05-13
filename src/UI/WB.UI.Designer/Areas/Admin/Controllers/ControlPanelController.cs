@@ -10,8 +10,6 @@ using Microsoft.Extensions.Configuration;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
-using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models.ControlPanel;
@@ -24,7 +22,6 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
     {
         private readonly UserManager<DesignerIdentityUser> users;
         private readonly IConfiguration configuration;
-        private readonly IAllowedAddressService allowedAddressService;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
@@ -32,14 +29,12 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public ControlPanelController(
             UserManager<DesignerIdentityUser> users,
             IConfiguration configuration, 
-            IAllowedAddressService allowedAddressService, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
             IProductVersion productVersion,
             IProductVersionHistory productVersionHistory)
         {
             this.users = users;
             this.configuration = configuration;
-            this.allowedAddressService = allowedAddressService;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.productVersion = productVersion;
             this.productVersionHistory = productVersionHistory;
@@ -115,69 +110,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             }
             return this.View("CompilationVersionsViews/EditCompilationVersion", model);
         }
-
-        public ActionResult AllowedAddresses() => this.View(this.allowedAddressService.GetAddresses());
-
-
-        [HttpPost]
-        public ActionResult RemoveAllowedAddress(int id)
-        {
-            this.allowedAddressService.Remove(id);
-            return RedirectToAction("AllowedAddresses");
-        }
-
-        public ActionResult AddAllowedAddress()
-        {
-            return this.View(new AllowedAddressModel());
-        }
-
-        [HttpPost]
-        public ActionResult AddAllowedAddress(AllowedAddressModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // just check if ip address
-                var ip = IPAddress.Parse(model.Address);
-                this.allowedAddressService.Add(new AllowedAddress
-                {
-                    Description = model.Description,
-                    Address = ip.ToString()
-                });
-                return RedirectToAction("AllowedAddresses");
-            }
-            return this.View(model);
-        }
-
-        public ActionResult EditAllowedAddress(int id)
-        {
-            var address = this.allowedAddressService.GetAddressById(id);
-            return this.View(new AllowedAddressModel
-            {
-                Id = address.Id,
-                Description = address.Description,
-                Address = address.Address
-            });
-        }
-
-        [HttpPost]
-        public ActionResult EditAllowedAddress(AllowedAddressModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // just check if ip address
-                var ip = IPAddress.Parse(model.Address);
-                this.allowedAddressService.Update(new AllowedAddress
-                {
-                    Id = model.Id,
-                    Description = model.Description,
-                    Address = ip.ToString()
-                });
-                return RedirectToAction("AllowedAddresses");
-            }
-            return this.View(model);
-        }
-
-
+        
         [HttpPost]
         public async Task<IActionResult> MakeAdmin(MakeAdminViewModel model)
         {

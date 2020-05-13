@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using AutoMapper;
@@ -53,6 +54,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.HealthChecks;
 using WB.UI.Headquarters.Metrics;
@@ -238,9 +240,11 @@ namespace WB.UI.Headquarters
             services.AddScoped<InstallationFilter>();
             services.AddScoped<AntiForgeryFilter>();
             services.AddScoped<GlobalNotificationResultFilter>();
-            services.AddTransient<ObserverNotAllowedActionFilter>();
+            services.AddTransient<ObservingNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
 
+            services.AddGraphQL();
+            
             FileStorageModule.Setup(services, Configuration);
 
             AddCompression(services);
@@ -250,7 +254,7 @@ namespace WB.UI.Headquarters
                 mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
                 mvc.Filters.AddService<InstallationFilter>(100);
                 mvc.Filters.AddService<GlobalNotificationResultFilter>(200);
-                mvc.Filters.AddService<ObserverNotAllowedActionFilter>(300);
+                mvc.Filters.AddService<ObservingNotAllowedActionFilter>(300);
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
                 mvc.ModelBinderProviders.Insert(0, new DataTablesRequestModelBinderProvider());
                 var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
@@ -366,6 +370,8 @@ namespace WB.UI.Headquarters
             app.UseRequestDecompression();
 
             app.UseHqSwaggerUI();
+            
+            app.UseGraphQLApi();
 
             app.UseRequestLocalization(opt =>
             {
@@ -409,6 +415,12 @@ namespace WB.UI.Headquarters
                 endpoints.MapDefaultControllerRoute();
 
                 endpoints.MapHub<WebInterview>("interview");
+
+                endpoints.MapGet("/Index", ctx =>
+                {
+                    ctx.Response.Redirect("/");
+                    return Task.CompletedTask;
+                });
 
                 // obsolete since all interviewers will be 20.03 and higher
                 endpoints.MapGet("/Dependencies/img/logo.png", async context =>

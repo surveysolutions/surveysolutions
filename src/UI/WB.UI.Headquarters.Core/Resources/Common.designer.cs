@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Common {
@@ -277,6 +277,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Equals.
+        /// </summary>
+        public static string Equals {
+            get {
+                return ResourceManager.GetString("Equals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Errors log.
         /// </summary>
         public static string ErrorsLog {
@@ -390,6 +399,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string NoResultsFound {
             get {
                 return ResourceManager.GetString("NoResultsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not equals.
+        /// </summary>
+        public static string NotEquals {
+            get {
+                return ResourceManager.GetString("NotEquals", resourceCulture);
             }
         }
         
@@ -556,6 +574,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select option.
+        /// </summary>
+        public static string SelectOption {
+            get {
+                return ResourceManager.GetString("SelectOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select questionnaire.
         /// </summary>
         public static string SelectQuestionnaire {
@@ -597,6 +624,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SignIn {
             get {
                 return ResourceManager.GetString("SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starts with.
+        /// </summary>
+        public static string StartsWith {
+            get {
+                return ResourceManager.GetString("StartsWith", resourceCulture);
             }
         }
         

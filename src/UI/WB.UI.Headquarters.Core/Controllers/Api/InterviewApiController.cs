@@ -26,28 +26,21 @@ namespace WB.UI.Headquarters.Controllers.Api
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
-        private readonly ITeamInterviewsFactory teamInterviewViewFactory;
         private readonly IChangeStatusFactory changeStatusFactory;
-        private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
         public InterviewApiController(
             IAuthorizedUser authorizedUser, 
             IAllInterviewsFactory allInterviewsViewFactory,
-            ITeamInterviewsFactory teamInterviewViewFactory,
-            IChangeStatusFactory changeStatusFactory,
-            IInterviewSummaryViewFactory interviewSummaryViewFactory)
+            IChangeStatusFactory changeStatusFactory)
         {
             this.authorizedUser = authorizedUser;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
-            this.teamInterviewViewFactory = teamInterviewViewFactory;
             this.changeStatusFactory = changeStatusFactory;
-            this.interviewSummaryViewFactory = interviewSummaryViewFactory;
         }
 
         [HttpGet]
         public InterviewsDataTableResponse Interviews([FromQuery] InterviewsDataTableRequest request)
         {
-
             var input = new AllInterviewsInputModel
             {
                 Page = request.PageIndex,
@@ -56,7 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 QuestionnaireId = request.QuestionnaireId,
                 QuestionnaireVersion = request.QuestionnaireVersion,
                 SupervisorOrInterviewerName = request.ResponsibleName,
-                Statuses = request.Status != null ? new[] { request.Status.Value } : null,
+                Statuses = GetFilterByStatus(request),
                 SearchBy = request.SearchBy ?? request.Search?.Value,
                 TeamId = request.TeamId,
                 UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
@@ -86,11 +79,24 @@ namespace WB.UI.Headquarters.Controllers.Api
             return response;
         }
 
+        private static InterviewStatus[] GetFilterByStatus(InterviewsDataTableRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Status))
+                return null;
+
+            if (Enum.TryParse(request.Status, out InterviewStatus enumValue))
+                return new[] { enumValue };
+
+            if (request.Status == "AllExceptApprovedByHQ")
+                return ((InterviewStatus[])Enum.GetValues(typeof(InterviewStatus))).Where(s => s != InterviewStatus.ApprovedByHeadquarters).ToArray();
+
+            throw new ArgumentException("Unknown status filter value: " + request.Status);
+        }
+
         [HttpGet]
         [Authorize(Roles = "Interviewer")]
         public InterviewsDataTableResponse GetInterviews(InterviewsDataTableRequest request)
         {
-            
             var input = new AllInterviewsInputModel
             {
                 Page = request.PageIndex,
@@ -106,7 +112,8 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
 
-            foreach (var x in allInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
+            foreach (var x in allInterviews.Items) 
+                foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
 
             var response = new InterviewsDataTableResponse
             {
@@ -114,40 +121,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                 RecordsTotal = allInterviews.TotalCount,
                 RecordsFiltered = allInterviews.TotalCount,
                 Data = allInterviews.Items
-            };
-
-            return response;
-        }
-        
-        [HttpGet]
-        public TeamInterviewsDataTableResponse GetTeamInterviews([FromQuery] InterviewsDataTableRequest request)
-        {
-            var input = new TeamInterviewsInputModel
-            {
-                Page = request.PageIndex,
-                PageSize = request.PageSize,
-                Orders = request.GetSortOrderRequestItems(),
-                QuestionnaireId = request.QuestionnaireId,
-                QuestionnaireVersion = request.QuestionnaireVersion,
-                SearchBy = request.SearchBy,
-                Status = request.Status,
-                ResponsibleName = request.ResponsibleName,
-                ViewerId = this.authorizedUser.Id,
-                UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
-                UnactiveDateEnd = request.UnactiveDateEnd?.ToUniversalTime(),
-                AssignmentId = request.AssignmentId
-            };
-
-            var teamInterviews = this.teamInterviewViewFactory.Load(input);
-
-            foreach (var x in teamInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
-
-            var response = new TeamInterviewsDataTableResponse
-            {
-                Draw = request.Draw + 1,
-                RecordsTotal = teamInterviews.TotalCount,
-                RecordsFiltered = teamInterviews.TotalCount,
-                Data = teamInterviews.Items
             };
 
             return response;
@@ -177,14 +150,14 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         private InterviewSummaryForMapPointView GetInterviewSummaryForMapPointView(Guid interviewId)
         {
-            var interviewSummaryView = this.interviewSummaryViewFactory.Load(interviewId);
+            var interviewSummaryView = this.allInterviewsViewFactory.Load(interviewId);
             if (interviewSummaryView == null)
                 return null;
 
             var interviewSummaryForMapPointView = new InterviewSummaryForMapPointView
             {
                 InterviewerName = interviewSummaryView.ResponsibleName,
-                SupervisorName = interviewSummaryView.TeamLeadName,
+                SupervisorName = interviewSummaryView.SupervisorName,
                 InterviewKey = interviewSummaryView.Key,
                 AssignmentId = interviewSummaryView.AssignmentId,
                 LastStatus = interviewSummaryView.Status.ToLocalizeString(),

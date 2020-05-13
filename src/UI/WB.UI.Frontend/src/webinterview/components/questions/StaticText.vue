@@ -34,7 +34,7 @@ export default {
             text: '',
         }
     },
-          
+
     mounted() {
         this.scroll()
     },
@@ -53,7 +53,7 @@ export default {
 
         scroll() {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
-                this.doScroll() 
+                this.doScroll()
             }
         },
     },

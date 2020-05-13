@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -35,12 +36,14 @@ namespace WB.UI.Shared.Web.Extensions
 
             Dictionary<string, string> locales = new Dictionary<string, string>();
 
-            foreach (var file in files)
+            foreach (var file in files.OrderByDescending(f => f.LastModified))
             {
                 var match = ComponentMatcher.Match(file.Name);
 
                 if (match.Success == false) continue;
 
+                if(locales.ContainsKey(match.Groups["component"].Value)) continue;
+                
                 locales.Add(match.Groups["component"].Value, '/' + folder + '/' + file.Name);
             }
 

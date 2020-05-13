@@ -1,20 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Hosting;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -23,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
@@ -31,8 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected readonly IHeadquartersEventStore eventStore;
         protected readonly IInterviewInformationFactory interviewsFactory;
 
-        protected InterviewsControllerBase(
-            IImageFileStorage imageFileStorage,
+        protected InterviewsControllerBase(IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
@@ -41,7 +53,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
-            IAudioAuditFileStorage audioAuditFileStorage)
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IWebHostEnvironment webHostEnvironment)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
@@ -53,11 +66,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStore = eventStore;
             this.audioAuditFileStorage = audioAuditFileStorage;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         public virtual ActionResult<List<InterviewApiView>> Get()
         {
-            List<InterviewApiView> resultValue = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
+            List<InterviewApiView> interviewApiViews = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
                 .Select(interview => new InterviewApiView
                 {
                     Id = interview.Id,
@@ -65,13 +79,26 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     IsRejected = interview.IsRejected,
                     ResponsibleId = interview.ResponsibleId,
                     Sequence = interview.LastEventSequence,
+                    LastEventId = interview.LastEventId,
                     IsMarkedAsReceivedByInterviewer = interview.IsReceivedByInterviewer
                 }).ToList();
 
-            var response = resultValue;
+            var isNeedUpdateApp = IsNeedUpdateApp(interviewApiViews);
+            if (isNeedUpdateApp)
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
 
-            return response;
+            return interviewApiViews;
         }
+
+        private bool IsNeedUpdateApp(List<InterviewApiView> interviews)
+        {
+            var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
+            if (productVersion != null && productVersion >= new Version(20, 5))
+                return false;
+
+            return interviews.Any(interview => interviewsFactory.HasAnySmallSubstitutionEvent(interview.Id));
+        }
+
 
         protected abstract IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId);
 
@@ -80,6 +107,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.authorizedUser.Id));
             return StatusCode(StatusCodes.Status204NoContent);
         }
+
+        protected abstract string ProductName { get; }
         
         public virtual IActionResult PostImage([FromBody] PostFileRequest request)
         {
@@ -103,26 +132,95 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        protected InterviewUploadState GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
+        protected async Task<InterviewUploadState> GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
         {
             var doesEventsExists = this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);
 
             // KP-12038 media files are not updated if interviewer changes them after reject
-            var imageNames = new HashSet<string>(); //this.imageFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
-            var audioNames = new HashSet<string>(); //this.audioFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
+            var imageNames = new HashSet<string>(); 
+            var audioNames = new HashSet<string>();
+
+            var imagesQuestionsMd5 = (await GetMd5Caches(await this.imageFileStorage.GetBinaryFilesForInterview(id)));
+            var audioQuestionsFilesMd5 = (await GetMd5Caches(await this.audioFileStorage.GetBinaryFilesForInterview(id)));
+            var audioAuditFilesMd5 = (await GetMd5Caches(await this.audioAuditFileStorage.GetBinaryFilesForInterview(id)));
+
+            var interview = interviewsFactory.GetInterviewsByIds(new [] { id }).SingleOrDefault();
 
             return new InterviewUploadState
             {
                 IsEventsUploaded = doesEventsExists,
                 ImagesFilesNames = imageNames,
-                AudioFilesNames = audioNames
+                AudioFilesNames = audioNames,
+                ImageQuestionsFilesMd5 = imagesQuestionsMd5,
+                AudioQuestionsFilesMd5 = audioQuestionsFilesMd5,
+                AudioAuditFilesMd5 = audioAuditFilesMd5,
+                ResponsibleId = interview?.ResponsibleId,
+                IsReceivedByInterviewer = interview?.IsReceivedByInterviewer ?? false
             };
+        }
+
+        private static async Task<HashSet<string>> GetMd5Caches(List<InterviewBinaryDataDescriptor> descriptors)
+        {
+            List<string> caches = new List<string>(descriptors.Count);
+
+            foreach (var descriptor in descriptors)
+            {
+                var md5 = await GetMd5Cache(descriptor);
+                if (md5 != null)
+                    caches.Add(md5);
+            }
+
+            return caches.ToHashSet();
+        }
+
+        private static async Task<string> GetMd5Cache(InterviewBinaryDataDescriptor descriptor)
+        {
+            var fileContent = await descriptor.GetData();
+            if (fileContent == null)
+                return null;
+
+            using var crypto = MD5.Create();
+            var hash = crypto.ComputeHash(fileContent);
+            var hashString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            return hashString;
         }
 
         protected IActionResult DetailsV3(Guid id)
         {
             var allEvents = eventStore.Read(id, 0).ToList();
+
+            var isNeedUpdateApp = IsNeedUpdateApp(allEvents);
+
+            if (isNeedUpdateApp)
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
+
             return new JsonResult(allEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
+        }
+
+        private bool IsNeedUpdateApp(List<CommittedEvent> allEvents)
+        {
+            if (webHostEnvironment.IsDevelopment())
+                return false;
+
+            var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
+            if (productVersion != null && productVersion >= new Version(20, 5))
+                return false;
+
+            return allEvents.Any(e =>
+            {
+                if (e.Payload is SubstitutionTitlesChanged titlesChanged)
+                {
+                    return titlesChanged.Questions.Length == 0 && titlesChanged.Groups.Length == 0 && titlesChanged.StaticTexts.Length == 0;
+                }
+
+                return false;
+            });
+        }
+        
+        protected IActionResult DetailsAfter(Guid id, Guid eventId)
+        {
+            var events = eventStore.ReadAfter(id, eventId).ToList();
+            return new JsonResult(events, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
         }
 
         protected IActionResult PostV3(InterviewPackageApiView package)

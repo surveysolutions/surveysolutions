@@ -16,10 +16,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
     internal class when_responsible_supervisor_answer_on_supervisors_questions
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            var mockOfInterviewSummaryViewFactory = new Mock<IInterviewSummaryViewFactory>();
+            var mockOfInterviewSummaryViewFactory = new Mock<IAllInterviewsFactory>();
             mockOfInterviewSummaryViewFactory.Setup(x => x.Load(interviewId)).Returns(new InterviewSummary
             {
-                TeamLeadId = responsibleId
+                SupervisorId = responsibleId
             });
             
             interview.Apply(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, supervisorId: responsibleId.FormatGuid()).Payload);

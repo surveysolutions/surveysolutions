@@ -50,8 +50,41 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
+        public IEnumerable<CommittedEvent> Read(Guid aggregateRootId, params string[] typeNames)
+        {
+            if (typeNames.Length == 0)
+                yield break;
+
+            var rawEvents = sessionProvider.Session.Connection.Query<RawEvent>(
+                 $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                 $"FROM {tableNameWithSchema} " +
+                 $"WHERE eventsourceid= @sourceId AND eventtype = ANY(@typeNames) " +
+                 $"ORDER BY eventsequence",
+                 new { sourceId = aggregateRootId, typeNames }, buffered: true);
+
+            foreach (var committedEvent in ToCommittedEvent(rawEvents))
+            {
+                yield return committedEvent;
+            }
+        }
+
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
             => this.Read(id, minVersion);
+
+        public IEnumerable<CommittedEvent> ReadAfter(Guid aggregateRootId, Guid eventId)
+        {
+            var rawEvents = sessionProvider.Session.Connection.Query<RawEvent>(
+                $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                $"FROM {tableNameWithSchema} " +
+                $"WHERE eventsourceid= @sourceId AND eventsequence > (select eventsequence from {tableNameWithSchema} where eventsourceid= @sourceId AND id = @eventId) " +
+                $"ORDER BY eventsequence",
+                new { sourceId = aggregateRootId, eventId }, buffered: true);
+
+            foreach (var committedEvent in ToCommittedEvent(rawEvents))
+            {
+                yield return committedEvent;
+            }
+        }
 
         public int? GetLastEventSequence(Guid id)
         {
@@ -182,6 +215,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                                         limit 1", new { eventSourceId, eventTypes = typeNames });
         }
 
+        public Guid? GetLastEventId(Guid eventSourceId, params string[] excludeTypeNames)
+        {
+            return this.sessionProvider.Session.Connection.ExecuteScalar<Guid?>(
+                $@"select id from {tableNameWithSchema} where
+                                        eventsourceid = @eventSourceId
+                                        and NOT (eventtype = ANY(@eventTypes))
+                                        order by eventsequence desc
+                                        limit 1", 
+                new { eventSourceId, eventTypes = excludeTypeNames }
+                );
+        }
 
         public IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize)
         {

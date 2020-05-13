@@ -89,6 +89,10 @@
                 <table class="table table-striped table-bordered">
                     <tbody>
                         <tr>
+                            <td>{{$t('Pages.Questionnaire_Variable')}}</td>
+                            <td>{{model.variable}}</td>
+                        </tr>
+                        <tr>
                             <td>{{$t('Pages.Questionnaire_SectionsCount')}}</td>
                             <td>{{model.sectionsCount}}</td>
                         </tr>
@@ -155,18 +159,18 @@ export default {
             return momentDate.local().format(DateFormats.dateTime)
         },
         recordAudioChanged() {
-            if (this.audioAudit) 
+            if (this.audioAudit)
                 this.$refs.audioAuditModal.modal({
                     backdrop: 'static',
                     keyboard: false,
                 })
-            else 
+            else
                 return this.recordAudioSend()
         },
         async recordAudioSend() {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
                 .AudioAudit(this.audioAudit)
-            if(response.status !== 204) 
+            if(response.status !== 204)
                 this.audioAudit = !this.audioAudit
             this.$refs.audioAuditModal.modal('hide')
         },

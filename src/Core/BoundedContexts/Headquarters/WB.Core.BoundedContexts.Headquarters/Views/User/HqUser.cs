@@ -93,7 +93,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
     public class HqUserToken : IdentityUserToken<Guid>
     {
+        public override bool Equals(object obj) => obj is HqUserToken token &&
+                                                   UserId == token.UserId &&
+                                                   LoginProvider == token.LoginProvider &&
+                                                   Name == token.Name;
 
+        public override int GetHashCode() => HashCode.Combine(UserId, LoginProvider, Name);
     }
 
     public class HqUserProfile

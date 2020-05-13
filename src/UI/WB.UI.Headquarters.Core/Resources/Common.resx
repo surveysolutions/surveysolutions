@@ -321,4 +321,16 @@
   <data name="Reset" xml:space="preserve">
     <value>Reset</value>
   </data>
+  <data name="Equals" xml:space="preserve">
+    <value>Equals</value>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Not equals</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>Select option</value>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
 </root>
