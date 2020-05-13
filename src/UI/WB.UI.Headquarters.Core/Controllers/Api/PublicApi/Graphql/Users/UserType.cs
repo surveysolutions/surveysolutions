@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using HotChocolate.Resolvers;
 using HotChocolate.Types;
+using Main.Core.Entities.SubEntities;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
 {
@@ -10,7 +12,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
         protected override void Configure(IObjectTypeDescriptor<UserDto> descriptor)
         {
             descriptor.Name("User");
-            descriptor.BindFieldsImplicitly();
+            descriptor.BindFieldsExplicitly();
+
+            descriptor.Field(x => x.Id).Type<NonNullType<IdType>>();
+            descriptor.Field(x => x.Roles).Type<NonNullType<ListType<NonNullType<EnumType<UserRoles>>>>>();
+            descriptor.Field(x => x.UserName).Type<NonNullType<StringType>>();
         }
     }
 }
