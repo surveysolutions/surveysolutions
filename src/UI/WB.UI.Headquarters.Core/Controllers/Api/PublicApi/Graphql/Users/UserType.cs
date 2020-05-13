@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(x => x.Id).Type<IdType>();
-            descriptor.Field(x => x.Roles).Type<NonNullType<ListType<EnumType<UserRoles>>>>();
+            descriptor.Field(x => x.Roles).Type<NonNullType<ListType<NonNullType<EnumType<UserRoles>>>>>();
             descriptor.Field(x => x.UserName).Type<NonNullType<StringType>>();
         }
     }
