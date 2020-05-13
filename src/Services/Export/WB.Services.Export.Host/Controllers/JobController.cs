@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Services.Export.Interview;
@@ -251,9 +252,11 @@ namespace WB.Services.Export.Host.Controllers
             var jobs = await this.exportProcessesService.GetAllProcesses(tenant, runningOnly: false);
             var filteredJobList = new List<DataExportProcessArgs>();
 
+            var tokenSource = new CancellationTokenSource();
+
             foreach (var job in jobs)
             {
-                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId);
+                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId, tokenSource.Token);
 
                 if (questionnaire != null)
                 {
