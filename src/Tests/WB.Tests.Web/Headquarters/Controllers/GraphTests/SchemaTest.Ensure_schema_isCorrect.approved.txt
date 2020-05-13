@@ -32,7 +32,7 @@ type Interview {
   createdDate: DateTime!
   "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1."
   errorsCount: Int!
-  id: ID
+  id: ID!
   "Information that identifies each assignment. These are the answers to questions marked as identifying in Designer."
   identifyingQuestions: [QuestionAnswer]
   "Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer."
@@ -80,7 +80,7 @@ type QuestionAnswer {
 }
 
 type User {
-  id: ID
+  id: ID!
   roles: [UserRoles!]!
   userName: String!
 }
