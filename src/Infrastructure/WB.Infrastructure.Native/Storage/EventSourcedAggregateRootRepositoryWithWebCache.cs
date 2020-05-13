@@ -55,14 +55,14 @@ namespace WB.Infrastructure.Native.Storage
 
                 if (aggregateRoot == null)
                 {
-                    if (!this.eventBusSettings.IsIgnoredAggregate(aggregateId))
-                    {
-                        aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
-                    }
-                    else
+                    if (this.eventBusSettings.IsIgnoredAggregate(aggregateId))
                     {
                         var events = this.inMemoryEventStore.Read(aggregateId, 0);
                         aggregateRoot = base.repository.Load(aggregateType, aggregateId, events);
+                    }
+                    else
+                    {
+                        aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
                     }
 
                     if (aggregateRoot != null)

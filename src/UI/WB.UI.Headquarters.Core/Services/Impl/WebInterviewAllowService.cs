@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -46,33 +47,33 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
         {
-            if(this.eventBusSettings.IgnoredAggregateRoots.Contains(interviewId))
-                if (!this.authorizedUser.IsHeadquarter && !this.authorizedUser.IsAdministrator)
-                {
-                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
-                }
-                else
+            if (Guid.TryParse(interviewId, out var id))
+            {
+                if (this.eventBusSettings.IsIgnoredAggregate(id))
                 {
                     return;
                 }
+            }
 
             var interview = statefulInterviewRepository.Get(interviewId);
 
             if (interview == null)
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, 
+                    Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
             if (!AllowedInterviewStatuses.Contains(interview.Status))
-                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, 
+                    Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
 
             if (this.authorizedUser.IsInterviewer)
             {
-                if (interview.CurrentResponsibleId == this.authorizedUser.Id)
-                    return;
-                else
+                if (interview.CurrentResponsibleId != this.authorizedUser.Id)
                 {
                     throw new InterviewAccessException(InterviewAccessExceptionReason.Forbidden,
                         Enumerator.Native.Resources.WebInterview.Error_Forbidden);
                 }
+                else
+                    return;
             }
 
             QuestionnaireIdentity questionnaireIdentity = interview.QuestionnaireIdentity;
