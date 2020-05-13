@@ -28,17 +28,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
 
             descriptor.Field("nodes")
                 .Description("A flattened list of the nodes.")
-                .Type<ListType<T>>()
+                .Type<NonNullType<ListType<T>>>()
                 .Resolver(ctx =>
                     ctx.Parent<IPagedConnection>().Nodes);
 
             descriptor.Field("totalCount")
-                .Type<IntType>()
+                .Type<NonNullType<IntType>>()
                 .Description("Total count of nodes without filtering applied")
                 .Resolver(x => x.Parent<IPagedConnection>().TotalCount);
 
             descriptor.Field("filteredCount")
-                .Type<IntType>()
+                .Type<NonNullType<IntType>>()
                 .Description("Filtered count of nodes without paging")
                 .Resolver(x => x.Parent<IPagedConnection>().FilteredCount);
         }
