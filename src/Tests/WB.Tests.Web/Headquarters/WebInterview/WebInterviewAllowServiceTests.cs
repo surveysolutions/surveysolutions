@@ -202,7 +202,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             this.authorizedUserMock.Setup(x => x.IsAuthenticated).Returns(true);
             this.authorizedUserMock.Setup(x => x.IsHeadquarter).Returns(true);
 
-            eventBusSettings.IgnoredAggregateRoots.Add(interviewId.FormatGuid());
+            eventBusSettings.AddIgnoredAggregateRoot(interviewId);
 
             // Act
             Assert.DoesNotThrow(Act);

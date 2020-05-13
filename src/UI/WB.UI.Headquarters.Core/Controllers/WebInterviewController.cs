@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
@@ -64,6 +66,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IOptions<RecaptchaSettings> recaptchaSettings;
         private readonly IOptions<CaptchaConfig> captchaConfig;
         private readonly IServiceLocator serviceLocator;
+        private readonly EventBusSettings eventBusSettings;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -73,12 +76,6 @@ namespace WB.UI.Headquarters.Controllers
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
             var passedInterviews = HttpContext.Session.Get<List<string>>(CapchaCompletedKey);
-            return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
-        }
-
-        private bool PasswordVerificationNeededForInterview(string interviewId)
-        {
-            var passedInterviews = HttpContext.Session.Get<List<string>>(PasswordVerifiedKey);
             return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
         }
 
@@ -120,7 +117,8 @@ namespace WB.UI.Headquarters.Controllers
             IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage,
             IOptions<RecaptchaSettings> recaptchaSettings,
             IOptions<CaptchaConfig> captchaConfig,
-            IServiceLocator serviceLocator)
+            IServiceLocator serviceLocator,
+            EventBusSettings eventBusSettings)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
@@ -139,6 +137,7 @@ namespace WB.UI.Headquarters.Controllers
             this.recaptchaSettings = recaptchaSettings;
             this.captchaConfig = captchaConfig;
             this.serviceLocator = serviceLocator;
+            this.eventBusSettings = eventBusSettings;
         }
 
         [Route("Error")]
@@ -157,6 +156,12 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Section(string id, string sectionId)
         {
             var interview = this.statefulInterviewRepository.Get(id);
+
+            if (interview == null)
+            {
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
+                    Enumerator.Native.Resources.WebInterview.Error_NotFound);
+            }
 
             var targetSectionIsEnabled = interview.IsEnabled(Identity.Parse(sectionId));
             if (!targetSectionIsEnabled)
@@ -207,7 +212,7 @@ namespace WB.UI.Headquarters.Controllers
             };
         }
 
-        public string GenerateUrl(string action, string interviewId, string sectionId = null)
+        public string GenerateUrl(string action, string interviewId, string? sectionId = null)
         {
             return Url.Action(action, new
             {
@@ -319,8 +324,8 @@ namespace WB.UI.Headquarters.Controllers
 
         public class SendLinkModel
         {
-            public string InterviewId { get; set; }
-            public string Email { get; set; }
+            public string? InterviewId { get; set; }
+            public string? Email { get; set; }
         }
 
         [HttpPost]
@@ -458,6 +463,12 @@ namespace WB.UI.Headquarters.Controllers
         public IActionResult Cover(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
+            if (interview == null)
+            {
+                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
+                                    Enumerator.Native.Resources.WebInterview.Error_NotFound);
+            }
+            
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) &&
                 this.CapchaVerificationNeededForInterview(id))
@@ -550,6 +561,13 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Complete(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
+
+            if (interview == null)
+            {
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
+                    Enumerator.Native.Resources.WebInterview.Error_NotFound);
+            }
+
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
             var isAuthorizedUser = this.IsAuthorizedUser(interview.CurrentResponsibleId);
@@ -656,6 +674,8 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewId = Guid.NewGuid();
 
+            this.eventBusSettings.AddIgnoredAggregateRoot(interviewId);
+
             var createInterviewCommand = new CreateInterview(
                 interviewId,
                 interviewer.PublicKey,
@@ -675,6 +695,13 @@ namespace WB.UI.Headquarters.Controllers
         private ResumeWebInterview GetResumeModel(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
+
+            if (interview == null)
+            {
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
+                    Enumerator.Native.Resources.WebInterview.Error_NotFound);
+            }
+
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(interview.QuestionnaireIdentity);
 
             if (questionnaireBrowseItem.IsDeleted)
@@ -757,6 +784,13 @@ namespace WB.UI.Headquarters.Controllers
                 if (Guid.TryParse(interviewIdCookie, out Guid pendingInterviewId))
                 {
                     var interview = statefulInterviewRepository.Get(pendingInterviewId.FormatGuid());
+
+                    if (interview == null)
+                    {
+                        throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
+                            Enumerator.Native.Resources.WebInterview.Error_NotFound);
+                    }
+                    
                     if (interview.Status == InterviewStatus.InterviewerAssigned)
                     {
                         view.HasPendingInterviewId = pendingInterviewId != Guid.Empty;

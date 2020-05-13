@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 .Returns(aggregateFromInMemoryEvents);
 
             var eventBusSettings = new EventBusSettings();
-            eventBusSettings.IgnoredAggregateRoots.Add(aggregateRootId.FormatGuid());
+            eventBusSettings.AddIgnoredAggregateRoot(aggregateRootId);
 
             var repository = GetRepository(inMemoryEventStore: inMemoryEventStoreMock.Object,
                 domainRepository: domainRepositoryMock.Object,

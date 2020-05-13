@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers
                 return NotFound(id);
             
             var newInterviewId = Guid.NewGuid();
-            this.eventBusSettings.IgnoredAggregateRoots.Add(newInterviewId.FormatGuid());
+            this.eventBusSettings.AddIgnoredAggregateRoot(newInterviewId);
 
             var command = new CreateTemporaryInterviewCommand(newInterviewId, this.authorizedUser.Id, identity);
 
