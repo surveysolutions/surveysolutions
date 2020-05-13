@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Field(x => x.SummaryId)
                 .Name("id")
-                .Type<IdType>();
+                .Type<NonNullType<IdType>>();
             
             descriptor.Field(x => x.Status)
                 .Type<NonNullType<EnumType<InterviewStatus>>>();
