@@ -36,7 +36,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
             await this.GenerateDescriptionTxtAsync(settings.Tenant, settings.QuestionnaireId, 
-                state.ExportTempFolder, ExportFileSettings.StataDataFileExtension);
+                state.ExportTempFolder, ExportFileSettings.StataDataFileExtension, cancellationToken);
         }
 
         private async Task<string[]> CreateStataDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
