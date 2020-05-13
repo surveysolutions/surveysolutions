@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -49,6 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         public List<InterviewHistoricalRecordView> Records { get; set; }
     }
 
+    [Authorize(AuthenticationSchemes = "TenantToken")]
     public class InterviewsExportApiController : Controller
     {
         private readonly IInterviewsToExportViewFactory viewFactory;
@@ -69,7 +71,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("api/export/v1/interview/batch/commentaries")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
         public ActionResult<List<InterviewCommentariesDto>> GetInterviewCommentariesBatch([FromQuery(Name = "id")] Guid[] id)
@@ -99,7 +100,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("api/export/v1/interview/batch/diagnosticsInfo")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
         public ActionResult<List<InterviewDiagnosticsInfo>> GetInterviewDiagnosticsBatch([FromQuery(Name = "id")] Guid[] id)
@@ -109,7 +109,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("api/export/v1/interview/batch/summaries")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
         public ActionResult<List<InterviewSummariesDto>> GetInterviewSummariesBatch([FromQuery(Name = "id")] Guid[] id)
@@ -136,7 +135,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("api/export/v1/interview/batch/history")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
         public ActionResult<List<InterviewHistoryDto>> GetInterviewHistory([FromQuery(Name = "id")] Guid[] id)

@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Interviews {
@@ -109,12 +109,30 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current responsible interviewers will not be notified about the reassignment until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!.
+        /// </summary>
+        public static string AssignReceivedWarning {
+            get {
+                return ResourceManager.GetString("AssignReceivedWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt; could be reassigned..
+        ///&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt; can be reassigned..
         /// </summary>
         public static string AssignToOtherTeamConfirmMessage {
             get {
                 return ResourceManager.GetString("AssignToOtherTeamConfirmMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose identifying questions to use in the filter.
+        /// </summary>
+        public static string ChooseQuestionsTitle {
+            get {
+                return ResourceManager.GetString("ChooseQuestionsTitle", resourceCulture);
             }
         }
         
@@ -188,6 +206,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string Errors {
             get {
                 return ResourceManager.GetString("Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters by questions.
+        /// </summary>
+        public static string FiltersByQuestions {
+            get {
+                return ResourceManager.GetString("FiltersByQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters by questions is only available when specific questionnaire version is selected.
+        /// </summary>
+        public static string QuestionsFilterNotAvailable {
+            get {
+                return ResourceManager.GetString("QuestionsFilterNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions selector.
+        /// </summary>
+        public static string QuestionsSelector {
+            get {
+                return ResourceManager.GetString("QuestionsSelector", resourceCulture);
             }
         }
         

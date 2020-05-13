@@ -329,4 +329,16 @@
   <data name="EmailProviders" xml:space="preserve">
     <value>Настройка рассылки</value>
   </data>
+  <data name="Equals" xml:space="preserve">
+    <value>Равно</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>Выберите опцию</value>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Начинается с</value>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Не равно</value>
+  </data>
 </root>

@@ -1,4 +1,9 @@
 ![Link Text](https://build.mysurvey.solutions/app/rest/builds/buildType:(id:CI_Package)/statusIcon)
+20.4 version
+- headquarters.cloud.ini should be replaced with headquarters.cloud.vnext.ini
+- ClientSecret of [ExternalStorages:OAuth2:Dropbox] should be updated in file headquarters.cloud.ini
+- data-export-storages.html file was changed, so first of all should be updated demo server
+- data-export-storages.html should be copied to Portal
 
 20.3 version
 - runs on .net core 3.1

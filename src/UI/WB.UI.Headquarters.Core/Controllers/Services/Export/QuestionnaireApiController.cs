@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -20,6 +21,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
 {
     [Localizable(false)]
     [Route("api/export/v1/questionnaire")]
+    [Authorize(AuthenticationSchemes = "TenantToken")]
     public class QuestionnaireApiController : Controller
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -37,7 +39,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("{id}")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         public ActionResult Get(string id)
         {
@@ -48,7 +49,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("{id}/pdf")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         public ActionResult Pdf(string id, [FromQuery]Guid? translation = null)
         {
@@ -61,7 +61,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         }
 
         [Route("{id}/category/{categoryId}")]
-        [ServiceApiKeyAuthorization]
         [HttpGet]
         public ActionResult<List<CategoriesItem>> Category(string id, Guid categoryId)
         {

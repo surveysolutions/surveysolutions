@@ -53,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public JsonBundleCommandResponse ExecuteCommands(JsonBundleCommandRequest request)
         {
             var response = new JsonBundleCommandResponse();
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public JsonCommandResponse Execute(JsonCommandRequest request)
         {
             var response = new JsonCommandResponse();

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Globalization;
 using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -76,21 +78,20 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return NotFound();
             }
 
-            using (MemoryStream resultStream = new MemoryStream())
-            using (var streamWriter = new StreamWriter(resultStream))
-            using (var csvWriter = new CsvWriter(streamWriter, new Configuration{Delimiter = "\t"}))
-            {
-                csvWriter.WriteHeader<AssignmentUpgradeError>();
-                csvWriter.NextRecord();
-                csvWriter.WriteRecords(assignmentUpgradeProgressDetails.AssignmentsMigratedWithError);
-                csvWriter.Flush();
-                streamWriter.Flush();
+            using MemoryStream resultStream = new MemoryStream();
+            using var streamWriter = new StreamWriter(resultStream);
+            using var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) {Delimiter = "\t"});
 
-                resultStream.Seek(0, SeekOrigin.Begin);
-                var fileContents = Compress(resultStream);
-                var fileName = this.GetOutputFileName(assignmentUpgradeProgressDetails.MigrateTo);
-                return File(fileContents, "application/octet-stream", fileName, null, null, false);
-            }
+            csvWriter.WriteHeader<AssignmentUpgradeError>();
+            csvWriter.NextRecord();
+            csvWriter.WriteRecords((IEnumerable) assignmentUpgradeProgressDetails.AssignmentsMigratedWithError);
+            csvWriter.Flush();
+            streamWriter.Flush();
+
+            resultStream.Seek(0, SeekOrigin.Begin);
+            var fileContents = Compress(resultStream);
+            var fileName = this.GetOutputFileName(assignmentUpgradeProgressDetails.MigrateTo);
+            return File(fileContents, "application/octet-stream", fileName, null, null, false);
         }
 
         private string GetOutputFileName(QuestionnaireIdentity questionnaireIdentity)

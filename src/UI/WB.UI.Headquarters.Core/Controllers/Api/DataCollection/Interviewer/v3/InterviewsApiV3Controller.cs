@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -8,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -31,10 +34,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
-            IAudioAuditFileStorage audioAuditFileStorage) :
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IWebHostEnvironment webHostEnvironment) :
             base(imageFileStorage,
                 audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder,
-                synchronizationSerializer, eventStore, audioAuditFileStorage)
+                synchronizationSerializer, eventStore, audioAuditFileStorage, webHostEnvironment)
         {
         }
 
@@ -52,6 +56,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         [Route("{id:guid}")]
         [WriteToSyncLog(SynchronizationLogType.GetInterviewV3)]
         public IActionResult Details(Guid id) => base.DetailsV3(id);
+
+        [HttpGet]
+        [Route("{id:guid}/{eventId:guid}")]
+        [WriteToSyncLog(SynchronizationLogType.GetInterviewPatch)]
+        public IActionResult DetailsAfter(Guid id, Guid eventId) => base.DetailsAfter(id, eventId);
 
         [HttpPost]
         [Route("{id:guid}")]
@@ -90,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         [HttpPost]
         [Route("{id:guid}/getInterviewUploadState")]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
-        public InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
+        public Task<InterviewUploadState> GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
             => base.GetInterviewUploadStateImpl(id, eventStreamSignatureTag);
     }
 }

@@ -30,8 +30,8 @@
             </div>
             <div class="information-block comments-block">
                 <template v-for="comment in additionalInfo.comments">
-                    <wb-comment-item 
-                        :userRole="comment.userRole" 
+                    <wb-comment-item
+                        :userRole="comment.userRole"
                         :text="comment.text"
                         :isOwnComment="comment.isOwnComment"
                         :resolved="comment.resolved"
@@ -44,20 +44,20 @@
                         <label>{{ $t("WebInterviewUI.CommentYours") }}</label>
                         <div class="form-group">
                             <div class="input-group comment-field">
-                                <textarea-autosize 
+                                <textarea-autosize
                                     autocomplete="off"
                                     rows="1"
-                                    v-on:keyup.enter="postComment" 
+                                    v-on:keyup.enter="postComment"
                                     v-model="comment"
-                                    :placeholder='$t("WebInterviewUI.CommentEnter")' 
+                                    :placeholder='$t("WebInterviewUI.CommentEnter")'
                                     :disabled="!addCommentsAllowed"
                                     class="form-control"
                                     :title="inputTitle"/>
                                 <div class="input-group-btn">
-                                    <button 
-                                        @click="postComment($event)" 
-                                        :disabled="!addCommentsAllowed" 
-                                        type="button" 
+                                    <button
+                                        @click="postComment($event)"
+                                        :disabled="!addCommentsAllowed"
+                                        type="button"
                                         class="btn btn-default  btn-post-comment">
                                         {{postBtnText}}</button>
                                 </div>
@@ -102,7 +102,7 @@ export default {
             postingComment: false,
         }
     },
-    methods: 
+    methods:
     {
         show(){
             this.$store.dispatch('loadAdditionalInfo', { id: this.item.id })

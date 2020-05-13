@@ -70,9 +70,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IChapterInfoViewFactory, ChapterInfoViewFactory>();
             registry.Bind<IQuestionnaireInfoViewFactory, QuestionnaireInfoViewFactory>();
             registry.Bind<IAccountListViewFactory, AccountListViewFactory>();
-            registry.Bind<IAllowedAddressService, AllowedAddressService>();
             registry.Bind<IQuestionnaireCompilationVersionService, QuestionnaireCompilationVersionService>();
-            registry.Bind<IIpAddressProvider, IpAddressProvider>();
             registry.Bind<ITranslationsService, TranslationsService>();
             registry.Bind<ICategoriesVerifier, CategoriesVerifier>();
             registry.Bind<ICategoriesExtractFactory, CategoriesExtractFactory>();
@@ -167,7 +165,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<UpdateSingleOptionQuestion>((command, aggregate) => aggregate.UpdateSingleOptionQuestion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 .Handles<UpdateTextListQuestion>((command, aggregate) => aggregate.UpdateTextListQuestion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 .Handles<UpdateTextQuestion>((command, aggregate) => aggregate.UpdateTextQuestion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
-                .Handles<ReplaceTextsCommand>((command, aggregate) => aggregate.ReplaceTexts(command), config => config.PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
+                .Handles<ReplaceTextsCommand>((command, aggregate) => aggregate.ReplaceTexts(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 // Copy-Paste
                 .Handles<PasteAfter>(aggregate => aggregate.PasteAfter, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>().PreProcessBy<CopyPastePreProcessor>())
                 .Handles<PasteInto>(aggregate => aggregate.PasteInto, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>().PreProcessBy<CopyPastePreProcessor>())

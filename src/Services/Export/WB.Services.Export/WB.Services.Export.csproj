@@ -5,6 +5,11 @@
     <Configurations>Debug;Release</Configurations>   
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Migrations\20190918154818_AddAssignmentTracking.cs" />
     <Compile Remove="Migrations\20190918154818_AddAssignmentTracking.Designer.cs" />

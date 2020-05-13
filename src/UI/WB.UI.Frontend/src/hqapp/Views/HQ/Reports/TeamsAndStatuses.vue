@@ -173,22 +173,22 @@ export default {
 
             var queryObject = {}
 
-            const templateId = (this.questionnaireId || {}).key
-            const templateVersion = (this.questionnaireVersion || {}).key
+            const questionnaireId = (this.questionnaireId || {}).key
+            const questionnaireVersion = (this.questionnaireVersion || {}).key
 
-            if (!isUndefined(templateVersion)) {
-                queryObject.templateVersion = templateVersion
+            if (!isUndefined(questionnaireVersion)) {
+                queryObject.questionnaireVersion = questionnaireVersion
             }
-            if (!isUndefined(templateId)) {
-                queryObject.templateId = templateId == undefined ? '' : this.formatGuid(templateId)
+            if (!isUndefined(questionnaireId)) {
+                queryObject.questionnaireId = questionnaireId == undefined ? '' : this.formatGuid(questionnaireId)
             }
 
             if (row.responsible) {
-                queryObject.responsible = row.responsible
+                queryObject.responsibleName = row.responsible
             }
 
             if (!isUndefined(interviewStatus)) {
-                queryObject.status = interviewStatus
+                queryObject.status = interviewStatus.toUpperCase()
             }
 
             var queryString = $.param(queryObject)
@@ -271,7 +271,10 @@ export default {
                         data: 'approvedBySupervisorCount',
                         name: 'ApprovedBySupervisorCount',
                         render(data, type, row) {
-                            return self.getLinkToInterviews(data, row, 'ApprovedBySupervisor')
+                            if (self.$config.model.isSupervisorMode) {
+                                const formatedNumber = formatNumber(data)
+                                return `<span>${formatedNumber}</span>`
+                            } else return self.getLinkToInterviews(data, row, 'ApprovedBySupervisor')
                         },
                         title: this.$t('Reports.ApprovedBySupervisor'),
                     },

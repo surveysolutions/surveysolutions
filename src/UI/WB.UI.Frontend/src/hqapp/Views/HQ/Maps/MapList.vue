@@ -1,9 +1,9 @@
 <template>
     <HqLayout :hasFilter="false"
-        :title="$t('Pages.MapList_Title')">        
+        :title="$t('Pages.MapList_Title')">
         <div slot="headers">
             <div class="topic-with-button" >
-                <h1>{{$t('Pages.MapList_Title')}}</h1>                
+                <h1>{{$t('Pages.MapList_Title')}}</h1>
                 <label class="btn btn-success btn-file"
                     v-if="actionsAlowed">
                     {{$t('Pages.MapList_Upload')}}
@@ -37,8 +37,8 @@
                 <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
             </p>
         </div>
-        <DataTables ref="table" 
-            :tableOptions="tableOptions" 
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems">
         </DataTables>
 
@@ -53,10 +53,10 @@
 <script>
 export default {
     data: function(){
-        return {        
+        return {
             statusMessage: '',
             errorList: [],
-        }        
+        }
     },
     mounted() {
         this.reload()
@@ -89,7 +89,7 @@ export default {
 
             const fd = new FormData()
             var fileToUpload = this.$refs.uploader.files[0]
-        
+
             var filesize = ((fileToUpload.size/1024)/1024).toFixed(4)
 
             if(filesize >= 1024){
@@ -98,13 +98,13 @@ export default {
             }
 
             fd.append('file', fileToUpload)
-        
+
             $.ajax({
                 url: this.$config.model.uploadMapsFileUrl,
                 xhr() {
                     const xhr = $.ajaxSettings.xhr()
-                    xhr.upload.onprogress = (e) => {                        
-                        statusupdater(uploadingMessage + ' ' + parseInt((e.loaded / e.total) * 100) + '%')                        
+                    xhr.upload.onprogress = (e) => {
+                        statusupdater(uploadingMessage + ' ' + parseInt((e.loaded / e.total) * 100) + '%')
                     }
                     return xhr
                 },
@@ -115,15 +115,15 @@ export default {
                 success: function(data) {
                     if(!data.isSuccess)
                         statusupdater(uploadingErrorMessage, data.errors)
-                    else   
+                    else
                         statusupdater(uploadingSuccess)
-                    reloader()                    
+                    reloader()
                 },
                 error : function(err){
                     statusupdater(uploadingErrorMessage)
                 },
-            })  
-            this.$refs.uploader.value = ''            
+            })
+            this.$refs.uploader.value = ''
         },
 
         contextMenuItems({ rowData }) {
@@ -131,7 +131,7 @@ export default {
             return [
                 {
                     name: this.$t('Common.Open'),
-                    callback: () => window.location = self.$hq.basePath + 'Maps/Details?mapname=' + encodeURIComponent(rowData.fileName),           
+                    callback: () => window.location = self.$hq.basePath + 'Maps/Details?mapname=' + encodeURIComponent(rowData.fileName),
                 },
                 {
                     name: this.$t('Pages.MapList_DeleteMap'),
@@ -169,7 +169,7 @@ export default {
                         data: 'fileName',
                         name: 'FileName',
                         class: 'title',
-                        title: this.$t('Pages.MapList_Name'),
+                        title: this.$t('Pages.MapList_MapName'),
                     },
                     {
                         data: 'size',

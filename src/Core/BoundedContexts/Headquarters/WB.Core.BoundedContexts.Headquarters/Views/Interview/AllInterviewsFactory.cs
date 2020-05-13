@@ -1,9 +1,7 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Utils;
@@ -49,9 +47,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
                         {
-                            Id = a.Questionid,
+                            Id = a.Id,
                             Answer = a.Answer,
-                            Question = a.Title
+                            Question = a.Question.QuestionText
                         }).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDateUtc = x.UpdateDate,
@@ -77,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     QuestionnaireVersion = x.QuestionnaireVersion,
                     AssignmentId = x.AssignmentId,
                     ReceivedByInterviewer = x.ReceivedByInterviewer,
-                    TeamLeadName = x.TeamLeadName,
+                    TeamLeadName = x.SupervisorName,
                     Key = x.Key,
                     ClientKey = x.ClientKey
                 }).ToList()
@@ -85,103 +83,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return result;
         }
 
-        public InterviewsWithoutPrefilledView LoadInterviewsWithoutPrefilled(InterviewsWithoutPrefilledInputModel input)
+        public InterviewSummary Load(Guid interviewId)
         {
-            List<InterviewSummary> interviews = new List<InterviewSummary>();
-            int totalCount;
-            if (input.InterviewId.HasValue)
-            {
-                var interviewSummary = this.interviewSummaryReader.GetById(input.InterviewId.Value);
-                if (interviewSummary!=null)
-                {
-                    interviews = interviewSummary.ToEnumerable().ToList();
-                }
-                totalCount = interviews.Count;
-            }
-            else
-            {
-                interviews = this.interviewSummaryReader.Query(_ =>
-                {
-                    var items = ApplyFilter(input, _);
-                    if (input.Orders != null)
-                    {
-                        items = this.DefineOrderBy(items, input);
-                    }
-
-                    return items.Skip((input.Page - 1)*input.PageSize)
-                        .Take(input.PageSize)
-                        .ToList();
-                });
-
-                totalCount = this.interviewSummaryReader.Query(_ => ApplyFilter(input, _).Count());
-            }
-            var result = new InterviewsWithoutPrefilledView
-            {
-                TotalCount = totalCount,
-                Items = interviews.Select(x => new InterviewListItem
-                {
-                    InterviewId = x.InterviewId,
-                    Key = x.Key,
-                    QuestionnaireId = new QuestionnaireIdentity(x.QuestionnaireId, x.QuestionnaireVersion).ToString(),
-                    ResponsibleId = x.ResponsibleId,
-                    ResponsibleName = x.ResponsibleName,
-                    ResponsibleRole = x.ResponsibleRole,
-                    TeamLeadId = x.TeamLeadId,
-                    TeamLeadName = x.TeamLeadName,
-                    Status = x.Status,
-                    UpdateDate = x.UpdateDate.ToLocalTime().FormatDateWithTime(),
-                    WasCreatedOnClient = x.WasCreatedOnClient,
-                    ReceivedByInterviewer = x.ReceivedByInterviewer,
-                }).ToList()
-            };
-            return result;
-        }
-
-        private static IQueryable<InterviewSummary> ApplyFilter(InterviewsWithoutPrefilledInputModel input, IQueryable<InterviewSummary> _)
-        {
-            var items = _;
-
-            if (input.SupervisorId.HasValue)
-            {
-                items = items.Where(x => x.TeamLeadId == input.SupervisorId);
-            }
-
-            if (!string.IsNullOrWhiteSpace(input.InterviewKey))
-            {
-                items = items.Where(x => x.Key == input.InterviewKey);
-            }
-
-            if (!string.IsNullOrWhiteSpace(input.SearchBy))
-            {
-                items = items.Where(x => x.Key.StartsWith(input.SearchBy));
-            }
-
-            if (input.CensusOnly)
-            {
-                items = items.Where(x => x.WasCreatedOnClient);
-            }
-
-            if (input.InterviewerId.HasValue)
-            {
-                items = items.Where(x => x.ResponsibleId == input.InterviewerId);
-            }
-
-            if (input.QuestionnaireId!=null)
-            {
-                items = items.Where(x => x.QuestionnaireId == input.QuestionnaireId.QuestionnaireId && x.QuestionnaireVersion == input.QuestionnaireId.Version);
-            }
-
-            if (input.ChangedFrom.HasValue)
-            {
-                items = items.Where(x => x.UpdateDate >= input.ChangedFrom.Value);
-            }
-
-            if (input.ChangedTo.HasValue)
-            {
-                items = items.Where(x => x.UpdateDate <= input.ChangedTo.Value);
-            }
-
-            return items;
+            return this.interviewSummaryReader.GetById(interviewId);
         }
 
         private IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
@@ -205,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (!string.IsNullOrWhiteSpace(input.SupervisorOrInterviewerName))
             {
-                items = items.Where(x => x.TeamLeadName == input.SupervisorOrInterviewerName || x.ResponsibleName == input.SupervisorOrInterviewerName);
+                items = items.Where(x => x.SupervisorName == input.SupervisorOrInterviewerName || x.ResponsibleName == input.SupervisorOrInterviewerName);
             }
 
             if (input.ResponsibleId.HasValue)
@@ -215,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (input.TeamId.HasValue)
             {
-                items = items.Where(x => x.ResponsibleId == input.TeamId || x.TeamLeadId == input.TeamId);
+                items = items.Where(x => x.ResponsibleId == input.TeamId || x.SupervisorId == input.TeamId);
             }
 
             if (input.QuestionnaireId.HasValue)

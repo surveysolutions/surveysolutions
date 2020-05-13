@@ -113,7 +113,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         [ActionName("Get")]
         public IActionResult Delete([FromBody]int[] ids)
         {
@@ -130,7 +130,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public IActionResult Unarchive([FromBody]int[] ids)
         {
             if (ids == null) return this.BadRequest();
@@ -145,7 +145,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public IActionResult Assign([FromBody] AssignRequest request)
         {
             if (request?.Ids == null) return this.BadRequest();
@@ -162,7 +162,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public IActionResult Create([FromBody] CreateAssignmentRequest request)
         {
             if (!this.authorizedUser.IsAdministrator && !this.authorizedUser.IsHeadquarter)
@@ -193,22 +193,22 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             //verify email
             if (!string.IsNullOrEmpty(request.Email) && AssignmentConstants.EmailRegex.Match(request.Email).Length <= 0)
-                return this.BadRequest("Invalid Email");
+                return this.BadRequest(new {Message = "Invalid Email"});
 
             //verify pass
             if (!string.IsNullOrEmpty(password))
             {
                 if ((password.Length < AssignmentConstants.PasswordLength ||
                      AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
-                    this.BadRequest("Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password");
+                    this.BadRequest(new {Message = "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"});
             }
 
             //assignment with email must have quantity = 1
             if (!string.IsNullOrEmpty(request.Email) && request.Quantity != 1)
-                this.BadRequest("For assignments with provided email allowed quantity is 1");
+                this.BadRequest(new {Message = "For assignments with provided email allowed quantity is 1"});
 
             if ((!string.IsNullOrEmpty(request.Email) || !string.IsNullOrEmpty(password)) && request.WebMode != true)
-                this.BadRequest("For assignments having Email or Password Web Mode should be activated");
+                this.BadRequest(new {Message = "For assignments having Email or Password Web Mode should be activated"});
 
             if (quantity == 1 && (request.WebMode == null || request.WebMode == true) &&
                 string.IsNullOrEmpty(request.Email) && !string.IsNullOrEmpty(password))
@@ -216,7 +216,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 var hasPasswordInDb = this.assignmentsStorage.DoesExistPasswordInDb(interview.QuestionnaireIdentity, password);
 
                 if (hasPasswordInDb)
-                    return this.BadRequest(Assignments.DuplicatePasswordByWebModeWithQuantity1);
+                    return this.BadRequest(new {Message = Assignments.DuplicatePasswordByWebModeWithQuantity1});
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);

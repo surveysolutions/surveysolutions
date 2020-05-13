@@ -10,14 +10,14 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
     internal class when_getting_interview_summary_for_map_point_and_interview_summary_does_not_contains_history_of_statuses : InterviewApiControllerTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            var interviewSummaryViewFactoryMock = new Mock<IInterviewSummaryViewFactory>();
+            var interviewSummaryViewFactoryMock = new Mock<IAllInterviewsFactory>();
             interviewSummaryViewFactoryMock.Setup(_ => _.Load(interviewId)).Returns(new InterviewSummary()
             {
                 ResponsibleName = interviewerName,
-                TeamLeadName = supervisorName
+                SupervisorName = supervisorName
             });
 
-            controller = CreateController(interviewSummaryViewFactory: interviewSummaryViewFactoryMock.Object);
+            controller = CreateController(allInterviewsViewFactory: interviewSummaryViewFactoryMock.Object);
             BecauseOf();
         }
 

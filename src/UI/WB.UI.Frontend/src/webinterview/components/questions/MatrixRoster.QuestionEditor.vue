@@ -1,10 +1,10 @@
 <template>
     <div class="ag-input-text-wrapper"
         :id="hash">
-        <component ref='editQuestionComponent' 
-            :key="question.identity" 
-            v-bind:is="'MatrixRoster_' + question.entityType" 
-            v-bind:id="question.identity" 
+        <component ref='editQuestionComponent'
+            :key="question.identity"
+            v-bind:is="'MatrixRoster_' + question.entityType"
+            v-bind:id="question.identity"
             :editorParams="params">
         </component>
         <wb-progress :visible="isFetchInProgress" />
@@ -18,13 +18,13 @@ import { debounce } from 'lodash'
 
 export default {
     name: 'MatrixRoster_QuestionEditor',
-        
+
     data() {
         return {
             question: null,
             id: '',
         }
-    }, 
+    },
     watch: {
         ['$store.getters.scrollState']() {
             this.scroll()
@@ -35,7 +35,7 @@ export default {
     },
     computed: {
         $me() {
-            return this.$store.state.webinterview.entityDetails[this.question.identity] 
+            return this.$store.state.webinterview.entityDetails[this.question.identity]
         },
         isFetchInProgress() {
             const result = this.$store.state.webinterview.fetch.state[this.question.identity]
@@ -78,7 +78,7 @@ export default {
 
         scroll() {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
-                this.doScroll() 
+                this.doScroll()
             }
         },
     },

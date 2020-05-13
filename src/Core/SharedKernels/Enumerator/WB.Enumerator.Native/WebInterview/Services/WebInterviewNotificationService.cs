@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -233,7 +232,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
         }
 
-        public void RefreshCascadingOptions(Guid interviewId, Identity identity)
+        public virtual void RefreshCascadingOptions(Guid interviewId, Identity identity)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
             if (interview == null) return;

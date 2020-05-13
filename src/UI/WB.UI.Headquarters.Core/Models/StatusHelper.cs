@@ -1,14 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.BoundedContexts.Headquarters.Views.Survey;
+using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public static class StatusHelper
     {
+        private static List<ComboboxViewItem> headquartersStatuses = null;
+
+        private static readonly InterviewStatus[] headquarterStatusesList =
+        {
+            InterviewStatus.ApprovedByHeadquarters,
+            InterviewStatus.ApprovedBySupervisor,
+            InterviewStatus.Completed, 
+            InterviewStatus.InterviewerAssigned, 
+            InterviewStatus.RejectedByHeadquarters,
+            InterviewStatus.RejectedBySupervisor,
+            InterviewStatus.SupervisorAssigned,
+        };
+
         private static readonly InterviewStatus[] invisibleForUserStatuses =
         {
             InterviewStatus.Created,
@@ -16,35 +32,55 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             InterviewStatus.SentToCapi,
             InterviewStatus.Restored,
             InterviewStatus.Deleted,
-            InterviewStatus.Restarted, 
+            InterviewStatus.Restarted,
         };
 
         private static readonly InterviewStatus[] invisibleForSupervisorStatuses =
-            invisibleForUserStatuses.Concat( new[]
-            { 
+            invisibleForUserStatuses.Concat(new[]
+            {
                 InterviewStatus.ApprovedBySupervisor,
                 InterviewStatus.ApprovedByHeadquarters,
                 InterviewStatus.Restarted,
             }).ToArray();
 
-        internal static IEnumerable<SurveyStatusViewItem> GetAllSurveyStatusViewItems(InterviewStatus[] skipStatuses)
+        public static IEnumerable<ComboboxViewItem> GetOnlyActualSurveyStatusViewItems(IAuthorizedUser authorizedUser)
         {
-            return from InterviewStatus status in Enum.GetValues(typeof(InterviewStatus))
-                   where !skipStatuses.Contains(status)
-                   select new SurveyStatusViewItem
-                   {
-                       Status = status,
-                       StatusName = status.ToLocalizeString()
-                   };
-        }
+            if (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+            {
+                if (headquartersStatuses == null)
+                {
+                    headquartersStatuses = new List<ComboboxViewItem>
+                    {
+                        AsComboboxItem("AllExceptApprovedByHQ", Strings.AllInterviewersExceptApprovedByHeadquarters,
+                            headquarterStatusesList
+                                .Where(status => status != InterviewStatus.ApprovedByHeadquarters)
+                                .ToArray()
+                        )
+                    };
 
-        public static IEnumerable<SurveyStatusViewItem> GetOnlyActualSurveyStatusViewItems(bool isSupervisor)
-        {
-            var ignoreStatuses = isSupervisor
+                    headquartersStatuses.AddRange(headquarterStatusesList.Select(status =>
+                        AsComboboxItem(status, status)));
+                }
+
+                return headquartersStatuses;
+            }
+
+            var ignoreStatuses = authorizedUser.IsSupervisor
                 ? invisibleForSupervisorStatuses
                 : invisibleForUserStatuses;
-            return GetAllSurveyStatusViewItems(ignoreStatuses)
-                .OrderBy(status=>status.StatusName);
+
+            return Enum.GetValues(typeof(InterviewStatus))
+                .OfType<InterviewStatus>()
+                .Where(i => !ignoreStatuses.Contains(i))
+                .Select(i => AsComboboxItem(i, i))
+                .OrderBy(s => s.Key);
         }
+
+        static ComboboxViewItem AsComboboxItem(InterviewStatus status, params InterviewStatus[] selector) =>
+            AsComboboxItem(status.ToString().ToUpper(), status.ToLocalizeString(), selector);
+
+        static ComboboxViewItem AsComboboxItem(string key, string translation, params InterviewStatus[] selector) =>
+            new ComboboxViewItem(key, translation,
+                JsonConvert.SerializeObject(selector.Select(s => s.ToString().ToUpper())));
     }
 }

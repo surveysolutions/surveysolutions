@@ -14,7 +14,7 @@ export default class ExportComponent {
         },
         ]
     }
-    
+
     initialize() {
         const VeeValidate = require('vee-validate')
         Vue.use(VeeValidate)

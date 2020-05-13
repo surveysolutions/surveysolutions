@@ -223,6 +223,10 @@ namespace WB.UI.Headquarters.Code
                         var categoriesId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
                         logItem.Log = SyncLogMessages.DownloadReusableCategories.FormatString(categoriesId);
                         break;
+                    case SynchronizationLogType.GetInterviewPatch:
+                        logItem.Log = SyncLogMessages.GetInterviewPatch.FormatString(idAsGuid.HasValue ? GetInterviewLink(idAsGuid.Value, context) : "Null interview id");
+                        logItem.InterviewId = idAsGuid;
+                        break;
                     default:
                         throw new ArgumentException(nameof(logAction));
                 }

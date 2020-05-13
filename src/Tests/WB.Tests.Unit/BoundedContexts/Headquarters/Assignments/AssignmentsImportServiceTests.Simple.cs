@@ -364,21 +364,27 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_gps_question_should_be_saved_assignemnt_with_specified_gps_answer()
         {
             //arrange 
-            var gpsQuestionId = Guid.Parse("77777777777777777777777777777777");
-            var gpsQuestion = "gps";
+            (Guid Id, string name) gps1 = (Id.g1, "gps1");
+            (Guid Id, string name) gpsNoTimestamp = (Id.g2, "gps2");
 
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.GpsCoordinateQuestion(gpsQuestionId, gpsQuestion)));
+                    Create.Entity.GpsCoordinateQuestion(gps1.Id, gps1.name),
+                    Create.Entity.GpsCoordinateQuestion(gpsNoTimestamp.Id, gpsNoTimestamp.name)));
 
             var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
             {
-                Create.Entity.PreloadingRow(Create.Entity.PreloadingCompositeValue(gpsQuestion,
+                Create.Entity.PreloadingRow(Create.Entity.PreloadingCompositeValue(gps1.name,
                     Create.Entity.PreloadingValue("latitude", "90"), 
                     Create.Entity.PreloadingValue("longitude", "180"),
                     Create.Entity.PreloadingValue("altitude", "100"),
                     Create.Entity.PreloadingValue("accuracy", "12"),
-                    Create.Entity.PreloadingValue("timestamp", "2019-09-22 12:11:10")))
+                    Create.Entity.PreloadingValue("timestamp", "2019-09-22 12:11:10")),
+                    Create.Entity.PreloadingCompositeValue(gpsNoTimestamp.name,
+                    Create.Entity.PreloadingValue("latitude", "90"),
+                    Create.Entity.PreloadingValue("longitude", "180"),
+                    Create.Entity.PreloadingValue("altitude", "100"),
+                    Create.Entity.PreloadingValue("accuracy", "12")))
             });
 
             var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
@@ -393,12 +399,31 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors, Is.Empty);
 
             var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
-
+            
             Assert.That(savedAssignments, Has.One.Items);
-            Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(savedAssignments[0].Answers[0].Answer, Is.TypeOf<GpsAnswer>());
-            Assert.That(((GpsAnswer) savedAssignments[0].Answers[0].Answer).Value,
-                Is.EqualTo(new GeoPosition(90, 180, 12, 100, new DateTime(2019, 9, 22, 12, 11, 10))));
+            var assignment = savedAssignments[0];
+
+            Assert.That(assignment.Answers, Has.Exactly(2).Items);
+
+            var answer1 = assignment.Answers[0];
+            if (!(answer1.Answer is GpsAnswer gpsAnswer1))
+            {
+                Assert.That(answer1.Answer, Is.TypeOf<GpsAnswer>());
+                return;
+            }
+            
+            Assert.That(gpsAnswer1.Value, Is.EqualTo(
+                new GeoPosition(90, 180, 12, 100, 
+                    new DateTime(2019, 9, 22, 12, 11, 10))));
+
+            var answerWithDefaultTimestamp = assignment.Answers[1];
+            if (!(answerWithDefaultTimestamp.Answer is GpsAnswer gpsAnswer2))
+            {
+                Assert.That(answerWithDefaultTimestamp.Answer, Is.TypeOf<GpsAnswer>());
+                return;
+            }
+
+            Assert.That(gpsAnswer2.Value.Timestamp, Is.EqualTo(DateTimeOffset.FromUnixTimeSeconds(0)));
         }
 
         [Test]

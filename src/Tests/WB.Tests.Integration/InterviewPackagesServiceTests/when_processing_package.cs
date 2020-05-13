@@ -130,8 +130,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         ResponsibleId = expectedCommand.UserId,
                         InterviewStatus = expectedCommand.InterviewStatus,
                         IsCensusInterview = expectedCommand.CreatedOnClient,
-                        Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents
-                            .Select(IntegrationCreate.AggregateRootEvent).ToArray())
+                        Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.ToArray())
                     });
         }
 

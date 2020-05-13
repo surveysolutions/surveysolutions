@@ -36,7 +36,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
         private static readonly Guid interviewId1 = Id.g2;
         private static readonly Guid interviewerId = Id.g1;
 
-        private static readonly InterviewInformation[] interviewsFromStorage =
+        private static readonly List<InterviewInformation> interviewsFromStorage = new List<InterviewInformation>()
         {
             new InterviewInformation
             {

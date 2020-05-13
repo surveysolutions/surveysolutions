@@ -81,7 +81,7 @@ namespace WB.Services.Export.Tests.ExportProcessHandlersTests
 
             await handler.ExportDataAsync(state, CancellationToken.None);
 
-            Assert.That(writed.First().Contains("label define role 0 `\"<UNKNOWN ROLE>\"'1 `\"Interviewer\"'2 `\"Supervisor\"'3 `\"Headquarter\"'4 `\"Administrator\"'5 `\"Api User\"'"));
+            Assert.That(writed.First().Contains("label define role 0 `\"<UNKNOWN ROLE>\"' 1 `\"Interviewer\"' 2 `\"Supervisor\"' 3 `\"Headquarter\"' 4 `\"Administrator\"' 5 `\"API User\"'"));
         }
     }
 }

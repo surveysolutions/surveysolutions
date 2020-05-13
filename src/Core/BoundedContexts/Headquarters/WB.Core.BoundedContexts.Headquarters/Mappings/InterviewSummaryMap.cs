@@ -17,9 +17,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.PropertyKeyAlias(x => x.SummaryId, id => summary => summary.SummaryId == id);
 
             Property(x => x.QuestionnaireTitle);
+            Property(x => x.QuestionnaireVariable, pm => pm.Column("questionnaire_variable"));
             Property(x => x.ResponsibleName);
-            Property(x => x.TeamLeadId, pm => pm.Column(cm => cm.Index("InterviewSummaries_TeamLeadId")));
-            Property(x => x.TeamLeadName);
+            Property(x => x.ResponsibleNameLowerCase, pm => pm.Column("responsible_name_lower_case"));
+            Property(x => x.SupervisorId, pm => pm.Column("teamleadid"));
+            Property(x => x.SupervisorName, pm => pm.Column("teamleadname"));
+            Property(x => x.SupervisorNameLowerCase, pm => pm.Column("teamlead_name_lower_case"));
             Property(x => x.ResponsibleRole);
             Property(x => x.UpdateDate);
             Property(x => x.WasCreatedOnClient);
@@ -69,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     collection.Key(key => key.Column("interview_id"));
                     collection.OrderBy(x => x.Position);
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                    //collection.Lazy(CollectionLazy.NoLazy);
+                    
                     collection.Inverse(true);
                 },
                 rel => rel.OneToMany());
@@ -116,6 +119,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 sm.Lazy(CollectionLazy.Lazy);
                 sm.Inverse(true);
             }, rel => rel.OneToMany());
+
+            Property(x => x.HasSmallSubstitutions);
         }
     }
 
@@ -153,18 +158,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         public QuestionAnswerMap()
         {
             Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
-            this.Table("AnswersToFeaturedQuestions");
 
-            Property(x => x.Questionid, clm => clm.Column("QuestionId"));
-            Property(x => x.Title, col => col.Column("AnswerTitle"));
+            Table("AnswersToFeaturedQuestions");
+
             Property(x => x.Position, col => col.Column("Position"));
-            Property(x => x.Answer, col =>
+            Property(x => x.Answer, col => col.Column("AnswerValue"));
+            Property(x => x.AnswerCode, col => col.Column("answer_code"));
+            Property(x => x.AnswerLowerCase, col => col.Column("answer_lower_case"));
+            
+            ManyToOne(x => x.Question, mtm =>
             {
-                col.Column("AnswerValue");
+                mtm.Lazy(LazyRelation.Proxy);
+                mtm.Column("question_id");                
             });
 
             ManyToOne(x => x.InterviewSummary, mtm => mtm.Column("interview_id"));
         }
     }
-
 }

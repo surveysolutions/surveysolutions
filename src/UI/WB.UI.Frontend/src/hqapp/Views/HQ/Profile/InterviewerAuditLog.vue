@@ -37,7 +37,7 @@
                     {{$t('InterviewerAuditRecord.DownloadTabLog')}}
                 </a>
                 <template v-else>
-                    {{$t('InterviewerAuditRecord.RocordsMissing')}}
+                    {{$t('InterviewerAuditRecord.RecordsMissing')}}
                 </template>
             </div>
         </div>
@@ -93,15 +93,15 @@ export default {
         actionCssClass(action) {
             switch (action.type)
             {
-            case 7:
-                return 'success-text'
-            case 4:
-            case 12:
-            case 6:
-            case 8:
-                return 'error-text'
-            default:
-                return ''
+                case 7:
+                    return 'success-text'
+                case 4:
+                case 12:
+                case 6:
+                case 8:
+                    return 'error-text'
+                default:
+                    return ''
             }
         },
     },

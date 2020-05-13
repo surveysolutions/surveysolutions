@@ -11,7 +11,7 @@
         <div class="extra-margin-bottom">
             <div class="profile">
                 <div class="col-sm-12">
-                    <form-group 
+                    <form-group
                         :label="$t('Pages.Admin_ReevaluateInterview_InterviewId')"
                         :error="errorByInterviewId"
                         :mandatory="true">
@@ -55,7 +55,7 @@ export default {
     },
     watch: {
         interviewId: function(val) {
-            
+
             if(val == null || val == '')
                 this.errorByInterviewId = this.$t('Pages.Admin_Reevaluate_InterviewId_Required')
             else if(!/^[0-9A-F]{8}-?[0-9A-F]{4}-?[0-9A-F]{4}-?[0-9A-F]{4}-?[0-9A-F]{12}$/i.test(val))

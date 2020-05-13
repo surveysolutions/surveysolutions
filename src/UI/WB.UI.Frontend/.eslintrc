@@ -20,7 +20,10 @@
         ],
         "indent": [
             "error",
-            4
+            4,
+            {
+                "SwitchCase": 1
+            }
         ],
         "quotes": [
             "error",
@@ -72,7 +75,8 @@
                     "allowFirstLine": true
                 }
             }
-        ]
+        ],
+        "no-trailing-spaces": "error",
     },
     "parserOptions": {
         "parser": "babel-eslint"

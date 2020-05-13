@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual Guid? CascadeFromQuestionId { get; set; }
         public virtual Guid? LinkedToRosterId { get; set; }
         public virtual Guid? LinkedToQuestionId { get; set; }
-        public virtual string StatExportCaption { get; set; }
+        public virtual string StataExportCaption { get; set; }
         public virtual string QuestionText { get; set; }
         public virtual string VariableLabel { get; set; }
     }
