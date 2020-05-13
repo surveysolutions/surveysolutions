@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.UI.Designer.Api.WebTester
@@ -13,16 +13,23 @@ namespace WB.UI.Designer.Api.WebTester
 
     public class QuestionnaireCacheStorage : IQuestionnaireCacheStorage
     {
-        readonly MemoryCache Cache = new MemoryCache("CompilationPackages");
+        private readonly IMemoryCache memoryCache;
+
+        public QuestionnaireCacheStorage(IMemoryCache memoryCache)
+        {
+            this.memoryCache = memoryCache;
+        }
+
+        private const string CachePrefix = "qcs::";
 
         public Lazy<Questionnaire> Get(string cacheKey)
         {
-            return Cache.Get(cacheKey) as Lazy<Questionnaire>;
+            return memoryCache.Get(CachePrefix + cacheKey) as Lazy<Questionnaire>;
         }
 
         public void Add(string cacheKey, Lazy<Questionnaire> cacheEntry)
         {
-            Cache.Add(cacheKey, cacheEntry, new CacheItemPolicy
+            memoryCache.Set(CachePrefix + cacheKey, cacheEntry, new MemoryCacheEntryOptions()
             {
                 SlidingExpiration = TimeSpan.FromMinutes(10)
             });
@@ -30,7 +37,7 @@ namespace WB.UI.Designer.Api.WebTester
 
         public void Remove(string cacheKey)
         {
-            Cache.Remove(cacheKey);
+            memoryCache.Remove(CachePrefix + cacheKey);
         }
     }
 }

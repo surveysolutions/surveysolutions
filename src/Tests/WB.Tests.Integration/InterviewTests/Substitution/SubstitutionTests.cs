@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
                     => _.GetLatest(typeof(StatefulInterview), interview.Id) == interview);
 
                 using var eventContext = new EventContext();
-                var eventStore = new InMemoryEventStore();
+                var eventStore = Create.Storage.InMemoryEventStore();
                 var eventBus = Create.Service.LiteEventBus(eventStore: eventStore);
 
                 var commandService = Create.Service.CommandService(repository: repository, eventBus: eventBus);
@@ -123,7 +123,7 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
                 SetUp.InstanceToMockedServiceLocator<StatefulInterview>(interviewLocator);
 
                 ServiceFactory factory = new ServiceFactory();
-                var eventStore = new InMemoryEventStore();
+                var eventStore = Create.Storage.InMemoryEventStore();
                 var events = new IEvent[]
                 {
                     Create.Event.InterviewCreated(),

@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLTests;
 
 namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
@@ -50,7 +51,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
             }, true);
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
-            return new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            return IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
         }
 
         protected static void ExecuteInCommandTransaction(Action action)

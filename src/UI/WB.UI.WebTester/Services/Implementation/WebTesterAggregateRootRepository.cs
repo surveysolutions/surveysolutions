@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -19,7 +19,8 @@ namespace WB.UI.WebTester.Services.Implementation
             IAggregateLock aggregateLock,
             IServiceLocator serviceLocator,
             IEvictionNotifier notify,
-            IEvictionObservable evictionNotification) : base(eventStore, eventStore, new EventBusSettings(), repository, serviceLocator, aggregateLock)
+            IEvictionObservable evictionNotification,
+            IMemoryCache memoryCache) : base(eventStore, eventStore, new EventBusSettings(), repository, serviceLocator, aggregateLock, memoryCache)
         {
             this.notify = notify;
             Expiration = TimeSpan.FromMinutes(10);
@@ -32,7 +33,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
         protected override TimeSpan Expiration { get; }
 
-        protected override void CacheItemRemoved(string key, CacheEntryRemovedReason reason)
+        protected override void CacheItemRemoved(string key, EvictionReason reason)
         {
             var interviewId = Guid.Parse(key.Substring(CachePrefix.Length));
             notify.Evict(interviewId);

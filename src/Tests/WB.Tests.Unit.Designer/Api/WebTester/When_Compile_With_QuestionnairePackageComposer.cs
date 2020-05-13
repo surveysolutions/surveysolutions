@@ -1,7 +1,10 @@
 ﻿using System;
 using AutoFixture;
+
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -38,7 +41,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
                 .Setup(q => q.Load(It.IsAny<QuestionnaireViewInputModel>()))
                 .Returns(questionnaireView);
 
-            fixture.Register<IQuestionnaireCacheStorage>(() => new QuestionnaireCacheStorage());
+            fixture.Register<IQuestionnaireCacheStorage>(() => new QuestionnaireCacheStorage(new MemoryCache(Options.Create(new MemoryCacheOptions()))));
 
             fixture.Register<DesignerDbContext>(() =>
             {
