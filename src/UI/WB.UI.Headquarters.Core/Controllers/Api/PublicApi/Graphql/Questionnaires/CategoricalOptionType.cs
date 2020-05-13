@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
         {
             descriptor.Name("CategoricalOption");
 
-            descriptor.BindFieldsImplicitly();
+            descriptor.Field(x => x.Title).Type<NonNullType<StringType>>();
 
         }
     }
