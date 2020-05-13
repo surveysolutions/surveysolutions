@@ -10,9 +10,9 @@ type CategoricalOption {
 }
 
 type HeadquartersMutations {
-  addUserToMap("Map file name" id: String! userName: String!): Map
-  deleteMap("Map file name" id: String!): Map
-  deleteUserFromMap("Map file name" id: String! userName: String!): Map
+  addUserToMap("Map file name" id: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor" ])
+  deleteMap("Map file name" id: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter" ])
+  deleteUserFromMap("Map file name" id: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor" ])
 }
 
 type HeadquartersQuery {
