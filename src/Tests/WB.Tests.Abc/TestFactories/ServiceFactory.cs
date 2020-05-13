@@ -202,11 +202,12 @@ namespace WB.Tests.Abc.TestFactories
             IEventStore eventStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepositoryWithWebCache(
                 eventStore ?? Mock.Of<IEventStore>(x => x.GetLastEventSequence(It.IsAny<Guid>()) == 0),
-                new InMemoryEventStore(), 
+                new InMemoryEventStore(Create.Storage.NewMemoryCache()),
                 new EventBusSettings(), 
                 repository ?? Mock.Of<IDomainRepository>(),
                 Create.Service.ServiceLocatorService(),
-                new AggregateLock());
+                new AggregateLock(),
+                Create.Storage.NewMemoryCache());
 
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
