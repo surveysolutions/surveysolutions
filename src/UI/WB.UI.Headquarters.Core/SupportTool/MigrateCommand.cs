@@ -3,6 +3,7 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -81,8 +82,12 @@ namespace WB.UI.Headquarters.SupportTool
                     (e, i, time) => { logger.LogWarning("Attempt #{attempt} to run migrations", i); })
                 .ExecuteAsync(async () =>
                 {
+                    Stopwatch sw = Stopwatch.StartNew();
+                    
                     await new OrmModule(unitOfWorkConnectionSettings)
                         .Init(host.Services.GetRequiredService<IServiceLocator>(), new UnderConstructionInfo());
+                    
+                    logger.LogInformation($"All migrations completed in {sw.Elapsed.TotalSeconds.Seconds()}");
                 });
             }
             else

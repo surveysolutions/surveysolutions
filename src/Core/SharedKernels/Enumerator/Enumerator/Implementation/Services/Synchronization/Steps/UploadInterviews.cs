@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -20,6 +24,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IImageFileStorage imagesStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPrincipal principal;
 
         protected UploadInterviews(IInterviewerInterviewAccessor interviewFactory,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
@@ -28,6 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAudioFileStorage audioFileStorage,
             ISynchronizationService synchronizationService,
             IAudioAuditFileStorage audioAuditFileStorage,
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IPrincipal principal,
             int sortOrder) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
@@ -35,16 +43,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.imagesStorage = imagesStorage ?? throw new ArgumentNullException(nameof(imagesStorage));
             this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
             this.audioAuditFileStorage = audioAuditFileStorage;
+            this.interviewViewRepository = interviewViewRepository;
+            this.principal = principal;
         }
 
         public override async Task ExecuteAsync()
         {
             var interviewsToUpload = GetInterviewsForUpload();
+            bool isNeedCompress = IsCompressEnabled();
 
-            Context.Statistics.TotalCompletedInterviewsCount = interviewsToUpload.Count;
+            var countInterviewsForFullUpload = interviewsToUpload.Count(i => IsNonPartialSynchedInterview(i));
+            Context.Statistics.TotalCompletedInterviewsCount = countInterviewsForFullUpload;
+            Context.Statistics.TotalPartialUploadedInterviewsCount = interviewsToUpload.Count - countInterviewsForFullUpload;
+
             var transferProgress = Context.Progress.AsTransferReport();
 
-            foreach (var completedInterview in interviewsToUpload)
+            foreach (var interview in interviewsToUpload)
             {
                 Context.CancellationToken.ThrowIfCancellationRequested();
                 try
@@ -54,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Title = string.Format(EnumeratorUIResources.Synchronization_Upload_Title_Format,
                             EnumeratorUIResources.Synchronization_Upload_CompletedAssignments_Text),
                         Description = string.Format(EnumeratorUIResources.Synchronization_Upload_Description_Format,
-                            Context.Statistics.SuccessfullyUploadedInterviewsCount, Context.Statistics.TotalCompletedInterviewsCount,
+                            Context.Statistics.SuccessfullyUploadedInterviewsCount, interviewsToUpload.Count,
                             EnumeratorUIResources.Synchronization_Upload_Interviews_Text),
                         Status = SynchronizationStatus.Upload,
                         Stage = SyncStage.UploadInterviews,
@@ -67,19 +81,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         }
                     });
 
-                    var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(completedInterview.InterviewId);
+                    var isPartialSynchedInterview = IsPartialSynchedInterview(interview);
+                    if (isPartialSynchedInterview && Context.Statistics.FailToPartialProcessInterviewIds.Contains(interview.InterviewId))
+                    {
+                        // don't partial synch interviews with problems on download changes and don't have last version of stream
+                        continue;
+                    }
 
-                    var uploadState = await this.synchronizationService.GetInterviewUploadState(completedInterview.InterviewId,
+                    var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(interview.InterviewId, isNeedCompress);
+
+                    var uploadState = await this.synchronizationService.GetInterviewUploadState(interview.InterviewId,
                         interviewEventStreamContainer.Tag, Context.CancellationToken);
 
-                    await this.UploadImagesByCompletedInterviewAsync(completedInterview.InterviewId, uploadState,
-                        Context.Progress, Context.CancellationToken);
+                    if (isPartialSynchedInterview && uploadState.ResponsibleId.HasValue && uploadState.ResponsibleId != principal.CurrentUserIdentity.UserId)
+                    {
+                        // don't upload if interview was reassigned
+                        continue;
+                    }
 
-                    await this.UploadAudioByCompletedInterviewAsync(completedInterview.InterviewId, uploadState,
-                        Context.Progress, Context.CancellationToken);
-
-                    await this.UploadAudioAuditByCompletedInterviewAsync(completedInterview.InterviewId, uploadState,
-                        Context.Progress, Context.CancellationToken);
+                    await this.UploadImagesByInterviewAsync(interview, uploadState, Context.Progress, Context.CancellationToken);
+                    await this.UploadAudioByInterviewAsync(interview, uploadState, Context.Progress, Context.CancellationToken);
+                    await this.UploadAudioAuditByInterviewAsync(interview, uploadState, Context.Progress, Context.CancellationToken);
 
                     if (!uploadState.IsEventsUploaded)
                     {
@@ -88,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         if (interviewPackage != null)
                         {
                             await this.synchronizationService.UploadInterviewAsync(
-                                completedInterview.InterviewId,
+                                interview.InterviewId,
                                 interviewPackage,
                                 transferProgress,
                                 Context.CancellationToken);
@@ -96,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         else
                         {
                             this.logger.Error($"Interview event stream is missing. No package was sent to server");
-                            throw new Exception($"Data inconsistency for interview {completedInterview.InterviewId}. No events to send.");
+                            throw new Exception($"Data inconsistency for interview {interview.InterviewId}. No events to send.");
                         }
                     }
                     else
@@ -104,8 +126,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         this.logger.Warn("Interview event stream is already uploaded");
                     }
 
-                    this.interviewFactory.RemoveInterview(completedInterview.InterviewId);
-                    this.Context.Statistics.SuccessfullyUploadedInterviewsCount++;
+                    if (!isPartialSynchedInterview)
+                    {
+                        this.interviewFactory.RemoveInterview(interview.InterviewId);
+                        this.Context.Statistics.SuccessfullyUploadedInterviewsCount++;
+                    }
+                    else
+                    {
+                        this.interviewFactory.MarkEventsAsReceivedByHQ(interview.InterviewId);
+                        MarkInterviewAsSynchedAndNonRemovable(interview.InterviewId);
+                        await MarkInterviewAsReceivedByInterviewerOnHqAsync(interview.InterviewId, uploadState);
+                        this.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount++;
+                    }
                 }
                 catch (Exception syncException)
                 {
@@ -116,11 +148,34 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
             }
         }
-        private async Task UploadImagesByCompletedInterviewAsync(Guid interviewId, InterviewUploadState uploadState,
+
+        private async Task MarkInterviewAsReceivedByInterviewerOnHqAsync(Guid interviewId, InterviewUploadState uploadState)
+        {
+            if (uploadState.IsReceivedByInterviewer)
+                return;
+
+            await synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interviewId);
+        }
+
+        protected abstract bool IsCompressEnabled();
+
+        protected abstract bool IsNonPartialSynchedInterview(InterviewView interview);
+
+        protected bool IsPartialSynchedInterview(InterviewView interview) => !IsNonPartialSynchedInterview(interview);
+
+        private void MarkInterviewAsSynchedAndNonRemovable(Guid interviewId)
+        {
+            var interviewView = interviewViewRepository.GetById(interviewId.FormatGuid());
+            interviewView.CanBeDeleted = false;
+            interviewView.FromHqSyncDateTime = DateTime.UtcNow;
+            interviewViewRepository.Store(interviewView);
+        }
+
+        private async Task UploadImagesByInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interviewId);
+            var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interview.InterviewId);
             var transferProgress = progress.AsTransferReport();
 
             foreach (var imageView in imageViews)
@@ -129,23 +184,32 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 cancellationToken.ThrowIfCancellationRequested();
 
+                var fileContent = await this.imagesStorage.GetInterviewBinaryDataAsync(interview.InterviewId, imageView.FileName);
+                var hash = GetMd5Cache(fileContent);
+                if (uploadState.ImageQuestionsFilesMd5?.Contains(hash) ?? false) continue;
+
+                cancellationToken.ThrowIfCancellationRequested();
+
                 await this.synchronizationService.UploadInterviewImageAsync(
                     imageView.InterviewId,
                     imageView.FileName,
-                    await this.imagesStorage.GetInterviewBinaryDataAsync(interviewId, imageView.FileName),
+                    fileContent,
                     transferProgress,
                     cancellationToken);
 
-                this.interviewMultimediaViewStorage.Remove(imageView.Id);
-                await this.imagesStorage.RemoveInterviewBinaryData(interviewId, imageView.FileName);
+                if (interview.Status == InterviewStatus.Completed)
+                {
+                    this.interviewMultimediaViewStorage.Remove(imageView.Id);
+                    await this.imagesStorage.RemoveInterviewBinaryData(interview.InterviewId, imageView.FileName);
+                }
             }
         }
         
-        private async Task UploadAudioAuditByCompletedInterviewAsync(Guid interviewId, InterviewUploadState uploadState,
+        private async Task UploadAudioAuditByInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var auditFiles = await this.audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
+            var auditFiles = await this.audioAuditFileStorage.GetBinaryFilesForInterview(interview.InterviewId);
             var transferProgress = progress.AsTransferReport();
 
             foreach (var auditFile in auditFiles)
@@ -153,7 +217,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 if (uploadState.AudioFilesNames.Contains(auditFile.FileName)) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
+
                 var fileData = await auditFile.GetData();
+                var hash = GetMd5Cache(fileData);
+                if (uploadState.AudioAuditFilesMd5?.Contains(hash) ?? false) continue;
+
+                cancellationToken.ThrowIfCancellationRequested();
 
                 await this.synchronizationService.UploadInterviewAudioAuditAsync(
                     auditFile.InterviewId,
@@ -163,15 +232,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     transferProgress,
                     cancellationToken);
 
-                await this.audioAuditFileStorage.RemoveInterviewBinaryData(auditFile.InterviewId, auditFile.FileName);
+                if (interview.Status == InterviewStatus.Completed)
+                    await this.audioAuditFileStorage.RemoveInterviewBinaryData(auditFile.InterviewId, auditFile.FileName);
             }
         }
 
-        private async Task UploadAudioByCompletedInterviewAsync(Guid interviewId, InterviewUploadState uploadState,
+        private async Task UploadAudioByInterviewAsync(InterviewView interview, InterviewUploadState uploadState,
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var audioFiles = await this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
+            var audioFiles = await this.audioFileStorage.GetBinaryFilesForInterview(interview.InterviewId);
             var transferProgress = progress.AsTransferReport();
 
             foreach (var audioFile in audioFiles)
@@ -179,7 +249,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 if (uploadState.AudioFilesNames.Contains(audioFile.FileName)) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
+                
                 var fileData = await audioFile.GetData();
+                var hash = GetMd5Cache(fileData);
+                if (uploadState.AudioQuestionsFilesMd5?.Contains(hash) ?? false) continue;
+
+                cancellationToken.ThrowIfCancellationRequested();
 
                 await this.synchronizationService.UploadInterviewAudioAsync(
                     audioFile.InterviewId,
@@ -189,9 +264,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     transferProgress,
                     cancellationToken);
 
-                await this.audioFileStorage.RemoveInterviewBinaryData(audioFile.InterviewId, audioFile.FileName);
+                if (interview.Status == InterviewStatus.Completed)
+                    await this.audioFileStorage.RemoveInterviewBinaryData(audioFile.InterviewId, audioFile.FileName);
             }
         }
+
+        private static string GetMd5Cache(byte[] content)
+        {
+            using var crypto = MD5.Create();
+            var hash = crypto.ComputeHash(content);
+            var hashString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            return hashString;
+        }
+
 
         protected abstract IReadOnlyCollection<InterviewView> GetInterviewsForUpload();
     }

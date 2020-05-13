@@ -132,6 +132,27 @@
   <data name="HQ_Views_Manage_Title" xml:space="preserve">
     <value>Управление учетной записью</value>
   </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+    <value>Двухфакторная аутентификация</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+    <value>Добавьте дополнительный уровень безопасности своей учетной записи, чтобы защитить все ваши данные</value>
+  </data>
+  <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+    <value>Настройка приложения аутентификатора</value>
+  </data>
+  <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+    <value>Сброс аутентификатора</value>
+  </data>
+  <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+    <value>Ключи восстановления</value>
+  </data>
+  <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+    <value>Отключение двухфакторной аутентификации</value>
+  </data>
+  <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+    <value>Генерация ключей восстановления</value>
+  </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
     <value>Утверждено Хедквотером</value>
   </data>
@@ -243,5 +264,30 @@
   </data>
   <data name="NoPermissionsToExecute" xml:space="preserve">
     <value>Пользователь не авторизован выполнять данное действие</value>
+  </data>
+  <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+    <value>Не утвержденные Хедквотером</value>
+    <comment>Все интервью кроме </comment>
+  </data>
+  <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+    <value>Смена пароля</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+    <value>включена</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+    <value>выключена</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+    <value>Настроить новое устройство для двухфакторной аутентификации. Можно настроить несколько устройств одновременно.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+    <value>Сбросить и сгенерировать новый ключ, если ваше устройство было утеряно или украдено.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+    <value>Отменить старые и создать новые ключи восстановления.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+    <value>Выключить двухфакторную аутентификацию, оставляя учетную запись защищенной только паролем.</value>
   </data>
 </root>

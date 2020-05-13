@@ -1,6 +1,6 @@
 <template>
     <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')"
-        :subtitle="$t('Pages.InterviewersAndDevicesSubtitle')" 
+        :subtitle="$t('Pages.InterviewersAndDevicesSubtitle')"
         :hasSearch="true">
         <DataTables ref="table"
             :tableOptions="tableOptions"
@@ -26,15 +26,15 @@ export default {
             if (!this.supervisorId) {
                 return `<a href='${this.$config.model.interviewersBaseUrl}?facet=${facet}&supervisor=${row.teamName}'>${formatedNumber}</a>`
             }
-         
+
             return this.getLinkToInterviewerProfile(data, row)
         },
         formatNumber(value) {
             if (value == null || value == undefined)
                 return value
             var language = navigator.languages && navigator.languages[0] ||
-               navigator.language ||  
-               navigator.userLanguage 
+               navigator.language ||
+               navigator.userLanguage
             return value.toLocaleString(language)
         },
         hasIssue(data) {
@@ -68,7 +68,7 @@ export default {
                             if(self.supervisorId) {
                                 return self.getLinkToInterviewerProfile(data, row)
                             }
-                            
+
                             const linkClass = self.hasIssue(row) ? 'text-danger' : ''
                             return `<a href='${window.location}/${row.teamId}'><hi class='${linkClass}'>${data}</hi></a>`
                         },

@@ -51,7 +51,7 @@ export default {
             question : null,
             lastUpdate: null,
         }
-    }, 
+    },
     watch: {
         ['$watchedQuestion'](watchedQuestion) {
             if (watchedQuestion.updatedAt != this.lastUpdate) {
@@ -62,7 +62,7 @@ export default {
     },
     computed: {
         $watchedQuestion() {
-            return this.$store.state.webinterview.entityDetails[this.questionId] 
+            return this.$store.state.webinterview.entityDetails[this.questionId]
         },
         questionStyle() {
             return [{
@@ -101,8 +101,8 @@ export default {
         formatNumber (value) {
             if (value == null || value == undefined || Number.isNaN(value))
                 return ''
-                
-            return value.toLocaleString(undefined, {style: 'decimal', maximumFractionDigits : 15, minimumFractionDigits : 0})    
+
+            return value.toLocaleString(undefined, {style: 'decimal', maximumFractionDigits : 15, minimumFractionDigits : 0})
         },
     },
 }

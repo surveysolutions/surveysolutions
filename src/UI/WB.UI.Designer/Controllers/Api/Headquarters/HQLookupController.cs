@@ -9,7 +9,6 @@ using WB.UI.Designer.Code.Attributes;
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Authorize]
-    [AllowOnlyFromWhitelistIP]
     [Route("api/hq/lookup")]
     public class HQLookupController : ControllerBase
     {

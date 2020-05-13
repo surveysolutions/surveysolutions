@@ -11,6 +11,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public class InterviewSummary : InterviewBrief
     {
+        private string responsibleName;
+
         public InterviewSummary()
         {
             this.AnswersToFeaturedQuestions = new List<QuestionAnswer>();
@@ -22,12 +24,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewSummary(IQuestionnaire questionnaire) : this()
         {
             int position = 0;
-            foreach (var featuredQuestionId in questionnaire.GetPrefilledQuestions().Where(x=>questionnaire.GetQuestionType(x) != QuestionType.GpsCoordinates))
+            foreach (var featuredQuestionId in questionnaire.GetPrefilledQuestions()
+                .Where(x => questionnaire.GetQuestionType(x) != QuestionType.GpsCoordinates))
             {
                 var result = new QuestionAnswer
                 {
-                    Questionid = featuredQuestionId,
-                    Title = questionnaire.GetQuestionTitle(featuredQuestionId),
+                    Question = new Questionnaire.QuestionnaireCompositeItem
+                    {
+                        Id = questionnaire.GetEntityIdMapValue(featuredQuestionId)
+                    },
                     Answer = string.Empty,
                     InterviewSummary = this,
                     Position = position
@@ -36,6 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 this.AnswersToFeaturedQuestions.Add(result);
             }
+
+            this.QuestionnaireVariable = questionnaire.VariableName;
         }
 
         public override Guid InterviewId
@@ -58,9 +65,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         [PrimaryKeyAlias]
         public virtual string SummaryId { get; set; }
         public virtual string QuestionnaireTitle { get; set; }
-        public virtual string ResponsibleName { get; set; }
-        public virtual Guid TeamLeadId { get; set; }
-        public virtual string TeamLeadName { get; set; }
+
+        public virtual string ResponsibleName
+        {
+            get => responsibleName;
+            set
+            {
+                responsibleName = value;
+                this.ResponsibleNameLowerCase = value?.ToLower();
+            }
+        }
+
+        public virtual Guid SupervisorId { get; set; }
+        public virtual string SupervisorName { get; set; }
+        public virtual string SupervisorNameLowerCase { get; set; }
+
         public virtual UserRoles ResponsibleRole { get; set; }
         public virtual DateTime UpdateDate { get; set; }
         public virtual string LastStatusChangeComment { get; set; }
@@ -89,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             set => this.InterviewDurationLong = value?.Ticks;
         }
         public virtual long? InterviewDurationLong { get; protected set; }
-        
+
         public virtual DateTime? LastResumeEventUtcTimestamp { get; set; }
 
         public virtual IList<InterviewCommentedStatus> InterviewCommentedStatuses { get; set; }
@@ -102,10 +121,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual int CommentedEntitiesCount { get; set; }
 
         public virtual bool HasResolvedComments { get; set; }
+        public virtual string ResponsibleNameLowerCase { get; protected set; }
+        public virtual bool HasSmallSubstitutions { get; set; }
 
-        public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
+        public virtual void AnswerFeaturedQuestion(int questionId, string answer, decimal? optionCode = null)
         {
-            this.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer = answer;
+            this.AnswersToFeaturedQuestions.First(x => x.Question.Id == questionId).Answer = answer;
+            this.AnswersToFeaturedQuestions.First(x => x.Question.Id == questionId).AnswerCode = optionCode;
+        }
+
+        public virtual bool CanAnswerFeaturedQuestion(int questionId)
+        {
+            return this.AnswersToFeaturedQuestions.Any(x => x.Question.Id == questionId);
         }
 
         protected bool Equals(InterviewSummary other)

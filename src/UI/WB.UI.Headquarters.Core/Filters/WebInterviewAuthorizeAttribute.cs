@@ -38,9 +38,11 @@ namespace WB.UI.Headquarters.Filters
             {
                 string errorMessage = WebInterview.GetUiMessageFromException(ie);
 
-                var controller = (Controller)context.Controller;
+                if (context.Controller is Controller controller)
+                {
+                    controller.TempData["WebInterview.ErrorMessage"] = errorMessage;
+                }
 
-                controller.TempData["WebInterview.ErrorMessage"] = errorMessage;
                 context.Result = new RedirectToActionResult("Error", "WebInterview", null); 
             }
         }

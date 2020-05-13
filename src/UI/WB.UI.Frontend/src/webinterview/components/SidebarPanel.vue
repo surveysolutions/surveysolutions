@@ -104,7 +104,7 @@ export default {
     watch: {
         ['$route.params.sectionId']() {
             this.update()
-               
+
         },
         'panel'() {
             this.update()

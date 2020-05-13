@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using Amazon.S3.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -23,7 +27,7 @@ using WB.UI.Headquarters.Filters;
 namespace WB.UI.Headquarters.API
 {
     [ApiValidationAntiForgeryToken]
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Administrator, Headquarter")]
     [Route("api/[controller]/[action]")]
     [ResponseCache(NoStore = true)]
     public class DataExportApiController : ControllerBase
@@ -46,7 +50,8 @@ namespace WB.UI.Headquarters.API
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IExportFileNameService exportFileNameService,
             IExportServiceApi exportServiceApi,
-            ISystemLog auditLog, ExternalStoragesSettings externalStoragesSettings)
+            ISystemLog auditLog, 
+            ExternalStoragesSettings externalStoragesSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
@@ -60,7 +65,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<List<long>>> GetRunningJobs()
         {
             try
@@ -74,7 +79,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<List<ExportStatusItem>>> ExportStatus()
         {
             try
@@ -110,7 +115,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<List<DataExportProcessView>>> Status([FromBody] long[] ids)
         {
             var statuses = await this.dataExportStatusReader.GetProcessStatuses(ids);
@@ -118,7 +123,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<ExportDataAvailabilityView>> DataAvailability(Guid id, long version)
         {
             ExportDataAvailabilityView result = await dataExportStatusReader.GetDataAvailabilityAsync(new QuestionnaireIdentity(id, version));
@@ -131,7 +136,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<bool>> WasExportFileRecreated(long id)
         {
             bool result = await dataExportStatusReader.WasExportFileRecreated(id);
@@ -139,7 +144,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         
         public async Task<ActionResult> DownloadData(long id)
         {
@@ -159,7 +164,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         
         public async Task<ActionResult> AllData(Guid id, long version, DataExportFormat format,
             InterviewStatus? status = null,
@@ -182,7 +187,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         
         public async Task<ActionResult> DDIMetadata(Guid id, long version)
         {
@@ -197,15 +202,15 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<DataExportUpdateRequestResult>> Regenerate(long id, string accessToken = null)
         {
-            var result = await this.exportServiceApi.Regenerate(id, GetPasswordFromSettings(), null);
+            var result = await this.exportServiceApi.Regenerate(id, GetPasswordFromSettings(), null, null);
             return result;
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<long>> RequestUpdate(Guid id, long version,
             DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
@@ -225,6 +230,7 @@ namespace WB.UI.Headquarters.API
             DateTime? @from,
             DateTime? to,
             string accessToken = null,
+            string refresh_token = null,
             ExternalStorageType? externalStorageType = null)
         {
             long jobId = 0;
@@ -238,6 +244,7 @@ namespace WB.UI.Headquarters.API
                     to?.ToUniversalTime(),
                     GetPasswordFromSettings(),
                     accessToken,
+                    refresh_token,
                     externalStorageType);
 
                 jobId = result?.JobId ?? 0;
@@ -255,7 +262,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public async Task<ActionResult<bool>> DeleteDataExportProcess([FromQuery] long id)
         {
             try
@@ -270,7 +277,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ObserverNotAllowed]
+        [ObservingNotAllowed]
         public Task<DataExportStatusView> GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
             => this.dataExportStatusReader.GetDataExportStatusForQuestionnaireAsync(new QuestionnaireIdentity(id, version),
                 status,
@@ -307,15 +314,58 @@ namespace WB.UI.Headquarters.API
             if (questionnaireBrowseItem == null || questionnaireBrowseItem.IsDeleted)
                 return NotFound("@Questionnaire not found");
 
-            await RequestExportUpdateAsync(questionnaireBrowseItem,
-                state.Format ?? DataExportFormat.Binary,
-                state.InterviewStatus,
-                state.FromDate?.ToUniversalTime(),
-                state.ToDate?.ToUniversalTime(),
-                model.Access_token,
-                state.Type);
+            try
+            {
+                var response = await GetExternalStorageAuthTokenAsync(state, model.Code);
+                await RequestExportUpdateAsync(questionnaireBrowseItem,
+                    state.Format ?? DataExportFormat.Binary,
+                    state.InterviewStatus,
+                    state.FromDate?.ToUniversalTime(),
+                    state.ToDate?.ToUniversalTime(),
+                    response.AccessToken,
+                    response.RefreshToken,
+                    state.Type);
 
-            return ExportToExternalStorage();
+                return ExportToExternalStorage();
+            }
+            catch (ApiException e)
+            {
+                return BadRequest($"Could not get access token for {state.Type} by code");
+            }
+        }
+
+        private Task<ExternalStorageTokenResponse> GetExternalStorageAuthTokenAsync(ExternalStorageStateModel state, string code)
+        {
+            var storageSettings = this.GetExternalStorageSettings(state.Type);
+            var client =  RestService.For<IOAuth2Api>(new HttpClient()
+            {
+                BaseAddress = new Uri(storageSettings.TokenUri)
+            });
+            var request = new ExternalStorageAccessTokenRequest
+            {
+                Code = code,
+                ClientId = storageSettings.ClientId,
+                ClientSecret = storageSettings.ClientSecret,
+                RedirectUri = this.externalStoragesSettings.OAuth2.RedirectUri,
+                GrantType = "authorization_code"
+            };
+            
+            return client.GetTokensByAuthorizationCodeAsync(request);
+        }
+
+        private ExternalStoragesSettings.ExternalStorageOAuth2Settings GetExternalStorageSettings(ExternalStorageType type)
+        {
+            switch (type)
+            {
+                case ExternalStorageType.Dropbox:
+                    return this.externalStoragesSettings.OAuth2.Dropbox;
+                case ExternalStorageType.GoogleDrive :
+                    return this.externalStoragesSettings.OAuth2.GoogleDrive;
+                case ExternalStorageType.OneDrive:
+                    return this.externalStoragesSettings.OAuth2.OneDrive;
+                default:
+                    throw new NotSupportedException($"<{type}> not supported external storage type");
+            }
         }
 
         private string GetPasswordFromSettings()
@@ -327,7 +377,7 @@ namespace WB.UI.Headquarters.API
 
         public class ExportToExternalStorageModel
         {
-            public string Access_token { get; set; }
+            public string Code { get; set; }
             public string State { get; set; }
         }
 

@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var gpsQuery = QueryGpsAnswers()
                 .Where(x => x.Answer.IsEnabled &&
-                            x.QuestionnaireItem.StatExportCaption == gpsQuestionVariableName &&
+                            x.QuestionnaireItem.StataExportCaption == gpsQuestionVariableName &&
                             x.InterviewSummary.QuestionnaireId == questionnaireId);
 
             if (questionnaireVersion.HasValue)
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (supervisorId.HasValue)
             {
                 gpsQuery = gpsQuery
-                    .Where(x => x.InterviewSummary.TeamLeadId == supervisorId.Value 
+                    .Where(x => x.InterviewSummary.SupervisorId == supervisorId.Value 
                                 && !DisabledStatusesForGps.Contains(x.InterviewSummary.Status));
             }
 

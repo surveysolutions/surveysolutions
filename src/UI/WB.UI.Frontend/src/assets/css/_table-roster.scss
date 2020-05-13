@@ -11,7 +11,13 @@
             border-top: 1px solid #E5E5E5;
             border-bottom: 1px solid rgba(0, 0, 0, 0.3);
             .ag-header-cell-label {
-                
+                .ag-header-cell-text {
+                    height: auto;
+                    overflow: visible;
+                    overflow-wrap: normal;
+                    text-overflow: clip;
+                    white-space: normal;
+                }
                 text-overflow: clip;
                 overflow: visible;
                 white-space: normal !important;

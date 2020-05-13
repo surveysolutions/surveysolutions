@@ -57,7 +57,15 @@ const httpPlugin = {
                     store.dispatch('fetch', { id, done: true })
                 }
                 else {
-                    store.dispatch('UNHANDLED_ERROR', err)
+                    if (err.response.status === 400
+                        && err.response.data != null
+                        && err.response.data.errorMessage != null) {
+                        err.message = err.response.data.errorMessage
+                        store.dispatch('UNHANDLED_ERROR', err)
+                    }
+                    else {
+                        store.dispatch('UNHANDLED_ERROR', err)
+                    }
                 }
             }
         }

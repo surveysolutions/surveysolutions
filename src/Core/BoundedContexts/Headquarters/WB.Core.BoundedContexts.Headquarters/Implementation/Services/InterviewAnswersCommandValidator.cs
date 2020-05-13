@@ -22,9 +22,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         ICommandValidator<StatefulInterview, AnswerQRBarcodeQuestionCommand>,
         ICommandValidator<StatefulInterview, AnswerTextListQuestionCommand>
     {
-        private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
+        private readonly IAllInterviewsFactory interviewSummaryViewFactory;
 
-        public InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory)
+        public InterviewAnswersCommandValidator(IAllInterviewsFactory interviewSummaryViewFactory)
         {
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
         }
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private void ThrowIfUserDontHavePermissionsToAnswer(StatefulInterview interview, InterviewCommand command)
         {
             var interviewSummary = this.interviewSummaryViewFactory.Load(interview.EventSourceId);
-            if(command.UserId != interviewSummary.TeamLeadId)
+            if(command.UserId != interviewSummary.SupervisorId)
                 throw new InterviewException(CommandValidatorsMessages.UserDontHavePermissionsToAnswer);
         }
 

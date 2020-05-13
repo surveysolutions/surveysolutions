@@ -1,10 +1,13 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Documents;
+using Microsoft.EntityFrameworkCore.Internal;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -32,9 +35,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         protected Mock<IUserRepository> userManager;
         protected Mock<IQuestionnaireStorage> questionnaireStorage;
         protected Mock<ILogger> logger;
-        protected Mock<IPreloadedDataVerifier> interviewImportService;
         protected Mock<ICommandService> commandService;
         protected Mock<IAuthorizedUser> authorizedUser;
+        protected Mock<IUserViewFactory> userViewFactory;
 
         [SetUp]
         public virtual void Setup()
@@ -44,6 +47,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             var assignment = Create.Entity.Assignment();
             var assignmentsService = Mock.Of<IAssignmentsService>(s =>
                 s.GetAssignmentByAggregateRootId(It.IsAny<Guid>()) == assignment);
+            var assignmentFactory = Create.Service.AssignmentFactory(commandService.Object, assignmentsService);
 
             this.controller = new AssignmentsController(
                 this.assignmentViewFactory.Object,
@@ -52,15 +56,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 this.userManager.Object,
                 this.questionnaireStorage.Object,
                 Mock.Of<ISystemLog>(),
-                Mock.Of<IInterviewCreatorFromAssignment>(),
-                this.interviewImportService.Object,
-                Create.Service.AssignmentFactory(commandService.Object, assignmentsService),
-                Mock.Of<IInvitationService>(),
-                Mock.Of<IAssignmentPasswordGenerator>(),
+                Create.Service.ImportDataVerifier(),
                 commandService.Object,
                 authorizedUser.Object,
                 Mock.Of<IUnitOfWork>(),
-                Mock.Of<ICommandTransformator>());
+                this.userViewFactory.Object,
+                Create.Service.AssignmentsImportService(assignmentFactory: assignmentFactory,
+                    verifier: Create.Service.ImportDataVerifier(userViewFactory: userViewFactory.Object)),
+                Create.Service.NewtonJsonSerializer());
         }
 
         private void PrepareMocks()
@@ -69,15 +72,25 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.assignmentViewFactory = new Mock<IAssignmentViewFactory>();
             this.mapper = new Mock<IMapper>();
             this.userManager = new Mock<IUserRepository>();
-            this.interviewImportService = new Mock<IPreloadedDataVerifier>();
             this.questionnaireStorage = new Mock<IQuestionnaireStorage>();
             this.logger = new Mock<ILogger>();
             this.commandService = new Mock<ICommandService>();
             this.authorizedUser = new Mock<IAuthorizedUser>();
+            this.userViewFactory = new Mock<IUserViewFactory>();
         }
 
         protected void SetupResponsibleUser(HqUser user)
         {
+            this.userViewFactory.Setup(uf => uf.GetUsersByUserNames(new[] {user.UserName})).Returns(new[]
+            {
+                new UserToVerify
+                {
+                    HeadquartersId = user.Roles.Any(x=>x.Name == "Headquarters") ? user.Id : (Guid?)null,
+                    SupervisorId = user.Roles.Any(x=>x.Name == "Supervisor") ? user.Id : (Guid?)null,
+                    InterviewerId = user.Roles.Any(x=>x.Name == "Interviewer") ? user.Id : (Guid?)null,
+                    IsLocked = user.IsLockedByHeadquaters || user.IsLockedBySupervisor
+                }
+            });
             this.userManager.Setup(um => um.FindByNameAsync(It.IsAny<string>(), CancellationToken.None)).Returns(Task.FromResult(user));
         }
         

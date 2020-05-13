@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewPaused>,
         IUpdateHandler<InterviewSummary, InterviewResumed>,
         IUpdateHandler<InterviewSummary, InterviewRestored>,
-        IUpdateHandler<InterviewSummary, AnswerCommentResolved>
+        IUpdateHandler<InterviewSummary, AnswerCommentResolved>,
+        IUpdateHandler<InterviewSummary, SubstitutionTitlesChanged>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
@@ -83,14 +84,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             interviewSummary.FirstAnswerDate = answerTime;
         }
+       
+        
 
         private InterviewSummary AnswerQuestion(InterviewSummary interviewSummary, Guid questionId, object answer, DateTime updateDate, DateTime answerDate)
         {
+            var questionnaire = GetQuestionnaire(interviewSummary);
+
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
-                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
+                var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
+                if (interview.CanAnswerFeaturedQuestion(questionCompositeId))
                 {
-                    interview.AnswerFeaturedQuestion(questionId, AnswerUtils.AnswerToString(answer));
+                    interview.AnswerFeaturedQuestion(questionCompositeId, AnswerUtils.AnswerToString(answer));
                 }
                 
                 RecordFirstAnswer(interview, answerDate);
@@ -101,16 +107,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             DateTime updateDate, DateTime? answerDateTime,
             params decimal[] answers)
         {
+            var questionnaire = this.GetQuestionnaire(interviewSummary);
+
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
-                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
+                var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
+                if (interview.CanAnswerFeaturedQuestion(questionCompositeId))
                 {
-                    var questionnaire = this.GetQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
-
                     var optionStrings = questionnaire.GetOptionsForQuestion(questionId, null, null, null)
                         .Where(x => answers.Contains(x.Value)).Select(x => x.Title);
 
-                    interview.AnswerFeaturedQuestion(questionId, string.Join(",", optionStrings));
+                    interview.AnswerFeaturedQuestion(questionCompositeId, string.Join(",", optionStrings), answers.First());
                 }
 
                 RecordFirstAnswer(interviewSummary, answerDateTime ?? updateDate);
@@ -127,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             DateTime? creationTime)
         {
             var responsible = this.users.GetUser(userId);
-            var questionnaire = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
+            var questionnaire = GetQuestionnaire(questionnaireId, questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnaire)
             {
@@ -139,6 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireVersion = questionnaireVersion,
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString(),
                 QuestionnaireTitle = questionnaire.Title,
+                QuestionnaireVariable = questionnaire.VariableName,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
                 ResponsibleRole = responsible?.Roles.First() ?? UserRoles.Interviewer,
@@ -151,8 +159,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return interviewSummary;
         }
 
-        private IQuestionnaire GetQuestionnaire(Guid questionnaireId, long questionnaireVersion) =>
-            this.questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), null);
+        private IQuestionnaire GetQuestionnaire(InterviewSummary interview) =>
+            GetQuestionnaire(interview.QuestionnaireId, interview.QuestionnaireVersion);
+
+        private IQuestionnaire GetQuestionnaire(Guid questionnaireId, long version) =>
+            this.questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(questionnaireId, version), null);
+
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
         {
@@ -216,19 +228,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interview.ResponsibleId = @event.Payload.SupervisorId;
                 interview.ResponsibleName = supervisorName;
                 interview.ResponsibleRole = UserRoles.Supervisor;
-                interview.TeamLeadId = @event.Payload.SupervisorId;
-                interview.TeamLeadName = supervisorName;
+                interview.SupervisorId = @event.Payload.SupervisorId;
+                interview.SupervisorName = supervisorName;
                 interview.IsAssignedToInterviewer = false;
                 interview.ReceivedByInterviewer = false;
 
                 if (interview.FirstSupervisorId == null)
                 {
-                    interview.FirstSupervisorId = interview.TeamLeadId;
+                    interview.FirstSupervisorId = interview.SupervisorId;
                 }
 
                 if (interview.FirstSupervisorName == null)
                 {
-                    interview.FirstSupervisorName = interview.TeamLeadName;
+                    interview.FirstSupervisorName = interview.SupervisorName;
                 }
             });
         }
@@ -262,7 +274,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
-            var questionnaire = GetQuestionnaire(state.QuestionnaireId, state.QuestionnaireVersion);
+            var questionnaire = GetQuestionnaire(state);
             string answerString = @event.Payload.Answer.ToString(DateTimeFormat.DateFormat);
             if (questionnaire.IsTimestampQuestion(@event.Payload.QuestionId))
             {
@@ -285,13 +297,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersRemoved> @event)
         {
+            var questionnaire = GetQuestionnaire(state);
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 foreach (var question in @event.Payload.Questions)
                 {
-                    if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == question.Id))
+                    var questionId = questionnaire.GetEntityIdMapValue(question.Id);
+                    if (interview.AnswersToFeaturedQuestions.Any(x => x.Question.Id == questionId))
                     {
-                        interview.AnswerFeaturedQuestion(question.Id, string.Empty);
+                        interview.AnswerFeaturedQuestion(questionId, string.Empty);
                     }
                 }
             });
@@ -324,8 +338,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 }
                 else
                 {
-                    interview.ResponsibleId = interview.TeamLeadId;
-                    interview.ResponsibleName = interview.TeamLeadName;
+                    interview.ResponsibleId = interview.SupervisorId;
+                    interview.ResponsibleName = interview.SupervisorName;
                     interview.ResponsibleRole = UserRoles.Supervisor;
                     interview.IsAssignedToInterviewer = false;
                     interview.ReceivedByInterviewer = false;
@@ -358,6 +372,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SynchronizationMetadataApplied> @event)
         {
+            var questionnaire = GetQuestionnaire(state);
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 if (state.WasCreatedOnClient)
@@ -366,18 +381,21 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     {
                         foreach (var questionFromDto in @event.Payload.FeaturedQuestionsMeta)
                         {
-                            if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionFromDto.Id))
+                            var questionId = questionnaire.GetEntityIdMapValue(questionFromDto.Id);
+                            if (interview.AnswersToFeaturedQuestions.Any(x => x.Question.Id == questionId))
                             {
-                                var questionnaire = GetQuestionnaire(interview.QuestionnaireId, interview.QuestionnaireVersion);
+                                var questionnaire = GetQuestionnaire(interview);
                                 var questionType = questionnaire.GetQuestionType(questionFromDto.Id);
                                 if (questionType == QuestionType.SingleOption)
                                 {
                                     decimal[] answer = { Convert.ToDecimal(questionFromDto.Answer) };
-                                    AnswerFeaturedQuestionWithOptions(interview, questionFromDto.Id, @event.EventTimeStamp, @event.EventTimeStamp, answer);
+                                    AnswerFeaturedQuestionWithOptions(interview, 
+                                        questionFromDto.Id, @event.EventTimeStamp, @event.EventTimeStamp, answer);
                                 }
                                 else
                                 {
-                                    interview.AnswerFeaturedQuestion(questionFromDto.Id, AnswerUtils.AnswerToString(questionFromDto.Answer));
+                                    interview.AnswerFeaturedQuestion(questionId,
+                                        AnswerUtils.AnswerToString(questionFromDto.Answer));
                                 }
 
                                 RecordFirstAnswer(interview, @event.EventTimeStamp);
@@ -387,8 +405,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     var responsible = this.users.GetUser(state.ResponsibleId);
                     if (responsible?.Supervisor != null)
                     {
-                        state.TeamLeadId = responsible.Supervisor.Id;
-                        state.TeamLeadName = responsible.Supervisor.Name;
+                        state.SupervisorId = responsible.Supervisor.Id;
+                        state.SupervisorName = responsible.Supervisor.Name;
                     }
                     state.Status = @event.Payload.Status;
                 }
@@ -501,6 +519,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
 
             return state;
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SubstitutionTitlesChanged> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                state.HasSmallSubstitutions = true;
+            });
         }
     }
 }

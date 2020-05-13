@@ -137,12 +137,9 @@
 
 <script>
 import Vue from 'vue'
-
 import modal from '@/shared/modal'
-import {mixin as VueTimers} from 'vue-timers'
 
 export default {
-    mixins: [VueTimers],
     props: {
         data: {
             type: Object,
@@ -150,10 +147,6 @@ export default {
                 return {}
             },
         },
-    },
-
-    timers: {
-        dataRecreationStatus: {time: 10000, autostart: false, repeat: true},
     },
 
     computed: {
@@ -177,7 +170,7 @@ export default {
             return this.data.jobStatus == 'Completed' || this.data.jobStatus == 'Canceled' || this.data.jobStatus == 'Fail'
         },
     },
-    watch: {},
+
     methods: {
         regenerate() {
             this.$http
@@ -191,24 +184,6 @@ export default {
                     Vue.config.errorHandler(error, this)
                 })
         },
-
-        dataRecreationStatus() {
-            this.$http
-                .get(this.$config.model.api.wasExportFileRecreatedUrl, {params: {id: this.data.id}})
-                .then(response => {
-                    var wasExportFileRecreated = response.data
-                    this.data.hasFile = this.data.hasFile && !wasExportFileRecreated
-
-                    if (!wasExportFileRecreated) {
-                        this.$timer.stop('dataRecreationStatus')
-                    }
-                })
-                .catch(error => {
-                    this.$timer.stop('dataRecreationStatus')
-                    Vue.config.errorHandler(error, this)
-                })
-        },
-
         cancel() {
             modal.confirm(this.$t('DataExport.ConfirmStop') + ' ' + this.$t('DataExport.export') + '?', result => {
                 if (result) {

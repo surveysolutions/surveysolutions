@@ -148,6 +148,24 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-7">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input
+                            class="checkbox-filter single-checkbox"
+                            v-model="isPartialSynchronizationEnabled"
+                            @change="updateDeviceSettings"
+                            id="interviewerPartialSynchronizationEnabled"
+                            type="checkbox"/>
+                        <label for="interviewerPartialSynchronizationEnabled"
+                            style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{$t('Settings.InterviewerPartialSynchronization')}}
+                            <p style="font-weight: normal">{{$t('Settings.PartialSynchronizationDescription')}}</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row extra-margin-bottom contain-input">
@@ -187,9 +205,9 @@
                 <input
                     name="__RequestVerificationToken"
                     type="hidden"
-                    
+
                     :value="this.$hq.Util.getCsrfCookie()"/>
-                <div class="block-filter"> 
+                <div class="block-filter">
                     <div class="form-group"
                         :class="{ 'has-error': this.$config.model.invalidImage }">
                         <label for="companyLogo">
@@ -261,6 +279,7 @@ export default {
             globalNoticeUpdated: false,
             isAllowInterviewerUpdateProfile: false,
             isInterviewerAutomaticUpdatesEnabled: false,
+            isPartialSynchronizationEnabled: false,
             isDeviceNotificationsEnabled: false,
             isEmailAllowed: false,
         }
@@ -282,10 +301,9 @@ export default {
                 profile.data.allowInterviewerUpdateProfile
 
             const interviewerSettings = await this.$hq.AdminSettings.getInterviewerSettings()
-            this.isInterviewerAutomaticUpdatesEnabled =
-                interviewerSettings.data.interviewerAutoUpdatesEnabled
-            this.isDeviceNotificationsEnabled =
-                interviewerSettings.data.notificationsEnabled
+            this.isInterviewerAutomaticUpdatesEnabled = interviewerSettings.data.interviewerAutoUpdatesEnabled
+            this.isDeviceNotificationsEnabled = interviewerSettings.data.notificationsEnabled
+            this.isPartialSynchronizationEnabled = interviewerSettings.data.partialSynchronizationEnabled
 
             const webInterviewSettings = await this.$hq.AdminSettings.getWebInterviewSettings()
             this.isEmailAllowed = webInterviewSettings.data.allowEmails
@@ -299,7 +317,7 @@ export default {
                     cancel: {
                         label: self.$t('Common.No'),
                     },
-                    
+
                     success: {
                         label: self.$t('Common.Yes'),
                         callback: async () => {
@@ -331,7 +349,8 @@ export default {
         updateDeviceSettings() {
             return this.$hq.AdminSettings.setInterviewerSettings(
                 this.isInterviewerAutomaticUpdatesEnabled,
-                this.isDeviceNotificationsEnabled
+                this.isDeviceNotificationsEnabled,
+                this.isPartialSynchronizationEnabled
             )
         },
         updateWebInterviewEmailNotifications() {

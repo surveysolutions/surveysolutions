@@ -6,7 +6,6 @@
                 <Typeahead
                     ref="questionnaireIdControl"
                     control-id="questionnaireId"
-                    fuzzy
                     data-vv-name="questionnaireId"
                     data-vv-as="questionnaire"
                     :placeholder="$t('Common.AllQuestionnaires')"
@@ -19,19 +18,18 @@
                 <Typeahead
                     ref="questionnaireVersionControl"
                     control-id="questionnaireVersion"
-                    fuzzy
                     data-vv-name="questionnaireVersion"
                     data-vv-as="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
                     :disabled="questionnaireId == null"
                     :value="questionnaireVersion"
                     :values="questionnaireId == null ? [] : questionnaireId.versions"
-                    v-on:selected="questionnaireVersionSelected"/>
+                    v-on:selected="questionnaireVersionSelected" />
             </FilterBlock>
+
             <FilterBlock :title="$t('Common.Status')">
                 <Typeahead
                     control-id="status"
-                    fuzzy
                     :selectedKey="selectedStatus"
                     data-vv-name="status"
                     data-vv-as="status"
@@ -67,19 +65,23 @@
                     </div>
                 </div>
             </FilterBlock>
+
+            <InterviewFilter slot="additional"
+                :questionnaireId="where.questionnaireId"
+                :questionnaireVersion="where.questionnaireVersion"
+                :value="conditions"
+                @change="questionFilterChanged" />
         </Filters>
 
         <DataTables
             ref="table"
             :tableOptions="tableOptions"
-            :addParamsToRequest="addParamsToRequest"
             :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="rows => selectedRows = rows"
             @page="resetSelection"
-            @totalRows="(rows) => totalRows = rows"
-            @ajaxComlpete="isLoading = false"
+            @ajaxComplete="isLoading = false"
             :selectable="showSelectors"
-            :selectableId="'interviewId'">
+            :selectableId="'id'">
             <div
                 class="panel panel-table"
                 v-if="selectedRows.length"
@@ -98,22 +100,27 @@
                     <button
                         class="btn btn-lg btn-success"
                         v-if="selectedRows.length"
+                        :disabled="getFilteredToAssign().length == 0"
                         @click="assignInterview">{{ $t("Common.Assign") }}</button>
                     <button
                         class="btn btn-lg btn-success"
                         v-if="selectedRows.length"
+                        :disabled="getFilteredToApprove().length == 0"
                         @click="approveInterview">{{ $t("Common.Approve")}}</button>
                     <button
                         class="btn btn-lg reject"
                         v-if="selectedRows.length"
+                        :disabled="getFilteredToReject().length == 0"
                         @click="rejectInterview">{{ $t("Common.Reject")}}</button>
                     <button
                         class="btn btn-lg btn-primary"
                         v-if="selectedRows.length && !config.isSupervisor"
+                        :disabled="getFilteredToUnApprove().length == 0"
                         @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
                     <button
                         class="btn btn-link"
                         v-if="selectedRows.length && !config.isSupervisor"
+                        :disabled="getFilteredToDelete().length == 0"
                         @click="deleteInterview">{{ $t("Common.Delete")}}</button>
                 </div>
             </div>
@@ -123,7 +130,6 @@
             <form onsubmit="return false;">
                 <div class="form-group"
                     v-if="getFilteredToAssign().length > 0">
-                    <p>{{$t("Interviews.ChooseResponsible")}}</p>
                     <label
                         class="control-label"
                         for="newResponsibleId">{{$t("Assignments.SelectResponsible")}}</label>
@@ -137,7 +143,15 @@
                 </div>
                 <div id="pnlAssignToOtherTeamConfirmMessage">
                     <p
-                        v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Supervisor assigned', status2: 'Interviewer assigned', status3: 'Rejected by Supervisor'} ) : $t('Interviews.AssignToOtherTeamConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Approved by Supervisor', status2: 'Approved by Headquarters'} )"></p>
+                        v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {
+                            count: this.getFilteredToAssign().length,
+                            status1: 'Supervisor assigned',
+                            status2: 'Interviewer assigned',
+                            status3: 'Rejected by Supervisor'} )
+                            : $t('Interviews.AssignToOtherTeamConfirmMessage', {
+                                count: this.getFilteredToAssign().length,
+                                status1: 'Approved by Supervisor',
+                                status2: 'Approved by Headquarters'} )"></p>
                 </div>
 
                 <div v-if="CountReceivedByInterviewerItems() > 0">
@@ -152,6 +166,11 @@
                         <span class="tick"></span>
                         {{$t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems())}}
                     </label>
+                    <br />
+                    <span v-if="isReassignReceivedByInterviewer"
+                        class="text-danger">
+                        {{$t("Interviews.AssignReceivedWarning")}}
+                    </span>
                 </div>
             </form>
             <div slot="actions">
@@ -168,7 +187,6 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-
         <ModalFrame ref="deleteModal">
             <div class="action-container">
                 <p
@@ -196,12 +214,13 @@
                 </div>
                 <div>
                     <label
-                        for="txtStatusChangeComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}} :</label>
+                        for="txtStatusApproveComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}} :</label>
                     <textarea
                         class="form-control"
                         rows="10"
                         maxlength="200"
-                        id="txtStatusChangeComment"
+                        name="txtStatusChangeComment"
+                        id="txtStatusApproveComment"
                         v-model="statusChangeComment"></textarea>
                 </div>
             </form>
@@ -219,7 +238,6 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-
         <ModalFrame ref="rejectModal">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -271,7 +289,6 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-
         <ModalFrame ref="unapproveModal">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -293,7 +310,6 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-
         <ModalFrame ref="statusHistory"
             :title="$t('Pages.HistoryOfStatuses_Title')">
             <div class="action-container">
@@ -340,9 +356,77 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
-import {lowerCase, map, join, assign, isNaN} from 'lodash'
+import {lowerCase, find, filter, flatten, map,
+    join, assign, isNaN, isNumber, toNumber, isEqual} from 'lodash'
+import InterviewFilter from './InterviewQuestionsFilters'
+import gql from 'graphql-tag'
+import * as toastr from 'toastr'
+
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+
+const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
+  interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
+    totalCount
+    filteredCount
+    nodes {
+      id
+      key
+      status
+      questionnaireId
+      responsibleId
+      responsibleName
+      responsibleRole
+      errorsCount
+      assignmentId
+      updateDate
+      receivedByInterviewer
+      actionFlags
+      questionnaireVersion
+      identifyingQuestions {
+        question {
+          variable
+          questionText
+          label
+        }
+        answer
+      }
+    }
+  }
+}`
+
+/** convert
+ * [{variable, field, value}, {variable, field, value}]
+ * ["variable,field,value", "variable,field,value"]
+ */
+function conditionToQueryString(conditions) {
+    const result = []
+    conditions.forEach(c => {
+        result.push(`${c.variable},${c.field},${JSON.stringify(c.value)}`)
+    })
+    return result.length > 0 ? result : null
+}
+
+function queryStringToCondition(queryStringArray) {
+    const result = []
+    queryStringArray.forEach(q => {
+        const parts = q.split(',')
+        const value = parts.slice(2).join(',')
+
+        result.push({
+            variable: parts[0],
+            field: parts[1],
+            value: JSON.parse(value),
+        })
+    })
+    return result
+}
 
 export default {
+    components: {
+        InterviewFilter,
+    },
+
     data() {
         return {
             restart_comment: null,
@@ -351,7 +435,8 @@ export default {
             isLoading: false,
             selectedRows: [],
             selectedRowWithMenu: null,
-            totalRows: 0,
+            totalRows: 0, filteredCount: 0,
+            draw: 0,
             assignmentId: null,
             responsibleId: null,
             responsibleParams: {showArchived: true, showLocked: true},
@@ -365,10 +450,22 @@ export default {
 
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
+
+            conditions: [],
         }
     },
 
     computed: {
+        rowData() {
+            return (this.interviewData.edges || []).map(e => e.node)
+        },
+
+        interviewData() {
+            if(this.interviews == null) {
+                return {}
+            }
+            return this.interviews
+        },
         interviewKey() {
             return this.selectedRowWithMenu != undefined ? this.selectedRowWithMenu.key : ''
         },
@@ -389,6 +486,7 @@ export default {
             const result = this.selectedRowWithMenu != null ? lowerCase(this.selectedRowWithMenu.responsibleRole) : ''
             return result
         },
+
         tableColumns() {
             const self = this
             return [
@@ -402,24 +500,29 @@ export default {
                     className: 'interview-id title-row',
                     render(data, type, row) {
                         var result =
-                            '<a href=\'' + self.config.interviewReviewUrl + '/' + row.interviewId + '\'>' + data + '</a>'
+                            '<a href=\'' + self.config.interviewReviewUrl + '/' + row.id + '\'>' + data + '</a>'
                         return result
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'key')
                     },
+                    width: '50px',
                 },
                 {
-                    data: 'featuredQuestions',
+                    data: 'identifyingQuestions',
                     title: this.$t('Assignments.IdentifyingQuestions'),
                     className: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        var questionsWithTitles = map(data, question => {
-                            return question.question + ': ' + question.answer
+                        const delimiter = self.mode == 'dense'
+
+                        var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
+                            return `${sanitizeHtml(node.question.label || node.question.questionText)}: <strong>${node.answer}</strong>`
                         })
-                        return join(questionsWithTitles, ', ')
+
+                        const dom = join(questionsWithTitles, ', ')
+                        return dom
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'prefield')
@@ -433,9 +536,10 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'responsible')
                     },
+                    width: '100px',
                 },
                 {
-                    data: 'lastEntryDateUtc',
+                    data: 'updateDate',
                     name: 'UpdateDate',
                     title: this.$t('Assignments.UpdatedAt'),
                     className: 'date last-update',
@@ -449,6 +553,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'updated')
                     },
+                    width: '100px',
                 },
                 {
                     data: 'errorsCount',
@@ -461,15 +566,20 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
                     },
+                    width: '50px',
                 },
                 {
                     data: 'status',
                     name: 'Status',
                     title: this.$t('Common.Status'),
                     orderable: true,
+                    render(data) {
+                        return find(self.statuses, s => s.key == data).value
+                    },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'status')
                     },
+                    width: '100px',
                 },
                 {
                     data: 'receivedByInterviewer',
@@ -481,6 +591,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'received')
                     },
+                    width: '50px',
                 },
                 {
                     data: 'assignmentId',
@@ -491,6 +602,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'assignment')
                     },
+                    width: '50px',
                 },
             ]
         },
@@ -499,74 +611,220 @@ export default {
             const columns = this.tableColumns.filter(x => x.if == null || x.if())
 
             var defaultSortIndex = 3 //findIndex(columns, { name: "UpdateDate" });
+
             if (this.showSelectors) defaultSortIndex += 1
+
+            const self = this
 
             var tableOptions = {
                 rowId: function(row) {
-                    return `row_${row.interviewId}`
+                    return `row_${row.id}`
                 },
                 order: [[defaultSortIndex, 'desc']],
                 deferLoading: 0,
                 columns,
-                ajax: {
-                    url: this.$config.model.allInterviews,
-                    type: 'GET',
+                pageLength: 20,
+                ajax (data, callback, settings) {
+                    const order = {}
+                    const order_col = data.order[0]
+                    const column = data.columns[order_col.column]
+
+                    order[column.data] = order_col.dir.toUpperCase()
+
+                    const variables = {
+                        order: order,
+                        skip: data.start,
+                        take: data.length,
+                    }
+
+                    const where = {
+                        AND: [...self.whereQuery],
+                    }
+
+                    const search = data.search.value
+
+                    if(search && search != '') {
+                        where.AND.push({ OR: [
+                            { key_starts_with: search.toLowerCase() },
+                            { responsibleNameLowerCase_starts_with: search.toLowerCase() },
+                            { supervisorNameLowerCase_starts_with: search.toLowerCase() },
+                            { identifyingQuestions_some: {
+                                answerLowerCase_starts_with: search.toLowerCase(),
+                            },
+                            }],
+                        })
+                    }
+
+                    if(where.AND.length > 0) {
+                        variables.where = where
+                    }
+
+                    self.$apollo.query({
+                        query,
+                        variables: variables,
+                        fetchPolicy: 'network-only',
+                    }).then(response => {
+                        const data = response.data.interviews
+                        self.totalRows = data.totalCount
+                        self.filteredCount = data.filteredCount
+                        callback({
+                            recordsTotal: data.totalCount,
+                            recordsFiltered: data.filteredCount,
+                            draw: ++this.draw,
+                            data: data.nodes,
+                        })
+                    }).catch(err => {
+                        callback({
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: [],
+                            error: err.toString(),
+                        })
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 },
                 select: {
                     style: 'multi',
                     selector: 'td>.checkbox-filter',
                     info: false,
                 },
+                dom: 'fritp',
                 sDom: 'rf<"table-with-scroll"t>ip',
                 searchHighlight: true,
             }
 
             return tableOptions
         },
+
         showSelectors() {
             return !this.config.isObserver && !this.config.isObserving
         },
+
         title() {
-            return this.$t('Common.Interviews') + ' (' + this.formatNumber(this.totalRows) + ')'
+            return this.$t('Common.Interviews') + ' (' + this.formatNumber(this.filteredCount) + ')'
         },
+
         config() {
             return this.$config.model
+        },
+
+        where() {
+            const data = {}
+
+            if (this.status) data.status = this.status.key
+            if (this.questionnaireId) data.questionnaireId = this.questionnaireId.key
+            if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
+            if (this.responsibleId) data.responsibleName = this.responsibleId.value
+            if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
+            if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
+            if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
+
+            return data
+        },
+
+        whereQuery() {
+            const and = []
+            const self = this
+
+            if(this.where.questionnaireId) {
+                and.push({questionnaireId: this.where.questionnaireId})
+
+                if(this.where.questionnaireVersion) {
+                    and.push({questionnaireVersion: this.where.questionnaireVersion})
+                }
+            }
+
+            if(this.where.status) {
+                and.push({ status_in: JSON.parse(this.status.alias)})
+            }
+
+            if(this.conditions != null && this.conditions.length > 0) {
+                this.conditions.forEach(cond => {
+                    if(cond.value == null) return
+
+                    const identifyingQuestions_some = { question: {variable: cond.variable}}
+
+                    const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
+                    identifyingQuestions_some[cond.field] = value
+                    and.push({ identifyingQuestions_some })
+                })
+            }
+
+            if(this.responsibleId) {
+                and.push({
+                    OR: [
+                        { responsibleName: this.responsibleId.value },
+                        { supervisorName: this.responsibleId.value },
+                    ]})
+            }
+
+            if(this.unactiveDateStart) {
+                and.push({ updateDate_gte: this.unactiveDateStart})
+            }
+
+            if(this.unactiveDateEnd) {
+                and.push({ updateDate_lte: this.unactiveDateEnd})
+            }
+
+            if(this.assignmentId) {
+                and.push({ assignmentId: parseInt(this.assignmentId) })
+            }
+
+            return and
+        },
+
+        queryString() {
+            const query = Object.assign({}, this.where)
+
+            const conditions = this.conditions
+
+            if(conditions.length > 0) {
+                query.conditions = conditionToQueryString(conditions)
+            }
+
+            return query
         },
     },
 
     methods: {
+        questionFilterChanged(conditions) {
+            this.conditions = conditions
+            this.reloadTableAndSaveRoute()
+        },
+
         togglePrefield() {
             this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
             return false
         },
 
         getFilteredToDelete() {
-            return this.getFileredItems(function(item) {
-                var value = item.canDelete
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANBEDELETED') >= 0
                 return !isNaN(value) && value
             })
         },
         getFilteredToAssign() {
-            return this.getFileredItems(function(item) {
-                var value = item.canBeReassigned
+            return this.getFilteredItems(function(item) {
+                var value =  item.actionFlags.indexOf('CANBEREASSIGNED') >= 0
                 return !isNaN(value) && value
             })
         },
         getFilteredToApprove() {
-            return this.getFileredItems(function(item) {
-                var value = item.canApprove
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANBEAPPROVED') >= 0
                 return !isNaN(value) && value
             })
         },
         getFilteredToReject() {
-            return this.getFileredItems(function(item) {
-                var value = item.canReject
+            return this.getFilteredItems(function(item) {
+                var value =  item.actionFlags.indexOf('CANBEREJECTED') >= 0
                 return !isNaN(value) && value
             })
         },
         getFilteredToUnApprove() {
-            return this.getFileredItems(function(item) {
-                var value = item.canUnapprove
+            return this.getFilteredItems(function(item) {
+                var value =  item.actionFlags.indexOf('CANBEUNAPPROVEDBYHQ') >= 0
                 return !isNaN(value) && value
             })
         },
@@ -578,17 +836,25 @@ export default {
             )
         },
         CountReceivedByInterviewerItems() {
-            return this.getFileredItems(function(item) {
+            return this.getFilteredItems(function(item) {
                 return item.receivedByInterviewer === true
             }).length
         },
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
-            this.questionnaireVersion = null
+
+            if(newValue != null && newValue.versions != null && newValue.versions.length == 1) {
+                this.questionnaireVersion = newValue.versions[0]
+            }
+            else {
+                this.questionnaireVersion = null
+            }
+            this.conditions = []
         },
 
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
+            this.conditions = []
         },
 
         userSelected(newValue) {
@@ -599,7 +865,7 @@ export default {
         },
 
         viewInterview() {
-            var id = this.selectedRowWithMenu.interviewId
+            var id = this.selectedRowWithMenu.id
             window.location = this.config.interviewReviewUrl + '/' + id.replace(/-/g, '')
         },
 
@@ -627,8 +893,8 @@ export default {
             }
 
             var commands = this.arrayMap(
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 }),
                 function(rowId) {
                     var item = {
@@ -663,7 +929,7 @@ export default {
             this.$refs.assignModal.modal({keyboard: false})
         },
 
-        getFileredItems(filterPredicat) {
+        getFilteredItems(filterPredicat) {
             if (this.$refs.table == undefined) return []
 
             var selectedItems = this.$refs.table.table.rows({selected: true}).data()
@@ -685,8 +951,8 @@ export default {
 
             var command = this.getCommand(
                 self.config.isSupervisor ? 'ApproveInterviewCommand' : 'HqApproveInterviewCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 }),
                 this.statusChangeComment
             )
@@ -720,8 +986,8 @@ export default {
             if (!self.config.isSupervisor) {
                 var command = this.getCommand(
                     'HqRejectInterviewCommand',
-                    map(filteredItems, question => {
-                        return question.interviewId
+                    map(filteredItems, interview => {
+                        return interview.id
                     }),
                     this.statusChangeComment
                 )
@@ -742,8 +1008,8 @@ export default {
                 if (noReassignInterviews.length > 0) {
                     var cmd = this.getCommand(
                         'RejectInterviewCommand',
-                        map(noReassignInterviews, question => {
-                            return question.interviewId
+                        map(noReassignInterviews, interview => {
+                            return interview.id
                         }),
                         this.statusChangeComment
                     )
@@ -764,8 +1030,8 @@ export default {
 
                 if (toReassignInterviews.length > 0 && self.newResponsibleId != null) {
                     var commands = this.arrayMap(
-                        map(toReassignInterviews, question => {
-                            return question.interviewId
+                        map(toReassignInterviews, interview => {
+                            return interview.id
                         }),
                         function(rowId) {
                             var item = {
@@ -797,6 +1063,7 @@ export default {
                 self.$refs.rejectModal.hide()
             }
         },
+
         rejectInterview() {
             this.statusChangeComment = null
             this.newResponsibleId = null
@@ -863,8 +1130,8 @@ export default {
 
             var command = this.getCommand(
                 'UnapproveByHeadquarterCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 })
             )
 
@@ -892,8 +1159,8 @@ export default {
 
             var command = this.getCommand(
                 'DeleteInterviewCommand',
-                map(filteredItems, question => {
-                    return question.interviewId
+                map(filteredItems, interview => {
+                    return interview.id
                 })
             )
 
@@ -910,6 +1177,7 @@ export default {
         deleteInterview() {
             this.$refs.deleteModal.modal({keyboard: false})
         },
+
         newResponsibleSelected(newValue) {
             this.newResponsibleId = newValue
         },
@@ -917,7 +1185,7 @@ export default {
         async showStatusHistory() {
             var self = this
             const statusHistoryList = await this.$http.post(this.config.api.interviewStatuses, {
-                interviewId: this.selectedRowWithMenu.interviewId,
+                interviewId: this.selectedRowWithMenu.id,
             })
 
             if (statusHistoryList.data.length != 0) {
@@ -979,7 +1247,7 @@ export default {
             menu.push({
                 name: self.$t('Pages.InterviewerHq_OpenInterview'),
                 callback: () => {
-                    window.location = self.config.interviewReviewUrl + '/' + rowData.interviewId.replace(/-/g, '')
+                    window.location = self.config.interviewReviewUrl + '/' + rowData.id.replace(/-/g, '')
                 },
             })
 
@@ -988,7 +1256,7 @@ export default {
                 callback: () => self.showStatusHistory(),
             })
 
-            if (rowData.responsibleRole === 'Interviewer') {
+            if (rowData.responsibleRole === 'INTERVIEWER') {
                 menu.push({
                     name: self.$t('Common.OpenResponsiblesProfile'),
                     callback: () => (window.location = self.config.profileUrl + '/' + rowData.responsibleId),
@@ -1005,28 +1273,33 @@ export default {
                     className: 'context-menu-separator context-menu-not-selectable',
                 })
 
+                const canBeAssigned =  rowData.actionFlags.indexOf('CANBEREASSIGNED') >= 0
                 menu.push({
                     name: self.$t('Common.Assign'),
-                    className: 'primary-text',
+                    className: canBeAssigned ? 'primary-text' : '',
                     callback: () => self.assignInterview(),
+                    disabled: !canBeAssigned,
                 })
 
                 menu.push({
                     name: self.$t('Common.Approve'),
                     className: 'success-text',
                     callback: () => self.approveInterview(),
+                    disabled: rowData.actionFlags.indexOf('CANBEAPPROVED') < 0,
                 })
 
                 menu.push({
                     name: self.$t('Common.Reject'),
                     className: 'error-text',
                     callback: () => self.rejectInterview(),
+                    disabled: rowData.actionFlags.indexOf('CANBEREJECTED') < 0,
                 })
 
                 if (!self.config.isSupervisor) {
                     menu.push({
                         name: self.$t('Common.Unapprove'),
                         callback: () => self.unapproveInterview(),
+                        disabled: rowData.actionFlags.indexOf('CANBEUNAPPROVEDBYHQ') < 0,
                     })
 
                     menu.push({
@@ -1037,39 +1310,22 @@ export default {
                         name: self.$t('Common.Delete'),
                         className: 'error-text',
                         callback: () => self.deleteInterview(),
+                        disabled: rowData.actionFlags.indexOf('CANBEDELETED') < 0,
                     })
                 }
             }
 
             return menu
         },
+
         resetSelection() {
             this.selectedRows.splice(0, this.selectedRows.length)
         },
 
-        addParamsToRequest(data) {
-            data.status = (this.status || {}).key
-            data.questionnaireId = (this.questionnaireId || {}).key
-            data.questionnaireVersion = (this.questionnaireVersion || {}).key
-            //data.responsibleId = (this.responsibleId || {}).key
-            data.responsibleName = (this.responsibleId || {}).value
-
-            if (this.assignmentId) {
-                data.assignmentId = this.assignmentId
-            }
-            if (this.unactiveDateStart) {
-                data.unactiveDateStart = this.unactiveDateStart
-            }
-            if (this.unactiveDateEnd) {
-                data.unactiveDateEnd = this.unactiveDateEnd
-            }
-        },
-        addParamsToRequestStatuses(data) {
-            data.interviewId = this.selectedRowWithMenu.interviewId
-        },
         clearAssignmentFilter() {
             this.assignmentId = null
         },
+
         formatNumber(value) {
             if (value == null || value == undefined) return value
             var language =
@@ -1081,44 +1337,39 @@ export default {
 
             props.forEach(iterator, this)
         },
+
         reloadTable() {
             this.isLoading = true
             this.selectedRows.splice(0, this.selectedRows.length)
-            
+
             if (this.$refs.table) {
                 this.$refs.table.reload()
             }
         },
+
         reloadTableAndSaveRoute() {
             this.reloadTable()
             this.addParamsToQueryString()
         },
+
         addParamsToQueryString() {
-            var queryString = {}
+            const query = Object.assign({} , this.queryString)
 
-            if (this.questionnaireId != null) {
-                queryString.templateId = this.questionnaireId.key
+            if (!isEqual(this.$route.query, query)) {
+                this.$router.push({ query })
+                    .catch(() => {})
             }
-            if (this.questionnaireVersion != null) {
-                queryString.templateVersion = this.questionnaireVersion.key
-            }
-
-            if (this.responsibleId) queryString.responsible = this.responsibleId.value
-            if (this.assignmentId) queryString.assignmentId = this.assignmentId
-            if (this.status) queryString.status = this.status.alias
-            if (this.unactiveDateStart) queryString.unactiveDateStart = this.unactiveDateStart
-            if (this.unactiveDateEnd) queryString.unactiveDateEnd = this.unactiveDateEnd
-
-            this.$router.push({query: queryString})
         },
 
         async loadResponsibleIdByName(onDone) {
-            if (this.$route.query.responsible != undefined) {
+            if (this.$route.query.responsibleName != undefined) {
                 const requestParams = assign(
                     {
-                        query: this.$route.query.responsible,
+                        query: this.$route.query.responsibleName,
                         pageSize: 1,
                         cache: false,
+                        showArchived: true,
+                        showLocked: true,
                     },
                     this.ajaxParams
                 )
@@ -1126,7 +1377,7 @@ export default {
                 const response = await this.$http.get(this.config.api.responsible, {params: requestParams})
 
                 onDone(
-                    response.data.options.length > 0 && response.data.options[0].value == this.$route.query.responsible
+                    response.data.options.length > 0 && response.data.options[0].value == this.$route.query.responsibleName
                         ? response.data.options[0].key
                         : undefined
                 )
@@ -1134,44 +1385,70 @@ export default {
         },
 
         loadQuestionnaireId(onDone) {
-            let requestParams = null
-
-            const questionnaireId = this.$route.query.templateId
-            const version = this.$route.query.templateVersion
+            const questionnaireId = this.$route.query.questionnaireId
+            const version = this.$route.query.questionnaireVersion
 
             onDone(questionnaireId, version)
+        },
+
+        initPageFilters() {
+            const self = this
+            const query = this.$route.query
+
+            this.unactiveDateStart = query.unactiveDateStart
+            this.unactiveDateEnd = query.unactiveDateEnd
+            this.assignmentId = query.assignmentId
+
+            if (query.status != null) {
+                self.status = self.statuses.find(o => o.key === query.status)
+            }
+
+            self.loadQuestionnaireId((questionnaireId, version) => {
+                if (questionnaireId != null) {
+                    self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
+                    if (version != null && self.questionnaireId != null) {
+                        self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
+
+                        if(query.conditions != null) {
+                            self.conditions = queryStringToCondition(flatten([query.conditions]))
+                        }
+                    } else {
+                        if(version == null && self.questionnaireId.versions.length == 1) {
+                            self.questionnaireVersionSelected(self.questionnaireId.versions[0])
+                        }
+                    }
+                }
+            })
+
+            self.loadResponsibleIdByName(responsibleId => {
+                if (responsibleId != null)
+                    self.responsibleId = {key: responsibleId, value: query.responsibleName}
+                else
+                    self.responsibleId = null
+
+                self.startWatchers(
+                    ['responsibleId',
+                        'questionnaireId',
+                        'status',
+                        'assignmentId',
+                        'questionnaireVersion'],
+                    self.reloadTableAndSaveRoute.bind(self)
+                )
+            })
         },
     },
 
     mounted() {
-        var self = this
+        this.initPageFilters()
+    },
 
-        this.unactiveDateStart = this.$route.query.unactiveDateStart
-        this.unactiveDateEnd = this.$route.query.unactiveDateEnd
-        this.assignmentId = this.$route.query.assignmentId
-
-        if (this.$route.query.status != undefined) {
-            self.status = self.statuses.find(o => o.alias === self.$route.query.status)
-        }
-
-        self.loadQuestionnaireId((questionnaireId, version) => {
-            if (questionnaireId != undefined) {
-                self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
-                if (version != undefined && self.questionnaireId != undefined) {
-                    self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
-                }
+    watch: {
+        '$route'(to) {
+            if(!isEqual(to.query, this.queryString)) {
+                this.initPageFilters()
+                this.reloadTable()
             }
-
-            self.loadResponsibleIdByName(responsibleId => {
-                if (responsibleId != undefined)
-                    self.responsibleId = {key: responsibleId, value: self.$route.query.responsible}
-
-                self.startWatchers(
-                    ['responsibleId', 'questionnaireId', 'status', 'assignmentId', 'questionnaireVersion'],
-                    self.reloadTableAndSaveRoute.bind(self)
-                )
-            })
-        })
+        },
     },
 }
 </script>

@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
+using WB.Tests.Integration.InterviewTests.LinkedQuestions;
 
 namespace WB.Tests.Integration.InterviewFactoryTests
 {
@@ -33,30 +34,27 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Identity.Create(Guid.NewGuid(), Create.RosterVector(1))
             };
 
-           interviewSummaryRepository.Store(new InterviewSummary
-                {
-                    SummaryId = interviewId.FormatGuid(),
-                    InterviewId = interviewId,
-                    Status = InterviewStatus.Completed,
-                    QuestionnaireIdentity = questionnaireId.ToString(),
-                    ReceivedByInterviewer = false
-                }, interviewId.FormatGuid());
+            interviewSummaryRepository.Store(  Create.Entity.InterviewSummary(
+                interviewId: interviewId,
+                status: InterviewStatus.Completed,
+                questionnaireId: questionnaireId.QuestionnaireId,
+                questionnaireVersion: questionnaireId.Version,
+                receivedByInterviewer: false), interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 id: questionnaireId.QuestionnaireId,
-
                 children: new IComposite[]
                 {
-                        Create.Entity.TextQuestion(questionIdentities[0].Id),
-                        Create.Entity.TextQuestion(questionIdentities[1].Id),
+                    Create.Entity.TextQuestion(questionIdentities[0].Id),
+                    Create.Entity.TextQuestion(questionIdentities[1].Id),
                 });
 
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
 
             foreach (var questionIdentity in questionIdentities)
-                 factory.SetFlagToQuestion(interviewId, questionIdentity, true);
+                factory.SetFlagToQuestion(interviewId, questionIdentity, true);
 
             //act
             var flaggedIdentites = factory.GetFlaggedQuestionIds(interviewId);
@@ -79,32 +77,30 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Identity.Create(Guid.NewGuid(), Create.RosterVector(1))
             };
 
-            interviewSummaryRepository.Store(new InterviewSummary
-                {
-                    SummaryId = interviewId.FormatGuid(),
-                    InterviewId = interviewId,
-                    Status = InterviewStatus.Completed,
-                    QuestionnaireIdentity = questionnaireId.ToString(),
-                    ReceivedByInterviewer = false
-                }, interviewId.FormatGuid());
+            interviewSummaryRepository.Store(  Create.Entity.InterviewSummary(
+                interviewId: interviewId,
+                status: InterviewStatus.Completed,
+                questionnaireId: questionnaireId.QuestionnaireId,
+                questionnaireVersion: questionnaireId.Version,
+                receivedByInterviewer: false), interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 id: questionnaireId.QuestionnaireId,
-
                 children: new IComposite[]
                 {
-                        Create.Entity.TextQuestion(questionIdentities[0].Id),
-                        Create.Entity.TextQuestion(questionIdentities[1].Id),
+                    Create.Entity.TextQuestion(questionIdentities[0].Id),
+                    Create.Entity.TextQuestion(questionIdentities[1].Id),
                 });
 
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
 
             foreach (var questionIdentity in questionIdentities)
-                {
-                    factory.SetFlagToQuestion(interviewId, questionIdentity, true);
-                }
+            {
+                factory.SetFlagToQuestion(interviewId, questionIdentity, true);
+            }
+
             factory.SetFlagToQuestion(interviewId, questionIdentities[0], false);
 
             //act
@@ -112,7 +108,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //assert
             Assert.AreEqual(1, flaggedIdentites.Length);
-            Assert.That(flaggedIdentites, Is.EquivalentTo(new[] { questionIdentities[1] }));
+            Assert.That(flaggedIdentites, Is.EquivalentTo(new[] {questionIdentities[1]}));
         }
 
         [Test]
@@ -122,23 +118,24 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var questionIdentity = Identity.Parse("111111111111111111111111111111111");
             var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 5);
 
-            interviewSummaryRepository.Store(new InterviewSummary
-            {
-                SummaryId = interviewId.FormatGuid(),
-                InterviewId = interviewId,
-                Status = InterviewStatus.Completed,
-                QuestionnaireIdentity = questionnaireId.ToString(),
-                ReceivedByInterviewer = true
-            }, interviewId.FormatGuid());
+            interviewSummaryRepository.Store(
+                Create.Entity.InterviewSummary(
+                    interviewId: interviewId,
+                    status: InterviewStatus.Completed,
+                    questionnaireId: questionnaireId.QuestionnaireId,
+                    questionnaireVersion: questionnaireId.Version,
+                    receivedByInterviewer: true), interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
             //act
-            var exception = Assert.Catch<InterviewException>(() => factory.SetFlagToQuestion(interviewId, questionIdentity, false));
+            var exception =
+                Assert.Catch<InterviewException>(() => factory.SetFlagToQuestion(interviewId, questionIdentity, false));
 
             //assert
             Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.Message, Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by interviewer."));
+            Assert.That(exception.Message,
+                Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by interviewer."));
         }
 
         [Test]
@@ -148,23 +145,23 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var questionIdentity = Identity.Parse("111111111111111111111111111111111");
             var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 5);
 
-            interviewSummaryRepository.Store(new InterviewSummary
-            {
-                SummaryId = interviewId.FormatGuid(),
-                InterviewId = interviewId,
-                Status = InterviewStatus.Completed,
-                QuestionnaireIdentity = questionnaireId.ToString(),
-                ReceivedByInterviewer = true
-            }, interviewId.FormatGuid());
+            interviewSummaryRepository.Store(Create.Entity.InterviewSummary(
+                interviewId: interviewId,
+                status: InterviewStatus.Completed,
+                questionnaireId: questionnaireId.QuestionnaireId,
+                questionnaireVersion: questionnaireId.Version,
+                receivedByInterviewer: true), interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
             //act
-            var exception = Assert.Catch<InterviewException>(() => factory.SetFlagToQuestion(interviewId, questionIdentity, true));
+            var exception =
+                Assert.Catch<InterviewException>(() => factory.SetFlagToQuestion(interviewId, questionIdentity, true));
 
             //assert
             Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.Message, Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by interviewer."));
+            Assert.That(exception.Message,
+                Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by interviewer."));
         }
     }
 }

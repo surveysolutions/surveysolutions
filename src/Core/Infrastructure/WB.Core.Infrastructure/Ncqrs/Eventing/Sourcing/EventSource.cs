@@ -119,10 +119,12 @@ namespace Ncqrs.Eventing.Sourcing
                 throw new EventNotHandledException(evnt);
         }
 
-        protected internal virtual void ApplyEvent(WB.Core.Infrastructure.EventBus.IEvent evnt)
+        protected internal virtual void ApplyEvent(Guid eventIdentifier,
+            DateTime eventTimeStamp,
+            WB.Core.Infrastructure.EventBus.IEvent evnt)
         {
             var eventSequence = GetNextSequence();
-            var wrappedEvent = new UncommittedEvent(Guid.NewGuid(), EventSourceId, eventSequence, _initialVersion, DateTime.UtcNow, evnt);
+            var wrappedEvent = new UncommittedEvent(eventIdentifier, EventSourceId, eventSequence, _initialVersion, eventTimeStamp, evnt);
 
             try
             {
@@ -141,6 +143,16 @@ namespace Ncqrs.Eventing.Sourcing
             {
                 throw new OnEventApplyException(wrappedEvent, e.Message, e);
             }
+        }
+
+
+        protected internal void ApplyEvent(WB.Core.Infrastructure.EventBus.IEvent evnt)
+        {
+            ApplyEvent(
+                eventIdentifier: Guid.NewGuid(), 
+                eventTimeStamp: DateTime.UtcNow,
+                evnt: evnt
+            );
         }
 
         private int GetNextSequence()

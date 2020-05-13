@@ -243,7 +243,7 @@
   <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
     <value>В справочной таблице слишком много столбцов</value>
   </data>
-  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+  <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
     <value>В справочной таблице слишком много строк</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">

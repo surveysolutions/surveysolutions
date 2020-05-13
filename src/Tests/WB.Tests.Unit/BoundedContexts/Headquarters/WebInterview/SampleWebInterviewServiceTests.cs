@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using CsvHelper;
@@ -126,7 +127,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         {
             var result = new List<string[]>();
             var streamReader = new StreamReader(new MemoryStream(outputBytes), Encoding.UTF8);
-            var reader = new CsvReader(streamReader, new Configuration
+            var reader = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,

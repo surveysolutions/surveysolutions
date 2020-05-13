@@ -331,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Passwords must be at least {0} characters..
         /// </summary>
         public static string PasswordTooShort {
             get {
@@ -507,6 +507,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string UserNameFieldName {
             get {
                 return ResourceManager.GetString("UserNameFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification code.
+        /// </summary>
+        public static string VerificationCodeFieldName {
+            get {
+                return ResourceManager.GetString("VerificationCodeFieldName", resourceCulture);
             }
         }
     }

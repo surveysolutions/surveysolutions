@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -78,7 +79,7 @@ namespace WB.Tests.Unit.Designer.Services
             var ms = new MemoryStream();
 
             using (var sw = new StreamWriter(ms, Encoding.UTF8, 4096, true))
-            using (var csvWriter = new CsvSerializer(sw, new Configuration
+            using (var csvWriter = new CsvSerializer(sw, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false,
                 TrimOptions = TrimOptions.Trim,
