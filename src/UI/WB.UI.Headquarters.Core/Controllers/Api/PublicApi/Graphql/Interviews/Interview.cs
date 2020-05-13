@@ -23,50 +23,52 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Type<IdType>();
             
             descriptor.Field(x => x.Status)
-                .Type<EnumType<InterviewStatus>>();
+                .Type<NonNullType<EnumType<InterviewStatus>>>();
             
-            descriptor.Field(x => x.ResponsibleName).Type<StringType>()
+            descriptor.Field(x => x.ResponsibleName).Type<NonNullType<StringType>>()
                 .Description("Login of current responsible user");
             
-            descriptor.Field(x => x.ResponsibleNameLowerCase).Type<StringType>()
+            descriptor.Field(x => x.ResponsibleNameLowerCase).Type<NonNullType<StringType>>()
                 .Description($"Lower cased version of {nameof(InterviewSummary.ResponsibleName).Camelize()} field");
 
-            descriptor.Field(x => x.ResponsibleId).Type<UuidType>();
-            descriptor.Field(x => x.ResponsibleRole).Type<EnumType<UserRoles>>();
+            descriptor.Field(x => x.ResponsibleId).Type<NonNullType<UuidType>>();
+            descriptor.Field(x => x.ResponsibleRole).Type<NonNullType<EnumType<UserRoles>>>();
 
             descriptor.Field(x => x.SupervisorName).Type<StringType>()
                 .Description("Supervisor login who is responsible for interview");
-            descriptor.Field(x => x.ReceivedByInterviewer)
-                .Type<StringType>();
+            
             descriptor.Field(x => x.WasCompleted)
                 .Description("Indicates if interview was ever completed by interviewer")
-                .Type<StringType>();
+                .Type<NonNullType<BooleanType>>();
             descriptor.Field(x => x.SupervisorNameLowerCase)
                 .Description("Lowercased version of supervisor login who is responsible for interview")
-                .Type<StringType>();
+                .Type<NonNullType<StringType>>();
 
             descriptor.Field(x => x.AssignmentId).Type<IntType>()
                   .Description("Identifier for the assignment to which this interview belongs");
 
             descriptor.Field(x => x.CreatedDate)
+                .Type<NonNullType<DateTimeType>>()
                 .Description("Utc creation date");
 
-            descriptor.Field(x => x.Key).Type<StringType>()  
+            descriptor.Field(x => x.Key).Type<NonNullType<StringType>>()  
                 .Description("Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer.");
             
             descriptor.Field(x => x.UpdateDate)
+                .Type<NonNullType<DateTimeType>>()
                 .Description("Represents date (UTC) when interview was changed last time");
             
-            descriptor.Field(x => x.ReceivedByInterviewer).Type<BooleanType>()
+            descriptor.Field(x => x.ReceivedByInterviewer)
+                .Type<NonNullType<BooleanType>>()
                 .Description("Indicator for whether the interview is on the interviewer’s tablet now");
             
             descriptor.Field(x => x.ErrorsCount)
                 .Description("Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1.")
-                .Type<IntType>();
+                .Type<NonNullType<IntType>>();
 
-            descriptor.Field(x => x.QuestionnaireId);
-            descriptor.Field(x => x.QuestionnaireVariable);
-            descriptor.Field(x => x.QuestionnaireVersion);
+            descriptor.Field(x => x.QuestionnaireId).Type<NonNullType<UuidType>>();
+            descriptor.Field(x => x.QuestionnaireVariable).Type<NonNullType<StringType>>();
+            descriptor.Field(x => x.QuestionnaireVersion).Type<NonNullType<LongType>>();
             
             descriptor.Field(x => x.AnswersToFeaturedQuestions)
                 .Name("identifyingQuestions")
@@ -90,6 +92,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Type<ListType<AnswerObjectType>>();
 
             descriptor.Field<InterviewActionFlagsResolver>(f => f.GetActionFlags(default, default))
+                .Type<NonNullType<ListType<NonNullType<EnumType<InterviewActionFlags>>>>>()
                 .Description("List of actions that can be applied to interview")
                 .Name("actionFlags");
         }
