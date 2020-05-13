@@ -16,6 +16,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Property(x => x.Map, ptp => ptp.NotNullable(true));
             Property(x => x.UserName, ptp => ptp.NotNullable(true));
+            
+            ManyToOne(x => x.Source, mtm => mtm.Column("map"));
         }
     }
 }

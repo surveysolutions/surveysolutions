@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using HotChocolate.Types;
+﻿using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
 { 
@@ -16,14 +14,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             descriptor.Field(x => x.ImportDate).Description("Date when map was imported on HQ");
             descriptor.Field(x => x.Users)
                 .Description("List of users assigned to map")
-                .Resolver(context =>
-                {
-                    var mapId = context.Parent<MapBrowseItem>().Id;
-
-                    return context.Service<IUnitOfWork>().Session.Query<UserMap>()
-                        .Where(a => mapId == a.Map)
-                        .ToList();
-                })
                 .Type<ListType<UserMapObjectType>>();
         }
     }
