@@ -23,11 +23,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             
             descriptor.Field(x => x.QuestionText)
                 .Description("Question text. May contain html tags.")
-                .Type<StringType>();
+                .Type<NonNullType<StringType>>();
 
             descriptor.Field(x => x.StataExportCaption)
                 .Name("variable")
-                .Type<StringType>();
+                .Type<NonNullType<StringType>>();
 
             descriptor.Field(x => x.QuestionScope)
                 .Name("scope")
@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Field(x => x.QuestionType)
                 .Name("type")
-                .Type<QuestionTypeObjectType>();
+                .Type<NonNullType<QuestionTypeObjectType>>();
 
             descriptor.Field(x => x.Featured)
                 .Name("identifying")
@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                                 });
                       
                     }).LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
-                .Type<ListType<CategoricalOptionType>>();
+                .Type<NonNullType<ListType<NonNullType<CategoricalOptionType>>>>();
         }
     }
 }
