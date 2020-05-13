@@ -81,7 +81,7 @@ type QuestionAnswer {
 
 type User {
   id: ID
-  roles: [UserRoles]!
+  roles: [UserRoles!]!
   userName: String!
 }
 
