@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
@@ -11,27 +12,54 @@ namespace WB.Core.GenericSubdomains.Portable
     /// </remarks>
     public class NamedLocker
     {
-        private readonly ConcurrentDictionary<string, object> locks = new ConcurrentDictionary<string, object>();
+        private readonly ConcurrentDictionary<string, KeyHolder> locks = new ConcurrentDictionary<string, KeyHolder>();
 
-        /// <summary>
-        /// Get a lock for use with a lock(){} block
-        /// </summary>
-        public object GetLock(string name)
+        private class KeyHolder
         {
-            return this.locks.GetOrAdd(name, s => new object());
+            public long HoldersCount = 0;
         }
 
+        internal int LocksCount => locks.Count;
+        
         public TResult RunWithLock<TResult>(string name, Func<TResult> body)
         {
-            lock (this.locks.GetOrAdd(name, s => new object()))
-                return body();
+            var lockKey = this.locks.GetOrAdd(name, s => new KeyHolder());
+            try
+            {
+                Interlocked.Increment(ref lockKey.HoldersCount);
+                lock (lockKey)
+                {
+                    return body();
+                }
+            }
+            finally
+            {
+                var value = Interlocked.Decrement(ref lockKey.HoldersCount);
+                if (value <= 0)
+                {
+                    this.locks.TryRemove(name, out _);
+                }
+            }
         }
 
         public void RunWithLock(string name, Action body)
         {
-            lock (this.locks.GetOrAdd(name, s => new object()))
+            var lockKey = this.locks.GetOrAdd(name, s => new KeyHolder());
+            try
             {
-                body();
+                Interlocked.Increment(ref lockKey.HoldersCount);
+                lock (lockKey)
+                {
+                    body();
+                }
+            }
+            finally
+            {
+                var value = Interlocked.Decrement(ref lockKey.HoldersCount);
+                if (value <= 0)
+                {
+                    this.locks.TryRemove(name, out _);
+                }
             }
         }
     }
