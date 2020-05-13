@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public string GetExternalStoragePath(string name) => $"maps/" + name;
 
-        public async Task SaveOrUpdateMapAsync(ExtractedFile mapFile)
+        public async Task<MapBrowseItem> SaveOrUpdateMapAsync(ExtractedFile mapFile)
         {
             var tempFileStore = Guid.NewGuid().FormatGuid();
             var pathToSave = this.fileSystemAccessor.CombinePath(this.path, tempFileStore);
@@ -116,6 +116,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 if (this.fileSystemAccessor.IsDirectoryExists(pathToSave))
                     fileSystemAccessor.DeleteDirectory(pathToSave);
             }
+
+            return this.GetMapById(mapFile.Name);
         }
 
         private MapBrowseItem ToMapBrowseItem(string tempFile, ExtractedFile mapFile)
