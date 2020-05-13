@@ -59,12 +59,8 @@ namespace WB.UI.WebTester
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>("eventBusSettings", new EventBusSettings
-            {
-                DisabledEventHandlerTypes = Array.Empty<Type>(),
-                EventHandlerTypesWithIgnoredExceptions = Array.Empty<Type>(),
-                IgnoredAggregateRoots = new List<string>()
-            });
+            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>("eventBusSettings", 
+                new EventBusSettings());
 
             registry.Bind<WebTesterStatefulInterview>();
             registry.Bind<IInterviewFactory, InterviewFactory>();

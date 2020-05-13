@@ -26,10 +26,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var serviceLocator = Mock.Of<IServiceLocator>(x =>
                 x.GetInstance(typeof(TestDenormalzier)) == secondEventHandlerMock.Object);
 
-            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(new EventBusSettings
-            {
-                IgnoredAggregateRoots = new List<string>(new[] { ignoredEventSource.FormatGuid() })
-            }, serviceLocator, denormalizerRegistry);
+            var busSettings = new EventBusSettings();
+            busSettings.AddIgnoredAggregateRoot(ignoredEventSource);
+            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(busSettings, serviceLocator, denormalizerRegistry);
 
             // Act
             ncqrCompatibleEventDispatcher.Publish(new[] { Create.Fake.PublishableEvent(eventSourceId: ignoredEventSource) });
@@ -65,10 +64,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var serviceLocator = Mock.Of<IServiceLocator>(x =>
                 x.GetInstance(typeof(CustomHandler)) == customHandler);
 
-            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(new EventBusSettings()
-            {
-                IgnoredAggregateRoots = new List<string>(new[] { ignoredEventSource.FormatGuid() })
-            }, serviceLocator, denormalizerRegistry);
+            var busSettings = new EventBusSettings();
+            busSettings.AddIgnoredAggregateRoot(ignoredEventSource);
+            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(busSettings, serviceLocator, denormalizerRegistry);
 
             // Act
             ncqrCompatibleEventDispatcher.Publish(new[] { Create.PublishedEvent.InterviewCreated(interviewId: ignoredEventSource) });
