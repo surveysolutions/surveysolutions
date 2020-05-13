@@ -172,6 +172,18 @@ export default {
     },
 
     methods: {
+        regenerate() {
+            this.$http
+                .post(this.$config.model.api.regenerateSurveyDataUrl, null, {
+                    params: {
+                        id: this.data.id,
+                    },
+                })
+                .then(() => {})
+                .catch(error => {
+                    Vue.config.errorHandler(error, this)
+                })
+        },
         cancel() {
             modal.confirm(this.$t('DataExport.ConfirmStop') + ' ' + this.$t('DataExport.export') + '?', result => {
                 if (result) {
