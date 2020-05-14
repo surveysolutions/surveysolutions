@@ -743,7 +743,7 @@ export default {
                 this.conditions.forEach(cond => {
                     if(cond.value == null) return
 
-                    const identifyingQuestions_some = { question: {variable: cond.variable}}
+                    let identifyingQuestions_some = { question: {variable: cond.variable}}
 
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
                     identifyingQuestions_some[cond.field] = value
