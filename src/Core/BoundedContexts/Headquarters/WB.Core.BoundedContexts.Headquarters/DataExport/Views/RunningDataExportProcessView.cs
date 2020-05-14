@@ -56,5 +56,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public DateTime DataFileLastUpdateDate { get; set; }
         public string DataDestination { get; set; }
         public string Title { get; set; }
+        public bool Deleted { get; set; } = false;
     }
 }
