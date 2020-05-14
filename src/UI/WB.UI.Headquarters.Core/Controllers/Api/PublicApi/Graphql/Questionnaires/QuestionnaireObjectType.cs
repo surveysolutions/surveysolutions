@@ -1,4 +1,5 @@
 #nullable enable
+using System.Linq;
 using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -19,14 +20,24 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             descriptor.Field(x => x.Id)
                 .Type<IdType>();
             descriptor.Field(x => x.Title).Type<NonNullType<StringType>>();
-            
-            descriptor.Field("translations")
+
+            descriptor.Field("defaultLanguageName")
+                .Type<StringType>()
                 .Resolver(ctx =>
                 {
                     var questionnaireStorage = ctx.Service<IQuestionnaireStorage>();
                     var browseItem = ctx.Parent<QuestionnaireBrowseItem>();
                     var questionnaire = questionnaireStorage.GetQuestionnaire(browseItem.Identity(), null);
-                    return questionnaire.Translations;
+                    return questionnaire.DefaultLanguageName;
+                });
+            descriptor.Field("translations")
+                .Type<NonNullType<ListType<NonNullType<StringType>>>>()
+                .Resolver(ctx =>
+                {
+                    var questionnaireStorage = ctx.Service<IQuestionnaireStorage>();
+                    var browseItem = ctx.Parent<QuestionnaireBrowseItem>();
+                    var questionnaire = questionnaireStorage.GetQuestionnaire(browseItem.Identity(), null);
+                    return questionnaire.Translations.Select(x => x.Name);
                 });
         }
     }

@@ -212,7 +212,11 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         [ObservingNotAllowed]
         public async Task<ActionResult<long>> RequestUpdate(Guid id, long version,
-            DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+            DataExportFormat format,
+            InterviewStatus? status = null,
+            DateTime? from = null,
+            DateTime? to = null,
+            string translation = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
@@ -220,7 +224,8 @@ namespace WB.UI.Headquarters.API
             if (questionnaireBrowseItem == null)
                 return NotFound("Questionnaire not found");
 
-            return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to);
+            return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to, 
+                translation: translation);
         }
 
         private async Task<ActionResult<long>> RequestExportUpdateAsync(
@@ -231,7 +236,8 @@ namespace WB.UI.Headquarters.API
             DateTime? to,
             string accessToken = null,
             string refresh_token = null,
-            ExternalStorageType? externalStorageType = null)
+            ExternalStorageType? externalStorageType = null,
+            string translation = null)
         {
             long jobId = 0;
             try
@@ -245,7 +251,8 @@ namespace WB.UI.Headquarters.API
                     GetPasswordFromSettings(),
                     accessToken,
                     refresh_token,
-                    externalStorageType);
+                    externalStorageType,
+                    translation);
 
                 jobId = result?.JobId ?? 0;
 
@@ -324,7 +331,8 @@ namespace WB.UI.Headquarters.API
                     state.ToDate?.ToUniversalTime(),
                     response.AccessToken,
                     response.RefreshToken,
-                    state.Type);
+                    state.Type,
+                    translation: state.Translation);
 
                 return ExportToExternalStorage();
             }
@@ -389,6 +397,7 @@ namespace WB.UI.Headquarters.API
             public DateTime? FromDate { get; set; }
             public DateTime? ToDate { get; set; }
             public DataExportFormat? Format { get; set; }
+            public string Translation { get; set; }
         }
     }
 }
