@@ -28,7 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             string archivePassword,
             string accessToken,
             string refreshToken,
-            ExternalStorageType? storageType);
+            ExternalStorageType? storageType,
+            string translation);
 
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
