@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 using WB.Services.Scheduler.Model;
@@ -24,19 +22,16 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IJobService jobService;
-        private readonly IQuestionnaireStorage questionnaireStorage;
-
+        
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
-            IJobService jobService,
-            IQuestionnaireStorage questionnaireStorage)
+            IJobService jobService)
         {
             this.exportProcessesService = exportProcessesService ?? throw new ArgumentNullException(nameof(exportProcessesService));
             this.jobsStatusReporting = jobsStatusReporting ?? throw new ArgumentNullException(nameof(jobsStatusReporting));
             this.archiveHandleService = archiveHandleService ?? throw new ArgumentNullException(nameof(archiveHandleService));
             this.jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
-            this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
         }
 
         [HttpPut]
@@ -204,7 +199,7 @@ namespace WB.Services.Export.Host.Controllers
         {
             var job = await jobService.GetJobAsync(tenant, processId);
             
-            if (job != null && job.Status == JobStatus.Running || job.Status != JobStatus.Created)
+            if (job != null && (job.Status == JobStatus.Running || job.Status != JobStatus.Created))
             {
                 this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
             }
@@ -230,7 +225,7 @@ namespace WB.Services.Export.Host.Controllers
         [Route("api/v1/job/running")]
         public async Task<List<long>> GetRunningJobsList(TenantInfo tenant)
         {
-            var jobs = await this.exportProcessesService.GetAllProcesses(tenant);
+            var jobs = await this.exportProcessesService.GetAllProcesses();
 
             return jobs
                 .Where(j => j.Status.IsRunning)
@@ -247,32 +242,10 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpGet]
         [Route("api/v1/job/all")]
-        public async Task<List<long>> GetAllJobsList(TenantInfo tenant)
+        public async Task<List<long>> GetAllJobsList()
         {
-            var jobs = await this.exportProcessesService.GetAllProcesses(tenant, runningOnly: false);
-            var filteredJobList = new List<DataExportProcessArgs>();
-
-            var tokenSource = new CancellationTokenSource();
-
-            foreach (var job in jobs)
-            {
-                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId, tokenSource.Token);
-
-                if (questionnaire != null)
-                {
-                    if (!questionnaire.IsDeleted)
-                    {
-                        filteredJobList.Add(job);
-                    }
-                }
-            }
-
-            List<long> result = filteredJobList
-                .GroupBy(x => x.NaturalId)
-                .Select(x => x.Max(s => s.ProcessId))
-                .ToList();
-
-            return result;
+            var jobs = await this.exportProcessesService.GetAllProcesses(runningOnly: false);
+            return jobs.Select(j => j.ProcessId).ToList();
         }
     }
 }

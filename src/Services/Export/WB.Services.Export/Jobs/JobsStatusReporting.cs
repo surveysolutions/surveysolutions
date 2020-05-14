@@ -8,7 +8,6 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.Tenant;
@@ -82,7 +81,7 @@ namespace WB.Services.Export.Jobs
             DataExportFormat? exportType, InterviewStatus? interviewStatus, string questionnaireIdentity,
             DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset, TenantInfo tenant)
         {
-            var allProcesses = await this.dataExportProcessesService.GetAllProcesses(tenant, false);
+            var allProcesses = await this.dataExportProcessesService.GetAllProcesses(false);
                 
             var allViews = new List<DataExportProcessView>();
             foreach (var process in allProcesses)
@@ -123,7 +122,7 @@ namespace WB.Services.Export.Jobs
             DateTime? fromDate = null, 
             DateTime? toDate = null)
         {
-            var allProcesses = (await this.dataExportProcessesService.GetAllProcesses(tenant))
+            var allProcesses = (await this.dataExportProcessesService.GetAllProcesses())
                 .Select(ToDataExportProcessView).ToArray();
 
             var exports = new List<DataExportView>();
