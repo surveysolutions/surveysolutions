@@ -312,6 +312,7 @@
 <script>
 import Vue from 'vue'
 import ExportProcessCard from './ExportProcessCard'
+import { filter } from 'lodash'
 
 const dataFormatNum = {Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6}
 const ExternalStorageType = {dropbox: 1, oneDrive: 2, googleDrive: 3}
@@ -338,7 +339,7 @@ export default {
 
     computed: {
         exportResults() {
-            return this.$store.state.export.jobs
+            return filter(this.$store.state.export.jobs, j => j.deleted == false)
         },
         exportServiceIsUnavailable() {
             return this.$store.state.export.exportServiceIsUnavailable
