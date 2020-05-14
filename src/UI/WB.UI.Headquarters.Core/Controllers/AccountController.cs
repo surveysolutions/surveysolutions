@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -28,13 +29,15 @@ namespace WB.UI.Headquarters.Controllers
         private readonly SignInManager<HqUser> signInManager;
         protected readonly IAuthorizedUser authorizedUser;
         private readonly ILogger<AccountController> logger;
+        private readonly IUserRepository userRepository;
 
         public AccountController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
             ICaptchaService captchaService,
             ICaptchaProvider captchaProvider,
             SignInManager<HqUser> signInManager,
             IAuthorizedUser authorizedUser,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IUserRepository userRepository)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.captchaService = captchaService;
@@ -42,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers
             this.signInManager = signInManager;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
+            this.userRepository = userRepository;
         }
 
         [HttpGet]
@@ -257,7 +261,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 if (!string.IsNullOrEmpty(preferredUsername))
                 {
-                    var user = await signInManager.UserManager.FindByEmailAsync(preferredUsername);
+                    var user = this.userRepository.Users.FirstOrDefault(x => x.Profile.ExternalName.ToUpper() == preferredUsername.ToUpper());
                     if (user != null)
                     {
                         var addLoginResult = await signInManager.UserManager.AddLoginAsync(user, info);

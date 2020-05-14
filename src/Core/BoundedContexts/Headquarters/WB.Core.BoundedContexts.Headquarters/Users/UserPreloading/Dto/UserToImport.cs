@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto
         public virtual string Role { get; set; }
         public virtual string Supervisor { get; set; }
 
+        public virtual string ExternalUserName { get; set; }
+
         [IgnoreDataMember]
         public virtual UserRoles UserRole
         {

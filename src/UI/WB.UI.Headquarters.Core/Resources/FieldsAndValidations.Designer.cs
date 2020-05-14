@@ -178,11 +178,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to External user name.
+        /// </summary>
+        public static string ExternalUserNameFieldName {
+            get {
+                return ResourceManager.GetString("ExternalUserNameFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid user.
         /// </summary>
         public static string InvalidUser {
             get {
                 return ResourceManager.GetString("InvalidUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is External user.
+        /// </summary>
+        public static string IsExternalUser {
+            get {
+                return ResourceManager.GetString("IsExternalUser", resourceCulture);
             }
         }
         
@@ -403,6 +421,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to External user name is required.
+        /// </summary>
+        public static string RequiredExternalUserNameErrorMessage {
+            get {
+                return ResourceManager.GetString("RequiredExternalUserNameErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password is required.
         /// </summary>
         public static string RequiredPasswordErrorMessage {
@@ -471,6 +498,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string UserBatchUploadModel_Validation_ErrorMessage {
             get {
                 return ResourceManager.GetString("UserBatchUploadModel_Validation_ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name needs to be correct.
+        /// </summary>
+        public static string UserExternalNameErrorMessage {
+            get {
+                return ResourceManager.GetString("UserExternalNameErrorMessage", resourceCulture);
             }
         }
         

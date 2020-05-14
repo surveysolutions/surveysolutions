@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Mapping
             this.Property(x => x.PhoneNumber);
             this.Property(x => x.Role);
             this.Property(x => x.Supervisor);
+            this.Property(x => x.ExternalUserName);
         }
     }
 }

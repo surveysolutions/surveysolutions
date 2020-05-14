@@ -153,6 +153,9 @@
   <data name="IsLockedFieldName" xml:space="preserve">
     <value>Заблокирован Администратором или Хедквотером</value>
   </data>
+  <data name="IsExternalUser" xml:space="preserve">
+    <value>Внешний пользователь</value>
+  </data>
   <data name="LogOnModel_Password" xml:space="preserve">
     <value>Пароль</value>
   </data>
@@ -195,6 +198,9 @@
   <data name="RequiredUserNameErrorMessage" xml:space="preserve">
     <value>Укажите имя пользователя</value>
   </data>
+  <data name="RequiredExternalUserNameErrorMessage" xml:space="preserve">
+    <value>Укажите внешнее имя пользователя</value>
+  </data>
   <data name="SupervisorFieldName" xml:space="preserve">
     <value>Супервизор</value>
   </data>
@@ -213,8 +219,14 @@
   <data name="UserNameErrorMessage" xml:space="preserve">
     <value>Имя должно иметь от 3 до 15 символов и содержать только буквы, цифры и символ подчеркивания</value>
   </data>
+  <data name="UserExternalNameErrorMessage" xml:space="preserve">
+    <value>Имя должно быть правильным</value>
+  </data>
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Имя пользователя</value>
+  </data>
+  <data name="ExternalUserNameFieldName" xml:space="preserve">
+    <value>Внешнее имя пользователя</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
     <value>Необходимо ввести имя вопросника</value>

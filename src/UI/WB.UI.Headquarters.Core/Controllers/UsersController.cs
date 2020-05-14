@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -35,6 +36,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
+        private readonly IUserRepository userRepository;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -45,13 +47,15 @@ namespace WB.UI.Headquarters.Controllers
             UserManager<HqUser> userManager, 
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
-            IOptions<HeadquartersConfig> options)
+            IOptions<HeadquartersConfig> options,
+            IUserRepository userRepository)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
             this.profileSettingsStorage = profileSettingsStorage;
             this.urlEncoder = urlEncoder;
             this.options = options;
+            this.userRepository = userRepository;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -366,7 +370,6 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     SharedKey = FormatKey(unformattedKey),
                     AuthenticatorUri = authenticatorUri,
-
                     UserId = user.Id,
                     UserName = user.UserName,
                     Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
@@ -400,6 +403,7 @@ namespace WB.UI.Headquarters.Controllers
                 Api = new
                 {
                     CreateUserUrl = Url.Action("CreateUser"),
+                    CreateExternalUserUrl = Url.Action("CreateExternalUser"),
                     ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead")
                 }
             });
@@ -427,6 +431,73 @@ namespace WB.UI.Headquarters.Controllers
                 AllowedUploadFileExtensions = new[] {TextExportFile.Extension, TabExportFile.Extention}
             }
         });
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObservingNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public async Task<ActionResult> CreateExternalUser([FromBody] CreateExternalUserModel model)
+        {
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            if (!Enum.TryParse(model.Role, true, out UserRoles role))
+                return BadRequest("Unknown user type");
+
+            if (this.authorizedUser.IsHeadquarter && !new[] { UserRoles.Supervisor, UserRoles.Interviewer }.Contains(role))
+                return Forbid();
+
+            if (role == UserRoles.Interviewer && !model.SupervisorId.HasValue)
+                this.ModelState.AddModelError(nameof(CreateExternalUserModel.SupervisorId), FieldsAndValidations.RequiredSupervisorErrorMessage);
+
+            if (await this.userManager.FindByNameAsync(model.UserName) != null)
+                this.ModelState.AddModelError(nameof(CreateExternalUserModel.UserName), FieldsAndValidations.UserName_Taken);
+
+            if (model.SupervisorId.HasValue)
+            {
+                var supervisor = await this.userManager.FindByIdAsync(model.SupervisorId.FormatGuid());
+                if (supervisor == null || !supervisor.IsInRole(UserRoles.Supervisor) || supervisor.IsArchivedOrLocked)
+                    this.ModelState.AddModelError(nameof(CreateExternalUserModel.SupervisorId), HQ.SupervisorNotFound);
+            }
+            
+            if (this.userRepository.Users.FirstOrDefault(x => x.Profile.ExternalName.ToUpper() == model.ExternalUserName.ToUpper()) != null)
+                this.ModelState.AddModelError(nameof(CreateExternalUserModel.ExternalUserName), FieldsAndValidations.UserName_Taken);
+            
+            if (this.ModelState.IsValid)
+            {
+                var profile = new HqUserProfile
+                {
+                    SupervisorId = model.SupervisorId,
+                    ExternalName = model.ExternalUserName
+                };
+
+                var user = new HqUser
+                {
+                    Id = Guid.NewGuid(),
+                    IsLockedBySupervisor = model.IsLockedBySupervisor,
+                    IsLockedByHeadquaters = model.IsLockedByHeadquarters,
+                    FullName = model.PersonName,
+                    Email = model.Email,
+                    UserName = model.UserName,
+                    PhoneNumber = model.PhoneNumber,
+                    Profile = profile
+                };
+
+                var identityResult = await this.userManager.CreateAsync(user);
+                if (!identityResult.Succeeded)
+                {
+                    foreach (var error in identityResult.Errors)
+                    {
+                        this.ModelState.AddModelError(nameof(CreateExternalUserModel.UserName), error.Description);
+                    }
+                }
+                else
+                {
+                    await this.userManager.AddToRoleAsync(user, model.Role);
+                }
+            }
+
+            return this.ModelState.ErrorsToJsonResult();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

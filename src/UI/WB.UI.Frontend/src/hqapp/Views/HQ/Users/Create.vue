@@ -15,6 +15,20 @@
                     <p v-html="$t('Pages.Supervisor_CreateText', {link: '/Users/Upload'})"></p>
                 </div>
                 <div class="col-sm-12">
+                    <form-group>
+                        <input
+                            class="checkbox-filter single-checkbox"
+                            id="IsExternal"
+                            name="IsExternal"
+                            type="checkbox"
+                            v-model="isExternal"/>
+                        <label for="IsExternal"
+                            style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{$t('FieldsAndValidations.IsExternalUser')}}
+                        </label>
+                    </form-group>
+
                     <form-group
                         :label="$t('FieldsAndValidations.UserNameFieldName')"
                         :error="modelState['UserName']"
@@ -40,9 +54,10 @@
                         </div>
                     </form-group>
                     <form-group
+                        v-if="!isExternal"
                         :label="$t('FieldsAndValidations.NewPasswordFieldName')"
                         :error="modelState['Password']"
-                        :mandatory="true">
+                        :mandatory="!isExternal">
                         <TextInput
                             type="password"
                             v-model.trim="password"
@@ -50,14 +65,25 @@
                             id="Password"/>
                     </form-group>
                     <form-group
+                        v-if="!isExternal"
                         :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
                         :error="modelState['ConfirmPassword']"
-                        :mandatory="true">
+                        :mandatory="!isExternal">
                         <TextInput
                             type="password"
                             v-model.trim="confirmPassword"
                             :haserror="modelState['ConfirmPassword'] !== undefined"
                             id="ConfirmPassword"/>
+                    </form-group>
+                    <form-group
+                        v-if="isExternal"
+                        :label="$t('FieldsAndValidations.UserNameFieldName')"
+                        :error="modelState['ExternalUserName']"
+                        :mandatory="isExternal">
+                        <TextInput
+                            v-model.trim="ExternalUserName"
+                            :haserror="modelState['ExternalUserName'] !== undefined"
+                            id="ExternalUserName"/>
                     </form-group>
                     <p v-if="lockMessage != null">{{lockMessage}}</p>
                     <form-group>
@@ -163,6 +189,8 @@ export default {
             isLockedBySupervisor: false,
             successMessage: null,
             supervisor: null,
+            isExternal:false,
+            externalUserName: null,
         }
     },
     computed: {
@@ -254,7 +282,7 @@ export default {
             var self = this
             this.$http({
                 method: 'post',
-                url: this.model.api.createUserUrl,
+                url: self.isExternal ? this.model.api.createExternalUserUrl : this.model.api.createUserUrl,
                 data: {
                     supervisorId: self.supervisor != null ? self.supervisor.key : null,
                     userName: self.userName,
@@ -266,6 +294,7 @@ export default {
                     password: self.password,
                     confirmPassword: self.confirmPassword,
                     role: self.userInfo.role,
+                    externalUserName: self.externalUserName,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
