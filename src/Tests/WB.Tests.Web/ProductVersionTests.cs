@@ -25,5 +25,15 @@ namespace WB.Tests.Web
 
             Assert.That(formatVersion, Is.EqualTo("20.05 (build 28407)"));
         }
+        
+        [Test]
+        public void should_produce_correct_month_info()
+        {
+            var v = Version.Parse("20.11.0.29407");
+
+            var formatVersion = ProductVersion.FormatVersion(v);
+
+            Assert.That(formatVersion, Is.EqualTo("20.11 (build 29407)"));
+        }
     }
 }
