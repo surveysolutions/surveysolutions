@@ -393,4 +393,7 @@
   <data name="InterviewerAssigned" xml:space="preserve">
     <value>Interviewer assigned  status</value>
   </data>
+  <data name="QuestionnaireTranslation" xml:space="preserve">
+    <value>Translation</value>
+  </data>
 </root>

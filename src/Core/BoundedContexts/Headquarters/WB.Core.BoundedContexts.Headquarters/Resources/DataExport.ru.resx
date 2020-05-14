@@ -403,5 +403,8 @@
   </data>
   <data name="DataExport_CompletedOn" xml:space="preserve">
     <value>Завершено: {{date}}</value>
+  </data> 
+  <data name="QuestionnaireTranslation" xml:space="preserve">
+    <value>Перевод</value>
   </data>
 </root>
