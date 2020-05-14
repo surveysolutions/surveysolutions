@@ -29,8 +29,8 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             if (memoryCache.TryGetValue(Key(id), out var res))
             {
                 document = res as QuestionnaireDocument;
-                if (document == null)
-                    return false;
+                /*if (document == null)
+                    return false;*/
 
                 return true;
             }

@@ -46,17 +46,19 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
                 var questionnaire = await this.tenantContext.Api.GetQuestionnaireAsync(questionnaireId, token);
 
-                if (questionnaire == null) return null;
-                questionnaire.QuestionnaireId = questionnaireId;
+                if (questionnaire != null)
+                { 
+                    questionnaire.QuestionnaireId = questionnaireId;
 
-                foreach (var category in questionnaire.Categories)
-                {
-                    category.Values =
-                        await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
-                }
+                    foreach (var category in questionnaire.Categories)
+                    {
+                        category.Values =
+                            await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
+                    }
 
-                logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
+                    logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
                     this.tenantContext.Tenant.Name, questionnaire.QuestionnaireId, questionnaire.TableName);
+                }
 
                 cache.Set(questionnaireId, questionnaire);
 
@@ -77,7 +79,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         public void InvalidateQuestionnaire(QuestionnaireId questionnaireId)
         {
-            if (cache.TryGetValue(questionnaireId, out var questionnaire) && !questionnaire.IsDeleted)
+            if (cache.TryGetValue(questionnaireId, out var questionnaire) && questionnaire?.IsDeleted == true)
             {
                 cache.Remove(questionnaireId);
             }
