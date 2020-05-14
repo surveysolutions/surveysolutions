@@ -74,7 +74,7 @@ export default {
         optionSelected(option) {
             this.$emit('change', {
                 variable: this.question.variable,
-                field: 'answerCode',
+                field: this.field.id || 'answerCode',
                 value: option == null ? null : parseInt(option.key),
             })
         },

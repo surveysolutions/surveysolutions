@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.InterviewDataStorage;
 
 namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
@@ -28,7 +25,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         public async Task<QuestionnaireDocument> GetQuestionnaireAsync(
             QuestionnaireId questionnaireId,
-            CancellationToken token = default)
+            CancellationToken token)
         {
             if (cache.TryGetValue(questionnaireId, out var result))
             {
@@ -49,9 +46,15 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                 if (questionnaire == null) return null;
                 questionnaire.QuestionnaireId = questionnaireId;
 
-                foreach (var category in questionnaire.Categories)
+                if (!questionnaire.IsDeleted)
                 {
-                    category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
+                    logger.LogDebug("Skipping questionnaire categories download for deleted questionnaire: {tenantName}. {questionnaireId} [{tableName}]",
+                        this.tenantContext.Tenant.Name, questionnaire.QuestionnaireId, questionnaire.TableName);
+
+                    foreach (var category in questionnaire.Categories)
+                    {
+                        category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
+                    }
                 }
 
                 logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
@@ -60,6 +63,13 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                 cache.Set(questionnaireId, questionnaire);
 
                 return questionnaire;
+            }
+            catch (TaskCanceledException tce)
+            {
+                if(tce.CancellationToken.IsCancellationRequested)
+                    logger.LogWarning("Task was canceled on getting questionnaire: {tenantName}. {questionnaireId}",
+                        this.tenantContext.Tenant.Name, questionnaireId);
+                throw;
             }
             finally
             {
