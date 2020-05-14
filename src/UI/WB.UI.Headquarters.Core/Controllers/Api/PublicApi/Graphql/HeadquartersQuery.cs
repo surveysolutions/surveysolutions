@@ -1,6 +1,8 @@
 #nullable enable
 using HotChocolate.Types;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
@@ -12,6 +14,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
+            descriptor.Field<QuestionnairesResolver>(x => x.Questionnaires(default, default, default))
+                .Authorize(nameof(UserRoles.Administrator),
+                    nameof(UserRoles.Headquarter),
+                    nameof(UserRoles.ApiUser))
+                .Name("questionnaires")
+                .Description("Gets questionnaire details")
+                .UseSimplePaging<Questionnaire, QuestionnaireBrowseItem>()
+                .Argument("id", a => a.Description("Questionnaire id").Type<UuidType>())
+                .Argument("version", a => a.Description("Questionnaire version").Type<LongType>());
+
             descriptor.Field<InterviewsResolver>(x => x.GetInterviews(default, default))
                 .Authorize()
                 .UseSimplePaging<Interview, InterviewSummary>()
