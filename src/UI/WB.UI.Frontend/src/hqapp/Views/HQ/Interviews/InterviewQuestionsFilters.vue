@@ -86,7 +86,7 @@ export default {
 
     apollo: {
         questions:{
-            query :gql`query questions($id: Uuid, $version: Long) {
+            query :gql`query questions($id: Uuid!, $version: Long!) {
                 questions(id: $id, version: $version, where: { identifying: true }) {
                     questionText, type, variable
                     options { title, value, parentValue }

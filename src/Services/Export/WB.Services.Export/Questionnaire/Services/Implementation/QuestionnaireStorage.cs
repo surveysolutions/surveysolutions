@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.InterviewDataStorage;
 
 namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
@@ -49,10 +46,15 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                 if (questionnaire == null) return null;
                 questionnaire.QuestionnaireId = questionnaireId;
 
-                foreach (var category in questionnaire.Categories)
+                if (!questionnaire.IsDeleted)
                 {
-                    category.Values =
-                        await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
+                    logger.LogDebug("Skipping questionnaire categories download for deleted questionnaire: {tenantName}. {questionnaireId} [{tableName}]",
+                        this.tenantContext.Tenant.Name, questionnaire.QuestionnaireId, questionnaire.TableName);
+
+                    foreach (var category in questionnaire.Categories)
+                    {
+                        category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
+                    }
                 }
 
                 logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
