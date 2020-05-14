@@ -27,8 +27,7 @@
                                     <div class="filter-column">
                                         <h5>
                                             {{$t('DataExport.SurveyQuestionnaire')}}
-                                            <span
-                                                class="text-danger">*</span>
+                                            <span class="text-danger">*</span>
                                         </h5>
                                         <div
                                             class="form-group"
@@ -62,6 +61,21 @@
                                                 v-on:selected="questionnaireVersionSelected"
                                                 :disabled="questionnaireVersionFetchUrl == null"
                                                 :selectFirst="true"/>
+                                            <span
+                                                class="help-block">{{ errors.first('questionnaireVersion') }}</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <Typeahead
+                                                control-id="questionnaireTranslation"
+                                                ref="questionnaireTranslation"
+                                                data-vv-name="questionnaireTranslation"
+                                                data-vv-as="questionnaire translation"
+                                                :placeholder="$t('DataExport.QuestionnaireTranslation')"
+                                                :selectedKey="pageState.translation"
+                                                :value="questionnaireTranslation"
+                                                :values="translations"
+                                                :disabled="questionnaireVersion == null"
+                                                v-on:selected="translationSelected"/>
                                             <span
                                                 class="help-block">{{ errors.first('questionnaireVersion') }}</span>
                                         </div>
@@ -312,7 +326,8 @@
 <script>
 import Vue from 'vue'
 import ExportProcessCard from './ExportProcessCard'
-import { filter } from 'lodash'
+import gql from 'graphql-tag'
+import { filter, toNumber, map} from 'lodash'
 
 const dataFormatNum = {Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6}
 const ExternalStorageType = {dropbox: 1, oneDrive: 2, googleDrive: 3}
@@ -325,6 +340,8 @@ export default {
             dataDestination: 'zip',
             questionnaireId: null,
             questionnaireVersion: null,
+            questionnaireTranslation: null,
+            translations: [],
             status: null,
             statuses: this.$config.model.statuses,
             isUpdatingDataAvailability: false,
@@ -404,7 +421,8 @@ export default {
                     self.dataType,
                     self.dataFormat,
                     self.dataDestination,
-                    self.status
+                    self.status,
+                    self.questionnaireTranslation
                 )
 
                 self.$store.dispatch('showProgress')
@@ -435,7 +453,8 @@ export default {
                 this.dataType,
                 this.dataFormat,
                 this.dataDestination,
-                this.status
+                this.status,
+                this.questionnaireTranslation
             )
 
             var state = {
@@ -471,7 +490,7 @@ export default {
             window.location = storageSettings.authorizationUri + '?' + decodeURIComponent($.param(request))
         },
 
-        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption) {
+        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption, translation) {
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
@@ -490,12 +509,14 @@ export default {
             }
 
             const status = (statusOption || {key: null}).key
+            const tr = (translation || {key: null}).key
 
             return {
                 id: questionnaireId,
                 version: questionnaireVersion,
-                format,
-                status,
+                format: format,
+                status: status,
+                translation: tr,
             }
         },
 
@@ -510,12 +531,36 @@ export default {
             }
         },
 
-        questionnaireVersionSelected(newValue) {
+        translationSelected(newValue) {
+            this.questionnaireTranslation = newValue
+        },
+
+        async questionnaireVersionSelected(newValue) {
+            const self = this
             this.questionnaireVersion = newValue
-            if (this.questionnaireVersion) this.updateDataAvalability()
-            else {
+            if (this.questionnaireVersion)
+                this.updateDataAvalability()
+            else
                 this.resetDataAvalability()
-            }
+
+            const query = gql`query questionnaires ($id: Uuid, $version: Long) {
+ questionnaires(id: $id, version: $version) {
+  nodes {
+    defaultLanguageName,
+    translations 
+  }}}`
+            if (newValue == null) return
+
+            const translationsResponse = await this.$apollo.query({
+                query,
+                variables: {
+                    id: this.questionnaireId.key,
+                    version: toNumber(newValue.key),
+                },
+                fetchPolicy: 'network-only',
+            })
+            const data = translationsResponse.data.questionnaires.nodes[0].translations
+            self.translations = map(data, i => {return  {key: i, value: i } })
         },
         resetDataAvalability() {
             this.hasInterviews = null
