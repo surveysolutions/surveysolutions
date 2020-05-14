@@ -29,18 +29,21 @@
                 <ul class="nav nav-tabs extra-margin-bottom">
                     <li class="nav-item"
                         v-bind:class=" {'active': currentTab == 'account'}" >
-                        <router-link :to="{ name: 'usersManage', params: { userId }}"
-                            id="profile" >{{$t('Pages.AccountManage_Profile')}}</router-link>
+                        <a class="nav-link"
+                            id="profile"
+                            v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a>
                     </li>
                     <li class="nav-item"
                         v-bind:class="{'active': currentTab=='password'}">
-                        <router-link :to="{ name: 'usersChangePassword', params: { userId }}"
-                            id="password" >{{$t('Pages.AccountManage_ChangePassword')}}</router-link>
+                        <a class="nav-link"
+                            id="password"
+                            v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a>
                     </li>
                     <li class="nav-item"
                         v-bind:class="{'active': currentTab=='two-factor'}">
-                        <router-link :to="{ name: 'users2fa', params: { userId }}"
-                            id="two-factor" >{{$t('Pages.AccountManage_TwoFactorAuth')}}</router-link>
+                        <a class="nav-link"
+                            id="two-factor"
+                            v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a>
                     </li>
                 </ul>
 

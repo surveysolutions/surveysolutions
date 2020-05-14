@@ -22,8 +22,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
         }
 
         protected Task GenerateDescriptionTxtAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
-            string directoryPath, string dataFilesExtension)
-            => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, dataFilesExtension);
+            string directoryPath, string dataFilesExtension, CancellationToken cancellationToken)
+            => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, dataFilesExtension, cancellationToken);
 
         protected async Task<string[]> CreateTabularDataFilesAsync(ExportState state, CancellationToken cancellationToken)
         {
