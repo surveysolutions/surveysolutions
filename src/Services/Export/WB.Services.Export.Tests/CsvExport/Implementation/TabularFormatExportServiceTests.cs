@@ -55,7 +55,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var questionnaireDocument = Create.QuestionnaireDocument(Guid.Parse("11111111111111111111111111111111"), 555);
-            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructure = CreateQuestionnaireExportStructure(levels: new[]
@@ -108,7 +108,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             questionnaireDocument.Title = "Name of questionnaire";
             questionnaireDocument.PublicKey = Guid.Parse("11111111111111111111111111111111");
             questionnaireDocument.Revision = 1;
-            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructure = CreateQuestionnaireExportStructure();

@@ -277,7 +277,7 @@ namespace WB.Services.Export.Tests.Questionnaire
                 }
             });
 
-            Mock.Get(questionnaireStorage).Verify(q => q.InvalidateQuestionnaire(questionnaire.QuestionnaireId), Times.Exactly(2));
+            Mock.Get(questionnaireStorage).Verify(q => q.InvalidateQuestionnaire(questionnaire.QuestionnaireId, null), Times.Exactly(2));
             questionnaireSchemaGenerator.Verify(q => q.DropQuestionnaireDbStructure(questionnaire), Times.Once);
         }
 

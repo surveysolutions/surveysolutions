@@ -187,7 +187,7 @@ namespace WB.Services.Export.Tests
         {
             var defaultQuestionnaireStorage = new Mock<IQuestionnaireStorage>();
             var questionnaireDocument = Create.QuestionnaireDocument(Guid.Parse("11111111111111111111111111111111"), 555);
-            defaultQuestionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+            defaultQuestionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
             
             var defaultInterviewsSource = new Mock<IInterviewsToExportSource>();
@@ -199,7 +199,7 @@ namespace WB.Services.Export.Tests
                 Mock.Of<ICommentsExporter>(),
                 Mock.Of<IDiagnosticsExporter>(),
                 Mock.Of<IInterviewActionsExporter>(),
-                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == Task.FromResult(questionnaireExportStructure)),
+                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>()) == Task.FromResult(questionnaireExportStructure)),
                 questionnaireStorage ?? defaultQuestionnaireStorage.Object,
                 Mock.Of<IProductVersion>(),
                 Mock.Of<IPdfExporter>(),
@@ -623,6 +623,7 @@ namespace WB.Services.Export.Tests
         {
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             questionnaireStorage.Setup(x => x.GetQuestionnaireAsync(new QuestionnaireId(questionnaire.Id),
+                    It.IsAny<Guid?>(),
                     CancellationToken.None))
                 .ReturnsAsync(questionnaire);
             return questionnaireStorage.Object;
