@@ -2072,6 +2072,44 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        public void HqRejectInterviewToInterviewer(Guid userId, Guid interviewerId, Guid supervisorId, string comment, DateTimeOffset originDate)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
+
+            var isCompleted = this.properties.Status == InterviewStatus.Completed;
+            if (!isCompleted)
+            {
+                this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate: originDate));
+            }
+
+            this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate: originDate));
+
+            if (supervisorId != properties.SupervisorId)
+                this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, originDate));
+            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
+        }
+
+        public void HqRejectInterviewToSupervisor(Guid userId, Guid supervisorId, string comment, DateTimeOffset originDate)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
+
+            var isCompleted = this.properties.Status == InterviewStatus.Completed;
+            if (!isCompleted)
+            {
+                this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate: originDate));
+            }
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, originDate));
+        }
+
         public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command) 
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
