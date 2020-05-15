@@ -160,7 +160,8 @@ namespace WB.UI.Headquarters.API
                 processView.Format,
                 processView.InterviewStatus,
                 processView.FromDate,
-                processView.ToDate);
+                processView.ToDate,
+                processView.TranslationId);
         }
 
         [HttpGet]
@@ -169,9 +170,11 @@ namespace WB.UI.Headquarters.API
         public async Task<ActionResult> AllData(Guid id, long version, DataExportFormat format,
             InterviewStatus? status = null,
             DateTime? from = null,
-            DateTime? to = null)
+            DateTime? to = null,
+            Guid? translationId = null)
         {
-            DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(new QuestionnaireIdentity(id, version), format, status, from, to);
+            DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(
+                new QuestionnaireIdentity(id, version), format, status, from, to, translationId);
             if (result == null)
             {
                 return NotFound();
