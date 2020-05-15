@@ -17,6 +17,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             return Roles.Any(x => x == UserRoles.Interviewer);
         }
+        public bool IsSupervisor()
+        {
+            return Roles.Any(x => x == UserRoles.Supervisor);
+        }
     }
 
     public class UserView
