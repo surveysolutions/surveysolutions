@@ -27,5 +27,6 @@ namespace WB.Services.Export.Services.Processing
         public double FileSize { get; set; }
         public DateTime DataFileLastUpdateDate { get; set; }
         public string DataDestination { get; set; }
+        public Guid? TranslationId { get; set; }
     }
 }

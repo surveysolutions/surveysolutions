@@ -24,7 +24,7 @@ namespace WB.Services.Export.Services
             CancellationToken cancellationToken);
 
         [Get("/api/export/v1/questionnaire/{questionnaireId}/category/{categoryId}")]
-        Task<CategoryItem[]> GetCategoriesAsync(QuestionnaireId questionnaireId, Guid categoryId, CancellationToken cancellationToken);
+        Task<CategoryItem[]> GetCategoriesAsync(QuestionnaireId questionnaireId, Guid categoryId, Guid? translation, CancellationToken cancellationToken);
 
         [Get("/api/export/v1/questionnaire/{id}/pdf")]
         Task<HttpContent> GetPdfAsync([AliasAs("id")] QuestionnaireId questionnaireId, Guid? translation = null);

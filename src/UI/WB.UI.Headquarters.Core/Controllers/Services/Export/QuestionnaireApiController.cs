@@ -77,10 +77,19 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var categoriesItems = reusableCategoriesStorage.GetOptions(questionnaireIdentity, categoryId);
+            if (categoriesItems == null) 
+                return NotFound();
+            var categoriesList = categoriesItems.ToList();
+            if (translation.HasValue)
+            {
+                var translationInstance = this.translationStorage.Get(questionnaireIdentity, translation.Value);
+                foreach (var category in categoriesList)
+                {
+                    category.Text = translationInstance.GetCategoriesText(categoryId, category.Id, category.ParentId);
+                }
+            }
 
-            if (categoriesItems == null) return NotFound();
-
-            return categoriesItems.ToList();
+            return categoriesList;
         }
     }
 }

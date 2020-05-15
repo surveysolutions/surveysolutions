@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AngleSharp.Css.Dom;
+using OfficeOpenXml;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -111,6 +113,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
 
             processView.Title = questionnaire.Title;
+            if (processView.TranslationId.HasValue)
+            {
+                var translation = questionnaire.Translations.FirstOrDefault(x =>x.Id == processView.TranslationId);
+                processView.TranslationName = translation?.Name;
+            }
+            else
+            {
+                processView.TranslationName = questionnaire.DefaultLanguageName;
+            }
             
             if (processView.Error != null)
             {
