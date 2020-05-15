@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using WB.Core.Infrastructure.PlainStorage;
@@ -20,29 +21,27 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
             this.translations = translations;
         }
 
-        public QuestionnaireDocument GetTranslated(QuestionnaireDocument questionnaire, long version, string language, out Translation translation)
+        public QuestionnaireDocument GetTranslated(QuestionnaireDocument questionnaire, long version, string? language, out Translation? translation)
         {
             translation = null;
-            QuestionnaireDocument result = questionnaire;
+            if (language == null) return questionnaire;
+            
+            translation = questionnaire.Translations.SingleOrDefault(t => t.Name == language);
 
-            if (language != null)
+            ITranslation? questionnaireTranslation = null;
+
+            if (translation != null)
             {
-                translation = questionnaire.Translations.SingleOrDefault(t => t.Name == language);
-
-                QuestionnaireTranslation questionnaireTranslation = null;
-
-                if (translation != null)
-                {
-                    var translationId = translation.Id;
-                    questionnaireTranslation = new QuestionnaireTranslation(translations.Query(_ => 
-                        _.Where(t => t.TranslationId == translationId && t.QuestionnaireId.QuestionnaireId == questionnaire.PublicKey && 
-                                     t.QuestionnaireId.Version == version)));
-                }
-
-                result = this.translator.Translate(questionnaire, questionnaireTranslation);
+                var translationId = translation.Id;
+                questionnaireTranslation = new QuestionnaireTranslation(translations.Query(_ => 
+                    _.Where(t => t.TranslationId == translationId && t.QuestionnaireId.QuestionnaireId == questionnaire.PublicKey && 
+                                 t.QuestionnaireId.Version == version)));
             }
 
-            return result;
+            if(questionnaireTranslation == null)
+                throw new InvalidOperationException("Translation must not be null.");
+
+            return this.translator.Translate(questionnaire, questionnaireTranslation);
         }
     }
 }

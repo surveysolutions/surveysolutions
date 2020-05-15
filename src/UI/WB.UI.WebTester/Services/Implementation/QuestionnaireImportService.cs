@@ -79,11 +79,7 @@ namespace WB.UI.WebTester.Services.Implementation
             {
                 var content = await webTesterApi.GetAttachmentContentAsync(designerToken.ToString(), documentAttachment.ContentId);
                 
-                attachments.Add(new QuestionnaireAttachment
-                {
-                    Id = documentAttachment.AttachmentId,
-                    Content = content
-                });
+                attachments.Add(new QuestionnaireAttachment(documentAttachment.AttachmentId, content));
             }
 
             var categories = await webTesterApi.GetCategoriesAsync(designerToken.ToString());
