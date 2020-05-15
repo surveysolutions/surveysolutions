@@ -212,7 +212,8 @@ namespace WB.Services.Export.Jobs
                 ExportFormat = dataExportProcessView.Format,
                 Status = dataExportProcessView.InterviewStatus,
                 FromDate = dataExportProcessView.FromDate,
-                ToDate = dataExportProcessView.ToDate
+                ToDate = dataExportProcessView.ToDate,
+                Translation = dataExportProcessView.TranslationId
             };
 
             dataExportProcessView.HasFile = false;

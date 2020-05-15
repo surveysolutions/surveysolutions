@@ -137,6 +137,7 @@ namespace WB.Services.Export.Host.Controllers
             DataExportFormat format,
             DateTime? fromDate,
             DateTime? toDate,
+            Guid? translationId,
             TenantInfo tenant)
         {
             var exportSettings = new ExportSettings
@@ -146,7 +147,8 @@ namespace WB.Services.Export.Host.Controllers
                 Status = status,
                 Tenant = tenant,
                 FromDate = fromDate,
-                ToDate = toDate
+                ToDate = toDate,
+                Translation = translationId
             };
 
             var result = await this.archiveHandleService.DownloadArchiveAsync(exportSettings, archiveName);
