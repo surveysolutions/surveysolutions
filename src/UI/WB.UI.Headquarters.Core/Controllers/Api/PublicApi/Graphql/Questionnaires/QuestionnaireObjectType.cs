@@ -1,9 +1,7 @@
 #nullable enable
-using System.Linq;
 using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 {
@@ -31,13 +29,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                     return questionnaire.DefaultLanguageName;
                 });
             descriptor.Field("translations")
-                .Type<NonNullType<ListType<NonNullType<StringType>>>>()
+                .Type<NonNullType<ListType<NonNullType<Translation>>>>()
                 .Resolver(ctx =>
                 {
                     var questionnaireStorage = ctx.Service<IQuestionnaireStorage>();
                     var browseItem = ctx.Parent<QuestionnaireBrowseItem>();
                     var questionnaire = questionnaireStorage.GetQuestionnaire(browseItem.Identity(), null);
-                    return questionnaire.Translations.Select(x => x.Name);
+                    return questionnaire.Translations;
                 });
         }
     }

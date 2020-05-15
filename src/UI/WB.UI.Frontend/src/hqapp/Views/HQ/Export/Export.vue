@@ -547,7 +547,10 @@ export default {
  questionnaires(id: $id, version: $version) {
   nodes {
     defaultLanguageName,
-    translations 
+    translations {
+        id, 
+        name
+    }
   }}}`
             if (newValue == null) return
 
@@ -560,7 +563,7 @@ export default {
                 fetchPolicy: 'network-only',
             })
             const data = translationsResponse.data.questionnaires.nodes[0].translations
-            self.translations = map(data, i => {return  {key: i, value: i } })
+            self.translations = map(data, i => {return  {key: i.id, value: i.name } })
         },
         resetDataAvalability() {
             this.hasInterviews = null
