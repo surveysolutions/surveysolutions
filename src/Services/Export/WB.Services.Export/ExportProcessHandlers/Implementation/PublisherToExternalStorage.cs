@@ -53,7 +53,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             : questionnaire.QuestionnaireId.Id;
                         questionnaireName = $"{questionnaire.VariableName}_v{questionnaireVersion}";
                     }
-                    var filename = this.exportFileNameService.GetFileNameForExportArchive(state.Settings, questionnaireName);
+                    var filename = await this.exportFileNameService.GetFileNameForExportArchiveAsync(state.Settings, questionnaireName);
                     await dataClient.UploadFileAsync(applicationFolder, filename, fileStream, fileStream.Length, cancellationToken);
                 }
             }

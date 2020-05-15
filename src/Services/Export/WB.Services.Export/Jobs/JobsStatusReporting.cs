@@ -274,7 +274,7 @@ namespace WB.Services.Export.Jobs
                 LastUpdateDate = DateTime.MinValue
             };
 
-            string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(exportSettings);
+            string filePath = await this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedDataAsync(exportSettings);
             if (this.externalArtifactsStorage.IsEnabled())
             {
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(exportSettings.Tenant, Path.GetFileName(filePath));
