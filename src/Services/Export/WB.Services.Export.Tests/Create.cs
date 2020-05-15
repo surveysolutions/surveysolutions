@@ -622,9 +622,9 @@ namespace WB.Services.Export.Tests
         public static IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
         {
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireStorage.Setup(x => x.GetQuestionnaireAsync(new QuestionnaireId(questionnaire.Id),
+            questionnaireStorage.Setup(x => x.GetQuestionnaireAsync(questionnaire.QuestionnaireId,
                     It.IsAny<Guid?>(),
-                    CancellationToken.None))
+                    It.IsAny<CancellationToken>()))
                 .ReturnsAsync(questionnaire);
             return questionnaireStorage.Object;
         }
@@ -728,6 +728,14 @@ namespace WB.Services.Export.Tests
         private static IQuestionnaireLabelFactory QuestionnaireLabelFactory()
         {
             return new QuestionnaireLabelFactory();
+        }
+
+        public static ExportExportFileNameService ExportExportFileNameService(IFileSystemAccessor fileSystemAccessor = null,
+            IQuestionnaireStorage questionnaireStorage = null)
+        {
+            return new ExportExportFileNameService(
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
     }
 
