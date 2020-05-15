@@ -30,7 +30,7 @@ namespace WB.Services.Export.Services.Processing
         public async Task<string> GetQuestionnaireDirectoryName(ExportSettings settings, CancellationToken cancellationToken)
         {
             var questionnaireId = settings.QuestionnaireId;
-            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, cancellationToken);
+            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
             var variableName = questionnaire.VariableName ?? questionnaire.Id;
 
             if (TryParseQuestionnaireVersion(questionnaireId, out var version))

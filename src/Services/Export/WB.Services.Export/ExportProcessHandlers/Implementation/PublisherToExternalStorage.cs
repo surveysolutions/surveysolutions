@@ -39,7 +39,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             {
                 var applicationFolder = await dataClient.CreateApplicationFolderAsync("Data Export");
 
-                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(state.Settings.QuestionnaireId, cancellationToken);
+                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(state.Settings.QuestionnaireId, 
+                    token: cancellationToken);
                 
                 using (var fileStream = File.OpenRead(state.ArchiveFilePath))
                 {
