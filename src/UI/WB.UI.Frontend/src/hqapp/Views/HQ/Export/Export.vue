@@ -224,7 +224,7 @@
                                     </label>
                                 </div>
                                 <div class="radio-btn-row"
-                                    v-if="isDropboxSetUp">
+                                    v-if="isOneDriveSetUp">
                                     <input
                                         class="radio-row"
                                         type="radio"
@@ -463,7 +463,7 @@ export default {
                 },
                 format: exportParams.format,
                 interviewStatus: exportParams.status,
-                questionnaireTranslation: exportParams.translation,
+                translation: exportParams.translation,
                 type: ExternalStorageType[this.dataDestination],
             }
 
