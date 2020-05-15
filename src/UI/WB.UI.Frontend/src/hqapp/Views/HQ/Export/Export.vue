@@ -64,7 +64,8 @@
                                             <span
                                                 class="help-block">{{ errors.first('questionnaireVersion') }}</span>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group"
+                                            v-if="translations.length > 0">
                                             <Typeahead
                                                 control-id="questionnaireTranslation"
                                                 ref="questionnaireTranslation"
@@ -76,8 +77,6 @@
                                                 :values="translations"
                                                 :disabled="questionnaireVersion == null"
                                                 v-on:selected="translationSelected"/>
-                                            <span
-                                                class="help-block">{{ errors.first('questionnaireVersion') }}</span>
                                         </div>
                                     </div>
 
@@ -464,6 +463,7 @@ export default {
                 },
                 format: exportParams.format,
                 interviewStatus: exportParams.status,
+                questionnaireTranslation: exportParams.translation,
                 type: ExternalStorageType[this.dataDestination],
             }
 
@@ -536,8 +536,10 @@ export default {
         },
 
         async questionnaireVersionSelected(newValue) {
-            const self = this
             this.questionnaireVersion = newValue
+            this.translations = []
+            this.questionnaireTranslation = null
+
             if (this.questionnaireVersion)
                 this.updateDataAvalability()
             else
@@ -563,7 +565,7 @@ export default {
                 fetchPolicy: 'network-only',
             })
             const data = translationsResponse.data.questionnaires.nodes[0].translations
-            self.translations = map(data, i => {return  {key: i.id, value: i.name } })
+            this.translations = map(data, i => {return  {key: i.id, value: i.name } })
         },
         resetDataAvalability() {
             this.hasInterviews = null

@@ -17,12 +17,14 @@
                 </div>
                 <p class="mb-0 font-regular">
                     <u class="font-bold">{{data.format}}</u> format.
-                    <span
-                        v-if="data.format!='DDI' && data.interviewStatus != null"
+                    <span v-if="data.format !='DDI' && data.interviewStatus != null"
                         class="font-bold">
                         {{ $t('DataExport.DataExport_InterviewsStatus', {
                             status: $t('DataExport.'+ data.interviewStatus) ,
                             interpolation: {escapeValue: false} }) }}
+                    </span>
+                    <span>
+                        {{translation}}
                     </span>
                 </p>
             </div>
@@ -168,6 +170,10 @@ export default {
         },
         isCompleted() {
             return this.data.jobStatus == 'Completed' || this.data.jobStatus == 'Canceled' || this.data.jobStatus == 'Fail'
+        },
+        translation() {
+            const languageName = this.data.translationName || this.$t('WebInterview.Original_Language')
+            return this.$t('DataExport.Translation_CardLabel', {language: languageName})
         },
     },
 
