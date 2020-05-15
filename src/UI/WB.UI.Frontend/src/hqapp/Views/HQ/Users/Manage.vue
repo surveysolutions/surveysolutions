@@ -114,6 +114,15 @@ export default {
         isOwnProfile() {
             return this.userInfo.isOwnProfile
         },
+        isHeadquarters() {
+            return this.userInfo.role == 'Headquarter'
+        },
+        isSupervisor() {
+            return this.userInfo.role == 'Supervisor'
+        },
+        isInterviewer() {
+            return this.userInfo.role == 'Interviewer'
+        },
         canLockBySupervisor() {
             return this.isInterviewer
         },

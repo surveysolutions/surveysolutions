@@ -38,7 +38,7 @@
                         <div >
                             <button id="enable-authenticator"
                                 type="submit"
-                                @click="navigate('two-fa-setup')"
+                                @click="navigateTo('../../Users/SetupAuthenticator')"
                                 style="display: inline-block;"
                                 v-bind:disabled="userInfo.isObserving"
                                 class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}</button>
@@ -56,7 +56,7 @@
                         <div>
                             <button id="reset-authenticator"
                                 type="submit"
-                                @click="navigate('two-fa-reset-authenticator')"
+                                @click="navigateTo('../../Users/ResetAuthenticator')"
                                 style="display: inline-block;"
                                 v-bind:disabled="userInfo.isObserving"
                                 class="btn btn-success">{{$t('Pages.ResetAuthenticator')}}
@@ -76,7 +76,7 @@
                         <div >
                             <button id="reset-codes"
                                 type="submit"
-                                @click="navigate('two-fa-reset-recovery-codes')"
+                                @click="navigateTo('../../Users/ResetRecoveryCodes')"
                                 style="display: inline-block;"
                                 v-bind:disabled="userInfo.isObserving"
                                 class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </button>
@@ -91,7 +91,7 @@
             <button
                 id="disable-2fa"
                 type="submit"
-                @click="navigate('two-fa-disable')"
+                @click="navigateTo('../../Users/Disable2fa')"
                 class="btn btn-danger"
                 v-bind:disabled="userInfo.isObserving">{{$t('Pages.Disable2fa')}}</button>
         </div >
@@ -132,8 +132,12 @@ export default {
             else
                 return baseUrl + '/' + this.model.userInfo.userId
         },
+        navigateTo: function(location){
+            window.location.href = this.getUrl(location)
+            return false
+        },
         navigate: function(target){
-            this.$router.push({ name: target, params: {userId: this.isOwnProfile ? '' :this.model.userInfo.userId}})
+            this.$router.push({ name: target, params: {userId: this.isOwnProfile ? '' : this.model.userInfo.userId}}, () => this.$router.go(0))
         },
     },
 }

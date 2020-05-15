@@ -40,7 +40,7 @@ export default class UsersComponent {
             path: '/Supervisors', component: Supervisors,
         },
         {
-            path: '/Users/Manage/:userId', component: Manage,
+            path: '/Users/Manage/:userId', component: Manage, name: 'usersManage',
         },
         {
             path: '/Users/Manage/', component: Manage,
@@ -52,7 +52,7 @@ export default class UsersComponent {
             path: '/Users/TwoFactorAuthentication', component: TwoFactorAuthentication,
         },
         {
-            path: '/Users/TwoFactorAuthentication/:userId', component: TwoFactorAuthentication,
+            path: '/Users/TwoFactorAuthentication/:userId', component: TwoFactorAuthentication, name: 'users2fa',
         },
         {
             path: '/Users/SetupAuthenticator', component: SetupAuthenticator,
@@ -95,7 +95,7 @@ export default class UsersComponent {
             component: Disable2fa,
         },
         {
-            path: '/Users/ChangePassword/:userId', component: ChangePassword,
+            path: '/Users/ChangePassword/:userId', component: ChangePassword, name: 'usersChangePassword',
         },
         {
             path: '/Users/ChangePassword/', component: ChangePassword,

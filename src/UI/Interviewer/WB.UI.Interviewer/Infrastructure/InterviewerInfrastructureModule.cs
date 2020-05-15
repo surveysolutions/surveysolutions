@@ -78,10 +78,5 @@ namespace WB.UI.Interviewer.Infrastructure
 
             registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();
         }
-
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
     }
 }

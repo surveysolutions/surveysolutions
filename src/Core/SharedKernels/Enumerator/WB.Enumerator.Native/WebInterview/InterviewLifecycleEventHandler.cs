@@ -135,7 +135,8 @@ namespace WB.Enumerator.Native.WebInterview
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
             this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
-            this.webInterviewNotificationService.RefreshCascadingOptions(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+            this.webInterviewNotificationService.RefreshCascadingOptions(evnt.EventSourceId, 
+                new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
         }
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)        

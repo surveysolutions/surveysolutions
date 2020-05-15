@@ -66,7 +66,7 @@ export const entityDetails = {
     },
 
     mounted() {
-        if(this.fetchOnMount){
+        if (this.fetchOnMount) {
             this.fetch()
         }
     },
@@ -107,13 +107,14 @@ export const entityDetails = {
         },
 
         handleEmptyAnswer(answer) {
-            const answ = answer === undefined || answer === null || answer === '' ? null : answer
+            const newAnswer = answer === undefined || answer === null || answer === '' ? null : answer
+            const currentAnswer = this.$me.answer === undefined || this.$me.answer === null || this.$me.answer === '' ? null : this.$me.answer
 
-            if (answ === this.$me.answer) {
+            if (newAnswer === currentAnswer) {
                 return true
             }
 
-            if ((answ === '' || answ === null) && this.$me.isAnswered) {
+            if (newAnswer === null && this.$me.isAnswered) {
                 this.removeAnswer()
                 return true
             }

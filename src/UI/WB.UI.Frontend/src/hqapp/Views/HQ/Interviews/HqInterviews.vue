@@ -168,7 +168,7 @@
                     </label>
                     <br />
                     <span v-if="isReassignReceivedByInterviewer"
-                        class="text-warning">
+                        class="text-danger">
                         {{$t("Interviews.AssignReceivedWarning")}}
                     </span>
                 </div>
@@ -743,7 +743,7 @@ export default {
                 this.conditions.forEach(cond => {
                     if(cond.value == null) return
 
-                    const identifyingQuestions_some = { question: {variable: cond.variable}}
+                    let identifyingQuestions_some = { question: {variable: cond.variable}}
 
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
                     identifyingQuestions_some[cond.field] = value
@@ -1368,6 +1368,8 @@ export default {
                         query: this.$route.query.responsibleName,
                         pageSize: 1,
                         cache: false,
+                        showArchived: true,
+                        showLocked: true,
                     },
                     this.ajaxParams
                 )
