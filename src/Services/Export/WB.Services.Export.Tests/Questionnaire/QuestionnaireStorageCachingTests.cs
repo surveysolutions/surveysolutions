@@ -53,12 +53,13 @@ namespace WB.Services.Export.Tests.Questionnaire
             this.apiMock.Setup(a => a.GetQuestionnaireAsync(qId, It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(doc));
 
-            await this.storage.GetQuestionnaireAsync(qId);
-            await this.storage.GetQuestionnaireAsync(qId);
-            await this.storage.GetQuestionnaireAsync(qId);
-            await this.storage.GetQuestionnaireAsync(qId);
-            await this.storage.GetQuestionnaireAsync(qId);
-            await this.storage.GetQuestionnaireAsync(qId);
+            var token = new CancellationToken();
+            await this.storage.GetQuestionnaireAsync(qId, token);
+            await this.storage.GetQuestionnaireAsync(qId, token);
+            await this.storage.GetQuestionnaireAsync(qId, token);
+            await this.storage.GetQuestionnaireAsync(qId, token);
+            await this.storage.GetQuestionnaireAsync(qId, token);
+            await this.storage.GetQuestionnaireAsync(qId, token);
 
             this.apiMock.Verify(a => a.GetQuestionnaireAsync(qId, It.IsAny<CancellationToken>()), Times.Once,
                 "should query questionnaire from API on cold cache only once");

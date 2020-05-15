@@ -137,6 +137,8 @@ export default {
 
     data() {
         return {
+            selectedQuestionnaire:null,
+            selectedQuestionnaireVersion:null,
             questionnaires: [],
             questions: [],
             selectedAnswers: [],
@@ -157,12 +159,6 @@ export default {
             this.$emit('input', value)
         },
 
-        'query.name'(to) {
-            if (this.selectedQuestion == null) {
-                this.loadQuestions(to)
-            }
-        },
-
         selectedQuestion(to) {
             if (to == null && this.questionsList != null && this.questionsList.length > 0) {
                 this.selectQuestion(this.questionsList[0])
@@ -173,14 +169,17 @@ export default {
     async mounted() {
         await this.loadQuestionnaires()
 
-        if (this.selectedQuestionnaire == null && this.questionnaireList.length > 0) {
-            const questionnaire = this.questionnaireList[this.questionnaireList.length - 1]
+        if (this.query.name != null)
+            this.selectedQuestionnaire = find(this.questionnaireList, {value: this.query.name})
 
-            this.selectQuestionnaire(questionnaire)
-            await this.loadQuestions(questionnaire.key)
-        } else {
-            await this.loadQuestions()
-        }
+        let key = parseInt(this.query.version)
+        key = Number.isNaN(key) ? null : key
+        this.selectedQuestionnaireVersion = find(this.questionnaireVersionsList, {key})
+
+        if(this.selectedQuestionnaire == null && this.questionnaireList.length > 0)
+            this.selectedQuestionnaire =  this.questionnaireList[this.questionnaireList.length - 1]
+
+        await this.selectQuestionnaireInt(this.selectedQuestionnaire)
 
         if (this.question == null && this.questionsList.length > 0) {
             this.selectQuestion(this.questionsList[0])
@@ -200,13 +199,14 @@ export default {
             }
         },
 
-        loadQuestions(questionnaireId = null, version = null) {
-            if (questionnaireId == null && this.selectedQuestionnaire == null) return
-            const id = questionnaireId || this.selectedQuestionnaire.key
+        async loadQuestions(questionnaire = null, version = null) {
+
+            if (questionnaire == null && this.selectedQuestionnaire == null) return
+            const id = questionnaire || this.selectedQuestionnaire.key
 
             this.loading.questions = true
 
-            return this.$hq.Report.SurveyStatistics.Questions(id, version)
+            await this.$hq.Report.SurveyStatistics.Questions(id, version)
                 .then(questions => {
                     this.questions = questions
                     this.loading.questions = false
@@ -214,33 +214,38 @@ export default {
                 .catch(() => (this.loading.questions = false))
         },
 
-        async selectQuestionnaire(id) {
-            const questionnaireId = id == null ? null : id.key
+        async selectQuestionnaire(questionnaire) {
 
-            if (id == null) {
+            this.selectedQuestionnaireVersion = null
+            await this.selectQuestionnaireInt(questionnaire)
+
+        },
+        async selectQuestionnaireInt(questionnaire) {
+            this.selectedQuestionnaire = questionnaire
+            const questionnaireId = questionnaire == null ? null : questionnaire.key
+
+            if (questionnaire == null) {
                 this.selectQuestion(null)
                 this.selectCondition(null)
                 return
             }
 
-            this.selectQuestionnaireVersion(null)
-
-            await this.loadQuestions(id.key, null)
-
-            this.selectCondition(null)
-            this.onChange(q => (q.name = id.value))
-
-            const question = find(this.questionsList, 'key', this.query.questionId)
-            this.selectQuestion(question)
+            this.onChange(query => (query.name = questionnaire.value))
+            await this.selectQuestionnaireVersion(this.selectedQuestionnaireVersion)
         },
 
-        selectQuestionnaireVersion(id) {
-            const version = id == null ? null : id.key
+        async selectQuestionnaireVersion(questionnaireVersion) {
+            const version = questionnaireVersion == null ? null : questionnaireVersion.key
             if (this.selectedQuestionnaire == null) return
 
-            this.loadQuestions(this.selectedQuestionnaire.key, version).then(() => {
-                this.onChange(query => (query.version = version))
-            })
+            this.selectedQuestionnaireVersion = questionnaireVersion
+            this.onChange(query => (query.version = version))
+
+            await this.loadQuestions(this.selectedQuestionnaire.key, version)
+
+            this.selectCondition(null)
+            const question = find(this.questionsList, 'key', this.query.questionId)
+            this.selectQuestion(question)
         },
 
         selectQuestion(id) {
@@ -417,18 +422,6 @@ export default {
         conditionAnswers() {
             if (this.condition == null) return []
             return filter(this.condition.Answers, ans => this.isSelectedAnswer(ans.Answer))
-        },
-
-        // drop down
-        selectedQuestionnaire() {
-            if (this.query.name == null) return null
-            return find(this.questionnaireList, {value: this.query.name})
-        },
-
-        selectedQuestionnaireVersion() {
-            let key = parseInt(this.query.version)
-            key = Number.isNaN(key) ? null : key
-            return find(this.questionnaireVersionsList, {key})
         },
 
         // drop down
