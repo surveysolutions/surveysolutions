@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
@@ -25,9 +26,10 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         public async Task<QuestionnaireDocument> GetQuestionnaireAsync(
             QuestionnaireId questionnaireId,
-            CancellationToken token)
+            Guid? translation = null,
+            CancellationToken token = default)
         {
-            if (cache.TryGetValue(questionnaireId, out var result))
+            if (cache.TryGetValue(questionnaireId, translation, out var result))
             {
                 return result;
             }
@@ -36,19 +38,19 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
             try
             {
-                if (cache.TryGetValue(questionnaireId, out result))
+                if (cache.TryGetValue(questionnaireId, translation, out result))
                 {
                     return result;
                 }
 
-                var questionnaire = await this.tenantContext.Api.GetQuestionnaireAsync(questionnaireId, token);
+                var questionnaire = await this.tenantContext.Api.GetQuestionnaireAsync(questionnaireId, translation, token);
 
                 if (questionnaire == null) return null;
                 questionnaire.QuestionnaireId = questionnaireId;
 
                 if (!questionnaire.IsDeleted)
                 {
-                    logger.LogDebug("Skipping questionnaire categories download for deleted questionnaire: {tenantName}. {questionnaireId} [{tableName}]",
+                    logger.LogDebug("Downloading questionnaire categories for questionnaire: {tenantName}. {questionnaireId} [{tableName}]",
                         this.tenantContext.Tenant.Name, questionnaire.QuestionnaireId, questionnaire.TableName);
 
                     foreach (var category in questionnaire.Categories)
@@ -60,7 +62,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                 logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
                     this.tenantContext.Tenant.Name, questionnaire.QuestionnaireId, questionnaire.TableName);
 
-                cache.Set(questionnaireId, questionnaire);
+                cache.Set(questionnaireId, translation, questionnaire);
 
                 return questionnaire;
             }
@@ -77,11 +79,11 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             }
         }
 
-        public void InvalidateQuestionnaire(QuestionnaireId questionnaireId)
+        public void InvalidateQuestionnaire(QuestionnaireId questionnaireId, Guid? translation)
         {
-            if (cache.TryGetValue(questionnaireId, out var questionnaire) && !questionnaire.IsDeleted)
+            if (cache.TryGetValue(questionnaireId, translation, out var questionnaire) && !questionnaire.IsDeleted)
             {
-                cache.Remove(questionnaireId);
+                cache.Remove(questionnaireId, translation);
             }
         }
     }

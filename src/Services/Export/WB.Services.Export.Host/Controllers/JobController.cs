@@ -41,6 +41,7 @@ namespace WB.Services.Export.Host.Controllers
             string archivePassword,
             string accessToken,
             string refreshToken,
+            string translation,
             TenantInfo tenant)
         {
             var process = await this.exportProcessesService.GetProcessAsync(processId);
@@ -53,7 +54,8 @@ namespace WB.Services.Export.Host.Controllers
                     ExportFormat = process.ExportSettings.ExportFormat,
                     FromDate = process.ExportSettings.FromDate,
                     ToDate = process.ExportSettings.ToDate,
-                    Status = process.ExportSettings.Status
+                    Status = process.ExportSettings.Status,
+                    Translation = process.ExportSettings.Translation
                 },
                 ArchivePassword = archivePassword,
                 AccessToken = accessToken,
@@ -80,6 +82,7 @@ namespace WB.Services.Export.Host.Controllers
             string archivePassword,
             string accessToken,
             string refreshToken,
+            Guid? translation,
             ExternalStorageType? storageType,
             TenantInfo tenant)
         {
@@ -92,6 +95,7 @@ namespace WB.Services.Export.Host.Controllers
                     ExportFormat = format,
                     FromDate = from,
                     ToDate = to,
+                    Translation = translation,
                     Status = status
                 },
                 ArchivePassword = archivePassword,
