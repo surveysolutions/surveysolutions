@@ -199,6 +199,7 @@ export default {
                 columns.splice(1, 0,
                     {
                         data: 'questionnaireVersion',
+                        name: 'QuestionnaireVersion',
                         className: 'type-numeric version centered-italic',
                         title: this.$t('Reports.TemplateVersion'),
                     })

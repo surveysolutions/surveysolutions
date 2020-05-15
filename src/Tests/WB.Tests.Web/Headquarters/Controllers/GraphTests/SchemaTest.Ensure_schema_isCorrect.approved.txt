@@ -5,7 +5,7 @@
 
 type CategoricalOption {
   parentValue: Int
-  title: String
+  title: String!
   value: Int!
 }
 
@@ -17,64 +17,63 @@ type HeadquartersMutations {
 
 type HeadquartersQuery {
   interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
+  questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Question] @authorize(apply: BEFORE_RESOLVER)
   map("Map file name" id: String!): Map @authorize(apply: BEFORE_RESOLVER)
-  maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
-  questions("Questionnaire id" id: Uuid "Questionnaire language" language: String "Questionnaire version" version: Long where: QuestionFilter): [Question] @authorize(apply: BEFORE_RESOLVER)
-  viewer: User @authorize(apply: BEFORE_RESOLVER)
+  maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)  viewer: User @authorize(apply: BEFORE_RESOLVER)
 }
 
 type IPagedConnectionOfInterview {
   "Filtered count of nodes without paging"
-  filteredCount: Int
+  filteredCount: Int!
   "A flattened list of the nodes."
-  nodes: [Interview]
+  nodes: [Interview]!
   "Total count of nodes without filtering applied"
-  totalCount: Int
+  totalCount: Int!
 }
 
 type IPagedConnectionOfMap {
   "Filtered count of nodes without paging"
-  filteredCount: Int
+  filteredCount: Int!
   "A flattened list of the nodes."
-  nodes: [Map]
+  nodes: [Map]!
   "Total count of nodes without filtering applied"
-  totalCount: Int
+  totalCount: Int!
 }
 
 type Interview {
   "List of actions that can be applied to interview"
-  actionFlags: [InterviewActionFlags!]
+  actionFlags: [InterviewActionFlags!]!
   "Identifier for the assignment to which this interview belongs"
   assignmentId: Int
   "Utc creation date"
   createdDate: DateTime!
   "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1."
-  errorsCount: Int
-  id: ID
+  errorsCount: Int!
+  id: ID!
   "Information that identifies each assignment. These are the answers to questions marked as identifying in Designer."
   identifyingQuestions: [QuestionAnswer]
   "Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer."
-  key: String
+  key: String!
   questionnaireId: Uuid!
-  questionnaireVariable: String
+  questionnaireVariable: String!
   questionnaireVersion: Long!
   "Indicator for whether the interview is on the interviewer’s tablet now"
-  receivedByInterviewer: Boolean
-  responsibleId: Uuid
+  receivedByInterviewer: Boolean!
+  responsibleId: Uuid!
   "Login of current responsible user"
-  responsibleName: String
+  responsibleName: String!
   "Lower cased version of responsibleName field"
-  responsibleNameLowerCase: String
-  responsibleRole: UserRoles
-  status: InterviewStatus
+  responsibleNameLowerCase: String!
+  responsibleRole: UserRoles!
+  status: InterviewStatus!
   "Supervisor login who is responsible for interview"
   supervisorName: String
   "Lowercased version of supervisor login who is responsible for interview"
-  supervisorNameLowerCase: String
+  supervisorNameLowerCase: String!
   "Represents date (UTC) when interview was changed last time"
   updateDate: DateTime!
   "Indicates if interview was ever completed by interviewer"
-  wasCompleted: String
+  wasCompleted: Boolean!
 }
 
 type Map {
@@ -98,12 +97,12 @@ type Map {
 type Question {
   identifying: Boolean
   label: String
-  options: [CategoricalOption]
+  options: [CategoricalOption!]!
   "Question text. May contain html tags."
-  questionText: String
+  questionText: String!
   scope: QuestionScope
-  type: QuestionType
-  variable: String
+  type: QuestionType!
+  variable: String!
 }
 
 type QuestionAnswer {
@@ -116,9 +115,9 @@ type QuestionAnswer {
 }
 
 type User {
-  id: Uuid!
-  roles: [UserRoles!]
-  userName: String
+  id: ID!
+  roles: [UserRoles!]!
+  userName: String!
 }
 
 type UserMap {

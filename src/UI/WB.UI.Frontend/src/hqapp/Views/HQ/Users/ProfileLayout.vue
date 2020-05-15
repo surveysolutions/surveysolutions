@@ -31,17 +31,20 @@
                         v-bind:class=" {'active': currentTab == 'account'}" >
                         <a class="nav-link"
                             id="profile"
-                            v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a></li>
+                            v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a>
+                    </li>
                     <li class="nav-item"
                         v-bind:class="{'active': currentTab=='password'}">
                         <a class="nav-link"
                             id="password"
-                            v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a></li>
+                            v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a>
+                    </li>
                     <li class="nav-item"
                         v-bind:class="{'active': currentTab=='two-factor'}">
                         <a class="nav-link"
                             id="two-factor"
-                            v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a></li>
+                            v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a>
+                    </li>
                 </ul>
 
                 <div class="col-sm-12">
@@ -101,7 +104,7 @@ export default {
             if (!this.isOwnProfile) {
                 if (this.isHeadquarters) return '../../Headquarters'
                 if (this.isSupervisor) return '../../Supervisors'
-                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userInfo.userId
+                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userId
                 if (this.isObserver) return '../../Observers'
                 if (this.isApiUser) return '../../ApiUsers'
             }

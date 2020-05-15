@@ -111,28 +111,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!HasPermissionsToManageUser(user)) return this.Forbid();
 
-            return View(new
-            {
-                UserInfo = new
-                {
-                    UserId = user.Id,
-                    Email = user.Email,
-                    PersonName = user.FullName,
-                    PhoneNumber = user.PhoneNumber,
-                    UserName = user.UserName,
-                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
-                    IsOwnProfile = user.Id == this.authorizedUser.Id,
-                    IsLockedByHeadquarters = user.IsLockedByHeadquaters,
-                    IsLockedBySupervisor = user.IsLockedBySupervisor,
-                    IsObserving = this.authorizedUser.IsObserving,
-                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter
-                },
-                Api = new
-                {
-                    UpdatePasswordUrl = Url.Action("UpdatePassword"),
-                    UpdateUserUrl = Url.Action("UpdateUser")
-                }
-            });
+            return View(await GetUserInfo(user));
         }
 
         [HttpGet]
@@ -145,28 +124,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!HasPermissionsToManageUser(user)) return this.Forbid();
 
-            return View(new
-            {
-                UserInfo = new
-                {
-                    UserId = user.Id,
-                    Email = user.Email,
-                    PersonName = user.FullName,
-                    PhoneNumber = user.PhoneNumber,
-                    UserName = user.UserName,
-                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
-                    IsOwnProfile = user.Id == this.authorizedUser.Id,
-                    IsLockedByHeadquarters = user.IsLockedByHeadquaters,
-                    IsLockedBySupervisor = user.IsLockedBySupervisor,
-                    IsObserving = this.authorizedUser.IsObserving,
-                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter
-                },
-                Api = new
-                {
-                    UpdatePasswordUrl = Url.Action("UpdatePassword"),
-                    UpdateUserUrl = Url.Action("UpdateUser")
-                }
-            });
+            return View(await GetUserInfo(user));
         }
 
         [HttpGet]
@@ -179,23 +137,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!HasPermissionsToManageUser(user)) return this.Forbid();
 
-            return View(new
-            {
-                UserInfo = new
-                {
-                    Is2faEnabled = await userManager.GetTwoFactorEnabledAsync(user),
-                    RecoveryCodesLeft = await userManager.CountRecoveryCodesAsync(user),
-                    HasAuthenticator = await this.userManager.GetAuthenticatorKeyAsync(user) != null,
-
-                    UserId = user.Id,
-                    UserName = user.UserName,
-                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
-                    IsOwnProfile = user.Id == this.authorizedUser.Id,
-                    IsObserving = this.authorizedUser.IsObserving
-                },
-                Api = new
-                {}
-            });
+            return View(await GetUserInfo(user));
         }
 
         private string FormatKey(string unformattedKey)
@@ -224,25 +166,50 @@ namespace WB.UI.Headquarters.Controllers
             if (user == null) return NotFound("User not found");
             if (!HasPermissionsToManageUser(user)) return this.Forbid();
             
-            return View(new
+            return View(await GetUserInfo(user));
+        }
+
+        private async Task<dynamic> GetUserInfo(HqUser user)
+        {
+            return new
             {
                 UserInfo = new
                 {
+                    Is2faEnabled = await userManager.GetTwoFactorEnabledAsync(user),
+                    RecoveryCodesLeft = await userManager.CountRecoveryCodesAsync(user),
+                    HasAuthenticator = await this.userManager.GetAuthenticatorKeyAsync(user) != null,
+
                     UserId = user.Id,
+                    Email = user.Email,
+                    PersonName = user.FullName,
+                    PhoneNumber = user.PhoneNumber,
                     UserName = user.UserName,
                     Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
-                    IsObserving = this.authorizedUser.IsObserving
+                    IsLockedByHeadquarters = user.IsLockedByHeadquaters,
+                    IsLockedBySupervisor = user.IsLockedBySupervisor,
+                    IsObserving = this.authorizedUser.IsObserving,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+
+                    RecoveryCodes = ""
                 },
                 Api = new
                 {
-                    ResetAuthenticatorKeyUrl = Url.Action("ResetAuthenticatorKey", new { id = id }),
-                    EnableAuthenticatorUrl = Url.Action("SetupAuthenticator", new { id = id }),
+                    GenerateRecoveryCodesUrl = Url.Action("GenerateRecoveryCodes"),
+                    ResetAuthenticatorKeyUrl = Url.Action("ResetAuthenticatorKey"),
+                    UpdatePasswordUrl = Url.Action("UpdatePassword"),
+                    UpdateUserUrl = Url.Action("UpdateUser"),
+                    Disable2faUrl = Url.Action("DisableTwoFactor"),
+
+                    SetupAuthenticatorUrl = Url.Action("SetupAuthenticator", new { id = user.Id }),
+                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = user.Id }),
+                    TwoFactorAuthenticationUrl = Url.Action("TwoFactorAuthentication", new { id = user.Id }),
+                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id })
                 }
-            });
+            };
         }
 
-        
+
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
@@ -252,23 +219,7 @@ namespace WB.UI.Headquarters.Controllers
             if (user == null) return NotFound("User not found");
             if (!HasPermissionsToManageUser(user)) return this.Forbid();
 
-            
-            return View(new
-            {
-                UserInfo = new
-                {
-                    UserId = user.Id,
-                    UserName = user.UserName,
-                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
-                    IsOwnProfile = user.Id == this.authorizedUser.Id,
-                    IsObserving = this.authorizedUser.IsObserving
-                },
-                Api = new
-                {
-                    GenerateRecoveryCodesUrl = Url.Action("GenerateRecoveryCodes", new { id = id }),
-                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = id })
-                }
-            });
+            return View(await GetUserInfo(user));
         }
 
 
@@ -291,15 +242,38 @@ namespace WB.UI.Headquarters.Controllers
             {
                 UserInfo = new
                 {
-                    RecoveryCodes = string.Join(" ", RecoveryCodes),
+                    Is2faEnabled = await userManager.GetTwoFactorEnabledAsync(user),
+                    RecoveryCodesLeft = await userManager.CountRecoveryCodesAsync(user),
+                    HasAuthenticator = await this.userManager.GetAuthenticatorKeyAsync(user) != null,
 
                     UserId = user.Id,
+                    Email = user.Email,
+                    PersonName = user.FullName,
+                    PhoneNumber = user.PhoneNumber,
                     UserName = user.UserName,
                     Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
-                    IsObserving = this.authorizedUser.IsObserving
+                    IsLockedByHeadquarters = user.IsLockedByHeadquaters,
+                    IsLockedBySupervisor = user.IsLockedBySupervisor,
+                    IsObserving = this.authorizedUser.IsObserving,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+
+                    RecoveryCodes = string.Join(" ", RecoveryCodes)
+
                 },
-                Api = new { }
+                Api = new
+                {
+                    GenerateRecoveryCodesUrl = Url.Action("GenerateRecoveryCodes"),
+                    ResetAuthenticatorKeyUrl = Url.Action("ResetAuthenticatorKey"),
+                    UpdatePasswordUrl = Url.Action("UpdatePassword"),
+                    UpdateUserUrl = Url.Action("UpdateUser"),
+                    Disable2faUrl = Url.Action("DisableTwoFactor"),
+
+                    SetupAuthenticatorUrl = Url.Action("SetupAuthenticator", new { id = user.Id }),
+                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = user.Id }),
+                    TwoFactorAuthenticationUrl = Url.Action("TwoFactorAuthentication", new { id = user.Id }),
+                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id })
+                }
             });
         }
 
@@ -315,22 +289,7 @@ namespace WB.UI.Headquarters.Controllers
             if(!user.TwoFactorEnabled)
                 return RedirectToAction("TwoFactorAuthentication", new { id = id });
 
-            return View(new
-            {
-                UserInfo = new
-                {
-                    UserId = user.Id,
-                    UserName = user.UserName,
-                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
-                    IsOwnProfile = user.Id == this.authorizedUser.Id,
-                    IsObserving = this.authorizedUser.IsObserving
-                },
-                Api = new
-                {
-                    Disable2faUrl = Url.Action("DisableTwoFactor", new { id = id }),
-                    RedirectUrl = Url.Action("TwoFactorAuthentication", new { id = id })
-                }
-            });
+            return View(await GetUserInfo(user));
         }
 
 
@@ -367,16 +326,34 @@ namespace WB.UI.Headquarters.Controllers
                     SharedKey = FormatKey(unformattedKey),
                     AuthenticatorUri = authenticatorUri,
 
+                    Is2faEnabled = await userManager.GetTwoFactorEnabledAsync(user),
+                    RecoveryCodesLeft = await userManager.CountRecoveryCodesAsync(user),
+                    HasAuthenticator = await this.userManager.GetAuthenticatorKeyAsync(user) != null,
+
                     UserId = user.Id,
+                    Email = user.Email,
+                    PersonName = user.FullName,
+                    PhoneNumber = user.PhoneNumber,
                     UserName = user.UserName,
                     Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
-                    IsObserving = this.authorizedUser.IsObserving
+                    IsLockedByHeadquarters = user.IsLockedByHeadquaters,
+                    IsLockedBySupervisor = user.IsLockedBySupervisor,
+                    IsObserving = this.authorizedUser.IsObserving,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
                 },
                 Api = new
                 {
-                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = id }),
-                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = id })
+                    GenerateRecoveryCodesUrl = Url.Action("GenerateRecoveryCodes"),
+                    ResetAuthenticatorKeyUrl = Url.Action("ResetAuthenticatorKey"),
+                    UpdatePasswordUrl = Url.Action("UpdatePassword"),
+                    UpdateUserUrl = Url.Action("UpdateUser"),
+                    Disable2faUrl = Url.Action("DisableTwoFactor"),
+
+                    SetupAuthenticatorUrl = Url.Action("SetupAuthenticator", new { id = user.Id }),
+                    ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = user.Id }),
+                    TwoFactorAuthenticationUrl = Url.Action("TwoFactorAuthentication", new { id = user.Id }),
+                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id })
                 }
             });
         }

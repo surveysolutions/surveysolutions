@@ -1178,8 +1178,11 @@
   <data name="MapList_DeleteMap" xml:space="preserve">
     <value>Удалить карту</value>
   </data>
+  <data name="MapList_MapName" xml:space="preserve">
+    <value>Файл карты</value>
+  </data>
   <data name="MapList_Name" xml:space="preserve">
-    <value>Имя интервьюера</value>
+    <value>Имя</value>
   </data>
   <data name="MapList_Size" xml:space="preserve">
     <value>Размер (MB)</value>
