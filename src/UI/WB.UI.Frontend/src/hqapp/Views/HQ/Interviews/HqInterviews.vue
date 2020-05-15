@@ -249,11 +249,11 @@
                         v-html="$t('Interviews.RejectConfirmMessage', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'Rejected by Headquarters'} )"></p>
                 </div>
 
-                <div v-if="config.isSupervisor && isNeedShowAssignInterviewers()">
+                <div>
                     <p>
                         <label
                             class="control-label"
-                            for="newResponsibleId">{{$t('Interviews.ChooseResponsibleInterviewer')}}</label>
+                            for="newResponsibleId">{{ $t('Interviews.ChooseResponsibleInterviewer') }}</label>
                         <Typeahead
                             control-id="newResponsibleId"
                             :placeholder="$t('Common.Responsible')"
@@ -984,13 +984,61 @@ export default {
             }
 
             if (!self.config.isSupervisor) {
-                var command = this.getCommand(
-                    'HqRejectInterviewCommand',
-                    map(filteredItems, interview => {
-                        return interview.id
-                    }),
-                    this.statusChangeComment
-                )
+                var command = null
+
+                if (self.newResponsibleId == null)
+                {
+                    command = this.getCommand(
+                        'HqRejectInterviewCommand',
+                        map(filteredItems, interview => {
+                            return interview.id
+                        }),
+                        this.statusChangeComment
+                    )
+                }
+                else if (self.newResponsibleId.iconClass === 'interviewer')
+                {
+                    var rejToIntCommands = this.arrayMap(
+                        map(filteredItems, interview => {
+                            return interview.id
+                        }),
+                        function(rowId) {
+                            var item = {
+                                InterviewId: rowId,
+                                InterviewerId: self.newResponsibleId.key,
+                                SupervisorId: self.newResponsibleId.SupervisorId,
+                                Comment: self.statusChangeComment,
+                            }
+                            return JSON.stringify(item)
+                        }
+                    )
+
+                    command = {
+                        type: 'HqRejectInterviewToSupervisorCommand',
+                        commands: rejToIntCommands,
+                    }
+                }
+                else if (self.newResponsibleId.iconClass === 'supervisor')
+                {
+                    var rejToSvCommands = this.arrayMap(
+                        map(filteredItems, interview => {
+                            return interview.id
+                        }),
+                        function(rowId) {
+                            var item = {
+                                InterviewId: rowId,
+                                SupervisorId: self.newResponsibleId.key,
+                                Comment: self.statusChangeComment,
+                            }
+                            return JSON.stringify(item)
+                        }
+                    )
+
+                    command = {
+                        type: 'HqRejectInterviewToSupervisorCommand',
+                        commands: rejToSvCommands,
+                    }
+                }
 
                 this.executeCommand(
                     command,
