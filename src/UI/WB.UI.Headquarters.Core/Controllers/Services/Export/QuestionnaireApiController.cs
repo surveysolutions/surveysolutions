@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
             var categoriesList = categoriesItems.ToList();
             if (translation.HasValue)
             {
-                var translationInstance = this.translationStorage.Get(questionnaireIdentity, translation.Value);
+                ITranslation translationInstance = this.translationStorage.Get(questionnaireIdentity, translation.Value);
                 foreach (var category in categoriesList)
                 {
                     category.Text = translationInstance.GetCategoriesText(categoryId, category.Id, category.ParentId);
