@@ -252,6 +252,7 @@ namespace WB.Services.Export.Jobs
                     : DataExportType.Data,
                 QuestionnaireId = settings.QuestionnaireId.ToString(),
                 InterviewStatus = settings.Status,
+                TranslationId = settings.Translation,
                 FromDate = settings.FromDate,
                 ToDate = settings.ToDate,
                 Error = error == null

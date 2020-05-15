@@ -407,4 +407,7 @@
   <data name="QuestionnaireTranslation" xml:space="preserve">
     <value>Перевод</value>
   </data>
+  <data name="Translation_CardLabel" xml:space="preserve">
+    <value>Перевод: {{language}}</value>
+  </data>
 </root>
