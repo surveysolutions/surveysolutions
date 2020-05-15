@@ -7,6 +7,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
         protected override void Configure(IObjectTypeDescriptor<Core.SharedKernels.SurveySolutions.Documents.Translation> descriptor)
         {
             base.Configure(descriptor);
+            descriptor.BindFieldsExplicitly();
+            
             descriptor.Field(x => x.Id)
                 .Type<NonNullType<UuidType>>();
             descriptor.Field(x => x.Name)
