@@ -76,15 +76,15 @@ namespace WB.UI.WebTester.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
-            var file = this.mediaStorage.Get(filename, interview.Id);
+            MultimediaFile? file = this.mediaStorage.Get(filename, interview.Id);
 
-            if ((file?.Data?.Length ?? 0) == 0)
+            if (file == null || (file?.Data?.Length ?? 0) == 0)
                 return NoContent();
 
             var fullSize = GetQueryStringValue("fullSize") != null;
             var resultFile = fullSize
-                ? file.Data
-                : this.imageProcessingService.ResizeImage(file.Data, 200, 1920);
+                ? file!.Data
+                : this.imageProcessingService.ResizeImage(file!.Data, 200, 1920);
             
             return this.BinaryResponseMessageWithEtag(resultFile);
         }
