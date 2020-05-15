@@ -55,7 +55,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
                     foreach (var category in questionnaire.Categories)
                     {
-                        category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, token);
+                        category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id, translation, token);
                     }
                 }
 
