@@ -91,7 +91,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             {
                 var hqUser = allUsers.FirstOrDefault(x => x.Id == user.UserId);
                 user.IconClass = hqUser.Roles.FirstOrDefault().Id.ToString().ToLower();
-                user.SupervisorId = hqUser.Profile?.SupervisorId;
             }
         }
 
