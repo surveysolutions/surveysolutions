@@ -3,9 +3,8 @@
     public class UserMap
     {
         public virtual int Id { get; set; }
-        public virtual string Map { get; set; }
         public virtual string UserName { get; set; }
-        public virtual MapBrowseItem Source { get; set; }
+        public virtual MapBrowseItem Map { get; set; }
         
         protected bool Equals(UserMap other) => Id == other.Id;
         public override bool Equals(object obj)

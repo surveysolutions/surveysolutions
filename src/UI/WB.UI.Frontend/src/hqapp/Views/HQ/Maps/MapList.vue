@@ -163,13 +163,13 @@ export default {
                 if (ok) {
                     self.$apollo.mutate({
                         mutation: gql`
-                                mutation deleteMap($id: String!) {
-                                    deleteMap(id: $id) {
+                                mutation deleteMap($fileName: String!) {
+                                    deleteMap(fileName: $fileName) {
                                         fileName
                                     }
                                 }`,
                         variables: {
-                            'id' : fileName,
+                            'fileName' : fileName,
                         },
                     }).then(response => {
                         self.$refs.table.reload()
