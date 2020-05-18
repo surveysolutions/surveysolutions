@@ -368,7 +368,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             var interviewReference = Create.Entity.InterviewReference();
             IInterviewReferencesStorage interviewReferencesStorage = Mock.Of<IInterviewReferencesStorage>(r 
                 => r.FindAsync(It.IsAny<Guid>()) == new ValueTask<InterviewReference>(Task.FromResult(interviewReference)));
-            IInterviewDataExportBulkCommandBuilder commandBuilder = new InterviewDataExportBulkCommandBuilder();
+            IInterviewDataExportBulkCommandBuilder commandBuilder = new InterviewDataExportBulkCommandBuilder(new InterviewDataExportBulkCommandBuilderSettings());
             Mock<ICommandExecutor> commandExecutor = new Mock<ICommandExecutor>();
             commandExecutor.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<DbCommand>(), It.IsAny<CancellationToken>()))
                 .Returns<DbCommand, CancellationToken>((c, ct) => Task.CompletedTask)

@@ -1,1 +1,1 @@
-﻿DELETE FROM "fakeTableName1" WHERE  (interview__id = @interviewId1 AND roster__vector = @rosterVector1) OR (interview__id = @interviewId2 AND roster__vector = @rosterVector2) OR (interview__id = @interviewId3 AND roster__vector = @rosterVector3) ;
+﻿DELETE FROM "fakeTableName1" WHERE  (interview__id = @interviewId1 AND roster__vector = @rosterVector1) OR (interview__id = @interviewId2 AND roster__vector = @rosterVector2) OR (interview__id = @interviewId3 AND roster__vector = @rosterVector3) ;DELETE FROM "fakeTableName1" WHER;
