@@ -27,6 +27,8 @@ import * as toastr from 'toastr'
 import gql from 'graphql-tag'
 const query = gql`query maps {
   maps {
+    totalCount,
+    filteredCount,
     nodes {
       fileName
       users {
