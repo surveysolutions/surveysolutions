@@ -56,7 +56,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.Services
             var categoriesStorage = Mock.Of<IReusableCategoriesStorage>(x =>
                 x.GetOptions(questionnaireIdentity, categoryId) == new List<CategoriesItem>
                 {
-                    Abc.Create.Entity.CategoriesItem("item1", 1, null)
+                    Abc.Create.Entity.CategoriesItem("item1", 1, null),
+                    Abc.Create.Entity.CategoriesItem("item2", 2, null)
                 });
 
             var translationForCategoryText = "переведен";
@@ -73,8 +74,9 @@ namespace WB.Tests.Web.Headquarters.Controllers.Services
 
             // Assert
             Assert.That(actionResult.Value, Is.Not.Null.Or.Empty);
-            Assert.That(actionResult.Value, Has.Count.EqualTo(1));
+            Assert.That(actionResult.Value, Has.Count.EqualTo(2));
             Assert.That(actionResult.Value[0].Text, Is.EqualTo(translationForCategoryText));
+            Assert.That(actionResult.Value[1].Text, Is.EqualTo("item2"));
         }
     }
 }
