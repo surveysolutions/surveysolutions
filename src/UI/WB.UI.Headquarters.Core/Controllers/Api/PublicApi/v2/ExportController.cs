@@ -76,12 +76,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             var interviewStatus = request.InterviewStatus == ExportInterviewType.All
                 ? (InterviewStatus?) null
                 : (InterviewStatus) request.InterviewStatus;
-
+            
             var result = await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
                 (DataExportFormat) request.ExportType, interviewStatus, request.From, request.To, password,
                 request.AccessToken, request.RefreshToken, 
                 (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType,
-                request.Translation);
+                request.TranslationId);
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {request.InterviewStatus.ToString() ?? ""}",
@@ -260,9 +260,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             public ExternalStorageType? StorageType { get; set; }
 
             /// <summary>
-            /// Translation name of the questionnaire
+            /// Translation Id of the questionnaire
             /// </summary>
-            public string Translation { get; set; }
+            public Guid? TranslationId { get; set; }
         }
 
         public class ExportProcess : CreateExportProcess
