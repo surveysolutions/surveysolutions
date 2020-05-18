@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             string accessToken,
             string refreshToken,
             ExternalStorageType? storageType,
-            string translation);
+            Guid? translationId);
 
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
