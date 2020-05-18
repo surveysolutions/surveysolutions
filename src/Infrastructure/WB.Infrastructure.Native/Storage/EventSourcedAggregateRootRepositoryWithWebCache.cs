@@ -113,19 +113,16 @@ namespace WB.Infrastructure.Native.Storage
         {
             var cacheKey = Key(aggregateRoot.EventSourceId);
 
-            memoryCache.Set(cacheKey, aggregateRoot, new MemoryCacheEntryOptions
-            {
-                SlidingExpiration = Expiration,
-                PostEvictionCallbacks =
-                {
-                    new PostEvictionCallbackRegistration
-                    {
-                        EvictionCallback = (key, value, reason, state) => CacheItemRemoved(key as string, reason)
-                    }
-                }
-            });
+            memoryCache.Set(cacheKey, aggregateRoot, new MemoryCacheEntryOptions()
+                .RegisterPostEvictionCallback(CacheItemRemoved)
+                .SetSlidingExpiration(Expiration));
 
             CommonMetrics.StatefullInterviewsCached.Labels("added").Inc();
+        }
+
+        private void CacheItemRemoved(object key, object value, EvictionReason reason, object state)
+        {
+            CacheItemRemoved(key as string, reason);
         }
 
         protected virtual string Key(Guid id) => "aggregateRoot_" + id;
