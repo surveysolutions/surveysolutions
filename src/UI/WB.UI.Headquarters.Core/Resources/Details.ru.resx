@@ -162,6 +162,6 @@
     <comment>Показать детали опросника</comment>
   </data>
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
-    <value>Вы можите изменить ответственного. Для этого выберите его в списке ниже.</value>
+    <value>Вы можете изменить ответственного. Для этого выберите его в списке ниже.</value>
   </data>
 </root>
