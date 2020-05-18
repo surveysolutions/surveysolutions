@@ -1,1 +1,1 @@
-﻿INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUES(@interviewId1, @rosterVector1),(@interviewId2, @rosterVector2),(@interviewId3, @rosterVector3) ON CONFLICT DO NOTHING;
+﻿INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUES(@interviewId1, @rosterVector1),(@interviewId2, @rosterVector2),(@interviewId3, @rosterVector3) ON CONFLICT DO NOTHING;INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUE ON CONFLICT DO NOTHING;
