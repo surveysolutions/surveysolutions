@@ -10,14 +10,14 @@ type CategoricalOption {
 }
 
 type HeadquartersMutations {
-  addUserToMap("Map file name" id: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor" ])
-  deleteMap("Map file name" id: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter" ])
-  deleteUserFromMap("Map file name" id: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor" ])
+  addUserToMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor" ])
+  deleteMap("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter" ])
+  deleteUserFromMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor" ])
 }
 
 type HeadquartersQuery {
   interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
-  map("Map file name" id: String!): Map @authorize(apply: BEFORE_RESOLVER)
+  map("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER)
   maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
   questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Question] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
