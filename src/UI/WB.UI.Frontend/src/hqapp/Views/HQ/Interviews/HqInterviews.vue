@@ -1006,7 +1006,6 @@ export default {
                             var item = {
                                 InterviewId: rowId,
                                 InterviewerId: self.newResponsibleId.key,
-                                SupervisorId: self.newResponsibleId.SupervisorId,
                                 Comment: self.statusChangeComment,
                             }
                             return JSON.stringify(item)
@@ -1014,7 +1013,7 @@ export default {
                     )
 
                     command = {
-                        type: 'HqRejectInterviewToSupervisorCommand',
+                        type: 'HqRejectInterviewToInterviewerCommand',
                         commands: rejToIntCommands,
                     }
                 }
