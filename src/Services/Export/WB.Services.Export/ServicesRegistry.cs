@@ -83,7 +83,7 @@ namespace WB.Services.Export
             services.AddTransient<IMetaDescriptionFactory, MetaDescriptionFactory>();
             services.AddTransient<IExportJob, ExportJob>();
             services.AddTransient<IDatabaseSchemaService, DatabaseSchemaService>();
-            services.AddTransient<InterviewDataExportBulkCommandBuilderSettings>();
+            services.AddSingleton<InterviewDataExportBulkCommandBuilderSettings>();
             services.AddTransient<IInterviewDataExportBulkCommandBuilder, InterviewDataExportBulkCommandBuilder>();
             services.AddTransient<ICommandExecutor, CommandExecutor>();
             services.AddTransient<IInterviewReferencesStorage, InterviewReferencesStorage>();
