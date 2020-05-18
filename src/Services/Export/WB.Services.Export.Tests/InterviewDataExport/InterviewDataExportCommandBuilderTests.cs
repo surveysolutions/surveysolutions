@@ -4,8 +4,6 @@ using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
-using Moq;
-using Npgsql;
 using NpgsqlTypes;
 using NUnit.Framework;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
@@ -30,9 +28,9 @@ namespace WB.Services.Export.Tests.InterviewDataExport
 
             Assert.That(command.Parameters.Count, Is.EqualTo(2));
             Assert.That(command.Parameters[0].Value, Is.EqualTo(interviewId1));
-            Assert.That(((NpgsqlParameter)command.Parameters[0]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[0].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
             Assert.That(command.Parameters[1].Value, Is.EqualTo(interviewId2));
-            Assert.That(((NpgsqlParameter)command.Parameters[1]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[1].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
 
             Approvals.Verify(command.CommandText);
         }
@@ -48,7 +46,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
 
             Assert.That(command.Parameters.Count, Is.EqualTo(1));
             Assert.That(command.Parameters[0].Value, Is.EqualTo(new[] { interviewId1, interviewId2 }));
-            Assert.That(((NpgsqlParameter)command.Parameters[0]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[0].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Uuid));
 
             Approvals.Verify(command.CommandText);
         }
@@ -72,17 +70,17 @@ namespace WB.Services.Export.Tests.InterviewDataExport
 
             Assert.That(command.Parameters.Count, Is.EqualTo(6));
             Assert.That(command.Parameters[0].Value, Is.EqualTo(interviewId1));
-            Assert.That(((NpgsqlParameter)command.Parameters[0]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[0].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
             Assert.That(command.Parameters[1].Value, Is.EqualTo(rosterVector1));
-            Assert.That(((NpgsqlParameter)command.Parameters[1]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
+            Assert.That(command.Parameters[1].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
             Assert.That(command.Parameters[2].Value, Is.EqualTo(interviewId1));
-            Assert.That(((NpgsqlParameter)command.Parameters[2]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[2].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
             Assert.That(command.Parameters[3].Value, Is.EqualTo(rosterVector2));
-            Assert.That(((NpgsqlParameter)command.Parameters[3]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
+            Assert.That(command.Parameters[3].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
             Assert.That(command.Parameters[4].Value, Is.EqualTo(interviewId2));
-            Assert.That(((NpgsqlParameter)command.Parameters[4]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[4].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
             Assert.That(command.Parameters[5].Value, Is.EqualTo(rosterVector1));
-            Assert.That(((NpgsqlParameter)command.Parameters[5]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
+            Assert.That(command.Parameters[5].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
 
             Approvals.Verify(command.CommandText);
         }
@@ -106,17 +104,17 @@ namespace WB.Services.Export.Tests.InterviewDataExport
 
             Assert.That(command.Parameters.Count, Is.EqualTo(6));
             Assert.That(command.Parameters[0].Value, Is.EqualTo(interviewId1));
-            Assert.That(((NpgsqlParameter)command.Parameters[0]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[0].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
             Assert.That(command.Parameters[1].Value, Is.EqualTo(rosterVector1));
-            Assert.That(((NpgsqlParameter)command.Parameters[1]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
+            Assert.That(command.Parameters[1].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
             Assert.That(command.Parameters[2].Value, Is.EqualTo(interviewId1));
-            Assert.That(((NpgsqlParameter)command.Parameters[2]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[2].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
             Assert.That(command.Parameters[3].Value, Is.EqualTo(rosterVector2));
-            Assert.That(((NpgsqlParameter)command.Parameters[3]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
+            Assert.That(command.Parameters[3].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
             Assert.That(command.Parameters[4].Value, Is.EqualTo(interviewId2));
-            Assert.That(((NpgsqlParameter)command.Parameters[4]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[4].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
             Assert.That(command.Parameters[5].Value, Is.EqualTo(rosterVector1));
-            Assert.That(((NpgsqlParameter)command.Parameters[5]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
+            Assert.That(command.Parameters[5].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
 
             Approvals.Verify(command.CommandText);
         }
@@ -140,13 +138,13 @@ namespace WB.Services.Export.Tests.InterviewDataExport
 
             Assert.That(command.Parameters.Count, Is.EqualTo(4));
             Assert.That(command.Parameters[0].Value, Is.EqualTo(11));
-            Assert.That(((NpgsqlParameter)command.Parameters[0]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Integer));
+            Assert.That(command.Parameters[0].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Integer));
             Assert.That(command.Parameters[1].Value, Is.EqualTo("11"));
-            Assert.That(((NpgsqlParameter)command.Parameters[1]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Text));
+            Assert.That(command.Parameters[1].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Text));
             Assert.That(command.Parameters[2].Value, Is.EqualTo(interviewId1));
-            Assert.That(((NpgsqlParameter)command.Parameters[2]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
+            Assert.That(command.Parameters[2].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Uuid));
             Assert.That(command.Parameters[3].Value, Is.EqualTo(rosterVector1));
-            Assert.That(((NpgsqlParameter)command.Parameters[3]).NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
+            Assert.That(command.Parameters[3].NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
 
             Approvals.Verify(command.CommandText);
         }
