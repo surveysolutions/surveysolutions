@@ -152,26 +152,26 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         }
 
         [Test]
-        public void when_get_several_arguments_to_insert_interview_command_with_200000_arguments()
+        public void when_get_several_arguments_to_insert_interview_command_with_20_arguments()
         {
             var commandBuilder = CreateBuilder();
             ExportBulkCommand exportBulkCommand = new ExportBulkCommand();
-            var interviewIds = Enumerable.Range(1, 200000).Select(value => new Guid($"00000000-0000-0000-0000-00{value:0000000000}"));
+            var interviewIds = Enumerable.Range(1, 20).Select(value => new Guid($"00000000-0000-0000-0000-00{value:0000000000}"));
 
             commandBuilder.AppendInsertInterviewCommandForTable(exportBulkCommand, fakeTableName1, interviewIds);
             var command = exportBulkCommand.GetCommand();
 
-            Assert.That(command.Parameters.Count, Is.EqualTo(200000));
+            Assert.That(command.Parameters.Count, Is.EqualTo(20));
             Approvals.Verify(command.CommandText);
         }
 
         [Test]
-        public void when_get_several_arguments_to_add_roster_instance_command_with_200000_arguments()
+        public void when_get_several_arguments_to_add_roster_instance_command_with_20_arguments()
         {
             var commandBuilder = CreateBuilder();
             ExportBulkCommand exportBulkCommand = new ExportBulkCommand();
 
-            var rosterInfos = Enumerable.Range(1, 200000).Select(value =>
+            var rosterInfos = Enumerable.Range(1, 20).Select(value =>
                 new RosterTableKey() { InterviewId = new Guid($"00000000-0000-0000-0000-00{value:0000000000}"), RosterVector = rosterVector1 }
             );
 
@@ -181,16 +181,16 @@ namespace WB.Services.Export.Tests.InterviewDataExport
                 rosterInfos);
             var command = exportBulkCommand.GetCommand();
 
-            Assert.That(command.Parameters.Count, Is.EqualTo(400000));
+            Assert.That(command.Parameters.Count, Is.EqualTo(40));
             Approvals.Verify(command.CommandText);
         }
 
         [Test]
-        public void when_get_several_arguments_to_remove_roster_instance_command_with_200000_arguments()
+        public void when_get_several_arguments_to_remove_roster_instance_command_with_20_arguments()
         {
             var commandBuilder = CreateBuilder();
             ExportBulkCommand exportBulkCommand = new ExportBulkCommand();
-            var rosterInfos = Enumerable.Range(1, 200000).Select(value =>
+            var rosterInfos = Enumerable.Range(1, 20).Select(value =>
                 new RosterTableKey() { InterviewId = new Guid($"00000000-0000-0000-0000-00{value:0000000000}"), RosterVector = rosterVector1 }
             );
 
@@ -200,18 +200,18 @@ namespace WB.Services.Export.Tests.InterviewDataExport
                 rosterInfos);
             var command = exportBulkCommand.GetCommand();
 
-            Assert.That(command.Parameters.Count, Is.EqualTo(400000));
+            Assert.That(command.Parameters.Count, Is.EqualTo(40));
             Approvals.Verify(command.CommandText);
         }
 
         [Test]
-        public void when_get_several_arguments_to_update_row_in_same_table_with_200000_arguments()
+        public void when_get_several_arguments_to_update_row_in_same_table_with_20_arguments()
         {
             var commandBuilder = CreateBuilder();
             ExportBulkCommand exportBulkCommand = new ExportBulkCommand();
 
             var rosterTableKey = new RosterTableKey() { InterviewId = interviewId1, RosterVector = rosterVector1 };
-            var updateValueInfos = Enumerable.Range(1, 200_000).Select(value =>
+            var updateValueInfos = Enumerable.Range(1, 20).Select(value =>
                 new UpdateValueInfo() { ColumnName = fakeColumnName1, Value = value, ValueType = NpgsqlDbType.Integer }
             );
 
@@ -222,12 +222,16 @@ namespace WB.Services.Export.Tests.InterviewDataExport
                 updateValueInfos);
             var command = exportBulkCommand.GetCommand();
 
-            Assert.That(command.Parameters.Count, Is.EqualTo(200_014));
+            Assert.That(command.Parameters.Count, Is.EqualTo(34));
             Approvals.Verify(command.CommandText);
         }
 
 
-        private IInterviewDataExportBulkCommandBuilder CreateBuilder() => new InterviewDataExportBulkCommandBuilder();
+        private IInterviewDataExportBulkCommandBuilder CreateBuilder() => new InterviewDataExportBulkCommandBuilder(
+            new InterviewDataExportBulkCommandBuilderSettings()
+        {
+                MaxParametersCountInOneCommand = 5
+        });
 
         private readonly string fakeTableName1 = "fakeTableName1";
         private readonly string fakeColumnName1 = "fakeColumnName1";
