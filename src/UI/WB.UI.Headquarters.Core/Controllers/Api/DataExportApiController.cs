@@ -4,9 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Amazon.S3.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
@@ -24,7 +22,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Filters;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Headquarters.Controllers.Api
 {
     [ApiValidationAntiForgeryToken]
     [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Administrator, Headquarter")]
@@ -219,7 +217,7 @@ namespace WB.UI.Headquarters.API
             InterviewStatus? status = null,
             DateTime? from = null,
             DateTime? to = null,
-            string translation = null)
+            Guid? translationId = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
@@ -228,7 +226,7 @@ namespace WB.UI.Headquarters.API
                 return NotFound("Questionnaire not found");
 
             return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to, 
-                translation: translation);
+                translation: translationId);
         }
 
         private async Task<ActionResult<long>> RequestExportUpdateAsync(
@@ -240,7 +238,7 @@ namespace WB.UI.Headquarters.API
             string accessToken = null,
             string refresh_token = null,
             ExternalStorageType? externalStorageType = null,
-            string translation = null)
+            Guid? translation = null)
         {
             long jobId = 0;
             try
@@ -335,7 +333,7 @@ namespace WB.UI.Headquarters.API
                     response.AccessToken,
                     response.RefreshToken,
                     state.Type,
-                    translation: state.Translation);
+                    translation: state.TranslationId);
 
                 return ExportToExternalStorage();
             }
@@ -400,7 +398,7 @@ namespace WB.UI.Headquarters.API
             public DateTime? FromDate { get; set; }
             public DateTime? ToDate { get; set; }
             public DataExportFormat? Format { get; set; }
-            public string Translation { get; set; }
+            public Guid? TranslationId { get; set; }
         }
     }
 }

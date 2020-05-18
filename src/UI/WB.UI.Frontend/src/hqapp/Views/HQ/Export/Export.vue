@@ -516,7 +516,7 @@ export default {
                 version: questionnaireVersion,
                 format: format,
                 status: status,
-                translation: tr,
+                translationId: tr,
             }
         },
 
