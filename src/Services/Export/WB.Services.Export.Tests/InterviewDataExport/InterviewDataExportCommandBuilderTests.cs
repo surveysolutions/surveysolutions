@@ -228,7 +228,8 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         private IInterviewDataExportBulkCommandBuilder CreateBuilder() => new InterviewDataExportBulkCommandBuilder(
             new InterviewDataExportBulkCommandBuilderSettings()
         {
-                MaxParametersCountInOneCommand = 5
+                MaxParametersCountInOneCommand = 5,
+                NewLineAfterCommand = true,
         });
 
         private readonly string fakeTableName1 = "fakeTableName1";

@@ -28,6 +28,13 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             int index = command.Parameters.Count;
             foreach (var updateValueInfo in updateValueInfos)
             {
+                if (parametersCount >= MaxParametersCountInOneCommand)
+                {
+                    EndCommand();
+                    StartCommand();
+                    parametersCount = 2;
+                }
+
                 index++;
                 command.CommandText.Append('"').Append(updateValueInfo.ColumnName).Append("\" = @answer").Append(index).Append(',');
 
@@ -37,13 +44,6 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                     command.Parameters.AddWithValue("@answer" + index, updateValueInfo.ValueType, updateValueInfo.Value);
 
                 parametersCount++;
-
-                if (parametersCount >= MaxParametersCountInOneCommand)
-                {
-                    EndCommand();
-                    StartCommand();
-                    parametersCount = 2;
-                }
             }
 
             void EndCommand()
@@ -65,6 +65,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                 }
 
                 command.CommandText.Append(';');
+
+                if (settings.NewLineAfterCommand)
+                    command.CommandText.AppendLine();
             }
             EndCommand();
         }
@@ -80,24 +83,27 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             int index = command.Parameters.Count;
             foreach (var interviewId in interviewIds)
             {
-                index++;
-                command.CommandText.Append(" (@interviewId").Append(index).Append("),");
-                command.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, interviewId);
-
-                parametersCount++;
-
                 if (parametersCount >= MaxParametersCountInOneCommand)
                 {
                     EndCommand();
                     StartInsertCommand();
                     parametersCount = 0;
                 }
+
+                index++;
+                command.CommandText.Append(" (@interviewId").Append(index).Append("),");
+                command.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, interviewId);
+
+                parametersCount++;
             }
 
             void EndCommand()
             {
                 command.CommandText.Remove(command.CommandText.Length - 1, 1); // TrimEnd(',');
                 command.CommandText.Append(" ON CONFLICT DO NOTHING;");
+
+                if (settings.NewLineAfterCommand)
+                    command.CommandText.AppendLine();
             }
             EndCommand();
         }
@@ -108,6 +114,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             command.CommandText.Append("DELETE FROM \"").Append(tableName).Append('"')
                 .Append(" WHERE ").Append(InterviewDatabaseConstants.InterviewId).Append(" = ANY(@interviewIds").Append(index).Append(");");
             command.Parameters.AddWithValue("@interviewIds"+index, NpgsqlDbType.Array | NpgsqlDbType.Uuid, interviewIds.ToArray());
+
+            if (settings.NewLineAfterCommand)
+                command.CommandText.AppendLine();
         }
 
         public void AppendAddRosterInstanceForTable(ExportBulkCommand command, string tableName, IEnumerable<RosterTableKey> rosterInfos)
@@ -121,24 +130,27 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             int index = command.Parameters.Count;
             foreach (var rosterInfo in rosterInfos)
             {
-                index++;
-                command.CommandText.Append("(@interviewId").Append(index).Append(", @rosterVector").Append(index).Append("),");
-                command.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, rosterInfo.InterviewId);
-                command.Parameters.AddWithValue("@rosterVector" + index, NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
-                parametersCount += 2;
-
                 if (parametersCount >= MaxParametersCountInOneCommand)
                 {
                     EndCommand();
                     StartInsertCommand();
                     parametersCount = 0;
                 }
+
+                index++;
+                command.CommandText.Append("(@interviewId").Append(index).Append(", @rosterVector").Append(index).Append("),");
+                command.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, rosterInfo.InterviewId);
+                command.Parameters.AddWithValue("@rosterVector" + index, NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
+                parametersCount += 2;
             }
 
             void EndCommand()
             {
                 command.CommandText.Remove(command.CommandText.Length - 1, 1); // TrimEnd(',');
                 command.CommandText.Append(" ON CONFLICT DO NOTHING;");
+
+                if (settings.NewLineAfterCommand)
+                    command.CommandText.AppendLine();
             }
             EndCommand();
         }
@@ -154,6 +166,13 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             int index = command.Parameters.Count;
             foreach (var rosterInfo in rosterInfos)
             {
+                if (parametersCount >= MaxParametersCountInOneCommand)
+                {
+                    EndCommand();
+                    StartCommand();
+                    parametersCount = 0;
+                }
+
                 index++;
                 command.CommandText.Append(" (")
                     .Append(InterviewDatabaseConstants.InterviewId).Append(" = @interviewId").Append(index)
@@ -164,19 +183,15 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                 command.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, rosterInfo.InterviewId);
                 command.Parameters.AddWithValue("@rosterVector" + index, NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
                 parametersCount += 2;
-
-                if (parametersCount >= MaxParametersCountInOneCommand)
-                {
-                    EndCommand();
-                    StartCommand();
-                    parametersCount = 0;
-                }
             }
 
             void EndCommand()
             {
                 command.CommandText.Remove(command.CommandText.Length - 2, 2); // TrimEnd('OR');
                 command.CommandText.Append(';');
+
+                if (settings.NewLineAfterCommand)
+                    command.CommandText.AppendLine();
             }
             EndCommand();
         }
