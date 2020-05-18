@@ -13,11 +13,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Table("usermaps");
 
             Id(x => x.Id, IdMapper => IdMapper.Generator(Generators.HighLow));
-
-            Property(x => x.Map, ptp => ptp.NotNullable(true));
             Property(x => x.UserName, ptp => ptp.NotNullable(true));
             
-            ManyToOne(x => x.Source, mtm => mtm.Column("map"));
+            ManyToOne(x => x.Map, mtm => mtm.Column("map"));
         }
     }
 }

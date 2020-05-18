@@ -269,7 +269,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return null;
 
             var mapUsers = this.userMapsStorage
-                .Query(q => q.Where(x => x.Map == mapName && x.UserName == user))
+                .Query(q => q.Where(x => x.Map.Id == mapName && x.UserName == user))
                 .ToList();
             
             if (mapUsers.Count > 0) this.userMapsStorage.Remove(mapUsers);
@@ -302,7 +302,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 List<Tuple<string, string>> maps = userMapsStorage.Query(q =>
                 {
-                    return q.Select(x => new Tuple<string, string>(x.Map, x.UserName)).Where(x => itemIds.Contains(x.Item1))
+                    return q.Select(x => new Tuple<string, string>(x.Map.Id, x.UserName)).Where(x => itemIds.Contains(x.Item1))
                         .ToList();
                 });
 
@@ -330,7 +330,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (map == null)
                 throw new ArgumentException($"Map was not found {mapName}", nameof(mapName));
 
-            var userMaps = userMapsStorage.Query(q => q.Where(x=>x.Map == mapName).ToList());
+            var userMaps = userMapsStorage.Query(q => q.Where(x=>x.Map.Id == mapName).ToList());
 
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
             var usersToLower = users.Select(em => em.ToLower()).ToList();
@@ -347,7 +347,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var userMappings = availableUsers
                 .Where(y => y.IsArchived == false 
                                                && y.Roles.Any(role => role.Id == interviewerRoleId))
-                .Select(x => new UserMap() {Map = mapName, UserName = x.UserName}).ToList();
+                .Select(x => new UserMap() {Map = map, UserName = x.UserName}).ToList();
 
             userMapsStorage.Remove(userMaps);
             userMapsStorage.Store(userMappings.Select(x => Tuple.Create(x, (object)x)));
@@ -363,7 +363,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return userMapsStorage.Query(q =>
             {
                 return q.Where(x => interviewerNames.Contains(x.UserName))
-                        .Select(y => y.Map)
+                        .Select(y => y.Map.Id)
                         .Distinct();
             }).ToArray();
         }
@@ -387,19 +387,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (dbUser != null)
             {
                 var userMap = this.userMapsStorage
-                    .Query(x => x.FirstOrDefault(x => x.Map == id && x.UserName == userName));
+                    .Query(x => x.FirstOrDefault(x => x.Map.FileName == id && x.UserName == userName));
 
                 if (userMap == null)
                 {
                     userMapsStorage.Store(new UserMap
                     {
-                        Map = id,
-                        UserName = userName
+                        UserName = userName,
+                        Map = map
                     }, null);
                 }
             }
 
-            return map;
+            return this.mapPlainStorageAccessor.GetById(id);
         }
 
         public string[] GetAllMapsForInterviewer(string userName)
@@ -407,7 +407,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return userMapsStorage.Query(q =>
             {
                 return q.Where(x => x.UserName == userName)
-                        .Select(y => y.Map)
+                        .Select(y => y.Map.Id)
                         .ToList();
             }).ToArray();
         }

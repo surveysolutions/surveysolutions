@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             descriptor.Field<MapsResolver>(x => x.GetMap(default))
                 .Authorize()
                 .Type<Map>()
-                .Argument("id", a => a.Description("Map file name").Type<NonNullType<StringType>>())
+                .Argument("fileName", a => a.Description("Map file name").Type<NonNullType<StringType>>())
                 .Name("map");
         }
     }

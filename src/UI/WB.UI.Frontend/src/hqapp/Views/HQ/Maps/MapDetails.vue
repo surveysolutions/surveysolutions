@@ -58,13 +58,6 @@
 import {orderBy} from 'lodash'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
-const query = gql`query map($id: String!) {
-  map(id: $id) {
-    users {
-      userName
-    }
-  }
-}`
 
 export default {
     mounted() {
@@ -95,13 +88,13 @@ export default {
                 {
                     self.$apollo.mutate({
                         mutation: gql`
-                                mutation deleteUserFromMap($id: String!, $userName: String!) {
-                                    deleteUserFromMap(id: $id, userName: $userName) {
+                                mutation deleteUserFromMap($fileName: String!, $userName: String!) {
+                                    deleteUserFromMap(fileName: $fileName, userName: $userName) {
                                         fileName
                                     }
                                 }`,
                         variables: {
-                            'id' : fileName,
+                            'fileName' : fileName,
                             'userName': userName,
                         },
                     }).then(response => {
@@ -135,10 +128,18 @@ export default {
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
 
+                    const query = gql`query map($fileName: String!) {
+                                               map(fileName: $fileName) {
+                                                   users {
+                                                           userName
+                                                   }
+                                                }
+                                        }`
+
                     self.$apollo.query({
                         query,
                         variables: {
-                            'id' : self.$config.model.fileName,
+                            'fileName' : self.$config.model.fileName,
                         },
                         fetchPolicy: 'network-only',
                     }).then(response => {
