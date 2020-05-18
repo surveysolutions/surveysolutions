@@ -9,7 +9,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public string UserName { get; set; }
 
         public string IconClass { get; set; }
-
-        public Guid? SupervisorId { get; set; }
     }
 }

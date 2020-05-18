@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         }
 
         public Guid InterviewerId { get; }
-        public Guid SupervisorId { get; }
+        public Guid SupervisorId { get; set; }
         public string Comment { get; set; }
     }
 }
