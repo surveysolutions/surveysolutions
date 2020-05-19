@@ -10,6 +10,7 @@ using NHibernate.Loader.Criteria;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Persister.Entity;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -44,23 +45,26 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return this.unitOfWork.Session.QueryOver<TEntity>().RowCount();
         }
 
-        const string CachePrefix = "kvAlias::";
+        static readonly string CachePrefix = "kvAlias::" + typeof(TEntity).Name + "::";
         
         public virtual TEntity GetById(TKey id)
         {
             if (ReadSideStorageMapping.IsPrimaryKeyAlias<TEntity, TKey>())
             {
                 var cacheKey = CachePrefix + id.ToString();
-                var primaryKey = memoryCache.GetOrCreate(cacheKey, cache =>
+
+                var primaryKey = memoryCache.GetOrCreateNullSafe(cacheKey, cache =>
                 {
                     var item = this.unitOfWork.Session.Query<TEntity>().GetByPrimaryKeyAlias(id);
                     if (item == null)
                     {
-                        return item;
+                        return null;
                     }
 
                     // getting primary key value to add to cache
-                    cache.SlidingExpiration = TimeSpan.FromMinutes(10);
+                    // we don't need there long sliding expiration, it's not a big deal to query 
+                    // metadata once a minute
+                    cache.SlidingExpiration = TimeSpan.FromMinutes(1);
                     return this.unitOfWork.Session.SessionFactory.GetClassMetadata(typeof(TEntity))
                         .GetIdentifier(item);
                 });
@@ -70,8 +74,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 // using cached primaryKey to make use of NHibernate first-level cache
                 return this.unitOfWork.Session.Get<TEntity>(primaryKey);
             }
-            
-            
 
             return this.unitOfWork.Session.Get<TEntity>(id);
         }
@@ -185,13 +187,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             return query.Invoke(this.unitOfWork.Session.Query<TEntity>());
         }
-
-        public Type ViewType => typeof(TEntity);
-
-        public string GetReadableStatus()
-        {
-            return "PostgreSQL :'(";
-        }
     }
 
     public static class ReadSideStorageMapping
@@ -202,7 +197,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             Expression<Func<TEntity, TKey>> property, Func<TKey, Expression<Func<TEntity, bool>>> getter)
             where TEntity : class
         {
-            var memberInfo = NHibernate.Mapping.ByCode.TypeExtensions.DecodeMemberAccessExpressionOf(property);
+            var memberInfo = TypeExtensions.DecodeMemberAccessExpressionOf(property);
             map.Property(property);
 
             var key = (memberInfo.DeclaringType, memberInfo.GetPropertyOrFieldType());
