@@ -6,9 +6,6 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
     public interface IReadSideStorage
     {
-        Type ViewType { get; }
-
-        string GetReadableStatus();
     }
 
     public interface IReadSideStorage<TEntity> : IReadSideStorage<TEntity, string>
