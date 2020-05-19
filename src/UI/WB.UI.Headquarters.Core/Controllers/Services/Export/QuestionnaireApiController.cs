@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
 
         [Route("{id}")]
         [HttpGet]
-        public ActionResult Get(string id, [FromQuery]Guid? translation = null)
+        public ActionResult Get(string id, [FromQuery] Guid? translation = null)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
