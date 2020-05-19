@@ -184,7 +184,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
             var result = await this.dataExportStatusReader.GetDataArchive(
                 exportProcess.QuestionnaireIdentity, exportProcess.Format, exportProcess.InterviewStatus,
-                exportProcess.FromDate, exportProcess.ToDate);
+                exportProcess.FromDate, exportProcess.ToDate, exportProcess.TranslationId);
 
             return result == null
                 ? BadRequest()
@@ -203,6 +203,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 To = exportProcess.ToDate,
                 StartDate = exportProcess.BeginDate,
                 CompleteDate = exportProcess.EndDate,
+                TranslationId = exportProcess.TranslationId,
                 ExportStatus = (ExportStatus) exportProcess.JobStatus,
                 Progress = exportProcess.Progress,
                 ExportType = (ExportType) exportProcess.Format,
