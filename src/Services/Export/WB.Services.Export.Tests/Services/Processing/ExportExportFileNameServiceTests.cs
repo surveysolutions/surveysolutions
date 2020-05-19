@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
+using WB.Services.Export.Infrastructure.Implementation;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -23,7 +24,8 @@ namespace WB.Services.Export.Tests.Services.Processing
                 Name = "Перевод"
             });
             
-            var service = Create.ExportExportFileNameService(questionnaireStorage: Create.QuestionnaireStorage(questionnaire));
+            var service = Create.ExportExportFileNameService(questionnaireStorage: Create.QuestionnaireStorage(questionnaire),
+                fileSystemAccessor: new FileSystemAccessor());
 
             var fileNameForExportArchive = await service.GetFileNameForExportArchiveAsync(
                 new ExportSettings
