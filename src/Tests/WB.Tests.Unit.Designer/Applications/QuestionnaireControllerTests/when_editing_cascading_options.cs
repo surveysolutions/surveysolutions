@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Controllers;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -34,11 +35,13 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var controller = CreateQuestionnaireController(
                 categoricalOptionsImportService: Create.CategoricalOptionsImportService(questionnaire));
+            
             controller.questionWithOptionsViewModel =
                 new QuestionnaireController.EditOptionsViewModel
                 {
                     QuestionnaireId = questionnaireId.FormatGuid(),
-                    QuestionId = questionId
+                    QuestionId = questionId,
+                    IsCascading = true
                 };
 
             var stream = GenerateStreamFromString("1\tStreet 1\t2");
@@ -46,13 +49,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             stream.Position = 0;
             var postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream && pf.FileName == "data.csv");
 
-            var view = controller.EditCascadingOptions(postedFile) as ViewResult;
+            var view = controller.EditOptions(postedFile) as JsonResult;
 
-            var model = (QuestionnaireController.EditOptionsViewModel)view.Model;
-            model.Options.Count().Should().Be(1);
-            model.Options.First().Value.Should().Be(1);
-            model.Options.First().Title.Should().Be("Street 1");
-            model.Options.First().ParentValue.Should().Be(2);
+            var model = (List<string>)view.Value;
+            model.Should().BeEmpty();
         }
     }
 }

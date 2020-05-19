@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Extensions;
@@ -24,16 +26,20 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             stream.Position = 0;
             postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream);
-            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel();
+            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel
+            {
+                IsCascading = true
+            };
             BecauseOf();
         }
 
-        private void BecauseOf() => controller.EditCascadingOptions(postedFile);
+        private void BecauseOf() => result = (JsonResult)controller.EditOptions(postedFile);
 
         [NUnit.Framework.Test] public void should_add_error_message_to_temp_data () =>
-            controller.TempData[Alerts.ERROR].Should().Be("Only tab-separated values files are accepted");
+            ((List<string>)result.Value)[0].Should().Be("Only tab-separated values files are accepted");
 
         private static QuestionnaireController controller;
         private static IFormFile postedFile;
+        private static JsonResult result;
     }
 }
