@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Sourcing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -27,7 +28,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class Interview : AggregateRootMappedByConvention
+    public class Interview : EventSourcedAggregateRoot
     {
         public Interview(IInterviewTreeBuilder treeBuilder)
         {
