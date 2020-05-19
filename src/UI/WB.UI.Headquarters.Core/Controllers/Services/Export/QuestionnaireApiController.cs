@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
 
         [Route("{id}/category/{categoryId}")]
         [HttpGet]
-        public ActionResult<List<CategoriesItem>> Category(string id, Guid categoryId, [FromQuery]Guid? translation = null)
+        public ActionResult<List<CategoriesItem>> Category(string id, Guid categoryId, [FromQuery] Guid? translation = null)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var categoriesItems = reusableCategoriesStorage.GetOptions(questionnaireIdentity, categoryId);
