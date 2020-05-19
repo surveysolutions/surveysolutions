@@ -1,141 +1,190 @@
-﻿@using System.Linq
 @using System.Web
-@using WB.UI.Designer.Extensions
-@using WB.UI.Shared.Web.Extensions
-@model WB.UI.Designer.Controllers.QuestionnaireController.EditOptionsViewModel
+
 @{
     ViewBag.Title = $"{QuestionnaireEditor.OptionsWindowTitle}: {@Model.QuestionTitle}";
     Layout = null;
 }
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>@ViewBag.Title</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- simplepage:js -->
-    <script src="~/js/simplepage.js"></script>
-    <!-- endinject -->
-    <!-- popup:css -->
-    <link rel="stylesheet" href="~/css/popup.css">
-    <!-- endinject -->
-
+    
+    <!-- simplepage:js --><script src="~/js/simplepage.js"></script><!-- endinject -->
+    <!-- vue:js --> <script src="~/js/vue.js"></script> <!-- endinject -->
+    <!-- popup:css --> <link rel="stylesheet" href="~/css/popup.css"> <!-- endinject -->
+    
     <script type="text/javascript">
-        function close_window() {
-            if (confirm('@Html.Raw(HttpUtility.JavaScriptStringEncode(QuestionnaireEditor.OptionsCloseWindow))')) {
-                close();
-            }
-        }
-
-        function apply() {
-            $.post("@Url.Action("ApplyOptions", "Questionnaire")", function(response) {
-                if (response.isSuccess || response.IsSuccess) {
-                    close();
-                } else {
-                    $(document).scrollTop(0);
-                    $("#applyOptionsErrorContent").html(response.Error);
-                    $('#applyOptionsError').fadeIn();
-                    setTimeout(function() { $('#applyOptionsError').fadeOut(); }, 10000);
+    var CategoriesOptionsConfig = {};
+    CategoriesOptionsConfig.install = function(Vue, options) {
+        Object.defineProperty(Vue, '$config', { get: function() { return options; } });
+        Object.defineProperty(Vue.prototype, '$config', { get: function() { return options; } });
+    };
+    
+    Vue.use(CategoriesOptionsConfig,
+    {
+        applyUrl: "@Url.Action("ApplyOptions", "Questionnaire")",
+        editOptionsUrl: "@Url.Action("EditOptions", "Questionnaire")",
+        resetOptionsUrl: "@Url.Action("ResetOptions", "Questionnaire")",
+        getOptionsUrl: "@Url.Action("GetOptions", "Questionnaire")",
+        exportOptionsUrl: "@Url.Action("ExportOptions", "Questionnaire")",
+        isCascading: @Model.IsCascading.ToString().ToLower()
+    });
+            
+    $(function() {
+        var app = new Vue({
+                el: '#categories-editor',
+                data: {
+                    errors: [],
+                    categories: []
+                },
+                created() {
+                    this.ajustNavPanels();
+                    this.update();
+                },
+                computed: {
+                    config: function(){
+                      return Vue.$config;
+                    },
+                    hasOptions: function(){
+                        return this.categories.length > 0;
+                    },
+                    hasErrors: function(){
+                        return this.errors.length > 0;
+                    }
+                },
+                methods:{
+                    ajustNavPanels: function(){
+                        $("body").css("paddingTop", $("#topNav").outerHeight() + 3); 
+                        $("body").css("paddingBottom", $("#bottomNav").outerHeight() + 3); 
+                    },
+                    closeWindow: function(){
+                        if (confirm('@Html.Raw(HttpUtility.JavaScriptStringEncode(QuestionnaireEditor.OptionsCloseWindow))')) { 
+                            close();
+                        }
+                    },
+                    upload: function(e){
+                        
+                        const files = e.target.files || e.dataTransfer.files
+                        if (!files.length) return 
+                        
+                        const file = files[0];
+                        
+                        const formData = new FormData();
+                        formData.append('csvFile', file)
+                        
+                        this.clearErrors();
+                        
+                        const self = this;
+                        $.ajax({
+                          url: this.config.editOptionsUrl, 
+                          type: 'POST',
+                          data: formData,
+                          processData: false,
+                          contentType: false
+                        }).done(function(response){
+                            self.errors = response;
+                            self.update();
+                        });
+                    },
+                    update: function(){
+                        const self = this;
+                        
+                        $.get(this.config.getOptionsUrl, function(response) { 
+                            self.categories = response;
+                        });
+                    },
+                    cancel: function(){
+                        this.clearErrors();
+                        
+                        const self = this
+                        $.post(this.config.resetOptionsUrl, function() { 
+                            self.update();
+                        }); 
+                        
+                        this.update()
+                    },
+                    apply: function(){
+                        const self = this
+                        $.post(this.config.applyUrl, function(response) { 
+                               if (response.isSuccess || response.IsSuccess) { 
+                                   close(); 
+                               } else { 
+                                   $(document).scrollTop(0);
+                                   self.errors = [response.Error]; 
+                               } 
+                        }); 
+                    },
+                    clearErrors: function(){
+                        this.errors = [];
+                    }
                 }
-            });
-        }
-
-        var ajustNavPanels = function() {
-            $("body").css("paddingTop", $("#topNav").outerHeight() + 3);
-            $("body").css("paddingBottom", $("#bottomNav").outerHeight() + 3);
-        }
-
-        $(window).resize(function() {
-            ajustNavPanels();
         });
-
-        $(document).ready(function() {
-            ajustNavPanels();
-
-            setTimeout(function() { $('.alert.alert-danger').fadeOut(); }, 10000);
-        });
+    });
     </script>
+
     @Html.GenerateFavicon(Url.Content("~/favicon.ico"))
 </head>
 <body>
-    <form asp-action="EditOptions" asp-controller="Questionnaire" method="post" enctype="multipart/form-data">
-        <nav id="topNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div id="uploadForm" class="navbar-form navbar-left">
-                    <input type="file" title="Import" name="csvFile">
-                    <button class="btn btn-default" type="submit">@QuestionnaireEditor.Upload</button>
-                </div>
-                <div class="pull-right">
-                    <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">@QuestionnaireEditor.Export</a>
-
-                </div>
+<section id="categories-editor">
+    <nav id="topNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div id="uploadForm" class="navbar-form navbar-left">
+                <input name="file"
+                       ref="uploader"
+                       v-show="false"
+                       accept=".tab, .txt, .tsv"
+                       type="file"
+                       @@change="upload"
+                       class="btn btn-default btn-lg btn-action-questionnaire" />
+                <button type="button"
+                        class="btn btn-default"
+                        @@click="$refs.uploader.click()">
+                    @QuestionnaireEditor.Upload
+                </button>
             </div>
-        </nav>
-    </form>
-    <div id="content" class="container">
-        <div id="applyOptionsError" class="alert alert-danger">
-            <div id="applyOptionsErrorContent"></div>
+            <div class="pull-right">
+                <a class="btn btn-default navbar-btn" :href="config.exportOptionsUrl">@QuestionnaireEditor.Export</a>
+            </div>
         </div>
-        @foreach (string key in Alerts.ALL)
-        {
-            if (TempData.ContainsKey(key))
-            {
-                <div class="alert alert-danger">
-                    @foreach (var errorMessage in ((string)TempData[key]).Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        @Html.Raw(errorMessage)
-                        <br />
-                    }
-                </div>
-            }
-        }
-        @if (Model.Options != null && Model.Options.Any())
-        {
-            <table class="table table-bordered table-hover table-condensed">
-                <thead>
-                    <tr class="active">
-                        <td nowrap>@QuestionnaireEditor.OptionsUploadValue</td>
-                        <td>@QuestionnaireEditor.OptionsUploadTitle</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var option in Model.Options)
-                    {
-                        <tr>
-                            <td nowrap>@option.Value</td>
-                            <td>@option.Title</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <table class="table table-bordered table-hover table-condensed">
-                <thead>
-                    <tr class="active">
-                        <td>@QuestionnaireEditor.OptionsUploadValue</td>
-                        <td>@QuestionnaireEditor.OptionsUploadTitle</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p><text>@string.Format(QuestionnaireEditor.OptionsUploadLimit, 15000)</text></p>
-        }
+    </nav>
+    <div id="content" class="container">
+        <div v-if="hasErrors" class="alert alert-danger">
+            <p v-for="error in errors" :key="error">{{error}}</p>
+        </div>
+        <table class="table table-bordered table-hover table-condensed">
+            <thead>
+            <tr class="active">
+                <td nowrap>@QuestionnaireEditor.OptionsUploadValue</td>
+                <td>@QuestionnaireEditor.OptionsUploadTitle</td>
+                <td nowrap v-if="config.isCascading">@QuestionnaireEditor.OptionsUploadParent</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-if="hasOptions" v-for="category in categories" :key="category.value">
+                <td>{{category.value}}</td>
+                <td>{{category.title}}</td>
+                <td v-if="config.isCascading">{{category.parentValue}}</td>
+            </tr>
+            <tr v-else>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td v-if="config.isCascading">&nbsp;</td>
+            </tr>
+            </tbody>
+        </table>
+        <p v-if="!hasOptions">@string.Format(QuestionnaireEditor.OptionsUploadLimit, 15000)</p>
     </div>
     <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="container">
-            <a class="btn btn-success navbar-btn" href="javascript:apply();">@QuestionnaireEditor.OptionsUploadApply</a>
-            <a class="btn btn-link navbar-btn" asp-action="ResetOptions" asp-controller="Questionnaire">@QuestionnaireEditor.Cancel</a>
-            <a class="btn btn-link navbar-btn pull-right" href="javascript:close_window();">@QuestionnaireEditor.Close</a>
+            <a class="btn btn-success navbar-btn" @@click="apply">@QuestionnaireEditor.OptionsUploadApply</a>
+            <a class="btn btn-link navbar-btn" @@click="cancel">@QuestionnaireEditor.Cancel</a>
+            <a class="btn btn-link navbar-btn pull-right" @@click="closeWindow">@QuestionnaireEditor.Close</a>
         </div>
     </nav>
+</section>
 </body>
 </html>

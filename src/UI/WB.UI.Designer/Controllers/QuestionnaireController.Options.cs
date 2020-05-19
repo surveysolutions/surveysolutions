@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers
@@ -43,16 +45,17 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        public IActionResult EditOptions(QuestionnaireRevision id, Guid questionId)
+        public IActionResult EditOptions(QuestionnaireRevision id, Guid questionId, bool? isCascading = false)
         {
-            this.SetupViewModel(id, questionId);
-            return this.View(this.questionWithOptionsViewModel);
+            this.SetupViewModel(id, questionId, isCascading ?? false);
+            return this.View("EditOptions", this.questionWithOptionsViewModel);
         }
-
         public IActionResult EditCascadingOptions(QuestionnaireRevision id, Guid questionId)
-            => this.EditOptions(id, questionId);
+            => this.EditOptions(id, questionId, true);
+        
+        public IActionResult GetOptions() => this.Json(this.questionWithOptionsViewModel?.Options);
 
-        private void SetupViewModel(QuestionnaireRevision id, Guid questionId)
+        private void SetupViewModel(QuestionnaireRevision id, Guid questionId, bool isCascading)
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
@@ -70,36 +73,30 @@ namespace WB.UI.Designer.Controllers
                 QuestionnaireId = id.QuestionnaireId.FormatGuid(),
                 QuestionId = questionId,
                 QuestionTitle = editQuestionView.Title,
-                Options = options.ToArray()
+                Options = options.ToArray(),
+                IsCascading = isCascading
             };
         }
 
         public IActionResult ResetOptions()
         {
-            return RedirectToAction("EditOptions",
-                new
-                {
-                    id = this.questionWithOptionsViewModel.QuestionnaireId,
-                    questionId = this.questionWithOptionsViewModel.QuestionId
-                });
-        }
+            this.SetupViewModel(
+                new QuestionnaireRevision(this.questionWithOptionsViewModel.QuestionnaireId),
+                this.questionWithOptionsViewModel.QuestionId,
+                this.questionWithOptionsViewModel.IsCascading);
 
-        public IActionResult ResetCascadingOptions()
-        {
-            return RedirectToAction("EditCascadingOptions",
-                new
-                {
-                    id = this.questionWithOptionsViewModel.QuestionnaireId,
-                    questionId = this.questionWithOptionsViewModel.QuestionId
-                });
+            return this.Ok();
+            
         }
 
         [HttpPost]
         public IActionResult EditOptions(IFormFile csvFile)
         {
+            List<string> errors = new List<string>();
+            
             var withOptionsViewModel = this.questionWithOptionsViewModel;
             if (csvFile == null)
-                this.Error(Resources.QuestionnaireController.SelectTabFile);
+                errors.Add(Resources.QuestionnaireController.SelectTabFile);
             else
             {
                 try
@@ -110,54 +107,40 @@ namespace WB.UI.Designer.Controllers
                         withOptionsViewModel.QuestionId);
 
                     if (importResult.Succeeded)
-                    {
                         withOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
-                    }
                     else
-                    {
-                        foreach (var importError in importResult.Errors)
-                            this.Error(importError, true);
-                    }
+                        errors.AddRange(importResult.Errors);
                 }
                 catch (Exception e)
                 {
-                    this.Error(Resources.QuestionnaireController.TabFilesOnly);
+                    errors.Add(Resources.QuestionnaireController.TabFilesOnly);
                     this.logger.LogError(e, e.Message);
                 }
             }
 
             this.questionWithOptionsViewModel = withOptionsViewModel;
 
-            return this.View(questionWithOptionsViewModel);
+            return this.Json(errors);
         }
-
-        [HttpPost]
-        public IActionResult EditCascadingOptions(IFormFile csvFile)
-            => this.EditOptions(csvFile);
 
         [HttpPost]
         public async Task<IActionResult> ApplyOptions()
         {
             var questionnaireCategoricalOptions = this.questionWithOptionsViewModel.Options.ToArray();
-            var commandResult = await this.ExecuteCommand(
-                new UpdateFilteredComboboxOptions(
-                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId,
-                        this.User.GetId(),
-                        questionnaireCategoricalOptions));
 
-            return Json(commandResult);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ApplyCascadingOptions()
-        {
-            var commandResult = await this.ExecuteCommand(
-                new UpdateCascadingComboboxOptions(
-                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId,
-                        this.User.GetId(),
-                        this.questionWithOptionsViewModel.Options.ToArray()));
+            var command = this.questionWithOptionsViewModel.IsCascading
+                ? (QuestionCommand) new UpdateCascadingComboboxOptions(
+                    Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
+                    this.questionWithOptionsViewModel.QuestionId,
+                    this.User.GetId(),
+                    questionnaireCategoricalOptions)
+                : new UpdateFilteredComboboxOptions(
+                    Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
+                    this.questionWithOptionsViewModel.QuestionId,
+                    this.User.GetId(),
+                    questionnaireCategoricalOptions);
+            
+            var commandResult = await this.ExecuteCommand(command);
 
             return Json(commandResult);
         }
@@ -209,6 +192,7 @@ namespace WB.UI.Designer.Controllers
             public Guid QuestionId { get; set; }
             public QuestionnaireCategoricalOption[] Options { get; set; }
             public string QuestionTitle { get; set; }
+            public bool IsCascading { get; set; }
         }
 
         #endregion
