@@ -72,7 +72,7 @@ namespace WB.Services.Export.Services.Processing
                 var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(exportSettings.QuestionnaireId,
                         exportSettings.Translation);
                 var translation = questionnaire.Translations.First(x => x.Id == exportSettings.Translation);
-                translationName += $"_{translation.Name.Unidecode()}";
+                translationName += $"_{this.fileSystemAccessor.MakeValidFileName(translation.Name.Unidecode())}";
             }
 
             var archiveName = $"{withQuestionnaireName ?? exportSettings.QuestionnaireId.ToString()}_" +
