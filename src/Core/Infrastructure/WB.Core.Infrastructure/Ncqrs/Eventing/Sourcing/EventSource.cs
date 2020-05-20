@@ -20,9 +20,11 @@ namespace Ncqrs.Eventing.Sourcing
         /// </value>
         public int Version => this._currentVersion;
 
-        [NonSerialized] private int _initialVersion;
+        [NonSerialized] 
+        private int _initialVersion;
 
-        [NonSerialized] private int _currentVersion;
+        [NonSerialized] 
+        private int _currentVersion;
 
         /// <summary>
         /// Gets the initial version.
