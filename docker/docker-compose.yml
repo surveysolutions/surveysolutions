@@ -1,12 +1,39 @@
 version: '3.7'
 
 services:
+  hq:
+    container_name: 'headquarters'
+    image: 'headquarters:${VERSION}'
+    ports:
+     - "${HQ_EXPOSE_PORT}:5000"
+    depends_on:
+     - "db"
+     - "export"
+    networks:
+      - backend-network
+    env_file: headquarters/appsettings.env
+
+  export:
+    container_name: 'export'
+    image: 'export:${VERSION}'
+    depends_on:
+     - "db" 
+    networks:
+      - backend-network
+
   db:
-    build: ./postgres
+    container_name: 'db'
+    image: "postgres:${PG_VERSION}"
     environment:
-       POSTGRES_PASSWORD: Qwerty12345
+      POSTGRES_PASSWORD: Qwerty1234
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend-network
 
 networks:
-  default:
-    external:
-      name: nat
+  backend-network:
+    driver: bridge
+
+volumes:
+    db_data:
