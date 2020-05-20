@@ -13,7 +13,7 @@ namespace WB.UI.Designer.Code
             string root = "";
             if (htmlHelper.ViewData.ContainsKey("webRoot"))
             {
-                root = htmlHelper.ViewData["webRoot"].ToString();
+                root = htmlHelper.ViewData["webRoot"].ToString() ?? "";
             }
             else
             {

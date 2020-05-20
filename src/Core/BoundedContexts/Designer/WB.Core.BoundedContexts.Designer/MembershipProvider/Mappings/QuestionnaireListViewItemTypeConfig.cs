@@ -16,13 +16,13 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.Property(e => e.PublicId).HasColumnName("publicid");
 
-            builder.Property(e => e.CreatedBy).HasColumnName("createdby");
+            builder.Property(e => e.CreatedBy).IsRequired(false).HasColumnName("createdby");
 
             builder.Property(e => e.CreationDate).HasColumnName("creationdate");
 
             builder.Property(e => e.CreatorName).HasColumnName("creatorname");
 
-            builder.Property(e => e.FolderId).HasColumnName("folderid");
+            builder.Property(e => e.FolderId).IsRequired(false).HasColumnName("folderid");
 
             builder.Property(e => e.IsDeleted).HasColumnName("isdeleted");
 

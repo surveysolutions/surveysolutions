@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
@@ -89,8 +91,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             var questionnaire = questionnaireView.Source.Clone();
-            questionnaire.Macros = null;
-            questionnaire.LookupTables = null;
+            questionnaire.Macros = new Dictionary<Guid, Macro>();
+            questionnaire.LookupTables = new Dictionary<Guid, LookupTable>();
             questionnaire.IsUsingExpressionStorage = questionnaireContentVersion > 19;
 
             var questionnaireCommunicationPackage = new QuestionnaireCommunicationPackage

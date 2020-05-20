@@ -33,6 +33,10 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
 
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+
+            if(questionnaireView == null)
+                return NotFound();
+
             var translationsIds = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
 
             var translationInstances = await this.dbContext.TranslationInstances.Where(x => x.QuestionnaireId == id && translationsIds.Contains(x.TranslationId))

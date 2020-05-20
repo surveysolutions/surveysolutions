@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -14,7 +15,7 @@ namespace Main.Core.Documents
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
         //is used for deserialization
-        public QuestionnaireDocument(List<IComposite> children = null)
+        public QuestionnaireDocument(List<IComposite>? children = null)
         {
             this.CreationDate = DateTime.Now;
             this.LastEntryDate = DateTime.Now;
@@ -202,7 +203,7 @@ namespace Main.Core.Documents
             this.LastEntryDate = DateTime.UtcNow;
         }
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
+        public T? Find<T>(Guid publicKey) where T : class, IComposite?
         {
             foreach (IComposite child in this.Children)
             {
@@ -236,8 +237,11 @@ namespace Main.Core.Documents
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
             => this.Find(condition).FirstOrDefault();
 
-        public void ReplaceEntity(IComposite oldEntity, IComposite newEntity)
+        public void ReplaceEntity(IComposite? oldEntity, IComposite newEntity)
         {
+            if(oldEntity == null)
+                throw new ArgumentException("Old Entity must be not null.");
+
             Guid oldEntityId = oldEntity.PublicKey;
 
             var entityParent = this.GetParentById(oldEntityId);
@@ -245,7 +249,8 @@ namespace Main.Core.Documents
             this.LastEntryDate = DateTime.UtcNow;
         }
 
-        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled, RosterDisplayMode displayMode)
+        public void UpdateGroup(Guid groupId, string? title, string? variableName, string? description, string? conditionExpression, 
+            bool hideIfDisabled, RosterDisplayMode displayMode)
         {
             this.UpdateGroup(groupId, group =>
             {

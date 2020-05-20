@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (node is IQuestion question
                 && (
                     (question.LinkedFilterExpression?.Contains(RowName) ?? false)
-                    || (question.Properties.OptionsFilterExpression?.Contains(RowName) ?? false)
+                    || (question.Properties?.OptionsFilterExpression?.Contains(RowName) ?? false)
                     || (question.ConditionExpression?.Contains(RowName) ?? false))
                 )
                 return true;
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool FilterExpressionUsingForbiddenClasses(IQuestion node, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var expression = string.IsNullOrEmpty(node.LinkedFilterExpression) ? node.Properties.OptionsFilterExpression : node.LinkedFilterExpression;
+            var expression = string.IsNullOrEmpty(node.LinkedFilterExpression) ? node.Properties?.OptionsFilterExpression : node.LinkedFilterExpression;
             if (!string.IsNullOrEmpty(expression))
             {
                 var foundUsages = FindForbiddenClassesUsage(expression, questionnaire);
@@ -211,7 +211,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .Where(grouping => grouping.Count() >= 3)
                 .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
-        private static SingleQuestion GetPreviousUnconditionalSingleOptionQuestionWith2Options(SingleQuestion question)
+        private static SingleQuestion? GetPreviousUnconditionalSingleOptionQuestionWith2Options(SingleQuestion question)
         {
             var previousQuestion = question.GetPrevious() as SingleQuestion;
 
@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .Where(grouping => grouping.Count() >= 3)
                 .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
-        private static IQuestion GetPreviousQuestionWithSameEnablement(IQuestion question)
+        private static IQuestion? GetPreviousQuestionWithSameEnablement(IQuestion question)
         {
             var previousQuestion = question.GetPrevious() as IQuestion;
 
@@ -262,7 +262,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return exceeded;
         }
 
-        private static string GetCustomEnablementCondition(IComposite entity)
+        private static string? GetCustomEnablementCondition(IComposite entity)
         {
             var entityAsIConditional = entity as IConditional;
 
@@ -352,7 +352,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool IsInsideMultiOptionBasedRoster(IQuestionnaireEntity entity, MultiLanguageQuestionnaireDocument questionnaire)
-            => entity.UnwrapReferences(x => x.GetParent()).Any(parent => questionnaire.Questionnaire.IsMultiRoster(parent as IGroup));
+            => entity.UnwrapReferences(x => x.GetParent())
+                .Any(parent => questionnaire.Questionnaire.IsMultiRoster(parent as IGroup));
 
         private bool RowIndexInMultiOptionBasedRoster(IQuestionnaireEntity entity, MultiLanguageQuestionnaireDocument questionnaire)
             => this.UsesRowIndex(entity)
@@ -430,7 +431,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private bool OptionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-            => this.DoesExpressionExceed1000CharsLimit(questionnaire, question.Properties.OptionsFilterExpression);
+            => this.DoesExpressionExceed1000CharsLimit(questionnaire, question.Properties?.OptionsFilterExpression);
 
         private static bool CascadingQuestionHasValidationExpresssion(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -457,12 +458,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             => ExpressionUsesForbiddenDateTimeProperties(question.LinkedFilterExpression, questionnaire);
 
         private bool CategoricalFilterUsesForbiddenDateTimeProperties(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-            => ExpressionUsesForbiddenDateTimeProperties(question.Properties.OptionsFilterExpression, questionnaire);
+            => ExpressionUsesForbiddenDateTimeProperties(question.Properties?.OptionsFilterExpression, questionnaire);
 
 
 
         private EntityVerificationResult<IComposite> VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-            IComposite entity, string expression, MultiLanguageQuestionnaireDocument questionnaire, Func<IComposite, bool> isReferencedQuestionIncorrect)
+            IComposite entity, string? expression, MultiLanguageQuestionnaireDocument questionnaire, Func<IComposite, bool> isReferencedQuestionIncorrect)
         {
             if (string.IsNullOrEmpty(expression))
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
@@ -490,7 +491,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool VariableUsesForbiddenDateTimeProperties(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)
             => ExpressionUsesForbiddenDateTimeProperties(variable.Expression, questionnaire);
 
-        private bool DoesExpressionExceed1000CharsLimit(MultiLanguageQuestionnaireDocument questionnaire, string expression)
+        private bool DoesExpressionExceed1000CharsLimit(MultiLanguageQuestionnaireDocument questionnaire, string? expression)
         {
             if (string.IsNullOrEmpty(expression))
                 return false;
@@ -510,7 +511,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             MultiLanguageQuestionnaireDocument questionnaire)
             => ExpressionUsesForbiddenDateTimeProperties(conditional.ConditionExpression, questionnaire);
 
-        protected bool ExpressionUsesForbiddenDateTimeProperties(string expression,
+        protected bool ExpressionUsesForbiddenDateTimeProperties(string? expression,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrWhiteSpace(expression)) return false;

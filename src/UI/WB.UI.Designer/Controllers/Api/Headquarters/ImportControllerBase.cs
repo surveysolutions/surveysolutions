@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         public virtual void Login() { }
 
-        protected IActionResult CheckInvariants(int clientVersion, QuestionnaireView questionnaireView)
+        protected IActionResult? CheckInvariants(int clientVersion, QuestionnaireView questionnaireView)
         {
             if (!this.engineVersionService.IsClientVersionSupported(clientVersion))
             {

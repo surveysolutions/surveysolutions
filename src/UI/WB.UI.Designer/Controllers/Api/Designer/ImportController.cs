@@ -55,9 +55,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             var mysqlPublicFolders = foldersAndQuestionnaires.Where(x => !questionnairesIds.Contains(x.Id)).ToList();
             mysqlPublicFolders.ForEach(x => x.IdGuid = Guid.Parse(x.Id.ToString().PadLeft(32, '1')));
-            var publicFoldersIdMap = mysqlPublicFolders.ToDictionary(x => x.Id, x => x.IdGuid.Value);
+            var publicFoldersIdMap = mysqlPublicFolders.ToDictionary(x => x.Id, x => x.IdGuid);
             mysqlPublicFolders.ForEach(x =>
-                publicFoldersStorage.CreateFolder(x.IdGuid.Value, x.Name, publicFoldersIdMap.ContainsKey(x.Pid) ? publicFoldersIdMap[x.Pid] : (Guid?)null,
+                publicFoldersStorage.CreateFolder(x.IdGuid, x.Name, publicFoldersIdMap.ContainsKey(x.Pid) ? publicFoldersIdMap[x.Pid] : (Guid?)null,
                     User.GetId())
             );
 
@@ -176,7 +176,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 var questionnaire = new QuestionnaireDocument
                 {
                     PublicKey = Guid.Parse(varNumber.ToString().PadLeft(32, '0')),
-                    Title = mysqlQuestionnaire.Name,
+                    Title = mysqlQuestionnaire.Name ?? "",
                     Description = mysqlQuestionnaire.Description,
                     Children = new ReadOnlyCollection<IComposite>(sections),
                     IsPublic = true,
@@ -282,7 +282,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 Id = x.IdGuid,
                 Value = x.Value,
-                Title = x.Title,
+                Title = x.Title ?? "",
                 Type = x.Type,
                 Index = x.Order,
                 Parent = x.ParentGuid,

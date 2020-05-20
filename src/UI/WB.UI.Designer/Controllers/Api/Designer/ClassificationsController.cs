@@ -103,7 +103,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
     public class ClassificationSearchQueryModel
     {
-        public string Query { get; set; }
+        public string? Query { get; set; }
         public Guid? GroupId{ get; set; }
         public bool PrivateOnly { get; set; } = false;
     }

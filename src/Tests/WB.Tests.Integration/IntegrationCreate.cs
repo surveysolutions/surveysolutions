@@ -328,10 +328,10 @@ namespace WB.Tests.Integration
         public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
         {
             return new LookupTableContent
-            {
-                VariableNames = variableNames,
-                Rows = rows
-            };
+            (
+                variableNames : variableNames,
+                rows : rows
+            );
         }
 
         public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)

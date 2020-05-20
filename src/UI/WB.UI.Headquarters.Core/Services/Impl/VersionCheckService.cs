@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Services.Impl
 
             this.SetVersion();
 
-            return AvailableVersion?.Build > productVersion.GetBildNumber();
+            return AvailableVersion?.Build > productVersion.GetBuildNumber();
         }
 
         public string GetNewVersionString()

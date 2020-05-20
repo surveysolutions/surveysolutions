@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return links.Any();
         }
 
-        public static IEnumerable<string> GetMarkdownLinksFromText(string text)
+        public static IEnumerable<string> GetMarkdownLinksFromText(string? text)
         {
             if (string.IsNullOrWhiteSpace(text)) yield break;
 
@@ -119,9 +119,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 if(!(node is LeafBlock leafBlock)) continue;
                 foreach (var inline in leafBlock.Inline)
                 {
-                    if(!(inline is LinkInline link)) continue;
-
-                    yield return link.Url?.ToLower();
+                    if(!(inline is LinkInline link) || link.Url==null) continue;
+                    
+                    yield return link.Url.ToLower();
                 }
             }
         }
