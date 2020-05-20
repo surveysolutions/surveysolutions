@@ -24,12 +24,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             };
         }
 
-        public string Title { get; private set; }
-        public string VariableName { get; private set; }
-        public string VariableLabel { get; private set; }
-        public string EnablementCondition { get; set; }
+        public string? Title { get; private set; }
+        public string? VariableName { get; private set; }
+        public string? VariableLabel { get; private set; }
+        public string? EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
-        public string Instructions { get; private set; }
+        public string? Instructions { get; private set; }
         public QuestionProperties Properties { get; set; }
     }
 }

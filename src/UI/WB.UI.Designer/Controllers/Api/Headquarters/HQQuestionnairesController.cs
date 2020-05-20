@@ -104,7 +104,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
         {
-            QuestionnaireView questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            QuestionnaireView? questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
             if (questionnaireView == null)
             {
@@ -187,8 +187,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("{id:Guid}/revision/{rev:int}/metadata")]
         public async Task<IActionResult> UpdateRevisionMetadata(Guid id, int rev, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
         {
-            QuestionnaireView questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
-
+            QuestionnaireView? questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, id));

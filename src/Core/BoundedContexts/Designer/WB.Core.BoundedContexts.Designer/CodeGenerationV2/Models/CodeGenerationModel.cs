@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
     {
         public Guid Id { set; get; }
 
-        public string ClassName { get; set; }
+        public string? ClassName { get; set; }
 
         public List<LevelModel> Levels { get; } = new List<LevelModel>();
 
@@ -23,9 +23,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 
         public List<ConditionMethodModel> VariableMethodModel { get; } = new List<ConditionMethodModel>();
 
-        public List<LookupTableTemplateModel> LookupTables { get; set; }
+        public List<LookupTableTemplateModel> LookupTables { get; set; } = new List<LookupTableTemplateModel>();
        
-        public Dictionary<Guid, string> IdMap { get; set; }
+        public Dictionary<Guid, string> IdMap { get; set; } = new Dictionary<Guid, string>();
 
 
         public List<RosterModel> AllRosters => this.Levels

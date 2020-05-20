@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                             QuestionnaireId = x.QuestionnaireId,
                             Title = x.Title,
                             FolderId = x.FolderId,
-                            Folder = isSupportFolders ? x.Folder : null
+                            Folder = isSupportFolders ? x.Folder : new QuestionnaireListViewFolder() //not good
                         }).ToList();
             }
 
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     if (input.FolderId.HasValue)
                     {
                         var folderId = input.FolderId.Value.ToString();
-                        result = result.Where(x => x.Folder.Path.Contains(folderId));
+                        result = result.Where(x => x.Folder!= null && x.Folder.Path.Contains(folderId));
                     }
                 }
                 else

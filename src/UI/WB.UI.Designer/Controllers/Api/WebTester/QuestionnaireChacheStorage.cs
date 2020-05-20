@@ -6,7 +6,7 @@ namespace WB.UI.Designer.Api.WebTester
 {
     public interface IQuestionnaireCacheStorage
     {
-        Lazy<Questionnaire> Get(string cacheKey);
+        Lazy<Questionnaire>? Get(string cacheKey);
         void Add(string cacheKey, Lazy<Questionnaire> cacheEntry);
         void Remove(string cacheKey);
     }
@@ -15,7 +15,7 @@ namespace WB.UI.Designer.Api.WebTester
     {
         readonly MemoryCache Cache = new MemoryCache("CompilationPackages");
 
-        public Lazy<Questionnaire> Get(string cacheKey)
+        public Lazy<Questionnaire>? Get(string cacheKey)
         {
             return Cache.Get(cacheKey) as Lazy<Questionnaire>;
         }

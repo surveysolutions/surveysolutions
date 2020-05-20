@@ -258,6 +258,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 return;
 
             var entity = questionnaireDocument.Find<IComposite>(entityId);
+            if (entity == null)
+                throw new InvalidOperationException("Entity was not found.");
+
             var title = GetEntityTitle(entity);
             if (!string.IsNullOrWhiteSpace(title))
             {
@@ -284,7 +287,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             }
         }
 
-        public static string GetEntityTitle(IQuestionnaireEntity entity)
+        public static string? GetEntityTitle(IQuestionnaireEntity entity)
             => (entity as IQuestion)?.QuestionText
                ?? (entity as IStaticText)?.Text
                ?? (entity as IGroup)?.Title

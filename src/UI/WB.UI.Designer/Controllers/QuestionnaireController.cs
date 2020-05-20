@@ -41,26 +41,26 @@ namespace WB.UI.Designer.Controllers
 
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_required))]
             [StringLength(AbstractVerifier.MaxTitleLength, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
-            public string Title { get; set; }
+            public string? Title { get; set; }
         }
 
         public class QuestionnaireViewModel
         {
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "QuestionnaireTitle_required")]
             [StringLength(AbstractVerifier.MaxTitleLength, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
-            public string Title { get; set; }
+            public string? Title { get; set; }
 
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "QuestionnaireVariable_required")]
             [RegularExpression(AbstractVerifier.VariableRegularExpression, ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireVariable_rules))]
             [StringLength(AbstractVerifier.DefaultVariableLengthLimit, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireVariable_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
-            public string Variable { get; set; }
+            public string? Variable { get; set; }
 
             public bool IsPublic { get; set; }
         }
 
         private class ComboItem
         {
-            public string Name { get; set; }
+            public string? Name { get; set; }
             public Guid? Value { get; set; }
         }
 
@@ -153,7 +153,7 @@ namespace WB.UI.Designer.Controllers
 
         public IActionResult Clone(QuestionnaireRevision id)
         {
-            QuestionnaireView questionnaire = this.GetQuestionnaireView(id.QuestionnaireId);
+            QuestionnaireView? questionnaire = this.GetQuestionnaireView(id.QuestionnaireId);
             if (questionnaire == null) return NotFound();
 
             QuestionnaireView model = questionnaire;
@@ -172,7 +172,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                QuestionnaireView questionnaire =
+                QuestionnaireView? questionnaire =
                     this.questionnaireViewFactory.Load(new QuestionnaireRevision(model.QuestionnaireId, model.Revision));
 
                 if (questionnaire == null)
@@ -183,7 +183,7 @@ namespace WB.UI.Designer.Controllers
                 {
                     var questionnaireId = Guid.NewGuid();
 
-                    var command = new CloneQuestionnaire(questionnaireId, model.Title, User.GetId(),
+                    var command = new CloneQuestionnaire(questionnaireId, model.Title ?? "", User.GetId(),
                         false, sourceModel.Source);
 
                     this.commandService.Execute(command);
@@ -229,10 +229,10 @@ namespace WB.UI.Designer.Controllers
                 {
                     var command = new CreateQuestionnaire(
                         questionnaireId: questionnaireId,
-                        text: model.Title,
+                        text: model.Title ?? "",
                         responsibleId: User.GetId(),
                         isPublic: model.IsPublic,
-                        variable: model.Variable);
+                        variable: model.Variable ?? "");
 
                     this.commandService.Execute(command);
                     this.dbContext.SaveChanges();
@@ -254,7 +254,7 @@ namespace WB.UI.Designer.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(Guid id)
         {
-            QuestionnaireView model = this.GetQuestionnaireView(id);
+            QuestionnaireView? model = this.GetQuestionnaireView(id);
             if (model != null)
             {
                 if ((model.CreatedBy != User.GetId()) && !User.IsAdmin())
@@ -319,7 +319,11 @@ namespace WB.UI.Designer.Controllers
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(new QuestionnaireRevision(id), this.User.GetId());
             if (questionnaireInfoView == null) return NotFound();
 
-            QuestionnaireChangeHistory questionnairePublicListViewModels = await questionnaireChangeHistoryFactory.LoadAsync(id, p ?? 1, GlobalHelper.GridPageItemsCount, this.User);
+            QuestionnaireChangeHistory? questionnairePublicListViewModels = 
+                await questionnaireChangeHistoryFactory.LoadAsync(id, p ?? 1, GlobalHelper.GridPageItemsCount, this.User);
+            if (questionnairePublicListViewModels == null)
+                return NotFound();
+
             questionnairePublicListViewModels.ReadonlyMode = questionnaireInfoView.IsReadOnlyForUser;
 
             return this.View(questionnairePublicListViewModels);
@@ -331,9 +335,9 @@ namespace WB.UI.Designer.Controllers
             return this.View();
         }
 
-        private QuestionnaireView GetQuestionnaireView(Guid id)
+        private QuestionnaireView? GetQuestionnaireView(Guid id)
         {
-            QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            QuestionnaireView? questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             return questionnaire;
         }
 
@@ -346,7 +350,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public IActionResult GetLanguages(QuestionnaireRevision id)
         {
-            QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(id);
+            var questionnaire = this.questionnaireViewFactory.Load(id);
             if (questionnaire == null) return NotFound();
 
             var comboBoxItems =
@@ -365,7 +369,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public IActionResult AssignFolder(Guid id, Guid folderId)
         {
-            QuestionnaireView questionnaire = GetQuestionnaireView(id);
+            QuestionnaireView? questionnaire = GetQuestionnaireView(id);
             if (questionnaire == null)
                 return NotFound();
 

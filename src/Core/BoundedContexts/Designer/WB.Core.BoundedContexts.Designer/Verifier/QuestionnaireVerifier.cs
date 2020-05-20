@@ -143,6 +143,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 var references =
                     cycle.Select(guid => questionnaire.Find<IComposite>(guid))
+                        .Where(x=> x != null)
                         .Select(x => QuestionnaireEntityReference.CreateFrom(x))
                         .ToArray();
 

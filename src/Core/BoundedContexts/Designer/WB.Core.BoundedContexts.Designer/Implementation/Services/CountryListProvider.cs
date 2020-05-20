@@ -5,6 +5,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class CountryItem
     {
+        public CountryItem(string code, string title)
+        {
+            Code = code;
+            Title = title;
+        }
+
         public string Code { get; set; }
         public string Title { get; set; }
     }
@@ -14,10 +20,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public static List<CountryItem> GetCounryItems()
         {
             var codes = GetCountryCodes();
-            return codes.Select(code => new CountryItem()
+            return codes.Select(code =>
             {
-                Code = code,
-                Title = Resources.Country.ResourceManager.GetString(code)
+                var item = new CountryItem (code, Resources.Country.ResourceManager.GetString(code));
+                return item;
             }).ToList();
         }
 

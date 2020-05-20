@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
-        public async Task<QuestionnaireChangeHistory> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user)
+        public async Task<QuestionnaireChangeHistory?> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user)
         {
             var questionnaire = questionnaireDocumentStorage.GetById(questionnaireId.FormatGuid());
 
@@ -98,9 +98,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 revision.Patch != null || revision.ResultingQuestionnaireDocument != null,
                 revision.TargetItemDateTime,
                 references,
-                revision?.Meta?.Comment,
-                revision?.Meta?.Hq?.Version,
-                revision?.Meta?.Hq?.QuestionnaireVersion,
+                revision.Meta?.Comment,
+                revision.Meta?.Hq?.Version,
+                revision.Meta?.Hq?.QuestionnaireVersion,
                 canEditComment)
             {
                 HqUserName = revision.Meta?.Hq?.ImporterLogin,

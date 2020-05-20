@@ -72,9 +72,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        public CategoriesFile GetAsExcelFile(Guid questionnaireId, Guid categoriesId)
+        public CategoriesFile? GetAsExcelFile(Guid questionnaireId, Guid categoriesId)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.ToString("N"));
+            if (questionnaire == null)
+                return null;
 
             return new CategoriesFile
             {
