@@ -2102,8 +2102,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
 
             var isCompleted = this.properties.Status == InterviewStatus.Completed;
-            if (!isCompleted)
+            if (isCompleted)
             {
+                this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate: originDate));
+            }
+            else
+            {                    
                 this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate: originDate));
             }
