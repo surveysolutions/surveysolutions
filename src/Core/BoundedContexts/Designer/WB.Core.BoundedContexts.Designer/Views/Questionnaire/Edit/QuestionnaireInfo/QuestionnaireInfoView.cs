@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
     public class QuestionnaireInfoView
     {
-        public QuestionnaireInfoView()
+        public QuestionnaireInfoView( List<CountryItem> countries,
+            string defaultLanguageName, 
+            string questionnaireId, string questionnaireRevision, 
+            bool hideIfDisabled,
+            bool isPublic,
+            string? title = null, 
+            string? variable = null)
         {
             this.SharedPersons = new List<SharedPersonView>();
             this.Chapters = new List<ChapterInfoView>();
@@ -15,12 +19,29 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.LookupTables = new List<LookupTableView>();
             this.Attachments = new List<AttachmentView>();
             this.Translations = new List<TranslationView>();
+
+
+            Metadata = new MetadataView();
+            StudyTypes = new List<StudyTypeItem>();
+            KindsOfData = new List<KindOfDataItem>();
+            
+            ModesOfDataCollection = new List<ModeOfDataCollectionItem>();
+            Scenarios = new List<ScenarioView>();
+            Categories = new List<CategoriesView>();
+            DefaultLanguageName = defaultLanguageName;
+            QuestionnaireId = questionnaireId;
+            QuestionnaireRevision = questionnaireRevision;
+            Title = title;
+            Variable = variable;
+            HideIfDisabled = hideIfDisabled;
+            IsPublic = isPublic;
+            Countries = countries;
         }
 
         public string QuestionnaireId { get; set; }
         public string QuestionnaireRevision { get; set; }
-        public string Title { get; set; }
-        public string Variable { get; set; }
+        public string? Title { get; set; }
+        public string? Variable { get; set; }
         public bool IsPublic { get; set; }
         public bool WebTestAvailable { get; set; }
         public List<ChapterInfoView> Chapters { get; set; }
@@ -47,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public List<KindOfDataItem> KindsOfData { get; set; }
         public List<CountryItem> Countries { get; set; }
         public List<ModeOfDataCollectionItem> ModesOfDataCollection { get; set; }
-        public bool? HideIfDisabled { get; set; }
+        public bool HideIfDisabled { get; set; }
 
         public List<ScenarioView> Scenarios { get; set; }
         public List<CategoriesView> Categories { get; set; }

@@ -34,31 +34,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             this.questionnaireTypeMapper = questionnaireTypeMapper;
         }
 
-        public NewChapterView Load(QuestionnaireRevision questionnaireId, string chapterId)
+        public NewChapterView? Load(QuestionnaireRevision questionnaireId, string chapterId)
         {
-            var document = this.questionnaireStorage.Get(questionnaireId).AsReadOnly();
+            var document = this.questionnaireStorage.Get(questionnaireId)?.AsReadOnly();
+            if (document == null)
+                return null;
+
             var chapterPublicKey = Guid.Parse(chapterId);
-            var isExistsChapter = document.Find<IGroup>(chapterPublicKey)!=null;
-            if (!isExistsChapter)
+            var chapter = document.Find<IGroup>(chapterPublicKey) ;
+            if (chapter == null)
                 return null;
 
             return new NewChapterView
-            {
-                Chapter = ConvertToChapterView(document, chapterPublicKey),
-                VariableNames = this.CollectVariableNames(document)
-            };
+            (
+                chapter : ConvertToChapterView(chapter),
+                variableNames : this.CollectVariableNames(document)
+            );
         }
 
-        private IQuestionnaireItem ConvertToChapterView(ReadOnlyQuestionnaireDocument document, Guid chapterPublicKey)
+        private IQuestionnaireItem? ConvertToChapterView(IGroup chapter)
         {
-            var chapter = document.Find<IGroup>(chapterPublicKey);
-
-            IQuestionnaireItem root = null;
+            IQuestionnaireItem? root = null;
             var allGroupViews = new Dictionary<IGroup, GroupInfoView>();
             chapter.ForEachTreeElement<IComposite>(x => x.Children, (parent, child) =>
             {
 
-                IQuestionnaireItem questionnaireItem = null;
+                IQuestionnaireItem? questionnaireItem = null;
 
                 if (child is IQuestion)
                 {
@@ -79,7 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                     questionnaireItem = this.ConvertToVariableInfoView((IVariable)child);
                 }
 
-                if (parent != null)
+                if (questionnaireItem!= null && parent != null)
                 {
                     allGroupViews.Last(x => x.Key == parent).Value.Items.Add(questionnaireItem);
                 }
@@ -92,24 +93,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         private VariableView ConvertToVariableInfoView(IVariable variable)
         {
-            return new VariableView
-            {
-                Id = variable.PublicKey,
-                ItemId = variable.PublicKey.FormatGuid(),
-                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression, variable.Label, variable.DoNotExport)
-            };
+            return new VariableView(
+                variable.PublicKey,
+                variable.PublicKey.FormatGuid(),
+                new VariableData(variable.Type, variable.Name, variable.Expression, variable.Label, variable.DoNotExport)
+            );
         }
 
         private StaticTextInfoView ConvertToStaticTextInfoView(IStaticText staticText)
         {
             return new StaticTextInfoView
-            {
-                ItemId = staticText.PublicKey.FormatGuid(),
-                Text = staticText.Text,
-                AttachmentName = staticText.AttachmentName,
-                HasCondition = !string.IsNullOrWhiteSpace(staticText.ConditionExpression),
-                HasValidation = staticText.ValidationConditions.Count > 0
-            };
+            (
+                itemId : staticText.PublicKey.FormatGuid(),
+                text : staticText.Text,
+                attachmentName : staticText.AttachmentName,
+                hasCondition : !string.IsNullOrWhiteSpace(staticText.ConditionExpression),
+                hasValidation : staticText.ValidationConditions.Count > 0
+            );
         }
 
         private GroupInfoView ConvertToGroupInfoView(IGroup group)
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return variables.ToArray();
         }
 
-        public string GetQuestionType(IComposite entity, ReadOnlyQuestionnaireDocument questionnaire)
+        public string? GetQuestionType(IComposite entity, ReadOnlyQuestionnaireDocument questionnaire)
         {
             var variable = entity as IVariable;
             if (variable != null) return questionnaireTypeMapper.GetVariableType(variable.Type);

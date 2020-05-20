@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     public class ScenarioView
     {
         public  int Id { get; set; }
-        public string Title { get; set; }
+        public string Title { get; set; } = String.Empty;
     }
 }

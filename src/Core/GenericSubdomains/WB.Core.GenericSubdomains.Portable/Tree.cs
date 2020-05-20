@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -60,9 +61,9 @@ namespace WB.Core.GenericSubdomains.Portable
             }
         }
         
-        public static IEnumerable<T> UnwrapReferences<T>(this T startItem, Func<T, T> getReferencedItem) where T : class
+        public static IEnumerable<T> UnwrapReferences<T>(this T startItem, Func<T, T?> getReferencedItem) where T : class
         {
-            T referencedItem = startItem;
+            var referencedItem = startItem;
             while (referencedItem != null)
             {
                 yield return referencedItem;

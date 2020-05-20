@@ -33,10 +33,11 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             stream.Position = 0;
             postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream && pf.FileName == "data.csv");
             controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel
-            {
-                QuestionnaireId = questionnaireId.FormatGuid(),
-                QuestionId = questionId
-            };
+            (
+                questionnaireId : questionnaireId.FormatGuid(),
+                questionId : questionId,
+                options:new QuestionnaireCategoricalOption[0]
+            );
             BecauseOf();
         }
 

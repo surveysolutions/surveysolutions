@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             return categories;
         }
 
-        private CategoriesHeaderMap TryGetHeadersFromFile(List<string> rowValues)
+        private CategoriesHeaderMap? TryGetHeadersFromFile(List<string>? rowValues)
         {
             if (rowValues == null)
                 return null;
@@ -119,11 +119,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             RowId = rowNumber
         };
 
-        private string GetRowValue(List<string> row, string index)
+        private string? GetRowValue(List<string> row, string? index)
         {
-            if (!int.TryParse(index, out var i))
-                return null;
-            return row.ElementAtOrDefault(i);
+            return !int.TryParse(index, out var i) ? null : row.ElementAtOrDefault(i);
         }
     }
 }

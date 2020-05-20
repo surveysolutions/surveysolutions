@@ -108,13 +108,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)
             => nodeOrToken.IsToken
             && nodeOrToken.Kind() == SyntaxKind.IdentifierToken
-            && nodeOrToken.Parent.Kind() == SyntaxKind.IdentifierName;
+            && nodeOrToken.Parent?.Kind() == SyntaxKind.IdentifierName;
 
         private static bool IsFunction(SyntaxNodeOrToken identifierToken)
-            => identifierToken.Parent.Parent is InvocationExpressionSyntax;
+            => identifierToken.Parent?.Parent is InvocationExpressionSyntax;
 
         private static bool IsConstructorCall(SyntaxNodeOrToken identifierToken)
-            => identifierToken.Parent.Parent is ObjectCreationExpressionSyntax;
+            => identifierToken.Parent?.Parent is ObjectCreationExpressionSyntax;
 
         private static bool IsLambdaParameter(SyntaxNodeOrToken identifierToken)
             => IsSimpleLambdaParameter(identifierToken)
@@ -152,8 +152,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return lambdaParameters.Contains(identifierToken.ToString());
         }
 
-        private static TAncestor FindAncestor<TAncestor>(SyntaxNodeOrToken nodeOrToken)
+        private static TAncestor? FindAncestor<TAncestor>(SyntaxNodeOrToken nodeOrToken)
             where TAncestor : SyntaxNode
-            => (TAncestor) nodeOrToken.Parent.UnwrapReferences(ancestor => ancestor.Parent).FirstOrDefault(ancestor => ancestor is TAncestor);
+            => (TAncestor?) (nodeOrToken.Parent as TAncestor)?.UnwrapReferences<TAncestor>(ancestor => (TAncestor?) ancestor?.Parent)
+                .FirstOrDefault(ancestor => ancestor != null);
     }
 }

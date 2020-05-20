@@ -11,21 +11,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
     {
         public virtual DateTime CreationDate { get; set; }
 
-        public virtual string QuestionnaireId { get; set; }
+        public virtual string QuestionnaireId { get; set; } = string.Empty;
 
         public virtual Guid PublicId
         {
-            get => this.QuestionnaireId.ParseGuid().Value;
+            get
+            {
+                var id = this.QuestionnaireId.ParseGuid();
+                if(id == null)
+                    throw new InvalidOperationException("Invalid Questionnaire id.");
+                return id.Value;
+            }
             set => this.QuestionnaireId = value.FormatGuid();
         }
 
         public virtual DateTime LastEntryDate { get; set; }
 
-        public virtual string Title { get; set; }
+        public virtual string Title { get; set; }  = string.Empty;
 
         public virtual Guid? CreatedBy { get; set; }
 
-        public virtual string CreatorName { get; set; }
+        public virtual string CreatorName { get; set; } = String.Empty;
 
         public virtual bool IsDeleted { get; set; }
 
@@ -33,10 +39,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual ICollection<SharedPerson> SharedPersons { get; set; } = new HashSet<SharedPerson>();
 
-        public virtual string Owner { get; set; }
+        public virtual string? Owner { get; set; }
 
         public virtual Guid? FolderId { get; set; }
 
-        public virtual QuestionnaireListViewFolder Folder { get; set; }
+        public virtual QuestionnaireListViewFolder Folder { get; set; } = new QuestionnaireListViewFolder();//not good
     }
 }

@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     public class StudyTypeItem
     {
         public StudyType Code { get; set; }
-        public string Title { get; set; }
+        public string? Title { get; set; }
     }
 
     public static class StudyTypeProvider
