@@ -1048,14 +1048,10 @@ export default {
                     }
                 )
             } else {
-                var noReassignInterviews = this.arrayFilter(filteredItems, function(item) {
-                    return !item.isNeedInterviewerAssign
-                })
-
-                if (noReassignInterviews.length > 0) {
+                if (self.newResponsibleId == null) {
                     var cmd = this.getCommand(
                         'RejectInterviewCommand',
-                        map(noReassignInterviews, interview => {
+                        map(filteredItems, interview => {
                             return interview.id
                         }),
                         this.statusChangeComment
@@ -1070,14 +1066,9 @@ export default {
                         }
                     )
                 }
-
-                var toReassignInterviews = this.arrayFilter(filteredItems, function(item) {
-                    return item.isNeedInterviewerAssign
-                })
-
-                if (toReassignInterviews.length > 0 && self.newResponsibleId != null) {
+                else if (self.newResponsibleId != null) {
                     var commands = this.arrayMap(
-                        map(toReassignInterviews, interview => {
+                        map(filteredItems, interview => {
                             return interview.id
                         }),
                         function(rowId) {
