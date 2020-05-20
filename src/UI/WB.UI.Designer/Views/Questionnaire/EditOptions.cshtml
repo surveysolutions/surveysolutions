@@ -1,5 +1,5 @@
-@using System.Web
-
+@using WB.UI.Designer.Extensions
+@using System.Globalization
 @{
     ViewBag.Title = $"{QuestionnaireEditor.OptionsWindowTitle}: {@Model.QuestionTitle}";
     Layout = null;
@@ -12,179 +12,62 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- simplepage:js --><script src="~/js/simplepage.js"></script><!-- endinject -->
-    <!-- vue:js --> <script src="~/js/vue.js"></script> <!-- endinject -->
     <!-- popup:css --> <link rel="stylesheet" href="~/css/popup.css"> <!-- endinject -->
+    <!-- manifest:json -->
+        <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-4feee32528.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-635620ebd1.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e7d9eca832.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-371e2e4990.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-c670b4e825.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-a63da5f11a.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-0f106fe676.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-4feee32528.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-635620ebd1.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e7d9eca832.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-371e2e4990.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-c670b4e825.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-a63da5f11a.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-0f106fe676.zh.json""}"; }
+        <!-- endinject -->
+        @{
+            var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json);
+            var locale = locales["QuestionnaireEditor." + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName + ".json"];
     
-    <script type="text/javascript">
-    var CategoriesOptionsConfig = {};
-    CategoriesOptionsConfig.install = function(Vue, options) {
-        Object.defineProperty(Vue, '$config', { get: function() { return options; } });
-        Object.defineProperty(Vue.prototype, '$config', { get: function() { return options; } });
-    };
-    
-    Vue.use(CategoriesOptionsConfig,
-    {
-        applyUrl: "@Url.Action("ApplyOptions", "Questionnaire")",
-        editOptionsUrl: "@Url.Action("EditOptions", "Questionnaire")",
-        resetOptionsUrl: "@Url.Action("ResetOptions", "Questionnaire")",
-        getOptionsUrl: "@Url.Action("GetOptions", "Questionnaire")",
-        exportOptionsUrl: "@Url.Action("ExportOptions", "Questionnaire")",
-        isCascading: @Model.IsCascading.ToString().ToLower()
-    });
-            
-    $(function() {
-        var app = new Vue({
-                el: '#categories-editor',
-                data: {
-                    errors: [],
-                    categories: []
-                },
-                created() {
-                    this.ajustNavPanels();
-                    this.update();
-                },
-                computed: {
-                    config: function(){
-                      return Vue.$config;
-                    },
-                    hasOptions: function(){
-                        return this.categories.length > 0;
-                    },
-                    hasErrors: function(){
-                        return this.errors.length > 0;
-                    }
-                },
-                methods:{
-                    ajustNavPanels: function(){
-                        $("body").css("paddingTop", $("#topNav").outerHeight() + 3); 
-                        $("body").css("paddingBottom", $("#bottomNav").outerHeight() + 3); 
-                    },
-                    closeWindow: function(){
-                        if (confirm('@Html.Raw(HttpUtility.JavaScriptStringEncode(QuestionnaireEditor.OptionsCloseWindow))')) { 
-                            close();
-                        }
-                    },
-                    upload: function(e){
-                        
-                        const files = e.target.files || e.dataTransfer.files
-                        if (!files.length) return 
-                        
-                        const file = files[0];
-                        
-                        const formData = new FormData();
-                        formData.append('csvFile', file)
-                        
-                        this.clearErrors();
-                        
-                        const self = this;
-                        $.ajax({
-                          url: this.config.editOptionsUrl, 
-                          type: 'POST',
-                          data: formData,
-                          processData: false,
-                          contentType: false
-                        }).done(function(response){
-                            self.errors = response;
-                            self.update();
-                        });
-                    },
-                    update: function(){
-                        const self = this;
-                        
-                        $.get(this.config.getOptionsUrl, function(response) { 
-                            self.categories = response;
-                        });
-                    },
-                    cancel: function(){
-                        this.clearErrors();
-                        
-                        const self = this
-                        $.post(this.config.resetOptionsUrl, function() { 
-                            self.update();
-                        }); 
-                        
-                        this.update()
-                    },
-                    apply: function(){
-                        const self = this
-                        $.post(this.config.applyUrl, function(response) { 
-                               if (response.isSuccess || response.IsSuccess) { 
-                                   close(); 
-                               } else { 
-                                   $(document).scrollTop(0);
-                                   self.errors = [response.Error]; 
-                               } 
-                        }); 
-                    },
-                    clearErrors: function(){
-                        this.errors = [];
-                    }
+        }
+        <link rel='preload' href='@locale' as="fetch" crossorigin="anonymous">
+    @Html.RenderConfig(new {
+        applyUrl = Url.Action("ApplyOptions", "Questionnaire"),
+        editOptionsUrl = Url.Action("EditOptions", "Questionnaire"),
+        resetOptionsUrl = Url.Action("ResetOptions", "Questionnaire"),
+        getOptionsUrl = Url.Action("GetOptions", "Questionnaire"),
+        exportOptionsUrl = Url.Action("ExportOptions", "Questionnaire"),
+        isCascading = Model.IsCascading
+    })
+    <script>           
+    var require = {
+                baseUrl: '/',
+                paths: {
+                    'vue': 'js/vue-js',
+                    'jquery': 'js/jquery',
+                    'i18next': 'js/i18next',
+                    'i18next-xhr-backend': 'js/i18next-xhr-backend'
                 }
-        });
-    });
-    </script>
-
+            };
+            loadCss = function(config) {
+                var head = document.getElementsByTagName('head')[0];
+             
+                if (config.content) {
+                    var style  = document.createElement('style');
+                    style.type = 'text/css';
+                    
+                    if (style.styleSheet)
+                        style.styleSheet.cssText = config.content;
+                    else
+                        style.innerHTML = config.content;
+             
+                    head.appendChild(style);
+                } else if (config.url) {
+                    var link  = document.createElement('link');
+                    link.href = config.url;
+                    link.rel  = 'stylesheet';
+                    link.type = 'text/css';
+                    head.appendChild(link);
+                }
+            };
+        </script>
+    <script data-main="js/vue-app/app" src="~/js/require.js"></script>
     @Html.GenerateFavicon(Url.Content("~/favicon.ico"))
 </head>
 <body>
-<section id="categories-editor">
-    <nav id="topNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div id="uploadForm" class="navbar-form navbar-left">
-                <input name="file"
-                       ref="uploader"
-                       v-show="false"
-                       accept=".tab, .txt, .tsv"
-                       type="file"
-                       @@change="upload"
-                       class="btn btn-default btn-lg btn-action-questionnaire" />
-                <button type="button"
-                        class="btn btn-default"
-                        @@click="$refs.uploader.click()">
-                    @QuestionnaireEditor.Upload
-                </button>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-default navbar-btn" :href="config.exportOptionsUrl">@QuestionnaireEditor.Export</a>
-            </div>
-        </div>
-    </nav>
-    <div id="content" class="container">
-        <div v-if="hasErrors" class="alert alert-danger">
-            <p v-for="error in errors" :key="error">{{error}}</p>
-        </div>
-        <table class="table table-bordered table-hover table-condensed">
-            <thead>
-            <tr class="active">
-                <td nowrap>@QuestionnaireEditor.OptionsUploadValue</td>
-                <td>@QuestionnaireEditor.OptionsUploadTitle</td>
-                <td nowrap v-if="config.isCascading">@QuestionnaireEditor.OptionsUploadParent</td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-if="hasOptions" v-for="category in categories" :key="category.value">
-                <td>{{category.value}}</td>
-                <td>{{category.title}}</td>
-                <td v-if="config.isCascading">{{category.parentValue}}</td>
-            </tr>
-            <tr v-else>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td v-if="config.isCascading">&nbsp;</td>
-            </tr>
-            </tbody>
-        </table>
-        <p v-if="!hasOptions">@string.Format(QuestionnaireEditor.OptionsUploadLimit, 15000)</p>
-    </div>
-    <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-        <div class="container">
-            <a class="btn btn-success navbar-btn" @@click="apply">@QuestionnaireEditor.OptionsUploadApply</a>
-            <a class="btn btn-link navbar-btn" @@click="cancel">@QuestionnaireEditor.Cancel</a>
-            <a class="btn btn-link navbar-btn pull-right" @@click="closeWindow">@QuestionnaireEditor.Close</a>
-        </div>
-    </nav>
-</section>
+<div id="app">
+    <categories></categories>
+</div>
 </body>
 </html>
