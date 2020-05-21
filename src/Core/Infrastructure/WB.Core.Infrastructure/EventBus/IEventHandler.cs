@@ -7,7 +7,5 @@ namespace WB.Core.Infrastructure.EventBus
     public interface IEventHandler
     {
         string Name { get; }
-        object[] Readers { get; }
-        object[] Writers { get; }
     }
 }
