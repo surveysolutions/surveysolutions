@@ -6,12 +6,18 @@
 }
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html class="no-js" lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
     <title>@ViewBag.Title</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- libs:css -->
+        <link rel="stylesheet" href="~/css/libs.css">
+        <!-- endinject -->
+        <!-- markup:css -->
+        <link rel="stylesheet" href="~/css/markup.css">
+        <!-- endinject -->
     <!-- popup:css --> <link rel="stylesheet" href="~/css/popup.css"> <!-- endinject -->
     <!-- manifest:json -->
         <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-4feee32528.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-635620ebd1.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e7d9eca832.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-371e2e4990.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-c670b4e825.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-a63da5f11a.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-0f106fe676.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-4feee32528.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-635620ebd1.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e7d9eca832.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-371e2e4990.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-c670b4e825.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-a63da5f11a.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-0f106fe676.zh.json""}"; }
@@ -37,7 +43,8 @@
                     'vue': 'js/vue-js',
                     'jquery': 'js/jquery',
                     'i18next': 'js/i18next',
-                    'i18next-xhr-backend': 'js/i18next-xhr-backend'
+                    'i18next-xhr-backend': 'js/i18next-xhr-backend',
+                    'vuetify': 'js/vuetify'
                 }
             };
             loadCss = function(config) {

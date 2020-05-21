@@ -16,7 +16,7 @@
   },
   "assets": {
     "images": ["Content/images/*"],
-    "fonts": ["Content/fonts/*"],
+    "fonts": ["Content/fonts/*", "node_modules/@mdi/font/fonts/*"],
     "qbank": ["Content/qbank/**/*" ]
   },
   "injectTargets": [
@@ -139,11 +139,16 @@
       ]
     },
     {
+      "name": "vuetify",
+      "inputFiles": [
+        "node_modules/vuetify/dist/vuetify.js"
+      ]
+    },
+    {
       "name": "popup",
       "inputFiles": [
-        "questionnaire/content/designer-start/bootstrap-custom.less",
-        "questionnaire/content/designer-start/bootstrap-override.less",
-        "questionnaire/content/wb-options-window.css"
+        "node_modules/vuetify/dist/vuetify.css",
+        "node_modules/@mdi/font/css/materialdesignicons.css"
       ]
     },
     {
