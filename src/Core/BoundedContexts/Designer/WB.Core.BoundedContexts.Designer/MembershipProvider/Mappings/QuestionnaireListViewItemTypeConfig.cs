@@ -32,9 +32,10 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.Property(e => e.Owner).HasColumnName("owner");
             
-            builder.Property(e => e.Title).HasColumnName("title");
+            builder.Property(e => e.Title).IsRequired(false).HasColumnName("title");
 
             builder.HasMany(x => x.SharedPersons)
+                
                 .WithOne(x => x.Questionnaire)
                 .HasForeignKey(x => x.QuestionnaireId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -59,10 +60,11 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             //    e.Property(x => x.ShareType);
             //}));
             builder.HasOne(d => d.Folder)
-              .WithMany(p => p.Questionnaires)
-              .HasForeignKey(d => d.FolderId)
-              .OnDelete(DeleteBehavior.SetNull)
-              .HasConstraintName("questionnaire_folder_relation_fk");
+                .WithMany()
+                //.WithMany(p => p.Questionnaires)
+                .HasForeignKey(d => d.FolderId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("questionnaire_folder_relation_fk");
 
             //ManyToOne(x => x.Folder, m =>
             //{

@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                             QuestionnaireId = x.QuestionnaireId,
                             Title = x.Title,
                             FolderId = x.FolderId,
-                            Folder = isSupportFolders ? x.Folder : new QuestionnaireListViewFolder() //not good
+                            Folder = isSupportFolders ? x.Folder : null
                         }).ToList();
             }
 

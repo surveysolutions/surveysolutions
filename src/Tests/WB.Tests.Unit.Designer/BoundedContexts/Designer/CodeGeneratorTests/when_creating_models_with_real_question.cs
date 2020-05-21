@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gB);
             question.VariableName.Should().Be("real");
-            question.AllMultioptionYesNoCodes.Should().BeNull();
+            question.AllMultioptionYesNoCodes.Should().BeEmpty();
             question.ValidationExpressions.FirstOrDefault().ValidationExpression.Should().Be("real validation");
             question.Condition.Should().Be("real condition");
             question.IsMultiOptionYesNoQuestion.Should().Be(false);

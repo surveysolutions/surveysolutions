@@ -70,7 +70,7 @@ namespace WB.Core.GenericSubdomains.Portable
                 referencedItem = getReferencedItem(referencedItem);
             }
         }
-        
+
         public static void ForEachTreeElement<T>(this T root, Func<T, IEnumerable<T>> getChildren, Action<T, T> parentWithChildren)
         {
             var stack = new Stack<Tuple<T, T>>();

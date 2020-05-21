@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual string Path { get; set; } = String.Empty;
 
-        public virtual ICollection<QuestionnaireListViewItem> Questionnaires { get; set; } = new List<QuestionnaireListViewItem>();
+        //public virtual ICollection<QuestionnaireListViewItem> Questionnaires { get; set; } = null!;
 
         protected bool Equals(QuestionnaireListViewFolder other)
         {
