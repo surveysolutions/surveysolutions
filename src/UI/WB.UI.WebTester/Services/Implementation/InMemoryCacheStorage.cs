@@ -1,10 +1,28 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using WB.Core.Infrastructure.Services;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
-    public class InMemoryCacheStorage<T, TK> : ICacheStorage<T, TK> where TK : notnull where T : class
+    public class WebTesterAggregateRootPrototypeService : IAggregateRootPrototypeService
+    {
+        public PrototypeType? GetPrototypeType(Guid id)
+        {
+            return PrototypeType.Permanent;
+        }
+
+        public void MarkAsPrototype(Guid id, PrototypeType type)
+        {
+            
+        }
+
+        public void RemovePrototype(Guid id)
+        {
+
+        }
+    }
+
     {
         private readonly ConcurrentDictionary<Guid, Dictionary<TK, T>> memoryCache =
             new ConcurrentDictionary<Guid, Dictionary<TK, T>>();

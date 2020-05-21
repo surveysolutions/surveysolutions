@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly EventBusSettings eventBusSettings;
+        private readonly IAggregateRootPrototypeService prototypeService;
 
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
@@ -37,19 +37,19 @@ namespace WB.UI.Headquarters.Services.Impl
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IAuthorizedUser authorizedUser,
-            EventBusSettings EventBusSettings)
+            IAggregateRootPrototypeService prototypeService)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
-            this.eventBusSettings = EventBusSettings;
+            this.prototypeService = prototypeService;
         }
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
         {
             if (Guid.TryParse(interviewId, out var id))
             {
-                if (this.eventBusSettings.IsIgnoredAggregate(id))
+                if (this.prototypeService.IsPrototype(id))
                 {
                     return;
                 }

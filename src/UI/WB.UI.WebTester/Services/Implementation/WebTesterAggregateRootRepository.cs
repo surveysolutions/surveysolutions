@@ -5,6 +5,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Services;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.WebTester.Services.Implementation
@@ -19,8 +20,9 @@ namespace WB.UI.WebTester.Services.Implementation
             IAggregateLock aggregateLock,
             IServiceLocator serviceLocator,
             IEvictionNotifier notify,
+            IAggregateRootPrototypeService prototypeService,
             IEvictionObservable evictionNotification,
-            IMemoryCache memoryCache) : base(eventStore, eventStore, new EventBusSettings(), repository, serviceLocator, aggregateLock, memoryCache)
+            IMemoryCache memoryCache) : base(eventStore, eventStore, prototypeService, repository, serviceLocator, aggregateLock, memoryCache)
         {
             this.notify = notify;
             Expiration = TimeSpan.FromMinutes(10);

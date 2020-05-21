@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Services;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
@@ -40,8 +41,8 @@ namespace WB.Tests.Unit.Infrastructure.Native
                     => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id && ar.Version == versionForNewObjects));
 
             var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, 
-                Mock.Of<IInMemoryEventStore>(),
-                new EventBusSettings(),  domainRepo.Object,
+                Mock.Of<IInMemoryEventStore>(), Create.Service.MockOfAggregatePrototypeService()
+                ,  domainRepo.Object,
                 ServiceLocator.Current,
                 new Stub.StubAggregateLock(), Create.Storage.NewMemoryCache());
 
@@ -64,7 +65,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
         }
 
         [Test]
-        public void should_read_ignored_aggregate_from_in_memory_event_store()
+        public void should_read_prototype_aggregate_from_in_memory_event_store()
         {
             var aggregateRootId = Id.gA;
             var aggregateFromInMemoryEvents = Mock.Of<IEventSourcedAggregateRoot>();
@@ -78,12 +79,11 @@ namespace WB.Tests.Unit.Infrastructure.Native
             domainRepositoryMock.Setup(x => x.Load(typeof(IEventSourcedAggregateRoot), aggregateRootId, committedEvents))
                 .Returns(aggregateFromInMemoryEvents);
 
-            var eventBusSettings = new EventBusSettings();
-            eventBusSettings.AddIgnoredAggregateRoot(aggregateRootId);
+            var prototypeService = Mock.Of<IAggregateRootPrototypeService>(s => s.GetPrototypeType(aggregateRootId) == PrototypeType.Permanent);
 
             var repository = GetRepository(inMemoryEventStore: inMemoryEventStoreMock.Object,
                 domainRepository: domainRepositoryMock.Object,
-                eventBusSettings: eventBusSettings);
+                prototypeService: prototypeService);
         
             // Act
             var aggregate = repository.GetLatest(typeof(IEventSourcedAggregateRoot), aggregateRootId);
@@ -95,17 +95,17 @@ namespace WB.Tests.Unit.Infrastructure.Native
         private EventSourcedAggregateRootRepositoryWithWebCache GetRepository(EventBusSettings eventBusSettings = null,
             IDomainRepository domainRepository = null,
             IEventStore eventStore = null,
-            IInMemoryEventStore inMemoryEventStore = null)
+            IInMemoryEventStore inMemoryEventStore = null,
+            IAggregateRootPrototypeService prototypeService = null)
         {
             return new EventSourcedAggregateRootRepositoryWithWebCache(
-                eventStore ?? Mock.Of<IEventStore>(), 
-                inMemoryEventStore ?? Mock.Of<IInMemoryEventStore>(), 
-                eventBusSettings ?? new EventBusSettings(), 
-                domainRepository ?? Mock.Of<IDomainRepository>(),
-                ServiceLocator.Current,
-                new Stub.StubAggregateLock(),
-                Create.Storage.NewMemoryCache()
-                );
+                eventStore: eventStore ?? Mock.Of<IEventStore>(), 
+                inMemoryEventStore: inMemoryEventStore ?? Mock.Of<IInMemoryEventStore>(),
+                repository: domainRepository ?? Mock.Of<IDomainRepository>(),
+                serviceLocator: ServiceLocator.Current,
+                aggregateLock: new Stub.StubAggregateLock(),
+                memoryCache: Create.Storage.NewMemoryCache(),
+                prototypeService: prototypeService ?? Create.Service.MockOfAggregatePrototypeService());
         }
     }
 }
