@@ -1,5 +1,4 @@
-- **switch to linux containers**
-
+- **switch to linux containers** or enable docker setting: `  "experimental": true`
 - docker\build.ps1 will build export and headquarters images locally
   - for export it will run test and will create image only if successful
 
