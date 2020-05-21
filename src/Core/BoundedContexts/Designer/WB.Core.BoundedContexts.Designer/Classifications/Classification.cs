@@ -20,6 +20,11 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
     public class Classification : IClassificationEntity
     {
+        public Classification()
+        {
+            Title = string.Empty;
+        }
+
         public Classification(Guid id, string title, ClassificationGroup @group, int categoriesCount, Guid? parent = null, Guid? userId = null)
         {
             Id = id;
@@ -34,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public string Title { get; set; }
         public Guid? Parent { get;set; }
         public Guid? UserId { get;set; }
-        public ClassificationGroup Group { get; set; }
+        public ClassificationGroup? Group { get; set; }
         public int CategoriesCount { get; set; }
         public int Count { get; set; } = 0;
     }
