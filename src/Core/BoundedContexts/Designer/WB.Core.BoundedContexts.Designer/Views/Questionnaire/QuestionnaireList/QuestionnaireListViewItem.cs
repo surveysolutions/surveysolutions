@@ -9,6 +9,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
     [DebuggerDisplay("{Title} | public: {IsPublic}, shared with {SharedPersons.Count} persons")]
     public class QuestionnaireListViewItem : IQuestionnaireListItem
     {
+        public QuestionnaireListViewItem()
+        {
+            SharedPersons = new List<SharedPerson>();
+        }
+
         public virtual DateTime CreationDate { get; set; }
 
         public virtual string QuestionnaireId { get; set; } = string.Empty;
@@ -37,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual bool IsPublic { get; set; }
 
-        public virtual ICollection<SharedPerson> SharedPersons { get; set; } = null!; 
+        public virtual ICollection<SharedPerson> SharedPersons { get; set; } 
 
         public virtual string? Owner { get; set; }
 
