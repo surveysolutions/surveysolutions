@@ -104,6 +104,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
+
                 serviceLocator.ExecuteInScope<ICommandExecutor>(ce => ce.ExecuteCommand(command, origin, cancellationToken, aggregateId));
             });
         }

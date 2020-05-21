@@ -35,6 +35,7 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -293,21 +294,26 @@ namespace WB.Tests.Integration
                         eventSequence: x.EventSequence)));
         }
 
-        public static SequentialCommandService SequentialCommandService(IEventSourcedAggregateRootRepository repository = null, ILiteEventBus eventBus = null)
+        public static SequentialCommandService SequentialCommandService(
+            IEventSourcedAggregateRootRepository repository = null, 
+            ILiteEventBus eventBus = null)
         {
             var locatorMock = new Mock<IServiceLocator>();
 
-            locatorMock.Setup(x => x.GetInstance<IInScopeExecutor>())
-                .Returns(() => new NoScopeInScopeExecutor(locatorMock.Object));
-            locatorMock.Setup(x => x.GetInstance<ICommandExecutor>())
-                .Returns(new CommandExecutor(repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
-                    eventBus ?? Mock.Of<IEventBus>(),
-                    locatorMock.Object,
-                    Mock.Of<IPlainAggregateRootRepository>(),
-                    Mock.Of<IAggregateRootCacheCleaner>(),
-                    Mock.Of<ICommandsMonitoring>()));
+            locatorMock.Setup(expression: x => x.GetInstance<IInScopeExecutor>())
+                .Returns(valueFunction: () => new NoScopeInScopeExecutor(rootScope: locatorMock.Object));
+            locatorMock.Setup(expression: x => x.GetInstance<ICommandExecutor>())
+                .Returns(value: new CommandExecutor(eventSourcedRepository: repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                    eventBus: eventBus ?? Mock.Of<IEventBus>(),
+                    serviceLocator: locatorMock.Object,
+                    plainRepository: Mock.Of<IPlainAggregateRootRepository>(),
+                    aggregateRootCacheCleaner: Mock.Of<IAggregateRootCacheCleaner>(),
+                    commandsMonitoring: Mock.Of<ICommandsMonitoring>(),
+                    prototypeService: Create.Service.MockOfAggregatePrototypeService(),
+                    promoterService: Mock.Of<IAggregateRootPrototypePromoterService>()
+                    ));
 
-            return new SequentialCommandService(locatorMock.Object, Stub.Lock());
+            return new SequentialCommandService(serviceLocator: locatorMock.Object, aggregateLock: Stub.Lock());
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
