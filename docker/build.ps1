@@ -34,17 +34,20 @@ $VERSION = Get-Version
 docker network create $NETWORK
 docker run --name db --rm --network $NETWORK -e POSTGRES_PASSWORD=$PG_PASSWORD -d postgres:$PG_VERSION
 
-$dockerfile = Join-Path $root "docker/export/dockerfile"
-docker build -f $dockerfile --force-rm `
-    --tag export:$VERSION `
-    --network $NETWORK `
-    --build-arg DOTNET_VERSION=$DOTNET_VERSION $root
+try {
+    $dockerfile = Join-Path $root "docker/export/dockerfile"
+    docker build -f $dockerfile --force-rm `
+        --tag export:$VERSION `
+        --network $NETWORK `
+        --build-arg DOTNET_VERSION=$DOTNET_VERSION $root
 
-$dockerfile = Join-Path $root "docker/headquarters/dockerfile"
-docker build -f $dockerfile --force-rm `
-    --tag headquarters:$VERSION `
-    --network $NETWORK `
-    --build-arg DOTNET_VERSION=$DOTNET_VERSION `
-    --build-arg NODEJS_VERSION=$NODEJS_VERSION $root
-
-Cleanup
+    $dockerfile = Join-Path $root "docker/headquarters/dockerfile"
+    docker build -f $dockerfile --force-rm `
+        --tag headquarters:$VERSION `
+        --network $NETWORK `
+        --build-arg DOTNET_VERSION=$DOTNET_VERSION `
+        --build-arg NODEJS_VERSION=$NODEJS_VERSION $root
+}
+finally {
+    Cleanup
+}
