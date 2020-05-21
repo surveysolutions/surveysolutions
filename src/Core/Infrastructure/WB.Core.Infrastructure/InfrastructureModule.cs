@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.Services;
 
 namespace WB.Core.Infrastructure
 {
@@ -21,6 +22,8 @@ namespace WB.Core.Infrastructure
             registry.BindInPerLifetimeScope<ICommandService, CommandService>();
             registry.Bind<ICommandExecutor, CommandExecutor>();
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
+            registry.Bind<IAggregateRootPrototypeService, AggregateRootPrototypeService>();
+            registry.Bind<IAggregateRootPrototypePromoterService, AggregateRootPrototypePromoterService>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
             registry.Bind<IInScopeExecutor, NoScopeInScopeExecutor>();
         }

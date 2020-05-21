@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Services;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Infrastructure.Native.Storage
@@ -18,7 +19,7 @@ namespace WB.Infrastructure.Native.Storage
     {
         private readonly IEventStore eventStore;
         private readonly IInMemoryEventStore inMemoryEventStore;
-        private readonly EventBusSettings eventBusSettings;
+        private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
         private readonly IMemoryCache memoryCache;
@@ -27,7 +28,7 @@ namespace WB.Infrastructure.Native.Storage
         public EventSourcedAggregateRootRepositoryWithWebCache(
             IEventStore eventStore,
             IInMemoryEventStore inMemoryEventStore,
-            EventBusSettings eventBusSettings,
+            IAggregateRootPrototypeService prototypeService,
             IDomainRepository repository,
             IServiceLocator serviceLocator,
             IAggregateLock aggregateLock,
@@ -36,7 +37,7 @@ namespace WB.Infrastructure.Native.Storage
         {
             this.eventStore = eventStore;
             this.inMemoryEventStore = inMemoryEventStore;
-            this.eventBusSettings = eventBusSettings;
+            this.prototypeService = prototypeService;
             this.serviceLocator = serviceLocator;
             this.aggregateLock = aggregateLock;
             this.memoryCache = memoryCache;
@@ -53,21 +54,23 @@ namespace WB.Infrastructure.Native.Storage
             {
                 var aggregateRoot = this.GetFromCache(aggregateId);
 
-                if (aggregateRoot == null)
+                if (aggregateRoot != null)
                 {
-                    if (this.eventBusSettings.IsIgnoredAggregate(aggregateId))
-                    {
-                        var events = this.inMemoryEventStore.Read(aggregateId, 0);
-                        aggregateRoot = base.repository.Load(aggregateType, aggregateId, events);
-                    }
-                    else
-                    {
-                        aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
-                    }
-
-                    if (aggregateRoot != null)
-                        this.PutToCache(aggregateRoot);
+                    return aggregateRoot;
                 }
+
+                if (this.prototypeService.IsPrototype(aggregateId))
+                {
+                    var events = this.inMemoryEventStore.Read(aggregateId, 0);
+                    aggregateRoot = base.repository.Load(aggregateType, aggregateId, events);
+                }
+                else
+                {
+                    aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
+                }
+
+                if (aggregateRoot != null)
+                    this.PutToCache(aggregateRoot);
 
                 return aggregateRoot;
             });
@@ -83,13 +86,16 @@ namespace WB.Infrastructure.Native.Storage
 
             bool dbContainsNewEvents = false;
 
-            if (!this.dirtyCheckedAggregateRoots.Contains(aggregateId))
+            if (!this.prototypeService.IsPrototype(aggregateId))
             {
-                dbContainsNewEvents = eventStore.IsDirty(aggregateId, cachedAggregate.Version);
-
-                if (!dbContainsNewEvents)
+                if (!this.dirtyCheckedAggregateRoots.Contains(aggregateId))
                 {
-                    this.dirtyCheckedAggregateRoots.Add(aggregateId);
+                    dbContainsNewEvents = eventStore.IsDirty(aggregateId, cachedAggregate.Version);
+
+                    if (!dbContainsNewEvents)
+                    {
+                        this.dirtyCheckedAggregateRoots.Add(aggregateId);
+                    }
                 }
             }
 
