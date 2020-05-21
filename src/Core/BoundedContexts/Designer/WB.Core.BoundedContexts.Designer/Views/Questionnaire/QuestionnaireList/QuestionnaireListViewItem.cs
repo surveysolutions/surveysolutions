@@ -27,22 +27,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual DateTime LastEntryDate { get; set; }
 
-        public virtual string Title { get; set; }  = string.Empty;
+        public virtual string Title { get; set; } = String.Empty;
 
         public virtual Guid? CreatedBy { get; set; }
 
-        public virtual string CreatorName { get; set; } = String.Empty;
+        public virtual string CreatorName { get; set; } = string.Empty;
 
         public virtual bool IsDeleted { get; set; }
 
         public virtual bool IsPublic { get; set; }
 
-        public virtual ICollection<SharedPerson> SharedPersons { get; set; } = new HashSet<SharedPerson>();
+        public virtual ICollection<SharedPerson> SharedPersons { get; set; } = null!; 
 
         public virtual string? Owner { get; set; }
 
         public virtual Guid? FolderId { get; set; }
 
-        public virtual QuestionnaireListViewFolder Folder { get; set; } = new QuestionnaireListViewFolder();//not good
+        public virtual QuestionnaireListViewFolder? Folder { get; set; } 
     }
 }
