@@ -42,15 +42,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 this.CloneCategories(sourceQuestionnaire.PublicKey, categoricalQuestion.CategoriesId.Value, targetQuestionnaireId);
 
             var group = sourceQuestionnaire.Find<IGroup>(sourceItemId);
-            if (group == null)
-                throw new InvalidOperationException("Source grout was not found.");
-            
-            ((IComposite) @group).TreeToEnumerable(x => x.Children)
-                .OfType<ICategoricalQuestion>()
-                .Where(x => x.CategoriesId.HasValue)
-                .Select(x => x.CategoriesId!.Value)
-                .ToHashSet()
-                .ForEach(categoryId => CloneCategories(sourceQuestionnaire.PublicKey, categoryId, targetQuestionnaireId));
+            if (group != null)
+                ((IComposite) @group).TreeToEnumerable(x => x.Children)
+                    .OfType<ICategoricalQuestion>()
+                    .Where(x => x.CategoriesId.HasValue)
+                    .Select(x => x.CategoriesId!.Value)
+                    .ToHashSet()
+                    .ForEach(categoryId => CloneCategories(sourceQuestionnaire.PublicKey, categoryId, targetQuestionnaireId));
         }
 
         private void CloneCategories(Guid questionnaireId, Guid categoriesId, Guid targetQuestionnaireId)

@@ -135,7 +135,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 GeneratedPdfs.TryRemove(pdfKey, out _);
 
                 // MS edge brakes on long file name
-                string? validTitle = questionnaireTitle.Length < 250 ? questionnaireTitle : questionnaireTitle.Substring(0, 250);
+                string? validTitle = (questionnaireTitle?.Length < 250 ? questionnaireTitle : questionnaireTitle?.Substring(0, 250) ?? "questionnaire");
 
                 return this.File(content, "application/pdf", $"{validTitle}.pdf");
             }

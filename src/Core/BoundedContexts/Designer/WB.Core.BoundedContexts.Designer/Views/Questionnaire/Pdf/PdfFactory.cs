@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     public interface IPdfFactory
     {
         PdfQuestionnaireModel? Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation);
-        string LoadQuestionnaireTitle(Guid questionnaireId);
+        string? LoadQuestionnaireTitle(Guid questionnaireId);
     }
 
     public class PdfFactory : IPdfFactory
@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }).ToList();
         }
 
-        public string LoadQuestionnaireTitle(Guid questionnaireId)
+        public string? LoadQuestionnaireTitle(Guid questionnaireId)
         {
             return this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid()).Title;
         }
