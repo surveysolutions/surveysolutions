@@ -1,153 +1,350 @@
 ﻿<template>
     <div>
-        <nav id="topNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div id="uploadForm" class="navbar-form navbar-left">
-                    <input name="file"
-                           ref="uploader"
-                           v-show="false"
-                           accept=".tab, .txt, .tsv"
-                           type="file"
-                           @change="upload"
-                           class="btn btn-default btn-lg btn-action-questionnaire" />
-                    <button type="button"
-                            class="btn btn-default"
-                            @click="$refs.uploader.click()">
-                        {{$t('Upload')}}
-                    </button>
+        <v-dialog v-model="dialog" max-width="500">
+            <v-card>
+                <div class="modal-content">
+                    <div class="modal-header blue-strip">
+                        <button
+                            type="button"
+                            class="close"
+                            aria-hidden="true"
+                            @click="close"
+                        >
+                            <!--&times;-->
+                        </button>
+                        <h3>{{ formTitle }}</h3>
+                    </div>
+
+                    <div class="modal-body share-question-dialog">
+                        <div class="tab-content">
+                            <div
+                                role="tabpanel"
+                                class="tab-pane active"
+                                id="questionnaireSettingsTab"
+                            >
+                                <div class="well-sm">
+                                    <form>
+                                        <div class="form-group">
+                                            <label
+                                                class="control-label"
+                                                for="value"
+                                                >{{
+                                                    $t('OptionsUploadValue')
+                                                }}</label
+                                            >
+                                            <input
+                                                v-model="editedItem.value"
+                                                id="value"
+                                                type="text"
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="form-group" v-if="$config.isCascading">
+                                            <label
+                                                class="control-label"
+                                                for="parent"
+                                                >{{
+                                                    $t('OptionsUploadParent')
+                                                }}</label
+                                            >
+                                            <input
+                                                v-model="editedItem.parentValue"
+                                                id="parent"
+                                                type="text"
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="form-group">
+                                            <label
+                                                class="control-label"
+                                                for="title"
+                                                >{{
+                                                    $t('OptionsUploadTitle')
+                                                }}</label
+                                            >
+                                            <input
+                                                v-model="editedItem.title"
+                                                id="title"
+                                                type="text"
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="form-group">
+                                            <button
+                                                type="button"
+                                                class="btn btn-lg update-button"
+                                                @click="save"
+                                            >
+                                                {{ $t('Save') }}
+                                            </button>
+                                            <button
+                                                    type="reset"
+                                                    class="btn btn-lg btn-link"
+                                                    @click="close"
+                                            >
+                                                {{ $t('Cancel') }}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="pull-right">
-                    <a class="btn btn-default navbar-btn" :href="$config.exportOptionsUrl">{{$t('Export')}}</a>
-                </div>
-            </div>
-        </nav>
+            </v-card>
+        </v-dialog>
         <div id="content" class="container">
             <div v-if="hasErrors" class="alert alert-danger">
-                <p v-for="error in errors" :key="error">{{error}}</p>
+                <p v-for="error in errors" :key="error">{{ error }}</p>
             </div>
-            <table class="table table-bordered table-hover table-condensed">
-                <thead>
-                <tr class="active">
-                    <td nowrap>{{$t('OptionsUploadValue')}}</td>
-                    <td>{{$t('OptionsUploadTitle')}}</td>
-                    <td nowrap v-if="$config.isCascading">{{$t('OptionsUploadParent')}}</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-if="hasOptions" v-for="category in categories" :key="category.value">
-                    <td>{{category.value}}</td>
-                    <td>{{category.title}}</td>
-                    <td v-if="$config.isCascading">{{category.parentValue}}</td>
-                </tr>
-                <tr v-else>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td v-if="$config.isCascading">&nbsp;</td>
-                </tr>
-                </tbody>
-            </table>
-            <p v-if="!hasOptions">{{$t('OptionsUploadLimit', {limit: 15000})}}</p>
+            <v-data-table
+                :headers="headers"
+                :items="categories"
+                :search="search"
+                :items-per-page="15"
+                :loading="loading"
+                class="elevation-1"
+                dense
+            >
+                <template v-slot:top>
+                    <v-toolbar flat color="white">
+                        <v-text-field
+                            v-model="search"
+                            append-icon="mdi-magnify"
+                            label="Search"
+                            single-line
+                            hide-details
+                        >
+                        </v-text-field>
+                        <v-spacer></v-spacer>
+                        <button
+                            type="button"
+                            class="btn btn-default"
+                            @click="$refs.uploader.click()"
+                        >
+                            {{ $t('Upload') }}
+                        </button>
+                        <input
+                            name="file"
+                            ref="uploader"
+                            v-show="false"
+                            accept=".tab, .txt, .tsv"
+                            type="file"
+                            @change="upload"
+                            class="btn btn-default btn-lg btn-action-questionnaire"
+                        />&nbsp;
+                        <a
+                            class="btn btn-default"
+                            :href="$config.exportOptionsUrl"
+                            >{{ $t('Export') }}</a
+                        >&nbsp;
+                        <a class="btn btn-primary"  @click="editItem(editedItem)">New Item</a>
+                    </v-toolbar>
+                </template>
+                <template v-slot:item.actions="{ item }">
+                    <v-icon small class="mr-2" @click="editItem(item)">
+                        mdi-pencil
+                    </v-icon>
+                    <v-icon small @click="deleteItem(item)">
+                        mdi-delete
+                    </v-icon>
+                </template>
+                <template v-slot:no-data>
+                    {{ $t('OptionsUploadLimit', { limit: 15000 }) }}
+                </template>
+            </v-data-table>
         </div>
-        <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <nav
+            id="bottomNav"
+            class="navbar navbar-default navbar-fixed-bottom"
+            role="navigation"
+        >
             <div class="container">
-                <a class="btn btn-success navbar-btn" @click="apply">{{$t('OptionsUploadApply')}}</a>
-                <a class="btn btn-link navbar-btn" @click="cancel">{{$t('Cancel')}}</a>
-                <a class="btn btn-link navbar-btn pull-right" @click="closeWindow">{{$t('Close')}}</a>
+                <button class="btn btn-lg btn-primary navbar-btn" type="button" @click="apply">{{
+                    $t('OptionsUploadApply')
+                }}</button>
+                <a class="btn btn-link navbar-btn" @click="cancel">{{
+                    $t('Cancel')
+                }}</a>
+                <a
+                    class="btn btn-link navbar-btn pull-right"
+                    @click="closeWindow"
+                    >{{ $t('Close') }}</a
+                >
             </div>
         </nav>
     </div>
 </template>
 
 <script>
-    import Vue from 'vue';
+import Vue from 'vue';
 
-    export default {
-        data() {
-            return {
-                errors: [],
-                categories: []
+export default {
+    data() {
+        return {
+            errors: [],
+            categories: [],
+            dialog: false,
+            loading: true,
+            search: '',
+            headers: [],
+            editedIndex: -1,
+            editedItem: {
+                value: 0,
+                title: '',
+                parentValue: 0,
+            },
+            defaultItem: {
+                value: 0,
+                title: '',
+                parentValue: 0,
+            },
+        };
+    },
+    watch: {
+        dialog(val) {
+            val || this.close();
+        },
+    },
+    mounted() {
+        this.initialize();
+        this.update();
+    },
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+        },
+        hasErrors: function () {
+            return this.errors.length > 0;
+        },
+    },
+    methods: {
+        initialize() {
+            this.headers = [
+                {
+                    text: this.$t('OptionsUploadValue'),
+                    sortable: true,
+                    value: 'value',
+                },
+                {
+                    text: this.$t('OptionsUploadTitle'),
+                    sortable: true,
+                    value: 'title',
+                    width: '50%',
+                },
+            ];
+            if (this.$config.isCascading) {
+                this.headers.push({
+                    text: this.$t('OptionsUploadParent'),
+                    sortable: true,
+                    value: 'parentValue',
+                });
+            }
+
+            this.headers.push({ value: 'actions', sortable: false });
+        },
+
+        editItem(item) {
+            this.editedIndex = this.categories.indexOf(item);
+            this.editedItem = Object.assign({}, item);
+            this.dialog = true;
+        },
+
+        deleteItem(item) {
+            const index = this.categories.indexOf(item);
+            confirm('Are you sure you want to delete this item?') &&
+                this.categories.splice(index, 1);
+        },
+
+        close() {
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.editedItem = Object.assign({}, this.defaultItem);
+                this.editedIndex = -1;
+            });
+        },
+
+        save() {
+            if (this.editedIndex > -1) {
+                Object.assign(
+                    this.categories[this.editedIndex],
+                    this.editedItem
+                );
+            } else {
+                this.categories.push(this.editedItem);
+            }
+            this.close();
+        },
+        closeWindow: function () {
+            if (confirm(this.$t('OptionsCloseWindow'))) {
+                close();
             }
         },
-        mounted() {
-            const self = this
-            Vue.nextTick(function(){
-                self.ajustNavPanels();
-                self.update();  
-            })
+        upload: function (e) {
+            const files = e.target.files || e.dataTransfer.files;
+            if (!files.length) return;
+
+            const file = files[0];
+
+            const formData = new FormData();
+            formData.append('csvFile', file);
+
+            this.clearErrors();
+
+            const self = this;
+            $.ajax({
+                url: this.$config.editOptionsUrl,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function (response) {
+                self.errors = response;
+                self.update();
+            });
         },
-        computed: {
-            hasOptions: function(){
-                return this.categories.length > 0;
-            },
-            hasErrors: function(){
-                return this.errors.length > 0;
-            }
+        update: function () {
+            const self = this;
+
+            self.loading = true;
+            $.get(this.$config.getOptionsUrl, function (response) {
+                self.categories = response;
+                self.loading = false;
+            });
         },
-        methods:{
-            ajustNavPanels: function(){
-                $("body").css("paddingTop", $("#topNav").outerHeight() + 3);
-                $("body").css("paddingBottom", $("#bottomNav").outerHeight() + 3);
-            },
-            closeWindow: function(){
-                if (confirm(this.$t('OptionsCloseWindow'))) {
+        cancel: function () {
+            this.clearErrors();
+
+            const self = this;
+            $.post(this.$config.resetOptionsUrl, function () {
+                self.update();
+            });
+
+            this.update();
+        },
+        apply: function () {
+            const self = this;
+            $.post(this.$config.applyUrl, function (response) {
+                if (response.isSuccess || response.IsSuccess) {
                     close();
+                } else {
+                    $(document).scrollTop(0);
+                    self.errors = [response.Error];
                 }
-            },
-            upload: function(e){
-
-                const files = e.target.files || e.dataTransfer.files
-                if (!files.length) return
-
-                const file = files[0];
-
-                const formData = new FormData();
-                formData.append('csvFile', file)
-
-                this.clearErrors();
-
-                const self = this;
-                $.ajax({
-                    url: this.$config.editOptionsUrl,
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false
-                }).done(function(response){
-                    self.errors = response;
-                    self.update();
-                });
-            },
-            update: function(){
-                const self = this;
-
-                $.get(this.$config.getOptionsUrl, function(response) {
-                    self.categories = response;
-                });
-            },
-            cancel: function(){
-                this.clearErrors();
-
-                const self = this
-                $.post(this.$config.resetOptionsUrl, function() {
-                    self.update();
-                });
-
-                this.update()
-            },
-            apply: function(){
-                const self = this
-                $.post(this.$config.applyUrl, function(response) {
-                    if (response.isSuccess || response.IsSuccess) {
-                        close();
-                    } else {
-                        //$(document).scrollTop(0);
-                        self.errors = [response.Error];
-                    }
-                });
-            },
-            clearErrors: function(){
-                this.errors = [];
-            }
-        }
-    };
+            });
+        },
+        clearErrors: function () {
+            this.errors = [];
+        },
+    },
+};
 </script>
+
+<style>
+    .modal-header h3 {
+        margin: 0;
+    }
+    .v-dialog__container {
+        display: block !important;
+    }
+</style>

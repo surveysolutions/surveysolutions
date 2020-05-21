@@ -8,8 +8,10 @@ import config from './config'
 Vue.use(config)
 
 import categories from './components/categories';
+import vuetify from './vuetify';
 
 var app = new Vue({
+    vuetify : vuetify,
     el: '#app',
     components: {
         categories
