@@ -290,11 +290,11 @@ input UserMapFilter {
   OR: [UserMapFilter!]
   "Allows equals comparison of user"
   userName: String
-  "Allows not equals comparison of user"
+  "Allows not equals comparison of username"
   userName_not: String
-  "Allows not starts with comparison of user"
+  "Allows not starts with comparison of username"
   userName_not_starts_with: String
-  "Allows starts with comparison of user"
+  "Allows starts with comparison of username"
   userName_starts_with: String
 }
 
