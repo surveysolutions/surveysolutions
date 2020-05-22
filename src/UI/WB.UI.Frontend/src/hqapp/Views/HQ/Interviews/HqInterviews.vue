@@ -254,9 +254,9 @@
                     <p>
                         <label
                             class="control-label"
-                            for="newResponsibleId">{{ $t('Interviews.ChooseResponsibleInterviewer') }}</label>
+                            for="rejectResponsibleId">{{ $t('Interviews.ChooseResponsibleInterviewer') }}</label>
                         <Typeahead
-                            control-id="newResponsibleId"
+                            control-id="rejectResponsibleId"
                             :placeholder="$t('Common.Responsible')"
                             :value="newResponsibleId"
                             :ajax-params="{ }"
