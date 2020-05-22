@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using OfficeOpenXml;
+using ClosedXML.Excel;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Verifier;
@@ -23,12 +23,13 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             var categories = new List<CategoriesRow>();
 
-            using (ExcelPackage package = new ExcelPackage(file))
+            using (XLWorkbook package = new XLWorkbook(file))
             {
-                var worksheet = package.Workbook.Worksheets[0];
+                var worksheet = package.Worksheets.First();
                 var headers = GetHeaders(worksheet);
 
-                if (worksheet.Dimension.End.Row > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion + 1)
+                var rowsCount = worksheet.LastRowUsed().RowNumber();
+                if (rowsCount > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion + 1)
                     throw new InvalidFileException(
                         ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier
                             .MaxOptionsCountInFilteredComboboxQuestion));
@@ -57,11 +58,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
                         })
                     };
 
-                if (worksheet.Dimension.End.Row == 1)
+                if (rowsCount == 1)
                     throw new InvalidFileException(ExceptionMessages.Excel_NoCategories);
 
                 var errors = new List<ImportValidationError>();
-                for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
+                for (int rowNumber = 2; rowNumber <= rowsCount; rowNumber++)
                 {
                     var row = GetRowValues(worksheet, headers, rowNumber);
 
@@ -85,13 +86,13 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        private CategoriesHeaderMap GetHeaders(ExcelWorksheet worksheet)
+        private CategoriesHeaderMap GetHeaders(IXLWorksheet worksheet)
         {
             var headers = new List<Tuple<string, string>>()
             {
-                new Tuple<string, string>(worksheet.Cells["A1"].GetValue<string>(), "A"),
-                new Tuple<string, string>(worksheet.Cells["B1"].GetValue<string>(), "B"),
-                new Tuple<string, string>(worksheet.Cells["C1"].GetValue<string>(), "C")
+                new Tuple<string, string>(worksheet.Cell("A1").GetString(), "A"),
+                new Tuple<string, string>(worksheet.Cell("B1").GetString(), "B"),
+                new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C")
             }.Where(kv => kv.Item1 != null).ToDictionary(k => k.Item1.Trim(), v => v.Item2);
 
             return new CategoriesHeaderMap()
@@ -102,11 +103,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
-        private CategoriesRow GetRowValues(ExcelWorksheet worksheet, CategoriesHeaderMap headers, int rowNumber) => new CategoriesRow
+        private CategoriesRow GetRowValues(IXLWorksheet worksheet, CategoriesHeaderMap headers, int rowNumber) => new CategoriesRow
         {
-            Id = worksheet.Cells[$"{headers.IdIndex}{rowNumber}"].GetValue<string>(),
-            Text = worksheet.Cells[$"{headers.TextIndex}{rowNumber}"].GetValue<string>(),
-            ParentId = worksheet.Cells[$"{headers.ParentIdIndex}{rowNumber}"].GetValue<string>(),
+            Id = worksheet.Cell($"{headers.IdIndex}{rowNumber}").GetString(),
+            Text = worksheet.Cell($"{headers.TextIndex}{rowNumber}").GetString(),
+            ParentId = worksheet.Cell($"{headers.ParentIdIndex}{rowNumber}").GetString(),
             RowId = rowNumber
         };
     }

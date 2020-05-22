@@ -53,7 +53,8 @@ namespace WB.Services.Export.Host.Controllers
                     ExportFormat = process.ExportSettings.ExportFormat,
                     FromDate = process.ExportSettings.FromDate,
                     ToDate = process.ExportSettings.ToDate,
-                    Status = process.ExportSettings.Status
+                    Status = process.ExportSettings.Status,
+                    Translation = process.ExportSettings.Translation
                 },
                 ArchivePassword = archivePassword,
                 AccessToken = accessToken,
@@ -80,6 +81,7 @@ namespace WB.Services.Export.Host.Controllers
             string archivePassword,
             string accessToken,
             string refreshToken,
+            Guid? translationId,
             ExternalStorageType? storageType,
             TenantInfo tenant)
         {
@@ -92,6 +94,7 @@ namespace WB.Services.Export.Host.Controllers
                     ExportFormat = format,
                     FromDate = from,
                     ToDate = to,
+                    Translation = translationId,
                     Status = status
                 },
                 ArchivePassword = archivePassword,
@@ -133,6 +136,7 @@ namespace WB.Services.Export.Host.Controllers
             DataExportFormat format,
             DateTime? fromDate,
             DateTime? toDate,
+            Guid? translationId,
             TenantInfo tenant)
         {
             var exportSettings = new ExportSettings
@@ -142,7 +146,8 @@ namespace WB.Services.Export.Host.Controllers
                 Status = status,
                 Tenant = tenant,
                 FromDate = fromDate,
-                ToDate = toDate
+                ToDate = toDate,
+                Translation = translationId
             };
 
             var result = await this.archiveHandleService.DownloadArchiveAsync(exportSettings, archiveName);

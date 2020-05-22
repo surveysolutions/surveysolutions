@@ -17,6 +17,8 @@ type HeadquartersMutations {
 
 type HeadquartersQuery {
   interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
+  "Gets questionnaire details"
+  questionnaires("Questionnaire id" id: Uuid skip: Int take: Int "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
   map("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER)
   maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
   questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Question] @authorize(apply: BEFORE_RESOLVER)
@@ -36,7 +38,7 @@ type IPagedConnectionOfMap {
   "Filtered count of nodes without paging"
   filteredCount: Int!
   "A flattened list of the nodes."
-  nodes: [Map]!
+  nodes: [Questionnaire]!
   "Total count of nodes without filtering applied"
   totalCount: Int!
 }
@@ -113,6 +115,21 @@ type QuestionAnswer {
   "Answer value for categorical questions"
   answerValue: Int
   question: Question!
+}
+
+type Questionnaire {
+  defaultLanguageName: String
+  id: ID
+  questionnaireId: Uuid!
+  title: String!
+  translations: [Translation!]!
+  variable: String!
+  version: Long!
+}
+
+type Translation {
+  id: Uuid!
+  name: String!
 }
 
 type User {

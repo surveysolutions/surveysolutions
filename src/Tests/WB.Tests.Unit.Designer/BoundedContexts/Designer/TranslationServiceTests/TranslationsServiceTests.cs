@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ClosedXML.Excel;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -533,15 +533,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private byte[] GetEmbendedFileContent(string fileName)
         {
+           
             var testType = typeof(TranslationsServiceTests);
             var readResourceFile = testType.Namespace + "." + fileName;
-            var manifestResourceStream = testType.Assembly.GetManifestResourceStream(readResourceFile);
+            using var manifestResourceStream = testType.Assembly.GetManifestResourceStream(readResourceFile);
 
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                manifestResourceStream.CopyTo(memoryStream);
-                return memoryStream.ToArray();
-            }
+            using MemoryStream memoryStream = new MemoryStream();
+            manifestResourceStream.CopyTo(memoryStream);
+            return memoryStream.ToArray();
         }
 
         private static byte[] CreateExcelWithHeader(string categoriesName, string[][] data)
@@ -557,18 +556,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private static byte[] CreateExcel(Dictionary<string,string[][]>  datas)
         {
-            using ExcelPackage package = new ExcelPackage();
+            using XLWorkbook package = new XLWorkbook();
 
             foreach (var data in datas)
             {
-                var worksheet = package.Workbook.Worksheets.Add(data.Key);
+                var worksheet = package.Worksheets.Add(data.Key);
 
                 for (var row = 0; row < data.Value.Length; row++)
                 for (var column = 0; column < data.Value[row].Length; column++)
-                    worksheet.Cells[row + 1, column + 1].Value = data.Value[row][column];    
+                {
+                    var value = data.Value[row][column];
+                    worksheet.Cell(row + 1, column + 1).SetValue(value);
+                }    
             }
 
-            return package.GetAsByteArray();
+            using var stream = new MemoryStream();
+            package.SaveAs(stream);
+            return stream.ToArray();
         }
     }
 }

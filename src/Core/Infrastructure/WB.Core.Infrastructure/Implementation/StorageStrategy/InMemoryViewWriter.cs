@@ -64,16 +64,6 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
         }
 
 
-        public Type ViewType
-        {
-            get { return typeof(TEntity); }
-        }
-
-        public string GetReadableStatus()
-        {
-            return "in-memory-1";
-        }
-
         public void Dispose()
         {
             this.Dispose(true);

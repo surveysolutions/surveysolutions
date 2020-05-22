@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
-namespace WB.UI.Headquarters.API.PublicApi.Models
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
     public class UserApiDetails
     {

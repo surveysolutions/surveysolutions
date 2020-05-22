@@ -58,7 +58,7 @@ namespace WB.Tests.Integration.AudioAudit
             using var read = IntegrationCreate.UnitOfWork(readFactory);
 
             var auditStorageAccesor = new PostgresPlainStorageRepository<AudioAuditFile>(plain);
-            var summary = CreateInterviewSummaryRepository(read);
+            var summary = IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(read);
             var items = new List<InterviewSummary>
             {
                 Create.Entity.InterviewSummary(questionnaireId: questionnaireId.QuestionnaireId, questionnaireVersion: questionnaireId.Version),
@@ -106,11 +106,6 @@ namespace WB.Tests.Integration.AudioAudit
             var hasAuditFiles = await auditFileStorage.HasAnyAudioAuditFilesStoredAsync(Create.Entity.QuestionnaireIdentity());
 
             Assert.False(hasAuditFiles);
-        }
-
-        protected PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository(IUnitOfWork unitOfWork)
-        {
-            return new PostgreReadSideStorage<InterviewSummary>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }
 
         protected void ExecuteInCommandTransaction(Action action)

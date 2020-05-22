@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.Infrastructure;
@@ -29,7 +30,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             var settings = state.Settings;
             var tabFiles = await this.CreateTabularDataFilesAsync(state, cancellationToken);
 
-            var exportedFiles = await this.CreateStataDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, tabFiles, state.Progress, cancellationToken);
+            var exportedFiles = 
+                await this.CreateStataDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, state.Settings.Translation, tabFiles, state.Progress, cancellationToken);
 
             CheckFileListsAndThrow(tabFiles, exportedFiles);
 
@@ -39,7 +41,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                 state.ExportTempFolder, ExportFileSettings.StataDataFileExtension, cancellationToken);
         }
 
-        private async Task<string[]> CreateStataDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
+        private async Task<string[]> CreateStataDataFilesFromTabularDataFilesAsync(TenantInfo tenant,
+            QuestionnaireId questionnaireIdentity, Guid? translationId, string[] tabDataFiles,
             ExportProgress progress, CancellationToken cancellationToken)
         {
             var exportProgress = new ExportProgress();
@@ -48,7 +51,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 
             return await tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaireAsync(
                  tenant,
-                 questionnaireIdentity,
+                 questionnaireIdentity, translationId,
                  tabDataFiles,
                  exportProgress,
                  cancellationToken);
