@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.MaxScale);
             Property(x => x.MinScale);
             
-            Bag(x => x.Users,
+            Set(x => x.Users,
                 collection =>
                 {
                     collection.Key(key => key.Column("map"));

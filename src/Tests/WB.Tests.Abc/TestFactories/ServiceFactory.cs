@@ -48,6 +48,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -1179,6 +1180,27 @@ namespace WB.Tests.Abc.TestFactories
         
         public ISerializer NewtonJsonSerializer()
             => new NewtonJsonSerializer();
+
+        public MapFileStorageService MapFileStorageService(
+            IFileSystemAccessor fileSystemAccessor = null, 
+            IOptions<FileStorageConfig> fileStorageConfig = null,
+            IArchiveUtils archiveUtils = null,
+            IPlainStorageAccessor<MapBrowseItem> mapsStorage = null,
+            IPlainStorageAccessor<UserMap> userMapsStorage = null,
+            ISerializer serializer = null,
+            IUserRepository userStorage = null,
+            IExternalFileStorage externalFileStorage = null)
+        {
+           return new MapFileStorageService(
+             fileSystemAccessor ?? Create.Service.FileSystemIOAccessor(), 
+             fileStorageConfig ?? Options.Create(new FileStorageConfig()),
+             archiveUtils ?? Create.Service.ArchiveUtils(),
+             mapsStorage ?? new TestPlainStorage<MapBrowseItem>(),
+             userMapsStorage ?? new TestPlainStorage<UserMap>(),
+             serializer ?? Create.Service.NewtonJsonSerializer(),
+             userStorage ?? Create.Storage.UserRepository(),
+             externalFileStorage ?? Mock.Of<IExternalFileStorage>()); 
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
