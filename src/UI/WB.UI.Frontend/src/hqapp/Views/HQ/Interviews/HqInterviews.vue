@@ -238,7 +238,8 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="rejectModal">
+        <ModalFrame ref="rejectModal"
+            id="rejectModel">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
