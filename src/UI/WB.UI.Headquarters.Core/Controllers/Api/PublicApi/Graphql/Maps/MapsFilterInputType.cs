@@ -45,9 +45,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                     y.Filter(f => f.UserName)
                         .BindFiltersExplicitly()
                         .AllowEquals().Description("Allows equals comparison of user")
-                        .And().AllowNotEquals().Description("Allows not equals comparison of user")
-                        .And().AllowStartsWith().Description("Allows starts with comparison of user")
-                        .And().AllowNotStartsWith().Description("Allows not starts with comparison of user");
+                        .And().AllowNotEquals().Description("Allows not equals comparison of username")
+                        .And().AllowStartsWith().Description("Allows starts with comparison of username")
+                        .And().AllowNotStartsWith().Description("Allows not starts with comparison of username");
                 }).Name("users_some");
         }
     }
