@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
@@ -19,39 +20,30 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             this.mapStorageService = mapStorageService;
             this.unitOfWork = unitOfWork;
         }
-        public IQueryable<MapBrowseItem> GetMaps() => this.mapStorageService.GetAllMaps();
+
+        public IQueryable<MapBrowseItem> GetMaps() => this.unitOfWork.Session.Query<MapBrowseItem>();
         public MapBrowseItem GetMap(string fileName) => this.mapStorageService.GetMapById(fileName);
-        public MapBrowseItem AddMap(IFormFile file)
+
+        public Task<MapBrowseItem> AddMap(IFormFile file)
         {
             var ms = new MemoryStream();
             file.CopyTo(ms);
-            
-            return this.Execute(() => this.mapStorageService.SaveOrUpdateMapAsync(new ExtractedFile
+
+            return this.mapStorageService.SaveOrUpdateMapAsync(new ExtractedFile
             {
                 Name = file.Name,
                 Size = file.Length,
                 Bytes = ms.ToArray()
-            }).Result);
+            });
         }
-        public MapBrowseItem DeleteMap(string fileName) => this.Execute(() => this.mapStorageService.DeleteMap(fileName).Result);
-        public MapBrowseItem DeleteUserFromMap(string fileName, string userName) => this.Execute(() => this.mapStorageService.DeleteMapUserLink(fileName, userName));
-        public MapBrowseItem AddUserToMap(string fileName, string userName) => this.Execute(() => this.mapStorageService.AddUserToMap(fileName, userName));
 
-        private T Execute<T>(Func<T> action)
-        {
-            T result = default;
-            
-            try
-            {
-                result = action();
-                this.unitOfWork.AcceptChanges();
-            }
-            catch
-            {
-                this.unitOfWork.DiscardChanges();
-            }
+        public Task<MapBrowseItem> DeleteMap(string fileName) =>
+            this.mapStorageService.DeleteMap(fileName);
 
-            return result;
-        }
+        public MapBrowseItem DeleteUserFromMap(string fileName, string userName) =>
+            this.mapStorageService.DeleteMapUserLink(fileName, userName);
+
+        public MapBrowseItem AddUserToMap(string fileName, string userName) =>
+            this.mapStorageService.AddUserToMap(fileName, userName);
     }
 }
