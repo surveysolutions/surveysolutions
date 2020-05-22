@@ -599,5 +599,13 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.GetError("WB0302").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
             verificationMessages.GetError("WB0302").References.Last().Id.Should().Be(sameRosterLevelQuestionId);
         }
+
+        [Test]
+        public void when_question_on_cover_page_without_variable_label()
+            => QuestionnaireDocumentWithCoverPage(new[]
+                {
+                    Create.Question(),
+                })
+                .ExpectError("WB0305");
     }
 }

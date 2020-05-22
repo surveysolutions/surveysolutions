@@ -819,4 +819,7 @@
   <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
     <value>Табличный ростер не может переопределять имя</value>
   </data>
+  <data name="WB0305_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+    <value>Вопросы в секции "Обложка" должны иметь тег переменной</value>
+  </data>
 </root>
