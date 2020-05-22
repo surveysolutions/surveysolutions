@@ -761,8 +761,9 @@
                     $scope.activeQuestion.linkedToEntityId = itemId;
                     $scope.activeQuestion.linkedToEntity = _.find($scope.sourceOfLinkedEntities, { id: $scope.activeQuestion.linkedToEntityId });
 
+
                     var filter = linkedFilterExpression || optionsFilterExpression;
-                    if ($scope.activeQuestion.linkedToEntity.type == 'textlist') {
+                    if ($scope.activeQuestion.linkedToEntity !== undefined && $scope.activeQuestion.linkedToEntity.type === 'textlist') {
                         $scope.activeQuestion.linkedFilterExpression = null;
                         $scope.activeQuestion.optionsFilterExpression = filter;
                     } else {

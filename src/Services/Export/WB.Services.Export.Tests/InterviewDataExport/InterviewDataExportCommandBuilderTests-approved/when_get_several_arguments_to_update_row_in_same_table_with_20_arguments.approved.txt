@@ -1,0 +1,7 @@
+﻿UPDATE "fakeTableName1" SET "fakeColumnName1" = @answer1,"fakeColumnName1" = @answer2,"fakeColumnName1" = @answer3 WHERE interview__id = @interviewId3 AND roster__vector = @rosterVector3;
+UPDATE "fakeTableName1" SET "fakeColumnName1" = @answer4,"fakeColumnName1" = @answer5,"fakeColumnName1" = @answer6 WHERE interview__id = @interviewId6 AND roster__vector = @rosterVector6;
+UPDATE "fakeTableName1" SET "fakeColumnName1" = @answer7,"fakeColumnName1" = @answer8,"fakeColumnName1" = @answer9 WHERE interview__id = @interviewId9 AND roster__vector = @rosterVector9;
+UPDATE "fakeTableName1" SET "fakeColumnName1" = @answer10,"fakeColumnName1" = @answer11,"fakeColumnName1" = @answer12 WHERE interview__id = @interviewId12 AND roster__vector = @rosterVector12;
+UPDATE "fakeTableName1" SET "fakeColumnName1" = @answer13,"fakeColumnName1" = @answer14,"fakeColumnName1" = @answer15 WHERE interview__id = @interviewId15 AND roster__vector = @rosterVector15;
+UPDATE "fakeTableName1" SET "fakeColumnName1" = @answer16,"fakeColumnName1" = @answer17,"fakeColumnName1" = @answer18 WHERE interview__id = @interviewId18 AND roster__vector = @rosterVector18;
+UPDATE "fakeTableName1" SET "fakeColumnName1" = @answer19,"fakeColumnName1" = @answer20 WHERE interview__id = @interviewId20 AND roster__vector = @rosterVector20;

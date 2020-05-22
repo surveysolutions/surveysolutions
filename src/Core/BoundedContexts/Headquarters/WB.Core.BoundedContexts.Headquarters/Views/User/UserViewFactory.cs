@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             return memoryCache.GetOrCreate(nameof(UserViewFactory) + ":" + id, entry =>
                 {
-                    entry.SlidingExpiration = TimeSpan.FromSeconds(1);
+                    entry.SlidingExpiration = TimeSpan.FromMinutes(1);
 
                     var user = GetUser(new UserViewInputModel(id));
 

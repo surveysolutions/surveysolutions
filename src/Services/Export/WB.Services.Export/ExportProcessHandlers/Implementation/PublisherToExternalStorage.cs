@@ -39,7 +39,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             {
                 var applicationFolder = await dataClient.CreateApplicationFolderAsync("Data Export");
 
-                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(state.Settings.QuestionnaireId, cancellationToken);
+                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(state.Settings.QuestionnaireId, 
+                    token: cancellationToken);
                 
                 using (var fileStream = File.OpenRead(state.ArchiveFilePath))
                 {
@@ -52,7 +53,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             : questionnaire.QuestionnaireId.Id;
                         questionnaireName = $"{questionnaire.VariableName}_v{questionnaireVersion}";
                     }
-                    var filename = this.exportFileNameService.GetFileNameForExportArchive(state.Settings, questionnaireName);
+                    var filename = await this.exportFileNameService.GetFileNameForExportArchiveAsync(state.Settings, questionnaireName);
                     await dataClient.UploadFileAsync(applicationFolder, filename, fileStream, fileStream.Length, cancellationToken);
                 }
             }

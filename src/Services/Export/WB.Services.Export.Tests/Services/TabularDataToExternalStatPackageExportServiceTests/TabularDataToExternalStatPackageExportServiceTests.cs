@@ -50,7 +50,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             
             //act
             await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
-                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), new[] {mailLevelFileName, nestedRosterFileName},
+                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), null, new[] {mailLevelFileName, nestedRosterFileName},
                     new ExportProgress(), CancellationToken.None);
 
            //Assert
@@ -102,7 +102,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
 
             // Act
             await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
-                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), new[] { mailLevelFileName, nestedRosterFileName , extraFile },
+                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), null, new[] { mailLevelFileName, nestedRosterFileName , extraFile },
                     new ExportProgress(), CancellationToken.None);
 
             //Assert
