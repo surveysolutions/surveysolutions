@@ -41,6 +41,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -2544,6 +2545,14 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewPackageContainer InterviewPackageContainer(Guid interviewId, params CommittedEvent[] events)
         {
             return new InterviewPackageContainer(interviewId, events.ToReadOnlyCollection());
+        }
+
+        public MapBrowseItem MapBrowseItem(string fileName)
+        {
+            return new MapBrowseItem
+            {
+                FileName = fileName
+            };
         }
     }
 }

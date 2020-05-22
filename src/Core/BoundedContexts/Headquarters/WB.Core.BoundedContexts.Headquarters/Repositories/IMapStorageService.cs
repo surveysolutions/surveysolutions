@@ -18,7 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         void UpdateUserMaps(string mapName, string[] users);
         string[] GetAllMapsForInterviewer(string userName);
         string[] GetAllMapsForSupervisor(Guid supervisorId);
-        IQueryable<MapBrowseItem> GetAllMaps();
         MapBrowseItem GetMapById(string id);
         MapBrowseItem AddUserToMap(string id, string userName);
     }

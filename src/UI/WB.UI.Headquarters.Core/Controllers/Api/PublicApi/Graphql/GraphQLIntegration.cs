@@ -12,7 +12,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         public static void AddGraphQL(this IServiceCollection services)
         {
             services.AddDataLoaderRegistry()
-                .AddGraphQL(x => HeadquartersSchema);
+                .AddGraphQL(x => HeadquartersSchema)
+                .AddErrorFilter<GraphQLErrorFilter>();
         }
 
         public static ISchema HeadquartersSchema => SchemaBuilder.New()

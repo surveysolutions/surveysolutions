@@ -10,9 +10,9 @@ type CategoricalOption {
 }
 
 type HeadquartersMutations {
-  addUserToMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor" ])
-  deleteMap("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter" ])
-  deleteUserFromMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor" ])
+  addUserToMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
+  deleteMap("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
+  deleteUserFromMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
 }
 
 type HeadquartersQuery {
@@ -90,8 +90,8 @@ type Interview {
 
 type Map {
   "Map file name"
-  fileName: String
-  "Date when map was imported on HQ"
+  fileName: String!
+  "Utc date when map was imported on HQ"
   importDate: DateTime
   maxScale: Float!
   minScale: Float!

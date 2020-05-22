@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
     {
         public MapBrowseItem()
         {
-            this.Users = new List<UserMap>();
+            this.Users = new HashSet<UserMap>();
         }
         public virtual string Id { get; set; }
 
@@ -22,6 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
 
         public virtual double MaxScale { set; get; }
         public virtual double MinScale { set; get; }
-        public virtual IList<UserMap> Users { get; set; }
+        public virtual ICollection<UserMap> Users { get; set; }
     }
 }
