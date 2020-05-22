@@ -278,12 +278,14 @@
             </form>
             <div slot="actions">
                 <button
+                    id="rejectOk"
                     type="button"
                     class="btn btn-primary"
                     role="confirm"
                     @click="rejectInterviews"
                     :disabled="getFilteredToReject().length==0">{{ $t("Common.Reject") }}</button>
                 <button
+                    id="rejectCancel"
                     type="button"
                     class="btn btn-link"
                     data-dismiss="modal"
