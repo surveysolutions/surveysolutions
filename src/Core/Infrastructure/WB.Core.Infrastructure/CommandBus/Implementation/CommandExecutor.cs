@@ -110,7 +110,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
             else if (prototypeService.IsPrototype(aggregateId))
             {
-                promoterService.MaterializePrototypeIfRequired(aggregateId, origin);
+                promoterService.MaterializePrototypeIfRequired(aggregateId);
             }
 
             cancellationToken.ThrowIfCancellationRequested();

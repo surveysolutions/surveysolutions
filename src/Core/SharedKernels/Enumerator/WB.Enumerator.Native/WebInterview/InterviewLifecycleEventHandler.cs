@@ -1,5 +1,6 @@
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Ncqrs.Eventing;
@@ -250,7 +251,12 @@ namespace WB.Enumerator.Native.WebInterview
             => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
-            => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        {
+            if (!evnt.IsPrototype())
+            {
+                this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+            }
+        }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
             => this.webInterviewNotificationService.FinishInterview(evnt.EventSourceId);
