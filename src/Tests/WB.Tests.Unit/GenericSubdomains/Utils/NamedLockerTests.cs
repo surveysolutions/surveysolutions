@@ -17,7 +17,9 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             var locker = new NamedLocker();
             var counter1 = new CounterHolder();
             var counter2 = new CounterHolder();
-            var iterations = 10000;
+            var counter3 = new CounterHolder();
+            
+            var iterations = 10_000;
 
             var tasks = new []
             {
@@ -30,10 +32,16 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
                 Task.Run(() => Runner("key2", counter2)),
                 Task.Run(() => Runner("key2", counter2)),
                 Task.Run(() => Runner("key2", counter2)),
+                
+                Task.Run(() => Runner("key3", counter3)),
+                Task.Run(() => Runner("key3", counter3)),
+                Task.Run(() => Runner("key3", counter3)),
+                Task.Run(() => Runner("key3", counter3)),
             };
 
             await Task.WhenAll(tasks);
 
+            Assert.That(locker.LocksCount, Is.EqualTo(0));
             Assert.Pass();
 
             void Runner(string key, CounterHolder counter)
