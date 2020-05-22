@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -16,7 +17,8 @@ namespace WB.Core.Infrastructure.Services
         private readonly IAggregateRootCacheCleaner cacheCleaner;
 
         public AggregateRootPrototypePromoterService(ILiteEventBus liteEventBus,
-            IInMemoryEventStore inMemoryEventStore, IEventStore eventStore, IAggregateRootPrototypeService prototypeService, IAggregateRootCacheCleaner cacheCleaner)
+            IInMemoryEventStore inMemoryEventStore, IEventStore eventStore, 
+            IAggregateRootPrototypeService prototypeService, IAggregateRootCacheCleaner cacheCleaner)
         {
             this.liteEventBus = liteEventBus;
             this.inMemoryEventStore = inMemoryEventStore;
@@ -25,7 +27,7 @@ namespace WB.Core.Infrastructure.Services
             this.cacheCleaner = cacheCleaner;
         }
 
-        public void MaterializePrototypeIfRequired(Guid id, string origin)
+        public void MaterializePrototypeIfRequired(Guid id)
         {
             switch (prototypeService.GetPrototypeType(id))
             {
@@ -37,12 +39,13 @@ namespace WB.Core.Infrastructure.Services
                         var events = this.inMemoryEventStore.Read(id, 0);
                         this.prototypeService.RemovePrototype(id);
                         
-                        var uncommitedEvents = events.Select(e => new UncommittedEvent(e.EventIdentifier, e.EventSourceId,
+                        var uncommittedEvents = events.Select(e => new UncommittedEvent(e.EventIdentifier, e.EventSourceId,
                             e.EventSequence, 0, e.EventTimeStamp, e.Payload));
 
-                        var eventStream = new UncommittedEventStream(origin, uncommitedEvents);
-                        var commited = eventStore.Store(eventStream);
-                        this.liteEventBus.PublishCommittedEvents(commited);
+                        var eventStream = new UncommittedEventStream("prototype", uncommittedEvents);
+                        var committed = eventStore.Store(eventStream);
+                        
+                        this.liteEventBus.PublishCommittedEvents(committed);
                     }
                     catch
                     {

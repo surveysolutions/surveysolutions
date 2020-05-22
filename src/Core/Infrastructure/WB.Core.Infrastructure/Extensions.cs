@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.Caching.Memory;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.Infrastructure
 {
@@ -40,6 +42,11 @@ namespace WB.Core.Infrastructure
             }
 
             return (TItem)result;
+        }
+
+        public static bool IsPrototype<T>(this IPublishedEvent<T> @event) where T : IEvent
+        {
+            return @event.Origin == "prototype";
         }
     }
 }

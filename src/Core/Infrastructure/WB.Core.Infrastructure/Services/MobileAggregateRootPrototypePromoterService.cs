@@ -4,7 +4,7 @@ namespace WB.Core.Infrastructure.Services
 {
     class MobileAggregateRootPrototypePromoterService : IAggregateRootPrototypePromoterService
     {
-        public void MaterializePrototypeIfRequired(Guid id, string origin)
+        public void MaterializePrototypeIfRequired(Guid id)
         {
             
         }

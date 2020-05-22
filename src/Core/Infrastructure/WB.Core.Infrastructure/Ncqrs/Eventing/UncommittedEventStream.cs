@@ -53,6 +53,7 @@ namespace Ncqrs.Eventing
             {
                 _singleSource = evnt.EventSourceId;
             }
+            
             _events.Add(evnt);
             evnt.OnAppendedToStream(_commitId, _origin);
             UpdateEventSourceInformation(evnt);
@@ -69,13 +70,7 @@ namespace Ncqrs.Eventing
         /// <summary>
         /// Returns whether this stream of events has a single source. An empty stream has single source by definition.
         /// </summary>
-        public bool HasSingleSource
-        {
-            get
-            {
-                return _hasSingleSource;
-            }
-        }
+        public bool HasSingleSource => _hasSingleSource;
 
         /// <summary>
         /// If the stream has a single source, it returns this source.
@@ -120,32 +115,17 @@ namespace Ncqrs.Eventing
         /// <summary>
         /// Returns if the stream contains at least one event.
         /// </summary>
-        public bool IsNotEmpty
-        {
-            get { return _events.Count > 0; }
-        }
+        public bool IsNotEmpty => _events.Count > 0;
 
         /// <summary>
         /// Returns unique id of commit associated with this stream.
         /// </summary>
-        public Guid CommitId
-        {
-            get { return _commitId; }
-        }
+        public Guid CommitId => _commitId;
 
-        public string Origin
-        {
-            get { return this._origin; }
-        }
+        public string Origin => this._origin;
 
-        public IEnumerator<UncommittedEvent> GetEnumerator()
-        {
-            return _events.GetEnumerator();
-        }
+        public IEnumerator<UncommittedEvent> GetEnumerator() => _events.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

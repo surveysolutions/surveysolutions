@@ -4,6 +4,6 @@ namespace WB.Core.Infrastructure.Services
 {
     public interface IAggregateRootPrototypePromoterService
     {
-        void MaterializePrototypeIfRequired(Guid id, string origin);
+        void MaterializePrototypeIfRequired(Guid id);
     }
 }
