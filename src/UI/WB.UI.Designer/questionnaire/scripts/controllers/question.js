@@ -90,7 +90,7 @@
                 $scope.activeQuestion.defaultDate = question.defaultDate;
                 $scope.activeQuestion.categoricalMultiKinds = dictionnaires.categoricalMultiKinds;
 
-                var options = question.options || [];
+                var options = question.options || [];  
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
                 });
@@ -122,6 +122,10 @@
 
                 $scope.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(question.categoriesId);
                 $scope.activeQuestion.categoriesId = question.categoriesId;
+
+                $scope.activeQuestion.parentIsCover = $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isCover: true }) != null
+                    : false;
 
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();

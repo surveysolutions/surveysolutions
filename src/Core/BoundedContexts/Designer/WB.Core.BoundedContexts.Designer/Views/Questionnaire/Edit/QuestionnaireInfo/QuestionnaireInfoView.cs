@@ -54,5 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         
         public int? PreviewRevision { get; set; }
         public string DefaultLanguageName { get; set; }
+
+        public bool IsCoverPageSupported { get; set; }
     }
 }

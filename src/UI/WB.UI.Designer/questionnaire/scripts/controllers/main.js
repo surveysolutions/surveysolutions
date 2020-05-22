@@ -268,11 +268,17 @@ angular.module('designerApp')
                         $scope.questionnaire.chapters.splice(targetIndex, 0, item);
                     };
 
+                    var sourceChapter = event.source.nodeScope.chapter;
+
+                    if (sourceChapter.isCover) {
+                        rollback(sourceChapter, event.source.index);
+                        return;
+                    }
+
                     if (event.dest.index !== event.source.index) {
-                        var group = event.source.nodeScope.chapter;
-                        questionnaireService.moveGroup(group.itemId, event.dest.index, null, $state.params.questionnaireId)
+                        questionnaireService.moveGroup(sourceChapter.itemId, event.dest.index, null, $state.params.questionnaireId)
                             .error(function () {
-                                rollback(group, event.source.index);
+                                rollback(sourceChapter, event.source.index);
                             });
                     }
                 }

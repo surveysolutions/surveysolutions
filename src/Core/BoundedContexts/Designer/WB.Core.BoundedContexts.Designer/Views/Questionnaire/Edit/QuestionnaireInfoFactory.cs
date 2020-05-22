@@ -32,13 +32,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
        
         private readonly IExpressionProcessor expressionProcessor;
 
-        private SelectOption[] AllQuestionScopeOptions => new []
+        private SelectOption[] GetQuestionScopeOptions(QuestionnaireDocument document)
         {
-            new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
-            new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
-            new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
-            new SelectOption {Value = "Identifying", Text = QuestionnaireEditor.QuestionScopeIdentifying}
-        };
+            if (document.IsCoverPageSupported)
+                return new[]
+                {
+                    new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
+                    new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
+                    new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
+                };
+
+            return new[]
+            {
+                new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
+                new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
+                new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
+                new SelectOption {Value = "Identifying", Text = QuestionnaireEditor.QuestionScopeIdentifying}
+            };
+        } 
 
         private static readonly HashSet<QuestionType> QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new HashSet<QuestionType>
         { QuestionType.Text, QuestionType.Numeric, QuestionType.DateTime };
@@ -283,13 +294,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
             NewEditQuestionView result = MapQuestionFields(question);
-            result.Options = result.Options ?? new CategoricalOption[0];
+            result.Options ??= new CategoricalOption[0];
             result.OptionsCount = result.Options.Length;
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
             result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
-            result.AllQuestionScopeOptions = AllQuestionScopeOptions;
+            result.AllQuestionScopeOptions = GetQuestionScopeOptions(document);
             result.GeometryTypeOptions = GeometryTypeOptions;
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);

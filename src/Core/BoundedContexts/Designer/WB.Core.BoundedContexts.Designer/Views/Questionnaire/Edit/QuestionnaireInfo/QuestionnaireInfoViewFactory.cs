@@ -51,7 +51,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 Chapters = new List<ChapterInfoView>(),
                 IsPublic = questionnaireDocument.IsPublic,
                 HideIfDisabled = questionnaireDocument.HideIfDisabled,
-                DefaultLanguageName = questionnaireDocument.DefaultLanguageName
+                DefaultLanguageName = questionnaireDocument.DefaultLanguageName,
+                IsCoverPageSupported = questionnaireDocument.IsCoverPageSupported,
             };
 
             foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
@@ -60,6 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 {
                     ItemId = chapter.PublicKey.FormatGuid(),
                     Title = chapter.Title,
+                    IsCover = chapter.PublicKey == QuestionnaireDocument.CoverPageSectionId,
                     GroupsCount = 0,
                     RostersCount = 0,
                     QuestionsCount = 0

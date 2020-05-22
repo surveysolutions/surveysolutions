@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return new NewChapterView
             {
                 Chapter = ConvertToChapterView(document, chapterPublicKey),
+                IsCover = document.IsCoverPage(chapterPublicKey),
                 VariableNames = this.CollectVariableNames(document)
             };
         }
