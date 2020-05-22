@@ -52,6 +52,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             return Create.QuestionnaireDocumentWithOneChapter(chapterChildren);
         }
 
+        protected static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(params IComposite[] chapterChildren)
+        {
+            return Create.QuestionnaireDocumentWithCoverPage(children: chapterChildren);
+        }
+
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
             return new QuestionnaireExpressionProcessorGenerator(
