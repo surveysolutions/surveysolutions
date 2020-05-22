@@ -106,6 +106,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cover section can not be removed from questionnaire.
+        /// </summary>
+        public static string CantRemoveCoverPageInQuestionnaire {
+            get {
+                return ResourceManager.GetString("CantRemoveCoverPageInQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last existing section can not be removed from questionnaire.
         /// </summary>
         public static string CantRemoveLastSectionInQuestionnaire {
@@ -174,6 +183,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string ComboboxCannotBeFound {
             get {
                 return ResourceManager.GetString("ComboboxCannotBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cover section must be first section in questionnaire.
+        /// </summary>
+        public static string CoverPageMustBeFirstInQuestionnaire {
+            get {
+                return ResourceManager.GetString("CoverPageMustBeFirstInQuestionnaire", resourceCulture);
             }
         }
         

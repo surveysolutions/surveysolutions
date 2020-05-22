@@ -734,6 +734,7 @@
                         var data = result.data;
                         $scope.items = data.chapter.items;
                         $scope.currentChapter = data.chapter;
+                        $scope.currentChapter.isCover = data.isCover;
                         $rootScope.updateVariableNames(data.variableNames);
                         connectTree();
                     });

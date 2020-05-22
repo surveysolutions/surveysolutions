@@ -148,6 +148,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableName = createQuestionnaire.Variable
             };
 
+            this.AddGroup(CreateGroup(QuestionnaireDocument.CoverPageSectionId, QuestionnaireEditor.CoverPageSection, null, null, null, false), null);
             this.AddGroup(CreateGroup(Guid.NewGuid(), QuestionnaireEditor.NewSection, null, null, null,false), null);
         }
 
@@ -547,6 +548,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void DeleteGroup(Guid groupId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfTryDeleteCoverPage(groupId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
@@ -561,9 +563,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex, Guid responsibleId)
         {
+            this.ThrowDomainExceptionIfTryDeleteCoverPage(groupId);
+            this.ThrowDomainExceptionIfCoverPageNotFirst(groupId, targetGroupId, targetIndex);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
-
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             if (targetGroupId.HasValue)
@@ -1705,7 +1708,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             replacementIdDictionary[entityToInsert.PublicKey] = pasteItemId;
 
             var clonedGroup = entityToInsertAsGroup.Clone();
-            clonedGroup.TreeToEnumerable(x => x.Children).ForEach(c =>
+            var elementsToCopy = IsCoverPage(targetToPasteIn.PublicKey)
+                ? clonedGroup.Children.Where(el => el is IQuestion || el is StaticText)
+                : clonedGroup.TreeToEnumerable(x => x.Children);
+            elementsToCopy.ForEach(c =>
             {
                 switch (c)
                 {
@@ -1751,6 +1757,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var question = (AbstractQuestion) entityToInsertAsQuestion.Clone();
             question.PublicKey = pasteItemId;
+
+            var targetIsCoverPage = IsCoverPage(targetToPasteIn.PublicKey);
+            if (targetIsCoverPage && !question.Featured)
+                question.Featured = true;
+            if (!targetIsCoverPage && question.Featured)
+                question.Featured = false;
 
             this.CopyCategories(entityToInsertAsQuestion, sourceQuestionnaire);
 
@@ -1841,6 +1853,31 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.GroupNotFound,
                     string.Format(ExceptionMessages.SubSectionCantBeFound, groupPublicKey));
+            }
+        }
+
+        private void ThrowDomainExceptionIfTryDeleteCoverPage(Guid groupPublicKey)
+        {
+            var isCoverPage = IsCoverPage(groupPublicKey);
+            if (isCoverPage)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.TryToDeleteCoverPage,
+                    ExceptionMessages.CantRemoveCoverPageInQuestionnaire);
+            }
+        }
+
+        private void ThrowDomainExceptionIfCoverPageNotFirst(Guid groupPublicKey, Guid? targetGroupId, in int targetIndex)
+        {
+            if (!QuestionnaireDocument.IsCoverPageSupported)
+                return;
+
+            if (IsCoverPage(groupPublicKey)
+                || (targetGroupId == null && targetIndex == 0))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.CoverSectionMustBeFirst,
+                    ExceptionMessages.CoverPageMustBeFirstInQuestionnaire);
             }
         }
 
@@ -2307,5 +2344,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Title = command.Title;
             this.innerDocument.Metadata = command.Metadata;
         }
+
+        private bool IsCoverPage(Guid publicKey) => publicKey == QuestionnaireDocument.CoverPageSectionId;
     }
 }

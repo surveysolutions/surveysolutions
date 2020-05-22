@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public int QuestionsCount { get; set; }
         public int GroupsCount { get; set; }
         public int RostersCount { get; set; }
+        public bool IsCover { get; set; }
 
         public List<IQuestionnaireItem> Items
         {
