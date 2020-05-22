@@ -14,10 +14,13 @@ namespace WB.Services.Export.Models
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public TenantInfo Tenant { get; set; }
+        
+        public Guid? Translation { get; set; }
 
         public string NaturalId => $"{Tenant}${InterviewStatusString()}${ExportFormat}${this.QuestionnaireId}" +
                                    $"${this.FromDate?.ToString(@"YYYYMMDD") ?? "EMPTY FROM DATE"}" +
-                                   $"${this.ToDate?.ToString(@"YYYYMMDD") ?? "EMPTY TO DATE"}";
+                                   $"${this.ToDate?.ToString(@"YYYYMMDD") ?? "EMPTY TO DATE"}" +
+                                   $"${this.Translation?.ToString("N") ?? "No translation"}";
 
         private string InterviewStatusString() => Status?.ToString() ?? "All";
 
