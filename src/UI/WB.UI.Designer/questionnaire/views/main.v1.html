@@ -83,12 +83,13 @@
                             <li class="chapter-panel-item"
                                 ng-repeat="chapter in questionnaire.chapters"
                                 ui-tree-node
+                                data-nodrag="{{ chapter.isCover }}"
                                 ng-class="{ current: isCurrentChapter(chapter) }"
                                 context-menu data-target="chapter-context-menu-{{ chapter.itemId }}"
                                 context-menu-hide-on-mouse-leave="true">
                                 <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
                                     <div class="inner">
-                                        <a class="handler" ui-tree-handle><span></span></a>
+                                        <a class="handler" ui-tree-handle ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover"><span></span></a>
                                         <a class="chapter-panel-item-body" ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})" ng-bind-html="chapter.title | escape"></a>
                                     </div>
                                 </div>
@@ -97,9 +98,9 @@
                                         <li><a ng-click="editChapter(chapter);" ng-i18next>Open</a></li>
                                         <li><a ng-click="copyRef(chapter);" ng-i18next>Copy</a></li>
                                         <li>
-                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>PasteAfter</a>
+                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover" ng-i18next>PasteAfter</a>
                                         </li>
-                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>Delete</a></li>
+                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover" ng-i18next>Delete</a></li>
                                     </ul>
                                 </div>
                             </li>

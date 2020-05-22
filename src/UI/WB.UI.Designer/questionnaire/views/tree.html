@@ -35,10 +35,10 @@
                 </div>
                 <div class="chapter-level-buttons" ng-show="!search.searchText">
                     <button type="button" class="btn lighter-hover" ng-if="!questionnaire.isReadOnlyForUser" ng-click="addQuestion(currentChapter)" ng-i18next="AddQuestion"></button>
-                    <button type="button" class="btn lighter-hover" ng-if="!questionnaire.isReadOnlyForUser" ng-click="addGroup(currentChapter)" ng-i18next="AddSubsection"></button>
-                    <button type="button" class="btn lighter-hover" ng-if="!questionnaire.isReadOnlyForUser" ng-click="addRoster(currentChapter)" ng-i18next="AddRoster"></button>
+                    <button type="button" class="btn lighter-hover" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isCover" ng-click="addGroup(currentChapter)" ng-i18next="AddSubsection"></button>
+                    <button type="button" class="btn lighter-hover" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isCover" ng-click="addRoster(currentChapter)" ng-i18next="AddRoster"></button>
                     <button type="button" class="btn lighter-hover" ng-if="!questionnaire.isReadOnlyForUser" ng-click="addStaticText(currentChapter)" ng-i18next="AddStaticText"></button>
-                    <button type="button" class="btn lighter-hover" ng-if="!questionnaire.isReadOnlyForUser" ng-click="addVariable(currentChapter)" ng-i18next="AddVariable"></button>
+                    <button type="button" class="btn lighter-hover" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isCover" ng-click="addVariable(currentChapter)" ng-i18next="AddVariable"></button>
                     
                     <button type="button" class="btn lighter-hover" ng-if="!questionnaire.isReadOnlyForUser" ng-click="searchForQuestion(currentChapter)" ng-i18next="SearchForQuestion"></button>
 
