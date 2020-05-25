@@ -6,6 +6,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
     {
         public IError OnError(IError error)
         {
+            if (!string.IsNullOrEmpty(error.Code))
+            {
+                return error;
+            }
+            
             return ErrorBuilder.New()
                 .SetMessage(error.Exception.Message)
                 .Build();

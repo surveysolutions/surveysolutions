@@ -261,7 +261,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var map = this.mapPlainStorageAccessor.GetById(mapName);
 
             if (map == null)
-                throw new Exception("Map not found");
+                throw new Exception("Map is not found.");
 
             var mapUsers = this.userMapsStorage
                 .Query(q => q.Where(x => x.Map.Id == mapName && x.UserName == user))
@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 this.userMapsStorage.Remove(mapUsers);
             else
             {
-                throw new Exception("Map is not assigned to specified interviewer");
+                throw new Exception("Map is not assigned to specified interviewer.");
             }
             return map;
         }
@@ -327,7 +327,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             var map = this.mapPlainStorageAccessor.GetById(mapName);
             if (map == null)
-                throw new ArgumentException($"Map was not found {mapName}", nameof(mapName));
+                throw new ArgumentException($"Map was not found {mapName}.", nameof(mapName));
 
             var userMaps = userMapsStorage.Query(q => q.Where(x=>x.Map.Id == mapName).ToList());
 
@@ -373,7 +373,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             var map = this.mapPlainStorageAccessor.GetById(id);
             if (map == null)
-                throw new ArgumentException($@"Map was not found {id}", nameof(id));
+                throw new ArgumentException($@"Map was not found {id}.", nameof(id));
             
             var userNameLowerCase = userName.ToLower();
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
@@ -384,7 +384,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                      x.Roles.Any(role => role.Id == interviewerRoleId));
             if (dbUser == null)
             {
-                throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer");
+                throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
             }
 
             var userMap = this.userMapsStorage
@@ -392,7 +392,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (userMap != null)
             {
-                throw new Exception("Provided map already assigned to specified interviewer");
+                throw new Exception("Provided map already assigned to specified interviewer.");
             }
 
             userMapsStorage.Store(new UserMap
