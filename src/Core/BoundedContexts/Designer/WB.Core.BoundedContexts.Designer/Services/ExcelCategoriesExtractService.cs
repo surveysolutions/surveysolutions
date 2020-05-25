@@ -7,12 +7,13 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
     internal class ExcelCategoriesExtractService : ICategoriesExtractService
     {
-        private ICategoriesVerifier verifier;
+        private readonly ICategoriesVerifier verifier;
 
         public ExcelCategoriesExtractService(ICategoriesVerifier verifier)
         {
@@ -21,69 +22,71 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public List<CategoriesRow> Extract(Stream file)
         {
+            return file.WrapStreamIntoTempFile(excel => ExtractCategoriesFromExcelFile(excel));
+        }
+
+        private List<CategoriesRow> ExtractCategoriesFromExcelFile(Stream xmlFile)
+        {
             var categories = new List<CategoriesRow>();
+            using XLWorkbook package = new XLWorkbook(xmlFile);
+            var worksheet = package.Worksheets.First();
+            var headers = GetHeaders(worksheet);
 
-            using (XLWorkbook package = new XLWorkbook(file))
-            {
-                var worksheet = package.Worksheets.First();
-                var headers = GetHeaders(worksheet);
+            var rowsCount = worksheet.LastRowUsed().RowNumber();
+            if (rowsCount > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion + 1)
+                throw new InvalidFileException(
+                    ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier
+                        .MaxOptionsCountInFilteredComboboxQuestion));
 
-                var rowsCount = worksheet.LastRowUsed().RowNumber();
-                if (rowsCount > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion + 1)
-                    throw new InvalidFileException(
-                        ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier
-                            .MaxOptionsCountInFilteredComboboxQuestion));
-
-                if (headers.IdIndex == null)
-                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
-                    {
-                        FoundErrors = new List<ImportValidationError>(new[]
-                        {
-                            new ImportValidationError
-                            {
-                                Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "id")
-                            }
-                        })
-                    };
-
-                if (headers.TextIndex == null)
-                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
-                    {
-                        FoundErrors = new List<ImportValidationError>(new[]
-                        {
-                            new ImportValidationError
-                            {
-                                Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "text")
-                            }
-                        })
-                    };
-
-                if (rowsCount == 1)
-                    throw new InvalidFileException(ExceptionMessages.Excel_NoCategories);
-
-                var errors = new List<ImportValidationError>();
-                for (int rowNumber = 2; rowNumber <= rowsCount; rowNumber++)
+            if (headers.IdIndex == null)
+                throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
                 {
-                    var row = GetRowValues(worksheet, headers, rowNumber);
+                    FoundErrors = new List<ImportValidationError>(new[]
+                    {
+                        new ImportValidationError
+                        {
+                            Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "id")
+                        }
+                    })
+                };
 
-                    if (string.IsNullOrEmpty(row.Id) && string.IsNullOrEmpty(row.ParentId) &&
-                        string.IsNullOrEmpty(row.Text)) continue;
+            if (headers.TextIndex == null)
+                throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
+                {
+                    FoundErrors = new List<ImportValidationError>(new[]
+                    {
+                        new ImportValidationError
+                        {
+                            Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "text")
+                        }
+                    })
+                };
 
-                    var error = this.verifier.Verify(row, headers);
+            if (rowsCount == 1)
+                throw new InvalidFileException(ExceptionMessages.Excel_NoCategories);
 
-                    if (error != null) errors.Add(error);
-                    else categories.Add(row);
+            var errors = new List<ImportValidationError>();
+            for (int rowNumber = 2; rowNumber <= rowsCount; rowNumber++)
+            {
+                var row = GetRowValues(worksheet, headers, rowNumber);
 
-                    if (errors.Count >= 10) break;
-                }
+                if (string.IsNullOrEmpty(row.Id) && string.IsNullOrEmpty(row.ParentId) &&
+                    string.IsNullOrEmpty(row.Text)) continue;
 
-                if (errors.Any())
-                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors) {FoundErrors = errors};
+                var error = this.verifier.Verify(row, headers);
 
-                this.verifier.VerifyAll(categories, headers);
+                if (error != null) errors.Add(error);
+                else categories.Add(row);
 
-                return categories;
+                if (errors.Count >= 10) break;
             }
+
+            if (errors.Any())
+                throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors) {FoundErrors = errors};
+
+            this.verifier.VerifyAll(categories, headers);
+
+            return categories;
         }
 
         private CategoriesHeaderMap GetHeaders(IXLWorksheet worksheet)
