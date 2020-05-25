@@ -2551,6 +2551,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new MapBrowseItem
             {
+                Id = fileName,
                 FileName = fileName
             };
         }
