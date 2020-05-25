@@ -60,18 +60,17 @@ namespace WB.Tests.Unit.Designer.Services
 
         private static Stream CreateExcelFile(string[][] data)
         {
-            using (XLWorkbook package = new XLWorkbook())
-            {
-                var worksheet = package.Worksheets.Add("Categories");
+            using XLWorkbook package = new XLWorkbook();
+            var worksheet = package.Worksheets.Add("Categories");
 
-                for (var row = 0; row < data.Length; row++)
-                for (var column = 0; column < data[row].Length; column++)
-                    worksheet.Cell(row + 1, column + 1).Value = data[row][column];
+            for (var row = 0; row < data.Length; row++)
+            for (var column = 0; column < data[row].Length; column++)
+                worksheet.Cell(row + 1, column + 1).Value = data[row][column];
 
-                var ms = new MemoryStream();
-                package.SaveAs(ms);
-                return ms;
-            }
+            var ms = new MemoryStream();
+            package.SaveAs(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms;
         }
 
         private static Stream CreateTsvFile(string[][] data)
