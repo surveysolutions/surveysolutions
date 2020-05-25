@@ -2,7 +2,7 @@
 
 namespace WB.Core.Infrastructure.Services
 {
-    class MobileAggregateRootPrototypeService : IAggregateRootPrototypeService
+    public class DumbAggregateRootPrototypeService : IAggregateRootPrototypeService
     {
         public PrototypeType? GetPrototypeType(Guid id)
         {
