@@ -17,7 +17,6 @@ type HeadquartersMutations {
 
 type HeadquartersQuery {
   interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
-  map("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER)
   maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
   "Gets questionnaire details"
   questionnaires("Questionnaire id" id: Uuid skip: Int take: Int "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
