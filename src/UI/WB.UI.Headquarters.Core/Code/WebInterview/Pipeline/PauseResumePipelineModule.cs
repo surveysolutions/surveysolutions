@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 
@@ -12,11 +13,13 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
     {
         private readonly IPauseResumeQueue pauseResumeQueue;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IAggregateRootPrototypeService prototypeService;
 
-        public PauseResumePipelineModule(IPauseResumeQueue pauseResumeQueue, IAuthorizedUser authorizedUser)
+        public PauseResumePipelineModule(IPauseResumeQueue pauseResumeQueue, IAuthorizedUser authorizedUser, IAggregateRootPrototypeService prototypeService)
         {
             this.pauseResumeQueue = pauseResumeQueue;
             this.authorizedUser = authorizedUser;
+            this.prototypeService = prototypeService;
         }
 
         public Task OnConnected(Hub hub)
@@ -39,6 +42,9 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
         {
             var interviewId = GetInterviewId(hub);
             Guid interviewGuid = Guid.Parse(interviewId);
+
+            if (prototypeService.IsPrototype(interviewGuid)) return Task.CompletedTask;
+
             if (authorizedUser.IsInterviewer)
             {
                 pauseResumeQueue.EnqueuePause(new PauseInterviewCommand(interviewGuid, this.authorizedUser.Id));
