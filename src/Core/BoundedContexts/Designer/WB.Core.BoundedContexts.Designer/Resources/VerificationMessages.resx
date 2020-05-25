@@ -801,4 +801,10 @@
   <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
     <value>Table roster cannot have custom roster title</value>
   </data>
+  <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+    <value>Reusable category cannot have row with same Id and ParentId values</value>
+  </data>
+  <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+    <value>Reusable category cannot have row with same ParentId and Text values</value>
+  </data>
 </root>

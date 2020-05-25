@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Entities.SubEntities
 {
-    [DebuggerDisplay("Question {PublicKey}")]
+    [DebuggerDisplay("{GetType().Name} {StataExportCaption} {PublicKey}")]
     public abstract class AbstractQuestion : IQuestion
     {
         protected AbstractQuestion(string questionText = null, List<IComposite> children = null)

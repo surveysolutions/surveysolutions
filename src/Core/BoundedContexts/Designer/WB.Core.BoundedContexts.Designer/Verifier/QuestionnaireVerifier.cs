@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 new StaticTextVerifications(), 
                 new TranslationVerifications(translationService), 
                 new VariableVerifications(substitutionService),
-                new CategoriesVerifications(keywordsProvider), 
+                new CategoriesVerifications(keywordsProvider, categoriesService), 
             };
         }
        
