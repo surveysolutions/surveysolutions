@@ -242,6 +242,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var map = this.mapPlainStorageAccessor.GetById(mapName);
             if (map != null)
                 this.mapPlainStorageAccessor.Remove(mapName);
+            else
+            {
+                throw new Exception("Map was not found.");
+            }
 
             if (externalFileStorage.IsEnabled())
             {
@@ -389,7 +393,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             var map = this.mapPlainStorageAccessor.GetById(id);
             if (map == null)
-                throw new ArgumentException($@"Map was not found {id}.", nameof(id));
+                throw new ArgumentException($@"Map was not found.", nameof(id));
             
             var userNameLowerCase = userName.ToLower();
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
