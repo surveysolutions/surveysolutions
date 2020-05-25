@@ -22,13 +22,11 @@ namespace WB.Tests.Unit.Infrastructure
         {
             public bool WasCalled = false;
             public virtual void Handle(IPublishedEvent<DummyEvent> evnt) => this.WasCalled = true;
-            public override object[] Writers { get; }
         }
 
         public class DifferentDenormalizer : BaseDenormalizer, IEventHandler<DifferentDummyEvent>
         {
             public virtual void Handle(IPublishedEvent<DifferentDummyEvent> evnt) { }
-            public override object[] Writers { get; }
         }
 
         public class DifferentDenormalizerBasedOnDenormalizer : Denormalizer, IEventHandler<DifferentDummyEvent>

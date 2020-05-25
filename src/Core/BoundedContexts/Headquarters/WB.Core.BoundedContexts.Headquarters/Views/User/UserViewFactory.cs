@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     UserId = x.Id,
                     UserName = x.UserName,
-                    IconClass = UserRoles.Interviewer.ToString().ToLower()
+                    IconClass = UserRoles.Interviewer.ToString().ToLower(),
                 });
 
             var result = new UsersView

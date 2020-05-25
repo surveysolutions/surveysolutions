@@ -194,5 +194,14 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Status", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can change responsible for interview on reject. Please, choose responsible interviewer.
+        /// </summary>
+        public static string YouCanChangeResponsibleInterviewer {
+            get {
+                return ResourceManager.GetString("YouCanChangeResponsibleInterviewer", resourceCulture);
+            }
+        }
     }
 }

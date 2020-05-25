@@ -105,8 +105,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private ApproveRejectAllowed GetApproveReject(InterviewSummary interviewSummary)
         {
             ApproveRejectAllowed approveRejectAllowed = new ApproveRejectAllowed();
-            approveRejectAllowed.InterviewersListUrl = Url.RouteUrl("DefaultApiWithAction",
-                new { httproute = "", controller = "Teams", action = "InterviewersCombobox" });
+            approveRejectAllowed.InterviewersListUrl = 
+                this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter
+                ? Url.Action("ResponsiblesCombobox", "Teams")
+                : Url.Action("InterviewersCombobox", "Teams");
 
             if(!this.authorizedUser.IsObserving)
             {
@@ -126,8 +128,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                                                 authorizedUser.IsSupervisor;
             }
 
-            approveRejectAllowed.InterviewerShouldbeSelected =
-                approveRejectAllowed.SupervisorRejectAllowed && !interviewSummary.IsAssignedToInterviewer;
+            approveRejectAllowed.InterviewerShouldbeSelected = approveRejectAllowed.SupervisorRejectAllowed
+                                                               && !interviewSummary.IsAssignedToInterviewer; 
 
             return approveRejectAllowed;
         }
