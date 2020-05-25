@@ -22,8 +22,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
         }
 
         public IQueryable<MapBrowseItem> GetMaps() => this.unitOfWork.Session.Query<MapBrowseItem>();
-        public MapBrowseItem GetMap(string fileName) => this.mapStorageService.GetMapById(fileName);
-
         public Task<MapBrowseItem> AddMap(IFormFile file)
         {
             var ms = new MemoryStream();
