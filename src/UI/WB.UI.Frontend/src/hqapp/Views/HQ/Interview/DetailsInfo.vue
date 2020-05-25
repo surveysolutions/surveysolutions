@@ -106,12 +106,12 @@
             slot="modals"
             :title="showUnapproveButton ? $t('Pages.ApproveRejectPartialView_UnapproveLabel') : $t('Pages.ApproveRejectPartialView_RejectLAbel')"
             :disableOk="interviewerShouldbeSelected && !newResponsibleId">
-            <form v-if="interviewerShouldbeSelected"
+            <form v-if="!showUnapproveButton"
                 onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label"
                         for="newResponsibleId">
-                        {{ $t("Details.ChooseResponsibleInterviewer") }}
+                        {{ interviewerShouldbeSelected ? $t("Details.ChooseResponsibleInterviewer") : $t("Details.ChooseResponsibleInterviewer") }}
                     </label>
                     <Typeahead control-id="newResponsibleId"
                         :placeholder="$t('Common.Responsible')"
@@ -212,7 +212,7 @@ export default {
         showRejectButton() {
             return (
                 this.$config.model.approveReject.supervisorRejectAllowed ||
-        this.$config.model.approveReject.hqOrAdminRejectAllowed
+                this.$config.model.approveReject.hqOrAdminRejectAllowed
             )
         },
         lastUpdateDate() {
