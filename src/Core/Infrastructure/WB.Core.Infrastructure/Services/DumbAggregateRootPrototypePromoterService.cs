@@ -2,7 +2,7 @@
 
 namespace WB.Core.Infrastructure.Services
 {
-    class MobileAggregateRootPrototypePromoterService : IAggregateRootPrototypePromoterService
+    public class DumbAggregateRootPrototypePromoterService : IAggregateRootPrototypePromoterService
     {
         public void MaterializePrototypeIfRequired(Guid id)
         {
