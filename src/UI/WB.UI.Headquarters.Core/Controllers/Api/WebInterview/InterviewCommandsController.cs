@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
@@ -26,14 +28,17 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewFactory interviewFactory;
+        private readonly IUserViewFactory userViewFactory;
 
         public InterviewCommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, 
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
-            IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IInterviewFactory interviewFactory) 
+            IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IInterviewFactory interviewFactory,
+            IUserViewFactory userViewFactory) 
             : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
         {
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;
+            this.userViewFactory = userViewFactory;
         }
 
         protected bool IsReviewMode() =>
@@ -151,33 +156,47 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         [Route("reject")]
         public IActionResult Reject(Guid interviewId, [FromBody]RejectInterviewRequest rejectInterviewRequest)
         {
+            var commandResponsibleId = this.GetCommandResponsibleId(interviewId);
+            ICommand command = null;
+
             if (this.authorizedUser.IsSupervisor)
             {
                 if (rejectInterviewRequest.AssignTo.HasValue)
                 {
-                    var command = new RejectInterviewToInterviewerCommand(this.GetCommandResponsibleId(interviewId), interviewId, rejectInterviewRequest.AssignTo.Value, rejectInterviewRequest.Comment);
-                    this.commandService.Execute(command);
+                    command = new RejectInterviewToInterviewerCommand(commandResponsibleId, interviewId, rejectInterviewRequest.AssignTo.Value, rejectInterviewRequest.Comment);
                 }
                 else
                 {
-                    var command = new RejectInterviewCommand(interviewId, this.GetCommandResponsibleId(interviewId), rejectInterviewRequest.Comment);
-                    this.commandService.Execute(command);
+                    command = new RejectInterviewCommand(interviewId, commandResponsibleId, rejectInterviewRequest.Comment);
                 }
             }
-            if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
+            else if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
             {
                 var statefulInterview = statefulInterviewRepository.Get(interviewId.FormatGuid());
                 if (statefulInterview.Status == InterviewStatus.ApprovedByHeadquarters)
                 {
-                    var command = new UnapproveByHeadquartersCommand(interviewId, this.GetCommandResponsibleId(interviewId), rejectInterviewRequest.Comment);
-                    this.commandService.Execute(command);
+                    command = new UnapproveByHeadquartersCommand(interviewId, commandResponsibleId, rejectInterviewRequest.Comment);
                 }
                 else
                 {
-                    var command = new HqRejectInterviewCommand(interviewId, this.GetCommandResponsibleId(interviewId), rejectInterviewRequest.Comment);
-                    this.commandService.Execute(command);
+                    if (rejectInterviewRequest.AssignTo.HasValue)
+                    {
+                        var newResponsible = userViewFactory.GetUser(rejectInterviewRequest.AssignTo.Value);
+                        if (newResponsible.IsInterviewer())
+                            command = new HqRejectInterviewToInterviewerCommand(interviewId,commandResponsibleId, rejectInterviewRequest.AssignTo.Value, newResponsible.Supervisor.Id, rejectInterviewRequest.Comment);
+                        else if (newResponsible.IsSupervisor())
+                            command = new HqRejectInterviewToSupervisorCommand(interviewId, commandResponsibleId, rejectInterviewRequest.AssignTo.Value, rejectInterviewRequest.Comment);
+                    }
+                    else
+                    {
+                        command = new HqRejectInterviewCommand(interviewId, commandResponsibleId, rejectInterviewRequest.Comment);
+                    }
                 }
             }
+
+            if (command != null)
+                this.commandService.Execute(command);
+
             return Ok();
         }
 
