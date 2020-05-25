@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using OSGeo.GDAL;
 using OSGeo.OGR;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -30,6 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
         private readonly IExternalFileStorage externalFileStorage;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
 
@@ -47,7 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IPlainStorageAccessor<UserMap> userMapsStorage,
             ISerializer serializer,
             IUserRepository userStorage,
-            IExternalFileStorage externalFileStorage)
+            IExternalFileStorage externalFileStorage,
+            IAuthorizedUser authorizedUser)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -57,6 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.userStorage = userStorage;
 
             this.externalFileStorage = externalFileStorage;
+            this.authorizedUser = authorizedUser;
 
             this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -258,13 +262,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             if (mapName == null) throw new ArgumentNullException(nameof(mapName));
             if (user == null) throw new ArgumentNullException(nameof(user));
+
+            var lowerCasedUserName = user.ToLower();
+            if (this.authorizedUser.IsSupervisor)
+            {
+                bool isTeamInterviewer = this.userStorage.Users
+                    .Any(x => x.UserName.ToLower() == lowerCasedUserName && x.Profile.SupervisorId == this.authorizedUser.Id);
+                if (!isTeamInterviewer)
+                {
+                    throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
+                }
+            }
+            
             var map = this.mapPlainStorageAccessor.GetById(mapName);
 
             if (map == null)
-                throw new Exception("Map is not found.");
+                throw new Exception("Map was not found.");
 
             var mapUsers = this.userMapsStorage
-                .Query(q => q.Where(x => x.Map.Id == mapName && x.UserName == user))
+                .Query(q => q.Where(x => x.Map.Id == mapName && x.UserName.ToLower() == lowerCasedUserName))
                 .ToList();
             
             if (mapUsers.Count > 0) 
@@ -378,11 +394,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var userNameLowerCase = userName.ToLower();
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
 
-            var dbUser = this.userStorage.Users
-                .FirstOrDefault(x => x.UserName.ToLower() == userNameLowerCase &&
+            var userQuery = this.userStorage.Users
+                .Where(x => x.UserName.ToLower() == userNameLowerCase &&
                                      x.IsArchived == false && 
                                      x.Roles.Any(role => role.Id == interviewerRoleId));
-            if (dbUser == null)
+            if (authorizedUser.IsSupervisor)
+            {
+                userQuery = userQuery.Where(x => x.Profile.SupervisorId == this.authorizedUser.Id);
+            }
+
+            var interviewer = userQuery.FirstOrDefault();
+            
+            if (interviewer == null)
             {
                 throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
             }
