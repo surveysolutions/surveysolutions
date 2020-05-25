@@ -1189,7 +1189,8 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorageAccessor<UserMap> userMapsStorage = null,
             ISerializer serializer = null,
             IUserRepository userStorage = null,
-            IExternalFileStorage externalFileStorage = null)
+            IExternalFileStorage externalFileStorage = null,
+            IAuthorizedUser authorizedUser = null)
         {
            return new MapFileStorageService(
              fileSystemAccessor ?? Create.Service.FileSystemIOAccessor(), 
@@ -1199,7 +1200,8 @@ namespace WB.Tests.Abc.TestFactories
              userMapsStorage ?? new TestPlainStorage<UserMap>(),
              serializer ?? Create.Service.NewtonJsonSerializer(),
              userStorage ?? Create.Storage.UserRepository(),
-             externalFileStorage ?? Mock.Of<IExternalFileStorage>()); 
+             externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
+             authorizedUser ?? Mock.Of<IAuthorizedUser>()); 
         }
     }
 
