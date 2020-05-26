@@ -54,7 +54,6 @@
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.57" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.137" />
     <PackageReference Include="Dapper" Version="2.0.35" />
-    <PackageReference Include="Gdal.Core" Version="1.0.0" />
     <PackageReference Include="GeoJSON.Net" Version="1.2.15" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
