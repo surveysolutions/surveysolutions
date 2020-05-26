@@ -58,8 +58,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("Questionnaire")]
         public IActionResult Questionnaire(DownloadQuestionnaireRequest request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-
+            if (request?.SupportedVersion == null) throw new ArgumentNullException(nameof(request));
+            
             var questionnaireView1 = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
             if (questionnaireView1 == null)
             {
@@ -96,11 +96,11 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             questionnaire.IsUsingExpressionStorage = questionnaireContentVersion > 19;
 
             var questionnaireCommunicationPackage = new QuestionnaireCommunicationPackage
-            {
-                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
-                QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = questionnaireContentVersion
-            };
+            (
+                questionnaire : this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
+                questionnaireAssembly : resultAssembly,
+                questionnaireContentVersion : questionnaireContentVersion
+            );
             return Ok(questionnaireCommunicationPackage);
         }
 

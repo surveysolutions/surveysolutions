@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.Group(groupId: sectionId, title:"Section Text",
                     children:new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(Question1Id, options:new Option[]{new Option(){Value = "1"} }),
+                        Create.NumericIntegerQuestion(Question1Id, options:new Option[]{new Option(value : "1", title:"1") }),
                         Create.StaticText(StaticText2Id, validationConditions:new ValidationCondition[]{new ValidationCondition("1==1","Test")}),
                         Create.Roster(Roster1Id),
                         Create.SingleOptionQuestion(Question3Id, 

@@ -34,7 +34,7 @@ namespace WB.UI.WebTester.Controllers
         public IActionResult ContentHead([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
-            if (attachment == null)
+            if (attachment?.Content?.Content == null)
             {
                 return NoContent();
             }
@@ -48,7 +48,7 @@ namespace WB.UI.WebTester.Controllers
         public IActionResult GetContent([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
-            if (attachment == null)
+            if (attachment?.Content?.Content == null)
             {
                 return NotFound();
             }

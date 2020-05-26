@@ -94,7 +94,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                         IComposite item;
                         var variableLabel = mysqlQuestion.Description;
                         var instructions = ((mysqlQuestion.Pre_text ?? string.Empty) + Environment.NewLine + (mysqlQuestion.Post_text?? string.Empty)).Trim();
-                        var variable = mysqlQuestion.Name;
+                        var variable = mysqlQuestion.Name ?? String.Empty;
                         var title = ((mysqlQuestion.Description?? string.Empty) + Environment.NewLine + (mysqlQuestion.Literal_text?? string.Empty)).Trim();
                         switch (mysqlQuestion.Visual_rep_format)
                         {
@@ -163,7 +163,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                                  
                                  break;
                              default:
-                                 item = new StaticText(Guid.NewGuid(), title, null, false, null);
+                                 item = new StaticText(Guid.NewGuid(), title, string.Empty, false, null);
                                  break;
                         }
                         children.Add(item);

@@ -135,11 +135,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public Guid[] GetParentGroupsIds(IComposite entity)
         {
             List<IGroup> parents = new List<IGroup>();
-            var parent = (IGroup)entity.GetParent();
+            var parent = entity.GetParent() as IGroup;
             while (parent != null && !(parent is QuestionnaireDocument))
             {
                 parents.Add(parent);
-                parent = (IGroup)parent.GetParent();
+                parent = parent.GetParent() as IGroup;
             }
             return parents.Select(x => x.PublicKey).ToArray();
         }
@@ -177,7 +177,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static IEnumerable<IGroup> GetAllParentsFromBottomToTop(IComposite questionnaireEntity)
         {
-            IComposite entity = questionnaireEntity;
+            IComposite? entity = questionnaireEntity;
             while (entity != null && !(entity is QuestionnaireDocument))
             {
                 if (entity is IGroup @group)
@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     yield return group;
                 }
 
-                entity = (IGroup)entity.GetParent();
+                entity = entity.GetParent() as IGroup;
             }
         }
 

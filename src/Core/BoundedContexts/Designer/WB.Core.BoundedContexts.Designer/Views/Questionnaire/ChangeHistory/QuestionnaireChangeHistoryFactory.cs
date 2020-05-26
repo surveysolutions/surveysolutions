@@ -123,15 +123,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
         private Guid? GetItemParentId(QuestionnaireDocument questionnaire, Guid itemId)
         {
-            var item = questionnaire.FirstOrDefault<IComposite>(g => g.PublicKey == itemId);
+            IComposite? item = questionnaire.FirstOrDefault<IComposite>(g => g.PublicKey == itemId);
             if (item == null)
                 return null;
 
-            while (item.GetParent().GetType() != typeof(QuestionnaireDocument))
+            while (item != null && item.GetParent()?.GetType() != typeof(QuestionnaireDocument))
             {
                 item = item.GetParent();
             }
-            return item.PublicKey;
+            return item?.PublicKey;
         }
         
         private bool IsQuestionnaireChangeHistoryReferenceExists(QuestionnaireDocument questionnaire, Guid itemId,

@@ -119,11 +119,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             questionnaire.Macros = new Dictionary<Guid, Macro>();
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
 
-            return new Questionnaire
-            {
-                Document = questionnaire,
-                Assembly = resultAssembly
-            };
+            return new Questionnaire(document: questionnaire, assembly: resultAssembly);
         }
     }
 

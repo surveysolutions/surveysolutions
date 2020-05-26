@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Controllers
             foreach (var categories in questionnaireDocument.Categories)
             {
                 var excelFile = this.categoriesService.GetAsExcelFile(id, categories.Id);
-                if(excelFile == null)
+                if(excelFile?.Content == null)
                     continue;
                 zipStream.PutFileEntry($"{questionnaireFolderName}/Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.Content);
             }

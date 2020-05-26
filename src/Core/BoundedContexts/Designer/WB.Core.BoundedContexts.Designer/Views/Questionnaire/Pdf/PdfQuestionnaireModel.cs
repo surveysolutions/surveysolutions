@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             public int Id { get; set; }
             public int? ParentId { get; set; }
-            public string? Text { get; set; }
+            public string Text { get; set; } = String.Empty;
         }
 
         private readonly QuestionnaireDocument questionnaire;
@@ -187,13 +187,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private IEnumerable<IGroup> GetAllParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
         {
             var startGroupId = group.PublicKey;
-            while (group != document)
+            IGroup? groupCursor = group;
+            while (groupCursor != document && groupCursor != null)
             {
-                if (group.PublicKey != startGroupId)
+                if (groupCursor.PublicKey != startGroupId)
                 {
-                    yield return group;
+                    yield return groupCursor;
                 }
-                group = (IGroup)group.GetParent();
+                groupCursor = groupCursor.GetParent() as IGroup;
             }
         }
 

@@ -7,9 +7,10 @@ namespace WB.Core.GenericSubdomains.Portable
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<T> GetCommonPart<T>(this IEnumerable<T> vector1, IEnumerable<T> vector2)
-            where T : struct
-            => vector1.Zip(vector2, (x, y) => x.Equals(y) ? x as T? : null as T?).TakeWhile(x => x != null).Select(x => x.Value);
+        public static IEnumerable<T> GetCommonPart<T>(this IEnumerable<T> vector1, IEnumerable<T> vector2) where T : struct
+            => vector1.Zip(vector2, (x, y) => x.Equals(y) ? x as T? : null as T?)
+                .TakeWhile(x => x != null)
+                .Select(x => x.Value);
 
         public static IEnumerable<T> ToEnumerable<T>(this T element)
         {
@@ -94,7 +95,7 @@ namespace WB.Core.GenericSubdomains.Portable
         private static IEnumerable<TResult> BatchImpl<TSource, TResult>(this IEnumerable<TSource> source, int size,
             Func<IEnumerable<TSource>, TResult> resultSelector)
         {
-            TSource[] bucket = null;
+            TSource[]? bucket = null;
             var count = 0;
 
             foreach (var item in source)

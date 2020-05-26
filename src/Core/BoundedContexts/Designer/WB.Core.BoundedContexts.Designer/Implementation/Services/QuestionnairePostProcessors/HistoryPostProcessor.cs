@@ -555,7 +555,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             foreach (var entity in entities)
             {
-                var parentId = entity.GetParent().PublicKey;
+                var parentId = entity.GetParent()?.PublicKey;
 
                 var entityAsStaticText = entity as IStaticText;
                 var entityAsVariable = entity as IVariable;

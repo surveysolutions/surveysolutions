@@ -104,10 +104,10 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
 
             var response = this.serializer.Serialize(new Questionnaire
-            {
-                Document = questionnaire,
-                Assembly = resultAssembly
-            });
+            (
+                document : questionnaire,
+                assembly : resultAssembly
+            ));
 
             return Content(response, MediaTypeNames.Application.Json);
         }
