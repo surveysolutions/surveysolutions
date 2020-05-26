@@ -1299,7 +1299,7 @@ namespace WB.Tests.Unit.Designer
                 validationExpression,
                 validationMessage,
                 scope,
-                options ?? new[] {new Option() {Title = "1", Value = "1"}, new Option() {Title = "2", Value = "2"}},
+                options ?? new[] {new Option(title : "1", value : "1"), new Option(title : "2", value : "2")},
                 linkedToQuestionId,
                 areAnswersOrdered,
                 maxAllowedAnswers,

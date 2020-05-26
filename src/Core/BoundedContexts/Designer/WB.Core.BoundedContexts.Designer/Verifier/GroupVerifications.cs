@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool NotSingleSectionWithLessThan5Questions(IGroup group)
             => IsSection(group)
-               && group.GetParent().Children.Count > 1
+               && (group.GetParent() ?? throw new InvalidOperationException("Parent was not found.")).Children.Count > 1
                && group.GetDescendants().Count(Question) < 5;
 
         private static bool Question(IQuestionnaireEntity entity) => entity is IQuestion;
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool FirstChapterHasEnablingCondition(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var parentComposite = group.GetParent();
-            if (parentComposite.PublicKey != questionnaire.PublicKey) return false;
+            if (parentComposite?.PublicKey != questionnaire.PublicKey) return false;
 
             if (parentComposite.Children.IndexOf(group) != 0) return false;
 
@@ -256,7 +256,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool GroupHasLevelDepthMoreThan10(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             int groupLevel = 0;
-            IComposite questionnaireItem = group;
+            IComposite? questionnaireItem = group;
             while (questionnaireItem != null)
             {
                 groupLevel++;

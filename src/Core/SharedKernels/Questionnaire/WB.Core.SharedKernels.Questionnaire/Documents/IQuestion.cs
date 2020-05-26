@@ -17,7 +17,7 @@ namespace Main.Core.Entities.SubEntities
         QuestionType QuestionType { get; set; }
         QuestionScope QuestionScope { get; set; }
         string StataExportCaption { get; set; }
-        string VariableLabel { get; set; }
+        string? VariableLabel { get; set; }
         [Obsolete("Multiple validations should be used instead")]
         string? ValidationExpression { get; set; }
         [Obsolete("Multiple validations should be used instead")]

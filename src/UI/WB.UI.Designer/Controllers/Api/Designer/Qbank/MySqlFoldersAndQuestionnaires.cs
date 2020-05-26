@@ -9,7 +9,7 @@ namespace WB.UI.Designer.Api.Designer.Qbank
     {
         public int Id { get; set; }
         public int Classification_id { get; set; }
-        public string? Classification_label { get; set; }
+        public string Classification_label { get; set; } = String.Empty;
         public string Value { get; set; } = String.Empty;
         public int Weight { get; set; }
     }

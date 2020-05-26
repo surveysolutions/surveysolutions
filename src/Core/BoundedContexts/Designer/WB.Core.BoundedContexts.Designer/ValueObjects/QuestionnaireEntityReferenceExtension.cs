@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             var parent = item;
             while (parent != null)
             {
-                IComposite grandParent = parent.GetParent();
+                IComposite? grandParent = parent.GetParent();
                 if (grandParent?.GetParent() == null)
                 {
                     break;

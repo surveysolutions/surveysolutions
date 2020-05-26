@@ -109,13 +109,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool IdentifyingQuestionInSectionWithEnablingCondition(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (Prefilled(question))
-            {
-                var parentSections = question.GetParent().UnwrapReferences(x => x.GetParent()).OfType<IConditional>();
-                return parentSections.Any(x => !string.IsNullOrEmpty(x.ConditionExpression));
-            }
+            if (!Prefilled(question)) return false;
+            
+            var parentSections = (question.GetParent() ?? throw new InvalidOperationException("Parent was not found."))
+                .UnwrapReferences(x => x.GetParent()).OfType<IConditional>();
+            return parentSections.Any(x => !string.IsNullOrEmpty(x.ConditionExpression));
 
-            return false;
         }
 
         private bool MultiOptionQuestionYesNoQuestionCantBeLinked(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -1064,7 +1063,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool TableRosterDoesntContainsQuestionWithSubstitutions(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (((IGroup) entity.GetParent()).DisplayMode != RosterDisplayMode.Table)
+            if (!(entity.GetParent() is IGroup parent))
+                throw new InvalidOperationException("Parent group was not found.");
+
+            if (parent.DisplayMode != RosterDisplayMode.Table)
                 return false;
 
             var title = entity.GetTitle();
@@ -1077,11 +1079,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
             var entitiesSupportingSubstitutions = questionnaire.FindWithTranslations<IQuestion>(question =>
-                ((IGroup) question.GetParent()).DisplayMode == RosterDisplayMode.Matrix).ToList();
+                (question.GetParent() as IGroup ?? throw new InvalidOperationException("Parent group was not found.")).DisplayMode == RosterDisplayMode.Matrix).ToList();
 
             foreach (var translatedEntity in entitiesSupportingSubstitutions)
             {
-                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
+                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle() ?? String.Empty, questionnaire));
                 if (!string.IsNullOrWhiteSpace(translatedEntity.Entity.Instructions))
                     foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.Instructions, questionnaire));
             }
