@@ -32,7 +32,7 @@
     <EmbeddedResource Include="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.95.2" />
+    <PackageReference Include="ClosedXML" Version="0.95.3" />
     <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="HtmlSanitizer" Version="5.0.310" />
