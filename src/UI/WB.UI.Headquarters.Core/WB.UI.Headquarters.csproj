@@ -16,7 +16,7 @@
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.6.0" />
+    <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.7.0" />
     <PackageReference Include="AntiXSS.NetStandard" Version="0.1.111" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
