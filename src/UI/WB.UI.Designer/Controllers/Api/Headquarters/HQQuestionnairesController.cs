@@ -176,11 +176,11 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());
 
             return Ok(new QuestionnaireCommunicationPackage
-            {
-                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
-                QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = versionToCompileAssembly
-            });
+            (
+                questionnaire : this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
+                questionnaireAssembly : resultAssembly,
+                questionnaireContentVersion : versionToCompileAssembly
+            ));
         }
 
         [HttpPost]
@@ -233,7 +233,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             {
                 if (questionnaireEntry is IGroup @group)
                 {
-                    if (group.GetParent().PublicKey == questionnaire.PublicKey)
+                    if (group.GetParent()?.PublicKey == questionnaire.PublicKey)
                     {
                         result.ChaptersCount++;
                     }

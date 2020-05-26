@@ -151,7 +151,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var questionnaireItems = document.Find<IComposite>();
 
             var variableNames = questionnaireItems
-                .Select(x => new VariableName(x.PublicKey.FormatGuid(), x.GetVariable(), GetQuestionType(x, document)))
+                .Select(x => 
+                    new VariableName(x.PublicKey.FormatGuid(), x.GetVariable() ?? String.Empty, GetQuestionType(x, document)))
                 .Where(variableName => !string.IsNullOrWhiteSpace(variableName.Name))
                 .ToList();
 
@@ -166,7 +167,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             if (variable != null) return questionnaireTypeMapper.GetVariableType(variable.Type);
 
             var question = entity as IQuestion;
-            if (question!=null) return questionnaireTypeMapper.GetQuestionType(question, questionnaire).Replace(typeof(YesNoAndAnswersMissings).Name, "YesNoAnswers");
+            if (question!=null) 
+                return questionnaireTypeMapper.GetQuestionType(question, questionnaire)
+                    .Replace(typeof(YesNoAndAnswersMissings).Name, "YesNoAnswers");
 
             return entity is IGroup ? "Roster" : null;
         }

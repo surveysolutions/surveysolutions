@@ -90,7 +90,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 foreach (var attachment in attachments)
                 {
-                    this.attachmentsStorage.Store(attachment,attachment.Content.Id, designerToken);
+                    this.attachmentsStorage.Store(attachment, attachment.Content.Id, designerToken);
                 }
                 
                 this.categoriesManagementService.RemoveCategories(questionnaireIdentity);

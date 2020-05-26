@@ -7,6 +7,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
     {
         Guid PublicKey { get; }
 
-        IComposite GetParent();
+        IComposite? GetParent();
     }
 }

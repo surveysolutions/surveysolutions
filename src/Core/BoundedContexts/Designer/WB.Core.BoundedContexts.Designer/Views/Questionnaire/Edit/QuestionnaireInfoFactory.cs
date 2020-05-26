@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -193,11 +192,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 return firstSectionId;
 
             List<IGroup> parents = new List<IGroup>();
-            var parent = (IGroup)entity.GetParent();
+            var parent = entity.GetParent() as IGroup;
             while (parent != null && !(parent is QuestionnaireDocument))
             {
                 parents.Add(parent);
-                parent = (IGroup)parent.GetParent();
+                parent = parent.GetParent() as IGroup;
             }
             var sectionId = parents.Select(x => x.PublicKey).LastOrDefault();
 
@@ -477,7 +476,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             foreach (var validationExpression in model.ValidationConditions)
             {
                 validationExpression.Expression = expressionReplacer.ReplaceGuidsWithStataCaptions(
-                    validationExpression.Expression, questionnaireKey.QuestionnaireId);
+                    validationExpression.Expression, questionnaireKey.QuestionnaireId) ?? String.Empty;
             }
         }
 
@@ -489,7 +488,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 type : question.QuestionType,
                 variableLabel : question.VariableLabel,
                 id : question.PublicKey,
-                parentGroupId : question.GetParent().PublicKey,
+                parentGroupId : (question.GetParent() ?? throw new InvalidOperationException("Parent was not found.")).PublicKey,
                 instructions : question.Instructions,
                 enablementCondition : question.ConditionExpression,
                 isPreFilled : question.Featured,
@@ -548,7 +547,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
                     questionView.CascadeFromQuestionId = singleoptionQuestion.CascadeFromQuestionId?.FormatGuid();
                     questionView.Options = CreateCategoricalOptions(singleoptionQuestion.Answers);
-                    questionView.OptionsFilterExpression = singleoptionQuestion.Properties.OptionsFilterExpression;
+                    questionView.OptionsFilterExpression = singleoptionQuestion.Properties?.OptionsFilterExpression;
                     questionView.ShowAsList = singleoptionQuestion.ShowAsList;
                     questionView.ShowAsListThreshold = singleoptionQuestion.ShowAsListThreshold;
                     questionView.CategoriesId = singleoptionQuestion.CategoriesId.FormatGuid();
@@ -560,7 +559,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 case QuestionType.DateTime:
                     var dateTimeQuestion = (DateTimeQuestion)question;
                     questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
-                    questionView.DefaultDate = dateTimeQuestion.Properties.DefaultDate;
+                    questionView.DefaultDate = dateTimeQuestion.Properties?.DefaultDate;
                     return questionView;
                 case QuestionType.Multimedia:
                     var multimediaQuestion = (MultimediaQuestion) question;
@@ -792,11 +791,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         private Breadcrumb[] GetBreadcrumbs(ReadOnlyQuestionnaireDocument document, IComposite entity)
         {
             List<IGroup> parents = new List<IGroup>();
-            var parent = (IGroup)entity.GetParent();
+            var parent = entity.GetParent() as IGroup;
             while (parent != null && parent != document.Questionnaire)
             {
                 parents.Add(parent);
-                parent = (IGroup)parent.GetParent();
+                parent = parent.GetParent() as IGroup;
             }
             parents.Reverse();
 

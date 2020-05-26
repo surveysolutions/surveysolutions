@@ -86,6 +86,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private TranslationFile GetTranslationFile(Guid questionnaireId, Guid? translationId = null)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            if(questionnaire == null) throw new InvalidOperationException("Questionnaire was not found.");
+            
             var translation = translationId.HasValue
                 ? this.Get(questionnaireId, translationId.Value)
                 : new QuestionnaireTranslation(new List<TranslationDto>());

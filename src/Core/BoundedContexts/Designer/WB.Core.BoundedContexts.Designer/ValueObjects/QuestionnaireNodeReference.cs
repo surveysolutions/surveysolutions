@@ -102,9 +102,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
 
             var section = entity;
-            while (true)
+            while (section != null)
             {
-                IComposite grandParent = section.GetParent();
+                var grandParent = section.GetParent();
                 if (grandParent?.GetParent() == null)
                 {
                     break;
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 }
             }
 
-            result.ChapterId = section.PublicKey;
+            result.ChapterId = section?.PublicKey;
             result.Property = property;
             result.IndexOfEntityInProperty = indexOfEntityInProperty;
 

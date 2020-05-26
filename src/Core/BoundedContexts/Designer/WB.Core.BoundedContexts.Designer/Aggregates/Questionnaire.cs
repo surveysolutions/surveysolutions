@@ -148,7 +148,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableName = createQuestionnaire.Variable
             };
 
-            this.AddGroup(CreateGroup(Guid.NewGuid(), QuestionnaireEditor.NewSection, null, null, null,false), null);
+            this.AddGroup(CreateGroup(Guid.NewGuid(), QuestionnaireEditor.NewSection, String.Empty,
+                String.Empty, String.Empty, false), null);
         }
 
         public void CloneQuestionnaire(string title, bool isPublic, Guid createdBy, Guid publicKey, IQuestionnaireDocument source)
@@ -171,7 +172,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if (!this.lookupTableService.IsLookupTableEmpty(document.PublicKey, lookupTable.Key, lookupTableName))
                 {
-                    lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key, lookupTableName, this.Id, lookupTable.Key);
+                    lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key,  this.Id, lookupTable.Key);
                 }
             }
 
@@ -460,7 +461,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowIfTargetGroupHasReachedAllowedDepthLimit(parentGroupId.Value);
             }
 
-            this.AddGroup(CreateGroup(groupId, title, variableName, description, condition, hideIfDisabled),
+            this.AddGroup(CreateGroup(groupId, title, variableName ?? String.Empty, description?? String.Empty, condition, hideIfDisabled),
                 parentGroupId);
 
             if (isRoster)
@@ -515,9 +516,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var wasRosterAndBecomeAGroup = @group.IsRoster && !isRoster;
 
             this.innerDocument.UpdateGroup(groupId,
-                title,
-                variableName,
-                description,
+                title ?? String.Empty,
+                variableName ?? String.Empty,
+                description ?? String.Empty,
                 condition,
                 hideIfDisabled,
                 displayMode);
@@ -1413,7 +1414,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var staticText = new StaticText(publicKey: command.EntityId,
                 text: System.Web.HttpUtility.HtmlDecode(command.Text),
-                enablementCondition: null,
+                conditionExpression: String.Empty, 
                 hideIfDisabled: false,
                 validationConditions: null,
                 attachmentName: null);
@@ -1435,7 +1436,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var oldStaticText = this.innerDocument.Find<IStaticText>(command.EntityId);
             var newStaticText = new StaticText(publicKey: command.EntityId,
                 text: System.Web.HttpUtility.HtmlDecode(command.Text),
-                enablementCondition: command.EnablementCondition,
+                conditionExpression: command.EnablementCondition,
                 hideIfDisabled: command.HideIfDisabled,
                 validationConditions: command.ValidationConditions,
                 attachmentName: command.AttachmentName);
@@ -1582,6 +1583,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var entityToInsert = GetEntityOrThrowDomainExceptionIfEntityDoesNotExists(pasteAfter.SourceDocument, pasteAfter.SourceItemId);
 
             var targetToPasteIn = itemToInsertAfter.GetParent();
+            if(targetToPasteIn == null)
+                throw new QuestionnaireException(
+                    DomainExceptionType.EntityNotFound,
+                    string.Format(ExceptionMessages.UnknownTypeCantBePaste, "unknown"));
+            
             var targetIndex = targetToPasteIn.Children.IndexOf(itemToInsertAfter) + 1;
 
             this.CheckDepthInvariants(targetToPasteIn, entityToInsert);
@@ -2065,13 +2071,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private IEnumerable<IGroup> GetAllParentGroups(IComposite entity)
         {
-            var currentParent = (IGroup)entity.GetParent();
+            var currentParent = entity.GetParent() as IGroup;
 
             while (currentParent != null)
             {
                 yield return currentParent;
 
-                currentParent = (IGroup)currentParent.GetParent();
+                currentParent = currentParent.GetParent() as IGroup;
             }
         }
 
@@ -2241,9 +2247,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
             question.QuestionText = System.Web.HttpUtility.HtmlDecode(questionText);
-            question.StataExportCaption = stataExportCaption;
+            question.StataExportCaption = stataExportCaption ?? String.Empty;
             question.VariableLabel = variableLabel;
-            question.ConditionExpression = conditionExpression;
+            question.ConditionExpression = conditionExpression ?? String.Empty;
             question.HideIfDisabled = hideIfDisabled;
             question.ValidationExpression = null;
             question.ValidationMessage = null;
@@ -2272,7 +2278,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private static IGroup CreateGroup(Guid id, string? title, string? variableName, string? description, string? enablingCondition, bool hideIfDisabled)
+        private static IGroup CreateGroup(Guid id, string? title, string variableName, string description, string enablingCondition, bool hideIfDisabled)
         {
             var group = new Group();
             group.Title = System.Web.HttpUtility.HtmlDecode(title);

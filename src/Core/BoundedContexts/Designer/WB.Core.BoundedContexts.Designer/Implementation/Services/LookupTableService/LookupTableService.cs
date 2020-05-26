@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return result;
         }
 
-        public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, string sourceLookupTableName, Guid newQuestionnaireId, Guid newLookupTableId)
+        public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, Guid newQuestionnaireId, Guid newLookupTableId)
         {
             var content = GetLookupTableContent(sourceQuestionnaireId, sourceTableId);
 
@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             this.lookupTableContentStorage.Store(content, lookupTableStorageId);
         }
 
-        public bool IsLookupTableEmpty(Guid questionnaireId, Guid tableId, string lookupTableName)
+        public bool IsLookupTableEmpty(Guid questionnaireId, Guid tableId, string? lookupTableName)
         {
             if (string.IsNullOrWhiteSpace(lookupTableName))
             {

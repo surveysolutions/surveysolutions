@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
         {
             var serializer =
                 Mock.Of<IJsonAllTypesSerializer>(x => x.Deserialize<SyncItem>(It.IsAny<string>()) == new SyncItem() &&
-                                          x.Deserialize<InterviewMetaInfo>(It.IsAny<string>()) == new InterviewMetaInfo { Status = 0 } &&
+                                          x.Deserialize<InterviewMetaInfo>(It.IsAny<string>()) == new InterviewMetaInfo(new FeaturedQuestionMeta[0]) { Status = 0 } &&
                                           x.Deserialize<AggregateRootEvent[]>(decompressedEvents) == new AggregateRootEvent[0]);
             var syncSettings = Mock.Of<SyncSettings>();
 
