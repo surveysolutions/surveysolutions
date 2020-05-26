@@ -1,47 +1,40 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Metrics;
 using WB.Core.Infrastructure.Services;
-using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Infrastructure.Native.Storage
 {
-    public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository,
-        IAggregateRootCacheCleaner, IAggregateRootCacheFiller
+    public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository
     {
         private readonly IEventStore eventStore;
-        private readonly IInMemoryEventStore inMemoryEventStore;
         private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
-        private readonly IMemoryCache memoryCache;
-        private readonly HashSet<Guid> dirtyCheckedAggregateRoots;
+        private readonly IAggregateRootCache memoryCache;
 
         public EventSourcedAggregateRootRepositoryWithWebCache(
             IEventStore eventStore,
-            IInMemoryEventStore inMemoryEventStore,
             IAggregateRootPrototypeService prototypeService,
             IDomainRepository repository,
             IServiceLocator serviceLocator,
             IAggregateLock aggregateLock,
-            IMemoryCache memoryCache)
+            IAggregateRootCache memoryCache)
             : base(eventStore, repository)
         {
             this.eventStore = eventStore;
-            this.inMemoryEventStore = inMemoryEventStore;
             this.prototypeService = prototypeService;
             this.serviceLocator = serviceLocator;
             this.aggregateLock = aggregateLock;
             this.memoryCache = memoryCache;
-            this.dirtyCheckedAggregateRoots = new HashSet<Guid>();
         }
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
@@ -52,7 +45,8 @@ namespace WB.Infrastructure.Native.Storage
         {
             return aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
-                var aggregateRoot = this.GetFromCache(aggregateId);
+                var aggregateRootCacheItem = this.GetFromCache(aggregateId);
+                var aggregateRoot = aggregateRootCacheItem?.AggregateRoot;
 
                 if (aggregateRoot != null)
                 {
@@ -61,7 +55,7 @@ namespace WB.Infrastructure.Native.Storage
 
                 if (this.prototypeService.IsPrototype(aggregateId))
                 {
-                    var events = this.inMemoryEventStore.Read(aggregateId, 0);
+                    IEnumerable<CommittedEvent> events = aggregateRootCacheItem?.Events ?? new List<CommittedEvent>();
                     aggregateRoot = base.repository.Load(aggregateType, aggregateId, events);
                 }
                 else
@@ -70,88 +64,55 @@ namespace WB.Infrastructure.Native.Storage
                 }
 
                 if (aggregateRoot != null)
-                    this.PutToCache(aggregateRoot);
+                {
+                    this.memoryCache.Set(aggregateRoot);
+                }
 
                 return aggregateRoot;
             });
         }
 
-        private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
+        private AggregateRootCacheItem GetFromCache(Guid aggregateId)
         {
-            if (!(memoryCache.Get(Key(aggregateId)) is IEventSourcedAggregateRoot cachedAggregate))
+            var cacheItem = memoryCache.Get(aggregateId);
+
+            if (cacheItem == null)
             {
-                CommonMetrics.StatefullInterviewCacheMiss.Inc();
+                CoreMetrics.StatefullInterviewCacheMiss?.Inc();
                 return null;
+            }
+
+            if (cacheItem.AggregateRoot == null)
+            {
+                return cacheItem;
             }
 
             bool dbContainsNewEvents = false;
 
             if (!this.prototypeService.IsPrototype(aggregateId))
             {
-                if (!this.dirtyCheckedAggregateRoots.Contains(aggregateId))
+                if (!cacheItem.IsDirtyChecked)
                 {
-                    dbContainsNewEvents = eventStore.IsDirty(aggregateId, cachedAggregate.Version);
+                    dbContainsNewEvents = eventStore.IsDirty(aggregateId, cacheItem.AggregateRoot.Version);
 
                     if (!dbContainsNewEvents)
                     {
-                        this.dirtyCheckedAggregateRoots.Add(aggregateId);
+                        cacheItem.IsDirtyChecked = true;
                     }
                 }
             }
 
-            bool isDirty = cachedAggregate.HasUncommittedChanges() || dbContainsNewEvents;
+            bool isDirty = cacheItem.AggregateRoot.HasUncommittedChanges() || dbContainsNewEvents;
             if (isDirty)
             {
-                Evict(aggregateId);
+                this.memoryCache.Evict(aggregateId);
                 return null;
             }
 
-            this.serviceLocator.InjectProperties(cachedAggregate);
+            this.serviceLocator.InjectProperties(cacheItem.AggregateRoot);
 
-            CommonMetrics.StatefullInterviewCacheHit.Inc();
-            return cachedAggregate;
-        }
-
-
-        protected virtual TimeSpan Expiration => TimeSpan.FromMinutes(5);
-
-        private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
-        {
-            var cacheKey = Key(aggregateRoot.EventSourceId);
-
-            memoryCache.Set(cacheKey, aggregateRoot, new MemoryCacheEntryOptions()
-                .RegisterPostEvictionCallback(CacheItemRemoved)
-                .SetSlidingExpiration(Expiration));
-
-            CommonMetrics.StatefullInterviewsCached.Labels("added").Inc();
-        }
-
-        private void CacheItemRemoved(object key, object value, EvictionReason reason, object state)
-        {
-            CacheItemRemoved(key as string, reason);
-        }
-
-        protected virtual string Key(Guid id) => "aggregateRoot_" + id;
-
-        protected virtual void CacheItemRemoved(string key, EvictionReason reason)
-        {
-            CommonMetrics.StatefullInterviewsCached.Labels("removed").Inc();
-        }
-
-        public void Evict(Guid aggregateId)
-        {
-            this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
-            {
-                var key = Key(aggregateId);
-                this.dirtyCheckedAggregateRoots.Remove(aggregateId);
-
-                memoryCache.Remove(key);
-            });
-        }
-
-        public void Store(IEventSourcedAggregateRoot aggregateRoot)
-        {
-            PutToCache(aggregateRoot);
+            CoreMetrics.StatefullInterviewCacheHit?.Inc();
+            return cacheItem;
         }
     }
 }

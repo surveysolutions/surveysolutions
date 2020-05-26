@@ -138,8 +138,8 @@ namespace WB.Tests.Abc.TestFactories
             ILiteEventBus eventBus = null,
             IServiceLocator serviceLocator = null,
             IAggregateLock aggregateLock = null,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner = null,
             IEventStore eventStore = null,
+            IAggregateRootCache aggregateRootCacheCleaner = null,
             IAggregateRootPrototypeService prototypeService = null,
             IAggregateRootPrototypePromoterService promoterService = null)
         {
@@ -155,7 +155,7 @@ namespace WB.Tests.Abc.TestFactories
                     eventBus: eventBus ?? Mock.Of<IEventBus>(),
                     serviceLocator: locatorMock.Object,
                     plainRepository: plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
-                    aggregateRootCacheCleaner: aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>(),
+                    aggregateRootCacheCleaner: aggregateRootCacheCleaner ?? Create.Storage.NewAggregateRootCache(),
                     commandsMonitoring: Mock.Of<ICommandsMonitoring>(),
                     promoterService: promoterService ?? Mock.Of<IAggregateRootPrototypePromoterService>(),
                     prototypeService: prototypeService 
@@ -210,12 +210,11 @@ namespace WB.Tests.Abc.TestFactories
             IEventStore eventStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepositoryWithWebCache(
                 eventStore ?? Mock.Of<IEventStore>(x => x.GetLastEventSequence(It.IsAny<Guid>()) == 0),
-                new InMemoryEventStore(Create.Storage.NewMemoryCache()),
                 Create.Service.MockOfAggregatePrototypeService(), 
                 repository ?? Mock.Of<IDomainRepository>(),
                 Create.Service.ServiceLocatorService(),
                 new AggregateLock(),
-                Create.Storage.NewMemoryCache());
+                Create.Storage.NewAggregateRootCache());
 
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();

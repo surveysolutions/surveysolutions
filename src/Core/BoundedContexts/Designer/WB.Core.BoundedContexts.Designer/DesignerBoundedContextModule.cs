@@ -109,8 +109,8 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IDesignerQuestionnaireStorage, DesignerQuestionnaireStorage>();
             registry.Bind<IUserManager, DesignerUserManager>();
 
-            registry.Bind<IAggregateRootPrototypeService, DumbAggregateRootPrototypeService>();
-            registry.Bind<IAggregateRootPrototypePromoterService, DumbAggregateRootPrototypePromoterService>();
+            registry.Bind<IAggregateRootPrototypeService, DummyAggregateRootPrototypeService>();
+            registry.Bind<IAggregateRootPrototypePromoterService, DummyAggregateRootPrototypePromoterService>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
