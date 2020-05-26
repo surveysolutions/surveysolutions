@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure
 
         public static bool IsPrototype<T>(this IPublishedEvent<T> @event) where T : IEvent
         {
-            return @event.Origin == "prototype";
+            return string.Equals(@event.Origin, "prototype", StringComparison.OrdinalIgnoreCase);
         }
     }
 }
