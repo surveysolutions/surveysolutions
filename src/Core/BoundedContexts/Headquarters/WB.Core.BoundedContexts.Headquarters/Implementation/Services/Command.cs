@@ -47,13 +47,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         /// By default, the resulting command line and the working directory (if specified) are echoed to standard error (stderr).
         /// To suppress this behavior, provide the <paramref name="noEcho"/> parameter with a value of <c>true</c>.
         /// </remarks>
-        public static string Read(string name, string args = null, Action<string> outputDataReceived = null)
+        public static string Read(string name, string args = null, string workingDirectory = null, Action<string> outputDataReceived = null)
         {
             using var process = new Process();
             process.StartInfo = new ProcessStartInfo(name, args)
             {
                 RedirectStandardOutput = true,
-                RedirectStandardError = true
+                RedirectStandardError = true,
+                WorkingDirectory = workingDirectory
             };
             process.OutputDataReceived += (sender, e) => outputDataReceived?.Invoke(e.Data);
 
