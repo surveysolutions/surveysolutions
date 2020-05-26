@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;W
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
         private readonly IExternalFileStorage externalFileStorage;
+        private readonly IOptions<GeospatialConfig> geospatialConfig;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
 
@@ -48,7 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IPlainStorageAccessor<UserMap> userMapsStorage,
             ISerializer serializer,
             IUserRepository userStorage,
-            IExternalFileStorage externalFileStorage)
+            IExternalFileStorage externalFileStorage,
+            IOptions<GeospatialConfig> geospatialConfig)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -58,6 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.userStorage = userStorage;
 
             this.externalFileStorage = externalFileStorage;
+            this.geospatialConfig = geospatialConfig;
 
             this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -208,7 +211,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                   try
                     {
-                        var startInfo = Command.Read($"gdalinfo", $"{tempFile} -json");
+                        var startInfo = Command.Read($"gdalinfo", $"{tempFile} -json",
+                            workingDirectory: this.geospatialConfig.Value.GdalHome);
                         var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
                         var allX = new List<double>
