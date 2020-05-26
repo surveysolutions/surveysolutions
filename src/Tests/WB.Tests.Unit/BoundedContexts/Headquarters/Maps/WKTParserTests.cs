@@ -1,5 +1,3 @@
-using Geo.Abstractions.Interfaces;
-using Geo.IO.Wkt;
 using NUnit.Framework;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
