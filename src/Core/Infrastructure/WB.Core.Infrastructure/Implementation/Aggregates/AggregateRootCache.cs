@@ -1,5 +1,6 @@
-using System;
-using Microsoft.Extensions.Caching.Memory;
+ using System;
+ using System.Security.Cryptography.X509Certificates;
+ using Microsoft.Extensions.Caching.Memory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Metrics;
@@ -23,7 +24,6 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         {
             var cacheItem = GetOrCreate(aggregateRoot.EventSourceId);
             cacheItem.AggregateRoot = aggregateRoot;
-            CoreMetrics.StatefullInterviewsCached?.Labels("added").Inc();
         }
 
         public AggregateRootCacheItem GetOrCreate(Guid id, Func<AggregateRootCacheItem, AggregateRootCacheItem> factory = null)
@@ -36,33 +36,45 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                         .RegisterPostEvictionCallback(CacheItemRemoved);
 
                     var result = new AggregateRootCacheItem(id);
-
+                    CoreMetrics.StatefullInterviewsCached?.Labels("added").Inc();
                     return factory != null ? factory(result) : result;
                 });
             });
         }
 
+        private static readonly TimeSpan MaxPinPeriod = TimeSpan.FromHours(1);
+
         public void PinItem(Guid id, TimeSpan period)
         {
-           // throw new NotImplementedException();
+            var item = this.Get(id);
+            if (item != null)
+            {
+                var expiration = period > MaxPinPeriod ? MaxPinPeriod : period;
+
+                CoreMetrics.StatefullInterviewsCached?.Labels("added").Inc();
+                this.memoryCache.Set(Key(id), item, new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(expiration)
+                        .RegisterPostEvictionCallback(CacheItemRemoved));
+            }
         }
 
         public void UnpinItem(Guid id)
         {
-           // throw new NotImplementedException();
+           PinItem(id, Expiration);
         }
 
         private void CacheItemRemoved(object key, object value, EvictionReason reason, object state)
         {
-            if (state is AggregateRootCacheItem cacheItem)
+            if (value is AggregateRootCacheItem cacheItem)
             {
+                CoreMetrics.StatefullInterviewsCached?.Labels("removed").Inc();
                 CacheItemRemoved(cacheItem.Id, reason);
             }
         }
 
         protected virtual void CacheItemRemoved(Guid id, EvictionReason reason)
         {
-            CoreMetrics.StatefullInterviewsCached?.Labels("removed").Inc();
+            
         }
 
         protected virtual string Key(Guid id) => "ar_" + id;
