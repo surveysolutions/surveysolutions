@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,10 +8,9 @@ using System.Threading.Tasks;
 using System.Xml;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
-using OSGeo.GDAL;
-using OSGeo.OGR;
+using Newtonsoft.Json;W
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
-using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -206,24 +206,74 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     break;
                 case ".tif":
                 {
-                    GdalConfiguration.ConfigureGdal();
-                    using (Dataset ds = Gdal.Open(tempFile, Access.GA_ReadOnly))
-                    using (SpatialReference sr = new SpatialReference(ds.GetProjection()))
+                  try
                     {
-                        if (sr.IsProjected() < 1)
-                            throw new ArgumentException(
-                                $"Geotiff is not projected. {this.fileSystemAccessor.GetFileName(tempFile)}");
+                        var startInfo = Command.Read($"gdalinfo", $"{tempFile} -json");
+                        var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
-                        if (int.TryParse(sr.GetAuthorityCode(null), out var wkid))
-                            item.Wkid = wkid == 0 ? item.Wkid : wkid;
+                        var allX = new List<double>
+                        {
+                            deserialized.CornerCoordinates.LowerLeft[0],
+                            deserialized.CornerCoordinates.UpperLeft[0],
+                            deserialized.CornerCoordinates.LowerRight[0],
+                            deserialized.CornerCoordinates.UpperRight[0],
+                        };
+                        
+                        var allY = new List<double>
+                        {
+                            deserialized.CornerCoordinates.LowerLeft[1],
+                            deserialized.CornerCoordinates.UpperLeft[1],
+                            deserialized.CornerCoordinates.LowerRight[1],
+                            deserialized.CornerCoordinates.UpperRight[1],
+                        };
+                        // // alternative way to extract extent
+                        // double xMin = double.MaxValue;
+                        // double xMax = double.MinValue;
+                        // double yMin = double.MaxValue;
+                        // double yMax = double.MinValue;
+                        //
+                        // foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
+                        // {
+                        //     foreach (double[] coord in poli)
+                        //     {
+                        //         xMin = Math.Min(xMin, coord[0]);
+                        //         xMax = Math.Max(xMax, coord[0]);
+                        //         
+                        //         yMin = Math.Min(yMin, coord[1]);
+                        //         yMax = Math.Max(yMax, coord[1]);
+                        //     }
+                        //     
+                        // }
+                        // item.XMinVal = xMin;
+                        // item.YMinVal = yMin;
+                        //
+                        // item.XMaxVal = xMax;
+                        // item.YMaxVal = yMax;
+                        
+                        item.Wkid = 32735; // probably written in WKT format in the deserialized.CoordinateSystem but there is no parser for it
 
-                        double[] geoTransform = new double[6];
-                        ds.GetGeoTransform(geoTransform);
+                        item.XMinVal = allX.Min();
+                        item.YMinVal = allY.Min();
+                        
+                        item.XMaxVal = allX.Max();
+                        item.YMaxVal = allY.Max();
 
-                        item.XMinVal = geoTransform[0];
-                        item.YMaxVal = geoTransform[3];
-                        item.XMaxVal = item.XMinVal + geoTransform[1] * ds.RasterXSize;
-                        item.YMinVal = item.YMaxVal + geoTransform[5] * ds.RasterYSize;
+                    }
+                    catch (Win32Exception e)
+                    {
+                        if (e.NativeErrorCode == 2)
+                        {
+                            throw new Exception("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
+                        }
+                    }
+                    catch (NonZeroExitCodeException e)
+                    {
+                        if (e.ProcessExitCode == 4)
+                        {
+                            throw new Exception(".tif file is not recognized as map", e);
+                        }
+
+                        throw;
                     }
                 }
                     break;
