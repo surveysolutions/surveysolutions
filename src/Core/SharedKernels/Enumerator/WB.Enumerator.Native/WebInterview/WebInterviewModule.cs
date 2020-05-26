@@ -15,6 +15,7 @@ namespace WB.Enumerator.Native.WebInterview
             registry.Bind<InterviewLifecycleEventHandler>();
             registry.BindAsSingleton<IWebInterviewInvoker, WebInterviewInvoker>();
             registry.Bind<IPipelineModule, WebInterviewConnectionsCounter>();
+            registry.Bind<IPipelineModule, StatefulInterviewCachePinModule>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -22,6 +22,7 @@ namespace WB.Core.Infrastructure
             registry.BindInPerLifetimeScope<ICommandService, CommandService>();
             registry.Bind<ICommandExecutor, CommandExecutor>();
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
+            registry.Bind<IAggregateRootCache, AggregateRootCache>();
             registry.Bind<IAggregateRootPrototypeService, AggregateRootPrototypeService>();
             registry.Bind<IAggregateRootPrototypePromoterService, AggregateRootPrototypePromoterService>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
@@ -33,6 +34,7 @@ namespace WB.Core.Infrastructure
             registry.Bind<IClock, DateTimeBasedClock>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
             registry.BindAsScoped<ICommandService, CommandService>();
+            registry.Bind<IAggregateRootCache, AggregateRootCache>();
             registry.Bind<ICommandExecutor, CommandExecutor>();
             registry.Bind<IInScopeExecutor, NoScopeInScopeExecutor>();
         }

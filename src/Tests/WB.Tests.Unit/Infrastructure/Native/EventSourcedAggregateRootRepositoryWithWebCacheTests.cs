@@ -19,13 +19,6 @@ namespace WB.Tests.Unit.Infrastructure.Native
     public class EventSourcedAggregateRootRepositoryWithWebCacheTests
     {
         [Test]
-        public void should_not_throw_when_evicted_from_empty_repository()
-        {
-            var repo = GetRepository();
-            repo.Evict(Guid.NewGuid());
-        }
-
-        [Test]
         public void should_evict_from_cache_if_aggregate_root_is_dirty()
         {
             var eventStore = new Mock<IEventStore>();
@@ -40,11 +33,12 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 .Returns<Type, Guid, IEnumerable<CommittedEvent>>((type, id, ce)
                     => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id && ar.Version == versionForNewObjects));
 
-            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, 
-                Mock.Of<IInMemoryEventStore>(), Create.Service.MockOfAggregatePrototypeService()
-                ,  domainRepo.Object,
+            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object,
+                Create.Service.MockOfAggregatePrototypeService(),  
+                domainRepo.Object,
                 ServiceLocator.Current,
-                new Stub.StubAggregateLock(), Create.Storage.NewMemoryCache());
+                new Stub.StubAggregateLock(), 
+                Create.Storage.NewAggregateRootCache());
 
             var entity = repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g1);
 
@@ -100,11 +94,10 @@ namespace WB.Tests.Unit.Infrastructure.Native
         {
             return new EventSourcedAggregateRootRepositoryWithWebCache(
                 eventStore: eventStore ?? Mock.Of<IEventStore>(), 
-                inMemoryEventStore: inMemoryEventStore ?? Mock.Of<IInMemoryEventStore>(),
                 repository: domainRepository ?? Mock.Of<IDomainRepository>(),
                 serviceLocator: ServiceLocator.Current,
                 aggregateLock: new Stub.StubAggregateLock(),
-                memoryCache: Create.Storage.NewMemoryCache(),
+                memoryCache: Create.Storage.NewAggregateRootCache(),
                 prototypeService: prototypeService ?? Create.Service.MockOfAggregatePrototypeService());
         }
     }

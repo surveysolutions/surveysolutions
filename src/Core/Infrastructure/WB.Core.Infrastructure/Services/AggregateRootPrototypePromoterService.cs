@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.Core.Infrastructure.Services
 {
@@ -14,17 +13,17 @@ namespace WB.Core.Infrastructure.Services
         private readonly IInMemoryEventStore inMemoryEventStore;
         private readonly IEventStore eventStore;
         private readonly IAggregateRootPrototypeService prototypeService;
-        private readonly IAggregateRootCacheCleaner cacheCleaner;
+        private readonly IAggregateRootCache cache;
 
         public AggregateRootPrototypePromoterService(ILiteEventBus liteEventBus,
             IInMemoryEventStore inMemoryEventStore, IEventStore eventStore, 
-            IAggregateRootPrototypeService prototypeService, IAggregateRootCacheCleaner cacheCleaner)
+            IAggregateRootPrototypeService prototypeService, IAggregateRootCache cache)
         {
             this.liteEventBus = liteEventBus;
             this.inMemoryEventStore = inMemoryEventStore;
             this.eventStore = eventStore;
             this.prototypeService = prototypeService;
-            this.cacheCleaner = cacheCleaner;
+            this.cache = cache;
         }
 
         public void MaterializePrototypeIfRequired(Guid id)
@@ -53,7 +52,7 @@ namespace WB.Core.Infrastructure.Services
                         throw;
                     }
 
-                    this.cacheCleaner.Evict(id);
+                    this.cache.Evict(id);
                     break;
                 }
             }

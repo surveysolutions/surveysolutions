@@ -1,38 +1,34 @@
-﻿﻿using System;
- using Microsoft.Extensions.Caching.Memory;
+﻿using System;
+using WB.Core.Infrastructure.Aggregates;
 
- namespace WB.Core.Infrastructure.Services
+namespace WB.Core.Infrastructure.Services
 {
     class AggregateRootPrototypeService : IAggregateRootPrototypeService
     {
-        private readonly IMemoryCache memoryCache;
+        private readonly IAggregateRootCache memoryCache;
 
-        public AggregateRootPrototypeService(IMemoryCache memoryCache)
+        public AggregateRootPrototypeService(IAggregateRootCache memoryCache)
         {
             this.memoryCache = memoryCache;
         }
-        
+
         public PrototypeType? GetPrototypeType(Guid id)
         {
-            if(memoryCache.TryGetValue(CacheKey(id), out PrototypeType type))
-            {
-                return type;
-            }
-            
-            return null;
+            var cacheItem = memoryCache.Get(id);
+
+            return cacheItem?.PrototypeType;
         }
 
         public void MarkAsPrototype(Guid id, PrototypeType type)
         {
-            memoryCache.Set(CacheKey(id), type,
-                new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(5)));
+            var cacheItem = memoryCache.GetOrCreate(id, item => item.SetPrototypeType(type));
+            cacheItem.PrototypeType = type;
         }
-
-        private string CacheKey(Guid id) => $"arps::" + id.ToString();
 
         public void RemovePrototype(Guid id)
         {
-            memoryCache.Remove(CacheKey(id));
+            var cacheItem = memoryCache.Get(id);
+            cacheItem.PrototypeType = null;
         }
     }
 }
