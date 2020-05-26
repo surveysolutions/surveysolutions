@@ -1,6 +1,7 @@
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Ncqrs.Eventing;
@@ -59,10 +60,10 @@ namespace WB.Enumerator.Native.WebInterview
 
     {
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
+        private readonly IAggregateRootCache aggregateRootCacheCleaner;
 
         public InterviewLifecycleEventHandler(IWebInterviewNotificationService webInterviewNotificationService,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
+            IAggregateRootCache aggregateRootCacheCleaner)
         {
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;

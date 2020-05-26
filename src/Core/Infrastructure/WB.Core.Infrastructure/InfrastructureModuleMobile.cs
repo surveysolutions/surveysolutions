@@ -24,8 +24,8 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
             registry.Bind<IInScopeExecutor, NoScopeInScopeExecutor>();
             registry.Bind<ICommandExecutor, CommandExecutor>();
-            registry.Bind<IAggregateRootPrototypeService, DumbAggregateRootPrototypeService>();
-            registry.Bind<IAggregateRootPrototypePromoterService, DumbAggregateRootPrototypePromoterService>();
+            registry.Bind<IAggregateRootPrototypeService, DummyAggregateRootPrototypeService>();
+            registry.Bind<IAggregateRootPrototypePromoterService, DummyAggregateRootPrototypePromoterService>();
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
+using WB.Core.Infrastructure.Metrics;
 
 namespace WB.Infrastructure.Native.Monitoring
 {
-    public class Counter : Counter.ICounter
+    public class Counter : ICounter
     {
         private readonly Prometheus.Counter counter;
         private string[] labels = null;
@@ -33,11 +33,5 @@ namespace WB.Infrastructure.Native.Monitoring
 
         public IEnumerable<string[]> AllLabels => this.counter.GetAllLabelValues();
         public double Value => this.labels == null ? this.counter.Value : this.counter.Labels(labels).Value;
-
-        public interface ICounter
-        {
-            void Inc(double amount = 1);
-            double Value { get; }
-        }
     }
 }

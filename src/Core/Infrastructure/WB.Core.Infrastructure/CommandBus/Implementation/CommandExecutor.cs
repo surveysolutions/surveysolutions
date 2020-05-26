@@ -7,7 +7,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Services;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
@@ -18,16 +17,17 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly ILiteEventBus eventBus;
         private readonly IServiceLocator serviceLocator;
         private readonly IPlainAggregateRootRepository plainRepository;
-        private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
+        private readonly IAggregateRootCache aggregateRootCacheCleaner;
         private readonly ICommandsMonitoring commandsMonitoring;
         private readonly IAggregateRootPrototypePromoterService promoterService;
         private readonly IAggregateRootPrototypeService prototypeService;
 
-        public CommandExecutor(IEventSourcedAggregateRootRepository eventSourcedRepository,
+        public CommandExecutor(
+            IEventSourcedAggregateRootRepository eventSourcedRepository,
             ILiteEventBus eventBus,
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
+            IAggregateRootCache aggregateRootCacheCleaner,
             ICommandsMonitoring commandsMonitoring,
             IAggregateRootPrototypePromoterService promoterService,
             IAggregateRootPrototypeService prototypeService)

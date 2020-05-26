@@ -2,7 +2,7 @@
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
-    public class DummyAggregateRootCacheCleaner : IAggregateRootCacheCleaner
+    public class DummyAggregateRootCacheCleaner
     {
         public void Evict(Guid aggregateId)
         {
