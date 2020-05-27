@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Shared.Web.Modules;
@@ -75,6 +76,11 @@ namespace WB.UI.WebTester.Controllers
             [FromQuery] string filename)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            if (interview == null)
+            {
+                return NotFound();
+            }
 
             MultimediaFile? file = this.mediaStorage.Get(filename, interview.Id);
 
