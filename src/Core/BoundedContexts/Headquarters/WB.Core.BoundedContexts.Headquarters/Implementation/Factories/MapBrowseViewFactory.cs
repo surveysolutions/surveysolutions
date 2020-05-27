@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             {
                 IQueryable<UserMap> query = queryable;
 
-                query = query.Where(x => x.Map == input.MapName);
+                query = query.Where(x => x.Map.Id == input.MapName);
 
                 if (!string.IsNullOrEmpty(input.SearchBy))
                 {
@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 Items = users.Select(x => new UserMapsItem()
                 {
                     UserName = x,
-                    Maps = this.userMapReader.Query(_ => _.Where(y => y.UserName == x).Select(z => z.Map).ToList())
+                    Maps = this.userMapReader.Query(_ => _.Where(y => y.UserName == x).Select(z => z.Map.Id).ToList())
                 }).ToList()
             };
         }
