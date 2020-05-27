@@ -95,7 +95,7 @@ namespace WB.Core.GenericSubdomains.Portable
         private static IEnumerable<TResult> BatchImpl<TSource, TResult>(this IEnumerable<TSource> source, int size,
             Func<IEnumerable<TSource>, TResult> resultSelector)
         {
-            TSource[]? bucket = null;
+            TSource[] bucket = null;
             var count = 0;
 
             foreach (var item in source)
