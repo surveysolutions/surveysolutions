@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
 
         private string CacheKey(string id) => "QuestionnaireHistoricalDocument:" + id;
 
-        public QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId)
+        public QuestionnaireDocument? GetByHistoryVersion(Guid historyReferenceId)
         {
             lock (lockObject)
             {
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             }
         }
 
-        private QuestionnaireDocument GetByHistoryVersionInt(Guid historyReferenceId)
+        private QuestionnaireDocument? GetByHistoryVersionInt(Guid historyReferenceId)
         {
             var questionnaireChangeRecord = this.dbContext.QuestionnaireChangeRecords.Find(historyReferenceId.FormatGuid());
             if (questionnaireChangeRecord == null)
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
                             DiffWithPreviousVersion = h.Patch
                         }).ToList();
 
-            var questionnaire = history.First().ResultingQuestionnaireDocument;
+            string? questionnaire = history.First().ResultingQuestionnaireDocument;
             foreach (var patch in history.Skip(1))
             {
                 questionnaire = this.patchApplier.Apply(questionnaire, patch.DiffWithPreviousVersion);
@@ -112,17 +112,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
         public void AddQuestionnaireChangeItem(
             Guid questionnaireId,
             Guid responsibleId,
-            string userName,
+            string? userName,
             QuestionnaireActionType actionType,
             QuestionnaireItemType targetType,
             Guid targetId,
-            string targetTitle,
-            string targetNewTitle,
+            string? targetTitle,
+            string? targetNewTitle,
             int? affectedEntries,
             DateTime? targetDateTime,
-            QuestionnaireDocument questionnaireDocument,
-            QuestionnaireChangeReference reference = null,
-            QuestionnaireChangeRecordMetadata meta = null)
+            QuestionnaireDocument? questionnaireDocument,
+            QuestionnaireChangeReference? reference = null,
+            QuestionnaireChangeRecordMetadata? meta = null)
         {
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
@@ -180,35 +180,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             // -1 is to take into account newly added change record that is not yet in DB
             this.RemoveOldQuestionnaireHistory(sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
             this.dbContext.SaveChanges();
-        }
-
-        private string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire)
-        {
-            var previousVersion = this.GetLastStoredQuestionnaireVersion(questionnaire);
-            var left = this.entitySerializer.Serialize(previousVersion);
-            var right = this.entitySerializer.Serialize(questionnaire);
-
-            var patch = this.patchGenerator.Diff(left, right);
-            return patch;
-        }
-
-        private QuestionnaireDocument GetLastStoredQuestionnaireVersion(QuestionnaireDocument questionnaireDocument)
-        {
-            if (questionnaireDocument == null)
-                return null;
-
-            var existingSnapshot =  
-                (from h in this.dbContext.QuestionnaireChangeRecords
-                 where h.QuestionnaireId == questionnaireDocument.Id
-                orderby h.Sequence 
-                select h.QuestionnaireChangeRecordId).FirstOrDefault();
-
-            if (existingSnapshot == null)
-                return null;
-
-            var resultingQuestionnaireDocument = this.GetByHistoryVersion(Guid.Parse(existingSnapshot));
-
-            return resultingQuestionnaireDocument;
         }
 
         public async Task<bool> UpdateRevisionCommentaryAsync(string questionnaireChangeRecordId, string comment)

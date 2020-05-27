@@ -56,7 +56,7 @@ namespace WB.UI.Designer
 
         public IConfiguration Configuration { get; }
 
-        private AspCoreKernel aspCoreKernel;
+        private AspCoreKernel? aspCoreKernel;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -290,6 +290,8 @@ namespace WB.UI.Designer
                     pattern: "{controller=Questionnaire}/{action=Index}/{id?}");
                 routes.MapRazorPages();
             });
+
+            if (aspCoreKernel == null) return;
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);
             if (env.IsDevelopment())

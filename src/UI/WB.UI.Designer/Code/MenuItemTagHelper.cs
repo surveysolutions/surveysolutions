@@ -19,19 +19,19 @@ namespace WB.UI.Designer.Code
         }
 
         [HtmlAttributeName("asp-area")]
-        public string Area { get; set; }
+        public string? Area { get; set; }
         
         [HtmlAttributeName("asp-page")]
-        public string Page { get; set; }
+        public string? Page { get; set; }
 
         [HtmlAttributeName("asp-controller")]
-        public string Controller { get; set; }
+        public string Controller { get; set; } = String.Empty;
 
         [HtmlAttributeName("asp-action")]
-        public string Action { get; set; }
+        public string Action { get; set; } = String.Empty;
         
         [HtmlAttributeName("asp-title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = String.Empty;
 
         [HtmlAttributeName("asp-if")]
         public bool? Condition { get; set; }
@@ -148,21 +148,10 @@ namespace WB.UI.Designer.Code
         /// </summary>
         [HtmlAttributeNotBound]
         [ViewContext]
-        public ViewContext ViewContext { get; set; }
-
-        private IDictionary<string, string> _routeValues;
+        public ViewContext ViewContext { get; set; } = new ViewContext();
 
         /// <summary>Additional parameters for the route.</summary>
         [HtmlAttributeName("asp-all-route-data", DictionaryAttributePrefix = "asp-route-")]
-        public IDictionary<string, string> RouteValues
-        {
-            get
-            {
-                if (this._routeValues == null)
-                    this._routeValues = (IDictionary<string, string>)new Dictionary<string, string>((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase);
-                return this._routeValues;
-            }
-            set => this._routeValues = value;
-        }
+        public IDictionary<string, string> RouteValues { get; set; } = (IDictionary<string, string>)new Dictionary<string, string>((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase);
     }
 }

@@ -6,6 +6,6 @@ namespace WB.UI.Designer.Code
     {
         public bool EnableDump { get; set; }
 
-        public string DumpFolder { get; set; }
+        public string? DumpFolder { get; set; }
     }
 }

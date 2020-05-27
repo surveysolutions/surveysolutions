@@ -37,7 +37,7 @@
     <Property Id="NETCOREHOSTVERSION">
         <RegistrySearch Id="NetCoreHostVersion" Type="raw" Win64="yes" Root="HKLM" Key="SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedhost" Name="Version" />
     </Property>
-    <Condition Message="This setup requires .NET Core 3.1 of higher">
+    <Condition Message="This setup requires .NET Core 3.1 or higher">
         <![CDATA[Installed OR (NETCOREHOSTVERSION >= "3.1.0")]]>
     </Condition>
 

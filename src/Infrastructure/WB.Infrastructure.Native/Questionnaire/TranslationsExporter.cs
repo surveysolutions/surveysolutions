@@ -32,12 +32,12 @@ namespace WB.Infrastructure.Native.Questionnaire
         public TranslationFile GenerateTranslationFile(QuestionnaireDocument questionnaire, Guid translationId, ITranslation translation, ICategories categoriesService)
         {
             var translationFile = new TranslationFile
-            {
-                QuestionnaireTitle = questionnaire.Title,
-                TranslationName = questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name ?? string.Empty,
-                ContentAsExcelFile = this.GetExcelFileContentEEPlus(questionnaire, 
+            (
+                questionnaireTitle : questionnaire.Title,
+                translationName : questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name ?? string.Empty,
+                contentAsExcelFile : this.GetExcelFileContentEEPlus(questionnaire, 
                     translation ?? new QuestionnaireTranslation(new List<TranslationDto>()),  categoriesService)
-            };
+            );
 
             return translationFile;
         }

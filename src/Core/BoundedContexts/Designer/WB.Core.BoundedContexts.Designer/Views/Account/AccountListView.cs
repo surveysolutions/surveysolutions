@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account

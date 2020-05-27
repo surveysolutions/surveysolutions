@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -8,10 +7,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class VariableView : INameable, IQuestionnaireItem
     {
-        public VariableView()
+        public VariableView(Guid id, string itemId, VariableData variableData, Breadcrumb[]? breadcrumbs = null, QuestionnaireInfoFactory.SelectOption[]? typeOptions = null)
         {
-            this.Breadcrumbs = new Breadcrumb[] {};
-            this.VariableData = new VariableData(VariableType.Boolean, null, null, null, false);
+            this.Id = id;
+            ItemId = itemId;
+            VariableData = variableData;
+
+            Breadcrumbs = breadcrumbs ?? new Breadcrumb[0];
+            TypeOptions = typeOptions ?? new QuestionnaireInfoFactory.SelectOption[0];
         }
 
         public Guid Id { get; set; }
