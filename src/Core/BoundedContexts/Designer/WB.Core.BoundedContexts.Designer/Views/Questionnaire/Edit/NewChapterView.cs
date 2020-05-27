@@ -7,5 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public IQuestionnaireItem Chapter { set; get; }
         public VariableName[] VariableNames { set; get; }
         public bool IsCover { get; set; }
+        public bool IsReadOnly { get; set; }
     }
 }

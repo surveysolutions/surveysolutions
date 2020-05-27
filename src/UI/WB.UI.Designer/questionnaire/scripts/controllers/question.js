@@ -126,6 +126,10 @@
                 $scope.activeQuestion.parentIsCover = $scope.questionnaire
                     ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isCover: true }) != null
                     : false;
+                $scope.activeQuestion.isReadOnly = $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isReadOnly: true }) != null
+                    : false;
+
 
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();
@@ -808,8 +812,10 @@
             };
 
             $scope.doesQuestionSupportEnablementConditions = function () {
-                return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Identifying')
-                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
+                return $scope.activeQuestion
+                    && ($scope.activeQuestion.questionScope != 'Identifying')
+                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId)
+                    && !$scope.activeQuestion.parentIsCover;
             };
 
             $scope.isIntegerChange = function () {

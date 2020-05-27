@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -55,6 +56,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 IsCoverPageSupported = questionnaireDocument.IsCoverPageSupported,
             };
 
+            if (!questionnaireDocument.IsCoverPageSupported)
+            {
+                questionnaireInfoView.Chapters.Add(new ChapterInfoView
+                {
+                    ItemId = QuestionnaireDocument.CoverPageSectionId.FormatGuid(),
+                    Title = QuestionnaireEditor.CoverPageSection,
+                    IsCover = true,
+                    GroupsCount = 0,
+                    RostersCount = 0,
+                    QuestionsCount = questionnaireDocument.Children
+                        .TreeToEnumerable(item => item.Children)
+                        .Where(c => c is IQuestion)
+                        .Cast<IQuestion>()
+                        .Count(q => q.Featured),
+                    IsReadOnly = true
+                });
+            }
+
             foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
             {
                 questionnaireInfoView.Chapters.Add(new ChapterInfoView
@@ -64,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     IsCover = chapter.PublicKey == QuestionnaireDocument.CoverPageSectionId,
                     GroupsCount = 0,
                     RostersCount = 0,
-                    QuestionsCount = 0
+                    QuestionsCount = 0,
                 });
             }
 

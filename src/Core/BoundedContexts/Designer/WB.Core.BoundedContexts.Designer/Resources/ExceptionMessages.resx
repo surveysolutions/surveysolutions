@@ -213,6 +213,12 @@
   <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
     <value>Cover section must be first section in questionnaire</value>
   </data>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTexts" xml:space="preserve">
+    <value>Cover section can contains only questions and static texts</value>
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>It is virtual Cover section in old questionnaire. You can't edit order of questions</value>
+  </data>
   <data name="CantRemoveUserFromTheList" xml:space="preserve">
     <value>Couldn't remove user, because it doesn't exist in share list</value>
   </data>

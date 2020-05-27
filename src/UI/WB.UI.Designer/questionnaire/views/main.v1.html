@@ -901,7 +901,7 @@
             <h1 ng-i18next="MoveToAnotherSubSection"></h1>
             <ul>
                 <li ng-repeat="chapter in $parent.questionnaire.chapters">
-                    <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId" unsaved-warning-clear>
+                    <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-show="!chapter.isReadOnly" ng-disabled="chapter.itemId == currentChapterId" unsaved-warning-clear>
                         {{chapter.title}}
                     </a>
                 </li>

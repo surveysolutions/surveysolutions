@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -40,12 +42,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var chapterPublicKey = Guid.Parse(chapterId);
             var isExistsChapter = document.Find<IGroup>(chapterPublicKey)!=null;
             if (!isExistsChapter)
+            {
+                if (!document.IsCoverPageSupported && document.IsCoverPage(chapterPublicKey))
+                {
+                    return new NewChapterView
+                    {
+                        Chapter = CreateVirtualCoverPageForNonSupportedDocument(document),
+                        IsCover = true,
+                        IsReadOnly = true,
+                        VariableNames = this.CollectVariableNames(document)
+                    };
+                }
+
                 return null;
+            }
 
             return new NewChapterView
             {
                 Chapter = ConvertToChapterView(document, chapterPublicKey),
                 IsCover = document.IsCoverPage(chapterPublicKey),
+                IsReadOnly = false,
                 VariableNames = this.CollectVariableNames(document)
             };
         }
@@ -86,6 +102,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 }
                 else
                     root = questionnaireItem;
+            });
+
+            return root;
+        }
+
+        private IQuestionnaireItem CreateVirtualCoverPageForNonSupportedDocument(ReadOnlyQuestionnaireDocument document)
+        {
+            GroupInfoView root = new GroupInfoView
+            {
+                ItemId = QuestionnaireDocument.CoverPageSectionId.FormatGuid(),
+                Title = QuestionnaireEditor.CoverPageSection,
+                IsRoster = false,
+                HasCondition = false,
+                Variable = null,
+                Items = new List<IQuestionnaireItem>(),
+                GroupsCount = 0,
+                RostersCount = 0,
+                QuestionsCount = 0
+            };
+
+            document.Questionnaire.ForEachTreeElement<IComposite>(x => x.Children, (parent, child) =>
+            {
+                if (child is IQuestion question && question.Featured)
+                {
+                    var questionnaireItem = this.ConvertToQuestionInfoView(question);
+                    root.Items.Add(questionnaireItem);
+                    root.QuestionsCount++;
+                }
             });
 
             return root;

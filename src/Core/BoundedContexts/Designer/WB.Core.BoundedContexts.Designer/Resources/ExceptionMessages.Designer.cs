@@ -88,6 +88,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is virtual Cover section in old questionnaire. You can&apos;t edit order of questions.
+        /// </summary>
+        public static string CantEditCoverPageInOldQuestionnaire {
+            get {
+                return ResourceManager.GetString("CantEditCoverPageInOldQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can&apos;t move to sub-section {0} because it position {1} in not acceptable..
         /// </summary>
         public static string CantMoveSubsectionInWrongPosition {
@@ -183,6 +192,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string ComboboxCannotBeFound {
             get {
                 return ResourceManager.GetString("ComboboxCannotBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cover section can contains only questions and static texts.
+        /// </summary>
+        public static string CoverPageCanContainsOnlyQuestionsAndStaticTexts {
+            get {
+                return ResourceManager.GetString("CoverPageCanContainsOnlyQuestionsAndStaticTexts", resourceCulture);
             }
         }
         
