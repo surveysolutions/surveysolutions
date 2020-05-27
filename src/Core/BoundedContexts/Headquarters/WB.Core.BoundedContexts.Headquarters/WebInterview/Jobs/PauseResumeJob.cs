@@ -14,13 +14,11 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
     {
         private readonly ILogger<PauseResumeJob> logger;
         private readonly IPauseResumeQueue queue;
-        private readonly IAggregateRootPrototypeService prototypeService;
 
-        public PauseResumeJob(IPauseResumeQueue queue, ILogger<PauseResumeJob> logger, IAggregateRootPrototypeService prototypeService)
+        public PauseResumeJob(IPauseResumeQueue queue, ILogger<PauseResumeJob> logger)
         {
             this.queue = queue;
             this.logger = logger;
-            this.prototypeService = prototypeService;
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -31,8 +29,6 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
             {
                 try
                 {
-                    if (prototypeService.IsPrototype(interviewCommand.InterviewId)) continue;
-
                     InScopeExecutor.Current.Execute(serviceLocatorLocal =>
                     {
                         var commandService = serviceLocatorLocal.GetInstance<ICommandService>();
