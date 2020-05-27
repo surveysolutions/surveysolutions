@@ -36,8 +36,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool HasDuplicatedPair_Id_ParentId(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var duplicated = 
-                from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id).ToList()
-                group row by Tuple.Create(row.Id, row.ParentId)
+                from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
+                group row by new { row.Id, row.ParentId}
                 into g
                 where g.Count() > 1
                 select g.Key;
@@ -50,8 +50,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool HasDuplicatedPair_ParentId_Text(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var duplicated = 
-                from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id).ToList()
-                group row by Tuple.Create(row.Text, row.ParentId)
+                from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
+                group row by new { row.Text, row.ParentId}
                 into g
                 where g.Count() > 1
                 select g.Key;
