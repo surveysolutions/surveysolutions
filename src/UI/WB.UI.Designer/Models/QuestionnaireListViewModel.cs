@@ -9,18 +9,17 @@ namespace WB.UI.Designer.Models
 
         public bool IsFolder { get; set; }
 
-        [Key]
-        public string Id { get; set; }
+        [Key] public string Id { get; set; } = string.Empty;
 
         [Display(Name = "Title", Order = 1)]
         [Default]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [Display(Name = "Last Entry Date", Order = 2)]
         public DateTime LastEntryDate { get; set; }
 
         [Display(Name = "Created by", Order = 3)]
-        public string Owner { get; set; }
+        public string? Owner { get; set; }
 
         [Display(Name = "Creation Date", Order = 4)]
         public DateTime CreationDate { get; set; }
@@ -33,6 +32,6 @@ namespace WB.UI.Designer.Models
         [OnlyForAdmin]
         public bool IsPublic { get; set; }
 
-        public string Location { get; set; }
+        public string? Location { get; set; }
     }
 }

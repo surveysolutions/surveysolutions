@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -45,7 +46,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteGroup command)
         {
             var @group = aggregate.QuestionnaireDocument.Find<IComposite>(command.GroupId);
-            var allChildrens = @group.TreeToEnumerable(g => g.Children).Select(e => e.PublicKey).ToList();
+            
+            if(group == null)
+                throw new InvalidOperationException("Group was not found.");
+            
+            var allChildrens = @group.TreeToEnumerable(g => g.Children)
+                .Select(e => e.PublicKey).ToList();
             this.commentsService.RemoveAllCommentsByEntity(command.QuestionnaireId, command.GroupId);
 
             foreach (var childrenId in allChildrens)

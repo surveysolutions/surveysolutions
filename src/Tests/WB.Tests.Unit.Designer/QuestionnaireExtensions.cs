@@ -124,7 +124,7 @@ namespace WB.Tests.Unit.Designer
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
 
-            var optionsList = options ?? new Option[] { new Option { Title = "one", Value = "1" }, new Option { Title = "two", Value = "2" } };
+            var optionsList = options ?? new Option[] { new Option (title : "one", value : "1"), new Option (title : "two", value : "2" ) };
 
             questionnaire.UpdateSingleOptionQuestion(
                 new UpdateSingleOptionQuestion(

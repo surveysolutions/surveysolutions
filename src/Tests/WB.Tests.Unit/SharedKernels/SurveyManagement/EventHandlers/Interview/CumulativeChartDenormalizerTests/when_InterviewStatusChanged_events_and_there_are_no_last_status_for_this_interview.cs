@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
                 cumulativeReportStatusChangeStorage: cumulativeReportStatusChangeStorage,
                 interviewReferencesStorage: interviewReferencesStorage);
 
-            denormalizer.Handle(existingEvents, interviewId);
+            denormalizer.Handle(existingEvents);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
                     status: InterviewStatus.Completed)
             };
 
-            denormalizer.Handle(events, interviewId);
+            denormalizer.Handle(events);
 
             var allChanges = cumulativeReportStatusChangeStorage.Dictionary.Select(v => v.Value).ToList();
 

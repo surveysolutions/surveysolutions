@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         Guid Id { get; }
         string VariableName { get; }
-        string Condition { get; }
+        string? Condition { get; }
     }
 }

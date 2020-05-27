@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             question.ValidationExpressions.FirstOrDefault().ValidationExpression.Should().Be("list validation");
             question.Condition.Should().Be("list condition");
             question.IsMultiOptionYesNoQuestion.Should().BeFalse();
-            question.AllMultioptionYesNoCodes.Should().BeNull();
+            question.AllMultioptionYesNoCodes.Should().BeEmpty();
             question.TypeName.Should().Be("Tuple<decimal, string>[]");
             question.RosterScopeName.Should().Be(CodeGenerator.QuestionnaireScope);
             question.ParentScopeTypeName.Should().Be(CodeGenerator.QuestionnaireTypeName);

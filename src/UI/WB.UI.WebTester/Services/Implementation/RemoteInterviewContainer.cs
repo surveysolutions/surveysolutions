@@ -49,9 +49,12 @@ namespace WB.UI.WebTester.Services.Implementation
                     new InterviewExpressionStateUpgrader(),
                     this.scope.Resolve<ILoggerProvider>());
 
+                if (questionnaire == null)
+                    throw new InvalidOperationException("Questionnaire must not be null.");
+
                 questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(identity);
 
-                statefulInterview =  this.scope.Resolve<WebTesterStatefulInterview>();
+                statefulInterview = this.scope.Resolve<WebTesterStatefulInterview>();
                 statefulInterview.SetId(interviewId);
             }
         }
@@ -62,7 +65,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly InterviewAssemblyLoadContext context;
         private ILifetimeScope scope;
 
-        public WebTesterStatefulInterview statefulInterview { get; private set; }
+        public WebTesterStatefulInterview? statefulInterview { get; private set; }
 
         private void ReleaseUnmanagedResources()
         {
@@ -97,6 +100,10 @@ namespace WB.UI.WebTester.Services.Implementation
                 {
                     Action<ICommand, IAggregateRoot> commandHandler =
                         CommandRegistry.GetCommandHandler(command);
+
+                    if(statefulInterview == null)
+                        throw new InvalidOperationException("StatefulInterview must not be null.");
+
                     commandHandler.Invoke(command, statefulInterview);
 
                     var eventStream = new UncommittedEventStream(null, statefulInterview.GetUnCommittedChanges());
@@ -126,6 +133,9 @@ namespace WB.UI.WebTester.Services.Implementation
             lock (this.context)
             {
                 if (state == State.Teardown) throw new InterviewException("Interview deleted", InterviewDomainExceptionType.InterviewHardDeleted);
+
+                if (statefulInterview == null)
+                    throw new InvalidOperationException("StatefulInterview must not be null.");
 
                 return statefulInterview.Version;
             }

@@ -1,8 +1,7 @@
 ﻿using System.IO;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Memory;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Memory;
-using SixLabors.Primitives;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace WB.UI.Shared.Web.Services

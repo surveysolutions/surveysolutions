@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             return new[] {publicQuestionnairesFolder};
         }
 
-        public QuestionnaireListViewFolder CreateFolder(Guid folderId, string title, Guid? parentId,
+        public QuestionnaireListViewFolder CreateFolder(Guid folderId, string? title, Guid? parentId,
             Guid userId)
         {
             var parentFolder = parentId.HasValue
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             var folder = new QuestionnaireListViewFolder()
             {
                 PublicId = folderId,
-                Title = title,
+                Title = title ?? "",
                 Parent = parentId,
                 CreateDate = DateTime.UtcNow,
                 CreatedBy = userId,

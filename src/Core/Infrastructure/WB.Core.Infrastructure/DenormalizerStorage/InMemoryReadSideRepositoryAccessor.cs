@@ -83,16 +83,6 @@ namespace WB.Core.Infrastructure.DenormalizerStorage
         {
             this.repository.Clear();
         }
-
-        public Type ViewType
-        {
-            get { return typeof(TView); }
-        }
-
-        public string GetReadableStatus()
-        {
-            return "in-memory-2";
-        }
     }
 
 

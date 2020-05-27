@@ -37,24 +37,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.loggedInUser = loggedInUser;
         }
 
-        public QuestionnaireInfoView Load(QuestionnaireRevision revision, Guid viewerId)
+        public QuestionnaireInfoView? Load(QuestionnaireRevision revision, Guid viewerId)
         {
             var questionnaireDocument = this.questionnaireStorage.Get(revision);
 
-            if (questionnaireDocument == null) return null;
+            if (questionnaireDocument == null) 
+                return null;
 
             var questionnaireInfoView = new QuestionnaireInfoView
-            {
-                QuestionnaireId = revision.QuestionnaireId.FormatGuid(),
-                QuestionnaireRevision = revision.Revision.FormatGuid(),
-                Title = questionnaireDocument.Title,
-                Variable = questionnaireDocument.VariableName,
-                Chapters = new List<ChapterInfoView>(),
-                IsPublic = questionnaireDocument.IsPublic,
-                HideIfDisabled = questionnaireDocument.HideIfDisabled,
-                DefaultLanguageName = questionnaireDocument.DefaultLanguageName,
-                IsCoverPageSupported = questionnaireDocument.IsCoverPageSupported,
-            };
+            (
+                questionnaireId : revision.QuestionnaireId.FormatGuid(),
+                questionnaireRevision : revision.Revision.FormatGuid(),
+                title : questionnaireDocument.Title,
+                variable : questionnaireDocument.VariableName,
+                isPublic : questionnaireDocument.IsPublic,
+                hideIfDisabled : questionnaireDocument.HideIfDisabled,
+                defaultLanguageName : questionnaireDocument.DefaultLanguageName,
+                isCoverPageSupported = questionnaireDocument.IsCoverPageSupported,
+                countries: CountryListProvider.GetCounryItems()
+            );
 
             if (!questionnaireDocument.IsCoverPageSupported)
             {
@@ -77,14 +78,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
             {
                 questionnaireInfoView.Chapters.Add(new ChapterInfoView
-                {
-                    ItemId = chapter.PublicKey.FormatGuid(),
-                    Title = chapter.Title,
-                    IsCover = chapter.PublicKey == QuestionnaireDocument.CoverPageSectionId,
-                    GroupsCount = 0,
-                    RostersCount = 0,
-                    QuestionsCount = 0,
-                });
+                (
+                    itemId : chapter.PublicKey.FormatGuid(),
+                    title : chapter.Title,
+                    isCover = chapter.PublicKey == QuestionnaireDocument.CoverPageSectionId,
+                    groupsCount : 0,
+                    rostersCount : 0,
+                    questionsCount : 0
+                ));
             }
 
             int questionsCount = 0, groupsCount = 0, rostersCount = 0;
@@ -184,12 +185,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.Attachments = questionnaireDocument.Attachments
                 .Select(attachmentIdentity => new AttachmentView
-                {
-                    AttachmentId = attachmentIdentity.AttachmentId.FormatGuid(),
-                    Name = attachmentIdentity.Name,
-                    Content = this.attachmentService.GetContentDetails(attachmentIdentity.ContentId),
-                    Meta = attachments?.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
-                })
+                (
+                    attachmentId : attachmentIdentity.AttachmentId.FormatGuid(),
+                    name : attachmentIdentity.Name,
+                    content : this.attachmentService.GetContentDetails(attachmentIdentity.ContentId),
+                    meta : attachments?.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
+                ))
                 .OrderBy(x => x.Name)
                 .ToList();
 
@@ -205,11 +206,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .ToList();
 
             questionnaireInfoView.Categories = questionnaireDocument.Categories
-                .Select(categoriesIdentity => new CategoriesView
-                {
-                    CategoriesId = categoriesIdentity.Id.FormatGuid(),
-                    Name = categoriesIdentity.Name,
-                })
+                .Select(categoriesIdentity => new CategoriesView(categoriesId : categoriesIdentity.Id.FormatGuid(), name : categoriesIdentity.Name))
                 .OrderBy(x => x.Name)
                 .ToList();
 
@@ -238,7 +235,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.StudyTypes = StudyTypeProvider.GetStudyTypeItems();
             questionnaireInfoView.KindsOfData = KindOfDataProvider.GetKindOfDataItems();
-            questionnaireInfoView.Countries = CountryListProvider.GetCounryItems();
             questionnaireInfoView.ModesOfDataCollection = ModeOfDataCollectionProvider.GetModeOfDataCollectionItems();
 
             questionnaireInfoView.Scenarios = dbContext.Scenarios

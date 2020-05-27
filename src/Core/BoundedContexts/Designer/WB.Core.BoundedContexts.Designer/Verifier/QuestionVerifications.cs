@@ -110,13 +110,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool IdentifyingQuestionInSectionWithEnablingCondition(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (Prefilled(question))
-            {
-                var parentSections = question.GetParent().UnwrapReferences(x => x.GetParent()).OfType<IConditional>();
-                return parentSections.Any(x => !string.IsNullOrEmpty(x.ConditionExpression));
-            }
+            if (!Prefilled(question)) return false;
+            
+            var parentSections = (question.GetParent() ?? throw new InvalidOperationException("Parent was not found."))
+                .UnwrapReferences(x => x.GetParent()).OfType<IConditional>();
+            return parentSections.Any(x => !string.IsNullOrEmpty(x.ConditionExpression));
 
-            return false;
         }
 
         private bool IdentityQuestionsMustHaveVariableLabel(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -197,14 +196,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             int[] existingOptions = (question.Answers ?? Enumerable.Empty<Answer>())
                 .Select(option => option.AnswerValue.ParseIntOrNull())
                 .Where(value => value.HasValue)
-                .Select(value => value.Value)
+                .Select(value => value!.Value)
                 .OrderBy(x => x)
                 .Distinct()
                 .ToArray();
 
             if (existingOptions.Length == 0)
                 return false;
-
 
             List<int> diffsByPrevNextOptionValues = new List<int>();
 
@@ -317,14 +315,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         index = index,
                     })
                     .Where(option => option.value.HasValue && option.title.HasValue)
-                    .Where(option => option.value.Value != option.title.Value)
+                    .Where(option => option.value != option.title)
                     .OrderBy(x => x.index)
                     .Distinct()
                     .ToArray();
 
                 foreach (var option in optionsWithNotEqualsNumericValueAndTitle)
                 {
-                    var message = string.Format(VerificationMessages.WB0288_ValueAndTitleNumbersIsNotEquals, option.value.Value, option.title.Value);
+                    var message = string.Format(VerificationMessages.WB0288_ValueAndTitleNumbersIsNotEquals, option.value, option.title);
                     var reference = QuestionnaireEntityReference.CreateFrom(question, QuestionnaireVerificationReferenceProperty.Option, option.index);
                     yield return QuestionnaireVerificationMessage.Warning("WB0288", message, reference);
                 }
@@ -379,9 +377,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var linkedQuestion in linkedQuestions)
             {
-
+                if (linkedQuestion.LinkedToQuestionId == null)
+                {
+                    yield return LinkedQuestionReferencesNotExistingQuestion(linkedQuestion);
+                    continue;
+                }
+                
                 var sourceQuestion = questionnaire.Find<IQuestion>(linkedQuestion.LinkedToQuestionId.Value);
-
                 if (sourceQuestion == null)
                 {
                     yield return LinkedQuestionReferencesNotExistingQuestion(linkedQuestion);
@@ -424,6 +426,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var questionLinkedOnRoster in questionsLinkedOnRoster)
             {
+                if(!questionLinkedOnRoster.LinkedToRosterId.HasValue)
+                    throw new InvalidOperationException("Invalid value.");
+
                 var sourceRoster = questionnaire.Find<IGroup>(questionLinkedOnRoster.LinkedToRosterId.Value);
                 if (sourceRoster == null)
                 {
@@ -540,7 +545,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool QuestionWithOptionsFilterCannotBePrefilled(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression) && questionnaire.Questionnaire.IsPreFilledQuestion(question);
+            return !string.IsNullOrWhiteSpace(question.Properties?.OptionsFilterExpression) && questionnaire.Questionnaire.IsPreFilledQuestion(question);
         }
 
        
@@ -573,7 +578,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (!question.CascadeFromQuestionId.HasValue)
+            if (question.CascadeFromQuestionId == null)
                 return new EntityVerificationResult<SingleQuestion> {HasErrors = false};
 
             var referencedEntities = new HashSet<SingleQuestion>();
@@ -582,7 +587,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 return questionnaire
                     .Find<SingleQuestion>(q => q.CascadeFromQuestionId.HasValue &&
-                                               q.PublicKey == x.CascadeFromQuestionId.Value)
+                                               q.PublicKey == x.CascadeFromQuestionId)
                     .SingleOrDefault();
             }
 
@@ -683,7 +688,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var categoricalQuestion = question as ICategoricalQuestion;
             bool hasErrors = false;
 
-            if (!question.CascadeFromQuestionId.HasValue)
+            if (categoricalQuestion == null || !question.CascadeFromQuestionId.HasValue)
                 return new EntityVerificationResult<IComposite> {HasErrors = hasErrors};
 
             var parentQuestion = document.Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
@@ -713,10 +718,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 hasErrors = !question.Answers.All(childAnswer =>
                     parentCategories.Any(parentAnswer => parentAnswer.Id == childAnswer.GetParsedParentValue()));
             }
-            else
+            else if(categoricalQuestion.CategoriesId != null && parentQuestion.CategoriesId != null)
             {
-                var categories = this.categoriesService.GetCategoriesById(document.PublicKey, categoricalQuestion.CategoriesId.Value);
-                var parentCategories = this.categoriesService.GetCategoriesById(document.PublicKey, parentQuestion.CategoriesId.Value);
+                var categories = 
+                    this.categoriesService.GetCategoriesById(document.PublicKey, categoricalQuestion.CategoriesId.Value);
+                var parentCategories = 
+                    this.categoriesService.GetCategoriesById(document.PublicKey, parentQuestion.CategoriesId.Value);
 
                 hasErrors = !categories.All(child => parentCategories.Any(parent => child.ParentId == parent.Id));
             }
@@ -812,27 +819,30 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             if (parentQuestions.Count == 0) return OptionsHaveUniqueValues(question, questionnaire.PublicKey);
 
-            var categories = question.CategoriesId.HasValue
-                ? this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value).Select(x => new {x.Id, x.ParentId}).ToList()
-                : question.Answers.Select(x => new {Id = (int) x.GetParsedValue(), ParentId = x.GetParsedParentValue()}).ToList();
+            if (question.CategoriesId.HasValue) return false;
+
+            var categories = question.Answers.Select(x => new {Id = (int) x.GetParsedValue(), ParentId = x.GetParsedParentValue()}).ToList();
 
             foreach (var questionAnswer in categories)
             {
                 var valueAndParentValues = new List<int> {questionAnswer.Id};
                 var parsedParentValue = questionAnswer.ParentId;
 
-                if (parsedParentValue.HasValue)
+                if (parsedParentValue != null)
                     valueAndParentValues.Add(parsedParentValue.Value);
 
                 foreach (var parentQuestion in parentQuestions)
                 {
-                    var lastParentId = valueAndParentValues?.LastOrDefault();
+                    var lastParentId = valueAndParentValues.LastOrDefault();
 
-                    parsedParentValue = parentQuestion.CategoriesId.HasValue
-                        ? this.categoriesService.GetCategoriesById(questionnaire.PublicKey, parentQuestion.CategoriesId.Value).FirstOrDefault(x => x.Id == lastParentId)?.ParentId
-                        : parentQuestion.Answers.Find(x => (int) x.GetParsedValue() == lastParentId)?.GetParsedParentValue();
+                    if (parentQuestion.CategoriesId.HasValue)
+                    {
+                        continue;
+                    }
 
-                    if (parsedParentValue.HasValue)
+                    parsedParentValue = parentQuestion.Answers.Find(x => (int) x.GetParsedValue() == lastParentId)?.GetParsedParentValue();
+
+                    if (parsedParentValue != null)
                         valueAndParentValues.Add(parsedParentValue.Value);
                 }
 
@@ -1067,7 +1077,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool TableRosterDoesntContainsQuestionWithSubstitutions(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (((IGroup) entity.GetParent()).DisplayMode != RosterDisplayMode.Table)
+            if (!(entity.GetParent() is IGroup parent))
+                throw new InvalidOperationException("Parent group was not found.");
+
+            if (parent.DisplayMode != RosterDisplayMode.Table)
                 return false;
 
             var title = entity.GetTitle();
@@ -1080,11 +1093,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
             var entitiesSupportingSubstitutions = questionnaire.FindWithTranslations<IQuestion>(question =>
-                ((IGroup) question.GetParent()).DisplayMode == RosterDisplayMode.Matrix).ToList();
+                (question.GetParent() as IGroup ?? throw new InvalidOperationException("Parent group was not found.")).DisplayMode == RosterDisplayMode.Matrix).ToList();
 
             foreach (var translatedEntity in entitiesSupportingSubstitutions)
             {
-                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
+                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle() ?? String.Empty, questionnaire));
                 if (!string.IsNullOrWhiteSpace(translatedEntity.Entity.Instructions))
                     foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.Instructions, questionnaire));
             }
@@ -1100,21 +1113,24 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 this.substitutionService.GetAllSubstitutionVariableNames(title, translatedEntity.Entity.VariableName);
 
             if (!substitutionReferences.Any())
-                return Enumerable.Empty<QuestionnaireVerificationMessage>();
+                yield break;
 
             Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution =
                 questionnaire.Questionnaire.GetRosterScope(translatedEntity.Entity);
 
-            IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
+            IEnumerable<QuestionnaireVerificationMessage?> entityErrors = substitutionReferences
                 .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
                     translatedEntity, null, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution,
-                    questionnaire))
-                .Where(errorOrNull => errorOrNull != null);
+                    questionnaire));
 
-            return entityErrors;
+            foreach (var entityError in entityErrors)
+            {
+                if (entityError != null)
+                    yield return entityError;
+            }
         }
 
-        private QuestionnaireVerificationMessage GetVerificationErrorsBySubstitutionReferenceOrNull(
+        private QuestionnaireVerificationMessage? GetVerificationErrorsBySubstitutionReferenceOrNull(
             MultiLanguageQuestionnaireDocument.TranslatedEntity<IQuestion> traslatedEntityWithSubstitution,
             int? validationConditionIndex,
             string substitutionReference,

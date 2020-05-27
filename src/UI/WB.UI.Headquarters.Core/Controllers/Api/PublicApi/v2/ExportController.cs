@@ -76,10 +76,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             var interviewStatus = request.InterviewStatus == ExportInterviewType.All
                 ? (InterviewStatus?) null
                 : (InterviewStatus) request.InterviewStatus;
-
+            
             var result = await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
                 (DataExportFormat) request.ExportType, interviewStatus, request.From, request.To, password,
-                request.AccessToken, request.RefreshToken, (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType);
+                request.AccessToken, request.RefreshToken, 
+                (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType,
+                request.TranslationId);
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {request.InterviewStatus.ToString() ?? ""}",
@@ -182,7 +184,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
             var result = await this.dataExportStatusReader.GetDataArchive(
                 exportProcess.QuestionnaireIdentity, exportProcess.Format, exportProcess.InterviewStatus,
-                exportProcess.FromDate, exportProcess.ToDate);
+                exportProcess.FromDate, exportProcess.ToDate, exportProcess.TranslationId);
 
             return result == null
                 ? BadRequest()
@@ -201,6 +203,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 To = exportProcess.ToDate,
                 StartDate = exportProcess.BeginDate,
                 CompleteDate = exportProcess.EndDate,
+                TranslationId = exportProcess.TranslationId,
                 ExportStatus = (ExportStatus) exportProcess.JobStatus,
                 Progress = exportProcess.Progress,
                 ExportType = (ExportType) exportProcess.Format,
@@ -256,6 +259,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             /// External storage type
             /// </summary>
             public ExternalStorageType? StorageType { get; set; }
+
+            /// <summary>
+            /// Translation Id of the questionnaire
+            /// </summary>
+            public Guid? TranslationId { get; set; }
         }
 
         public class ExportProcess : CreateExportProcess

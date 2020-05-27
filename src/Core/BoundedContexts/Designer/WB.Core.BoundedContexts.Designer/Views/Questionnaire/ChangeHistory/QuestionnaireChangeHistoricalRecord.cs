@@ -7,19 +7,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
     {
         public QuestionnaireChangeHistoricalRecord(
             string id,
-            string userName,
+            string? userName,
             DateTime timestamp,
             QuestionnaireActionType actionType,
             Guid targetId,
             Guid? targetParentId,
-            string title,
+            string? title,
             QuestionnaireItemType type,
-            string targetNewTitle,
+            string? targetNewTitle,
             int? affectedEntries,
             bool hasRevertTo,
             DateTime? targetDateTime,
             List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences,
-            string comment, string hqVersion, long? hqQuestionnaireVersion, bool canEditComment)
+            string? comment, string? hqVersion, long? hqQuestionnaireVersion, bool canEditComment)
         {
             this.Id = id;
             UserName = userName;
@@ -42,24 +42,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
         public string Id { get; }
         public int Sequence { get; set; }
-        public string UserName { get; }
+        public string? UserName { get; }
         public DateTime Timestamp { get; private set; }
         public QuestionnaireActionType ActionType { get; }
 
         public Guid TargetId { get; private set; }
-        public string TargetTitle { get; }
+        public string? TargetTitle { get; }
         public Guid? TargetParentId { get; private set; }
         public QuestionnaireItemType TargetType { get; }
         public DateTime? TargetDateTime { get; private set; }
-        public string TargetNewTitle { get; }
+        public string? TargetNewTitle { get; }
         public int? AffectedEntries { get; private set; }
 
         public bool HasRevertTo { get; }
         public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; }
-        public string Comment { get; }
+        public string? Comment { get; }
         public bool CanEditComment { get; set; }
-        public string HqUserName { get; set; }
-        public string HqVersion { get; }
+        public string? HqUserName { get; set; }
+        public string? HqVersion { get; }
         public long? HqQuestionnaireVersion { get; }
     }
 }

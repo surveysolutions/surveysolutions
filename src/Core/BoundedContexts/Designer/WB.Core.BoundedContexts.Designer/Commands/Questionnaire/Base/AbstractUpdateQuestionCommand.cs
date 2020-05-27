@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.VariableLabel = CommandUtils.SanitizeHtml(commonQuestionParameters.VariableLabel, removeAllTags: true);
             this.Title = CommandUtils.SanitizeHtml(commonQuestionParameters.Title);
             this.VariableName = CommandUtils.SanitizeHtml(commonQuestionParameters.VariableName, removeAllTags: true);
-            this.EnablementCondition = commonQuestionParameters.EnablementCondition;
+            this.EnablementCondition = commonQuestionParameters.EnablementCondition ?? string.Empty;
             this.HideIfDisabled = commonQuestionParameters.HideIfDisabled;
             this.Instructions = CommandUtils.SanitizeHtml(commonQuestionParameters.Instructions, removeAllTags: true);
             this.Properties = new QuestionProperties(commonQuestionParameters.HideInstructions, false)
@@ -24,12 +24,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             };
         }
 
-        public string Title { get; private set; }
-        public string VariableName { get; private set; }
+        public string? Title { get; private set; }
+        public string? VariableName { get; private set; }
         public string VariableLabel { get; private set; }
         public string EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
-        public string Instructions { get; private set; }
+        public string? Instructions { get; private set; }
         public QuestionProperties Properties { get; set; }
     }
 }

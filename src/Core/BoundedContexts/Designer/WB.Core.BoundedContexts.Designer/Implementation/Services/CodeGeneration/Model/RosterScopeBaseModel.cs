@@ -14,8 +14,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             List<RosterTemplateModel> rosters, 
             List<Guid> rosterScope,
             List<VariableTemplateModel> variables,
-            string parentTypeName)
+            string? parentTypeName)
         {
+            //this.Questions = new List<QuestionTemplateModel>();
+            //this.StaticTexts = new List<StaticTextTemplateModel>();
+            //this.Groups = new List<GroupTemplateModel>();
+            //this.Rosters = new List<RosterTemplateModel>();
+            //this.Variables = new List<VariableTemplateModel>();
+            
             RosterScopeName = rosterScopeName;
             TypeName = typeName;
             Groups = groups;
@@ -27,20 +33,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             ParentTypeName = parentTypeName;
         }
 
-        protected RosterScopeBaseModel()
-        {
-            this.Questions = new List<QuestionTemplateModel>();
-            this.StaticTexts = new List<StaticTextTemplateModel>();
-            this.Groups = new List<GroupTemplateModel>();
-            this.Rosters = new List<RosterTemplateModel>();
-            this.Variables=new List<VariableTemplateModel>();
-        }
-
         public string RosterScopeName { get;}
 
         public string TypeName { get; }
 
-        public string ParentTypeName { get; }
+        public string? ParentTypeName { get; }
 
         public List<QuestionTemplateModel> Questions { get; }
 
