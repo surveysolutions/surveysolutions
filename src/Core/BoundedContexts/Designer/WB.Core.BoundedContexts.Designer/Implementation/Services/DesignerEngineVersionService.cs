@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
              new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 29,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -267,6 +267,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             && question.LinkedToQuestionId.HasValue 
                             && questionnaire.Find<IQuestion>(question.LinkedToQuestionId.Value).QuestionType == QuestionType.TextList).Any(),
                         Description = "Option filter for categorical linked to list questions"
+                    },
+                }
+            },
+             new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire =>  questionnaire.IsCoverPageSupported,
+                        Description = "New Cover page"
                     },
                 }
             },

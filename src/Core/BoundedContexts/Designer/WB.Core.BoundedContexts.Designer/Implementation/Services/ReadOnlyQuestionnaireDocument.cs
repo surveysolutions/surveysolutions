@@ -320,5 +320,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         public bool IsCoverPage(Guid publicKey) => Questionnaire.IsCoverPage(publicKey);
+        public bool IsCoverPageSupported => Questionnaire.IsCoverPageSupported;
     }
 }

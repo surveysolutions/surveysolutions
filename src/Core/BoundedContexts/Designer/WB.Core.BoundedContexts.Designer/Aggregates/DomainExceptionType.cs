@@ -161,5 +161,7 @@
 
         TryToDeleteCoverPage,
         CoverSectionMustBeFirst,
+        CanNotAddElementToCoverPage,
+        CanNotEditElementIntoCoverPage,
     }
 }

@@ -216,9 +216,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public NewEditGroupView GetGroupEditView(QuestionnaireRevision questionnaireId, Guid groupId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
-            var group = document?.Find<IGroup>(groupId);
-            if (@group == null)
+            if (document == null)
                 return null;
+
+            var group = document.Find<IGroup>(groupId);
+            if (@group == null)
+            {
+                if (document.IsCoverPage(groupId) && !document.IsCoverPageSupported)
+                {
+                    return new NewEditGroupView
+                    {
+                        Group = new GroupDetailsView
+                        {
+                            Id = QuestionnaireDocument.CoverPageSectionId,
+                            Title = QuestionnaireEditor.CoverPageSection,
+                            EnablementCondition = null,
+                            HideIfDisabled = false,
+                            VariableName = null,
+                            DisplayMode = RosterDisplayMode.SubSection
+                        },
+                        Breadcrumbs = new[] { new Breadcrumb()
+                        {
+                            Id = QuestionnaireDocument.CoverPageSectionId.FormatGuid(),
+                            Title = QuestionnaireEditor.CoverPageSection
+                        }}
+                    };
+                }
+                return null;
+            }
 
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
