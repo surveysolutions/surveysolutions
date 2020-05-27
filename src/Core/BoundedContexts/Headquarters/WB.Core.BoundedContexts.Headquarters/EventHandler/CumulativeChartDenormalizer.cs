@@ -39,26 +39,30 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.cumulativeReportReader = cumulativeReportReader;
         }
 
-        public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+        public void Handle(IEnumerable<IPublishableEvent> publishableEvents)
         {
             var statusChangeEvents = publishableEvents.Where(x => x.Payload is InterviewStatusChanged).ToList();
-
+            
             if (!statusChangeEvents.Any())
                 return;
 
-            var state = new CumulativeState
-            {
-                QuestionnaireIdentity = this.interviewReferencesStorage.GetQuestionnaireIdentity(eventSourceId)
-            };
+            Dictionary<Guid, CumulativeState> states = new Dictionary<Guid, CumulativeState>();
 
             foreach (var statusChangeEvent in statusChangeEvents)
             {
                 var interviewStatusChanged = statusChangeEvent.Payload as InterviewStatusChanged;
 
+                if(interviewStatusChanged == null) continue;
+
+                var state = states.GetOrAdd(statusChangeEvent.EventSourceId, () => new CumulativeState
+                {
+                    QuestionnaireIdentity = this.interviewReferencesStorage.GetQuestionnaireIdentity(statusChangeEvent.EventSourceId)
+                });
+
                 state.LastInterviewStatus = interviewStatusChanged.PreviousStatus
                                             ?? state.LastInterviewStatus
                                             ?? cumulativeReportReader.Query(_ => _
-                                                .Where(x => x.InterviewId == eventSourceId && x.ChangeValue > 0)
+                                                .Where(x => x.InterviewId == statusChangeEvent.EventSourceId && x.ChangeValue > 0)
                                                 .OrderByDescending(x => x.EventSequence)
                                                 .FirstOrDefault())?.Status;
 
@@ -66,9 +70,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                 state.LastInterviewStatus = interviewStatusChanged.Status;
             }
-            
-            if (state.IsDirty)
-                this.SaveState(state);
+
+            foreach (var state in states.Values)
+            {
+                if (state.IsDirty)
+                    this.SaveState(state);
+            }
         }
 
         private void Update(CumulativeState state, InterviewStatusChanged statusChanged, IPublishableEvent publishableEvent)
@@ -113,7 +120,5 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         public string Name => "Cumulative Chart Functional Denormalizer";
-        public object[] Readers { get; } = Array.Empty<object>();
-        public object[] Writers { get; } = Array.Empty<object>();
     }
 }

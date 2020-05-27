@@ -29,7 +29,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
                 datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(), 
                 new QuestionnaireLabelFactory(),
                 Mock.Of<IQuestionnaireExportStructureFactory>(x => 
-                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) 
+                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>()) 
                     == Task.FromResult(questionnaireExportStructure)),
                 exportServiceDataProvider ?? Mock.Of <IExportServiceDataProvider>());
         }

@@ -40,8 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             BecauseOf();
         }
 
-        private void BecauseOf() =>
-                denormalizer.Handle(statusEventsToPublish, interviewId);
+        private void BecauseOf() => denormalizer.Handle(statusEventsToPublish);
 
         [NUnit.Framework.Test] public void should_store_all_Status_changes_and_preserve_the_order () => 
             history.InterviewCommentedStatuses.Select(i => i.Status).ToArray()

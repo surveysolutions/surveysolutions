@@ -382,7 +382,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            //filtered and cascadings
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
                 return questionOptionsRepository.GetOptionsForQuestion(this,
