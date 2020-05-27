@@ -1,7 +1,6 @@
 const ControlPanelLayout = () => import( /*  webpackChunkName: "controlpanel" */ './ControlPanelLayout')
 const TabletInfos = () => import( /*  webpackChunkName: "controlpanel" */ './TabletInfos')
 const AppUpdates = () => import( /*  webpackChunkName: "controlpanel" */ './AppUpdates')
-const CreateAdmin = () => import( /*  webpackChunkName: "controlpanel" */ './CreateAdmin')
 const InterviewPackages = () => import( /*  webpackChunkName: "controlpanel" */ './InterviewPackages')
 const ChangePassword = () => import( /*  webpackChunkName: "controlpanel" */ './ChangePassword')
 const ReevaluateInterview = () => import( /*  webpackChunkName: "controlpanel" */ './ReevaluateInterview')
@@ -25,10 +24,6 @@ export default class MapComponent {
                     {
                         path: 'AppUpdates',
                         component: AppUpdates,
-                    },
-                    {
-                        path: 'CreateAdmin',
-                        component: CreateAdmin,
                     },
                     {
                         path: 'InterviewPackages',
