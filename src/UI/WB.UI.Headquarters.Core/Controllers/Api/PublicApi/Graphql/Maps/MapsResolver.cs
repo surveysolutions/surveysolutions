@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
         }
 
         public IQueryable<MapBrowseItem> GetMaps() => this.unitOfWork.Session.Query<MapBrowseItem>();
-        public Task<MapBrowseItem> AddMap(IFormFile file)
+        public Task AddMap(IFormFile file)
         {
             var ms = new MemoryStream();
             file.CopyTo(ms);
@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             });
         }
 
-        public Task<MapBrowseItem> DeleteMap(string fileName) =>
+        public Task DeleteMap(string fileName) =>
             this.mapStorageService.DeleteMap(fileName);
 
         public MapBrowseItem DeleteUserFromMap(string fileName, string userName) =>
