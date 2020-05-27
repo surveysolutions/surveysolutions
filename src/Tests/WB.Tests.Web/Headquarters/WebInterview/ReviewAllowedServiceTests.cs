@@ -1,17 +1,9 @@
-﻿using System.Runtime.Caching;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveySolutions;
 using WB.Enumerator.Native.WebInterview;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
-using WB.UI.Headquarters.API.WebInterview;
-using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
 

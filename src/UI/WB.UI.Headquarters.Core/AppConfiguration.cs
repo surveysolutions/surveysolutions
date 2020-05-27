@@ -1,7 +1,6 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -14,7 +13,7 @@ namespace WB.UI.Headquarters
 {
     public static class AppConfiguration
     {
-        private static object lockObject = new object();
+        private static readonly object lockObject = new object();
 
         public static void AddOptionsConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
@@ -29,6 +28,7 @@ namespace WB.UI.Headquarters
             services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
             services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
             services.Configure<FileStorageConfig>(configuration.GetSection("FileStorage"));
+            
             services.Configure<MetricsConfig>(configuration.MetricsConfiguration());
 
             services.PostConfigure<FileStorageConfig>(c =>

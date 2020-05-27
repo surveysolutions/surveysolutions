@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Caching;
 using System.Threading;
+using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
@@ -21,14 +21,17 @@ namespace WB.Infrastructure.Native.Storage
         private readonly EventBusSettings eventBusSettings;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
+        private readonly IMemoryCache memoryCache;
         private readonly HashSet<Guid> dirtyCheckedAggregateRoots;
 
-        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore,
+        public EventSourcedAggregateRootRepositoryWithWebCache(
+            IEventStore eventStore,
             IInMemoryEventStore inMemoryEventStore,
             EventBusSettings eventBusSettings,
             IDomainRepository repository,
             IServiceLocator serviceLocator,
-            IAggregateLock aggregateLock)
+            IAggregateLock aggregateLock,
+            IMemoryCache memoryCache)
             : base(eventStore, repository)
         {
             this.eventStore = eventStore;
@@ -36,6 +39,7 @@ namespace WB.Infrastructure.Native.Storage
             this.eventBusSettings = eventBusSettings;
             this.serviceLocator = serviceLocator;
             this.aggregateLock = aggregateLock;
+            this.memoryCache = memoryCache;
             this.dirtyCheckedAggregateRoots = new HashSet<Guid>();
         }
 
@@ -71,7 +75,7 @@ namespace WB.Infrastructure.Native.Storage
 
         private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
         {
-            if (!(Cache.Get(Key(aggregateId)) is IEventSourcedAggregateRoot cachedAggregate))
+            if (!(memoryCache.Get(Key(aggregateId)) is IEventSourcedAggregateRoot cachedAggregate))
             {
                 CommonMetrics.StatefullInterviewCacheMiss.Inc();
                 return null;
@@ -102,31 +106,28 @@ namespace WB.Infrastructure.Native.Storage
             return cachedAggregate;
         }
 
-        static readonly MemoryCache Cache = MemoryCache.Default;
 
         protected virtual TimeSpan Expiration => TimeSpan.FromMinutes(5);
 
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
         {
-            var key = Key(aggregateRoot.EventSourceId);
+            var cacheKey = Key(aggregateRoot.EventSourceId);
 
-            Cache.Set(key, aggregateRoot, new CacheItemPolicy
-            {
-                RemovedCallback = OnUpdateCallback,
-                SlidingExpiration = Expiration
-            });
+            memoryCache.Set(cacheKey, aggregateRoot, new MemoryCacheEntryOptions()
+                .RegisterPostEvictionCallback(CacheItemRemoved)
+                .SetSlidingExpiration(Expiration));
 
             CommonMetrics.StatefullInterviewsCached.Labels("added").Inc();
         }
 
-        private void OnUpdateCallback(CacheEntryRemovedArguments arguments)
+        private void CacheItemRemoved(object key, object value, EvictionReason reason, object state)
         {
-            CacheItemRemoved(arguments.CacheItem.Key, arguments.RemovedReason);
+            CacheItemRemoved(key as string, reason);
         }
 
         protected virtual string Key(Guid id) => "aggregateRoot_" + id;
 
-        protected virtual void CacheItemRemoved(string key, CacheEntryRemovedReason reason)
+        protected virtual void CacheItemRemoved(string key, EvictionReason reason)
         {
             CommonMetrics.StatefullInterviewsCached.Labels("removed").Inc();
         }
@@ -138,7 +139,7 @@ namespace WB.Infrastructure.Native.Storage
                 var key = Key(aggregateId);
                 this.dirtyCheckedAggregateRoots.Remove(aggregateId);
 
-                Cache.Remove(key);
+                memoryCache.Remove(key);
             });
         }
 

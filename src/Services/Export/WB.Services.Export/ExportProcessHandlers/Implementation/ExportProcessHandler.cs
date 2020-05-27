@@ -127,7 +127,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         private async Task PrepareOutputArchive(ExportState state, CancellationToken cancellationToken)
         {
-            state.ArchiveFilePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(state.Settings);
+            state.ArchiveFilePath = await this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedDataAsync(state.Settings);
             state.QuestionnaireName = await this.exportFileNameService.GetQuestionnaireDirectoryName(state.Settings, cancellationToken);
         }
 

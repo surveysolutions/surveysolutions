@@ -1,3 +1,5 @@
+using System;
+
 namespace WB.UI.Headquarters.Models.User
 {
     public class ResponsibleComboboxOptionModel

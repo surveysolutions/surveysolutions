@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
+using Ncqrs.Eventing.Storage;
 using SQLite;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
@@ -29,6 +30,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Enumerator.Native.Questionnaire.Impl;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Abc.TestFactories
@@ -62,6 +64,8 @@ namespace WB.Tests.Abc.TestFactories
             NewMemoryCache(),
             Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>());
 
+        public InMemoryEventStore InMemoryEventStore() => new InMemoryEventStore(NewMemoryCache());
+        
         public IUserRepository UserRepository(params HqUser[] users)
             => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
 
@@ -136,7 +140,8 @@ namespace WB.Tests.Abc.TestFactories
             return result.Object;
         }
 
-        public MemoryCache NewMemoryCache() => new MemoryCache(Options.Create(new MemoryCacheOptions()));
+        private static IMemoryCache cache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+        public IMemoryCache NewMemoryCache() => cache;
 
         public IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
         {

@@ -6,12 +6,5 @@
         {
             get { return this.GetType().Name; }
         }
-
-        public virtual object[] Readers
-        {
-            get { return new object[0]; }
-        }
-        
-        public abstract object[] Writers { get; }
     }
 }
