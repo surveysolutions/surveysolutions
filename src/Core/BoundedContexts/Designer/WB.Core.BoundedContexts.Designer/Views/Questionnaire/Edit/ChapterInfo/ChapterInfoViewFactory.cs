@@ -49,24 +49,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 if (!document.IsCoverPageSupported && document.IsCoverPage(chapterPublicKey))
                 {
                     return new NewChapterView
-                    {
-                        chapter = CreateVirtualCoverPageForNonSupportedDocument(document),
-                        isCover = true,
-                        isReadOnly = true,
-                        variableNames = this.CollectVariableNames(document)
-                    };
+                    (
+                        chapter : CreateVirtualCoverPageForNonSupportedDocument(document),
+                        variableNames: this.CollectVariableNames(document),
+                        isCover: true,
+                        isReadOnly: true
+                    );
                 }
 
                 return null;
             }
-
+             
             return new NewChapterView
             (
                 chapter : ConvertToChapterView(chapter),
-                isCover = document.IsCoverPage(chapterPublicKey),
-                isReadOnly = false,
-                variableNames = this.CollectVariableNames(document)
-            };
+                variableNames : this.CollectVariableNames(document),
+                isCover: document.IsCoverPage(chapterPublicKey),
+                isReadOnly: false
+            );
         }
 
         private IQuestionnaireItem? ConvertToChapterView(IGroup chapter)
@@ -75,7 +75,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var allGroupViews = new Dictionary<IGroup, GroupInfoView>();
             chapter.ForEachTreeElement<IComposite>(x => x.Children, (parent, child) =>
             {
-
                 IQuestionnaireItem? questionnaireItem = null;
 
                 if (child is IQuestion)
@@ -116,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Title = QuestionnaireEditor.CoverPageSection,
                 IsRoster = false,
                 HasCondition = false,
-                Variable = null,
+                Variable = string.Empty,
                 Items = new List<IQuestionnaireItem>(),
                 GroupsCount = 0,
                 RostersCount = 0,

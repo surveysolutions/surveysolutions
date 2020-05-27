@@ -53,26 +53,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 isPublic : questionnaireDocument.IsPublic,
                 hideIfDisabled : questionnaireDocument.HideIfDisabled,
                 defaultLanguageName : questionnaireDocument.DefaultLanguageName,
-                isCoverPageSupported = questionnaireDocument.IsCoverPageSupported,
+                isCoverPageSupported : questionnaireDocument.IsCoverPageSupported,
                 countries: CountryListProvider.GetCounryItems()
             );
 
             if (!questionnaireDocument.IsCoverPageSupported)
             {
                 questionnaireInfoView.Chapters.Add(new ChapterInfoView
-                {
-                    ItemId = QuestionnaireDocument.CoverPageSectionId.FormatGuid(),
-                    Title = QuestionnaireEditor.CoverPageSection,
-                    IsCover = true,
-                    GroupsCount = 0,
-                    RostersCount = 0,
-                    QuestionsCount = questionnaireDocument.Children
+                (
+                    itemId: QuestionnaireDocument.CoverPageSectionId.FormatGuid(),
+                    title: QuestionnaireEditor.CoverPageSection,
+                    isCover: true,
+                    isReadOnly: true,
+                    groupsCount: 0,
+                    rostersCount: 0,
+                    questionsCount: questionnaireDocument.Children
                         .TreeToEnumerable(item => item.Children)
                         .Where(c => c is IQuestion)
                         .Cast<IQuestion>()
-                        .Count(q => q.Featured),
-                    IsReadOnly = true
-                });
+                        .Count(q => q.Featured)
+                ));
             }
 
             foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
@@ -81,7 +81,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 (
                     itemId : chapter.PublicKey.FormatGuid(),
                     title : chapter.Title,
-                    isCover = chapter.PublicKey == QuestionnaireDocument.CoverPageSectionId,
+                    isCover: chapter.PublicKey == QuestionnaireDocument.CoverPageSectionId,
+                    isReadOnly: false,
                     groupsCount : 0,
                     rostersCount : 0,
                     questionsCount : 0
