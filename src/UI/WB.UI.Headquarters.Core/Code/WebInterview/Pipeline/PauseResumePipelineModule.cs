@@ -25,7 +25,9 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
         public Task OnConnected(Hub hub)
         {
             var interviewId = hub.GetInterviewId();
-            
+
+            if (prototypeService.IsPrototype(interviewId)) return Task.CompletedTask;
+
             if (authorizedUser.IsInterviewer)
             {
                 pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(interviewId, this.authorizedUser.Id));
