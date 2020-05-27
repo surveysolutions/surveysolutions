@@ -116,6 +116,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
@@ -214,7 +215,8 @@ namespace WB.Tests.Abc.TestFactories
                 repository ?? Mock.Of<IDomainRepository>(),
                 Create.Service.ServiceLocatorService(),
                 new AggregateLock(),
-                Create.Storage.NewAggregateRootCache());
+                Create.Storage.NewAggregateRootCache(),
+                Options.Create(new SchedulerConfig()));
 
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();

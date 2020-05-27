@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -11,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Services;
+using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
@@ -38,7 +40,8 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 domainRepo.Object,
                 ServiceLocator.Current,
                 new Stub.StubAggregateLock(), 
-                Create.Storage.NewAggregateRootCache());
+                Create.Storage.NewAggregateRootCache(),
+                Options.Create(new SchedulerConfig()));
 
             var entity = repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g1);
 
@@ -98,7 +101,8 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 serviceLocator: ServiceLocator.Current,
                 aggregateLock: new Stub.StubAggregateLock(),
                 memoryCache: Create.Storage.NewAggregateRootCache(),
-                prototypeService: prototypeService ?? Create.Service.MockOfAggregatePrototypeService());
+                prototypeService: prototypeService ?? Create.Service.MockOfAggregatePrototypeService(),
+                schedulerOptions: Options.Create(new SchedulerConfig()));
         }
     }
 }

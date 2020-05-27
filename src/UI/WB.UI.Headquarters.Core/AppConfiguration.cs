@@ -5,6 +5,7 @@ using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
