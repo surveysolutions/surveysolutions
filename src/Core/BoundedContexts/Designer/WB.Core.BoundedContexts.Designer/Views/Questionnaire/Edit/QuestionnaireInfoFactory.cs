@@ -226,9 +226,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 if (document.IsCoverPage(groupId) && !document.IsCoverPageSupported)
                 {
                     return new NewEditGroupView
-                    {
-                        Group = new GroupDetailsView
-                        {
+                    (
+                        group: new GroupDetailsView
+                        { 
                             Id = QuestionnaireDocument.CoverPageSectionId,
                             Title = QuestionnaireEditor.CoverPageSection,
                             EnablementCondition = null,
@@ -236,18 +236,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                             VariableName = null,
                             DisplayMode = RosterDisplayMode.SubSection
                         },
-                        Breadcrumbs = new[] { new Breadcrumb()
+                        breadcrumbs: new[] { new Breadcrumb()
                         {
                             Id = QuestionnaireDocument.CoverPageSectionId.FormatGuid(),
                             Title = QuestionnaireEditor.CoverPageSection
                         }}
-                    };
+                    );
                 }
                 return null;
             }
 
-            if (document == null)
-                return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
             var result = new NewEditGroupView

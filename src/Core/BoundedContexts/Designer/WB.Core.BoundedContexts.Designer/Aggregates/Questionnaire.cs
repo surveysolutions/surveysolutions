@@ -1719,7 +1719,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         q.LinkedToQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToQuestionId);
                         q.LinkedToRosterId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToRosterId);
                         q.Featured = QuestionnaireDocument.IsCoverPageSupported ? targetIsCoverPage : q.Featured;
-                        q.ConditionExpression = targetIsCoverPage ? null : q.ConditionExpression; 
+                        q.ConditionExpression = targetIsCoverPage ? string.Empty : q.ConditionExpression; 
                         this.CopyCategories(q, sourceQuestionnaire);
                         break;
                     case Variable v:
@@ -1760,7 +1760,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if (targetIsCoverPage)
                 {
-                    question.ConditionExpression = null;
+                    question.ConditionExpression = string.Empty;
                 }
             }
 

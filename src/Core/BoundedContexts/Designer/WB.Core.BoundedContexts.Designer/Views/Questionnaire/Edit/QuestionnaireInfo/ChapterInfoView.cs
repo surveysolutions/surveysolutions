@@ -5,13 +5,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 {
     public class ChapterInfoView : IQuestionnaireItem
     {
-        public ChapterInfoView(string itemId, string title, int questionsCount, int groupsCount, int rostersCount)
+        public ChapterInfoView(string itemId, string title, int questionsCount, int groupsCount, int rostersCount, bool isCover, bool isReadOnly)
         {
             ItemId = itemId;
             Title = title;
             QuestionsCount = questionsCount;
             GroupsCount = groupsCount;
             RostersCount = rostersCount;
+            IsCover = isCover;
+            IsReadOnly = isReadOnly;
         }
 
         public string ItemId { get; set; }

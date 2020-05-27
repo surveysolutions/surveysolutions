@@ -282,10 +282,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = questionnaire =>  questionnaire.IsCoverPageSupported,
-                        Description = "New Cover page"
-                    },
+                    (
+                        hasQuestionnaire: questionnaire =>  questionnaire.IsCoverPageSupported,
+                        description: "New Cover page"
+                    ),
                 }
             },
         };
