@@ -32,7 +32,6 @@ namespace WB.Core.Infrastructure.Aggregates
         public Guid Id { get; }
 
         public IEventSourcedAggregateRoot AggregateRoot { get; set; }
-        public bool IsDirtyChecked { get; set; }
         public IEnumerable<CommittedEvent> Events { get; set; }
         public PrototypeType? PrototypeType { get; set; }
 

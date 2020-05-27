@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Microsoft.Extensions.Options;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -20,6 +21,8 @@ namespace WB.Infrastructure.Native.Storage
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
         private readonly IAggregateRootCache memoryCache;
+        private readonly IOptions<SchedulerConfig> schedulerOptions;
+        private readonly HashSet<Guid> dirtyChecked = new HashSet<Guid>();
 
         public EventSourcedAggregateRootRepositoryWithWebCache(
             IEventStore eventStore,
@@ -27,7 +30,8 @@ namespace WB.Infrastructure.Native.Storage
             IDomainRepository repository,
             IServiceLocator serviceLocator,
             IAggregateLock aggregateLock,
-            IAggregateRootCache memoryCache)
+            IAggregateRootCache memoryCache,
+            IOptions<SchedulerConfig> schedulerOptions)
             : base(eventStore, repository)
         {
             this.eventStore = eventStore;
@@ -35,6 +39,7 @@ namespace WB.Infrastructure.Native.Storage
             this.serviceLocator = serviceLocator;
             this.aggregateLock = aggregateLock;
             this.memoryCache = memoryCache;
+            this.schedulerOptions = schedulerOptions;
         }
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
@@ -89,15 +94,18 @@ namespace WB.Infrastructure.Native.Storage
 
             bool dbContainsNewEvents = false;
 
-            if (!this.prototypeService.IsPrototype(aggregateId))
+            if (this.schedulerOptions.Value.IsClustered)
             {
-                if (!cacheItem.IsDirtyChecked)
+                if (!this.prototypeService.IsPrototype(aggregateId))
                 {
-                    dbContainsNewEvents = eventStore.IsDirty(aggregateId, cacheItem.AggregateRoot.Version);
-
-                    if (!dbContainsNewEvents)
+                    if (!dirtyChecked.Contains(aggregateId))
                     {
-                        cacheItem.IsDirtyChecked = true;
+                        dbContainsNewEvents = eventStore.IsDirty(aggregateId, cacheItem.AggregateRoot.Version);
+
+                        if (!dbContainsNewEvents)
+                        {
+                            dirtyChecked.Add(aggregateId);
+                        }
                     }
                 }
             }
