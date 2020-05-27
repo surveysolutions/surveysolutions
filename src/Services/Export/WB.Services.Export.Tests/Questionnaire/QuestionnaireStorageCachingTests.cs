@@ -50,18 +50,18 @@ namespace WB.Services.Export.Tests.Questionnaire
             var qId = new QuestionnaireId(Guid.NewGuid() + "$1");
             var doc = Create.QuestionnaireDocument();
 
-            this.apiMock.Setup(a => a.GetQuestionnaireAsync(qId, It.IsAny<CancellationToken>()))
+            this.apiMock.Setup(a => a.GetQuestionnaireAsync(qId, It.IsAny<Guid?>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(doc));
 
             var token = new CancellationToken();
-            await this.storage.GetQuestionnaireAsync(qId, token);
-            await this.storage.GetQuestionnaireAsync(qId, token);
-            await this.storage.GetQuestionnaireAsync(qId, token);
-            await this.storage.GetQuestionnaireAsync(qId, token);
-            await this.storage.GetQuestionnaireAsync(qId, token);
-            await this.storage.GetQuestionnaireAsync(qId, token);
+            await this.storage.GetQuestionnaireAsync(qId, token: token);
+            await this.storage.GetQuestionnaireAsync(qId, token: token);
+            await this.storage.GetQuestionnaireAsync(qId, token: token);
+            await this.storage.GetQuestionnaireAsync(qId, token: token);
+            await this.storage.GetQuestionnaireAsync(qId, token: token);
+            await this.storage.GetQuestionnaireAsync(qId, token: token);
 
-            this.apiMock.Verify(a => a.GetQuestionnaireAsync(qId, It.IsAny<CancellationToken>()), Times.Once,
+            this.apiMock.Verify(a => a.GetQuestionnaireAsync(qId, It.IsAny<Guid?>(), It.IsAny<CancellationToken>()), Times.Once,
                 "should query questionnaire from API on cold cache only once");
         }
     }

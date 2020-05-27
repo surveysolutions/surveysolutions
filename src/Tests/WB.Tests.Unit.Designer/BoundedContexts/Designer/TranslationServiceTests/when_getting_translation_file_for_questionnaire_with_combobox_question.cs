@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using ClosedXML.Excel;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -53,26 +54,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         private void BecauseOf() 
         {
             var excelFile = service.GetAsExcelFile(questionnaireId, translationId);
-            var excelWorkbook = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook;
-            comboboxCells = excelWorkbook.Worksheets["@@_combobox"].Cells;
-            cascadingCells = excelWorkbook.Worksheets["@@_cascading"].Cells;
+            var excelWorkbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile));
+            comboboxCells = excelWorkbook.Worksheets.First(x => x.Name == "@@_combobox");
+            cascadingCells = excelWorkbook.Worksheets.First(x => x.Name =="@@_cascading");
         }
 
         [NUnit.Framework.Test] public void should_export_translation_on__Translations_combobox__sheet_in_2_row () 
         {
-            comboboxCells[2, TranslationsServiceTestsContext.originalTextColumn].GetValue<string>().Should().Be("Option");
-            comboboxCells[2, TranslationsServiceTestsContext.translactionColumn].GetValue<string>().Should().Be("Опция");
+            comboboxCells.Cell(2, TranslationsServiceTestsContext.originalTextColumn).GetValue<string>().Should().Be("Option");
+            comboboxCells.Cell(2, TranslationsServiceTestsContext.translactionColumn).GetValue<string>().Should().Be("Опция");
         }
 
         [NUnit.Framework.Test] public void should_export_translation_on__Translations_cascading__sheet_in_2_row () 
         {
-            cascadingCells[2, TranslationsServiceTestsContext.originalTextColumn].GetValue<string>().Should().Be("Cascading Option");
-            cascadingCells[2, TranslationsServiceTestsContext.translactionColumn].GetValue<string>().Should().Be("Каскадная Опция");
+            cascadingCells.Cell(2, TranslationsServiceTestsContext.originalTextColumn).GetValue<string>().Should().Be("Cascading Option");
+            cascadingCells.Cell(2, TranslationsServiceTestsContext.translactionColumn).GetValue<string>().Should().Be("Каскадная Опция");
         }
 
         static TranslationsService service;
-        static ExcelRange comboboxCells;
-        static ExcelRange cascadingCells;
+        static IXLWorksheet comboboxCells;
+        static IXLWorksheet cascadingCells;
         static readonly Guid translationId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid comboboxId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

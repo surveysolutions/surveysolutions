@@ -12,8 +12,6 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         IEventHandler<InterviewCreated>
     {
         public string Name { get; }
-        public object[] Readers { get; }
-        public object[] Writers { get; }
 
         public virtual void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
@@ -25,8 +23,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         IEventHandler<InterviewCreated>
     {
         public string Name { get; }
-        public object[] Readers { get; }
-        public object[] Writers { get; }
+
         public virtual void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
             throw new System.NotImplementedException();
@@ -39,7 +36,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         public int TotalEvents { get; private set; }
 
-        public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+        public void Handle(IEnumerable<IPublishableEvent> publishableEvents)
         {
             HandleCount++;
             TotalEvents += publishableEvents.Count();
@@ -50,8 +47,6 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         IEventHandler<InterviewCreated>
     {
         public string Name { get; }
-        public object[] Readers { get; }
-        public object[] Writers { get; }
 
         public int HandleCount { get; private set; }
         public virtual void Handle(IPublishedEvent<InterviewCreated> evnt)

@@ -123,6 +123,9 @@
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>Interview has no responsible. Please, choose responsible interviewer</value>
   </data>
+  <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
+    <value>You can change responsible for interview on reject. Please, choose responsible interviewer</value>
+  </data>
   <data name="FlagTitleFlagged" xml:space="preserve">
     <value>Flagged</value>
   </data>

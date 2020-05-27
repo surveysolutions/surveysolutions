@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using ClosedXML.Excel;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -30,16 +30,15 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         private class TranslationsWithHeaderMap
         {
-            public TranslationsWithHeaderMap(ExcelWorksheet worksheet)
+            public TranslationsWithHeaderMap(IXLWorksheet worksheet)
             {
                 Worksheet = worksheet;
             }
-
-            public ExcelWorksheet Worksheet { get; set; }
-            public string? EntityIdIndex { get; set; }
-            public string? TypeIndex { get; set; }
-            public string? OptionValueOrValidationIndexOrFixedRosterIdIndex { get; set; }
-            public string? TranslationIndex { get; set; }
+            public IXLWorksheet Worksheet { get; set; }
+            public string EntityIdIndex { get; set; }
+            public string TypeIndex { get; set; }
+            public string OptionValueOrValidationIndexOrFixedRosterIdIndex { get; set; }
+            public string TranslationIndex { get; set; }
         }
 
         private readonly TranslationType[] translationTypesWithIndexes =
@@ -106,16 +105,16 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             try
             {
-                using ExcelPackage package = new ExcelPackage(stream);
+                using var package = new XLWorkbook(stream);
 
-                if (package.Workbook.Worksheets.Count == 0)
+                if (package.Worksheets.Count == 0)
                     throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);
 
                 var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
                 if (questionnaire == null)
                     throw new InvalidFileException(ExceptionMessages.QuestionnaireCantBeFound);
 
-                var sheetsWithTranslation = package.Workbook.Worksheets
+                var sheetsWithTranslation = package.Worksheets
                     .Where(x => x.Name == TranslationExcelOptions.WorksheetName ||
                                 x.Name.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix) ||
                                 (x.Name.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix) &&
@@ -133,8 +132,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 var translationInstances = new List<TranslationInstance>();
                 foreach (var translationWithHeaderMap in translationsWithHeaderMap)
                 {
-                    translationInstances.AddRange(GetWorksheetTranslations(translationWithHeaderMap,
-                        questionnaire, idsOfAllQuestionnaireEntities, questionnaireId, translationId));
+                    var worksheetTranslations = GetWorksheetTranslations(translationWithHeaderMap,
+                        questionnaire, idsOfAllQuestionnaireEntities, questionnaireId, translationId);
+                    translationInstances.AddRange(worksheetTranslations);
                 }
 
                 var uniqueTranslationInstances = translationInstances
@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             var worksheet = translationWithHeaderMap.Worksheet;
             var worksheetName = worksheet.Name.ToLower();
-            var end = worksheet.Dimension.End.Row;
+            var end = worksheet.LastRowUsed().RowNumber();
 
             var isCategoriesWorksheet = worksheetName.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix);
             var categoriesWorksheetName = isCategoriesWorksheet
@@ -238,17 +238,18 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             };
         }
 
-        private TranslationsWithHeaderMap CreateHeaderMap(ExcelWorksheet worksheet)
+        private TranslationsWithHeaderMap CreateHeaderMap(IXLWorksheet worksheet)
         {
-            var headers = new List<Tuple<string, string>>()
+            var items = new List<Tuple<string, string>>()
             {
-                new Tuple<string, string>(worksheet.Cells["A1"].GetValue<string>(), "A"),
-                new Tuple<string, string>(worksheet.Cells["B1"].GetValue<string>(), "B"),
-                new Tuple<string, string>(worksheet.Cells["C1"].GetValue<string>(), "C"),
-                new Tuple<string, string>(worksheet.Cells["D1"].GetValue<string>(), "D"),
-                new Tuple<string, string>(worksheet.Cells["E1"].GetValue<string>(), "E"),
-                new Tuple<string, string>(worksheet.Cells["F1"].GetValue<string>(), "F"),
-            }.Where(kv => kv.Item1 != null).ToDictionary(k => k.Item1.Trim(), v => v.Item2);
+                new Tuple<string, string>(worksheet.Cell(1, "A").GetString(), "A"),
+                new Tuple<string, string>(worksheet.Cell(1, "B").GetString(), "B"),
+                new Tuple<string, string>(worksheet.Cell(1, "C").GetString(), "C"),
+                new Tuple<string, string>(worksheet.Cell(1, "D").GetString(), "D"),
+                new Tuple<string, string>(worksheet.Cell(1, "E").GetString(), "E"),
+                new Tuple<string, string>(worksheet.Cell(1, "F").GetString(), "F"),
+            }.Where(kv => !string.IsNullOrEmpty(kv.Item1));
+            var headers = items.ToDictionary(k => k.Item1.Trim(), v => v.Item2);
             return new TranslationsWithHeaderMap(worksheet)
             {
                 EntityIdIndex = headers.GetOrNull(TranslationExcelOptions.EntityIdColumnName),
@@ -299,13 +300,25 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         public int Count(Guid questionnaireId, Guid translationId)
             => this.dbContext.TranslationInstances.Count(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId);
 
-        private TranslationRow GetExcelTranslation(TranslationsWithHeaderMap worksheetWithHeadersMap, int rowNumber) => this.AdjustIndexValue(new TranslationRow
+        private TranslationRow GetExcelTranslation(TranslationsWithHeaderMap worksheetWithHeadersMap, int rowNumber)
         {
-            EntityId = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.EntityIdIndex}{rowNumber}"].GetValue<string>(),
-            Type = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.TypeIndex}{rowNumber}"].GetValue<string>(),
-            OptionValueOrValidationIndexOrFixedRosterId = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}"].GetValue<string>(),
-            Translation = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.TranslationIndex}{rowNumber}"].GetValue<string>()
-        });
+            var entityId = worksheetWithHeadersMap.Worksheet.Cell($"{worksheetWithHeadersMap.EntityIdIndex}{rowNumber}")
+                ?.GetValue<string>();
+            var type = worksheetWithHeadersMap.Worksheet.Cell($"{worksheetWithHeadersMap.TypeIndex}{rowNumber}")
+                ?.GetString();
+            var optionValueOrValidationIndexOrFixedRosterId = worksheetWithHeadersMap.Worksheet
+                .Cell($"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}")
+                ?.GetString();
+            var translation = worksheetWithHeadersMap.Worksheet
+                .Cell($"{worksheetWithHeadersMap.TranslationIndex}{rowNumber}")?.GetString();
+            return this.AdjustIndexValue(new TranslationRow
+            {
+                EntityId = entityId.NullIfEmpty(),
+                Type = type.NullIfEmpty(),
+                OptionValueOrValidationIndexOrFixedRosterId = optionValueOrValidationIndexOrFixedRosterId.NullIfEmpty(),
+                Translation = translation.NullIfEmpty()
+            });
+        }
 
         private TranslationRow AdjustIndexValue(TranslationRow row)
         {
@@ -317,7 +330,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private IEnumerable<ImportValidationError> Verify(TranslationsWithHeaderMap worksheetWithHeadersMap)
         {
             var worksheet = worksheetWithHeadersMap.Worksheet;
-            var end = worksheet.Dimension.End.Row;
+            var end = worksheet.LastRowUsed().RowNumber();
 
             if (worksheetWithHeadersMap.EntityIdIndex == null)
                 yield return new ImportValidationError
@@ -391,7 +404,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private IEnumerable<ImportValidationError> VerifyCategories(TranslationsWithHeaderMap worksheetWithHeadersMap)
         {
             var worksheet = worksheetWithHeadersMap.Worksheet;
-            var end = worksheet.Dimension.End.Row;
+            var end = worksheet.LastRowUsed().RowNumber();
             
             if (worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex == null)
                 yield return new ImportValidationError

@@ -57,8 +57,6 @@ namespace WB.Enumerator.Native.WebInterview
         IEventHandler<AnswerCommentResolved>
 
     {
-        public override object[] Writers => new object[0];
-
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
 

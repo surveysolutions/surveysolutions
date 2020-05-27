@@ -212,7 +212,8 @@ namespace WB.Services.Export.Jobs
                 ExportFormat = dataExportProcessView.Format,
                 Status = dataExportProcessView.InterviewStatus,
                 FromDate = dataExportProcessView.FromDate,
-                ToDate = dataExportProcessView.ToDate
+                ToDate = dataExportProcessView.ToDate,
+                Translation = dataExportProcessView.TranslationId
             };
 
             dataExportProcessView.HasFile = false;
@@ -252,6 +253,7 @@ namespace WB.Services.Export.Jobs
                     : DataExportType.Data,
                 QuestionnaireId = settings.QuestionnaireId.ToString(),
                 InterviewStatus = settings.Status,
+                TranslationId = settings.Translation,
                 FromDate = settings.FromDate,
                 ToDate = settings.ToDate,
                 Error = error == null
@@ -273,7 +275,7 @@ namespace WB.Services.Export.Jobs
                 LastUpdateDate = DateTime.MinValue
             };
 
-            string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(exportSettings);
+            string filePath = await this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedDataAsync(exportSettings);
             if (this.externalArtifactsStorage.IsEnabled())
             {
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(exportSettings.Tenant, Path.GetFileName(filePath));
