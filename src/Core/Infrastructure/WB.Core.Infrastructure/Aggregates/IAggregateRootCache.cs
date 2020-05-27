@@ -12,7 +12,7 @@ namespace WB.Core.Infrastructure.Aggregates
         AggregateRootCacheItem GetOrCreate(Guid id, Func<AggregateRootCacheItem, AggregateRootCacheItem> factory);
         
         /// <summary>
-        /// Pin item in cache for extended period of time
+        /// Make sure item won't be evicted from cache for extended period of time
         /// </summary>
         /// <param name="id">Aggregate id</param>
         /// <param name="period">Period</param>
