@@ -33,7 +33,8 @@ namespace WB.UI.Headquarters
             await host.RunAsync();
             return 0;
         }
-
+        private static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+        
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseSerilog((host, loggerConfig) =>
@@ -41,8 +42,8 @@ namespace WB.UI.Headquarters
                     loggerConfig
                         .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "Headquarters")
                         .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning);
-                    
-                    if (host.HostingEnvironment.IsDevelopment())
+
+                    if (host.HostingEnvironment.IsDevelopment() || InDocker)
                     {
                         // To debug logitems source add {SourceContext} to output template
                         // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
