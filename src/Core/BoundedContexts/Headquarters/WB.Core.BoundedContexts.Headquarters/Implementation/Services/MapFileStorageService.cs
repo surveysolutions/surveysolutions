@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly string mapsFolderPath;
 
         public MapFileStorageService(
-            IFileSystemAccessor fileSystemAccessor, 
+            IFileSystemAccessor fileSystemAccessor,
             IOptions<FileStorageConfig> fileStorageConfig,
             IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapFile.Name);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
-                
+
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
             }
             catch
@@ -140,146 +140,150 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             switch (this.fileSystemAccessor.GetFileExtension(tempFile))
             {
                 case ".tpk":
-                {
-                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "conf.cdi");
-                    if (unzippedFile != null)
                     {
-                        XmlDocument doc = new XmlDocument();
-                        doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                        var envelope = doc["EnvelopeN"];
-                        item.Wkid = int.Parse(envelope["SpatialReference"]["WKID"].InnerText);
-                        item.XMaxVal = double.Parse(envelope["XMax"].InnerText);
-                        item.XMinVal = double.Parse(envelope["XMin"].InnerText);
-                        item.YMaxVal = double.Parse(envelope["YMax"].InnerText);
-                        item.YMinVal = double.Parse(envelope["YMin"].InnerText);
-                    }
-                    else
-                    {
-                        unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
+                        var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "conf.cdi");
                         if (unzippedFile != null)
                         {
-                            var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                            SetMapProperties(jsonObject.contents, item);
+                            XmlDocument doc = new XmlDocument();
+                            doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                            var envelope = doc["EnvelopeN"];
+                            item.Wkid = int.Parse(envelope["SpatialReference"]["WKID"].InnerText);
+                            item.XMaxVal = double.Parse(envelope["XMax"].InnerText);
+                            item.XMinVal = double.Parse(envelope["XMin"].InnerText);
+                            item.YMaxVal = double.Parse(envelope["YMax"].InnerText);
+                            item.YMinVal = double.Parse(envelope["YMin"].InnerText);
                         }
-                    }
-                }
-                    break;
-                case ".mmpk":
-                {
-                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "iteminfo.xml");
-                    if (unzippedFile != null)
-                    {
-                        XmlDocument doc = new XmlDocument();
-                        doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                        var esriInfo = doc["ESRI_ItemInformation"];
-
-                        unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{esriInfo["name"].InnerText}.info");
-                        if (unzippedFile != null)
+                        else
                         {
-                            var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                            
-                            if (jsonObject?.maps?.Count > 0)
+                            unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
+                            if (unzippedFile != null)
                             {
-                                var mapName = jsonObject.maps[0];
-                                unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
-                                jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
-
-                                item.Wkid = jsonObject.map.spatialReference.wkid;
-
-                                var extent = jsonObject.item.extent;
-
-                                item.XMinVal = extent[0][0];
-                                item.YMinVal = extent[0][1];
-                                item.XMaxVal = extent[1][0];
-                                item.YMaxVal = extent[1][1];
-
-                                var layers = jsonObject.map.baseMap.baseMapLayers;
-                                if (layers?.Count > 0)
-                                {
-                                    var layer = layers[0];
-
-                                    item.MaxScale = layer.maxScale;
-                                    item.MinScale = layer.minScale;
-                                }
-
+                                var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                                SetMapProperties(jsonObject.contents, item);
                             }
                         }
                     }
-                }
+                    break;
+                case ".mmpk":
+                    {
+                        var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "iteminfo.xml");
+                        if (unzippedFile != null)
+                        {
+                            XmlDocument doc = new XmlDocument();
+                            doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                            var esriInfo = doc["ESRI_ItemInformation"];
+
+                            unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{esriInfo["name"].InnerText}.info");
+                            if (unzippedFile != null)
+                            {
+                                var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+
+                                if (jsonObject?.maps?.Count > 0)
+                                {
+                                    var mapName = jsonObject.maps[0];
+                                    unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
+                                    jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+
+                                    item.Wkid = jsonObject.map.spatialReference.wkid;
+
+                                    var extent = jsonObject.item.extent;
+
+                                    item.XMinVal = extent[0][0];
+                                    item.YMinVal = extent[0][1];
+                                    item.XMaxVal = extent[1][0];
+                                    item.YMaxVal = extent[1][1];
+
+                                    var layers = jsonObject.map.baseMap.baseMapLayers;
+                                    if (layers?.Count > 0)
+                                    {
+                                        var layer = layers[0];
+
+                                        item.MaxScale = layer.maxScale;
+                                        item.MinScale = layer.minScale;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
                     break;
                 case ".tif":
-                {
-                  try
                     {
-                        var startInfo = Command.Read($"gdalinfo", $"{tempFile} -json",
-                            workingDirectory: this.geospatialConfig.Value.GdalHome);
-                        var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
-
-                        var allX = new List<double>
+                        try
                         {
-                            deserialized.CornerCoordinates.LowerLeft[0],
-                            deserialized.CornerCoordinates.UpperLeft[0],
-                            deserialized.CornerCoordinates.LowerRight[0],
-                            deserialized.CornerCoordinates.UpperRight[0],
-                        };
-                        
-                        var allY = new List<double>
-                        {
-                            deserialized.CornerCoordinates.LowerLeft[1],
-                            deserialized.CornerCoordinates.UpperLeft[1],
-                            deserialized.CornerCoordinates.LowerRight[1],
-                            deserialized.CornerCoordinates.UpperRight[1],
-                        };
-                        // // alternative way to extract extent
-                        // double xMin = double.MaxValue;
-                        // double xMax = double.MinValue;
-                        // double yMin = double.MaxValue;
-                        // double yMax = double.MinValue;
-                        //
-                        // foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
-                        // {
-                        //     foreach (double[] coord in poli)
-                        //     {
-                        //         xMin = Math.Min(xMin, coord[0]);
-                        //         xMax = Math.Max(xMax, coord[0]);
-                        //         
-                        //         yMin = Math.Min(yMin, coord[1]);
-                        //         yMax = Math.Max(yMax, coord[1]);
-                        //     }
-                        //     
-                        // }
-                        // item.XMinVal = xMin;
-                        // item.YMinVal = yMin;
-                        //
-                        // item.XMaxVal = xMax;
-                        // item.YMaxVal = yMax;
-                        
-                        item.Wkid = 32735; // probably written in WKT format in the deserialized.CoordinateSystem but there is no parser for it
+                            var startInfo = Command.Read($"gdalinfo", $"{tempFile} -json",
+                                workingDirectory: this.geospatialConfig.Value.GdalHome);
+                            var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
-                        item.XMinVal = allX.Min();
-                        item.YMinVal = allY.Min();
-                        
-                        item.XMaxVal = allX.Max();
-                        item.YMaxVal = allY.Max();
+                            /*var allX = new List<double>
+                            {
+                                deserialized.CornerCoordinates.LowerLeft[0],
+                                deserialized.CornerCoordinates.UpperLeft[0],
+                                deserialized.CornerCoordinates.LowerRight[0],
+                                deserialized.CornerCoordinates.UpperRight[0],
+                            };
 
-                    }
-                    catch (Win32Exception e)
-                    {
-                        if (e.NativeErrorCode == 2)
+                            var allY = new List<double>
+                            {
+                                deserialized.CornerCoordinates.LowerLeft[1],
+                                deserialized.CornerCoordinates.UpperLeft[1],
+                                deserialized.CornerCoordinates.LowerRight[1],
+                                deserialized.CornerCoordinates.UpperRight[1],
+                            };
+                            item.XMinVal = allX.Min();
+                            item.YMinVal = allY.Min();
+
+                            item.XMaxVal = allX.Max();
+                            item.YMaxVal = allY.Max();
+
+                            //item.Wkid = 32735; // probably written in WKT format in the deserialized.CoordinateSystem but there is no parser for it
+                                 */
+
+                            // alternative way to extract extent
+                            double xMin = double.MaxValue;
+                            double xMax = double.MinValue;
+                            double yMin = double.MaxValue;
+                            double yMax = double.MinValue;
+
+                            foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
+                            {
+                                foreach (double[] coord in poli)
+                                {
+                                    xMin = Math.Min(xMin, coord[0]);
+                                    xMax = Math.Max(xMax, coord[0]);
+
+                                    yMin = Math.Min(yMin, coord[1]);
+                                    yMax = Math.Max(yMax, coord[1]);
+                                }
+
+                            }
+                            item.XMinVal = xMin;
+                            item.YMinVal = yMin;
+
+                            item.XMaxVal = xMax;
+                            item.YMaxVal = yMax;
+
+                            item.Wkid = 4326; //geographic coordinates Wgs84
+
+
+                        }
+                        catch (Win32Exception e)
                         {
-                            throw new Exception("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
+                            if (e.NativeErrorCode == 2)
+                            {
+                                throw new Exception("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
+                            }
+                        }
+                        catch (NonZeroExitCodeException e)
+                        {
+                            if (e.ProcessExitCode == 4)
+                            {
+                                throw new Exception(".tif file is not recognized as map", e);
+                            }
+
+                            throw;
                         }
                     }
-                    catch (NonZeroExitCodeException e)
-                    {
-                        if (e.ProcessExitCode == 4)
-                        {
-                            throw new Exception(".tif file is not recognized as map", e);
-                        }
-
-                        throw;
-                    }
-                }
                     break;
             }
 
@@ -307,10 +311,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public void DeleteMapUserLink(string map, string user)
         {
-            if(string.IsNullOrWhiteSpace(map)||string.IsNullOrWhiteSpace(user))
+            if (string.IsNullOrWhiteSpace(map) || string.IsNullOrWhiteSpace(user))
                 return;
 
-            var mapUsers = this.userMapsStorage.Query(q=> q.Where(x=>x.Map==map && x.UserName == user)).ToList();
+            var mapUsers = this.userMapsStorage.Query(q => q.Where(x => x.Map == map && x.UserName == user)).ToList();
             if (mapUsers.Count > 0)
                 this.userMapsStorage.Remove(mapUsers);
         }
@@ -326,14 +330,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 List<string> itemIds = this.mapPlainStorageAccessor.Query(queryable =>
                 {
-                    IQueryable<MapBrowseItem> pagedResults = queryable.OrderBy(x =>x.FileName).Skip((page - 1) * pageSize).Take(pageSize);
+                    IQueryable<MapBrowseItem> pagedResults = queryable.OrderBy(x => x.FileName).Skip((page - 1) * pageSize).Take(pageSize);
 
                     itemIds = pagedResults.Select(x => x.Id).ToList();
 
                     return itemIds;
                 });
 
-                if(itemIds.Count<1)
+                if (itemIds.Count < 1)
                     break;
 
                 page++;
@@ -354,10 +358,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             } while (true);
 
-            
+
             return new ReportView()
             {
-                Headers = new [] {"map", "users"},
+                Headers = new[] { "map", "users" },
                 Data = rows.ToArray()
             };
         }
@@ -368,7 +372,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (map == null)
                 throw new ArgumentException($"Map was not found {mapName}", nameof(mapName));
 
-            var userMaps = userMapsStorage.Query(q => q.Where(x=>x.Map == mapName).ToList());
+            var userMaps = userMapsStorage.Query(q => q.Where(x => x.Map == mapName).ToList());
 
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
             var usersToLower = users.Select(em => em.ToLower()).ToList();
@@ -383,9 +387,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }).ToArray();
 
             var userMappings = availableUsers
-                .Where(y => y.IsArchived == false 
+                .Where(y => y.IsArchived == false
                                                && y.Roles.Any(role => role.Id == interviewerRoleId))
-                .Select(x => new UserMap() {Map = mapName, UserName = x.UserName}).ToList();
+                .Select(x => new UserMap() { Map = mapName, UserName = x.UserName }).ToList();
 
             userMapsStorage.Remove(userMaps);
             userMapsStorage.Store(userMappings.Select(x => Tuple.Create(x, (object)x)));
@@ -422,7 +426,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 return await this.externalFileStorage.GetBinaryAsync((GetExternalStoragePath(mapName)));
             }
-            
+
             var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
 
             if (!this.fileSystemAccessor.IsFileExists(filePath))
