@@ -30,7 +30,7 @@ namespace WB.UI.Designer.Services
             this.dbContext.SaveChanges();
         }
 
-        private string GetLastRegisteredVersion()
+        private string? GetLastRegisteredVersion()
             => this.dbContext.ProductVersionChanges.OrderByDescending(change => change.UpdateTimeUtc)
                 .FirstOrDefault()?.ProductVersion;
 

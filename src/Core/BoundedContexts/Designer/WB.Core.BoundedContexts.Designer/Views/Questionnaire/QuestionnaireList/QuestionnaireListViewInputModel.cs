@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             this.Page = 1;
         }
 
-        public string Order
+        public string? Order
         {
             get => this.Orders.GetOrderRequestString();
             set => this.Orders = value.ParseOrderRequestString();
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public bool IsAdminMode { get; set; }
         public Guid ViewerId { get; set; }
         public QuestionnairesType Type { get; set; }
-        public string SearchFor { get; set; }
+        public string? SearchFor { get; set; }
         public Guid? FolderId { get; set; }
     }
 

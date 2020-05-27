@@ -18,77 +18,77 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             if (reference.Type == QuestionnaireVerificationReferenceType.Questionnaire)
             {
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = QuestionnaireVerificationReferenceType.Questionnaire,
-                    Variable = questionnaireDocument.VariableName,
-                    Title = questionnaireDocument.Title
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : QuestionnaireVerificationReferenceType.Questionnaire,
+                    variable : questionnaireDocument.VariableName,
+                    title : questionnaireDocument.Title
+                );
             }
 
             if (reference.Type == QuestionnaireVerificationReferenceType.Attachment)
             {
                 var attachment = questionnaireDocument.Attachments.Single(x => x.AttachmentId == reference.Id);
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = QuestionnaireVerificationReferenceType.Attachment,
-                    Variable = attachment.Name,
-                    Title = attachment.Name
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : QuestionnaireVerificationReferenceType.Attachment,
+                    variable : attachment.Name,
+                    title : attachment.Name
+                );
             }
 
             if (reference.Type == QuestionnaireVerificationReferenceType.Macro)
             {
                 var macro = questionnaireDocument.Macros.First(x => x.Key == reference.Id);
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = QuestionnaireVerificationReferenceType.Macro,
-                    Variable = macro.Value.Name,
-                    Title = macro.Value.Content
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : QuestionnaireVerificationReferenceType.Macro,
+                    variable : macro.Value.Name,
+                    title : macro.Value.Content
+                );
             }
 
             if (reference.Type == QuestionnaireVerificationReferenceType.LookupTable)
             {
                 var lookupTable = questionnaireDocument.LookupTables.First(x => x.Key == reference.Id);
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = QuestionnaireVerificationReferenceType.LookupTable,
-                    Variable = lookupTable.Value.TableName,
-                    Title = lookupTable.Value.FileName
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : QuestionnaireVerificationReferenceType.LookupTable,
+                    variable : lookupTable.Value.TableName,
+                    title : lookupTable.Value.FileName
+                );
             }
 
             if (reference.Type == QuestionnaireVerificationReferenceType.Translation)
             {
                 var translation = questionnaireDocument.Translations.First(x => x.Id == reference.Id);
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = QuestionnaireVerificationReferenceType.Translation,
-                    Title = translation.Name
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : QuestionnaireVerificationReferenceType.Translation,
+                    title : translation.Name
+                );
             }
 
             if (reference.Type == QuestionnaireVerificationReferenceType.Categories)
             {
                 var categories = questionnaireDocument.Categories.First(x => x.Id == reference.Id);
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = QuestionnaireVerificationReferenceType.Categories,
-                    Title = categories.Name
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : QuestionnaireVerificationReferenceType.Categories,
+                    title : categories.Name
+                );
             }
 
             var item = questionnaireDocument.Find<IComposite>(reference.Id);
             var parent = item;
             while (parent != null)
             {
-                IComposite grandParent = parent.GetParent();
+                IComposite? grandParent = parent.GetParent();
                 if (grandParent?.GetParent() == null)
                 {
                     break;
@@ -103,13 +103,13 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 var group = questionnaireDocument.Find<IGroup>(reference.Id);
 
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = @group.IsRoster ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
-                    Variable = @group.VariableName,
-                    Title = @group.Title,
-                    ChapterId = parent?.PublicKey.FormatGuid()
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : @group?.IsRoster == true ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
+                    variable : @group?.VariableName,
+                    title : @group?.Title ?? "",
+                    chapterId : parent?.PublicKey.FormatGuid()
+                );
             }
 
             if (reference.Type == QuestionnaireVerificationReferenceType.StaticText)
@@ -117,41 +117,41 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 var staticText = questionnaireDocument.Find<IStaticText>(reference.Id);
 
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = reference.Type,
-                    Title = String.IsNullOrEmpty(staticText.Text) ? "static text" : staticText.Text,
-                    ChapterId = parent?.PublicKey.FormatGuid(),
-                    IndexOfEntityInProperty = reference.IndexOfEntityInProperty
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : reference.Type,
+                    title : String.IsNullOrEmpty(staticText?.Text) ? "static text" : staticText.Text,
+                    chapterId : parent?.PublicKey.FormatGuid(),
+                    indexOfEntityInProperty : reference.IndexOfEntityInProperty
+                );
             }
 
             if (reference.Type == QuestionnaireVerificationReferenceType.Variable)
             {
                 var variable = questionnaireDocument.Find<IVariable>(reference.Id);
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = reference.Type,
-                    Title = variable.Label,
-                    Variable = variable.Name,
-                    ChapterId = parent?.PublicKey.FormatGuid()
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : reference.Type,
+                    title : variable?.Label ?? String.Empty,
+                    variable : variable?.Name,
+                    chapterId : parent?.PublicKey.FormatGuid()
+                );
             }
             else
             {
                 var question = questionnaireDocument.Find<IQuestion>(reference.Id);
 
                 return new QuestionnaireEntityExtendedReference
-                {
-                    ItemId = reference.Id.FormatGuid(),
-                    Type = reference.Type,
-                    Variable = question.StataExportCaption,
-                    QuestionType = "icon-" + question.QuestionType.ToString().ToLower(),
-                    Title = question.QuestionText,
-                    ChapterId = parent?.PublicKey.FormatGuid(),
-                    IndexOfEntityInProperty = reference.IndexOfEntityInProperty
-                };
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : reference.Type,
+                    variable : question?.StataExportCaption,
+                    questionType : "icon-" + question?.QuestionType.ToString().ToLower(),
+                    title : question?.QuestionText ?? "",
+                    chapterId : parent?.PublicKey.FormatGuid(),
+                    indexOfEntityInProperty : reference.IndexOfEntityInProperty
+                );
             }
         }
     }

@@ -10,7 +10,7 @@ namespace WB.UI.Designer.Extensions
 {
     public static class UserManagerExtensions
     {
-        public static async Task<string> GetFullName(this UserManager<DesignerIdentityUser> users, Guid userId)
+        public static async Task<string?> GetFullName(this UserManager<DesignerIdentityUser> users, Guid userId)
         {
             var user = await users.FindByIdAsync(userId.FormatGuid());
             if (user != null)

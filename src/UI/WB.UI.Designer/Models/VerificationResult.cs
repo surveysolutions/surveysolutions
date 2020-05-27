@@ -2,9 +2,10 @@
 {
     public class VerificationResult
     {
-        public VerificationResult()
+        public VerificationResult(VerificationMessage[] errors, VerificationMessage[] warnings)
         {
-            this.Errors = new VerificationMessage[0];
+            Errors = errors;
+            Warnings = warnings;
         }
 
         public VerificationMessage[] Errors { get; set; }

@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.archiveUtils = archiveUtils;
         }
 
-        public string Diff(string left, string right)
+        public string? Diff(string left, string? right)
         {
             var jdp = new JsonDiffPatch();
             var patch = jdp.Diff(left ?? emptyJson, right ?? emptyJson);
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return stringPatch;
         }
 
-        public string Apply(string document, string patch)
+        public string? Apply(string? document, string? patch)
         {
             if (patch == null) return document;
 

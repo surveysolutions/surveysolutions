@@ -9,13 +9,13 @@ namespace Main.Core.Entities.Composite
     {
         ReadOnlyCollection<IComposite> Children { get; set; }
 
-        void SetParent(IComposite parent);
+        void SetParent(IComposite? parent);
 
-        T Find<T>(Guid publicKey) where T : class, IComposite;
+        T? Find<T>(Guid publicKey) where T : class, IComposite;
 
         IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
 
-        T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
+        T? FirstOrDefault<T>(Func<T, bool> condition) where T : class;
         
         void ConnectChildrenWithParent();
 

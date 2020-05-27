@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             throw new ArgumentException("Unsupported entity type: " + composite.GetType().Name);
         }
 
-        private string GetTextUsedForSearch(IComposite composite)
+        private string? GetTextUsedForSearch(IComposite composite)
         {
             var textUsedForSearch = GetTitle(composite);
             if (composite is IQuestion question)
@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             return textUsedForSearch;
         }
 
-        public static string GetTitle(IQuestionnaireEntity entity)
+        public static string? GetTitle(IQuestionnaireEntity entity)
             => (entity as IQuestion)?.QuestionText
             ?? (entity as IStaticText)?.Text
             ?? (entity as IGroup)?.Title
@@ -159,7 +159,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             return searchResult;
         }
 
-        private string CreateTextSearchQuery(string inputQuery)
+        private string? CreateTextSearchQuery(string? inputQuery)
         {
             inputQuery = inputQuery?.Trim().ToLower();
             if (string.IsNullOrEmpty(inputQuery))

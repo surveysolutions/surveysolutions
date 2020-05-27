@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             question.ValidationExpressions.FirstOrDefault().ValidationExpression.Should().Be("singleCombo validation");
             question.Condition.Should().Be("singleCombo condition");
             question.IsMultiOptionYesNoQuestion.Should().Be(false);
-            question.AllMultioptionYesNoCodes.Should().BeNull();
+            question.AllMultioptionYesNoCodes.Should().BeEmpty();
             question.TypeName.Should().Be("decimal?");
             question.RosterScopeName.Should().Be(CodeGenerator.QuestionnaireScope);
             question.ParentScopeTypeName.Should().Be(CodeGenerator.QuestionnaireTypeName);

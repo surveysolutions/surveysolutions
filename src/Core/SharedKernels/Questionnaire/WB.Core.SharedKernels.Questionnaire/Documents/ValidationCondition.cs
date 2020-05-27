@@ -1,4 +1,5 @@
-﻿using System.Xml.Schema;
+﻿using System;
+using System.Xml.Schema;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.QuestionnaireEntities
@@ -15,8 +16,8 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
             this.Message = message;
         }
 
-        public string Expression { get; set; } 
-        public string Message { get; set; }
+        public string Expression { get; set; } = String.Empty; 
+        public string Message { get; set; } = String.Empty;
 
         public ValidationSeverity Severity { set; get; }
 

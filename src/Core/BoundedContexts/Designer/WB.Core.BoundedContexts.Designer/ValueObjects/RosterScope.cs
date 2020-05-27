@@ -1,3 +1,4 @@
+//#nullable enable
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,9 +28,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
         #region Backward compatibility with decimal[]
 
-        private Guid[] array;
+        private Guid[]? array;
 
-        private Guid[] Array => this.array ?? (this.array = this.Coordinates.ToArray());
+        private Guid[] Array => this.array ??= this.Coordinates.ToArray();
 
         IEnumerator<Guid> IEnumerable<Guid>.GetEnumerator() => ((IEnumerable<Guid>)this.Array).GetEnumerator();
 
@@ -43,9 +44,10 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
         public static implicit operator RosterScope(Guid[] array) => new RosterScope(array);
 
-        public bool Identical(RosterScope other)
+        public bool Identical(RosterScope? other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return true;
 
             if ((this.Length == 0 && other.Length == 0) || ReferenceEquals(this, other))
             {
@@ -62,13 +64,13 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
         #endregion
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
 
             if (obj.GetType() == typeof(RosterScope))
-                return this.Identical((RosterScope)obj);
+                return this.Identical((RosterScope?)obj);
 
             if (obj.GetType() == typeof(Guid[]))
                 return this.Identical((Guid[])obj);
@@ -94,11 +96,11 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             return this.cachedHashCode.Value;
         }
 
-        public static bool operator ==(RosterScope a, RosterScope b)
+        public static bool operator ==(RosterScope? a, RosterScope? b)
             => ReferenceEquals(a, b)
                || (a?.Equals(b) ?? false);
 
-        public static bool operator !=(RosterScope a, RosterScope b)
+        public static bool operator !=(RosterScope? a, RosterScope? b)
             => !(a == b);
 
         public RosterScope Shrink(int targetLength)

@@ -27,12 +27,12 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         }
 
         [TempData]
-        public string Message { get; set; }
+        public string? Message { get; set; }
         [TempData]
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new InputModel();
 
         public class InputModel
         {
@@ -42,7 +42,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             [Required]
             [EmailAddress]
             [Display(Name = "Email", Order = 2)]
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
             [Display(Name = "Is Approved", Order = 3)]
             public bool IsApproved { get; set; }
@@ -53,11 +53,11 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             public bool CanImportOnHq { get; set; }
 
             [Display(Name = "User name", Order = 1)]
-            public string UserName { get; set; }
+            public string UserName { get; set; } = String.Empty;
 
             [Display(Name = "Full name", Order = 2)]
             [StringLength(RegisterModel.FullNameMaxLength, ErrorMessageResourceName = nameof(ErrorMessages.FullNameMaxLengthError), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
-            public string FullName { get; set; }
+            public string? FullName { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
@@ -81,7 +81,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
         public async Task<IActionResult> OnPostAsync(string id)
         {
-            if (ModelState.IsValid)
+            if (Input!= null && ModelState.IsValid)
             {
                 var user = await this.userManager.FindByIdAsync(id);
                 if (user == null) return NotFound();

@@ -89,13 +89,13 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
         public int? SortOrder { get; set; }
 
-        public string Filter { get; set; }
+        public string? Filter { get; set; }
 
-        public string SortBy { get; set; }
+        public string? SortBy { get; set; }
 
         public int? PageIndex { get; set; }
 
-        public IPagedList<AccountListViewItemModel> List { get; private set; }
+        public IPagedList<AccountListViewItemModel>? List { get; private set; }
     }
 
     public class AccountListViewItemModel : ActionItem
@@ -104,10 +104,10 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         public DateTime CreationDate { get; set; }
 
         [Display(Name = "Email", Order = 2)]
-        public string Email { get; set; }
+        public string Email { get; set; } = String.Empty;
 
         [Display(Name = "FullName", Order = 2)]
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         [Key]
         public Guid Id { get; set; }
@@ -123,7 +123,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
         [Display(Name = "Name", Order = 1)]
         [Default]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         public override bool CanCopy => false;
 

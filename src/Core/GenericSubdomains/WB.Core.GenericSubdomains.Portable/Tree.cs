@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -60,20 +61,20 @@ namespace WB.Core.GenericSubdomains.Portable
             }
         }
         
-        public static IEnumerable<T> UnwrapReferences<T>(this T startItem, Func<T, T> getReferencedItem) where T : class
+        public static IEnumerable<T> UnwrapReferences<T>(this T startItem, Func<T, T?> getReferencedItem) where T : class
         {
-            T referencedItem = startItem;
+            T? referencedItem = startItem;
             while (referencedItem != null)
             {
                 yield return referencedItem;
                 referencedItem = getReferencedItem(referencedItem);
             }
         }
-        
+
         public static void ForEachTreeElement<T>(this T root, Func<T, IEnumerable<T>> getChildren, Action<T, T> parentWithChildren)
         {
             var stack = new Stack<Tuple<T, T>>();
-            stack.Push(new Tuple<T, T>(default(T), root));
+            stack.Push(new Tuple<T, T>(default(T)!, root));
             while (stack.Count > 0)
             {
                 var current = stack.Pop();

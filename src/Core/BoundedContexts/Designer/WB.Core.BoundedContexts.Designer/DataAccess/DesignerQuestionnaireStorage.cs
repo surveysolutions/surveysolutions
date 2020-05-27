@@ -19,14 +19,14 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             this.questionnaireDocumentReader = questionnaireDocumentReader;
         }
 
-        public QuestionnaireDocument Get(QuestionnaireRevision questionnaire)
+        public QuestionnaireDocument? Get(QuestionnaireRevision questionnaire)
         {
             return questionnaire.Revision == null
                 ? this.questionnaireDocumentReader.GetById(questionnaire.QuestionnaireId.FormatGuid())
                 : this.questionnaireHistoryVersionsService.GetByHistoryVersion(questionnaire.Revision.Value);
         }
 
-        public QuestionnaireDocument Get(Guid questionnaireId)
+        public QuestionnaireDocument? Get(Guid questionnaireId)
         {
             return this.questionnaireDocumentReader.GetById(questionnaireId.FormatGuid());
         }

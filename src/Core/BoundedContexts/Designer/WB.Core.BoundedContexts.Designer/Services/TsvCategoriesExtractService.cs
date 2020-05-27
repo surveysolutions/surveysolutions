@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -85,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             return categories;
         }
 
-        private CategoriesHeaderMap TryGetHeadersFromFile(List<string> rowValues)
+        private CategoriesHeaderMap? TryGetHeadersFromFile(List<string>? rowValues)
         {
             if (rowValues == null)
                 return null;
@@ -114,16 +115,14 @@ namespace WB.Core.BoundedContexts.Designer.Services
         private CategoriesRow GetRowValues(List<string> row, CategoriesHeaderMap headerMap, int rowNumber) => new CategoriesRow
         {
             Id = GetRowValue(row, headerMap.IdIndex),
-            Text = GetRowValue(row, headerMap.TextIndex),
+            Text = GetRowValue(row, headerMap.TextIndex) ?? String.Empty,
             ParentId = GetRowValue(row, headerMap.ParentIdIndex),
             RowId = rowNumber
         };
 
-        private string GetRowValue(List<string> row, string index)
+        private string? GetRowValue(List<string> row, string? index)
         {
-            if (!int.TryParse(index, out var i))
-                return null;
-            return row.ElementAtOrDefault(i);
+            return !int.TryParse(index, out var i) ? null : row.ElementAtOrDefault(i);
         }
     }
 }

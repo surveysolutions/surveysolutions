@@ -8,8 +8,8 @@ namespace WB.Core.BoundedContexts.Designer.Scenarios
 
         public Guid QuestionnaireId { get; set; }
 
-        public string Title { get; set; }
+        public string Title { get; set; } = String.Empty;
 
-        public string Steps { get; set; }
+        public string Steps { get; set; } = String.Empty;
     }
 }

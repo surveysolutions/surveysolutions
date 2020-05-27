@@ -17,8 +17,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
             this.Succeeded = true;
         }
         public bool Succeeded { get; }
-        public IEnumerable<string> Errors { get; }
-        public IEnumerable<QuestionnaireCategoricalOption> ImportedOptions { get; }
+        public IEnumerable<string> Errors { get; } = new List<string>();
+        public IEnumerable<QuestionnaireCategoricalOption> ImportedOptions { get; } = new List<QuestionnaireCategoricalOption>();
 
         public static ImportCategoricalOptionsResult Success(params QuestionnaireCategoricalOption[] importedOptions)
             => new ImportCategoricalOptionsResult(importedOptions);
