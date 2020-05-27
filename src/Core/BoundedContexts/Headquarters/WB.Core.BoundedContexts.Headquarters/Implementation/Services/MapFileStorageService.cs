@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IUserRepository userStorage;
         private readonly IExternalFileStorage externalFileStorage;
         private readonly IOptions<GeospatialConfig> geospatialConfig;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
 
@@ -50,7 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             ISerializer serializer,
             IUserRepository userStorage,
             IExternalFileStorage externalFileStorage,
-            IOptions<GeospatialConfig> geospatialConfig)
+            IOptions<GeospatialConfig> geospatialConfig,
+            IAuthorizedUser authorizedUser)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -60,6 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.userStorage = userStorage;
 
             this.externalFileStorage = externalFileStorage;
+            this.authorizedUser = authorizedUser;
             this.geospatialConfig = geospatialConfig;
 
             this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
@@ -309,14 +313,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
-        public void DeleteMapUserLink(string map, string user)
+        public MapBrowseItem DeleteMapUserLink(string mapName, string user)
         {
-            if (string.IsNullOrWhiteSpace(map) || string.IsNullOrWhiteSpace(user))
-                return;
+            if (mapName == null) throw new ArgumentNullException(nameof(mapName));
+            if (user == null) throw new ArgumentNullException(nameof(user));
 
-            var mapUsers = this.userMapsStorage.Query(q => q.Where(x => x.Map == map && x.UserName == user)).ToList();
+            var lowerCasedUserName = user.ToLower();
+            if (this.authorizedUser.IsSupervisor)
+            {
+                bool isTeamInterviewer = this.userStorage.Users
+                    .Any(x => x.UserName.ToLower() == lowerCasedUserName && x.Profile.SupervisorId == this.authorizedUser.Id);
+                if (!isTeamInterviewer)
+                {
+                    throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
+                }
+            }
+
+            var map = this.mapPlainStorageAccessor.GetById(mapName);
+
+            if (map == null)
+                throw new Exception("Map was not found.");
+
+            var mapUsers = this.userMapsStorage
+                .Query(q => q.Where(x => x.Map.Id == mapName && x.UserName.ToLower() == lowerCasedUserName))
+                .ToList();
+
             if (mapUsers.Count > 0)
                 this.userMapsStorage.Remove(mapUsers);
+            else
+            {
+                throw new Exception("Map is not assigned to specified interviewer.");
+            }
+            return map;
         }
 
         public ReportView GetAllMapUsersReportView()
@@ -344,7 +372,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 List<Tuple<string, string>> maps = userMapsStorage.Query(q =>
                 {
-                    return q.Select(x => new Tuple<string, string>(x.Map, x.UserName)).Where(x => itemIds.Contains(x.Item1))
+                    return q.Select(x => new Tuple<string, string>(x.Map.Id, x.UserName)).Where(x => itemIds.Contains(x.Item1))
                         .ToList();
                 });
 
@@ -372,7 +400,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (map == null)
                 throw new ArgumentException($"Map was not found {mapName}", nameof(mapName));
 
-            var userMaps = userMapsStorage.Query(q => q.Where(x => x.Map == mapName).ToList());
+            var userMaps = userMapsStorage.Query(q => q.Where(x => x.Map.Id == mapName).ToList());
 
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
             var usersToLower = users.Select(em => em.ToLower()).ToList();
@@ -389,7 +417,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var userMappings = availableUsers
                 .Where(y => y.IsArchived == false
                                                && y.Roles.Any(role => role.Id == interviewerRoleId))
-                .Select(x => new UserMap() { Map = mapName, UserName = x.UserName }).ToList();
+                .Select(x => new UserMap() { Map = map, UserName = x.UserName }).ToList();
 
             userMapsStorage.Remove(userMaps);
             userMapsStorage.Store(userMappings.Select(x => Tuple.Create(x, (object)x)));
@@ -405,7 +433,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return userMapsStorage.Query(q =>
             {
                 return q.Where(x => interviewerNames.Contains(x.UserName))
-                        .Select(y => y.Map)
+                        .Select(y => y.Map.Id)
                         .Distinct();
             }).ToArray();
         }
@@ -415,9 +443,56 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return userMapsStorage.Query(q =>
             {
                 return q.Where(x => x.UserName == userName)
-                        .Select(y => y.Map)
+                        .Select(y => y.Map.Id)
                         .ToList();
             }).ToArray();
+        }
+
+        public MapBrowseItem GetMapById(string id) => this.mapPlainStorageAccessor.GetById(id);
+
+        public MapBrowseItem AddUserToMap(string id, string userName)
+        {
+            if (id == null) throw new ArgumentNullException(nameof(id));
+            if (userName == null) throw new ArgumentNullException(nameof(userName));
+
+            var map = this.mapPlainStorageAccessor.GetById(id);
+            if (map == null)
+                throw new Exception(@"Map was not found.");
+
+            var userNameLowerCase = userName.ToLower();
+            var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+
+            var userQuery = this.userStorage.Users
+                .Where(x => x.UserName.ToLower() == userNameLowerCase &&
+                            x.IsArchived == false &&
+                            x.Roles.Any(role => role.Id == interviewerRoleId));
+            if (authorizedUser.IsSupervisor)
+            {
+                userQuery = userQuery.Where(x => x.Profile.SupervisorId == this.authorizedUser.Id);
+            }
+
+            var interviewer = userQuery.FirstOrDefault();
+
+            if (interviewer == null)
+            {
+                throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
+            }
+
+            var userMap = this.userMapsStorage
+                .Query(x => x.FirstOrDefault(um => um.Map.FileName == id && um.UserName == userName));
+
+            if (userMap != null)
+            {
+                throw new Exception("Provided map already assigned to specified interviewer.");
+            }
+
+            userMapsStorage.Store(new UserMap
+            {
+                UserName = userName,
+                Map = map
+            }, null);
+
+            return this.mapPlainStorageAccessor.GetById(id);
         }
 
         public async Task<byte[]> GetMapContentAsync(string mapName)
