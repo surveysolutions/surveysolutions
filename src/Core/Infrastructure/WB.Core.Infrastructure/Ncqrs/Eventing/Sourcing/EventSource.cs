@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using Ncqrs.Domain;
 
@@ -7,14 +9,8 @@ namespace Ncqrs.Eventing.Sourcing
 {
     public abstract class EventSource : IEventSource
     {
-        [NonSerialized]
-        private Guid _eventSourceId;
-        
-        public virtual Guid EventSourceId
-        {
-            get { return _eventSourceId; }
-            protected set { _eventSourceId = value; }
-        }
+        [field: NonSerialized]
+        public virtual Guid EventSourceId { get; protected set; }
 
         /// <summary>
         /// Gets the current version of the instance as it is known in the event store.
@@ -24,10 +20,10 @@ namespace Ncqrs.Eventing.Sourcing
         /// </value>
         public int Version => this._currentVersion;
 
-        [NonSerialized]
+        [NonSerialized] 
         private int _initialVersion;
 
-        [NonSerialized]
+        [NonSerialized] 
         private int _currentVersion;
 
         /// <summary>
@@ -43,21 +39,20 @@ namespace Ncqrs.Eventing.Sourcing
         /// <value>The initial version.</value>
         public int InitialVersion => this._initialVersion;
 
-        [NonSerialized]
-        private readonly List<ISourcedEventHandler> _eventHandlers = new List<ISourcedEventHandler>();
 
         protected EventSource()
         {
             EventSourceId = Guid.NewGuid();
         }
 
-        protected EventSource(Guid eventSourceId) 
+        protected EventSource(Guid eventSourceId)
             : this()
         {
             EventSourceId = eventSourceId;
         }
 
-        protected virtual bool CanHandleEvent(CommittedEvent committedEvent) => true;
+        protected virtual bool CanHandleEvent(CommittedEvent committedEvent) 
+            => GetForEvent(committedEvent.Payload) != null;
 
         public virtual void InitializeFromSnapshot(Guid eventSourceId, int version)
         {
@@ -95,28 +90,28 @@ namespace Ncqrs.Eventing.Sourcing
             EventApplied?.Invoke(this, new EventAppliedEventArgs(evnt));
         }
 
-        protected internal void RegisterHandler(ISourcedEventHandler handler)
+        private static readonly ConcurrentDictionary<(Type, Type), MethodInfo> _handlersCache 
+            = new ConcurrentDictionary<(Type, Type), MethodInfo>(); 
+        
+        private MethodInfo GetForEvent(object evnt) => _handlersCache.GetOrAdd((GetType(), evnt.GetType()), key =>
         {
-            _eventHandlers.Add(handler);
-        }
-
+            var parameters = new[] { key.Item2 };
+            return key.Item1.GetMethod("Apply", 
+                       BindingFlags.Instance | BindingFlags.NonPublic, Type.DefaultBinder, parameters, null)
+                   ??  key.Item1.GetMethod("Apply", 
+                       BindingFlags.Instance | BindingFlags.Public, Type.DefaultBinder, parameters, null);
+        });
+        
         protected virtual void HandleEvent(object evnt)
         {
-            var handled = false;
-
-            // Get a copy of the handlers because an event
-            // handler can register a new handler. This will
-            // cause the _eventHandlers list to be modified.
-            // And modification while iterating it not allowed.
-            var handlers = new List<ISourcedEventHandler>(_eventHandlers);
-
-            foreach (var handler in handlers)
+            var apply = GetForEvent(evnt);
+            
+            if (apply == null)
             {
-                handled |= handler.HandleEvent(evnt);
-            }
-
-            if (!handled)
                 throw new EventNotHandledException(evnt);
+            }
+            
+            apply.Invoke(this, new [] { evnt });
         }
 
         protected internal virtual void ApplyEvent(Guid eventIdentifier,
@@ -124,14 +119,11 @@ namespace Ncqrs.Eventing.Sourcing
             WB.Core.Infrastructure.EventBus.IEvent evnt)
         {
             var eventSequence = GetNextSequence();
-            var wrappedEvent = new UncommittedEvent(eventIdentifier, EventSourceId, eventSequence, _initialVersion, eventTimeStamp, evnt);
+            var wrappedEvent = new UncommittedEvent(eventIdentifier, EventSourceId, eventSequence, _initialVersion,
+                eventTimeStamp, evnt);
 
             try
             {
-                //Legacy stuff...
-                var sourcedEvent = evnt as ISourcedEvent;
-                sourcedEvent?.ClaimEvent(this.EventSourceId, eventSequence);
-
                 HandleEvent(wrappedEvent.Payload);
                 OnEventApplied(wrappedEvent);
             }
@@ -145,11 +137,10 @@ namespace Ncqrs.Eventing.Sourcing
             }
         }
 
-
         protected internal void ApplyEvent(WB.Core.Infrastructure.EventBus.IEvent evnt)
         {
             ApplyEvent(
-                eventIdentifier: Guid.NewGuid(), 
+                eventIdentifier: Guid.NewGuid(),
                 eventTimeStamp: DateTime.UtcNow,
                 evnt: evnt
             );
@@ -163,7 +154,7 @@ namespace Ncqrs.Eventing.Sourcing
             {
                 _currentVersion = _initialVersion;
             }
-        
+
             return Interlocked.Increment(ref _currentVersion);
         }
 
@@ -188,14 +179,14 @@ namespace Ncqrs.Eventing.Sourcing
             {
                 var message = String.Format("Cannot apply event with sequence {0}. Since the initial version of the " +
                                             "aggregate root is {1}. Only an event with sequence number {2} can be applied.",
-                                            evnt.EventSequence, Version, Version + 1);
+                    evnt.EventSequence, Version, Version + 1);
                 throw new InvalidOperationException(message);
             }
         }
-        
+
         public virtual void AcceptChanges()
         {
-            _initialVersion = Version;            
+            _initialVersion = Version;
         }
 
         public override string ToString()

@@ -2114,11 +2114,29 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reusable category cannot have row with same Id and ParentId values.
+        /// </summary>
+        public static string WB0305_DuplicatedCategoryIdParentIdPair {
+            get {
+                return ResourceManager.GetString("WB0305_DuplicatedCategoryIdParentIdPair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reusable category cannot have row with same ParentId and Text values.
+        /// </summary>
+        public static string WB0306_DuplicatedCategoryParentIdText {
+            get {
+                return ResourceManager.GetString("WB0306_DuplicatedCategoryParentIdText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questions in cover section must have variable label..
         /// </summary>
-        public static string WB0305_IdentityQuestionsMustHaveVariableLabel {
+        public static string WB0307_IdentityQuestionsMustHaveVariableLabel {
             get {
-                return ResourceManager.GetString("WB0305_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
+                return ResourceManager.GetString("WB0307_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
             }
         }
     }

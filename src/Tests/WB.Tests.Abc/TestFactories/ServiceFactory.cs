@@ -48,6 +48,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -202,11 +203,12 @@ namespace WB.Tests.Abc.TestFactories
             IEventStore eventStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepositoryWithWebCache(
                 eventStore ?? Mock.Of<IEventStore>(x => x.GetLastEventSequence(It.IsAny<Guid>()) == 0),
-                new InMemoryEventStore(), 
+                new InMemoryEventStore(Create.Storage.NewMemoryCache()),
                 new EventBusSettings(), 
                 repository ?? Mock.Of<IDomainRepository>(),
                 Create.Service.ServiceLocatorService(),
-                new AggregateLock());
+                new AggregateLock(),
+                Create.Storage.NewMemoryCache());
 
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
@@ -1178,6 +1180,29 @@ namespace WB.Tests.Abc.TestFactories
         
         public ISerializer NewtonJsonSerializer()
             => new NewtonJsonSerializer();
+
+        public MapFileStorageService MapFileStorageService(
+            IFileSystemAccessor fileSystemAccessor = null, 
+            IOptions<FileStorageConfig> fileStorageConfig = null,
+            IArchiveUtils archiveUtils = null,
+            IPlainStorageAccessor<MapBrowseItem> mapsStorage = null,
+            IPlainStorageAccessor<UserMap> userMapsStorage = null,
+            ISerializer serializer = null,
+            IUserRepository userStorage = null,
+            IExternalFileStorage externalFileStorage = null,
+            IAuthorizedUser authorizedUser = null)
+        {
+           return new MapFileStorageService(
+             fileSystemAccessor ?? Create.Service.FileSystemIOAccessor(), 
+             fileStorageConfig ?? Options.Create(new FileStorageConfig()),
+             archiveUtils ?? Create.Service.ArchiveUtils(),
+             mapsStorage ?? new TestPlainStorage<MapBrowseItem>(),
+             userMapsStorage ?? new TestPlainStorage<UserMap>(),
+             serializer ?? Create.Service.NewtonJsonSerializer(),
+             userStorage ?? Create.Storage.UserRepository(),
+             externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
+             authorizedUser ?? Mock.Of<IAuthorizedUser>()); 
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler

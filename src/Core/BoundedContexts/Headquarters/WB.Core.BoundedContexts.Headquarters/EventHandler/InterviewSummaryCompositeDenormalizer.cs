@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -34,7 +33,5 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             get;
         }
-
-        public override object[] Readers { get; } = Array.Empty<object>();
     }
 }

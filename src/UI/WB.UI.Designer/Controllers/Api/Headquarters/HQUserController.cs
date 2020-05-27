@@ -18,15 +18,17 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         [HttpGet]
         [Route("userdetails")]
-        public IActionResult UserDetails()
+        public IActionResult? UserDetails()
         {
-            return Ok(new PortalUserModel
-            {
-                Id = User.GetId(),
-                Login = User.Identity.Name,
-                Roles = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToArray(),
-                Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
-            });
+            if (User == null)
+                return null;
+
+            return Ok(new PortalUserModel(
+                id : User.GetId(),
+                login : User.Identity.Name,
+                roles : User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToArray(),
+                email : User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+            ));
         }
     }
 }

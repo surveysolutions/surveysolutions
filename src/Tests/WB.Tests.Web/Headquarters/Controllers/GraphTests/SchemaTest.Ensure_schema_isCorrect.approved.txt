@@ -1,5 +1,6 @@
 ﻿schema {
   query: HeadquartersQuery
+  mutation: HeadquartersMutations
 }
 
 type CategoricalOption {
@@ -8,8 +9,17 @@ type CategoricalOption {
   value: Int!
 }
 
+type HeadquartersMutations {
+  addUserToMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
+  deleteMap("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
+  deleteUserFromMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
+}
+
 type HeadquartersQuery {
   interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
+  maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
+  "Gets questionnaire details"
+  questionnaires("Questionnaire id" id: Uuid skip: Int take: Int "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
   questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Question] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
 }
@@ -19,6 +29,24 @@ type IPagedConnectionOfInterview {
   filteredCount: Int!
   "A flattened list of the nodes."
   nodes: [Interview]!
+  "Total count of nodes without filtering applied"
+  totalCount: Int!
+}
+
+type IPagedConnectionOfMap {
+  "Filtered count of nodes without paging"
+  filteredCount: Int!
+  "A flattened list of the nodes."
+  nodes: [Map]!
+  "Total count of nodes without filtering applied"
+  totalCount: Int!
+}
+
+type IPagedConnectionOfQuestionnaire {
+  "Filtered count of nodes without paging"
+  filteredCount: Int!
+  "A flattened list of the nodes."
+  nodes: [Questionnaire]!
   "Total count of nodes without filtering applied"
   totalCount: Int!
 }
@@ -59,6 +87,24 @@ type Interview {
   wasCompleted: Boolean!
 }
 
+type Map {
+  "Map file name"
+  fileName: String!
+  "Utc date when map was imported on HQ"
+  importDate: DateTime
+  maxScale: Float!
+  minScale: Float!
+  "Size of map in bytes"
+  size: Long!
+  "List of users assigned to map"
+  users: [UserMap]
+  wkid: Int!
+  xMaxVal: Float!
+  xMinVal: Float!
+  yMaxVal: Float!
+  yMinVal: Float!
+}
+
 type Question {
   identifying: Boolean
   label: String
@@ -79,10 +125,30 @@ type QuestionAnswer {
   question: Question!
 }
 
+type Questionnaire {
+  defaultLanguageName: String
+  id: ID
+  questionnaireId: Uuid!
+  title: String!
+  translations: [Translation!]!
+  variable: String!
+  version: Long!
+}
+
+type Translation {
+  id: Uuid!
+  name: String!
+}
+
 type User {
   id: ID!
   roles: [UserRoles!]!
   userName: String!
+}
+
+type UserMap {
+  "Name of the user assigned to map"
+  userName: String
 }
 
 input InterviewFilter {
@@ -151,6 +217,37 @@ input InterviewSort {
   updateDate: SortOperationKind
 }
 
+input MapsFilter {
+  AND: [MapsFilter!]
+  fileName: String
+  fileName_in: [String]
+  fileName_starts_with: String
+  importDate_gt: DateTime
+  importDate_gte: DateTime
+  importDate_lt: DateTime
+  importDate_lte: DateTime
+  importDate_not_gt: DateTime
+  importDate_not_gte: DateTime
+  importDate_not_lt: DateTime
+  importDate_not_lte: DateTime
+  OR: [MapsFilter!]
+  size_gt: Long
+  size_gte: Long
+  size_lt: Long
+  size_lte: Long
+  size_not_gt: Long
+  size_not_gte: Long
+  size_not_lt: Long
+  size_not_lte: Long
+  users_some: UserMapFilter
+}
+
+input MapsSort {
+  fileName: SortOperationKind
+  importDate: SortOperationKind
+  size: SortOperationKind
+}
+
 input QuestionAnswerFilter {
   AND: [QuestionAnswerFilter!]
   "Allows case sensitive equals comparison of answer"
@@ -185,6 +282,19 @@ input QuestionFilter {
   questionText: String
   scope: QuestionScope
   variable: String
+}
+
+input UserMapFilter {
+  AND: [UserMapFilter!]
+  OR: [UserMapFilter!]
+  "Allows equals comparison of user"
+  userName: String
+  "Allows not equals comparison of username"
+  userName_not: String
+  "Allows not starts with comparison of username"
+  userName_not_starts_with: String
+  "Allows starts with comparison of username"
+  userName_starts_with: String
 }
 
 enum ApplyPolicy {
@@ -263,6 +373,9 @@ scalar DateTime
 
 "The built-in `Decimal` scalar type."
 scalar Decimal
+
+"The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http:\/\/en.wikipedia.org\/wiki\/IEEE_floating_point)."
+scalar Float
 
 "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID."
 scalar ID

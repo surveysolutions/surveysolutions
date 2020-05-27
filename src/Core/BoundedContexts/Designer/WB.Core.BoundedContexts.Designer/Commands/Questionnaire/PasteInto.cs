@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
         public Guid SourceQuestionnaireId { get; private set; }
         public Guid SourceItemId { get; private set; }
 
-        public QuestionnaireDocument SourceDocument { get; set; }
+        public QuestionnaireDocument? SourceDocument { get; set; }
     }
 }
 

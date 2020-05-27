@@ -20,7 +20,7 @@ namespace WB.UI.Designer.Code
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(Guid viewerId, bool isAdmin, QuestionnairesType type, Guid? folderId,
-            int? pageIndex = null, string sortBy = null, int? sortOrder = null, string searchFor = null)
+            int? pageIndex = null, string? sortBy = null, int? sortOrder = null, string? searchFor = null)
         {
             QuestionnaireListView model = this.viewFactory.LoadFoldersAndQuestionnaires(new QuestionnaireListInputModel
             {
@@ -76,7 +76,8 @@ namespace WB.UI.Designer.Code
         public IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId)
             => this.GetQuestionnaires(viewerId: viewerId, isAdmin: isAdmin, type: QuestionnairesType.Shared, folderId: folderId);
 
-        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, bool isAdmin, bool showPublic, string location)
+        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, 
+            bool isAdmin, bool showPublic, string? location)
             => new QuestionnaireListViewModel
             {
                 Id = x.PublicId.FormatGuid(),
@@ -101,7 +102,7 @@ namespace WB.UI.Designer.Code
                     : (x.CreatedBy == viewerId ? QuestionnaireController.You : x.CreatorName)
             };
 
-        private QuestionnaireListViewModel GetFolder(QuestionnaireListViewFolder x, bool showPublic, string location)
+        private QuestionnaireListViewModel GetFolder(QuestionnaireListViewFolder x, bool showPublic, string? location)
             => new QuestionnaireListViewModel
             {
                 Id = x.PublicId.FormatGuid(),

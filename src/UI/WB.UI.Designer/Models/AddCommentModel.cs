@@ -16,6 +16,6 @@ namespace WB.UI.Designer.Models
 
         [Required]
         [StringLength(1000, ErrorMessageResourceName = nameof(Resources.QuestionnaireEditor.MaxCommentLengthErrorMessage), ErrorMessageResourceType = typeof(Resources.QuestionnaireEditor), ErrorMessage = null)]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
     }
 }

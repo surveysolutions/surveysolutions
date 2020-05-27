@@ -25,11 +25,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             var oldOptions = new Option[210].Select(
                 answer =>
                     new Option
-                    {
-                        Value = incrementer.ToString(),
-                        Title = (incrementer++).ToString(),
-                        ParentValue = "1"
-                    }).ToArray();
+                    (
+                        value : incrementer.ToString(),
+                        title : (incrementer++).ToString(),
+                        parentValue : "1"
+                    )).ToArray();
 
             var questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
@@ -37,8 +37,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             (
                 parentQuestionId,
                 chapterId,
-                options: new Option[] { new Option{ Title = "option1", Value = "1"},
-                    new Option(){Title= "option2", Value = "2"}},
+                options: new Option[] { new Option (title : "option1", value : "1"),
+                    new Option(title: "option2", value : "2")},
                 title: "Parent question",
                 variableName: "cascade_parent",
                 isPreFilled: false,
@@ -114,11 +114,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             var oldOptions = new Option[10].Select(
                 answer =>
                     new Option
-                    {
-                        Value = incrementer.ToString(),
-                        Title = (incrementer++).ToString(),
-                        ParentValue = "1"
-                    }).ToArray();
+                    (
+                        value : incrementer.ToString(),
+                        title : (incrementer++).ToString(),
+                        parentValue : "1"
+                    )).ToArray();
 
             var questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
@@ -126,8 +126,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             (
                 parentQuestionId,
                 chapterId,
-                options: new Option[] { new Option{ Title = "option1", Value = "1"},
-                    new Option(){Title= "option2", Value = "2"}},
+                options: new Option[] { new Option (title : "option1", value : "1"),
+                    new Option(title: "option2", value : "2")},
                 title: "Parent question",
                 variableName: "cascade_parent",
                 isPreFilled: false,

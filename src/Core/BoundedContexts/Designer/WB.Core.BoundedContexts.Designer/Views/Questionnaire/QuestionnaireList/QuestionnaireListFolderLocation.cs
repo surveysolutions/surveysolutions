@@ -7,6 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
     {
         public Guid PublicId { get; set; }
 
-        public string Location { get; set; }
+        public string Location { get; set; } = String.Empty;
     }
 }

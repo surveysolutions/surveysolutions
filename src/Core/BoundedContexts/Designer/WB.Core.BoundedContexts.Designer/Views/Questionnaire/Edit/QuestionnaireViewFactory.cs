@@ -13,8 +13,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public interface IQuestionnaireViewFactory
     {
-        QuestionnaireView Load(QuestionnaireViewInputModel input);
-        QuestionnaireView Load(QuestionnaireRevision revision);
+        QuestionnaireView? Load(QuestionnaireViewInputModel input);
+        QuestionnaireView? Load(QuestionnaireRevision revision);
 
         bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId);
 
@@ -36,14 +36,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.dbContext = dbContext;
         }
 
-        public QuestionnaireView Load(QuestionnaireViewInputModel input)
+        public QuestionnaireView? Load(QuestionnaireViewInputModel input)
         {
             var doc = GetQuestionnaireDocument(input);
             var sharedPersons = this.GetSharedPersons(input.QuestionnaireId);
             return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
         }
 
-        public QuestionnaireView Load(QuestionnaireRevision revision)
+        public QuestionnaireView? Load(QuestionnaireRevision revision)
         {
             var doc = this.questionnaireStorage.Get(revision);
             return doc == null ? null : new QuestionnaireView(doc, Enumerable.Empty<SharedPersonView>());
@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return sharedPersons.ToList();
         }
 
-        private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)
+        private QuestionnaireDocument? GetQuestionnaireDocument(QuestionnaireViewInputModel input)
         {
             try
             {
@@ -134,8 +134,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 q => q.QuestionnaireChangeRecordId == revisionId.FormatGuid());
 
             var questionnaire = this.questionnaireStorage.Get(Guid.Parse(changeRecord.QuestionnaireId));
-
-            return HasUserAccessToEditComments(changeRecord, questionnaire, userId);
+            
+            return questionnaire != null && HasUserAccessToEditComments(changeRecord, questionnaire, userId);
         }
 
         public bool HasUserAccessToEditComments(

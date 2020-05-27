@@ -39,9 +39,11 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 .Returns<Type, Guid, IEnumerable<CommittedEvent>>((type, id, ce)
                     => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id && ar.Version == versionForNewObjects));
 
-            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, Mock.Of<IInMemoryEventStore>(), new EventBusSettings(),  domainRepo.Object,
+            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, 
+                Mock.Of<IInMemoryEventStore>(),
+                new EventBusSettings(),  domainRepo.Object,
                 ServiceLocator.Current,
-                new Stub.StubAggregateLock());
+                new Stub.StubAggregateLock(), Create.Storage.NewMemoryCache());
 
             var entity = repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g1);
 
@@ -101,7 +103,8 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 eventBusSettings ?? new EventBusSettings(), 
                 domainRepository ?? Mock.Of<IDomainRepository>(),
                 ServiceLocator.Current,
-                new Stub.StubAggregateLock()
+                new Stub.StubAggregateLock(),
+                Create.Storage.NewMemoryCache()
                 );
         }
     }
