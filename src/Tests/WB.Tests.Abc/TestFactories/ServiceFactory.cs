@@ -35,6 +35,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -1190,7 +1191,8 @@ namespace WB.Tests.Abc.TestFactories
             ISerializer serializer = null,
             IUserRepository userStorage = null,
             IExternalFileStorage externalFileStorage = null,
-            IAuthorizedUser authorizedUser = null)
+            IAuthorizedUser authorizedUser = null,
+            IOptions<GeospatialConfig> geospatialConfig = null)
         {
            return new MapFileStorageService(
              fileSystemAccessor ?? Create.Service.FileSystemIOAccessor(), 
@@ -1201,6 +1203,7 @@ namespace WB.Tests.Abc.TestFactories
              serializer ?? Create.Service.NewtonJsonSerializer(),
              userStorage ?? Create.Storage.UserRepository(),
              externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
+             geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
              authorizedUser ?? Mock.Of<IAuthorizedUser>()); 
         }
     }
