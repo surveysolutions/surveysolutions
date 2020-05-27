@@ -7,19 +7,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public interface IQuestionnaireInfoFactory
     {
-        NewEditGroupView GetGroupEditView(QuestionnaireRevision questionnaireId, Guid groupId);
+        NewEditGroupView? GetGroupEditView(QuestionnaireRevision questionnaireId, Guid groupId);
 
-        NewEditRosterView GetRosterEditView(QuestionnaireRevision questionnaireId, Guid rosterId);
+        NewEditRosterView? GetRosterEditView(QuestionnaireRevision questionnaireId, Guid rosterId);
 
-        NewEditQuestionView GetQuestionEditView(QuestionnaireRevision questionnaireId, Guid questionId);
+        NewEditQuestionView? GetQuestionEditView(QuestionnaireRevision questionnaireId, Guid questionId);
 
-        NewEditStaticTextView GetStaticTextEditView(QuestionnaireRevision questionnaireId, Guid staticTextId);
+        NewEditStaticTextView? GetStaticTextEditView(QuestionnaireRevision questionnaireId, Guid staticTextId);
 
         List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(QuestionnaireRevision questionnaireId, Guid id);
 
-        List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(QuestionnaireRevision questionnaireId, Guid rosterId, Guid rosterSizeQuestionId);
+        List<DropdownEntityView>? GetQuestionsEligibleForNumericRosterTitle(QuestionnaireRevision questionnaireId, Guid rosterId, Guid rosterSizeQuestionId);
 
-        VariableView GetVariableEditView(QuestionnaireRevision questionnaireId, Guid variableId);
+        VariableView? GetVariableEditView(QuestionnaireRevision questionnaireId, Guid variableId);
 
         Guid GetSectionIdForItem(QuestionnaireRevision questionnaireId, Guid? entityid);
     }

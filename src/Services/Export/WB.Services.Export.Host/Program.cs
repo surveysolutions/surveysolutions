@@ -139,6 +139,7 @@ namespace WB.Services.Export.Host
                         c.AddJsonFile($"appsettings.Production.json", true);
                         c.AddIniFile($"appsettings.Production.ini", true);
 
+                        c.AddEnvironmentVariables("Export_");
                         c.AddCommandLine(args);
                     });
 

@@ -21,9 +21,10 @@ namespace WB.Services.Export.Questionnaire
         }
 
         public async Task<QuestionnaireExportStructure> GetQuestionnaireExportStructureAsync(TenantInfo tenant,
-            QuestionnaireId questionnaireId)
+            QuestionnaireId questionnaireId,
+            Guid? translation)
         {
-            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId, translation);
             if (questionnaire == null) return null;
             return CreateQuestionnaireExportStructure(questionnaire);
         }

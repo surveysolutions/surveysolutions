@@ -449,53 +449,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
-        public void when_verifying_questionnaire_with_cascading_question_with_reusable_categories_and_panent_not_and_ids_are_not_unique()
-        {
-            // assert
-            var questionId = Guid.Parse("10000000000000000000000000000000");
-            var parentQuestionId = Guid.Parse("22222222222222222222222222222222");
-            var categoriesId = Guid.Parse("11111111111111111111111111111111");
-
-            var questionnaire = CreateQuestionnaireDocument(
-                Create.SingleOptionQuestion
-                (
-                    parentQuestionId,
-                    variable: "parentQuestion",
-                    answers: new List<Answer>
-                    {
-                        new Answer {AnswerText = "opt 1", AnswerValue = "1"},
-                        new Answer {AnswerText = "opt 2", AnswerValue = "2"},
-                    }
-                ),
-                Create.SingleOptionQuestion
-                (
-                    questionId,
-                    variable: "question",
-                    categoriesId: categoriesId,
-                    cascadeFromQuestionId: parentQuestionId
-                ));
-
-            var categoriesService = Mock.Of<ICategoriesService>(x =>
-                x.GetCategoriesById(It.IsAny<Guid>(), categoriesId) == new List<CategoriesItem>()
-                {
-                    new CategoriesItem {Id = 1, ParentId = 2, Text = "child 1"},
-                    new CategoriesItem {Id = 1, ParentId = 2, Text = "child 2"}
-                }.AsQueryable());
-
-            var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
-
-            // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
-
-            // arrange
-            verificationMessages.ShouldContainError("WB0073");
-            verificationMessages.Single(e => e.Code == "WB0073").MessageLevel.Should().Be(VerificationMessageLevel.General);
-            verificationMessages.Single(e => e.Code == "WB0073").References.Count().Should().Be(1);
-            verificationMessages.Single(e => e.Code == "WB0073").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
-            verificationMessages.Single(e => e.Code == "WB0073").References.First().Id.Should().Be(questionId);
-        }
-
-        [Test]
         public void when_verifying_questionnaire_with_cascading_question_and_panent_with_reusable_categories_and_ids_are_not_unique()
         {
             // assert

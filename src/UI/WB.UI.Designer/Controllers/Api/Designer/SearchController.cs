@@ -45,10 +45,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 PageSize = model.PageSize,
             });
 
-            var result = new SearchResultModel()
-            {
-                Total = searchResult.TotalCount,
-                Entities = searchResult.Items.Select(i =>
+            var result = new SearchResultModel(
+                searchResult.Items.Select(i =>
                     new QuestionnaireSearchResultEntity()
                     {
                         QuestionnaireId = i.QuestionnaireId.FormatGuid(),
@@ -57,15 +55,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                         ItemType = i.EntityType,
                         SectionId = i.SectionId.FormatGuid(),
                         Title = i.Title,
-                        Folder = !i.FolderId.HasValue
-                            ? null
-                            : new QuestionnaireListViewFolder
-                            {
-                                Title = i.FolderName,
-                                PublicId = i.FolderId.Value
-                            }
-                    }).ToList()
-            };
+                        Folder = i.FolderId != null
+                            ? new QuestionnaireListViewFolder(i.FolderId.Value, i.FolderName ?? "")
+                            : null
+                    }).ToList(), 
+                searchResult.TotalCount
+            );
 
             return Ok(result);
         }
@@ -73,24 +68,30 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
     public class SearchResultModel
     {
+        public SearchResultModel(List<QuestionnaireSearchResultEntity> entities, int total)
+        {
+            Entities = entities;
+            Total = total;
+        }
+
         public List<QuestionnaireSearchResultEntity> Entities { get; set; }
         public int Total { get; set; }
     }
 
     public class QuestionnaireSearchResultEntity
     {
-        public string Title { get; set; }
-        public string QuestionnaireTitle { get; set; }
-        public QuestionnaireListViewFolder Folder { get; set; }
-        public string QuestionnaireId { get; set; }
-        public string SectionId { get; set; }
-        public string ItemId  { get; set; }
-        public string ItemType { get; set; }
+        public string? Title { get; set; }
+        public string? QuestionnaireTitle { get; set; }
+        public QuestionnaireListViewFolder? Folder { get; set; }
+        public string? QuestionnaireId { get; set; }
+        public string? SectionId { get; set; }
+        public string? ItemId  { get; set; }
+        public string? ItemType { get; set; }
     }
 
     public class SearchQueryModel
     {
-        public string Query { get; set; }
+        public string? Query { get; set; }
         public Guid? FolderId{ get; set; }
         public bool PrivateOnly { get; set; } = false;
 

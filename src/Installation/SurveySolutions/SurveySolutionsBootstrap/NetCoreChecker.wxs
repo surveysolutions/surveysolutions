@@ -104,4 +104,40 @@
       </ExePackage>
     </PackageGroup>
   </Fragment>
+  <Fragment>
+    <Variable Name="WindowsDotNetHosting314InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\3.1.4" />
+    <util:DirectorySearch Id="WindowsDotNetHosting314Installed" Path="[WindowsDotNetHosting314InstallDir]" Variable="WindowsDotNetHosting314Installed" Result="exists" />
+
+    <WixVariable Id="WindowsDotNetHosting314InstalledDetectCondition" Value="WindowsDotNetHosting314Installed" Overridable="yes" />
+    <WixVariable Id="WindowsDotNetHosting314InstalledInstallCondition" Value="" Overridable="yes" />
+
+    <PackageGroup Id="WindowsDotNetHosting314">
+      <ExePackage
+          Name="dotnet-hosting-3.1.4-win.exe"
+          InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting314Log]&quot;"
+          RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting314Log]&quot;"
+          UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting314Log]&quot;"
+          PerMachine="yes"
+          DetectCondition="!(wix.WindowsDotNetHosting314InstalledDetectCondition)"
+          InstallCondition="!(wix.WindowsDotNetHosting314InstalledInstallCondition)"
+          Vital="yes"
+          Permanent="yes"
+          Protocol="burn"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/5bed16f2-fd1a-4027-bee3-3d6a1b5844cc/dd22ca2820fadb57fd5378e1763d27cd/dotnet-hosting-3.1.4-win.exe"
+          LogPathVariable="WindowsDotNetHosting314Log"
+          Compressed="no">
+        <!-- heat.exe payload "dotnet-hosting-3.1.4-win.exe" -o "dotnet-hosting.wxs" -->
+        <RemotePayload 
+            CertificatePublicKey="3756E9BBF4461DCD0AA68E0D1FCFFA9CEA47AC18" 
+            CertificateThumbprint="2485A7AFA98E178CB8F30C9838346B514AEA4769" 
+            Description="Microsoft .NET Core 3.1.4 - Windows Server Hosting" 
+            Hash="17C869B0D792643A1344DFAD0F5DE3FEC3437CC6" 
+            ProductName="Microsoft .NET Core 3.1.4 - Windows Server Hosting" 
+            Size="64749160" 
+            Version="3.1.4.20222" />
+      </ExePackage>
+    </PackageGroup>
+  </Fragment>
+
+
 </Wix>

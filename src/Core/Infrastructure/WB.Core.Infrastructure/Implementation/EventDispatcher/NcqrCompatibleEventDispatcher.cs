@@ -61,7 +61,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
                     try
                     {
-                        handler.Handle(events, firstEventSourceId);
+                        handler.Handle(events);
                     }
                     catch (Exception exception)
                     {

@@ -2,6 +2,6 @@
 {
     public interface IPatchGenerator
     {
-        string Diff(string left, string right);
+        string? Diff(string left, string? right);
     }
 }

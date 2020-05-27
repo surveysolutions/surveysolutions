@@ -14,8 +14,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public ExpressionReplacer(IQuestionnaireDocument questionnaire)
         {
             var questionnaireDocument = questionnaire as QuestionnaireDocument;
-            if (questionnaireDocument != null)
-                this.variableMap = new QuestionnaireStataMapView(questionnaireDocument);
+            if (questionnaireDocument == null) 
+             throw new ArgumentException(nameof(questionnaireDocument));
+                
+            this.variableMap = new QuestionnaireStataMapView(questionnaireDocument);
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// Decode expression with stata captions instead of public keys
         /// </param>
         /// <returns></returns>
-        public string ReplaceGuidsWithStataCaptions(string expression, Guid questionnaireKey)
+        public string? ReplaceGuidsWithStataCaptions(string? expression, Guid questionnaireKey)
         {
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;

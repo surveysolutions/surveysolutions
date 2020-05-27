@@ -65,7 +65,10 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             var interviewCommand = command as InterviewCommand;
 
-            if(appDomains.TryGetValue(interviewCommand.InterviewId, out var interview))
+            if (interviewCommand == null)
+                throw new ArgumentException(nameof(command));
+
+            if (appDomains.TryGetValue(interviewCommand.InterviewId, out var interview))
             {
                 logger.LogDebug($"Execute remote interview command: {interviewCommand.InterviewId} # {command.GetType().Name}");
                 return interview.Value.Execute(command);

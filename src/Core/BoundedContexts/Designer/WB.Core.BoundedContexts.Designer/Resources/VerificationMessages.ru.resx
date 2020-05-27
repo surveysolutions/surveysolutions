@@ -819,7 +819,13 @@
   <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
     <value>Табличный ростер не может переопределять имя</value>
   </data>
-  <data name="WB0305_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+  <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+    <value>Категории должны содержать уникальную пару Id, ParentId</value>
+  </data>
+  <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+    <value>Категории должны содержать уникальную пару ParentId, Text</value>
+  </data>
+  <data name="WB0307_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
     <value>Вопросы в секции "Обложка" должны иметь тег переменной</value>
   </data>
 </root>

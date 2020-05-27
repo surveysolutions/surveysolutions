@@ -47,8 +47,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     {
         public class CommandExecutionModel
         {
-            public string Type { get; set; }
-            public string Command { get; set; }
+            public string? Type { get; set; }
+            public string? Command { get; set; }
         }
 
         private readonly ICommandService commandService;
@@ -90,15 +90,18 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         public class AttachmentModel
         {
-            public IFormFile File { get; set; }
-            public string FileName { get; set; }
-            public string Command { get; set; }
+            public IFormFile? File { get; set; }
+            public string FileName { get; set; } = string.Empty;
+            public string? Command { get; set; }
         }
 
         [Route("~/api/command/attachment")]
         [HttpPost]
         public async Task<IActionResult> UpdateAttachment(AttachmentModel model)
         {
+            if(model?.Command == null)
+                return this.Error((int)HttpStatusCode.NotAcceptable, "Invalid command");
+
             var commandType = typeof(AddOrUpdateAttachment).Name;
             AddOrUpdateAttachment command;
             try
@@ -124,13 +127,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 {
                     if (!command.OldAttachmentId.HasValue)
                         throw new ArgumentException(string.Format(ExceptionMessages.OldAttachmentIdIsEmpty, command.AttachmentId, command.QuestionnaireId));
-                    command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(command.OldAttachmentId.Value);
+                    
+                    command.AttachmentContentId = 
+                        this.attachmentService.GetAttachmentContentId(command.OldAttachmentId.Value) 
+                        ?? throw new ArgumentException(string.Format(ExceptionMessages.OldAttachmentIdIsEmpty, command.AttachmentId, command.QuestionnaireId));
                 }
 
                 this.attachmentService.SaveMeta(
                     attachmentId: command.AttachmentId,
                     questionnaireId: command.QuestionnaireId,
-                    contentId: command.AttachmentContentId, fileName: model.File?.FileName ?? model.FileName);
+                    contentId: command.AttachmentContentId, 
+                    fileName: model.File?.FileName ?? model.FileName);
             }
             catch (FormatException e)
             {
@@ -229,6 +236,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("~/api/command")]
         public async Task<IActionResult> Post([FromBody]CommandExecutionModel model)
         {
+            if (model?.Command == null || model?.Type == null)
+                throw new InvalidOperationException("Invalid command");
+
             try
             {
                 using (var transaction = await dbContext.Database.BeginTransactionAsync())
@@ -260,8 +270,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         public class FileModel
         {
-            public IFormFile File { get; set; }
-            public string Command { get; set; }
+            public IFormFile? File { get; set; }
+            public string? Command { get; set; }
         }
 
 
@@ -269,6 +279,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [HttpPost]
         public async Task<IActionResult> UpdateTranslation(FileModel model)
         {
+            if (model?.Command == null)
+                return this.Error((int)HttpStatusCode.NotAcceptable, "Invalid command");
+
             var commandType = typeof(AddOrUpdateTranslation).Name;
             AddOrUpdateTranslation command;
             try
@@ -331,6 +344,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [HttpPost]
         public async Task<IActionResult> UpdateCategories(FileModel model)
         {
+            if (model?.Command == null)
+                return this.Error((int)HttpStatusCode.NotAcceptable, "Invalid command");
+
             var commandType = typeof(AddOrUpdateCategories).Name;
             AddOrUpdateCategories command;
             try
@@ -394,9 +410,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             try
             {
                 Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
-                ICommand command = (ICommand)JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
-
-                return command;
+                return JsonConvert.DeserializeObject(serializedCommand, resultCommandType) as ICommand 
+                       ?? throw new ArgumentException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
             }
             catch (Exception e)
             {

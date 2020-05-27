@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
 
-            var metadata = new InterviewMetaInfo
+            var metadata = new InterviewMetaInfo(this.prefilledQuestions.Where(x => x.InterviewId == interview.InterviewId).Select(ToFeaturedQuestionMeta).ToList())
             {
                 PublicKey = interview.InterviewId,
                 ResponsibleId = interview.ResponsibleId,
@@ -123,8 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 Comments = interview.LastInterviewerOrSupervisorComment,
                 Valid = true,
                 CreatedOnClient = interview.Census,
-                TemplateVersion = questionnaireIdentity.Version,
-                FeaturedQuestionsMeta = this.prefilledQuestions.Where(x => x.InterviewId == interview.InterviewId).Select(ToFeaturedQuestionMeta).ToList()
+                TemplateVersion = questionnaireIdentity.Version
             };
 
             return new InterviewPackageApiView

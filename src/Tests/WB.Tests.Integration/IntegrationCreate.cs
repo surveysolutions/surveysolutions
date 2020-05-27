@@ -328,10 +328,10 @@ namespace WB.Tests.Integration
         public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
         {
             return new LookupTableContent
-            {
-                VariableNames = variableNames,
-                Rows = rows
-            };
+            (
+                variableNames : variableNames,
+                rows : rows
+            );
         }
 
         public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
@@ -351,6 +351,7 @@ namespace WB.Tests.Integration
                 sessionProvider ?? Mock.Of<IUnitOfWork>(),
                 postgreConnectionSettings ?? new UnitOfWorkConnectionSettings(),
                 Mock.Of<ILogger>(),
+                Create.Storage.NewMemoryCache(),
                 new EntitySerializer<TEntity>());
         }
 
@@ -430,10 +431,14 @@ namespace WB.Tests.Integration
             IUnitOfWork sessionProvider = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
-            return new PostgreReadSideStorage<TEntity>(
-                sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                Mock.Of<ILogger>(),
-                Mock.Of<IServiceLocator>());
+            return new PostgreReadSideStorage<TEntity>(sessionProvider ?? Mock.Of<IUnitOfWork>(), Create.Storage.NewMemoryCache());
+        }  
+        
+        public static PostgreReadSideStorage<TEntity, TK> PostgresReadSideRepository<TEntity, TK>(
+            IUnitOfWork sessionProvider = null)
+            where TEntity : class, IReadSideRepositoryEntity
+        {
+            return new PostgreReadSideStorage<TEntity, TK>(sessionProvider ?? Mock.Of<IUnitOfWork>(), Create.Storage.NewMemoryCache());
         }
 
         public static AnswerNotifier AnswerNotifier(IViewModelEventRegistry registry = null)

@@ -104,7 +104,7 @@ namespace WB.UI.WebTester
                 },
                 new RefitSettings
                 {                   
-                    ContentSerializer = new JsonContentSerializer(new JsonSerializerSettings { 
+                    ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings { 
                         TypeNameHandling = TypeNameHandling.All,
                         NullValueHandling = NullValueHandling.Ignore,
                         FloatParseHandling = FloatParseHandling.Decimal,

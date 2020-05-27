@@ -79,11 +79,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             var lookupTableStorageId = this.GetLookupTableStorageId(questionnaire.PublicKey, lookupTableId);
 
             var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
+            if (lookupTableContent == null)
+                throw new ArgumentException(string.Format(ExceptionMessages.LookupTableHasEmptyContent, questionnaireId));
 
             return lookupTableContent;
         }
 
-        public LookupTableContentFile GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId)
+        public LookupTableContentFile? GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId)
         {
             var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
 
@@ -111,7 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return result;
         }
 
-        public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, string sourceLookupTableName, Guid newQuestionnaireId, Guid newLookupTableId)
+        public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, Guid newQuestionnaireId, Guid newLookupTableId)
         {
             var content = GetLookupTableContent(sourceQuestionnaireId, sourceTableId);
 
@@ -120,7 +122,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             this.lookupTableContentStorage.Store(content, lookupTableStorageId);
         }
 
-        public bool IsLookupTableEmpty(Guid questionnaireId, Guid tableId, string lookupTableName)
+        public bool IsLookupTableEmpty(Guid questionnaireId, Guid tableId, string? lookupTableName)
         {
             if (string.IsNullOrWhiteSpace(lookupTableName))
             {
@@ -132,7 +134,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return this.lookupTableContentStorage.GetById(lookupTableStorageId) == null;
         }
 
-        private LookupTableContentFile GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
+        private LookupTableContentFile? GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
         {
             var lookupTableContent = GetLookupTableContent(questionnaire.PublicKey, lookupTableId);
 
@@ -165,11 +167,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     }
                 }
 
-                return new LookupTableContentFile()
-                {
-                    Content = memoryStream.ToArray(),
-                    FileName = questionnaire.LookupTables[lookupTableId].FileName
-                };
+                return new LookupTableContentFile(
+                    content : memoryStream.ToArray(),
+                    fileName : questionnaire.LookupTables[lookupTableId].FileName
+               );
             }
         }
 
@@ -180,8 +181,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private LookupTableContent CreateLookupTableContent(string fileContent)
         {
-            var result = new LookupTableContent();
-
             using (var csvReader = new CsvReader(new StringReader(fileContent), this.CreateCsvConfiguration()))
             {
                 var rows = new List<LookupTableRow>();
@@ -278,10 +277,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     throw new ArgumentException(ExceptionMessages.LookupTables_rowcode_values_must_be_unique);
                 }
 
-                result.VariableNames = fieldHeaders.Where(h => !h.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase)).ToArray();
-                result.Rows = rows.ToArray();
+                return new LookupTableContent(
+                    fieldHeaders.Where(h => !h.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase)).ToArray(),
+                     rows.ToArray());
             }
-            return result;
         }
 
         private static bool IsVariableNameInvalid(string variableName)

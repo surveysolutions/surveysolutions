@@ -138,7 +138,7 @@ namespace WB.Services.Export.CsvExport.Implementation
         
         public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension, CancellationToken cancellationToken)
         {
-            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId, cancellationToken);
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
             QuestionnaireExportStructure questionnaireExportStructure = await this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
 
             var questionnaireUrl = $"https://designer.mysurvey.solutions/questionnaire/details/{questionnaire.PublicKey.ToString("N")}";
