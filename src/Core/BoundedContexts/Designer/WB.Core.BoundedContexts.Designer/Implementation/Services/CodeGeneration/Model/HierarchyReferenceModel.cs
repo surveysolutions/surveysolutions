@@ -2,7 +2,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class HierarchyReferenceModel
     {
-        public string TypeName { set; get; }
-        public string VariableName { set; get; }
+        public string? TypeName { set; get; }
+        public string? VariableName { set; get; }
     }
 }

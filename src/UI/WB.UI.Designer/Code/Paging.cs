@@ -105,7 +105,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             return nav;
         }
 
-        private static void MakeDisabledPagingItem(string htmlTitle, TagBuilder root, string additionalClass = null)
+        private static void MakeDisabledPagingItem(string htmlTitle, TagBuilder root, string? additionalClass = null)
         {
             var li = new TagBuilder("li");
             li.AddCssClass("disabled");

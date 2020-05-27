@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class QuestionnaireView
     {
-        private IEnumerable<ICompositeView> children;
+        private IEnumerable<ICompositeView>? children;
 
         public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPersonView> sharedPersons)
         {
@@ -25,9 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             get
             {
-                return this.children
-                       ?? (this.children =
-                           this.Source.Children.Cast<IGroup>().Select(@group => new EditGroupView(@group, null, 0)).ToList());
+                return this.children ??= this.Source.Children.Cast<IGroup>().Select(@group => new EditGroupView(@group, null, 0)).ToList();
             }
         }
 

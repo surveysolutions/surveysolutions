@@ -18,7 +18,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Extensions;
 
@@ -62,7 +61,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         }
 
         [BindProperty]
-        public IFormFile Upload { get; set; }
+        public IFormFile? Upload { get; set; }
 
         public IActionResult OnPost()
         {
@@ -75,7 +74,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     return Page();
                 }
 
-                if (Upload.FileName.ToLower().EndsWith(".tmpl"))
+                if (Upload!.FileName!.ToLower().EndsWith(".tmpl"))
                 {
                     this.Error = "You are trying to restore old format questionnaire. Please use 'Old Format Restore' option.";
                     return Page();
@@ -121,10 +120,10 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         }
 
         [TempData]
-        public string Success { get; set; } = string.Empty;
+        public string? Success { get; set; } = string.Empty;
 
         [TempData]
-        public string Error { get; set; } = string.Empty;
+        public string? Error { get; set; } = string.Empty;
 
         private void RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream, RestoreState state)
         {
@@ -213,10 +212,10 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
                     if (attachment.HasAllDataForRestore())
                     {
-                        string attachmentContentId = this.attachmentService.CreateAttachmentContentId(attachment.BinaryContent);
+                        string attachmentContentId = this.attachmentService.CreateAttachmentContentId(attachment.BinaryContent!);
 
-                        this.attachmentService.SaveContent(attachmentContentId, attachment.ContentType, attachment.BinaryContent);
-                        this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, attachment.FileName);
+                        this.attachmentService.SaveContent(attachmentContentId, attachment.ContentType!, attachment.BinaryContent!);
+                        this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, attachment.FileName!);
 
                         state.RemoveAttachment(attachmentId);
 
@@ -239,7 +238,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 else if (isTranslationEntry)
                 {
                     var translationIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]);
-                    byte[] excelContent = null;
+                    byte[]? excelContent = null;
 
                     using (var memoryStream = new MemoryStream())
                     {
@@ -282,9 +281,9 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         {
             public class Attachment
             {
-                public string FileName { get; set; }
-                public string ContentType { get; set; }
-                public byte[] BinaryContent { get; set; }
+                public string? FileName { get; set; }
+                public string? ContentType { get; set; }
+                public byte[]? BinaryContent { get; set; }
 
                 public bool HasAllDataForRestore()
                     => this.FileName != null

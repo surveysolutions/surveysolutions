@@ -33,14 +33,14 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                 var newScenario = new StoredScenario
                 {
                     QuestionnaireId = id, 
-                    Steps = model.ScenarioText, 
+                    Steps = model.ScenarioText ?? "", 
                     Title = model.ScenarioTitle ?? "New scenario"
                 };
                 await this.dbContext.Scenarios.AddAsync(newScenario);
             }
             else
             {
-                existingScenario.Steps = model.ScenarioText;
+                existingScenario.Steps = model.ScenarioText ?? "";
             }
             
             await this.dbContext.SaveChangesAsync();
@@ -82,8 +82,8 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
     public class PostScenarioModel
     {
-        public string ScenarioText { get; set; }
+        public string? ScenarioText { get; set; }
         public int? ScenarioId { get; set; }
-        public string ScenarioTitle { get; set; }
+        public string? ScenarioTitle { get; set; }
     }
 }

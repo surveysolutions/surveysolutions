@@ -22,19 +22,23 @@ namespace WB.Core.BoundedContexts.Designer.Translations
     {
         private class TranslationRow
         {
-            public string EntityId { get; set; }
-            public string Type { get; set; }
-            public string OptionValueOrValidationIndexOrFixedRosterId { get; set; }
-            public string Translation { get; set; }
+            public string? EntityId { get; set; }
+            public string? Type { get; set; }
+            public string? OptionValueOrValidationIndexOrFixedRosterId { get; set; }
+            public string? Translation { get; set; }
         }
 
         private class TranslationsWithHeaderMap
         {
+            public TranslationsWithHeaderMap(IXLWorksheet worksheet)
+            {
+                Worksheet = worksheet;
+            }
             public IXLWorksheet Worksheet { get; set; }
-            public string EntityIdIndex { get; set; }
-            public string TypeIndex { get; set; }
-            public string OptionValueOrValidationIndexOrFixedRosterIdIndex { get; set; }
-            public string TranslationIndex { get; set; }
+            public string? EntityIdIndex { get; set; }
+            public string? TypeIndex { get; set; }
+            public string? OptionValueOrValidationIndexOrFixedRosterIdIndex { get; set; }
+            public string? TranslationIndex { get; set; }
         }
 
         private readonly TranslationType[] translationTypesWithIndexes =
@@ -81,6 +85,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private TranslationFile GetTranslationFile(Guid questionnaireId, Guid? translationId = null)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            if(questionnaire == null) throw new InvalidOperationException("Questionnaire was not found.");
+            
             var translation = translationId.HasValue
                 ? this.Get(questionnaireId, translationId.Value)
                 : new QuestionnaireTranslation(new List<TranslationDto>());
@@ -105,6 +111,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);
 
                 var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+                if (questionnaire == null)
+                    throw new InvalidFileException(ExceptionMessages.QuestionnaireCantBeFound);
 
                 var sheetsWithTranslation = package.Worksheets
                     .Where(x => x.Name == TranslationExcelOptions.WorksheetName ||
@@ -207,7 +215,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 Type = TranslationType.Categories
             };
 
-        private TranslationInstance GetQuestionnaireTranslation(Guid questionnaireId, Guid translationId, TranslationRow importedTranslation,
+        private TranslationInstance? GetQuestionnaireTranslation(Guid questionnaireId, Guid translationId, TranslationRow importedTranslation,
             Dictionary<Guid, bool> idsOfAllQuestionnaireEntities)
         {
             var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
@@ -242,9 +250,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 new Tuple<string, string>(worksheet.Cell(1, "F").GetString(), "F"),
             }.Where(kv => !string.IsNullOrEmpty(kv.Item1));
             var headers = items.ToDictionary(k => k.Item1.Trim(), v => v.Item2);
-            return new TranslationsWithHeaderMap()
+            return new TranslationsWithHeaderMap(worksheet)
             {
-                Worksheet = worksheet,
                 EntityIdIndex = headers.GetOrNull(TranslationExcelOptions.EntityIdColumnName),
                 TypeIndex = headers.GetOrNull(TranslationExcelOptions.TranslationTypeColumnName),
                 OptionValueOrValidationIndexOrFixedRosterIdIndex = headers.GetOrNull(TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName),
@@ -252,7 +259,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             };
         }
 
-        private string GetCleanedValue(TranslationType translationType, bool isGroup, string value)
+        private string GetCleanedValue(TranslationType translationType, bool isGroup, string? value)
         {
             switch (translationType)
             {

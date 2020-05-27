@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,24 +20,25 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             _userManager = userManager;
         }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
+        [BindProperty] public InputModel Input { get; set; } = new InputModel();
 
         public class InputModel
-        {            
-            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Password_required))]
+        {
+            [Required(ErrorMessageResourceType = typeof(ErrorMessages),
+                ErrorMessageResourceName = nameof(ErrorMessages.Password_required))]
             [DataType(DataType.Password)]
-            public string Password { get; set; }
+            public string Password { get; set; } = string.Empty;
 
             [DataType(DataType.Password)]
-            [Compare(nameof(Password), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.The_password_and_confirmation_password_do_not_match))]
-            public string ConfirmPassword { get; set; }
+            [Compare(nameof(Password), ErrorMessageResourceType = typeof(ErrorMessages),
+                ErrorMessageResourceName = nameof(ErrorMessages.The_password_and_confirmation_password_do_not_match))]
+            public string ConfirmPassword { get; set; } = string.Empty;
 
-            public string Code { get; set; }
-            public string UserId { get; set; }
+            public string Code { get; set; } = String.Empty;
+            public string UserId { get; set; } = String.Empty;
         }
 
-        public async Task<IActionResult> OnGet(string code = null, string userId = null)
+        public async Task<IActionResult> OnGet(string? code = null, string? userId = null)
         {
             if (code == null || userId == null)
             {
@@ -60,7 +62,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (Input == null || !ModelState.IsValid)
             {
                 return Page();
             }
