@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using WB.Infrastructure.Native.Monitoring;
-using Task = System.Threading.Tasks.Task;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
 {

@@ -8,11 +8,5 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
     {
         Task OnConnected(Hub hub);
         Task OnDisconnected(Hub hub, Exception exception);
-
-        protected string GetInterviewId(Hub hub)
-        {
-            var http = hub.Context.GetHttpContext();
-            return http.Request.Query["interviewId"];
-        }
     }
 }
