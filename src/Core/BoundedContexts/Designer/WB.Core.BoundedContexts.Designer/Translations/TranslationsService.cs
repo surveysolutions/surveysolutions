@@ -35,10 +35,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 Worksheet = worksheet;
             }
             public IXLWorksheet Worksheet { get; set; }
-            public string EntityIdIndex { get; set; }
-            public string TypeIndex { get; set; }
-            public string OptionValueOrValidationIndexOrFixedRosterIdIndex { get; set; }
-            public string TranslationIndex { get; set; }
+            public string? EntityIdIndex { get; set; }
+            public string? TypeIndex { get; set; }
+            public string? OptionValueOrValidationIndexOrFixedRosterIdIndex { get; set; }
+            public string? TranslationIndex { get; set; }
         }
 
         private readonly TranslationType[] translationTypesWithIndexes =
