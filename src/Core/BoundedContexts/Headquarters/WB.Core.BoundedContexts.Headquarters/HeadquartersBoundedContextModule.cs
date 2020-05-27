@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
-            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
+            registry.BindInPerLifetimeScope<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
 
             registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
             
