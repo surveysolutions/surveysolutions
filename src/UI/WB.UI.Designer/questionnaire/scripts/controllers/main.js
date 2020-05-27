@@ -254,13 +254,14 @@ angular.module('designerApp')
 
             $scope.chaptersTree = {
                 accept: function (sourceNodeScope) {
-                    return _.isEmpty(sourceNodeScope.item);
+                    return _.isEmpty(sourceNodeScope.item) && !sourceNodeScope.chapter.isCover;
                 },
                 dragStart: function () {
                     $scope.chaptersTree.isDragging = true;
                 },
                 beforeDrop: function (event) {
                     $scope.chaptersTree.isDragging = false;
+                    return event.dest.index != 0;
                 },
                 dropped: function (event) {
                     var rollback = function (item, targetIndex) {
@@ -269,14 +270,20 @@ angular.module('designerApp')
                     };
 
                     var sourceChapter = event.source.nodeScope.chapter;
+                    var destIndex = event.dest.index;
 
-                    if (sourceChapter.isCover) {
+                    if (sourceChapter.isCover || destIndex == 0) { // try to insert before Cover
                         rollback(sourceChapter, event.source.index);
                         return;
                     }
 
-                    if (event.dest.index !== event.source.index) {
-                        questionnaireService.moveGroup(sourceChapter.itemId, event.dest.index, null, $state.params.questionnaireId)
+                    if (destIndex !== event.source.index) {
+                        var cover = $scope.questionnaire.chapters[0];
+                        if (cover.isCover && cover.isReadOnly) { // old version of questionnaire
+                            destIndex--;  
+                        }
+                        
+                        questionnaireService.moveGroup(sourceChapter.itemId, destIndex, null, $state.params.questionnaireId)
                             .error(function () {
                                 rollback(sourceChapter, event.source.index);
                             });
