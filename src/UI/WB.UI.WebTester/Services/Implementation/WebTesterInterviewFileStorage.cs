@@ -18,13 +18,22 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName)
         {
-            var interviewBinaryData = this.mediaStorage.Get(fileName, interviewId)?.Data;
-            return Task.FromResult(interviewBinaryData);
+            var file = this.mediaStorage.Get(fileName, interviewId);
+
+            if (file == null)
+                throw new InvalidOperationException("File must not be null.");
+
+            return Task.FromResult(file.Data);
         }
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            return this.mediaStorage.Get(fileName, interviewId)?.Data;
+            var file = this.mediaStorage.Get(fileName, interviewId);
+
+            if(file == null)
+                throw new InvalidOperationException("File must not be null.");
+
+            return file.Data;
         }
 
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
@@ -38,12 +47,8 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
-            mediaStorage.Store(new MultimediaFile
-            {
-                Filename = fileName,
-                Data = data,
-                MimeType = contentType
-            }, fileName, interviewId);
+            var file = new MultimediaFile(fileName, data, null,contentType);
+            mediaStorage.Store(file, fileName, interviewId);
         }
 
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
@@ -52,7 +57,7 @@ namespace WB.UI.WebTester.Services.Implementation
             return Task.CompletedTask;
         }
 
-        public string GetPath(Guid interviewId, string filename = null)
+        public string GetPath(Guid interviewId, string? filename = null)
         {
             throw new NotImplementedException();
         }

@@ -42,9 +42,13 @@ namespace WB.UI.WebTester.Infrastructure
             this.executedCommandsStorage = executedCommandsStorage;
         }
 
-        public void Execute(ICommand command, string origin = null)
+        public void Execute(ICommand command, string? origin = null)
         {
             var interviewCommand = command as InterviewCommand;
+
+            if (interviewCommand == null)
+                throw new ArgumentException(nameof(command));
+
             var aggregateId = interviewCommand.InterviewId;
             var aggregateType = typeof(WebTesterStatefulInterview);
 
@@ -75,7 +79,7 @@ namespace WB.UI.WebTester.Infrastructure
             });
         }
 
-        public Task ExecuteAsync(ICommand command, string origin = null,
+        public Task ExecuteAsync(ICommand command, string? origin = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.CompletedTask;

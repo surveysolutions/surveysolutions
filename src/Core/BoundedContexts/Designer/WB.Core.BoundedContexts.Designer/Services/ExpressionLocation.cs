@@ -124,8 +124,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
             this.Id = id ?? Guid.Empty;
         }
 
-        public ExpressionLocation(string stringValue)
+        public ExpressionLocation(string? stringValue)
         {
+            if (stringValue == null) throw new ArgumentNullException(nameof(stringValue));
+            
             string[] expressionLocation = stringValue.Split(':');
             if (expressionLocation.Length != 3 && expressionLocation.Length != 4)
                 throw new ArgumentException("stringValue");

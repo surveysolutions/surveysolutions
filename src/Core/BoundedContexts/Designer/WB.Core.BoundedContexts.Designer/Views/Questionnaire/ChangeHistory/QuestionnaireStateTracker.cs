@@ -10,16 +10,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
     public class QuestionnaireStateTracker
     {
         public Dictionary<Guid, Guid?> Parents { get; set; } = new Dictionary<Guid, Guid?>();
-        public Dictionary<Guid, string> QuestionsState { get; set; } = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> GroupsState { get; set; } = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> RosterState { get; set; } = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> StaticTextState { get; set; } = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> VariableState { get; set; } = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> MacroState { get; set; } = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> LookupState { get; set; } = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> AttachmentState { get; set; } = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> TranslationState { get; set; } = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> CategoriesState { get; set; } = new Dictionary<Guid, string>();
+        public Dictionary<Guid, string?> QuestionsState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> GroupsState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> RosterState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> StaticTextState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> VariableState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> MacroState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> LookupState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> AttachmentState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> TranslationState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> CategoriesState { get; set; } = new Dictionary<Guid, string?>();
         public Guid CreatedBy { get; set; }
 
         public void RemoveCascadely(Guid groupId)

@@ -2,7 +2,7 @@
 {
     public class Area
     {
-        public Area(){}
+        //public Area(){}
 
         public Area(string geometry, string mapName, int? numberOfPoints, double? areaSize, 
             double? length, string coordinates, double? distanceToEditor)

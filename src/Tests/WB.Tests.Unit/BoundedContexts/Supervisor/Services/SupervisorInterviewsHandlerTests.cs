@@ -242,7 +242,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 {
                     InterviewId = Id.g2,
                     Events = "",
-                    MetaInfo = new InterviewMetaInfo()
+                    MetaInfo = new InterviewMetaInfo(new FeaturedQuestionMeta[0])
                 }
             });
 

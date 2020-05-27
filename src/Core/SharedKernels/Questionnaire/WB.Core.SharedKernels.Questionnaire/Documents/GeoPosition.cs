@@ -58,7 +58,7 @@ namespace Main.Core.Entities.SubEntities
 
         public override bool Equals(object obj)
         {
-            GeoPosition geoPosition = obj as GeoPosition;
+            GeoPosition? geoPosition = obj as GeoPosition;
             return geoPosition != null && this.Equals(geoPosition);
         }
 
@@ -81,13 +81,15 @@ namespace Main.Core.Entities.SubEntities
             }
         }
 
-        public static bool operator ==(GeoPosition x, GeoPosition y) => x?.Accuracy == y?.Accuracy &&
-                                                                        x?.Altitude == y?.Altitude &&
-                                                                        x?.Latitude == y?.Latitude &&
-                                                                        x?.Longitude == y?.Longitude &&
-                                                                        x?.Timestamp == y?.Timestamp;
+        public static bool operator ==(GeoPosition? x, GeoPosition? y) => 
+            
+            x?.Accuracy == y?.Accuracy &&
+                                                                         x?.Altitude == y?.Altitude &&
+                                                                         x?.Latitude == y?.Latitude &&
+                                                                         x?.Longitude == y?.Longitude &&
+                                                                         x?.Timestamp == y?.Timestamp;
 
-        public static bool operator !=(GeoPosition x, GeoPosition y) => !(x == y);
+        public static bool operator !=(GeoPosition? x, GeoPosition? y) => !(x == y);
 
         public GeoPosition Clone()
         {

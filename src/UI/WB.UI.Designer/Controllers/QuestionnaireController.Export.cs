@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Controllers
     {
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public FileResult Backup(Guid id)
+        public FileResult? Backup(Guid id)
         {
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
@@ -88,6 +88,8 @@ namespace WB.UI.Designer.Controllers
             foreach (var categories in questionnaireDocument.Categories)
             {
                 var excelFile = this.categoriesService.GetAsExcelFile(id, categories.Id);
+                if(excelFile?.Content == null)
+                    continue;
                 zipStream.PutFileEntry($"{questionnaireFolderName}/Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.Content);
             }
 

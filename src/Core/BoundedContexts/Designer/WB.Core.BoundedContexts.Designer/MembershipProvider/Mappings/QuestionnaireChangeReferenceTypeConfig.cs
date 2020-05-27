@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
                 .ValueGeneratedOnAdd();
 
             builder.Property(e => e.QuestionnaireChangeRecordId)
+                .IsRequired(false)
                 .HasColumnName("questionnairechangerecordid")
                 .HasMaxLength(255);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -14,8 +15,12 @@ namespace Main.Core.Documents
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
         //is used for deserialization
-        public QuestionnaireDocument(List<IComposite> children = null)
+        public QuestionnaireDocument(List<IComposite>? children = null)
         {
+            DefaultLanguageName = String.Empty;
+            VariableName = String.Empty;
+            Description = String.Empty;
+            this.Title = string.Empty;
             this.CreationDate = DateTime.Now;
             this.LastEntryDate = DateTime.Now;
             this.PublicKey = Guid.NewGuid();
@@ -85,16 +90,16 @@ namespace Main.Core.Documents
 
         public bool IsPublic { get; set; }
 
-        private IComposite parent;
+        private IComposite? parent;
 
         private bool childrenWereConnected = false;
 
-        public IComposite GetParent()
+        public IComposite? GetParent()
         {
             return parent;
         }
 
-        public void SetParent(IComposite parent)
+        public void SetParent(IComposite? parent)
         {
             this.parent = parent;
             this.childrenWereConnected = false;
@@ -106,7 +111,7 @@ namespace Main.Core.Documents
 
         public string Description { get; set; }
 
-        public QuestionnaireMetaInfo Metadata { get; set; }
+        public QuestionnaireMetaInfo? Metadata { get; set; }
 
         public string VariableName { get; set; }
 
@@ -137,13 +142,13 @@ namespace Main.Core.Documents
         public bool IsUsingExpressionStorage { get; set; }
 
         // fill in before export to HQ or Tester
-        public List<Guid> ExpressionsPlayOrder { get; set; }
+        public List<Guid>? ExpressionsPlayOrder { get; set; }
 
-        public Dictionary<Guid, Guid[]> DependencyGraph { get; set; }
-        public Dictionary<Guid, Guid[]> ValidationDependencyGraph { get; set; }
+        public Dictionary<Guid, Guid[]>? DependencyGraph { get; set; }
+        public Dictionary<Guid, Guid[]>? ValidationDependencyGraph { get; set; }
 
         // Map of question id to database stored 'questionnaire_entities'.id
-        public Dictionary<Guid, int> EntitiesIdMap { get; set; }
+        public Dictionary<Guid, int>? EntitiesIdMap { get; set; }
 
         public bool CustomRosterTitle => false;
         public string DefaultLanguageName { get; set; }
@@ -202,7 +207,7 @@ namespace Main.Core.Documents
             this.LastEntryDate = DateTime.UtcNow;
         }
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
+        public T? Find<T>(Guid publicKey) where T : class, IComposite?
         {
             foreach (IComposite child in this.Children)
             {
@@ -236,8 +241,11 @@ namespace Main.Core.Documents
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
             => this.Find(condition).FirstOrDefault();
 
-        public void ReplaceEntity(IComposite oldEntity, IComposite newEntity)
+        public void ReplaceEntity(IComposite? oldEntity, IComposite newEntity)
         {
+            if(oldEntity == null)
+                throw new ArgumentException("Old Entity must be not null.");
+
             Guid oldEntityId = oldEntity.PublicKey;
 
             var entityParent = this.GetParentById(oldEntityId);
@@ -245,7 +253,8 @@ namespace Main.Core.Documents
             this.LastEntryDate = DateTime.UtcNow;
         }
 
-        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled, RosterDisplayMode displayMode)
+        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, 
+            bool hideIfDisabled, RosterDisplayMode displayMode)
         {
             this.UpdateGroup(groupId, group =>
             {
@@ -295,7 +304,7 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
-        public IEnumerable<T> GetEntitiesByType<T>(IGroup startGroup = null) where T : class, IComposite
+        public IEnumerable<T> GetEntitiesByType<T>(IGroup? startGroup = null) where T : class, IComposite
         {
             var result = new List<T>();
             var groups = new Queue<IComposite>();
@@ -346,7 +355,7 @@ namespace Main.Core.Documents
         public IComposite GetChapterOfItemById(Guid itemId)
         {
             IComposite item = this.GetItemOrLogWarning(itemId);
-            IComposite parent = item.GetParent();
+            IComposite? parent = item.GetParent();
 
             while (!(parent is IQuestionnaireDocument) && parent != null)
             {
@@ -371,9 +380,9 @@ namespace Main.Core.Documents
                     {
                         treeStack.Push(child);
                     }
-                    else if (child is IQuestion)
+                    else if (child is IQuestion question)
                     {
-                        yield return (child as IQuestion);
+                        yield return question;
                     }
                 }
             }
@@ -489,6 +498,8 @@ namespace Main.Core.Documents
         public QuestionnaireDocument Clone()
         {
             var doc = this.MemberwiseClone() as QuestionnaireDocument;
+            if(doc == null)
+                throw new InvalidOperationException($"Cloned object is not {nameof(QuestionnaireDocument)}");
 
             doc.SetParent(null);
 

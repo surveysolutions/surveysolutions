@@ -28,11 +28,9 @@ namespace WB.UI.Designer.Extensions
         public static void PutTextFileEntry(this ZipOutputStream stream, string filename, string text)
             => stream.PutFileEntry(filename, Encoding.UTF8.GetBytes(text ?? string.Empty));
 
-        public static Guid AsGuid(this object source)
+        public static Guid AsGuid(this object? source)
         {
-            if (source == null)
-                return Guid.Empty;
-            return Guid.Parse(source.ToString());
+            return source == null ? Guid.Empty : Guid.Parse(source.ToString() ?? throw new InvalidOperationException("Cannot get string."));
         }
 
         public static int? InvertBooleableInt(this int? val, bool needValue)

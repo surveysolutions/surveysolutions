@@ -5,8 +5,6 @@ namespace Main.Core.Entities.SubEntities
 {
     public class Option
     {
-        public Option() {}
-
         public Option(string value, string title)
         {
             this.Value = value;
@@ -30,6 +28,6 @@ namespace Main.Core.Entities.SubEntities
 
         public string Title { get; set; }
 
-        public string ParentValue { get; set; }
+        public string? ParentValue { get; set; }
     }
 }

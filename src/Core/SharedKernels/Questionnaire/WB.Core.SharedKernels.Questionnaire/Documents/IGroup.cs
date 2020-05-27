@@ -6,11 +6,11 @@ namespace Main.Core.Entities.SubEntities
 {
     public interface IGroup : IComposite, IConditional
     {
-        string Title { get; set; }
+        string Title { get; set; } 
 
         string Description { get; set; }
 
-        new string VariableName { get; set; }
+        new string VariableName { get; set; } 
 
         bool IsRoster { get; }
 
