@@ -5,8 +5,9 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 {
     public class InterviewMetaInfo
     {
-        public InterviewMetaInfo()
+        public InterviewMetaInfo(IEnumerable<FeaturedQuestionMeta>? featuredQuestionsMeta = null)
         {
+            FeaturedQuestionsMeta = featuredQuestionsMeta ?? new FeaturedQuestionMeta[0];
         }
 
         public Guid PublicKey { get; set; }
@@ -15,7 +16,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public long TemplateVersion { get; set; }
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         public Guid ResponsibleId { get; set; }
         
@@ -26,7 +27,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public IEnumerable<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; set; }
 
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         public bool Valid { get; set; }
 
@@ -45,12 +46,6 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
         public Guid PublicKey { get; private set; }
         public string Title { get; private set; }
         public string Value { get; private set; }
-    }
-
-    public class SurveyStatusMeta
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
     }
 
     public class QuestionnaireMetadata

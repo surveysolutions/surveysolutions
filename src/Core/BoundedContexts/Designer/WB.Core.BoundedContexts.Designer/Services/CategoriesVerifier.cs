@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     internal class CategoriesVerifier : ICategoriesVerifier
     {
-        public ImportValidationError Verify(CategoriesRow categories, CategoriesHeaderMap headers)
+        public ImportValidationError? Verify(CategoriesRow categories, CategoriesHeaderMap headers)
         {
             if (categories == null) throw new ArgumentNullException(nameof(categories));
 

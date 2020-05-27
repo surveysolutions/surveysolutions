@@ -29,6 +29,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<QuestionnaireEntityReference> FindAll(QuestionnaireRevision questionnaireId, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             var questionnaire = this.questionnaires.Get(questionnaireId);
+            if(questionnaire == null)
+                throw new InvalidOperationException("Questionnaire was not found.");
             return FindAll(questionnaire, searchFor, matchCase, matchWholeWord, useRegex);
         }
 
@@ -63,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         }
                     }
 
-                    if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex) || MatchesSearchTerm(question.LinkedFilterExpression, searchRegex))
+                    if (MatchesSearchTerm(question.Properties?.OptionsFilterExpression, searchRegex) || MatchesSearchTerm(question.LinkedFilterExpression, searchRegex))
                     {
                         yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
                     }
@@ -151,23 +153,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return searchRegex;
         }
 
-        private static bool MatchesSearchTerm(string target, Regex searchRegex)
+        private static bool MatchesSearchTerm(string? target, Regex searchRegex)
         {
             if (target.IsNullOrEmpty()) return false;
 
             return searchRegex.IsMatch(target);
         }
 
-        private static string ReplaceUsingSearchTerm(string target, Regex searchFor, string replaceWith)
+        private static string ReplaceUsingSearchTerm(string? target, Regex searchFor, string? replaceWith)
         {
-            return searchFor.Replace(target, replaceWith);
+            return searchFor.Replace(target ?? String.Empty, replaceWith?? string.Empty);
         }
-
 
         public int ReplaceTexts(QuestionnaireRevision questionnaireId, Guid responsibleId, string searchFor, string replaceWith,
             bool matchCase, bool matchWholeWord, bool useRegex)
         {
             var questionnaire = this.questionnaires.Get(questionnaireId);
+            if(questionnaire == null)
+                throw new InvalidOperationException("Questionnaire was not found.");
             return ReplaceTexts(questionnaire, responsibleId, searchFor, replaceWith, matchCase, matchWholeWord, useRegex);
         }
 
@@ -194,11 +197,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     questionnaireItem.SetVariable(ReplaceUsingSearchTerm(variableName, searchRegex, replaceWith));
                 }
 
-                var conditional = questionnaireItem as IConditional;
-                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
+                if (questionnaireItem is IConditional conditional && MatchesSearchTerm(conditional.ConditionExpression, searchRegex))
                 {
                     replacedAny = true;
-                    string newCondition = ReplaceUsingSearchTerm(conditional.ConditionExpression, searchRegex, replaceWith);
+                    string newCondition = ReplaceUsingSearchTerm(conditional.ConditionExpression ?? string.Empty, searchRegex, replaceWith);
                     conditional.ConditionExpression = newCondition;
                 }
 
@@ -250,10 +252,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         }
                     }
 
-                    if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex))
+                    if (question.Properties?.OptionsFilterExpression != null && MatchesSearchTerm(question.Properties?.OptionsFilterExpression, searchRegex))
                     {
                         replacedAny = true;
-                        question.Properties.OptionsFilterExpression = ReplaceUsingSearchTerm(question.Properties.OptionsFilterExpression, searchRegex, replaceWith);
+                        question.Properties!.OptionsFilterExpression = ReplaceUsingSearchTerm(question.Properties.OptionsFilterExpression, searchRegex, replaceWith);
                     }
 
                     if (MatchesSearchTerm(question.LinkedFilterExpression, searchRegex))

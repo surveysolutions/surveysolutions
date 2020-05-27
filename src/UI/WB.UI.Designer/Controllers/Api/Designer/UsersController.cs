@@ -48,7 +48,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         public class FindByEmailRequest
         {
-            public string Query { get; set; }
+            public string? Query { get; set; }
         }
     }
 }

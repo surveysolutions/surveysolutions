@@ -122,11 +122,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 return NotFound();
             }
-
-            bool shouldTruncateOptions = (editQuestionView.IsFilteredCombobox == true || !string.IsNullOrWhiteSpace(editQuestionView.CascadeFromQuestionId))
-                                         && editQuestionView.Options != null;
-
-            if (shouldTruncateOptions)
+            
+            if ((editQuestionView.IsFilteredCombobox == true || !string.IsNullOrWhiteSpace(editQuestionView.CascadeFromQuestionId))
+                && editQuestionView.Options != null)
             {
                 editQuestionView.WereOptionsTruncated = editQuestionView.Options.Length > MaxCountOfOptionForFileredCombobox;
                 editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();   
@@ -154,7 +152,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public IActionResult EditRoster(QuestionnaireRevision id, Guid rosterId)
         {
             var editRosterView = this.questionnaireInfoFactory.GetRosterEditView(id, rosterId);
-
             if (editRosterView == null)
             {
                 return NotFound();
@@ -205,10 +202,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, readOnlyQuestionnaire);
 
             return Ok(new VerificationResult
-            {
-                Errors = errors,
-                Warnings = warnings
-            });
+            (
+                errors : errors,
+                warnings : warnings
+            ));
         }
 
         [HttpGet]
@@ -228,7 +225,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("GetQuestionsEligibleForNumericRosterTitle/{id}")]
-        public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(QuestionnaireRevision id, Guid rosterId, Guid rosterSizeQuestionId)
+        public List<DropdownEntityView>? GetQuestionsEligibleForNumericRosterTitle(QuestionnaireRevision id, Guid rosterId, Guid rosterSizeQuestionId)
         {
             return this.questionnaireInfoFactory.GetQuestionsEligibleForNumericRosterTitle(id, rosterId, rosterSizeQuestionId);
         }

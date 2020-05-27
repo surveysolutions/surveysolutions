@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
 {
     public class MapBrowseItem
     {
+        public MapBrowseItem()
+        {
+            this.Users = new HashSet<UserMap>();
+        }
         public virtual string Id { get; set; }
 
         public virtual long Size { get; set; }
@@ -17,5 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
 
         public virtual double MaxScale { set; get; }
         public virtual double MinScale { set; get; }
+        public virtual ICollection<UserMap> Users { get; set; }
     }
 }

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Services;
@@ -32,17 +31,17 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new InputModel();
 
         public class InputModel
         {
             [Required]
-            public string Email { get; set; }
+            public string? Email { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
+            if (Input!= null && ModelState.IsValid)
             {
                 var user = await userManager.FindByNameAsync(Input.Email)
                     ?? await userManager.FindByEmailAsync(Input.Email);

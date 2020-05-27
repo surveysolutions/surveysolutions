@@ -1,4 +1,5 @@
-﻿using Ganss.XSS;
+﻿using System;
+using Ganss.XSS;
 
 namespace WB.Core.BoundedContexts.Designer.Commands
 {
@@ -15,10 +16,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands
             "color", "size"
         };
 
-        public static string SanitizeHtml(string html, bool removeAllTags = false)
+        public static string SanitizeHtml(string? html, bool removeAllTags = false)
         {
             if (string.IsNullOrWhiteSpace(html))
-                return html;
+                return String.Empty;
 
             var sanitizer = new HtmlSanitizer { KeepChildNodes = true };
 

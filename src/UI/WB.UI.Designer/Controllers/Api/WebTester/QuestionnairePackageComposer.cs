@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Api.WebTester;
 
 namespace WB.UI.Designer.Controllers.Api.WebTester
@@ -76,6 +78,8 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         private Questionnaire ComposeQuestionnaireImpl(Guid questionnaireId)
         {
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
+            if (questionnaireView == null)
+                throw new InvalidOperationException("Questionnaire not found.");
 
             if (this.questionnaireVerifier.CheckForErrors(questionnaireView).Any())
             {
@@ -112,14 +116,10 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                 .GetValidationDependencyGraph(readOnlyQuestionnaireDocument)
                 .ToDictionary(x => x.Key, x => x.Value.ToArray());
 
-            questionnaire.Macros = null;
+            questionnaire.Macros = new Dictionary<Guid, Macro>();
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
 
-            return new Questionnaire
-            {
-                Document = questionnaire,
-                Assembly = resultAssembly
-            };
+            return new Questionnaire(document: questionnaire, assembly: resultAssembly);
         }
     }
 

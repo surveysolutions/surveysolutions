@@ -13,7 +13,7 @@ namespace WB.UI.Designer.Code.Attributes
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationSchemeOptions>
     {
         private readonly IBasicAuthenticationService _userService;
-        private UnauthorizedException loginException;
+        private UnauthorizedException? loginException;
 
         public BasicAuthenticationHandler(
             IOptionsMonitor<BasicAuthenticationSchemeOptions> options,

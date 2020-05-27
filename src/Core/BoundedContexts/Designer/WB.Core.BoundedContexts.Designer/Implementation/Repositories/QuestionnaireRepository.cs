@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             this.dbContext = dbContext;
         }
 
-        public Questionnaire Get(Guid aggregateId)
+        public Questionnaire? Get(Guid aggregateId)
         {
             var questionnaireDocument = this.questionnaireStorage.GetById(aggregateId.FormatGuid());
 
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             throw new NotImplementedException();
         }
 
-        public IPlainAggregateRoot Get(Type aggregateRootType, Guid aggregateId)
+        public IPlainAggregateRoot? Get(Type aggregateRootType, Guid aggregateId)
         {
             if(aggregateRootType != typeof(Questionnaire))
                 throw new InvalidOperationException();

@@ -193,7 +193,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
         {
             designerApi
                 .Setup(d => d.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>()))
-                .Returns(Task.FromResult(package ?? new QuestionnaireCommunicationPackage()));
+                .Returns(Task.FromResult(package ?? new QuestionnaireCommunicationPackage(String.Empty,string.Empty, 0)));
 
             designerApi
                 .Setup(d => d.GetPdfStatus(It.IsAny<Guid>(), It.IsAny<Guid?>()))
