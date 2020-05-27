@@ -735,6 +735,7 @@
                         $scope.items = data.chapter.items;
                         $scope.currentChapter = data.chapter;
                         $scope.currentChapter.isCover = data.isCover;
+                        $scope.currentChapter.isReadOnly = data.isReadOnly;
                         $rootScope.updateVariableNames(data.variableNames);
                         connectTree();
                     });
