@@ -13,9 +13,9 @@ namespace WB.UI.Designer.Code
             QuestionnairesType type,
             Guid? folderId,
             int? pageIndex = null, 
-            string sortBy = null, 
+            string? sortBy = null, 
             int? sortOrder = null, 
-            string searchFor = null);
+            string? searchFor = null);
 
         IPagedList<QuestionnaireListViewModel> GetMyQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId);
 

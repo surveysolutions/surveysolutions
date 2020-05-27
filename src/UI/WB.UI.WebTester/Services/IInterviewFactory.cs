@@ -101,6 +101,9 @@ namespace WB.UI.WebTester.Services
             var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId);
             var scenario = this.serializer.Deserialize(scenarioSerialized);
 
+            if (scenario == null)
+                throw new InvalidOperationException("Scenario must not be null.");
+
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaire, null);
             var commands = this.scenarioService.ConvertFromScenario(questionnaireDocument, scenario.Steps);
             try

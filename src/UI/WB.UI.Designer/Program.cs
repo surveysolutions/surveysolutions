@@ -20,10 +20,10 @@ namespace WB.UI.Designer
     {
         public static void Main(string[] args)
         {
-            var appRoot = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+            string? appRoot = Path.GetDirectoryName(typeof(Program).Assembly.Location);
 
             Log.Logger = new LoggerConfiguration()
-                .ConfigureSurveySolutionsLogging(appRoot, "designer")
+                .ConfigureSurveySolutionsLogging(appRoot ?? throw new InvalidOperationException("App path was not found"), "designer")
                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                 .CreateLogger();
 

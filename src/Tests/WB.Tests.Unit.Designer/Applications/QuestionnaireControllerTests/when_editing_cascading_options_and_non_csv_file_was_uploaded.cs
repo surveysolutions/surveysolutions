@@ -1,12 +1,14 @@
 using System;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using FluentAssertions;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Extensions;
+using Image = System.Drawing.Image;
 
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
@@ -22,9 +24,16 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var imageStream = new MemoryStream(Convert.FromBase64String(imageInBase64));
             Image.FromStream(imageStream).Save(stream, ImageFormat.Jpeg);
 
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var questionId = Guid.Parse("22222222222222222222222222222222");
+
             stream.Position = 0;
             postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream);
-            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel();
+            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel(
+                questionnaireId: questionnaireId.FormatGuid(),
+                questionId: questionId,
+                options: new QuestionnaireCategoricalOption[0]
+            );
             BecauseOf();
         }
 

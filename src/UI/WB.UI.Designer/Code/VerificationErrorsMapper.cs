@@ -19,32 +19,32 @@ namespace WB.UI.Designer.Code
                 .Where(x => x.References.Count == 1)
                 .GroupBy(x => new { x.Code, x.Message })
                 .Select(x => new VerificationMessage
-                {
-                    Code = x.Key.Code,
-                    Message = x.Key.Message,
-                    IsGroupedMessage = true,
-                    Errors = x.Select(g => new VerificationMessageError
-                    {
-                        References = g.References.Select(reference => reference.ExtendedReference(questionnaire)).ToList(),
-                        CompilationErrorMessages = g.CompilationErrorMessages
-                    }).ToList()
-                }).ToList();
+                (
+                    code : x.Key.Code,
+                    message : x.Key.Message,
+                    isGroupedMessage : true,
+                    errors : x.Select(g => new VerificationMessageError
+                    (
+                        references : g.References.Select(reference => reference.ExtendedReference(questionnaire)).ToList(),
+                        compilationErrorMessages : g.CompilationErrorMessages 
+                    )).ToList()
+                )).ToList();
 
             errors.AddRange(verificationMessages
                 .Where(x => x.References.Count != 1).Select(x => new VerificationMessage
-                {
-                    Code = x.Code,
-                    Message = x.Message,
-                    IsGroupedMessage = false,
-                    Errors = new List<VerificationMessageError>
+                (
+                    code : x.Code,
+                    message : x.Message,
+                    isGroupedMessage : false,
+                    errors : new List<VerificationMessageError>
                     {
                         new VerificationMessageError
-                        {
-                            CompilationErrorMessages = x.CompilationErrorMessages,
-                            References = x.References.Select(reference => reference.ExtendedReference(questionnaire)).ToList()
-                        }
+                        (
+                            compilationErrorMessages : x.CompilationErrorMessages,
+                            references : x.References.Select(reference => reference.ExtendedReference(questionnaire)).ToList()
+                        )
                     }
-                }));
+                )));
 
             return errors.OrderBy(x => x.Code).ToArray();
         }

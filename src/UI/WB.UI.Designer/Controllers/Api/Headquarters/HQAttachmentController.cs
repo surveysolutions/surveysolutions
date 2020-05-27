@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
             if (attachment == null) return NotFound();
 
-            string fileName = null;
+            string? fileName = null;
             if (attachmentId.HasValue)
             {
                 var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentId.Value);

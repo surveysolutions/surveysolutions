@@ -11,7 +11,7 @@ namespace WB.UI.Designer.Models
 {
     public class QuestionnaireRevisionBinderProvider : IModelBinderProvider
     {
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
+        public IModelBinder? GetBinder(ModelBinderProviderContext context)
         {
             if (context == null)
             {
