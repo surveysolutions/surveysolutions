@@ -391,9 +391,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         
         public MapBrowseItem AddUserToMap(string id, string userName)
         {
+            if (id == null) throw new ArgumentNullException(nameof(id));
+            if (userName == null) throw new ArgumentNullException(nameof(userName));
+            
             var map = this.mapPlainStorageAccessor.GetById(id);
             if (map == null)
-                throw new ArgumentException($@"Map was not found.", nameof(id));
+                throw new Exception(@"Map was not found.");
             
             var userNameLowerCase = userName.ToLower();
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
