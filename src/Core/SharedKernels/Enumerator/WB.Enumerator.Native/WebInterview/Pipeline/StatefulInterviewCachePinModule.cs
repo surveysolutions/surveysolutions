@@ -38,7 +38,7 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
                 var aggregateId = hub.GetInterviewId();
                 var count = this.aggregateRootCache.GetConnectedCount(aggregateId);
                 count--;
-                this.aggregateRootCache.SetConnectedCount(aggregateId, ++count);
+                this.aggregateRootCache.SetConnectedCount(aggregateId, count);
                 
                 if (count <= 0)
                 {
