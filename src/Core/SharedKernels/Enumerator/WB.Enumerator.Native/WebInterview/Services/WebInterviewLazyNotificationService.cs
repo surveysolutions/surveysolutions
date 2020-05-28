@@ -40,7 +40,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 }
                 catch (NotSupportedException)
                 {
-                    // read side may not be avaliable for now
+                    // read side may not be available for now
                     Thread.Sleep(5000);
                 }
                 catch { /* nom nom nom */ }
