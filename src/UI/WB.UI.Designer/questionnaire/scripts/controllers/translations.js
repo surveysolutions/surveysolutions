@@ -80,7 +80,7 @@
 
                 var defaultTranslation = {
                     translationId: null,
-                    name: $scope.questionnaire.defaultLanguageName == null ? $i18next.t("Translation_Original") : $scope.questionnaire.defaultLanguageName,
+                    name: !$scope.questionnaire.defaultLanguageName ? $i18next.t("Translation_Original") : $scope.questionnaire.defaultLanguageName,
                     file: null,
                     isDefault: !_.any($scope.questionnaire.translations, { isDefault: true }),
                     content: { details: {} },
