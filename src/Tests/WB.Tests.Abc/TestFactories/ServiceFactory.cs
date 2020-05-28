@@ -1066,7 +1066,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
                 invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>(),
-                Create.Service.TokenGenerator());
+                Create.Service.TokenGenerator(), new DummyAggregateRootPrototypePromoterService());
             return service;
         }
 
@@ -1078,7 +1078,9 @@ namespace WB.Tests.Abc.TestFactories
                 accessor.Store(invitation, invitation.Id);
             }
 
-            var service = new InvitationService(accessor, Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>());
+            var service = new InvitationService(accessor,
+                Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>(),
+                new DummyAggregateRootPrototypePromoterService());
             return service;
         }
 
