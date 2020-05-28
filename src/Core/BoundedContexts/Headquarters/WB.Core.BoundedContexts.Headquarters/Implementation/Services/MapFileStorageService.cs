@@ -294,7 +294,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return item;
         }
 
-        public async Task DeleteMap(string mapName)
+        public async Task<MapBrowseItem> DeleteMap(string mapName)
         {
             var map = this.mapPlainStorageAccessor.GetById(mapName);
             if (map != null)
@@ -311,6 +311,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 if (this.fileSystemAccessor.IsFileExists(filePath))
                     fileSystemAccessor.DeleteFile(filePath);
             }
+
+            return map;
         }
 
         public MapBrowseItem DeleteMapUserLink(string mapName, string user)
