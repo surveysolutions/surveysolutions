@@ -14,21 +14,17 @@ namespace WB.Core.Infrastructure.Services
 
         public PrototypeType? GetPrototypeType(Guid id)
         {
-            var cacheItem = memoryCache.Get(id);
-
-            return cacheItem?.PrototypeType;
+            return memoryCache.GetPrototypeType(id);
         }
 
         public void MarkAsPrototype(Guid id, PrototypeType type)
         {
-            var cacheItem = memoryCache.GetOrCreate(id, item => item.SetPrototypeType(type));
-            cacheItem.PrototypeType = type;
+            memoryCache.SetPrototypeType(id, type);
         }
 
         public void RemovePrototype(Guid id)
         {
-            var cacheItem = memoryCache.Get(id);
-            cacheItem.PrototypeType = null;
+            memoryCache.SetPrototypeType(id, null);
         }
     }
 }

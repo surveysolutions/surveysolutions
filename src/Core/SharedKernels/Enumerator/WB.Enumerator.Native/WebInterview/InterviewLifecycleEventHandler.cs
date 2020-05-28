@@ -60,13 +60,14 @@ namespace WB.Enumerator.Native.WebInterview
 
     {
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IAggregateRootCache aggregateRootCacheCleaner;
+        private readonly IAggregateRootCache aggregateRootCache;
 
-        public InterviewLifecycleEventHandler(IWebInterviewNotificationService webInterviewNotificationService,
-            IAggregateRootCache aggregateRootCacheCleaner)
+        public InterviewLifecycleEventHandler(
+            IWebInterviewNotificationService webInterviewNotificationService,
+            IAggregateRootCache aggregateRootCache)
         {
             this.webInterviewNotificationService = webInterviewNotificationService;
-            this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
+            this.aggregateRootCache = aggregateRootCache;
         }
 
         public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt)
@@ -267,13 +268,13 @@ namespace WB.Enumerator.Native.WebInterview
         
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-            this.aggregateRootCacheCleaner.Evict(evnt.EventSourceId);
+            this.aggregateRootCache.Evict(evnt.EventSourceId);
             this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            this.aggregateRootCacheCleaner.Evict(evnt.EventSourceId);
+            this.aggregateRootCache.Evict(evnt.EventSourceId);
             this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
         }
 
