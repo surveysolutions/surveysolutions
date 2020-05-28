@@ -45,7 +45,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
         {
             bool IsSectionVisible(InterviewTreeGroup x) =>
                 (!x.IsDisabled() || x.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id))
-                && !questionnaire.IsCustomViewRoster(x.Identity.Id);
+                && !questionnaire.IsCustomViewRoster(x.Identity.Id)
+                && !questionnaire.IsCoverPage(x.Identity.Id);
 
             Sidebar result = new Sidebar();
             HashSet<Identity> visibleSections = new HashSet<Identity>();
