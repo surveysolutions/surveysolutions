@@ -7,9 +7,14 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
     {
         public static Guid GetInterviewId(this Hub hub)
         {
-            var http = hub.Context.GetHttpContext(); 
-            var interviewId = http.Request.Query["interviewId"];
+            var interviewId = hub.GetInterviewIdString();
             return Guid.Parse(interviewId);
+        }
+
+        public static string GetInterviewIdString(this Hub hub)
+        {
+            var http = hub.Context.GetHttpContext();
+            return http.Request.Query["interviewId"];
         }
     }
 }

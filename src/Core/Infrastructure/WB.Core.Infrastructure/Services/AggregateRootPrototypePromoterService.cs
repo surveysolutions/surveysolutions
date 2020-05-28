@@ -52,7 +52,7 @@ namespace WB.Core.Infrastructure.Services
                         throw;
                     }
 
-                    this.cache.Evict(id);
+                    this.cache.EvictAggregateRoot(id);
                     break;
                 }
             }

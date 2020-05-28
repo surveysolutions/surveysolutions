@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -27,13 +28,19 @@ namespace Ncqrs.Eventing.Storage
         {
             return Read(id, minVersion);
         }
-        
+
         private Queue<CommittedEvent> GetFromCache(Guid id)
         {
-            var cacheItem = this.cache.GetOrCreate(id, item => item.SetEvents(new Queue<CommittedEvent>()));
-            
-            cacheItem.Events ??= new Queue<CommittedEvent>();
-            return cacheItem.Events as Queue<CommittedEvent>;
+            var cacheItem = this.cache.GetOrCreate(id);
+
+            if (!(cacheItem.GetEvents() is Queue<CommittedEvent> events))
+            {
+                events = new Queue<CommittedEvent>();
+                cacheItem.SetEvents(events);
+                return events;
+            }
+
+            return events;
         }
 
         public virtual int? GetLastEventSequence(Guid id) => GetFromCache(id).LastOrDefault()?.EventSequence;
@@ -53,16 +60,16 @@ namespace Ncqrs.Eventing.Storage
 
                 foreach (var evnt in eventStream)
                 {
-                    var committedEvent = new CommittedEvent(eventStream.CommitId, 
-                        evnt.Origin, 
-                        evnt.EventIdentifier, 
-                        eventStream.SourceId, 
+                    var committedEvent = new CommittedEvent(eventStream.CommitId,
+                        evnt.Origin,
+                        evnt.EventIdentifier,
+                        eventStream.SourceId,
                         evnt.EventSequence,
-                        evnt.EventTimeStamp, 
+                        evnt.EventTimeStamp,
                         events.Count,
                         evnt.Payload);
                     events.Enqueue(committedEvent);
-                    result.Add(committedEvent);   
+                    result.Add(committedEvent);
                 }
 
                 return new CommittedEventStream(eventStream.SourceId, result);

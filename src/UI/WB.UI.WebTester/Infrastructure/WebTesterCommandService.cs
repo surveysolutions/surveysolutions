@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -63,7 +64,7 @@ namespace WB.UI.WebTester.Infrastructure
                     aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);
                     aggregate.SetId(aggregateId);
 
-                    this.aggregateRootCache.Set(aggregate);
+                    this.aggregateRootCache.SetAggregateRoot(aggregate);
                 }
 
                 var events = this.interviews.Execute(command);
