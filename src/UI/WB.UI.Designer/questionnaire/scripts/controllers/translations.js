@@ -84,7 +84,6 @@
                     file: null,
                     isDefault: !_.any($scope.questionnaire.translations, { isDefault: true }),
                     content: { details: {} },
-                    downloadUrl: $scope.downloadBaseUrl + '/' + $scope.questionnaire.questionnaireId + '/template',
                     isOriginalTranslation: true
                 };
                 defaultTranslation.checkpoint = { name: defaultTranslation.name };
