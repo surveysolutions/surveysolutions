@@ -548,11 +548,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public ReadOnlyCollection<Guid> GetPrefilledQuestions()
-            => this
+        {
+            return this
                 .QuestionnaireDocument
                 .Find<IQuestion>(question => question.Featured)
                 .Select(question => question.PublicKey)
                 .ToReadOnlyCollection();
+        }
+
+        public ReadOnlyCollection<Guid> GetPrefilledEntities()
+        {
+            if (this.QuestionnaireDocument.IsCoverPageSupported)
+            {
+                return this.QuestionnaireDocument
+                    .Children
+                    .First(section => this.QuestionnaireDocument.IsCoverPage(section.PublicKey))
+                    .Children
+                    .Select(entity => entity.PublicKey)
+                    .ToReadOnlyCollection();
+            }
+            else
+            {
+                return GetPrefilledQuestions();
+            }
+        }
 
         public ReadOnlyCollection<Guid> GetHiddenQuestions()
             => this
@@ -1926,5 +1945,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.GetGroup(id)?.CustomRosterTitle == true;
         }
+
+        public bool IsCoverPage(Guid identityId) => innerDocument.IsCoverPage(identityId);
     }
 }
