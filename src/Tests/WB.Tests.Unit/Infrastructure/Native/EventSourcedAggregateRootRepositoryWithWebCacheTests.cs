@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
                     => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id && ar.Version == versionForNewObjects));
 
             var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object,
+                Create.Storage.InMemoryEventStore(),
                 Create.Service.MockOfAggregatePrototypeService(),  
                 domainRepo.Object,
                 ServiceLocator.Current,
@@ -67,7 +68,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
             var aggregateRootId = Id.gA;
             var aggregateFromInMemoryEvents = Mock.Of<IEventSourcedAggregateRoot>();
             var committedEvents = new List<CommittedEvent>();
-
+            
             var inMemoryEventStoreMock = new Mock<IInMemoryEventStore>();
             inMemoryEventStoreMock.Setup(x => x.Read(aggregateRootId, 0))
                 .Returns(committedEvents);
@@ -89,14 +90,16 @@ namespace WB.Tests.Unit.Infrastructure.Native
             Assert.That(aggregate, Is.SameAs(aggregateFromInMemoryEvents));
         }
 
-        private EventSourcedAggregateRootRepositoryWithWebCache GetRepository(EventBusSettings eventBusSettings = null,
+        private EventSourcedAggregateRootRepositoryWithWebCache GetRepository(
+            EventBusSettings eventBusSettings = null,
             IDomainRepository domainRepository = null,
             IEventStore eventStore = null,
             IInMemoryEventStore inMemoryEventStore = null,
             IAggregateRootPrototypeService prototypeService = null)
         {
             return new EventSourcedAggregateRootRepositoryWithWebCache(
-                eventStore: eventStore ?? Mock.Of<IEventStore>(), 
+                eventStore: eventStore ?? Mock.Of<IEventStore>(),
+                inMemoryEventStore: inMemoryEventStore ?? Mock.Of<IInMemoryEventStore>(),
                 repository: domainRepository ?? Mock.Of<IDomainRepository>(),
                 serviceLocator: ServiceLocator.Current,
                 aggregateLock: new Stub.StubAggregateLock(),

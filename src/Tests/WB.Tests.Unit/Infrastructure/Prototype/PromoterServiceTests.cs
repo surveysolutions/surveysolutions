@@ -6,6 +6,7 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Services;
@@ -22,17 +23,9 @@ namespace WB.Tests.Unit.Infrastructure.Prototype
         {
             var aggregateId = Id.g1;
 
-            var fixture = Create.Other.AutoFixture();
+            var fixture = PrepareFixture(aggregateId, type);
 
             fixture.GetMock<IInMemoryEventStore>(); // freeze mock for later use
-
-            fixture.GetMock<IAggregateRootPrototypeService>()
-                .Setup(p => p.GetPrototypeType(aggregateId))
-                .Returns(type);
-
-            fixture.GetMock<IEventStore>()
-                .Setup(s => s.Store(It.IsAny<UncommittedEventStream>()))
-                .Returns(new CommittedEventStream(aggregateId));
 
             // setup
             var promoter = fixture.Create<AggregateRootPrototypePromoterService>();
@@ -68,7 +61,6 @@ namespace WB.Tests.Unit.Infrastructure.Prototype
             var aggregateId = Id.g1;
 
             var fixture = PrepareFixture(aggregateId);
-            fixture.GetMock<IAggregateRootCache>(); // freeze mock
 
             // setup
             var promoter = fixture.Create<AggregateRootPrototypePromoterService>();
@@ -77,8 +69,7 @@ namespace WB.Tests.Unit.Infrastructure.Prototype
             promoter.MaterializePrototypeIfRequired(aggregateId);
 
             // arrange
-            fixture.GetMock<IAggregateRootCache>()
-                .Verify(p => p.Evict(aggregateId), Times.Once);
+            Assert.That(fixture.Create<IAggregateRootCache>().GetAggregateRoot(aggregateId), Is.Null);
         }
 
         [Test]
@@ -137,17 +128,20 @@ namespace WB.Tests.Unit.Infrastructure.Prototype
                 .Verify(b => b.PublishCommittedEvents(It.IsAny<CommittedEventStream>()), Times.Once);
         }
 
-        private Fixture PrepareFixture(Guid aggregateId)
+        private Fixture PrepareFixture(Guid aggregateId, PrototypeType? prototypeType = PrototypeType.Temporary)
         {
             var fixture = Create.Other.AutoFixture();
 
             fixture.GetMock<IAggregateRootPrototypeService>()
                 .Setup(p => p.GetPrototypeType(aggregateId))
-                .Returns(PrototypeType.Temporary);
+                .Returns(prototypeType);
 
             fixture.GetMock<IEventStore>()
                 .Setup(s => s.Store(It.IsAny<UncommittedEventStream>()))
                 .Returns(new CommittedEventStream(aggregateId));
+
+            var cache = Create.Storage.NewAggregateRootCache();
+            fixture.Inject<IAggregateRootCache>(cache);
 
             return fixture;
         }

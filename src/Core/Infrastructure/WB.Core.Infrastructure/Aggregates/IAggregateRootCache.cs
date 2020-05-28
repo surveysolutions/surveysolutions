@@ -1,59 +1,61 @@
-﻿using System;
+﻿#nullable enable
+using System;
 
 namespace WB.Core.Infrastructure.Aggregates
 {
     public interface IAggregateRootCache
     {
-        AggregateRootCacheItem Get(Guid id);
-        void Set(IEventSourcedAggregateRoot aggregateRoot);
-        AggregateRootCacheItem GetOrCreate(Guid id, Func<AggregateRootCacheItem, AggregateRootCacheItem> factory);
-        
         /// <summary>
-        /// Make sure item won't be evicted from cache for extended period of time
+        /// Gets the aggregate root associated with this UUID if present.
         /// </summary>
-        /// <param name="id">Aggregate id</param>
-        /// <param name="period">Period</param>
-        void PinItem(Guid id, TimeSpan period);
+        /// <param name="aggregateId">An UUID identifying the requested aggregate root.</param>
+        /// <param name="value">The located aggregate root or null.</param>
+        /// <returns>True if the key was found.</returns>
+        bool TryGetValue(Guid aggregateId, out AggregateRootCacheItem value);
 
-        void UnpinItem(Guid id);
-        void Evict(Guid id);
+        /// <summary>
+        /// Create or overwrite an aggregate root in the cache.
+        /// </summary>
+        /// <param name="aggregateId">An objectUUID identifying the aggregate root.</param>
+        /// <param name="factory">Aggregate root cache item factory</param>
+        /// <param name="expirationPeriod">Sliding expiration period. Default is 5 minutes</param>
+        /// <returns>The newly created <see cref="AggregateRootCacheItem"/> instance.</returns>
+        AggregateRootCacheItem CreateEntry(Guid aggregateId, Func<AggregateRootCacheItem, AggregateRootCacheItem> factory = null, TimeSpan? expirationPeriod = null);
+
+        /// <summary>
+        /// Removes the aggregate root associated with the given UUID.
+        /// </summary>
+        /// <param name="aggregateId">An aggregate root UUID identifying the entry.</param>
+        void Evict(Guid aggregateId);
     }
 
-    class AggregateRootCache : IAggregateRootCache
+    public static class AggregateRootCacheExtensions
     {
-        private AggregateRootCacheItem cacheItem = null;
-
-        public AggregateRootCacheItem Get(Guid id)
+        public static AggregateRootCacheItem? Get(this IAggregateRootCache cache, Guid aggregateId)
         {
-            return cacheItem;
+            return cache.TryGetValue(aggregateId, out var item) ? item : null;
         }
 
-        public void Set(IEventSourcedAggregateRoot aggregateRoot)
+        public static AggregateRootCacheItem GetOrCreate(this IAggregateRootCache cache, Guid aggregateId)
         {
-            cacheItem = new AggregateRootCacheItem(aggregateRoot.EventSourceId)
+            var cacheItem = cache.TryGetValue(aggregateId, out var item) ? item : null;
+            return cacheItem ?? cache.CreateEntry(aggregateId);
+        }
+
+        public static AggregateRootCacheItem? Update(this IAggregateRootCache cache, Guid aggregateId, TimeSpan? slidingExpiration = null)
+        {
+            var item = cache.Get(aggregateId);
+
+            if (item == null)
             {
-                AggregateRoot = aggregateRoot
-            };
-        }
+                return null;
+            }
 
-        public AggregateRootCacheItem GetOrCreate(Guid id, Func<AggregateRootCacheItem, AggregateRootCacheItem> factory)
-        {
-            return 
-        }
-
-        public void PinItem(Guid id, TimeSpan period)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UnpinItem(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Evict(Guid id)
-        {
-            throw new NotImplementedException();
+            return cache.CreateEntry(aggregateId, entry =>
+            {
+                entry.Meta = item.Meta;
+                return entry;
+            }, slidingExpiration);
         }
     }
 }

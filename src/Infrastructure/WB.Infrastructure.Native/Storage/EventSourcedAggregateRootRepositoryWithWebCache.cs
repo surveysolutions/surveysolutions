@@ -1,12 +1,13 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using Microsoft.Extensions.Options;
 using Ncqrs.Domain.Storage;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Metrics;
@@ -17,6 +18,7 @@ namespace WB.Infrastructure.Native.Storage
     public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository
     {
         private readonly IEventStore eventStore;
+        private readonly IInMemoryEventStore inMemoryEventStore;
         private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
@@ -26,6 +28,7 @@ namespace WB.Infrastructure.Native.Storage
 
         public EventSourcedAggregateRootRepositoryWithWebCache(
             IEventStore eventStore,
+            IInMemoryEventStore inMemoryEventStore,
             IAggregateRootPrototypeService prototypeService,
             IDomainRepository repository,
             IServiceLocator serviceLocator,
@@ -35,6 +38,7 @@ namespace WB.Infrastructure.Native.Storage
             : base(eventStore, repository)
         {
             this.eventStore = eventStore;
+            this.inMemoryEventStore = inMemoryEventStore;
             this.prototypeService = prototypeService;
             this.serviceLocator = serviceLocator;
             this.aggregateLock = aggregateLock;
@@ -42,16 +46,15 @@ namespace WB.Infrastructure.Native.Storage
             this.schedulerOptions = schedulerOptions;
         }
 
-        public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
+        public override IEventSourcedAggregateRoot? GetLatest(Type aggregateType, Guid aggregateId)
             => this.GetLatest(aggregateType, aggregateId, null, CancellationToken.None);
 
-        public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId,
-            IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+        public override IEventSourcedAggregateRoot? GetLatest(Type aggregateType, Guid aggregateId,
+            IProgress<EventReadingProgress>? progress, CancellationToken cancellationToken)
         {
             return aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
-                var aggregateRootCacheItem = this.GetFromCache(aggregateId);
-                var aggregateRoot = aggregateRootCacheItem?.AggregateRoot;
+                var aggregateRoot = this.GetFromCache(aggregateId);
 
                 if (aggregateRoot != null)
                 {
@@ -60,8 +63,8 @@ namespace WB.Infrastructure.Native.Storage
 
                 if (this.prototypeService.IsPrototype(aggregateId))
                 {
-                    IEnumerable<CommittedEvent> events = aggregateRootCacheItem?.Events ?? new List<CommittedEvent>();
-                    aggregateRoot = base.repository.Load(aggregateType, aggregateId, events);
+                    var events = this.inMemoryEventStore.Read(aggregateId, 0);
+                    aggregateRoot = repository.Load(aggregateType, aggregateId, events);
                 }
                 else
                 {
@@ -70,26 +73,21 @@ namespace WB.Infrastructure.Native.Storage
 
                 if (aggregateRoot != null)
                 {
-                    this.memoryCache.Set(aggregateRoot);
+                    this.memoryCache.SetAggregateRoot(aggregateRoot);
                 }
 
                 return aggregateRoot;
             });
         }
 
-        private AggregateRootCacheItem GetFromCache(Guid aggregateId)
+        private IEventSourcedAggregateRoot? GetFromCache(Guid aggregateId)
         {
-            var cacheItem = memoryCache.Get(aggregateId);
+            var aggregateRoot = memoryCache.GetAggregateRoot(aggregateId);
 
-            if (cacheItem == null)
+            if (aggregateRoot == null)
             {
                 CoreMetrics.StatefullInterviewCacheMiss?.Inc();
                 return null;
-            }
-
-            if (cacheItem.AggregateRoot == null)
-            {
-                return cacheItem;
             }
 
             bool dbContainsNewEvents = false;
@@ -100,7 +98,7 @@ namespace WB.Infrastructure.Native.Storage
                 {
                     if (!dirtyChecked.Contains(aggregateId))
                     {
-                        dbContainsNewEvents = eventStore.IsDirty(aggregateId, cacheItem.AggregateRoot.Version);
+                        dbContainsNewEvents = eventStore.IsDirty(aggregateId, aggregateRoot.Version);
 
                         if (!dbContainsNewEvents)
                         {
@@ -110,17 +108,17 @@ namespace WB.Infrastructure.Native.Storage
                 }
             }
 
-            bool isDirty = cacheItem.AggregateRoot.HasUncommittedChanges() || dbContainsNewEvents;
+            bool isDirty = aggregateRoot.HasUncommittedChanges() || dbContainsNewEvents;
             if (isDirty)
             {
-                this.memoryCache.Evict(aggregateId);
+                this.memoryCache.EvictAggregateRoot(aggregateId);
                 return null;
             }
 
-            this.serviceLocator.InjectProperties(cacheItem.AggregateRoot);
+            this.serviceLocator.InjectProperties(aggregateRoot);
 
             CoreMetrics.StatefullInterviewCacheHit?.Inc();
-            return cacheItem;
+            return aggregateRoot;
         }
     }
 }

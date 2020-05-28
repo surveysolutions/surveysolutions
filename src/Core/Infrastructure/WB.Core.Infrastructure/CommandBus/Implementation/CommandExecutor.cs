@@ -17,7 +17,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly ILiteEventBus eventBus;
         private readonly IServiceLocator serviceLocator;
         private readonly IPlainAggregateRootRepository plainRepository;
-        private readonly IAggregateRootCache aggregateRootCacheCleaner;
+        private readonly IAggregateRootCache aggregateRootCache;
         private readonly ICommandsMonitoring commandsMonitoring;
         private readonly IAggregateRootPrototypePromoterService promoterService;
         private readonly IAggregateRootPrototypeService prototypeService;
@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             ILiteEventBus eventBus,
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
-            IAggregateRootCache aggregateRootCacheCleaner,
+            IAggregateRootCache aggregateRootCache,
             ICommandsMonitoring commandsMonitoring,
             IAggregateRootPrototypePromoterService promoterService,
             IAggregateRootPrototypeService prototypeService)
@@ -36,7 +36,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             this.eventBus = eventBus;
             this.serviceLocator = serviceLocator;
             this.plainRepository = plainRepository;
-            this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
+            this.aggregateRootCache = aggregateRootCache;
             this.commandsMonitoring = commandsMonitoring;
             this.promoterService = promoterService;
             this.prototypeService = prototypeService;
@@ -136,7 +136,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             catch (OnEventApplyException)
             {
                 // evict AR only if exception occured on event apply
-                aggregateRootCacheCleaner.Evict(aggregateId);
+                aggregateRootCache.EvictAggregateRoot(aggregateId);
                 throw;
             }
 
@@ -158,7 +158,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
             catch (Exception)
             {
-                aggregateRootCacheCleaner.Evict(aggregateId);
+                aggregateRootCache.EvictAggregateRoot(aggregateId);
                 throw;
             }
         }

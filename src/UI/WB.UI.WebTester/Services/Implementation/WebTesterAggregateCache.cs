@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.Caching.Memory;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.UI.WebTester.Services.Implementation
@@ -9,10 +8,8 @@ namespace WB.UI.WebTester.Services.Implementation
     {
         private readonly IEvictionNotifier notify;
 
-        public WebTesterAggregateCache(
-            IAggregateLock aggregateLock, 
-            IMemoryCache memoryCache,
-            IEvictionNotifier notify) : base(aggregateLock, memoryCache)
+        public WebTesterAggregateCache(IMemoryCache memoryCache,
+            IEvictionNotifier notify) : base(memoryCache)
         {
             this.notify = notify;
         }

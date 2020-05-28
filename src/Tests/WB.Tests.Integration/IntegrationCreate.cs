@@ -307,7 +307,7 @@ namespace WB.Tests.Integration
                     eventBus: eventBus ?? Mock.Of<IEventBus>(),
                     serviceLocator: locatorMock.Object,
                     plainRepository: Mock.Of<IPlainAggregateRootRepository>(),
-                    aggregateRootCacheCleaner: Create.Storage.NewAggregateRootCache(),
+                    aggregateRootCache: Create.Storage.NewAggregateRootCache(),
                     commandsMonitoring: Mock.Of<ICommandsMonitoring>(),
                     prototypeService: Create.Service.MockOfAggregatePrototypeService(),
                     promoterService: Mock.Of<IAggregateRootPrototypePromoterService>()
