@@ -347,11 +347,11 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public CoverInfo()
         {
-            this.IdentifyingQuestions = new List<IdentifyingQuestion>();
+            this.IdentifyingEntities = new List<IdentifyingEntity>();
             this.EntitiesWithComments = new EntityWithComment[0];
         }
 
-        public List<IdentifyingQuestion> IdentifyingQuestions { get; set; }
+        public List<IdentifyingEntity> IdentifyingEntities { get; set; }
         public EntityWithComment[] EntitiesWithComments { get; set; }
         public int CommentedQuestionsCount { get; set; }
         public string SupervisorRejectComment { get; set; }

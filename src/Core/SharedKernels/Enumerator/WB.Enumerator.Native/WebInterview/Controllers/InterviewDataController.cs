@@ -116,13 +116,26 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return this.interviewEntityFactory.GetInterviewSimpleStatus(interview, IsReviewMode());
         }
 
-        private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
+        private IdentifyingEntity GetIdentifyingEntity(Guid entityId, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            var result = new IdentifyingQuestion();
-            var entityType = this.interviewEntityFactory.GetEntityType(new Identity(questionId, RosterVector.Empty), questionnaire, interview, IsReviewMode());
+            var entityIdentity = new Identity(entityId, RosterVector.Empty);
+            var entityType = this.interviewEntityFactory.GetEntityType(entityIdentity, questionnaire, interview, IsReviewMode());
 
+            if (entityType == InterviewEntityType.StaticText)
+            {
+                var staticText = interview.GetStaticText(entityIdentity);
+                return new IdentifyingStaticText()
+                {
+                    Type = entityType.ToString(),
+                    Identity = entityIdentity.ToString(),
+                    Title = staticText.Title.BrowserReadyText,
+                    AttachmentContent = questionnaire.GetAttachmentForEntity(entityId)?.ContentId
+                };
+            }
+
+            var result = new IdentifyingQuestion();
             result.Type = entityType.ToString();
-            var questionIdentity = new Identity(questionId, RosterVector.Empty);
+            var questionIdentity = entityIdentity;
             result.Identity = questionIdentity.ToString();
             var interviewQuestion = interview.GetQuestion(questionIdentity);
 
@@ -152,7 +165,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return result;
         }
 
-        public virtual InterviewEntityWithType[] GetPrefilledQuestions(Guid interviewId)
+        public virtual InterviewEntityWithType[] GetInterviewEntitiesWithTypes(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
             var questionnaire = this.GetCallerQuestionnaire(interview.QuestionnaireIdentity);
@@ -175,7 +188,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (statefulInterview == null) return null;
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
 
-            InterviewEntityWithType[] interviewEntityWithTypes = GetPrefilledQuestions(interviewId)
+            InterviewEntityWithType[] interviewEntityWithTypes = GetInterviewEntitiesWithTypes(interviewId)
                 .Union(ActionButtonsDefinition)
                 .ToArray();
 
@@ -459,7 +472,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var interview = this.GetCallerInterview(interviewId);
             if (interview == null) return false;
 
-            return this.GetCallerQuestionnaire(interview.QuestionnaireIdentity).GetPrefilledQuestions().Any()
+            return this.GetCallerQuestionnaire(interview.QuestionnaireIdentity).GetPrefilledEntities().Any()
                 || interview.GetAllCommentedEnabledQuestions().Any()
                 || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
         }
@@ -562,14 +575,14 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }).ToArray();
 
             var interviewEntityWithTypes = questionnaire
-                .GetPrefilledQuestions()
-                .Select(x => this.GetIdentifyingQuestion(x, interview, questionnaire))
+                .GetPrefilledEntities()
+                .Select(x => this.GetIdentifyingEntity(x, interview, questionnaire))
                 .ToList();
 
             var completeInfo = new CoverInfo
             {
                 EntitiesWithComments = entitiesWithComments,
-                IdentifyingQuestions = interviewEntityWithTypes,
+                IdentifyingEntities = interviewEntityWithTypes,
                 CommentedQuestionsCount = commentedQuestionsCount,
                 SupervisorRejectComment = interview.SupervisorRejectComment
             };

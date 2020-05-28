@@ -47,33 +47,33 @@
             </div>
         </div>
 
-        <template v-for="question in questions">
+        <template v-for="entity in identifyingEntities">
             <div class="wrapper-info"
-                v-if="question.isReadonly"
-                :key="question.id">
+                v-if="entity.isReadonly"
+                :key="entity.id">
                 <div class="container-info"
-                    :id="question.identity">
-                    <h5 v-html="question.title"></h5>
+                    :id="entity.identity">
+                    <h5 v-html="entity.title"></h5>
                     <p>
-                        <b v-if="question.type == 'Gps'">
-                            <a :href="getGpsUrl(question)"
-                                target="_blank">{{question.answer}}</a>
+                        <b v-if="entity.type == 'Gps'">
+                            <a :href="getGpsUrl(entity)"
+                                target="_blank">{{entity.answer}}</a>
                             <br/>
-                            <img v-bind:src="googleMapPosition(question.answer)"
+                            <img v-bind:src="googleMapPosition(entity.answer)"
                                 draggable="false" />
                         </b>
-                        <b v-else-if="question.type == 'DateTime'"
+                        <b v-else-if="entity.type == 'DateTime'"
                             v-dateTimeFormatting
-                            v-html="question.answer">
+                            v-html="entity.answer">
                         </b>
-                        <b v-else>{{question.answer}}</b>
+                        <b v-else>{{entity.answer}}</b>
                     </p>
                 </div>
             </div>
             <component v-else
-                :key="question.identity"
-                v-bind:is="question.type"
-                v-bind:id="question.identity"
+                :key="entity.identity"
+                v-bind:is="entity.type"
+                v-bind:id="entity.identity"
                 fetchOnMount></component>
         </template>
 
@@ -117,8 +117,8 @@ export default {
                 ? this.$t('WebInterviewUI.CoverFirstComments', { count: this.$store.state.webinterview.coverInfo.entitiesWithComments.length})
                 : this.$t('WebInterviewUI.CoverComments')
         },
-        questions() {
-            return this.$store.state.webinterview.coverInfo.identifyingQuestions
+        identifyingEntities() {
+            return this.$store.state.webinterview.coverInfo.identifyingEntities
         },
         commentedQuestions() {
             return this.$store.state.webinterview.coverInfo.entitiesWithComments || []
