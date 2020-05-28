@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             invitation.InterviewWasCreated(interviewId);
             invitationStorage.Store(invitation, null);
 
-            if (Guid.TryParse(interviewId, out var aggregateId))
+            if (interviewId != null && Guid.TryParse(interviewId, out var aggregateId))
             {
                 promoterService.MaterializePrototypeIfRequired(aggregateId);
             }
