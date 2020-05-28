@@ -35,8 +35,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             });
         }
 
-        public Task DeleteMap(string fileName) =>
-            this.mapStorageService.DeleteMap(fileName);
+        public Task<MapBrowseItem> DeleteMap(string fileName) 
+        {
+            return this.mapStorageService.DeleteMap(fileName);
+        }
+        
 
         public MapBrowseItem DeleteUserFromMap(string fileName, string userName) =>
             this.mapStorageService.DeleteMapUserLink(fileName, userName);
