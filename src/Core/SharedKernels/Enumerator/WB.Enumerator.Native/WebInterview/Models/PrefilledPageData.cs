@@ -12,7 +12,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
     public class IdentifyingStaticText : IdentifyingEntity
     {
-        public string AttachmentContent { get; set; }
     }
 
     public class IdentifyingQuestion : IdentifyingEntity

@@ -129,7 +129,6 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     Type = entityType.ToString(),
                     Identity = entityIdentity.ToString(),
                     Title = staticText.Title.BrowserReadyText,
-                    AttachmentContent = questionnaire.GetAttachmentForEntity(entityId)?.ContentId
                 };
             }
 
@@ -289,7 +288,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
 
             var sections = callerQuestionnaire.GetAllSections()
-                .Where(sec => statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)))
+                .Where(sec => 
+                    statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)) 
+                    && !callerQuestionnaire.IsCoverPage(sec))
                 .ToArray();
 
             if (sectionId == null)
