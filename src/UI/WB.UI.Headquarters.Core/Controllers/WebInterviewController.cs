@@ -231,7 +231,8 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!invitation.IsWithAssignmentResolvedByPassword() && invitation.InterviewId != null)
             {
-                return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
+                if (this.statefulInterviewRepository.Get(invitation.InterviewId) != null)
+                    return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
             }
 
             var assignment = invitation.Assignment;
@@ -261,10 +262,13 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     if (invitation.InterviewId != null)
                     {
-                        if (invitation.Interview.Status >= InterviewStatus.Completed)
-                            throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
-                                Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
-                        return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
+                        if (this.statefulInterviewRepository.Get(invitation.InterviewId) != null)
+                        {
+                            if (invitation.Interview.Status >= InterviewStatus.Completed)
+                                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
+                                    Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                            return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
+                        }
                     }
 
                     var interviewId = this.CreateInterview(assignment);
@@ -568,7 +572,6 @@ namespace WB.UI.Headquarters.Controllers
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
             var isAuthorizedUser = this.IsAuthorizedUser(interview.CurrentResponsibleId);
-
 
             if (isAuthorizedUser && interview.Status == InterviewStatus.Completed)
             {
