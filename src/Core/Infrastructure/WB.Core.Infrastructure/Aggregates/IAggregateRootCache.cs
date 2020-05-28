@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Ncqrs.Eventing;
-using WB.Core.Infrastructure.Services;
 
 namespace WB.Core.Infrastructure.Aggregates
 {
@@ -22,29 +19,41 @@ namespace WB.Core.Infrastructure.Aggregates
         void Evict(Guid id);
     }
 
-    public class AggregateRootCacheItem
+    class AggregateRootCache : IAggregateRootCache
     {
-        public AggregateRootCacheItem(Guid id)
+        private AggregateRootCacheItem cacheItem = null;
+
+        public AggregateRootCacheItem Get(Guid id)
         {
-            this.Id = id;
+            return cacheItem;
         }
 
-        public Guid Id { get; }
-
-        public IEventSourcedAggregateRoot AggregateRoot { get; set; }
-        public IEnumerable<CommittedEvent> Events { get; set; }
-        public PrototypeType? PrototypeType { get; set; }
-
-        public AggregateRootCacheItem SetPrototypeType(PrototypeType? prototypeType)
+        public void Set(IEventSourcedAggregateRoot aggregateRoot)
         {
-            PrototypeType = prototypeType;
-            return this;
+            cacheItem = new AggregateRootCacheItem(aggregateRoot.EventSourceId)
+            {
+                AggregateRoot = aggregateRoot
+            };
         }
 
-        public AggregateRootCacheItem SetEvents(IEnumerable<CommittedEvent> events)
+        public AggregateRootCacheItem GetOrCreate(Guid id, Func<AggregateRootCacheItem, AggregateRootCacheItem> factory)
         {
-            Events = events;
-            return this;
+            return 
+        }
+
+        public void PinItem(Guid id, TimeSpan period)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnpinItem(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Evict(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -44,6 +44,10 @@ namespace WB.Core.Infrastructure
             return (TItem)result;
         }
 
+
+        /// <summary>
+        /// Events created during prototype phase are marked with 'prototype' origin
+        /// </summary>
         public static bool IsPrototype<T>(this IPublishedEvent<T> @event) where T : IEvent
         {
             return string.Equals(@event.Origin, "prototype", StringComparison.OrdinalIgnoreCase);
