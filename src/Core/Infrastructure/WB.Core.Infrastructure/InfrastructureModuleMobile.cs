@@ -20,6 +20,7 @@ namespace WB.Core.Infrastructure
             registry.BindToRegisteredInterface<IEventSourcedAggregateRootRepositoryCacheCleaner, IEventSourcedAggregateRootRepositoryWithCache>(); 
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
+            registry.Bind<IAggregateRootCache, AggregateRootCache>();
             registry.BindAsSingleton<ICommandsMonitoring, TraceCommandsMonitoring>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
             registry.Bind<IInScopeExecutor, NoScopeInScopeExecutor>();
