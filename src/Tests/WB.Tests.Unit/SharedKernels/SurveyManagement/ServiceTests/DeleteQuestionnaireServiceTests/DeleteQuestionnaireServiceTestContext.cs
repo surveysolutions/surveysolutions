@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
@@ -49,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                     new DeleteQuestionnaireJobScheduler(Mock.Of<IScheduler>()),
                     Mock.Of<IInvitationsDeletionService>(),
-                    Mock.Of<IAggregateRootCacheCleaner>(),
+                    Mock.Of<IAggregateRootCache>(),
                     assignmentsToDeleteFactory ?? Mock.Of<IAssignmentsToDeleteFactory>(f => f.LoadBatch(It.IsAny<Guid>(), It.IsAny<long>()) == Enumerable.Empty<Assignment>().ToList()),
                     Mock.Of<IReusableCategoriesStorage>());
         }

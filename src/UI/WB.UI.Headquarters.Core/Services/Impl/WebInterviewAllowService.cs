@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -15,7 +16,7 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly EventBusSettings eventBusSettings;
+        private readonly IAggregateRootPrototypeService prototypeService;
 
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
@@ -36,43 +37,43 @@ namespace WB.UI.Headquarters.Services.Impl
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IAuthorizedUser authorizedUser,
-            EventBusSettings EventBusSettings)
+            IAggregateRootPrototypeService prototypeService)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
-            this.eventBusSettings = EventBusSettings;
+            this.prototypeService = prototypeService;
         }
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
         {
-            if(this.eventBusSettings.IgnoredAggregateRoots.Contains(interviewId))
-                if (!this.authorizedUser.IsHeadquarter && !this.authorizedUser.IsAdministrator)
-                {
-                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
-                }
-                else
+            if (Guid.TryParse(interviewId, out var id))
+            {
+                if (this.prototypeService.IsPrototype(id))
                 {
                     return;
                 }
+            }
 
             var interview = statefulInterviewRepository.Get(interviewId);
 
             if (interview == null)
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, 
+                    Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
             if (!AllowedInterviewStatuses.Contains(interview.Status))
-                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, 
+                    Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
 
             if (this.authorizedUser.IsInterviewer)
             {
-                if (interview.CurrentResponsibleId == this.authorizedUser.Id)
-                    return;
-                else
+                if (interview.CurrentResponsibleId != this.authorizedUser.Id)
                 {
                     throw new InterviewAccessException(InterviewAccessExceptionReason.Forbidden,
                         Enumerator.Native.Resources.WebInterview.Error_Forbidden);
                 }
+                else
+                    return;
             }
 
             QuestionnaireIdentity questionnaireIdentity = interview.QuestionnaireIdentity;

@@ -42,6 +42,7 @@ using WB.Infrastructure.Native.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Storage;
@@ -107,6 +108,9 @@ namespace WB.Core.BoundedContexts.Designer
 
             registry.Bind<IDesignerQuestionnaireStorage, DesignerQuestionnaireStorage>();
             registry.Bind<IUserManager, DesignerUserManager>();
+
+            registry.Bind<IAggregateRootPrototypeService, DummyAggregateRootPrototypeService>();
+            registry.Bind<IAggregateRootPrototypePromoterService, DummyAggregateRootPrototypePromoterService>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using System;
-using System.Linq;
 
 namespace WB.Core.Infrastructure.Aggregates
 {

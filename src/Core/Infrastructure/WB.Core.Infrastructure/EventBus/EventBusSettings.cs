@@ -2,25 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.CustomCollections;
 
 namespace WB.Core.Infrastructure.EventBus
 {
     public class EventBusSettings
     {
-        public EventBusSettings()
-        {
-            this.IgnoredAggregateRoots = new List<string>();
-            this.EventHandlerTypesWithIgnoredExceptions=new Type[0];
-            this.DisabledEventHandlerTypes = new Type[0];
-        }
-
-        public Type[] DisabledEventHandlerTypes { get; set; }
-        public Type[] EventHandlerTypesWithIgnoredExceptions { get; set; }        
-        public List<string> IgnoredAggregateRoots { get; set; }
-
-        public bool IsIgnoredAggregate(Guid id)
-        {
-            return this.IgnoredAggregateRoots.Contains(id.FormatGuid(), StringComparer.OrdinalIgnoreCase);
-        }
+        public Type[] DisabledEventHandlerTypes { get; set; } = Array.Empty<Type>();
+        public Type[] EventHandlerTypesWithIgnoredExceptions { get; set; } = Array.Empty<Type>();
     }
 }
