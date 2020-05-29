@@ -166,6 +166,12 @@
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
 &lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Reject to original responsible</value>
+  </data>
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Reject and choose new responsible</value>
+  </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;
 &lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
