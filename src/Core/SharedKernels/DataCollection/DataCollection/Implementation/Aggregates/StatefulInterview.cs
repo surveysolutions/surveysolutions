@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Ncqrs;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
@@ -16,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -26,8 +29,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public StatefulInterview(
             ISubstitutionTextFactory substitutionTextFactory,
             IInterviewTreeBuilder treeBuilder,
-            IQuestionOptionsRepository optionsRepository)
-            : base(substitutionTextFactory, treeBuilder, optionsRepository)
+            IQuestionOptionsRepository optionsRepository,
+            IClock clock)
+            : base(substitutionTextFactory, treeBuilder, optionsRepository, clock)
         {
         }
 
@@ -162,22 +166,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.IsCompleted = true;
         }
 
-        private void Apply(InterviewPaused @event)
-        {
-        }
-
-        private void Apply(InterviewResumed @event)
-        {
-        }
-
-        private void Apply(InterviewOpenedBySupervisor @event)
-        {
-        }
-
-        private void Apply(InterviewClosedBySupervisor @event)
-        {
-        }
-
         protected override void Apply(InterviewRejected @event)
         {
             base.Apply(@event);
@@ -219,6 +207,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var question = this.Tree.GetQuestion(questionIdentity);
             return question.GetAnswerAsString(cultureInfo ?? CultureInfo.InvariantCulture);
+        }
+
+        protected override void OnEventApplied(UncommittedEvent appliedEvent)
+        {
+            base.OnEventApplied(appliedEvent);
+            if (appliedEvent.Payload is QuestionAnswered questionAnswered)
+            {
+                this.properties.LastAnswerDateUtc = questionAnswered.AnswerTimeUtc;
+            }
         }
 
         public bool HasErrors { get; private set; }
@@ -959,28 +956,64 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Pause(PauseInterviewCommand command)
         {
-            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
-            {
-                ApplyEvent(new InterviewPaused(command.UserId, command.OriginDate));
-            }
+            ApplyEvent(new InterviewPaused(command.UserId, command.OriginDate));
         }
 
         public void Resume(ResumeInterviewCommand command)
         {
-            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
+            if (this.properties.LastResumedUtc.HasValue)
             {
-                ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate));
+                DateTime closePreviousNonClosedSessionDate = this.properties.LastResumedUtc.Value.AddMinutes(15);
+                
+                if (this.properties.LastAnswerDateUtc > closePreviousNonClosedSessionDate)
+                {
+                    closePreviousNonClosedSessionDate = this.properties.LastAnswerDateUtc.Value;
+                }
+                
+                ApplyEvent(new InterviewPaused(command.UserId, closePreviousNonClosedSessionDate));
             }
+            
+            ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate));
         }
 
-        public void CloseBySupevisor(CloseInterviewBySupervisorCommand command)
+        public void CloseBySupervisor(CloseInterviewBySupervisorCommand command)
         {
             ApplyEvent(new InterviewClosedBySupervisor(command.UserId, command.OriginDate));
         }
 
-        public void OpenBySupevisor(OpenInterviewBySupervisorCommand command)
+        public void OpenBySupervisor(OpenInterviewBySupervisorCommand command)
         {
+            if (this.properties.LastOpenedBySupervisor > base.clock.UtcNow().AddMinutes(15))
+            {
+                DateTime closePreviousNonClosedSessionDate = this.properties.LastOpenedBySupervisor.Value.AddMinutes(15);
+                ApplyEvent(new InterviewClosedBySupervisor(command.UserId, closePreviousNonClosedSessionDate));
+            }
+            
             ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.OriginDate));
+        }
+        
+        private void Apply(InterviewPaused @event)
+        {
+            this.properties.LastPausedUtc = @event.UtcTime;
+            this.properties.LastResumedUtc = null;
+        }
+
+        private void Apply(InterviewResumed @event)
+        {
+            this.properties.LastResumedUtc = @event.UtcTime;
+            this.properties.LastPausedUtc = null;
+        }
+
+        private void Apply(InterviewOpenedBySupervisor @event)
+        {
+            this.properties.LastOpenedBySupervisor = @event.OriginDate?.UtcDateTime;
+            this.properties.LastClosedBySupervisor = null;
+        }
+
+        private void Apply(InterviewClosedBySupervisor @event)
+        {
+            this.properties.LastClosedBySupervisor = @event.OriginDate?.UtcDateTime;
+            this.properties.LastOpenedBySupervisor = null;
         }
     }
 }

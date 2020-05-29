@@ -15,5 +15,10 @@ namespace Ncqrs
         {
             return DateTime.UtcNow;
         }
+
+        public DateTimeOffset OffsetNow()
+        {
+            return DateTimeOffset.Now;
+        }
     }
 }

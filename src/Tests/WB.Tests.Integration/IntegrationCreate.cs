@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Microsoft.Extensions.Options;
 using Moq;
+using Ncqrs;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -160,7 +161,8 @@ namespace WB.Tests.Integration
             var interview = new Interview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                optionsRepository
+                optionsRepository,
+                new DateTimeBasedClock()
                 );
             interview.ServiceLocatorInstance = serviceLocator.Object;
 
@@ -198,7 +200,8 @@ namespace WB.Tests.Integration
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Create.Storage.QuestionnaireQuestionOptionsRepository()
+                Create.Storage.QuestionnaireQuestionOptionsRepository(),
+                new DateTimeBasedClock()
                 );
 
             interview.ServiceLocatorInstance = serviceLocator.Object;
@@ -250,7 +253,8 @@ namespace WB.Tests.Integration
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                optionsRepository
+                optionsRepository,
+                new DateTimeBasedClock()
                  );
             interview.ServiceLocatorInstance = serviceLocatorMock.Object;
 

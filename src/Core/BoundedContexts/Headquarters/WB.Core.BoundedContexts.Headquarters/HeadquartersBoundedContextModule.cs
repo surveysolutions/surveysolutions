@@ -424,8 +424,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation)
                 .Handles<PauseInterviewCommand>(cmd => cmd.InterviewId, a => a.Pause)
                 .Handles<ResumeInterviewCommand>(cmd => cmd.InterviewId, a => a.Resume)
-                .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupevisor)
-                .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupevisor);
+                .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupervisor)
+                .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupervisor);
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => 
                 configuration
