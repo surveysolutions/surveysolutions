@@ -89,7 +89,8 @@
         <Confirm ref="confirmApprove"
             id="confirmApprove"
             slot="modals"
-            :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')">
+            :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')"
+            :okTitle="$t('Common.Approve')">
             <label for="txtApproveComment">
                 {{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:
             </label>
@@ -105,7 +106,8 @@
             id="rejectConfirm"
             slot="modals"
             :title="showUnapproveButton ? $t('Pages.ApproveRejectPartialView_UnapproveLabel') : $t('Pages.ApproveRejectPartialView_RejectLAbel')"
-            :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) && newResponsibleId == null">
+            :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) && newResponsibleId == null"
+            :okTitle="showUnapproveButton ? $t('Common.Unapprove') : $t('Common.Reject')">
             <form v-if="!showUnapproveButton"
                 onsubmit="return false;">
                 <div class="form-group">
