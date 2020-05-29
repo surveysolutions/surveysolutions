@@ -205,11 +205,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     state.WasCompleted = true;
                 }
-
-                if (@event.Payload.Status == InterviewStatus.Completed)
-                {
-                    LogInterviewTotalInterviewingTime(interview, @event.Payload.UtcTime ?? @event.EventTimeStamp);
-                }
             });
         }
 
