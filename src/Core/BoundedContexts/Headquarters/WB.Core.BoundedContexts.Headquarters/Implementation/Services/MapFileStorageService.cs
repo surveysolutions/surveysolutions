@@ -90,7 +90,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var tempFile = this.fileSystemAccessor.CombinePath(pathToSave, mapFile.Name);
 
-            this.fileSystemAccessor.WriteAllBytes(tempFile, mapFile.Bytes);
+            await this.fileSystemAccessor.WriteAllBytesAsync(tempFile, mapFile.Bytes)
+                .ConfigureAwait(false);
 
             try
             {
@@ -100,7 +101,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     await using FileStream file = File.OpenRead(tempFile);
                     var name = this.fileSystemAccessor.GetFileName(tempFile);
-                    await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip");
+                    await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip")
+                        .ConfigureAwait(false);
                 }
                 else
                 {
@@ -222,7 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             var fullPath = Path.GetFullPath(tempFile);
 
                             var valueGdalHome = this.geospatialConfig.Value.GdalHome;
-                            this.logger.LogInformation("Reading info from {fileName} with gdalinfo located in {home}", 
+                            this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
                                 fullPath, valueGdalHome);
                             var startInfo = Command.Read(this.fileSystemAccessor.CombinePath(valueGdalHome, "gdalinfo")
                                 , $"{fullPath} -json");
