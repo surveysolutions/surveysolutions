@@ -1204,7 +1204,8 @@ namespace WB.Tests.Abc.TestFactories
              userStorage ?? Create.Storage.UserRepository(),
              externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
              geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
-             authorizedUser ?? Mock.Of<IAuthorizedUser>()); 
+             authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+             Mock.Of<ILogger<MapFileStorageService>>()); 
         }
     }
 
