@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Maps;
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IExternalFileStorage externalFileStorage;
         private readonly IOptions<GeospatialConfig> geospatialConfig;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly ILogger<MapFileStorageService> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
 
@@ -53,7 +55,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IUserRepository userStorage,
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            ILogger<MapFileStorageService> logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -64,6 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             this.externalFileStorage = externalFileStorage;
             this.authorizedUser = authorizedUser;
+            this.logger = logger;
             this.geospatialConfig = geospatialConfig;
 
             this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
@@ -215,7 +219,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         try
                         {
-                            var startInfo = Command.Read($"gdalinfo", $"{tempFile} -json",
+                            this.logger.LogInformation("Reading info from {fileName} with gdalinfo located in {home}", 
+                                tempFile, this.geospatialConfig.Value.GdalHome);
+                            var startInfo = Command.Read("gdalinfo", $"{tempFile} -json",
                                 workingDirectory: this.geospatialConfig.Value.GdalHome);
                             var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
@@ -243,29 +249,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             //item.Wkid = 32735; // probably written in WKT format in the deserialized.CoordinateSystem but there is no parser for it
                                  */
 
-                            // alternative way to extract extent
-                            double xMin = double.MaxValue;
-                            double xMax = double.MinValue;
-                            double yMin = double.MaxValue;
-                            double yMax = double.MinValue;
-
-                            foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
+                            if (deserialized.Wgs84Extent != null)
                             {
-                                foreach (double[] coord in poli)
-                                {
-                                    xMin = Math.Min(xMin, coord[0]);
-                                    xMax = Math.Max(xMax, coord[0]);
+                                double xMin = double.MaxValue;
+                                double xMax = double.MinValue;
+                                double yMin = double.MaxValue;
+                                double yMax = double.MinValue;
 
-                                    yMin = Math.Min(yMin, coord[1]);
-                                    yMax = Math.Max(yMax, coord[1]);
+                                foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
+                                {
+                                    foreach (double[] coord in poli)
+                                    {
+                                        xMin = Math.Min(xMin, coord[0]);
+                                        xMax = Math.Max(xMax, coord[0]);
+
+                                        yMin = Math.Min(yMin, coord[1]);
+                                        yMax = Math.Max(yMax, coord[1]);
+                                    }
+
                                 }
 
-                            }
-                            item.XMinVal = xMin;
-                            item.YMinVal = yMin;
+                                item.XMinVal = xMin;
+                                item.YMinVal = yMin;
 
-                            item.XMaxVal = xMax;
-                            item.YMaxVal = yMax;
+                                item.XMaxVal = xMax;
+                                item.YMaxVal = yMax;
+                            }
 
                             item.Wkid = 4326; //geographic coordinates Wgs84
 
