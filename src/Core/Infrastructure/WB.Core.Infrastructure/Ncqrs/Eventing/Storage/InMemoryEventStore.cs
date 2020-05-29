@@ -1,9 +1,9 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Eventing.Storage
 {
@@ -12,11 +12,11 @@ namespace Ncqrs.Eventing.Storage
     /// </summary>
     public class InMemoryEventStore : IInMemoryEventStore
     {
-        private readonly IMemoryCache memoryCache;
+        private readonly IAggregateRootCache cache;
 
-        public InMemoryEventStore(IMemoryCache memoryCache)
+        public InMemoryEventStore(IAggregateRootCache cache)
         {
-            this.memoryCache = memoryCache;
+            this.cache = cache;
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
@@ -29,14 +29,19 @@ namespace Ncqrs.Eventing.Storage
             return Read(id, minVersion);
         }
 
-        private const string CachePrefix = "inm::";
-        
-        private Queue<CommittedEvent> GetFromCache(Guid id) =>
-            this.memoryCache.GetOrCreate(CachePrefix + id.ToString(), entry =>
+        private Queue<CommittedEvent> GetFromCache(Guid id)
+        {
+            var cacheItem = this.cache.GetOrCreate(id);
+
+            if (!(cacheItem.GetEvents() is Queue<CommittedEvent> events))
             {
-                entry.SlidingExpiration = TimeSpan.FromMinutes(5);
-                return new Queue<CommittedEvent>();
-            });
+                events = new Queue<CommittedEvent>();
+                cacheItem.SetEvents(events);
+                return events;
+            }
+
+            return events;
+        }
 
         public virtual int? GetLastEventSequence(Guid id) => GetFromCache(id).LastOrDefault()?.EventSequence;
 
@@ -51,20 +56,20 @@ namespace Ncqrs.Eventing.Storage
             {
                 List<CommittedEvent> result = new List<CommittedEvent>();
 
-                var events = GetFromCache(eventStream.SourceId); 
+                var events = GetFromCache(eventStream.SourceId);
 
                 foreach (var evnt in eventStream)
                 {
-                    var committedEvent = new CommittedEvent(eventStream.CommitId, 
-                        evnt.Origin, 
-                        evnt.EventIdentifier, 
-                        eventStream.SourceId, 
+                    var committedEvent = new CommittedEvent(eventStream.CommitId,
+                        evnt.Origin,
+                        evnt.EventIdentifier,
+                        eventStream.SourceId,
                         evnt.EventSequence,
-                        evnt.EventTimeStamp, 
+                        evnt.EventTimeStamp,
                         events.Count,
                         evnt.Payload);
                     events.Enqueue(committedEvent);
-                    result.Add(committedEvent);   
+                    result.Add(committedEvent);
                 }
 
                 return new CommittedEventStream(eventStream.SourceId, result);

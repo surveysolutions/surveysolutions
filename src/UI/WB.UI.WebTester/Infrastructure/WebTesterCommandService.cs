@@ -4,10 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.WebTester.Services;
@@ -17,7 +17,7 @@ namespace WB.UI.WebTester.Infrastructure
     public class WebTesterCommandService : ICommandService
     {
         private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
-        private readonly IAggregateRootCacheFiller cacheFiller;
+        private readonly IAggregateRootCache aggregateRootCache;
         private readonly IAppdomainsPerInterviewManager interviews;
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateLock aggregateLock;
@@ -26,7 +26,7 @@ namespace WB.UI.WebTester.Infrastructure
 
         public WebTesterCommandService(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
-            IAggregateRootCacheFiller cacheFiller,
+            IAggregateRootCache aggregateRootCache,
             IAppdomainsPerInterviewManager interviews,
             ILiteEventBus eventBus,
             IAggregateLock aggregateLock,
@@ -34,7 +34,7 @@ namespace WB.UI.WebTester.Infrastructure
             ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage)
         {
             this.eventSourcedRepository = eventSourcedRepository;
-            this.cacheFiller = cacheFiller;
+            this.aggregateRootCache = aggregateRootCache;
             this.interviews = interviews;
             this.eventBus = eventBus;
             this.aggregateLock = aggregateLock;
@@ -64,7 +64,7 @@ namespace WB.UI.WebTester.Infrastructure
                     aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);
                     aggregate.SetId(aggregateId);
 
-                    this.cacheFiller.Store(aggregate);
+                    this.aggregateRootCache.SetAggregateRoot(aggregate);
                 }
 
                 var events = this.interviews.Execute(command);

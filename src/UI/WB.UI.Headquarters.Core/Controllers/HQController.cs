@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
@@ -20,17 +19,17 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IQuestionnaireExporter questionnaireExporter;
-        private readonly EventBusSettings eventBusSettings;
+        private readonly IAggregateRootPrototypeService prototypeService;
 
         public HQController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
             IQuestionnaireExporter questionnaireExporter,
-            EventBusSettings eventBusSettings)
+            IAggregateRootPrototypeService prototypeService)
         {
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
             this.questionnaireExporter = questionnaireExporter;
-            this.eventBusSettings = eventBusSettings;
+            this.prototypeService = prototypeService;
         }
 
         public IActionResult Index()
@@ -56,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers
                 return NotFound(id);
             
             var newInterviewId = Guid.NewGuid();
-            this.eventBusSettings.IgnoredAggregateRoots.Add(newInterviewId.FormatGuid());
+            this.prototypeService.MarkAsPrototype(newInterviewId, PrototypeType.Permanent);
 
             var command = new CreateTemporaryInterviewCommand(newInterviewId, this.authorizedUser.Id, identity);
 
@@ -75,7 +74,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public IActionResult TakeNewAssignment(string id)
         {
-            if (!this.eventBusSettings.IsIgnoredAggregate(Guid.Parse(id)))
+            if (this.prototypeService.GetPrototypeType(Guid.Parse(id)) != PrototypeType.Permanent)
                 return NotFound();
 
             return this.View(new
