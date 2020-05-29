@@ -8,6 +8,7 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -57,9 +58,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public string SupervisorNote { get; set; }
 
-        public IEnumerable<CoverPrefilledQuestion> PrefilledQuestions { get; set; }
+        public IEnumerable<CoverPrefilledEntity> PrefilledEntities { get; set; }
 
-        public bool HasPrefilledQuestions { get; set; }
+        public bool HasPrefilledEntities { get; set; }
 
         public IList<EntityWithCommentsViewModel> CommentedEntities { get; private set; }
 
@@ -83,13 +84,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.firstSectionIdentity = new Identity(questionnaire.GetAllSections().First(), RosterVector.Empty);
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = questionnaire
-                .GetPrefilledQuestions()
-                .Where(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates)
-                .Select(questionId => new CoverPrefilledQuestion
+            this.PrefilledEntities = questionnaire
+                .GetPrefilledEntities()
+                .Where(entityId => questionnaire.IsStaticText(entityId) || 
+                                   (questionnaire.IsQuestion(entityId)
+                                    && questionnaire.GetQuestionType(entityId) != QuestionType.GpsCoordinates))
+                .Select(entityId => new CoverPrefilledEntity
                 {
-                    Question = this.CreateQuestionTitle(interviewId, new Identity(questionId, RosterVector.Empty)),
-                    Answer = interview.GetAnswerAsString(Identity.Create(questionId, RosterVector.Empty), CultureInfo.CurrentCulture)
+                    Title = this.CreatePrefilledTitle(questionnaire, interviewId, new Identity(entityId, RosterVector.Empty)),
+                    Answer = interview.GetAnswerAsString(Identity.Create(entityId, RosterVector.Empty), CultureInfo.CurrentCulture)
                 })
                 .ToList();
 
@@ -98,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var assignmentId = interview.GetAssignmentId();
             this.AssignmentId = !assignmentId.HasValue ? null : string.Format(UIResources.AssignmentN, assignmentId);
            
-            this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
+            this.HasPrefilledEntities = this.PrefilledEntities.Any();
 
             this.CountOfCommentedQuestions = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Count();
             this.CommentedEntities = entitiesListViewModelFactory.GetEntitiesWithComments(interviewId, navigationState).ToList();
@@ -114,10 +117,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.SupervisorNote = interview.GetLastSupervisorComment();
         }
 
-        private DynamicTextViewModel CreateQuestionTitle(string interviewId, Identity entityIdentity)
+        private DynamicTextViewModel CreatePrefilledTitle(IQuestionnaire questionnaire, string interviewId, Identity entityIdentity)
         {
             var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
 
+            if (questionnaire.IsStaticText(entityIdentity.Id))
+                title.InitAsStatic();
             title.Init(interviewId, entityIdentity);
 
             return title;
@@ -135,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            var prefilledQuestionsLocal = PrefilledQuestions;
+            var prefilledQuestionsLocal = PrefilledEntities;
             foreach (var prefilledQuestion in prefilledQuestionsLocal)
             {
                 prefilledQuestion.Dispose();
