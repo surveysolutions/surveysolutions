@@ -126,7 +126,8 @@
             </div>
         </DataTables>
 
-        <ModalFrame ref="assignModal">
+        <ModalFrame ref="assignModal"
+            :title="$t('Common.Assign')">
             <form onsubmit="return false;">
                 <div class="form-group"
                     v-if="getFilteredToAssign().length > 0">
@@ -187,7 +188,8 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="deleteModal">
+        <ModalFrame ref="deleteModal"
+            :title="$t('Common.Delete')">
             <div class="action-container">
                 <p
                     v-html="$t('Interviews.DeleteConfirmMessageHQ', {count: this.getFilteredToDelete().length, status1: 'Supervisor assigned', status2: 'Interviewer assigned'})"></p>
@@ -207,7 +209,7 @@
             </div>
         </ModalFrame>
         <ModalFrame ref="approveModal"
-            :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')">
+            :title="$t('Common.Approve')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
@@ -240,7 +242,7 @@
             </div>
         </ModalFrame>
         <ModalFrame ref="rejectModal"
-            :title="$t('Pages.ApproveRejectPartialView_RejectLAbel')"
+            :title="$t('Common.Reject')"
             id="rejectModel">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -307,7 +309,7 @@
             </div>
         </ModalFrame>
         <ModalFrame ref="unapproveModal"
-            :title="$t('Pages.ApproveRejectPartialView_UnapproveLabel')">
+            :title="$t('Common.Unapprove')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
