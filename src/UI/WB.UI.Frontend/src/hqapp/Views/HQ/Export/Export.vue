@@ -67,6 +67,8 @@
                                         <div class="form-group"
                                             v-if="translations.length > 0">
                                             <Typeahead
+                                                noClear
+                                                selectFirst
                                                 control-id="questionnaireTranslation"
                                                 ref="questionnaireTranslation"
                                                 data-vv-name="questionnaireTranslation"
@@ -564,8 +566,16 @@ export default {
                 },
                 fetchPolicy: 'network-only',
             })
-            const data = translationsResponse.data.questionnaires.nodes[0].translations
-            this.translations = map(data, i => {return  {key: i.id, value: i.name } })
+            const data = translationsResponse.data.questionnaires.nodes[0]
+            this.translations = map(data.translations, i => {return  {key: i.id, value: i.name } })
+            if(this.translations.length > 0) {
+                this.translations.unshift({
+                    key: null,
+                    value: data.defaultLanguageName || this.$t('WebInterview.Original_Language'),
+                }
+                )
+            }
+
         },
         resetDataAvalability() {
             this.hasInterviews = null
