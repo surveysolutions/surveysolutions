@@ -188,7 +188,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                     unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
                                     jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
 
-                                    item.Wkid = jsonObject.map.spatialReference.wkid;
+                                    item.Wkid = 4326;//extent in geographic coordinates
 
                                     var extent = jsonObject.item.extent;
 
@@ -202,8 +202,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                     {
                                         var layer = layers[0];
 
-                                        item.MaxScale = layer.maxScale;
-                                        item.MinScale = layer.minScale;
+                                        item.MaxScale = layer.maxScale ?? 0;
+                                        item.MinScale = layer.minScale ?? 0;
                                     }
 
                                 }
