@@ -206,7 +206,8 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="approveModal">
+        <ModalFrame ref="approveModal"
+            :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
@@ -239,6 +240,7 @@
             </div>
         </ModalFrame>
         <ModalFrame ref="rejectModal"
+            :title="$t('Pages.ApproveRejectPartialView_RejectLAbel')"
             id="rejectModel">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -304,7 +306,8 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="unapproveModal">
+        <ModalFrame ref="unapproveModal"
+            :title="$t('Pages.ApproveRejectPartialView_UnapproveLabel')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
@@ -1121,6 +1124,8 @@ export default {
         rejectInterview() {
             this.statusChangeComment = null
             this.newResponsibleId = null
+            this.rejectToNewResponsible = false
+
             this.$refs.rejectModal.modal({
                 keyboard: false,
             })
