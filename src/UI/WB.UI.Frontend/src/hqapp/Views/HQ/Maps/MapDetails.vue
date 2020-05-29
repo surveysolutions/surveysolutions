@@ -128,13 +128,15 @@ export default {
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
 
-                    const query = gql`query map($fileName: String!) {
-                                               map(fileName: $fileName) {
-                                                   users {
-                                                           userName
-                                                   }
+                    const query = gql`query ($fileName: String!) {
+                                        maps(where: {fileName: $fileName}) {
+                                            nodes {
+                                                users {
+                                                    userName
                                                 }
-                                        }`
+                                            }
+                                        }
+                                    }`
 
                     self.$apollo.query({
                         query,
@@ -143,7 +145,7 @@ export default {
                         },
                         fetchPolicy: 'network-only',
                     }).then(response => {
-                        const users = response.data.map.users
+                        const users = response.data.maps.nodes[0].users
                         const orderedUsers = orderBy(users, [column.data], [order_col.dir])
 
                         self.totalRows = users.length
