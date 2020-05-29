@@ -290,7 +290,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="responsibleId">New responsible id</param>
         /// <response code="200">Interview was rejected</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Target interview was in status that was not ready to be rejected</response>
+        /// <response code="406">Target interview was in status that was not ready to be rejected or selected responsible cannot be assigned</response>
+
         [HttpPatch]
         [Route("{id:guid}/reject")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
@@ -340,7 +341,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="responsibleId">New responsible id</param>
         /// <response code="200">Interview was rejected</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Target interview was in status that was not ready to be rejected</response>
+        /// <response code="406">Target interview was in status that was not ready to be rejected or selected responsible cannot be assigned</response>
+
         [HttpPatch]
         [Route("{id:guid}/hqreject")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
