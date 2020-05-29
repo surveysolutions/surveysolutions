@@ -251,18 +251,30 @@
                 </div>
 
                 <div>
-                    <p>
-                        <label
-                            class="control-label"
-                            for="rejectResponsibleId">{{ $t('Interviews.ChooseResponsibleInterviewer') }}</label>
-                        <Typeahead
-                            control-id="rejectResponsibleId"
-                            :placeholder="$t('Common.Responsible')"
-                            :value="newResponsibleId"
-                            :ajax-params="{ }"
-                            @selected="newResponsibleSelected"
-                            :fetch-url="config.api.responsible"></Typeahead>
-                    </p>
+                    <div class="options-group">
+                        <Radio
+                            :label="$t('Interviews.RejectToOriginal')"
+                            :radioGroup="false"
+                            name="rejectToNewResponsible"
+                            :value="rejectToNewResponsible"
+                            @input="rejectToNewResponsible = false; newResponsibleId = null" />
+                        <Radio
+                            :label="$t('Interviews.RejectToNewResponsible')"
+                            :radioGroup="true"
+                            name="rejectToNewResponsible"
+                            :value="rejectToNewResponsible"
+                            @input="rejectToNewResponsible = true" />
+                        <p>
+                            <Typeahead
+                                v-if="rejectToNewResponsible == true"
+                                control-id="rejectResponsibleId"
+                                :placeholder="$t('Common.Responsible')"
+                                :value="newResponsibleId"
+                                :ajax-params="{ }"
+                                @selected="newResponsibleSelected"
+                                :fetch-url="config.api.responsible"></Typeahead>
+                        </p>
+                    </div>
                 </div>
 
                 <div>
@@ -283,7 +295,7 @@
                     class="btn btn-primary"
                     role="confirm"
                     @click="rejectInterviews"
-                    :disabled="getFilteredToReject().length==0">{{ $t("Common.Reject") }}</button>
+                    :disabled="getFilteredToReject().length==0 || (rejectToNewResponsible == true && newResponsibleId == null)">{{ $t("Common.Reject") }}</button>
                 <button
                     id="rejectCancel"
                     type="button"
@@ -444,6 +456,7 @@ export default {
             responsibleId: null,
             responsibleParams: {showArchived: true, showLocked: true},
             newResponsibleId: null,
+            rejectToNewResponsible: false,
             statusChangeComment: null,
             status: null,
             selectedStatus: null,
