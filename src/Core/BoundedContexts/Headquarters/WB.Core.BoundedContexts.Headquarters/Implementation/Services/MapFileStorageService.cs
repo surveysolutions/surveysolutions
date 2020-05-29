@@ -219,9 +219,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         try
                         {
+                            var fullPath = Path.GetFullPath(tempFile);
+                            
                             this.logger.LogInformation("Reading info from {fileName} with gdalinfo located in {home}", 
-                                tempFile, this.geospatialConfig.Value.GdalHome);
-                            var startInfo = Command.Read("gdalinfo", $"{tempFile} -json",
+                                fullPath, this.geospatialConfig.Value.GdalHome);
+                            var startInfo = Command.Read("gdalinfo", $"{fullPath} -json",
                                 workingDirectory: this.geospatialConfig.Value.GdalHome);
                             var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
