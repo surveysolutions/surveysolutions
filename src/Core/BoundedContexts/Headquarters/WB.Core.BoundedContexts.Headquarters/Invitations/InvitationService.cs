@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -19,7 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     public class InvitationService : IInvitationService
     {
         private readonly ITokenGenerator tokenGenerator;
-        private readonly IAggregateRootPrototypePromoterService promoterService;
         private readonly IPlainStorageAccessor<Invitation> invitationStorage;
         private readonly IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage;
         private static CancellationTokenSource cancellationTokenSource;
@@ -27,13 +25,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public InvitationService(
             IPlainStorageAccessor<Invitation> invitationStorage,
             IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage, 
-            ITokenGenerator tokenGenerator,
-            IAggregateRootPrototypePromoterService promoterService)
+            ITokenGenerator tokenGenerator)
         {
             this.invitationStorage = invitationStorage;
             this.invitationsDistributionStatusStorage = invitationsDistributionStatusStorage;
             this.tokenGenerator = tokenGenerator;
-            this.promoterService = promoterService;
         }
         
         public int CreateInvitationForPublicLink(Assignment assignment, string interviewId)
@@ -43,12 +39,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             invitation.SetToken(token);
             invitation.InterviewWasCreated(interviewId);
             invitationStorage.Store(invitation, null);
-
-            if (interviewId != null && Guid.TryParse(interviewId, out var aggregateId))
-            {
-                promoterService.MaterializePrototypeIfRequired(aggregateId);
-            }
-
             return invitation.Id;
         }
 
