@@ -35,8 +35,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             });
         }
 
-        public MapBrowseItem GetMap(string fileName) => this.mapStorageService.GetMapById(fileName);
-
         public Task DeleteMap(string fileName) =>
             this.mapStorageService.DeleteMap(fileName);
 
