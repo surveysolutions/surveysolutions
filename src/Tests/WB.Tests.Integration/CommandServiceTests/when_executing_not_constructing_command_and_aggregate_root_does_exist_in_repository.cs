@@ -17,8 +17,8 @@ namespace WB.Tests.Integration.CommandServiceTests
 {
     internal class when_executing_not_constructing_command_and_aggregate_root_does_exist_in_repository
     {
-        private class Update : ICommand { public Guid CommandIdentifier { get; private set; } }
-        private class Updated : IEvent { }
+        private class Update2 : ICommand { public Guid CommandIdentifier { get; private set; } }
+        private class Updated2 : IEvent { }
 
         private class Aggregate : EventSourcedAggregateRoot
         {
@@ -26,14 +26,14 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             public void Update()
             {
-                this.ApplyEvent(new Updated());
+                this.ApplyEvent(new Updated2());
             }
         }
 
         [NUnit.Framework.OneTimeSetUp] public void context () {
             CommandRegistry
                 .Setup<Aggregate>()
-                .Handles<Update>(_ => aggregateId, (command, aggregate) => aggregate.Update());
+                .Handles<Update2>(_ => aggregateId, (command, aggregate) => aggregate.Update());
 
             aggregateFromRepository = new Aggregate();
 
@@ -94,10 +94,10 @@ namespace WB.Tests.Integration.CommandServiceTests
         }
 
         private void BecauseOf() =>
-            commandService.Execute(new Update(), null);
+            commandService.Execute(new Update2(), null);
 
         [NUnit.Framework.Test] public void should_publish_result_aggregate_root_event_to_event_bus () =>
-            publishedEvents.Single().Payload.Should().BeOfType<Updated>();
+            publishedEvents.Single().Payload.Should().BeOfType<Updated2>();
 
         private static CommandService commandService;
         private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
