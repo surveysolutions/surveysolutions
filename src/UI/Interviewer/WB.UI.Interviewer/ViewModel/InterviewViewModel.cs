@@ -117,27 +117,26 @@ namespace WB.UI.Interviewer.ViewModel
                 var interview = interviewRepository.Get(this.InterviewId);
                 if (interview == null) return;
 
-                if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
+                lock (ThrottlingLock)
                 {
-                    lock (ThrottlingLock)
+                    PauseThread?.Abort();
+                    if (pendingPause == null)
                     {
-                        PauseThread?.Abort();
-                        if (pendingPause == null)
-                        {
-                            commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
-                        }
-                        else
-                        {
-                            var delay = DateTimeOffset.Now - pendingPause.OriginDate;
-                            if (delay > PauseResumeThrottling && pendingPause.InterviewId == interviewId)
-                            {
-                                commandService.Execute(pendingPause);
-                                commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
-                            }
-                        }
-
-                        pendingPause = null;
+                        commandService.Execute(new ResumeInterviewCommand(interviewId,
+                            Principal.CurrentUserIdentity.UserId));
                     }
+                    else
+                    {
+                        var delay = DateTimeOffset.Now - pendingPause.OriginDate;
+                        if (delay > PauseResumeThrottling && pendingPause.InterviewId == interviewId)
+                        {
+                            commandService.Execute(pendingPause);
+                            commandService.Execute(new ResumeInterviewCommand(interviewId,
+                                Principal.CurrentUserIdentity.UserId));
+                        }
+                    }
+
+                    pendingPause = null;
                 }
 
                 if (IsAudioRecordingEnabled == true && !isAuditStarting)
@@ -178,15 +177,12 @@ namespace WB.UI.Interviewer.ViewModel
                 {
                     var interviewId = interview.Id;
 
-                    if (!interview.IsCompleted)
-                    {
-                        pendingPause = new PauseInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId);
-                        var cmdid = pendingPause.CommandIdentifier; // to make sure it's a same command
+                    pendingPause = new PauseInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId);
+                    var cmdid = pendingPause.CommandIdentifier; // to make sure it's a same command
 
-                        // discard - c# feature to ignore warning on non awaited Task
-                        PauseThread = new Thread(() => { PauseInterview(interviewId, cmdid); });
-                        PauseThread.Start();
-                    }
+                    // discard - c# feature to ignore warning on non awaited Task
+                    PauseThread = new Thread(() => { PauseInterview(interviewId, cmdid); });
+                    PauseThread.Start();
 
                     auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
