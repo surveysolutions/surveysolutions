@@ -44,11 +44,11 @@
         <View style="@style/Interview_Entity_Divider" />
       
         <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical"
-                      local:MvxBind="Visible HasPrefilledQuestions">
+                      local:MvxBind="Visible HasPrefilledEntities">
             <MvxLinearLayout
                       android:orientation="vertical"
                       style="@style/Interview_Cover_Prefilled_Answers"
-                      local:MvxBind="ItemsSource PrefilledQuestions"
+                      local:MvxBind="ItemsSource PrefilledEntities"
                       local:MvxItemTemplate="@layout/interview_cover_prefilled_question_template" />
         </LinearLayout>
       
