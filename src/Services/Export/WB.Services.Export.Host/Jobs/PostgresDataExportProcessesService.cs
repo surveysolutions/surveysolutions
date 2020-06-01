@@ -87,7 +87,7 @@ namespace WB.Services.Export.Host.Jobs
         public async Task<DataExportProcessArgs> GetProcessAsync(long processId)
         {
             var job = await this.jobService.GetJobAsync(processId);
-            if (job == null && job.Tenant != this.tenantContext.Tenant.Id.Id) return null;
+            if (job == null || job.Tenant != this.tenantContext.Tenant.Id.Id) return null;
 
             return AsDataExportProcessArgs(job);
         }
