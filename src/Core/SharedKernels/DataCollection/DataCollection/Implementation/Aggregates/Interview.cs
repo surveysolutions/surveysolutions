@@ -2437,7 +2437,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyUpdateAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid responsibleId)
         {
-            var now = this.clock.OffsetNow();
+            var now = this.clock.DateTimeOffsetNow();
             foreach (var diffByQuestion in diffByQuestions)
             {
                 var changedQuestion = diffByQuestion.ChangedNode;
