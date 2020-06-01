@@ -15,7 +15,7 @@ namespace Ncqrs.Tests
         [Test]
         public void When_getting_the_current_time_it_should_be_a_utc_kind()
         {
-            var clock = new DateTimeBasedClock();
+            var clock = new SystemClock();
             var currentTime = clock.UtcNow();
 
             Assert.That(currentTime.Kind, Is.EqualTo(DateTimeKind.Utc));
@@ -24,7 +24,7 @@ namespace Ncqrs.Tests
         [Test]
         public void When_getting_the_current_time_it_should_be_the_same_as_the_result_from_the_DateTime_class()
         {
-            var clock = new DateTimeBasedClock();
+            var clock = new SystemClock();
             
             var currentClockTime = clock.UtcNow();
             var currentDateTimeTime = DateTime.UtcNow;
