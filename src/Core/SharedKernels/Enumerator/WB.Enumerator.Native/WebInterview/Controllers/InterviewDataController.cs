@@ -69,7 +69,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             
             return new LanguageInfo
             {
-                OriginalLanguageName = questionnaire.DefaultLanguageName ?? Resources.WebInterview.Original_Language,
+                OriginalLanguageName = string.IsNullOrEmpty(questionnaire.DefaultLanguageName) ? Resources.WebInterview.Original_Language : questionnaire.DefaultLanguageName,
                 Languages = questionnaire.GetTranslationLanguages(),
                 CurrentLanguage = statefulInterview.Language
             };
