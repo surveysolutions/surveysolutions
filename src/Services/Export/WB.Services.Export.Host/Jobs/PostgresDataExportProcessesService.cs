@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -66,38 +63,28 @@ namespace WB.Services.Export.Host.Jobs
             }
         }
         
-        public async Task<List<DataExportProcessArgs>> GetAllProcesses(bool runningOnly = true)
+        public async Task<List<DataExportProcessArgs>> GetAllProcessesAsync(bool runningOnly = true, CancellationToken token = default)
         {
+            await tenantDbContext.EnsureMigrated(token);
+
             var jobItems = runningOnly
                 ? await this.jobService.GetRunningOrQueuedJobs(tenantContext.Tenant)
                 : await this.jobService.GetAllJobsAsync(tenantContext.Tenant);
 
-            return await AsDataExportProcesses(jobItems);
-        }
-
-        private async Task EnsureMigrated(CancellationToken cancellationToken)
-        {
-            if (this.tenantDbContext.Database.IsNpgsql())
-            {
-                await this.tenantDbContext.CheckSchemaVersionAndMigrate(cancellationToken);
-                await this.tenantDbContext.SetContextSchema(cancellationToken);
-            }
+            return AsDataExportProcesses(jobItems).ToList();
         }
 
         private HashSet<string> deletedQuestionnaires;
-        private HashSet<string> DeletedQuestionnaires =>
-             deletedQuestionnaires ??= this.tenantDbContext.GeneratedQuestionnaires
-                    .Where(q => q.DeletedAt != null)
-                    .Select(q => q.Id)
-                    .ToHashSet();
+        private HashSet<string> DeletedQuestionnaires => deletedQuestionnaires ??= this.tenantDbContext.GeneratedQuestionnaires
+            .Where(q => q.DeletedAt != null)
+            .Select(q => q.Id)
+            .ToHashSet();
 
-        private async Task<List<DataExportProcessArgs>> AsDataExportProcesses(IEnumerable<JobItem> jobItems, 
-            CancellationToken cancellationToken = default)
+        private IEnumerable<DataExportProcessArgs> AsDataExportProcesses(IEnumerable<JobItem> jobItems)
         {
-            await EnsureMigrated(cancellationToken);
             return jobItems.Select(j => AsDataExportProcessArgs(j))
                 .Where(d => !DeletedQuestionnaires.Contains(d.ExportSettings.QuestionnaireId.Id))
-                .ToList();
+                .ToArray();
         }
 
         public async Task<DataExportProcessArgs> GetProcessAsync(long processId)
@@ -139,11 +126,11 @@ namespace WB.Services.Export.Host.Jobs
             args.ProcessId = job.Id;
             return args;
         }
-
         public async Task<List<DataExportProcessArgs>> GetProcessesAsync(long[] processIds)
         {
             var jobs = await this.jobService.GetJobsAsync(processIds);
-            return await AsDataExportProcesses(jobs);
+            await this.tenantDbContext.EnsureMigrated(CancellationToken.None);
+            return AsDataExportProcesses(jobs).ToList();
         }
 
         public void UpdateDataExportProgress(long processId, int progressInPercents, TimeSpan estimatedTime = default)
