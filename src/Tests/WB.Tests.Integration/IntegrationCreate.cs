@@ -162,7 +162,7 @@ namespace WB.Tests.Integration
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
                 optionsRepository,
-                new DateTimeBasedClock()
+                new SystemClock()
                 );
             interview.ServiceLocatorInstance = serviceLocator.Object;
 
@@ -201,7 +201,7 @@ namespace WB.Tests.Integration
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
                 Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                new DateTimeBasedClock()
+                new SystemClock()
                 );
 
             interview.ServiceLocatorInstance = serviceLocator.Object;
@@ -254,7 +254,7 @@ namespace WB.Tests.Integration
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
                 optionsRepository,
-                new DateTimeBasedClock()
+                new SystemClock()
                  );
             interview.ServiceLocatorInstance = serviceLocatorMock.Object;
 

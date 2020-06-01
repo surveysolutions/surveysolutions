@@ -58,7 +58,7 @@ namespace WB.Tests.Abc.TestFactories
                 textFactory ?? textFactoryMock.Object,
                 Create.Service.InterviewTreeBuilder(),
                 Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                new DateTimeBasedClock()
+                new SystemClock()
                 );
 
             interview.ServiceLocatorInstance = serviceLocator.Object;
@@ -147,7 +147,7 @@ namespace WB.Tests.Abc.TestFactories
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
                 Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                clock ?? new DateTimeBasedClock());
+                clock ?? new SystemClock());
 
             statefulInterview.ServiceLocatorInstance = serviceLocator.Object;
 
@@ -186,7 +186,7 @@ namespace WB.Tests.Abc.TestFactories
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
                 Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                new DateTimeBasedClock()
+                new SystemClock()
                 );
             statefulInterview.ServiceLocatorInstance = serviceLocator.Object;
 

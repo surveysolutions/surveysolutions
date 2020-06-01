@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var lastAnswerDate = firstResume.AddDays(5);
             var secondResume = firstResume.AddYears(1);
 
-            var clock = Mock.Of<Ncqrs.IClock>(c => c.OffsetNow() == lastAnswerDate);
+            var clock = Mock.Of<Ncqrs.IClock>(c => c.DateTimeOffsetNow() == lastAnswerDate);
             
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: interviewId,
                 questionnaire: Create.Entity.QuestionnaireDocumentWithOneQuestion(questionId),

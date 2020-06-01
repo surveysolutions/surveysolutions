@@ -181,7 +181,7 @@ namespace WB.Tests.Integration.InterviewTests
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
                 Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                new DateTimeBasedClock()
+                new SystemClock()
                 );
 
             interview.ServiceLocatorInstance = serviceLocatorMock.Object;
