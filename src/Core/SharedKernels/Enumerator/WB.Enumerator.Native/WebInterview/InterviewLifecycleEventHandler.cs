@@ -3,7 +3,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Ncqrs.Eventing;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
