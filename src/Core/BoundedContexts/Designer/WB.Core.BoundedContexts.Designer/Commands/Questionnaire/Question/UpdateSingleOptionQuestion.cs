@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid? cascadeFromQuestionId,
             List<ValidationCondition> validationConditions,
             string linkedFilterExpression,
-            bool showAsList,
+            bool? showAsList,
             int? showAsListThreshold,
             Guid? categoriesId)
             : base(
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public int? ShowAsListThreshold { get; set; }
 
-        public bool ShowAsList { get; set; }
+        public bool? ShowAsList { get; set; }
 
         public bool IsFilteredCombobox { get; set; }
 
