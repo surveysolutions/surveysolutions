@@ -250,7 +250,12 @@ namespace WB.Enumerator.Native.WebInterview
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
 
         public void Handle(IPublishedEvent<TranslationSwitched> evnt)
-            => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        {
+            if (!evnt.IsPrototype())
+            {
+                this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+            }
+        }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
