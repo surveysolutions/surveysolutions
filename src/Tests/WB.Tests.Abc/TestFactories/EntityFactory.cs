@@ -2076,7 +2076,8 @@ namespace WB.Tests.Abc.TestFactories
         };
 
         public PreloadingAssignmentRow PreloadingAssignmentRow(string fileName,
-            AssignmentResponsible responsible = null, AssignmentQuantity quantity = null,
+            AssignmentResponsible responsible = null, 
+            AssignmentQuantity quantity = null,
             AssignmentRosterInstanceCode[] rosterInstanceCodes = null,
             AssignmentInterviewId interviewId = null,
             string questionnaireOrRosterName = null,
