@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
         public void When_section_disabled_and_hide_if_disabled_Then_view_model_of_that_section_should_not_be_visible()
         {
             //arrange
-            var section1Id = Id.g1;
+            var section1Id = Id.g4;
             var disabledSectionId = Id.g2;
             var section3Id = Id.g3;
 
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
         public void When_section_disabled_and_set_hide_if_disabled_for_questionnaire_Then_view_model_of_that_section_should_not_be_visible()
         {
             //arrange
-            var section1Id = Id.g1;
+            var section1Id = Id.g4;
             var disabledSectionId = Id.g2;
             var section3Id = Id.g3;
 
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
         public void When_section_disabled_and_hide_if_disabled_for_questionnaire_is_not_set_Then_view_model_of_that_section_should_be_visible()
         {
             //arrange
-            var section1Id = Id.g1;
+            var section1Id = Id.g4;
             var disabledSectionId = Id.g2;
             var section3Id = Id.g3;
 
