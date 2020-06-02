@@ -9,11 +9,13 @@ namespace WB.UI.WebTester.Infrastructure
 {
     public class WebTesterQuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
-        public Assembly Assembly { get; set; }
+        public Assembly? Assembly { get; set; }
 
 
         public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
         {
+            if(Assembly == null)
+                throw new InvalidOperationException("Assembly must not be null.");
             return Assembly;
         }
 
@@ -41,12 +43,12 @@ namespace WB.UI.WebTester.Infrastructure
             Assembly = null;
         }
 
-        public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
+        public string? GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
         {
             return null;
         }
 
-        public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
+        public byte[]? GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
             return null;
         }

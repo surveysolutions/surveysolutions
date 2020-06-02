@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Routing;
-using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.Core.BoundedContexts.Designer;
 
@@ -77,15 +76,15 @@ namespace WB.UI.Designer.BootstrapSupport
             return v;
         }
 
-        private static object GetId(this object model)
+        private static object? GetId(this object model)
         {
-            return model.GetType().GetProperty(model.IdentifierPropertyName()).GetValue(model, new object[0]);
+            return model.GetType().GetProperty(model.IdentifierPropertyName())?.GetValue(model, new object[0]);
         }
 
         public static string GetName(this object model)
         {
             var property = model.GetType().GetProperties().First(info => info.AttributeExists<DefaultAttribute>()).Name;
-            return ((string)model.GetType().GetProperty(property).GetValue(model, new object[0])) ?? string.Empty;
+            return (model.GetType().GetProperty(property)?.GetValue(model, new object[0]) as string) ?? string.Empty;
         }
 
         public static bool IsDateTimePropertyValue(this PropertyInfo prop)
@@ -152,12 +151,12 @@ namespace WB.UI.Designer.BootstrapSupport
             return true;
         }
 
-        public static T GetAttribute<T>(this Type type) where T : class
+        public static T? GetAttribute<T>(this Type type) where T : class
         {
             return type.GetCustomAttributes(typeof(T), false).FirstOrDefault() as T;
         }
 
-        public static T GetAttribute<T>(this PropertyInfo propertyInfo) where T : class
+        public static T? GetAttribute<T>(this PropertyInfo propertyInfo) where T : class
         {
             return propertyInfo.GetCustomAttributes(typeof(T), false).FirstOrDefault() as T;
         }

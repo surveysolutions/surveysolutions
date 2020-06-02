@@ -23,7 +23,6 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(denormalizerRegistry: denormalizerRegistry);
 
-            eventSourceId = Guid.NewGuid();
             eventsToPublish = new IPublishableEvent[0];
         }
 
@@ -31,11 +30,10 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         [NUnit.Framework.Test]
         public void should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream() =>
-            functionalStyleEventHandlerMock.Verify(x => x.Handle(eventsToPublish, eventSourceId), Times.Never());
+            functionalStyleEventHandlerMock.Verify(x => x.Handle(eventsToPublish), Times.Never());
 
         private static NcqrCompatibleEventDispatcher ncqrCompatibleEventDispatcher;
         private static Mock<IFunctionalEventHandler> functionalStyleEventHandlerMock;
         private static IEnumerable<IPublishableEvent> eventsToPublish;
-        private static Guid eventSourceId;
     }
 }

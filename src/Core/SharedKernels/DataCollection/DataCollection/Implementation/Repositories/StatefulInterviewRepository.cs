@@ -13,15 +13,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     {
         private readonly IEventSourcedAggregateRootRepository aggregateRootRepository;
         
-        /*
-         *IQuestionnaireStorage questionnaireRepository,
-                                         IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
-                                         ISubstitutionTextFactory substitutionTextFactory,
-                                         IInterviewTreeBuilder treeBuilder,
-                                         IQuestionOptionsRepository questionOptionsRepository
-         *
-         */
-
         public StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository)
         {
             this.aggregateRootRepository = aggregateRootRepository ?? throw new ArgumentNullException(nameof(aggregateRootRepository));

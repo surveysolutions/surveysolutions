@@ -28,7 +28,7 @@ namespace WB.Core.Synchronization.MetaInfo
             if (storedQuestionnaire == null)
                 return null;
 
-            return new InterviewMetaInfo
+            return new InterviewMetaInfo(GetFeaturedQuestionsMeta(doc, storedQuestionnaire))
             {
                 ResponsibleId = doc.UserId,
                 PublicKey = doc.Id,
@@ -38,8 +38,7 @@ namespace WB.Core.Synchronization.MetaInfo
                 CreatedOnClient = doc.CreatedOnClient,
                 Comments = doc.Comments,
                 RejectDateTime = doc.RejectDateTime,
-                InterviewerAssignedDateTime = doc.InterviewerAssignedDateTime,
-                FeaturedQuestionsMeta = GetFeaturedQuestionsMeta(doc, storedQuestionnaire)
+                InterviewerAssignedDateTime = doc.InterviewerAssignedDateTime
             };
         }
 

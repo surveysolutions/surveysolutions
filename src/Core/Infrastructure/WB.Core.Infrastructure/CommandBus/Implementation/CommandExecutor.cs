@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Services;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
@@ -17,22 +17,29 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly ILiteEventBus eventBus;
         private readonly IServiceLocator serviceLocator;
         private readonly IPlainAggregateRootRepository plainRepository;
-        private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
+        private readonly IAggregateRootCache aggregateRootCache;
         private readonly ICommandsMonitoring commandsMonitoring;
+        private readonly IAggregateRootPrototypePromoterService promoterService;
+        private readonly IAggregateRootPrototypeService prototypeService;
 
-        public CommandExecutor(IEventSourcedAggregateRootRepository eventSourcedRepository,
+        public CommandExecutor(
+            IEventSourcedAggregateRootRepository eventSourcedRepository,
             ILiteEventBus eventBus,
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            ICommandsMonitoring commandsMonitoring)
+            IAggregateRootCache aggregateRootCache,
+            ICommandsMonitoring commandsMonitoring,
+            IAggregateRootPrototypePromoterService promoterService,
+            IAggregateRootPrototypeService prototypeService)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
             this.serviceLocator = serviceLocator;
             this.plainRepository = plainRepository;
-            this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
+            this.aggregateRootCache = aggregateRootCache;
             this.commandsMonitoring = commandsMonitoring;
+            this.promoterService = promoterService;
+            this.prototypeService = prototypeService;
         }
 
         public void ExecuteCommand(ICommand command, string origin, CancellationToken cancellationToken, Guid aggregateId)
@@ -94,10 +101,16 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
-                    throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
+                    throw new CommandServiceException(
+                        $"Unable to execute not-constructing command {command.GetType().Name} " +
+                                $"because aggregate {aggregateId.FormatGuid()} does not exist.");
 
                 aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);
                 aggregate.SetId(aggregateId);
+            }
+            else if (prototypeService.IsPrototype(aggregateId))
+            {
+                promoterService.MaterializePrototypeIfRequired(aggregateId);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -123,7 +136,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             catch (OnEventApplyException)
             {
                 // evict AR only if exception occured on event apply
-                aggregateRootCacheCleaner.Evict(aggregateId);
+                aggregateRootCache.EvictAggregateRoot(aggregateId);
                 throw;
             }
 
@@ -145,7 +158,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
             catch (Exception)
             {
-                aggregateRootCacheCleaner.Evict(aggregateId);
+                aggregateRootCache.EvictAggregateRoot(aggregateId);
                 throw;
             }
         }

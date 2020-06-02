@@ -43,7 +43,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
                     default(CancellationToken));
 
         [NUnit.Framework.Test] public void should_contain_stata_script_for_insheet_file () =>
-            Assert.That(stataGeneratedContent, Does.Contain(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName)));
+            Assert.That(stataGeneratedContent, Does.Contain(string.Format("insheet using \"{0}.tab\", tab case names{1}", dataFileName, Environment.NewLine)));
 
         [NUnit.Framework.Test] public void should_contain_stata_variable_parent2_on_InterviewId_mapping () =>
             Assert.That(stataGeneratedContent, Does.Contain("label variable interview__id `\"Unique 32-character long identifier of the interview\"'"));

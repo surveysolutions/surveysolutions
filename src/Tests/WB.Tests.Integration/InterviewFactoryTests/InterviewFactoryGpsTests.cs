@@ -480,8 +480,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected void PrepareAnswers(ICollection<GpsAnswer> answers)
         {
-
-            var interviewSummaryRepositoryLocal = new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            var interviewSummaryRepositoryLocal = IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(x =>
                 x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null) == Mock.Of<IQuestionnaire>(y =>
                     y.GetQuestionType(It.IsAny<Guid>()) == QuestionType.GpsCoordinates));

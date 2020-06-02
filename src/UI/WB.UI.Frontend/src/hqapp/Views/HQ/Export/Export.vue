@@ -27,8 +27,7 @@
                                     <div class="filter-column">
                                         <h5>
                                             {{$t('DataExport.SurveyQuestionnaire')}}
-                                            <span
-                                                class="text-danger">*</span>
+                                            <span class="text-danger">*</span>
                                         </h5>
                                         <div
                                             class="form-group"
@@ -64,6 +63,22 @@
                                                 :selectFirst="true"/>
                                             <span
                                                 class="help-block">{{ errors.first('questionnaireVersion') }}</span>
+                                        </div>
+                                        <div class="form-group"
+                                            v-if="translations.length > 0">
+                                            <Typeahead
+                                                noClear
+                                                selectFirst
+                                                control-id="questionnaireTranslation"
+                                                ref="questionnaireTranslation"
+                                                data-vv-name="questionnaireTranslation"
+                                                data-vv-as="questionnaire translation"
+                                                :placeholder="$t('DataExport.QuestionnaireTranslation')"
+                                                :selectedKey="pageState.translation"
+                                                :value="questionnaireTranslation"
+                                                :values="translations"
+                                                :disabled="questionnaireVersion == null"
+                                                v-on:selected="translationSelected"/>
                                         </div>
                                     </div>
 
@@ -211,7 +226,7 @@
                                     </label>
                                 </div>
                                 <div class="radio-btn-row"
-                                    v-if="isDropboxSetUp">
+                                    v-if="isOneDriveSetUp">
                                     <input
                                         class="radio-row"
                                         type="radio"
@@ -312,7 +327,8 @@
 <script>
 import Vue from 'vue'
 import ExportProcessCard from './ExportProcessCard'
-import { filter } from 'lodash'
+import gql from 'graphql-tag'
+import { filter, toNumber, map} from 'lodash'
 
 const dataFormatNum = {Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6}
 const ExternalStorageType = {dropbox: 1, oneDrive: 2, googleDrive: 3}
@@ -325,6 +341,8 @@ export default {
             dataDestination: 'zip',
             questionnaireId: null,
             questionnaireVersion: null,
+            questionnaireTranslation: null,
+            translations: [],
             status: null,
             statuses: this.$config.model.statuses,
             isUpdatingDataAvailability: false,
@@ -404,7 +422,8 @@ export default {
                     self.dataType,
                     self.dataFormat,
                     self.dataDestination,
-                    self.status
+                    self.status,
+                    self.questionnaireTranslation
                 )
 
                 self.$store.dispatch('showProgress')
@@ -435,7 +454,8 @@ export default {
                 this.dataType,
                 this.dataFormat,
                 this.dataDestination,
-                this.status
+                this.status,
+                this.questionnaireTranslation
             )
 
             var state = {
@@ -445,6 +465,7 @@ export default {
                 },
                 format: exportParams.format,
                 interviewStatus: exportParams.status,
+                translation: exportParams.translation,
                 type: ExternalStorageType[this.dataDestination],
             }
 
@@ -471,7 +492,7 @@ export default {
             window.location = storageSettings.authorizationUri + '?' + decodeURIComponent($.param(request))
         },
 
-        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption) {
+        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption, translation) {
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
@@ -490,12 +511,14 @@ export default {
             }
 
             const status = (statusOption || {key: null}).key
+            const tr = (translation || {key: null}).key
 
             return {
                 id: questionnaireId,
                 version: questionnaireVersion,
-                format,
-                status,
+                format: format,
+                status: status,
+                translationId: tr,
             }
         },
 
@@ -510,12 +533,49 @@ export default {
             }
         },
 
-        questionnaireVersionSelected(newValue) {
+        translationSelected(newValue) {
+            this.questionnaireTranslation = newValue
+        },
+
+        async questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
-            if (this.questionnaireVersion) this.updateDataAvalability()
-            else {
+            this.translations = []
+            this.questionnaireTranslation = null
+
+            if (this.questionnaireVersion)
+                this.updateDataAvalability()
+            else
                 this.resetDataAvalability()
+
+            const query = gql`query questionnaires ($id: Uuid, $version: Long) {
+ questionnaires(id: $id, version: $version) {
+  nodes {
+    defaultLanguageName,
+    translations {
+        id, 
+        name
+    }
+  }}}`
+            if (newValue == null) return
+
+            const translationsResponse = await this.$apollo.query({
+                query,
+                variables: {
+                    id: this.questionnaireId.key,
+                    version: toNumber(newValue.key),
+                },
+                fetchPolicy: 'network-only',
+            })
+            const data = translationsResponse.data.questionnaires.nodes[0]
+            this.translations = map(data.translations, i => {return  {key: i.id, value: i.name } })
+            if(this.translations.length > 0) {
+                this.translations.unshift({
+                    key: null,
+                    value: data.defaultLanguageName || this.$t('WebInterview.Original_Language'),
+                }
+                )
             }
+
         },
         resetDataAvalability() {
             this.hasInterviews = null

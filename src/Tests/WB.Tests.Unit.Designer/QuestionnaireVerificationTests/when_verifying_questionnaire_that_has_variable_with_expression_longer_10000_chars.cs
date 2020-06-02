@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Microsoft.CodeAnalysis;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             string generationResult;
             questionnireExpressionProcessorGeneratorMock.Setup(
                 _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(), out generationResult))
-                .Returns(new GenerationResult() { Success = true, Diagnostics = new List<GenerationDiagnostic>() });
+                .Returns(new GenerationResult(success : true, diagnostics : new List<Diagnostic>() ));
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: questionnireExpressionProcessorGeneratorMock.Object);
             BecauseOf();

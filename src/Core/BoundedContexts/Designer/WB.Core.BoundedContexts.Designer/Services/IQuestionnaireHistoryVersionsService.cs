@@ -7,22 +7,22 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IQuestionnaireHistoryVersionsService
     {
-        QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId);
+        QuestionnaireDocument? GetByHistoryVersion(Guid historyReferenceId);
         
         void AddQuestionnaireChangeItem(
             Guid questionnaireId,
             Guid responsibleId,
-            string userName,
+            string? userName,
             QuestionnaireActionType actionType,
             QuestionnaireItemType targetType,
             Guid targetId,
-            string targetTitle,
-            string targetNewTitle,
+            string? targetTitle,
+            string? targetNewTitle,
             int? affectedEntries,
             DateTime? targetDateTime,
-            QuestionnaireDocument questionnaireDocument,
-            QuestionnaireChangeReference reference = null,
-            QuestionnaireChangeRecordMetadata meta = null);
+            QuestionnaireDocument? questionnaireDocument,
+            QuestionnaireChangeReference? reference = null,
+            QuestionnaireChangeRecordMetadata? meta = null);
 
         Task<bool> UpdateRevisionCommentaryAsync(string questionnaireChangeRecordId, string comment);
         Task<int> TrackQuestionnaireImportAsync(QuestionnaireDocument questionnaireDocument, string userAgent, Guid userId);

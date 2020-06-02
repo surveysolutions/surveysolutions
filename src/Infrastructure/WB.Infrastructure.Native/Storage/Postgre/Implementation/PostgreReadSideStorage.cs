@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Caching;
-using System.Threading;
+using Microsoft.Extensions.Caching.Memory;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Impl;
@@ -11,23 +10,19 @@ using NHibernate.Loader.Criteria;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Persister.Entity;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgreReadSideStorage<TEntity> : PostgreReadSideStorage<TEntity, string>,
-            IReadSideRepositoryWriter<TEntity>,
-            INativeReadSideStorage<TEntity>
+        IReadSideRepositoryWriter<TEntity>,
+        INativeReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
         public PostgreReadSideStorage(
-            IUnitOfWork unitOfWork,
-            ILogger logger,
-            IServiceLocator serviceLocator) : base(unitOfWork, logger, serviceLocator)
+            IUnitOfWork unitOfWork, IMemoryCache memoryCache) : base(unitOfWork, memoryCache)
         {
         }
     }
@@ -37,16 +32,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly ILogger logger;
-        private readonly IServiceLocator serviceLocator;
+        private readonly IMemoryCache memoryCache;
 
-        public PostgreReadSideStorage(IUnitOfWork unitOfWork,
-            ILogger logger,
-            IServiceLocator serviceLocator)
+        public PostgreReadSideStorage(IUnitOfWork unitOfWork, IMemoryCache memoryCache)
         {
             this.unitOfWork = unitOfWork;
-            this.logger = logger;
-            this.serviceLocator = serviceLocator;
+            this.memoryCache = memoryCache;
         }
 
         public virtual int Count()
@@ -54,33 +45,34 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return this.unitOfWork.Session.QueryOver<TEntity>().RowCount();
         }
 
-        static readonly MemoryCache Cache = new MemoryCache("Map key alias to id cache");
-
+        static readonly string CachePrefix = "kvAlias::" + typeof(TEntity).Name + "::";
+        
         public virtual TEntity GetById(TKey id)
         {
             if (ReadSideStorageMapping.IsPrimaryKeyAlias<TEntity, TKey>())
             {
-                var cacheKey = id.ToString();
-                var primaryKey = Cache.Get(cacheKey);
+                var cacheKey = CachePrefix + id.ToString();
 
-                if (primaryKey != null)
+                var primaryKey = memoryCache.GetOrCreateNullSafe(cacheKey, cache =>
                 {
-                    // using cached primaryKey to make use of NHibernate first-level cache
-                    return this.unitOfWork.Session.Get<TEntity>(primaryKey);
-                }
+                    var item = this.unitOfWork.Session.Query<TEntity>().GetByPrimaryKeyAlias(id);
+                    if (item == null)
+                    {
+                        return null;
+                    }
 
-                var item = this.unitOfWork.Session.Query<TEntity>().GetByPrimaryKeyAlias(id);
-                if (item == null) return item;
-
-                // getting primary key value to add to cache
-                primaryKey = this.unitOfWork.Session.SessionFactory.GetClassMetadata(typeof(TEntity)).GetIdentifier(item);
-
-                Cache.Add(cacheKey, primaryKey, new CacheItemPolicy
-                {
-                    SlidingExpiration = TimeSpan.FromMinutes(10)
+                    // getting primary key value to add to cache
+                    // we don't need there long sliding expiration, it's not a big deal to query 
+                    // metadata once a minute
+                    cache.SlidingExpiration = TimeSpan.FromMinutes(1);
+                    return this.unitOfWork.Session.SessionFactory.GetClassMetadata(typeof(TEntity))
+                        .GetIdentifier(item);
                 });
 
-                return item;
+                if (primaryKey == null) return null;
+                
+                // using cached primaryKey to make use of NHibernate first-level cache
+                return this.unitOfWork.Session.Get<TEntity>(primaryKey);
             }
 
             return this.unitOfWork.Session.Get<TEntity>(id);
@@ -131,7 +123,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             this.unitOfWork.Session.Flush();
         }
 
-        public int CountDistinctWithRecursiveIndex<TResult>(Func<IQueryOver<TEntity, TEntity>, IQueryOver<TResult, TResult>> query)
+        public int CountDistinctWithRecursiveIndex<TResult>(
+            Func<IQueryOver<TEntity, TEntity>, IQueryOver<TResult, TResult>> query)
         {
             var queryable = query.Invoke(this.unitOfWork.Session.QueryOver<TEntity>());
 
@@ -139,20 +132,21 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             var result = countQuery.UniqueResult<long>();
 
-            return (int)result;
+            return (int) result;
         }
 
         public IQuery GenerateCountRowsQuery(ICriteria criteria)
         {
             ISession session = this.unitOfWork.Session;
 
-            var criteriaImpl = (CriteriaImpl)criteria;
-            var sessionImpl = (SessionImpl)criteriaImpl.Session;
-            var factory = (SessionFactoryImpl)sessionImpl.SessionFactory;
+            var criteriaImpl = (CriteriaImpl) criteria;
+            var sessionImpl = (SessionImpl) criteriaImpl.Session;
+            var factory = (SessionFactoryImpl) sessionImpl.SessionFactory;
             var implementors = factory.GetImplementors(criteriaImpl.EntityOrClassName);
             var entityPersister = factory.GetEntityPersister(implementors[0]) as AbstractEntityPersister;
-            var outerJoinLoadable = (IOuterJoinLoadable)entityPersister; 
-            var loader = new CriteriaLoader(outerJoinLoadable, factory, criteriaImpl, implementors[0], sessionImpl.EnabledFilters);
+            var outerJoinLoadable = (IOuterJoinLoadable) entityPersister;
+            var loader = new CriteriaLoader(outerJoinLoadable, factory, criteriaImpl, implementors[0],
+                sessionImpl.EnabledFilters);
 
             if (loader.Translator.ProjectedColumnAliases.Length != 1)
             {
@@ -160,24 +154,27 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
 
             var aliasName = loader.Translator.ProjectedColumnAliases[0];
-            PropertyProjection propertyProjection = (PropertyProjection)criteriaImpl.Projection;
+            PropertyProjection propertyProjection = (PropertyProjection) criteriaImpl.Projection;
 
             var columnName = entityPersister.GetPropertyColumnNames(propertyProjection.PropertyName).First();
 
-            var result = session.CreateSQLQuery($"WITH RECURSIVE t AS ( ({loader.SqlString} ORDER BY {columnName} LIMIT 1) " +
-                                                $"UNION ALL SELECT({loader.SqlString} and {columnName} > t.{aliasName} ORDER BY {columnName} LIMIT 1) FROM t WHERE t.{aliasName} IS NOT NULL)" +
-                                                $"SELECT count(*) FROM t WHERE {aliasName} IS NOT NULL; ");
+            var result = session.CreateSQLQuery(
+                $"WITH RECURSIVE t AS ( ({loader.SqlString} ORDER BY {columnName} LIMIT 1) " +
+                $"UNION ALL SELECT({loader.SqlString} and {columnName} > t.{aliasName} ORDER BY {columnName} LIMIT 1) FROM t WHERE t.{aliasName} IS NOT NULL)" +
+                $"SELECT count(*) FROM t WHERE {aliasName} IS NOT NULL; ");
             int position = 0;
             foreach (var collectedParameter in loader.Translator.CollectedParameters)
             {
                 result.SetParameter(position, collectedParameter.Value, collectedParameter.Type);
                 position++;
             }
+
             foreach (var collectedParameter in loader.Translator.CollectedParameters)
             {
                 result.SetParameter(position, collectedParameter.Value, collectedParameter.Type);
                 position++;
             }
+
             return result;
         }
 
@@ -190,13 +187,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             return query.Invoke(this.unitOfWork.Session.Query<TEntity>());
         }
-
-        public Type ViewType => typeof(TEntity);
-
-        public string GetReadableStatus()
-        {
-            return "PostgreSQL :'(";
-        }
     }
 
     public static class ReadSideStorageMapping
@@ -204,9 +194,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         static readonly Dictionary<(Type, Type), object> aliasGetters = new Dictionary<(Type, Type), object>();
 
         public static void PropertyKeyAlias<TKey, TEntity>(this ClassMapping<TEntity> map,
-            Expression<Func<TEntity, TKey>> property, Func<TKey, Expression<Func<TEntity, bool>>> getter) where TEntity : class
+            Expression<Func<TEntity, TKey>> property, Func<TKey, Expression<Func<TEntity, bool>>> getter)
+            where TEntity : class
         {
-            var memberInfo = NHibernate.Mapping.ByCode.TypeExtensions.DecodeMemberAccessExpressionOf(property);
+            var memberInfo = TypeExtensions.DecodeMemberAccessExpressionOf(property);
             map.Property(property);
 
             var key = (memberInfo.DeclaringType, memberInfo.GetPropertyOrFieldType());
@@ -227,7 +218,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             if (aliasGetters.TryGetValue((typeof(TEntity), typeof(TKey)), out var prop))
             {
-                var property = (Func<TKey, Expression<Func<TEntity, bool>>>)prop;
+                var property = (Func<TKey, Expression<Func<TEntity, bool>>>) prop;
                 return query.SingleOrDefault(property(id));
             }
 

@@ -10,14 +10,16 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Entities.SubEntities
 {
-    [DebuggerDisplay("Question {PublicKey}")]
+    [DebuggerDisplay("{GetType().Name} {StataExportCaption} {PublicKey}")]
     public abstract class AbstractQuestion : IQuestion
     {
-        protected AbstractQuestion(string questionText = null, List<IComposite> children = null)
+        protected AbstractQuestion(string? questionText = null, List<IComposite>? children = null)
         {
+            ConditionExpression = String.Empty;
+            StataExportCaption = String.Empty;
             this.validationConditions = new List<ValidationCondition>();
             this.Properties = new QuestionProperties(false, false);
-            this.QuestionText = questionText;
+            this.QuestionText = questionText ?? String.Empty;
         }
 
         public Order? AnswerOrder { get; set; }
@@ -38,7 +40,7 @@ namespace Main.Core.Entities.SubEntities
             }
         }
 
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         public string ConditionExpression { get; set; }
 
@@ -46,19 +48,19 @@ namespace Main.Core.Entities.SubEntities
 
         public bool Featured { get; set; }
 
-        public string Instructions { get; set; }
+        public string? Instructions { get; set; }
 
-        public QuestionProperties Properties { get; set; }
+        public QuestionProperties? Properties { get; set; }
 
-        private IComposite parent;
+        private IComposite? parent;
         private IList<ValidationCondition> validationConditions;
 
-        public IComposite GetParent()
+        public IComposite? GetParent()
         {
             return this.parent;
         }
 
-        public void SetParent(IComposite parent)
+        public void SetParent(IComposite? parent)
         {
             this.parent = parent;
         }
@@ -67,17 +69,17 @@ namespace Main.Core.Entities.SubEntities
 
         public QuestionScope QuestionScope { get; set; }
 
-        public string QuestionText { get; set; }
+        public string? QuestionText { get; set; }
 
         public virtual QuestionType QuestionType { get; set; }
 
         public string StataExportCaption { get; set; }
 
-        public string VariableLabel { get; set; }
+        public string? VariableLabel { get; set; }
 
-        public string ValidationExpression { get; set; }
+        public string? ValidationExpression { get; set; }
 
-        public string ValidationMessage { get; set; }
+        public string? ValidationMessage { get; set; }
 
         public Guid? LinkedToRosterId { get; set; }
 
@@ -88,7 +90,7 @@ namespace Main.Core.Entities.SubEntities
 
         public Guid? LinkedToQuestionId { get; set; }
 
-        public string LinkedFilterExpression { get; set; }
+        public string? LinkedFilterExpression { get; set; }
 
         public bool? IsFilteredCombobox { get; set; }
 
@@ -114,7 +116,8 @@ namespace Main.Core.Entities.SubEntities
         public virtual IComposite Clone()
         {
             var question = this.MemberwiseClone() as IQuestion;
-
+            if(question ==null)
+                throw new InvalidOperationException("Cloned object is not IQuestion.");
             question.SetParent(null);
 
             // handle reference part
@@ -145,15 +148,15 @@ namespace Main.Core.Entities.SubEntities
         {
         }
 
-        public abstract T Find<T>(Guid publicKey) where T : class, IComposite;
+        public abstract T? Find<T>(Guid publicKey) where T : class, IComposite;
 
         public abstract IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
 
-        public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
+        public abstract T? FirstOrDefault<T>(Func<T, bool> condition) where T : class;
 
         public override string ToString()
         {
-            return String.Format("Question {{{0}}} '{1}'", this.PublicKey, this.QuestionText ?? "<untitled>");
+            return $"Question {{{this.PublicKey}}} '{this.QuestionText ?? "<untitled>"}'";
         }
     }
 }

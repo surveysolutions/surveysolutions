@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Web.Versions
         }
 
         public Version GetVersion() => new Version(this.ToString().Split(' ')[0]);
-        public int GetBildNumber() => FileVersionInfo.GetVersionInfo(this.assembly.Location).FilePrivatePart;
+        public int GetBuildNumber() => FileVersionInfo.GetVersionInfo(this.assembly.Location).FilePrivatePart;
 
         public static string FormatVersion(Version version)
         {
