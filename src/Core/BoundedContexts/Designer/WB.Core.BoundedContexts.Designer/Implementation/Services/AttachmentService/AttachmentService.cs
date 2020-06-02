@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             }).ToList();
         }
 
-        public string GetAttachmentContentId(Guid attachmentId)
+        public string? GetAttachmentContentId(Guid attachmentId)
         {
             return this.dbContext.AttachmentMetas.Find(attachmentId)?.ContentId;
         }

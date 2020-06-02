@@ -234,6 +234,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid QuestionnaireId => this.innerDocument.PublicKey;
 
         public string Title => this.innerDocument.Title;
+        public string DefaultLanguageName => this.innerDocument.DefaultLanguageName;
 
         public Translation Translation => this.translation;
         public string VariableName => this.innerDocument.VariableName;
@@ -381,7 +382,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            //filtered and cascadings
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
                 return questionOptionsRepository.GetOptionsForQuestion(this,

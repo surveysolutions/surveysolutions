@@ -7,12 +7,12 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
     {
         public Guid RootId { get; set; }
 
-        public string Content;
-        public string ItemType;
+        public string? Content;
+        public string? ItemType;
         public bool IsCompressed;
 
         public long ChangeTracker = 0;
 
-        public string MetaInfo;
+        public string? MetaInfo;
     }
 }

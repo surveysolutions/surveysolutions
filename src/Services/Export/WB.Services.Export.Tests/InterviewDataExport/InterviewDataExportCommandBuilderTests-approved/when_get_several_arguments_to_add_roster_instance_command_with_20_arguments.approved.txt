@@ -1,0 +1,7 @@
+﻿INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUES(@interviewId1, @rosterVector1),(@interviewId2, @rosterVector2),(@interviewId3, @rosterVector3) ON CONFLICT DO NOTHING;
+INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUES(@interviewId4, @rosterVector4),(@interviewId5, @rosterVector5),(@interviewId6, @rosterVector6) ON CONFLICT DO NOTHING;
+INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUES(@interviewId7, @rosterVector7),(@interviewId8, @rosterVector8),(@interviewId9, @rosterVector9) ON CONFLICT DO NOTHING;
+INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUES(@interviewId10, @rosterVector10),(@interviewId11, @rosterVector11),(@interviewId12, @rosterVector12) ON CONFLICT DO NOTHING;
+INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUES(@interviewId13, @rosterVector13),(@interviewId14, @rosterVector14),(@interviewId15, @rosterVector15) ON CONFLICT DO NOTHING;
+INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUES(@interviewId16, @rosterVector16),(@interviewId17, @rosterVector17),(@interviewId18, @rosterVector18) ON CONFLICT DO NOTHING;
+INSERT INTO "fakeTableName1" (interview__id, roster__vector) VALUES(@interviewId19, @rosterVector19),(@interviewId20, @rosterVector20) ON CONFLICT DO NOTHING;

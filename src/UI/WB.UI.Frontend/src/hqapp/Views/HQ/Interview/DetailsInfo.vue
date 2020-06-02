@@ -89,7 +89,8 @@
         <Confirm ref="confirmApprove"
             id="confirmApprove"
             slot="modals"
-            :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')">
+            :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')"
+            :okTitle="$t('Common.Approve')">
             <label for="txtApproveComment">
                 {{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:
             </label>
@@ -105,20 +106,35 @@
             id="rejectConfirm"
             slot="modals"
             :title="showUnapproveButton ? $t('Pages.ApproveRejectPartialView_UnapproveLabel') : $t('Pages.ApproveRejectPartialView_RejectLAbel')"
-            :disableOk="interviewerShouldbeSelected && !newResponsibleId">
-            <form v-if="interviewerShouldbeSelected"
+            :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) && newResponsibleId == null"
+            :okTitle="showUnapproveButton ? $t('Common.Unapprove') : $t('Common.Reject')">
+            <form v-if="!showUnapproveButton"
                 onsubmit="return false;">
                 <div class="form-group">
-                    <label class="control-label"
-                        for="newResponsibleId">
-                        {{ $t("Details.ChooseResponsibleInterviewer") }}
-                    </label>
-                    <Typeahead control-id="newResponsibleId"
-                        :placeholder="$t('Common.Responsible')"
-                        :value="newResponsibleId"
-                        @selected="newResponsibleSelected"
-                        :fetch-url="this.$config.model.approveReject.interviewersListUrl">
-                    </Typeahead>
+                    <Radio
+                        v-if="!interviewerShouldbeSelected"
+                        :label="$t('Interviews.RejectToOriginal')"
+                        :radioGroup="false"
+                        name="rejectToNewResponsible"
+                        :value="rejectToNewResponsible"
+                        @input="rejectToNewResponsible = false; newResponsibleId = null" />
+                    <Radio
+                        v-if="!interviewerShouldbeSelected"
+                        :label="$t('Interviews.RejectToNewResponsible')"
+                        :radioGroup="true"
+                        name="rejectToNewResponsible"
+                        :value="rejectToNewResponsible"
+                        @input="rejectToNewResponsible = true" />
+                    <p>
+                        <Typeahead
+                            v-if="rejectToNewResponsible == true || interviewerShouldbeSelected"
+                            control-id="newResponsibleId"
+                            :placeholder="$t('Common.Responsible')"
+                            :value="newResponsibleId"
+                            @selected="newResponsibleSelected"
+                            :fetch-url="this.$config.model.approveReject.interviewersListUrl">
+                        </Typeahead>
+                    </p>
                 </div>
             </form>
 
@@ -149,6 +165,7 @@ export default {
             rejectComment: '',
             commentMaxLength: 1500,
             newResponsibleId: null,
+            rejectToNewResponsible: false,
         }
     },
     methods: {
@@ -212,7 +229,7 @@ export default {
         showRejectButton() {
             return (
                 this.$config.model.approveReject.supervisorRejectAllowed ||
-        this.$config.model.approveReject.hqOrAdminRejectAllowed
+                this.$config.model.approveReject.hqOrAdminRejectAllowed
             )
         },
         lastUpdateDate() {

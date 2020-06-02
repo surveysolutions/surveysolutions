@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using MvvmCross.ViewModels;
 using Ncqrs.Eventing.Storage;
 using NLog;
@@ -112,6 +114,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IEnumeratorWorkerManager, EnumeratorWorkerManager>();
             registry.Bind<ICurrentViewModelPresenter, CurrentViewModelPresenter>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
+            registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
             SetupLoggingFacility(registry);
         }

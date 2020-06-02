@@ -1,5 +1,6 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.Aggregates;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Infrastructure
@@ -8,7 +9,10 @@ namespace WB.UI.WebTester.Infrastructure
     {
         private readonly IAppdomainsPerInterviewManager interviewManager;
 
-        public WebTesterEventStore(IAppdomainsPerInterviewManager interviewManager)
+        public WebTesterEventStore(
+            IAggregateRootCache aggregateRootCache, 
+            IAppdomainsPerInterviewManager interviewManager) 
+            : base(aggregateRootCache)
         {
             this.interviewManager = interviewManager;
         }

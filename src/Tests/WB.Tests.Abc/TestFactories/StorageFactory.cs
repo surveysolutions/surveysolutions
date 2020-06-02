@@ -1,14 +1,12 @@
-using System;
 using System.Linq;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using Main.Core.Documents;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
+using Ncqrs.Eventing.Storage;
 using SQLite;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
@@ -17,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -62,6 +61,8 @@ namespace WB.Tests.Abc.TestFactories
             NewMemoryCache(),
             Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>());
 
+        public InMemoryEventStore InMemoryEventStore() => new InMemoryEventStore(NewAggregateRootCache());
+        
         public IUserRepository UserRepository(params HqUser[] users)
             => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
 
@@ -136,7 +137,10 @@ namespace WB.Tests.Abc.TestFactories
             return result.Object;
         }
 
-        public MemoryCache NewMemoryCache() => new MemoryCache(Options.Create(new MemoryCacheOptions()));
+        private static IMemoryCache cache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+        public IMemoryCache NewMemoryCache() => cache;
+
+        public AggregateRootCache NewAggregateRootCache() => new AggregateRootCache(NewMemoryCache());
 
         public IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
         {

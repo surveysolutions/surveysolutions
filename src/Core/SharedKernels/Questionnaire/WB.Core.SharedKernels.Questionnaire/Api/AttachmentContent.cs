@@ -4,13 +4,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Api
 {
     public class AttachmentContent 
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = String.Empty;
 
-        public string ContentType { get; set; }
+        public string ContentType { get; set; } = String.Empty;
 
         public long Size { get; set; }
 
-        public byte[] Content { get; set; }
+        public byte[]? Content { get; set; }
 
         public bool IsImage()
         {

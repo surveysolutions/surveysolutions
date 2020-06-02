@@ -79,12 +79,14 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public static QuestionnaireEntityReference CreateForCategories(Guid categoriesId)
             => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Categories, categoriesId);
 
-        public static QuestionnaireEntityReference CreateFrom(IQuestionnaireEntity entity,
+        public static QuestionnaireEntityReference CreateFrom(IQuestionnaireEntity? entity,
             QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None,
             int? indexOfEntityInProperty = null)
         {
+            if(entity == null) 
+                return new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Unknown, Guid.Empty);
+            
             QuestionnaireEntityReference result;
-
             if (entity is IVariable)
                 result = CreateForVariable(entity.PublicKey);
             else if (entity is IGroup)
@@ -100,9 +102,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
 
             var section = entity;
-            while (true)
+            while (section != null)
             {
-                IComposite grandParent = section.GetParent();
+                var grandParent = section.GetParent();
                 if (grandParent?.GetParent() == null)
                 {
                     break;
@@ -113,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 }
             }
 
-            result.ChapterId = section.PublicKey;
+            result.ChapterId = section?.PublicKey;
             result.Property = property;
             result.IndexOfEntityInProperty = indexOfEntityInProperty;
 

@@ -49,7 +49,7 @@ namespace WB.UI.Tester.Activities
             },
             {
                 Resource.Id.interview_language_original,
-                TesterUIResources.MenuItem_Title_Language_Original
+                this.ViewModel.DefaultLanguageName ?? TesterUIResources.MenuItem_Title_Language_Original
             },
         };
 

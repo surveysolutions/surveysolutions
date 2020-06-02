@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
@@ -25,12 +26,12 @@ namespace WB.Services.Export.Services.Processing
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
         
-        public string GetArchiveFilePathForExportedData(ExportSettings exportSettings)
+        public async Task<string> GetArchiveFilePathForExportedDataAsync(ExportSettings exportSettings)
         {
             var exportDirectory = GetExportDirectory(exportSettings.Tenant);
             CreateIfNeeded(exportDirectory);
 
-            var fileName = this.exportFileNameService.GetFileNameForExportArchive(exportSettings);
+            var fileName = await this.exportFileNameService.GetFileNameForExportArchiveAsync(exportSettings);
 
             return Path.Combine(exportDirectory, fileName);
         }

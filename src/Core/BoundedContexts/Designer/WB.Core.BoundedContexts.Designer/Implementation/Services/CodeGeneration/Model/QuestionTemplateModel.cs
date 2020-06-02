@@ -5,12 +5,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class QuestionTemplateModel : ITemplateModel
     {
+        public QuestionTemplateModel(Guid id, string rosterScopeName, string typeName, string variableName,
+            string parentScopeTypeName)
+        {
+            Id = id;
+            TypeName = typeName;
+            VariableName = variableName;
+            ParentScopeTypeName = parentScopeTypeName;
+            RosterScopeName = rosterScopeName;
+
+            ValidationExpressions = new List<ValidationExpressionModel>();
+            AllMultioptionYesNoCodes = new List<string>();
+        }
+
         public Guid Id { set; get; }
         public string VariableName { set; get; }
 
         public List<GeneratedVariable> GeneratedVariables { get; set; } = new List<GeneratedVariable>();
 
-        public string Condition { set; get; }
+        public string? Condition { set; get; }
 
         public List<ValidationExpressionModel> ValidationExpressions { get; set; }
 
@@ -27,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string RosterScopeName { set; get; }
         public string ParentScopeTypeName { get; set; }
-        public string OptionsFilterExpression { get; set; }
+        public string? OptionsFilterExpression { get; set; }
 
         public bool HasOptionsFilter => !string.IsNullOrWhiteSpace(this.OptionsFilterExpression);
     }

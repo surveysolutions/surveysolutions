@@ -28,7 +28,8 @@
                 customRosterTitle: $i18next.t('HelpCustomTitle'),
                 doNotExport: $i18next.t('HelpDoNotExport'),
                 HelpOptionValue: $i18next.t('HelpOptionValue'),
-                HelpOptionTitle: $i18next.t('HelpOptionTitle')
+                HelpOptionTitle: $i18next.t('HelpOptionTitle'),
+                questionnaireDefaultLanguageName: $i18next.t('HelpQuestionnaireDefaultLanguageName'),
             };
 
             helpService.getHelpMessage = function(key) {

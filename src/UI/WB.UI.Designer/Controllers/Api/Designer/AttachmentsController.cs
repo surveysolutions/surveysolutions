@@ -69,8 +69,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (thumbnail)
             {
                 string contentType = "image/jpg";
-                byte[] thumbBytes = null;
-                if (attachmentContent.Details.Thumbnail == null)
+                byte[]? thumbBytes = null;
+                if (attachmentContent.Details.Thumbnail == null || attachmentContent.Details.Thumbnail.Length == 0)
                 {
                     if (attachmentContent.IsImage())
                     {

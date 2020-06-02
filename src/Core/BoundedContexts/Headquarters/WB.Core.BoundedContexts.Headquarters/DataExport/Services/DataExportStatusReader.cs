@@ -46,11 +46,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public async Task<DataExportArchive?> GetDataArchive(QuestionnaireIdentity questionnaireIdentity,
             DataExportFormat format,
-            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null, Guid? translationId = null)
         {
             var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
             var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName,
-                format, status, from, to);
+                format, status, from, to, translationId);
 
             if (result.StatusCode == HttpStatusCode.NotFound) return null;
 
@@ -111,6 +111,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
 
             processView.Title = questionnaire.Title;
+            if (processView.TranslationId.HasValue)
+            {
+                var translation = questionnaire.Translations.FirstOrDefault(x =>x.Id == processView.TranslationId);
+                processView.TranslationName = translation?.Name;
+            }
+            else
+            {
+                processView.TranslationName = questionnaire.DefaultLanguageName;
+            }
             
             if (processView.Error != null)
             {

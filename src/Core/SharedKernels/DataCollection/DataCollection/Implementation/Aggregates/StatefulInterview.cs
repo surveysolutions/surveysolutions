@@ -154,12 +154,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             
         }
 
-        public new void Apply(SubstitutionTitlesChanged @event)
-        {
-            base.Apply(@event);
-        }
-
-        public new void Apply(InterviewCompleted @event)
+        protected override void Apply(InterviewCompleted @event)
         {
             base.Apply(@event);
 
@@ -183,25 +178,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
         }
 
-        public new void Apply(InterviewRejected @event)
+        protected override void Apply(InterviewRejected @event)
         {
             base.Apply(@event);
             this.SupervisorRejectComment = @event.Comment;
         }
 
-        public new void Apply(InterviewRestarted @event)
+        protected override void Apply(InterviewRestarted @event)
         {
             base.Apply(@event);
             this.IsCompleted = false;
         }
 
-        public new void Apply(InterviewDeclaredValid @event)
+        protected override void Apply(InterviewDeclaredValid @event)
         {
             base.Apply(@event);
             this.HasErrors = false;
         }
 
-        public new void Apply(InterviewDeclaredInvalid @event)
+        protected override void Apply(InterviewDeclaredInvalid @event)
         {
             base.Apply(@event);
             this.HasErrors = true;

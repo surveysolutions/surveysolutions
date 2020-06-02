@@ -261,6 +261,11 @@ namespace WB.Tests.Abc
         {
             return fixture.Freeze<Mock<T>>();
         }
+        
+        public static void FreezeMock<T>(this IFixture fixture) where T : class
+        {
+            fixture.Freeze<Mock<T>>();
+        }
 
         public static IPlainStorageAccessor<QuestionnaireBrowseItem> QuestionnaireBrowseItemRepository(params QuestionnaireBrowseItem[] questionnaireBrowseItem)
         {
