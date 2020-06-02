@@ -64,6 +64,11 @@ import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash'
 export default {
     name: 'Typeahead',
 
+    // http://vee-validate.logaretm.com/v2/concepts/components.html#component-constructor-options
+    $_veeValidate: {
+        name: function() { return this.controlId },
+    },
+
     props: {
         fetchUrl: String,
         controlId: {
