@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.Services;
 
 namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 {
@@ -24,6 +25,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly IEventStore eventStore;
         private readonly IInMemoryEventStore inMemoryEventStore;
         private readonly IDenormalizerRegistry denormalizerRegistry;
+        private readonly IAggregateRootPrototypeService prototypeService;
 
         public NcqrCompatibleEventDispatcher(
             IServiceLocator serviceLocator,
@@ -31,7 +33,8 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             ILogger logger,
             IEventStore eventStore,
             IInMemoryEventStore inMemoryEventStore,
-            IDenormalizerRegistry denormalizerRegistry)
+            IDenormalizerRegistry denormalizerRegistry,
+            IAggregateRootPrototypeService prototypeService)
         {
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
@@ -39,6 +42,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             this.eventStore = eventStore;
             this.inMemoryEventStore = inMemoryEventStore;
             this.denormalizerRegistry = denormalizerRegistry;
+            this.prototypeService = prototypeService;
             this.serviceLocator = serviceLocator;
         }
 
@@ -53,7 +57,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             var errorsDuringHandling = new List<Exception>();
 
-            if (!this.eventBusSettings.IsIgnoredAggregate(firstEventSourceId))
+            if (!this.prototypeService.IsPrototype(firstEventSourceId))
             {
                 foreach (var functionalEventHandler in denormalizerRegistry.FunctionalDenormalizers)
                 {
@@ -61,7 +65,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
                     try
                     {
-                        handler.Handle(events, firstEventSourceId);
+                        handler.Handle(events);
                     }
                     catch (Exception exception)
                     {
@@ -76,7 +80,8 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                         if (shouldIgnoreException)
                         {
                             this.logger.Error(
-                                $"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
+                                $"Failed to handle {eventHandlerException.EventType.Name} in " +
+                                $"{eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
                                 eventHandlerException);
 
                         }
@@ -102,13 +107,12 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                             continue;
                         }
 
-                        bool isIgnoredAggregate =
-                            this.eventBusSettings.IsIgnoredAggregate(publishableEvent.EventSourceId);
+                        bool isPrototype = this.prototypeService.IsPrototype(publishableEvent.EventSourceId);
 
                         var eventType = publishableEvent.Payload.GetType();
                         var eventHandlerMethod = denormalizerRegistry.HandlerMethod(handler, eventType);
 
-                        if (isIgnoredAggregate && !eventHandlerMethod.ReceivesIgnoredEvents)
+                        if (isPrototype && !eventHandlerMethod.ReceivesIgnoredEvents)
                         {
                             continue;
                         }
@@ -172,7 +176,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         public IReadOnlyCollection<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
         {
             var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
-            if (this.eventBusSettings.IsIgnoredAggregate(aggregateRoot.EventSourceId))
+            if (this.prototypeService.IsPrototype(aggregateRoot.EventSourceId))
             {
                 return this.inMemoryEventStore.Store(eventStream);
             }

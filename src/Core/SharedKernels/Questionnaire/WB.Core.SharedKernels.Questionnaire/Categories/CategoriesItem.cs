@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace WB.Core.SharedKernels.Questionnaire.Categories
@@ -7,7 +8,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Categories
     {
         public int Id { get; set; }
         public int? ParentId { get; set; }
-        public string Text { get; set; }
+        public string Text { get; set; } = String.Empty;
 
         public override bool Equals(object obj)
         {

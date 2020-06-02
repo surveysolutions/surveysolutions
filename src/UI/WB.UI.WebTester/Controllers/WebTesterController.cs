@@ -1,14 +1,12 @@
 ﻿using Refit;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.UI.WebTester.Infrastructure;
@@ -112,7 +110,7 @@ namespace WB.UI.WebTester.Controllers
             }
         }
 
-        private InterviewPageModel GetInterviewPageModel(string id)
+        private InterviewPageModel? GetInterviewPageModel(string id)
         {
             var interview = statefulInterviewRepository.Get(id);
 
@@ -153,29 +151,40 @@ namespace WB.UI.WebTester.Controllers
 
     public class QuestionnaireAttachment
     {
+        public QuestionnaireAttachment(Guid id, AttachmentContent content)
+        {
+            Content = content;
+            Id = id;
+        }
+
         public Guid Id { get; set; }
         public AttachmentContent Content { get; set; }
     }
 
     public class InterviewPageModel
     {
-        public string Title { get; set; }
-        public string GoogleMapsKey { get; set; }
-        public string Id { get; set; }
-        public string ReloadQuestionnaireUrl { get; set; }
-        public string OriginalInterviewId { get; set; }
-        public string SaveScenarioUrl { get; set; }
-        public string GetScenarioUrl { get; set; }
+        public string? Title { get; set; }
+        public string? GoogleMapsKey { get; set; }
+        public string? Id { get; set; }
+        public string? ReloadQuestionnaireUrl { get; set; }
+        public string? OriginalInterviewId { get; set; }
+        public string? SaveScenarioUrl { get; set; }
+        public string? GetScenarioUrl { get; set; }
         public int? ScenarioId { get; set; }
-        public string DesignerUrl { get; set; }
+        public string? DesignerUrl { get; set; }
     }
 
     public class ApiTestModel
     {
+        public ApiTestModel()
+        {
+            Attaches = new List<string>();
+        }
+
         public Guid Id { get; set; }
         public DateTime LastUpdated { get; set; }
         public int NumOfTranslations { get; set; }
         public List<string> Attaches { get; set; }
-        public string Title { get; set; }
+        public string? Title { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace WB.Services.Export.Tests.Ddi
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string[]>())).Returns<string[]>(Path.Combine);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructureFactory = new Mock<IQuestionnaireExportStructureFactory>();
@@ -38,7 +38,7 @@ namespace WB.Services.Export.Tests.Ddi
                 .Returns(new QuestionnaireExportStructure());
 
             questionnaireExportStructureFactory.Setup(x =>
-                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()))
+                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>()))
                 .Returns(Task.FromResult(new QuestionnaireExportStructure()));
 
             return new DdiMetadataFactory(

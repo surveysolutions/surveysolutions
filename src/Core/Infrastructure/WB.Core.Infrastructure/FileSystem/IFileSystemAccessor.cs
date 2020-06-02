@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
@@ -33,6 +34,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         void WriteAllText(string pathToFile, string content);
         void WriteAllBytes(string pathToFile, byte[] content);
+        Task WriteAllBytesAsync(string pathToFile, byte[] content);
         byte[] ReadHash(string pathToFile);
         bool IsHashValid(byte[] fileContent, byte[] hash);
         byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null);

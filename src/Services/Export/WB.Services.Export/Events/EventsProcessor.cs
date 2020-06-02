@@ -43,11 +43,7 @@ namespace WB.Services.Export.Events
         private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
             var tenantDbContext = this.serviceProvider.GetService<TenantDbContext>();
-            if (tenantDbContext.Database.IsNpgsql())
-            {
-                await tenantDbContext.CheckSchemaVersionAndMigrate(cancellationToken);
-                await tenantDbContext.SetContextSchema(cancellationToken);
-            }
+            await tenantDbContext.EnsureMigrated(cancellationToken);
         }
 
         public async Task HandleNewEvents(long exportProcessId, CancellationToken token = default)
@@ -59,7 +55,7 @@ namespace WB.Services.Export.Events
 
             await HandleNewEventsImplementation(exportProcessId, sequenceToStartFrom, token);
         }
-        
+
         private async Task HandleNewEventsImplementation(long exportProcessId, long sequenceToStartFrom, CancellationToken token)
         {
             Stopwatch globalStopwatch = Stopwatch.StartNew();
@@ -88,7 +84,7 @@ namespace WB.Services.Export.Events
                         var eventsHandler = scope.ServiceProvider.GetRequiredService<IEventsHandler>();
                         await eventsHandler.HandleEventsFeedAsync(feed, token);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         var feedRangesDebugData = string.Join(", ", feedRanges.Select(f => f.ToString()));
                         e.Data.Add("WB:feedRanges", feedRangesDebugData);

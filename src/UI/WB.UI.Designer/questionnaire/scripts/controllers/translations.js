@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('TranslationsCtrl',
-        function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
+        function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment, shareService) {
             'use strict';
 
             $scope.downloadBaseUrl = '../../translations';
@@ -26,6 +26,8 @@
                 translation.isDefault = translationDto.isDefault;
                 translation.content = {};
                 translation.content.details = {};
+                translation.downloadUrl = $scope.downloadBaseUrl + '/' + $scope.questionnaire.questionnaireId + '/xlsx/' + translationDto.translationId;
+                translation.isOriginalTranslation = false;
 
                 if (!_.isUndefined(translationDto.content) && !_.isNull(translationDto.content)) {
                     translation.content.size = translationDto.content.size;
@@ -38,9 +40,55 @@
                 }
             };
 
+            $scope.onSave = function ($event, translation) {
+                if (!translation.isOriginalTranslation) {
+                    $scope.saveTranslation(translation);
+                    $event.stopPropagation();
+                }
+                else {
+                    shareService.udpateQuestionnaire(
+                        $scope.questionnaire.questionnaireId,
+                        $scope.questionnaire.title,
+                        $scope.questionnaire.variable,
+                        $scope.questionnaire.editedHideIfDisabled,
+                        $scope.questionnaire.isPublic,
+                        translation.name
+                    ).then(function () {
+                        translation.checkpoint.name = translation.name;
+                        translation.form.$setPristine();
+                    });
+
+                    $event.stopPropagation();
+                }
+            };
+            $scope.onCancel = function ($event, translation) {
+                if (!translation.isOriginalTranslation) {
+                    $scope.cancel(translation);
+                    $event.stopPropagation();
+                }
+                else {
+                    translation.name = translation.checkpoint.name;
+                    translation.form.$setPristine();
+
+                    $event.stopPropagation();
+                }
+            }
+
             $scope.loadTranslations = function () {
                 if ($scope.questionnaire === null)
                     return;
+
+                var defaultTranslation = {
+                    translationId: null,
+                    name: !$scope.questionnaire.defaultLanguageName ? $i18next.t("Translation_Original") : $scope.questionnaire.defaultLanguageName,
+                    file: null,
+                    isDefault: !_.any($scope.questionnaire.translations, { isDefault: true }),
+                    content: { details: {} },
+                    isOriginalTranslation: true
+                };
+                defaultTranslation.checkpoint = { name: defaultTranslation.name };
+
+                $scope.translations.push(defaultTranslation);
 
                 $scope.isReadOnlyForUser = $scope.questionnaire.isReadOnlyForUser || false;
 
@@ -123,7 +171,7 @@
                 if (!_.isUndefined(callback)) {
                     callback();
                 }
-            }
+            };
 
             $scope.saveTranslation = function (translation) {
                 commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
@@ -168,7 +216,7 @@
                 var translation = $scope.translations[translationIndex];
 
                 commandService.setDefaultTranslation($state.params.questionnaireId, isDefault ? translation.translationId : null).then(function () {
-                    _.each($scope.translations, function(translation) {
+                    _.each($scope.translations, function (translation) {
                         translation.isDefault = translation.checkpoint.isDefault = false;
                     });
                     translation.isDefault = translation.checkpoint.isDefault = isDefault;

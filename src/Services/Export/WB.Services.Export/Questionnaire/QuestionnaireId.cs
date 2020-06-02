@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -9,10 +10,10 @@ namespace WB.Services.Export.Questionnaire
         {
             this.Id = id;
         }
-
+        
         protected bool Equals(QuestionnaireId other)
         {
-            return string.Equals(Id, other.Id);
+            return string.Equals(Id, other.Id, StringComparison.Ordinal);
         }
 
         public override bool Equals(object obj)

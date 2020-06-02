@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using ClosedXML.Excel;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
-using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -44,18 +45,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
             BecauseOf();
 
-            cells[3, TranslationsServiceTestsContext.originalTextColumn].GetValue<string>().Should().Be("В скобках символ без графического отобажения ()");
-            cells[3, TranslationsServiceTestsContext.translactionColumn].GetValue<string>().Should().Be("Here is non-printable char ()");
+            
+            cells.Cell(3, originalTextColumn).GetString().Should().Be("В скобках символ без графического отобажения ()");
+            cells.Cell(3, translactionColumn).GetString().Should().Be("Here is non-printable char ()");
         }
 
         private void BecauseOf()
         {
             var excelFile = service.GetAsExcelFile(questionnaireId, translationId);
-            cells = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook.Worksheets[0].Cells;
+            cells = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile)).Worksheets.First();
         }
 
         static TranslationsService service;
-        static ExcelRange cells;
+        static IXLWorksheet cells;
         static readonly Guid translationId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

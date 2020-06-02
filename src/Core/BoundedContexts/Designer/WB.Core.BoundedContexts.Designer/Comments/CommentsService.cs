@@ -90,21 +90,22 @@ namespace WB.Core.BoundedContexts.Designer.Comments
 
         public List<CommentThread> LoadCommentThreads(Guid questionnaireId)
         {
-            var questionnaire = questionnaireStorage.GetById(questionnaireId.FormatGuid()).AsReadOnly();
+            var questionnaire = questionnaireStorage.GetById(questionnaireId.FormatGuid())?.AsReadOnly();
+            if(questionnaire == null)
+                return new List<CommentThread>();
 
             var commentForEntity = dbContext.CommentInstances.AsNoTracking()
                 .Where(x => x.QuestionnaireId == questionnaireId).ToList().GroupBy(x => x.EntityId)
                 .Select(x => new CommentThread(
                     x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(),
-                    CreateCommentedEntity(questionnaire, x.Key)))
+                    CreateQuestionnaireEntityExtendedReference(questionnaire, x.Key)))
                 .Where(y => y.Entity != null)
                 .ToList();
 
             return commentForEntity.OrderByDescending(x => x.IndexOfLastUnresolvedComment).ToList();
         }
 
-        private QuestionnaireEntityExtendedReference CreateCommentedEntity(ReadOnlyQuestionnaireDocument questionnaire,
-            Guid itemId)
+        private QuestionnaireEntityExtendedReference? CreateQuestionnaireEntityExtendedReference(ReadOnlyQuestionnaireDocument questionnaire, Guid itemId)
         {
             var entity = questionnaire.Find<IComposite>(itemId);
             if (entity == null)

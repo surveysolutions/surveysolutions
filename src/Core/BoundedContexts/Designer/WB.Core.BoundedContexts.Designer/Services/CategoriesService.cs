@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using ClosedXML.Excel;
 using Main.Core.Documents;
-using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -50,17 +50,17 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public byte[] GetTemplateAsExcelFile()
         {
-            using (ExcelPackage excelPackage = new ExcelPackage())
+            using (XLWorkbook excelPackage = new XLWorkbook())
             {
-                var worksheet = excelPackage.Workbook.Worksheets.Add("Categories");
+                var worksheet = excelPackage.Worksheets.Add("Categories");
 
-                worksheet.Cells["A1"].Value = "id";
-                worksheet.Cells["B1"].Value = "text";
-                worksheet.Cells["C1"].Value = "parentid";
+                worksheet.Cells("A1").Value = "id";
+                worksheet.Cells("B1").Value = "text";
+                worksheet.Cells("C1").Value = "parentid";
 
                 void FormatCell(string address)
                 {
-                    var cell = worksheet.Cells[address];
+                    var cell = worksheet.Cells(address);
                     cell.Style.Font.Bold = true;
                 }
 
@@ -68,13 +68,17 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 FormatCell("B1");
                 FormatCell("C1");
 
-                return excelPackage.GetAsByteArray();
+                using var stream = new MemoryStream();
+                excelPackage.SaveAs(stream);
+                return stream.ToArray();
             }
         }
 
-        public CategoriesFile GetAsExcelFile(Guid questionnaireId, Guid categoriesId)
+        public CategoriesFile? GetAsExcelFile(Guid questionnaireId, Guid categoriesId)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.ToString("N"));
+            if (questionnaire == null)
+                return null;
 
             return new CategoriesFile
             {

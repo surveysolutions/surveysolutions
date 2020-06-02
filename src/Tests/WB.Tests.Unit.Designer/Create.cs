@@ -10,6 +10,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
@@ -148,14 +149,15 @@ namespace WB.Tests.Unit.Designer
         public static AttachmentView AttachmentView(Guid? id = null, long? size = null)
         {
             return new AttachmentView
-            {
-                AttachmentId = (id ?? Guid.NewGuid()).FormatGuid(),
-                Meta = new AttachmentMeta { AttachmentId = id ?? Guid.NewGuid() },
-                Content = new AttachmentContent
+            (
+                attachmentId : (id ?? Guid.NewGuid()).FormatGuid(),
+                name: "Test",
+                meta : new AttachmentMeta { AttachmentId = id ?? Guid.NewGuid() },
+                content : new AttachmentContent
                 {
                     Size = size ?? 10
                 }
-            };
+            );
         }
 
         public static Group Chapter(string title = "Chapter X", Guid? chapterId = null, bool hideIfDisabled = false, IEnumerable<IComposite> children = null)
@@ -281,7 +283,7 @@ namespace WB.Tests.Unit.Designer
 
         public static GenerationResult GenerationResult(bool success = false)
         {
-            return new GenerationResult() { Success = success };
+            return new GenerationResult( success : success , new Diagnostic[0]);
         }
 
 
@@ -350,10 +352,10 @@ namespace WB.Tests.Unit.Designer
         public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
         {
             return new LookupTableContent
-            {
-                VariableNames = variableNames,
-                Rows = rows
-            };
+            (
+                variableNames : variableNames,
+                rows : rows
+            );
         }
 
         public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
@@ -1061,17 +1063,17 @@ namespace WB.Tests.Unit.Designer
         public static VerificationMessage VerificationMessage(string code, string message, params QuestionnaireEntityExtendedReference[] extendedReferences)
         {
             return new VerificationMessage
-            {
-                Code = code,
-                Message = message,
-                Errors = new List<VerificationMessageError>()
+            (
+                code : code,
+                message : message,
+                isGroupedMessage:false,
+                errors : new List<VerificationMessageError>()
                 {
-                    new VerificationMessageError()
-                    {
-                        References = extendedReferences.ToList()
-                    }
+                    new VerificationMessageError(
+                        references : extendedReferences.ToList()
+                    )
                 }
-            };
+            );
         }
 
         public static QuestionnaireEntityReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
@@ -1082,11 +1084,11 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireEntityExtendedReference VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)
         {
             return new QuestionnaireEntityExtendedReference
-            {
-                Type = type,
-                ItemId = id.FormatGuid(),
-                Title = title
-            };
+            (
+                type : type,
+                itemId : id.FormatGuid(),
+                title : title
+            );
         }
 
         internal static class Command
@@ -1240,9 +1242,9 @@ namespace WB.Tests.Unit.Designer
                     new VariableData(variableType, name, expression, label, doNotExport), responsibleId, parentId, index);
             }
 
-            public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", string variable = "questionnaire", bool isPublic = false, bool isResponsibleAdmin = false)
+            public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", string variable = "questionnaire", bool isPublic = false, bool isResponsibleAdmin = false, string defaultLanguageName = "Original")
             {
-                return new UpdateQuestionnaire(questionnaireId, title, variable, false, isPublic, responsibleId, isResponsibleAdmin);
+                return new UpdateQuestionnaire(questionnaireId, title, variable, false, isPublic, defaultLanguageName, responsibleId, isResponsibleAdmin);
             }
             public static DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, Guid responsibleId)
             {
@@ -1297,7 +1299,7 @@ namespace WB.Tests.Unit.Designer
                 validationExpression,
                 validationMessage,
                 scope,
-                options ?? new[] {new Option() {Title = "1", Value = "1"}, new Option() {Title = "2", Value = "2"}},
+                options ?? new[] {new Option(title : "1", value : "1"), new Option(title : "2", value : "2")},
                 linkedToQuestionId,
                 areAnswersOrdered,
                 maxAllowedAnswers,
@@ -1433,8 +1435,8 @@ namespace WB.Tests.Unit.Designer
             return new DeskAuthenticationService(Mock.Of<IOptions<DeskSettings>>(x => x.Value == new DeskSettings(multipassKey, returnUrlFormat, siteKey)));
         }
 
-        public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false, string variable = "questionnaire")
-            => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, false, isPublic, responsibleId, isResponsibleAdmin);
+        public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false, string variable = "questionnaire", string defaultLanguageName = "Original")
+            => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, false, isPublic, defaultLanguageName, responsibleId, isResponsibleAdmin);
 
         public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, SharedPerson[] sharedPersons = null)
             => QuestionnaireListViewItem(id ?? Guid.Empty, isPublic, null, null, sharedPersons);
@@ -1493,7 +1495,7 @@ namespace WB.Tests.Unit.Designer
             string generationResult;
             questionnireExpressionProcessorGeneratorMock.Setup(
                 _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(), out generationResult))
-                .Returns(new GenerationResult() { Success = true, Diagnostics = new List<GenerationDiagnostic>() });
+                .Returns(new GenerationResult( success : true, diagnostics : new List<Diagnostic>() ));
 
             var substitutionServiceInstance = new SubstitutionService();
 
@@ -1630,7 +1632,7 @@ namespace WB.Tests.Unit.Designer
                 emailNotifier ?? Mock.Of<IRecipientNotifier>());
         }
 
-        public static IPlainKeyValueStorage<T> MockedKeyValueStorage<T>()
+        public static IPlainKeyValueStorage<T> MockedKeyValueStorage<T>() where T : class
         {
             var result = new Mock<IPlainKeyValueStorage<T>>();
             result.DefaultValue = DefaultValue.Mock;

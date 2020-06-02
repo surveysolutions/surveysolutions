@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Implementation.StorageStrategy;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -27,17 +25,11 @@ namespace WB.Core.Infrastructure.EventHandlers
             this.Handle(evt, this.readSideStorage);
         }
 
-        public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+        public void Handle(IEnumerable<IPublishableEvent> publishableEvents)
         {
-            if (publishableEvents.Any(this.Handles))
+            foreach (var publishableEvent in publishableEvents)
             {
-                using (var inMemoryStorage = new InMemoryViewWriter<TEntity>(this.readSideStorage, eventSourceId))
-                {
-                    foreach (var publishableEvent in publishableEvents)
-                    {
-                        this.Handle(publishableEvent, inMemoryStorage);
-                    }
-                }
+                this.Handle(publishableEvent, readSideStorage);
             }
         }
 
@@ -67,7 +59,7 @@ namespace WB.Core.Infrastructure.EventHandlers
             var update = updateMethodsCache.GetOrAdd((this.GetType(), eventType), k =>
                 k.eventHandler.GetMethod("Update", new[] { typeof(TEntity), k.eventType }));
 
-            var newState = (TEntity) update
+            var newState = (TEntity)update
                 ?.Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
             return newState;
         }
@@ -96,9 +88,6 @@ namespace WB.Core.Infrastructure.EventHandlers
 
         public string Name => this.GetType().Name;
 
-        public virtual object[] Writers => new object[] { this.readSideStorage };
-        public virtual object[] Readers => Array.Empty<object>();
-
         static readonly ConcurrentDictionary<(Type eventType, Type handler), bool> handleCache =
             new ConcurrentDictionary<(Type eventType, Type handler), bool>();
 
@@ -114,9 +103,6 @@ namespace WB.Core.Infrastructure.EventHandlers
             });
         }
     }
-
-
-
 
     public abstract class AbstractFunctionalEventHandlerOnGuid<TEntity, TStorage> : IFunctionalEventHandler, IEventHandler
         where TEntity : class, IReadSideRepositoryEntity
@@ -134,17 +120,11 @@ namespace WB.Core.Infrastructure.EventHandlers
             this.Handle(evt, this.readSideStorage);
         }
 
-        public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+        public void Handle(IEnumerable<IPublishableEvent> publishableEvents)
         {
-            if (publishableEvents.Any(this.Handles))
+            foreach (var publishableEvent in publishableEvents)
             {
-                using (var inMemoryStorage = new InMemoryViewWriter<TEntity, Guid>(this.readSideStorage, eventSourceId))
-                {
-                    foreach (var publishableEvent in publishableEvents)
-                    {
-                        this.Handle(publishableEvent, inMemoryStorage);
-                    }
-                }
+                this.Handle(publishableEvent, this.readSideStorage);
             }
         }
 
@@ -202,9 +182,6 @@ namespace WB.Core.Infrastructure.EventHandlers
         }
 
         public string Name => this.GetType().Name;
-
-        public virtual object[] Writers => new object[] { this.readSideStorage };
-        public virtual object[] Readers => Array.Empty<object>();
 
         static readonly ConcurrentDictionary<(Type eventType, Type handler), bool> handleCache =
             new ConcurrentDictionary<(Type eventType, Type handler), bool>();

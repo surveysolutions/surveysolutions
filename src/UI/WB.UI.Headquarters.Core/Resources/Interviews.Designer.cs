@@ -257,6 +257,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reject and choose new responsible.
+        /// </summary>
+        public static string RejectToNewResponsible {
+            get {
+                return ResourceManager.GetString("RejectToNewResponsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reject to original responsible.
+        /// </summary>
+        public static string RejectToOriginal {
+            get {
+                return ResourceManager.GetString("RejectToOriginal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignment ID. Click in the field to type the full ID number..
         /// </summary>
         public static string Tooltip_Filter_Assignment {

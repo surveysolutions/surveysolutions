@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             {
                 foreach (var publishableEvent in statusEventsToPublish)
                 {
-                    denormalizer.Handle(new[] {publishableEvent}, publishableEvent.EventSourceId);
+                    denormalizer.Handle(new[] {publishableEvent});
                 }
             }
 

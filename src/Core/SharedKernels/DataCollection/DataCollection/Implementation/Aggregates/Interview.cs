@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Sourcing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -27,7 +28,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class Interview : AggregateRootMappedByConvention
+    public class Interview : EventSourcedAggregateRoot
     {
         public Interview(IInterviewTreeBuilder treeBuilder)
         {
@@ -1983,7 +1984,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate:originDate));
-            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
+
+            if (interviewerId != properties.InterviewerId)
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
         }
 
         public void HqApprove(Guid userId, string comment, DateTimeOffset originDate)
@@ -2070,6 +2073,52 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate:originDate));
             }
+        }
+
+        public void HqRejectInterviewToInterviewer(Guid userId, Guid interviewerId, Guid supervisorId, string comment, DateTimeOffset originDate)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
+
+            var isCompleted = this.properties.Status == InterviewStatus.Completed;
+            if (!isCompleted)
+            {
+                this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate: originDate));
+            }
+
+            this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate: originDate));
+
+            if (supervisorId != properties.SupervisorId)
+                this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, originDate));
+            if (interviewerId != properties.InterviewerId)
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
+        }
+
+        public void HqRejectInterviewToSupervisor(Guid userId, Guid supervisorId, string comment, DateTimeOffset originDate)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
+
+            var isCompleted = this.properties.Status == InterviewStatus.Completed;
+            if (isCompleted)
+            {
+                this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate: originDate));
+            }
+            else
+            {                    
+                this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate: originDate));
+            }
+            
+            if (supervisorId != properties.SupervisorId)
+                this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, originDate));
         }
 
         public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command) 

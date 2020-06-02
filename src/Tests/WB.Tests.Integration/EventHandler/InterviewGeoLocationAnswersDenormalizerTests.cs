@@ -14,12 +14,25 @@ namespace WB.Tests.Integration.EventHandler
     [TestOf(typeof(InterviewGeoLocationAnswersDenormalizer))]
     internal class InterviewGeoLocationAnswersDenormalizerTests
     {
+        private string connectionString;
+
+        [SetUp]
+        public void Setup()
+        {
+            this.connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            DatabaseTestInitializer.DropDb(connectionString);
+        }
+
         [Test]
         public void when_double_update_by_geo_question_answered_event_should_second_one_not_throw_an_exception()
         {
             // arrange
             var @event = Create.PublishedEvent.GeoLocationQuestionAnswered();
-            var connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
 
             var sessionFactory = IntegrationCreate.SessionFactory(connectionString,
                 new List<Type> {typeof(InterviewGpsMap)}, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
@@ -38,7 +51,6 @@ namespace WB.Tests.Integration.EventHandler
         {
             // arrange
             var @event = Create.PublishedEvent.GeoLocationQuestionAnswered(timestamp: DateTimeOffset.MinValue);
-            var connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
 
             var sessionFactory = IntegrationCreate.SessionFactory(connectionString,
                 new List<Type> { typeof(InterviewGpsMap) }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);

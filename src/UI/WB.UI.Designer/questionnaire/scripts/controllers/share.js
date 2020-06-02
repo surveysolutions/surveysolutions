@@ -94,7 +94,8 @@
                 $scope.questionnaire.editedTitle,
                 $scope.questionnaire.editedVariable,
                 $scope.questionnaire.editedHideIfDisabled,
-                $scope.questionnaire.isPublic
+                $scope.questionnaire.isPublic,
+                $scope.questionnaire.defaultLanguageName
             );
             updateRequest.then(function() {
                 $scope.questionnaire.title = $scope.questionnaire.editedTitle;
@@ -165,7 +166,8 @@
                 $scope.questionnaire.title,
                 $scope.questionnaire.variable,
                 $scope.questionnaire.editedHideIfDisabled,
-                !$scope.questionnaire.isPublic
+                !$scope.questionnaire.isPublic,
+                $scope.questionnaire.defaultLanguageName
             );
 
             updateRequest.then(function() {

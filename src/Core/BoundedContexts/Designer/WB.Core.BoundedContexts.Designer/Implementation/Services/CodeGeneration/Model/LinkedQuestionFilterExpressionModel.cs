@@ -4,7 +4,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class LinkedQuestionFilterExpressionModel
     {
-        public LinkedQuestionFilterExpressionModel(string filterExpression, string filterForLinkedQuestionMethodName, string linkedQuestionVariableName, Guid rosterId, Guid linkedQuestionId)
+        public LinkedQuestionFilterExpressionModel(string filterExpression, string filterForLinkedQuestionMethodName, string linkedQuestionVariableName, 
+            Guid rosterId, Guid linkedQuestionId)
         {
             this.FilterExpression = filterExpression;
             this.FilterForLinkedQuestionMethodName = filterForLinkedQuestionMethodName;
@@ -21,6 +22,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
 
         public string LinkedQuestionVariableName { get; private set; }
-        public string ParentScopeTypeName { get; set; }
+        public string ParentScopeTypeName { get; set; } = String.Empty;
     }
 }

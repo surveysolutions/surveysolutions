@@ -7,7 +7,7 @@
             class="btn btn-primary"
             :disabled="disableOk"
             @click="confirm">
-            {{$t("Common.Ok")}}
+            {{ ok_title }}
         </button>
         <button slot="actions"
             type="button"
@@ -31,6 +31,10 @@ export default {
             required: false,
             default: false,
         },
+        okTitle: {
+            type: String,
+            required: false,
+        },
     },
 
     data() {
@@ -42,6 +46,9 @@ export default {
     computed: {
         confirm_title() {
             return this.title || this.$t('Pages.ConfirmationNeededTitle')
+        },
+        ok_title() {
+            return this.okTitle || this.$t('Common.Ok')
         },
     },
 

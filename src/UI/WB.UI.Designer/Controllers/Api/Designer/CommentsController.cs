@@ -89,7 +89,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             commentsService.PostComment(commentModel.Id, 
                 commentModel.QuestionnaireId,
                 commentModel.EntityId, 
-                commentModel.Comment, 
+                commentModel.Comment ?? "", 
                 user.UserName,
                 user.Email);
 

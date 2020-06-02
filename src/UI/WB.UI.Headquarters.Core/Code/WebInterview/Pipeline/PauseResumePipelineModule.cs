@@ -21,15 +21,15 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
 
         public Task OnConnected(Hub hub)
         {
-            var interviewId = GetInterviewId(hub);
-            Guid interviewGuid = Guid.Parse(interviewId);
+            var interviewId = hub.GetInterviewId();
+
             if (authorizedUser.IsInterviewer)
             {
-                pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(interviewGuid, this.authorizedUser.Id));
+                pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(interviewId, this.authorizedUser.Id));
             }
             else if (authorizedUser.IsSupervisor)
             {
-                pauseResumeQueue.EnqueueOpenBySupervisor(new OpenInterviewBySupervisorCommand(interviewGuid, this.authorizedUser.Id));
+                pauseResumeQueue.EnqueueOpenBySupervisor(new OpenInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id));
             }
 
             return Task.CompletedTask;
@@ -37,24 +37,18 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
 
         public Task OnDisconnected(Hub hub, Exception exception)
         {
-            var interviewId = GetInterviewId(hub);
-            Guid interviewGuid = Guid.Parse(interviewId);
+            var interviewId = hub.GetInterviewId();
+
             if (authorizedUser.IsInterviewer)
             {
-                pauseResumeQueue.EnqueuePause(new PauseInterviewCommand(interviewGuid, this.authorizedUser.Id));
+                pauseResumeQueue.EnqueuePause(new PauseInterviewCommand(interviewId, this.authorizedUser.Id));
             }
             else if (authorizedUser.IsSupervisor)
             {
-                pauseResumeQueue.EnqueueCloseBySupervisor(new CloseInterviewBySupervisorCommand(interviewGuid, this.authorizedUser.Id));
+                pauseResumeQueue.EnqueueCloseBySupervisor(new CloseInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id));
             }
 
             return Task.CompletedTask;
-        }
-
-        private string GetInterviewId(Hub hub)
-        {
-            var http = hub.Context.GetHttpContext();
-            return http.Request.Query["interviewId"];
         }
     }
 }

@@ -6,19 +6,27 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Metrics;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.UI.Headquarters.Metrics
 {
     public class DashboardStatisticsService : BackgroundService, IDashboardStatisticsService
     {
+        private readonly MemoryCache memoryCache;
         private List<MetricState> state;
         private DateTime lastQuery = DateTime.UtcNow;
         private ManualResetEventSlim gate = new ManualResetEventSlim(false);
 
         List<MetricsDiffHolder> Counters = new List<MetricsDiffHolder>();
+
+        public DashboardStatisticsService(IMemoryCache memoryCache)
+        {
+            this.memoryCache = memoryCache as MemoryCache;
+        }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -57,12 +65,14 @@ namespace WB.UI.Headquarters.Metrics
             var cpuDiff = RegisterCounter(() => Process.GetCurrentProcess().TotalProcessorTime.TotalSeconds);
 
             // interviews cached/evicted change over time per second
-            var interviewsCached = RegisterCounter(() => CommonMetrics.StatefullInterviewsCached.GetSummForLabels(CacheAddedLabel));
-            var interviewsEvicted = RegisterCounter(() => CommonMetrics.StatefullInterviewsCached.GetSummForLabels(CacheRemovedLabel));
+            var interviewsCached = RegisterCounter(() => (CoreMetrics.StatefullInterviewsCached as Counter).GetSummForLabels(CacheAddedLabel));
+            var interviewsEvicted = RegisterCounter(() => (CoreMetrics.StatefullInterviewsCached as Counter).GetSummForLabels(CacheRemovedLabel));
 
             // npgsql data transfer change over time  per second
             var dataTransferRead = RegisterCounter(() => CommonMetrics.NpgsqlDataCounter.GetSummForLabels(ReadDbdataLabel));
             var dataTransferWrite = RegisterCounter(() => CommonMetrics.NpgsqlDataCounter.GetSummForLabels(WriteDbdataLabel));
+
+            var cacheItemsDiff = RegisterCounter(() => memoryCache?.Count ?? 0);
 
             // request counter change over time per second
             var requests = RegisterCounter(() =>
@@ -91,7 +101,7 @@ namespace WB.UI.Headquarters.Metrics
             result.Add(new MetricState("Web interview connections", "connection".ToQuantity(connections, "N0")));
 
             // statefull interviews
-            var statefulInterviews = CommonMetrics.StatefullInterviewsCached.GetDiffForLabels(CacheAddedLabel, CacheRemovedLabel);
+            var statefulInterviews = (CoreMetrics.StatefullInterviewsCached as Counter).GetDiffForLabels(CacheAddedLabel, CacheRemovedLabel);
 
             result.Add(new MetricState("Statefull interviews in cache", "interview".ToQuantity(statefulInterviews, "N0")
                     + $" (cached {await interviewsCached:N2} / evicted {await interviewsEvicted:N2} per second)"));
@@ -114,6 +124,10 @@ namespace WB.UI.Headquarters.Metrics
             )));
 
             result.Add(new MetricState("Requests", "requests".ToQuantity(await requests, "N2") + "/s"));
+
+            await cacheItemsDiff;
+
+            result.Add(new MetricState("Cache items", $"Total: {memoryCache.Count} ({cacheItemsDiff.Result:N2}/s)"));
 
             return result;
         }

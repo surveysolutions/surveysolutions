@@ -7,7 +7,7 @@ namespace Main.Core.Entities.SubEntities.Question
 {
     public class NumericQuestion : AbstractQuestion, INumericQuestion
     {
-        public NumericQuestion(string questionText = null, List<IComposite> children = null):base(questionText, children){ }
+        public NumericQuestion(string? questionText = null, List<IComposite>? children = null):base(questionText, children){ }
 
         public override void AddAnswer(Answer answer)
         {
@@ -19,7 +19,7 @@ namespace Main.Core.Entities.SubEntities.Question
             this.Answers.Add(answer);
         }
 
-        public override T Find<T>(Guid publicKey)
+        public override T? Find<T>(Guid publicKey) where T:class
         {
             return null;
         }
@@ -29,7 +29,7 @@ namespace Main.Core.Entities.SubEntities.Question
             return new T[0];
         }
 
-        public override T FirstOrDefault<T>(Func<T, bool> condition)
+        public override T? FirstOrDefault<T>(Func<T, bool> condition) where T: class
         {
             return null;
         }
