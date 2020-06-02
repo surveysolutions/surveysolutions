@@ -162,6 +162,12 @@
   <data name="SelectResponsible" xml:space="preserve">
     <value>Select responsible</value>
   </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>Responsible is required</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>All assignments for web interviews must be made to an interviewer</value>
+  </data>
   <data name="ShowArchived" xml:space="preserve">
     <value>Archived status</value>
   </data>
