@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
@@ -15,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -26,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected readonly IPrincipal principal;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
 
         public CoverStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
@@ -37,7 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository, 
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
-            IDynamicTextViewModelFactory dynamicTextViewModelFactory)
+            IDynamicTextViewModelFactory dynamicTextViewModelFactory,
+            IInterviewViewModelFactory interviewViewModelFactory)
         {
             this.commandService = commandService;
             this.principal = principal;
@@ -48,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewRepository = interviewRepository;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
+            this.interviewViewModelFactory = interviewViewModelFactory;
         }
 
         public string InterviewKey { get; set; }
@@ -86,13 +91,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledEntities = questionnaire
                 .GetPrefilledEntities()
-                .Where(entityId => questionnaire.IsStaticText(entityId) || 
-                                   (questionnaire.IsQuestion(entityId)
-                                    && questionnaire.GetQuestionType(entityId) != QuestionType.GpsCoordinates))
-                .Select(entityId => new CoverPrefilledEntity
+                .Select(entityId => new
                 {
-                    Title = this.CreatePrefilledTitle(questionnaire, interviewId, new Identity(entityId, RosterVector.Empty)),
-                    Answer = interview.GetAnswerAsString(Identity.Create(entityId, RosterVector.Empty), CultureInfo.CurrentCulture)
+                    EntityId = entityId,
+                    IsStaticText = questionnaire.IsStaticText(entityId),
+                    QuestionType = questionnaire.IsQuestion(entityId) 
+                        ? questionnaire.GetQuestionType(entityId)
+                        : (QuestionType?)null,
+                })
+                .Where(entity => entity.IsStaticText || 
+                                   (entity.QuestionType.HasValue
+                                    && entity.QuestionType.Value != QuestionType.GpsCoordinates))
+                .Select(entity =>
+                {
+                    var entityIdentity = new Identity(entity.EntityId, RosterVector.Empty);
+                    var attachmentViewModel = this.interviewViewModelFactory.GetNew<AttachmentViewModel>();
+                    attachmentViewModel.Init(interviewId, entityIdentity, navigationState);
+
+                    return new CoverPrefilledEntity
+                    {
+                        Title = this.CreatePrefilledTitle(questionnaire, interviewId, entityIdentity),
+                        Answer = entity.QuestionType.HasValue
+                            ? interview.GetAnswerAsString(Identity.Create(entity.EntityId, RosterVector.Empty), CultureInfo.CurrentCulture)
+                            : string.Empty,
+                        Attachment = attachmentViewModel
+                    };
                 })
                 .ToList();
 
@@ -120,11 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private DynamicTextViewModel CreatePrefilledTitle(IQuestionnaire questionnaire, string interviewId, Identity entityIdentity)
         {
             var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
-
-            if (questionnaire.IsStaticText(entityIdentity.Id))
-                title.InitAsStatic();
             title.Init(interviewId, entityIdentity);
-
             return title;
         }
 
