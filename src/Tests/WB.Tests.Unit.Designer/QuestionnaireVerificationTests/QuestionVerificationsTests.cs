@@ -559,6 +559,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 {
                     Create.Question(),
                 })
-                .ExpectError("WB0305");
+                .ExpectError("WB0307");
     }
 }
