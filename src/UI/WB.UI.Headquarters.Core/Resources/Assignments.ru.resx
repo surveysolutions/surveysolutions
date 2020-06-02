@@ -471,4 +471,10 @@
   <data name="StartWebInterview" xml:space="preserve">
     <value>Начать Web интервью</value>
   </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>Необходимо выбрать ответственного</value>
+  </data>
+    <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>Все задания для web интервью должны быть назначены на интервьюера</value>
+  </data>
 </root>
