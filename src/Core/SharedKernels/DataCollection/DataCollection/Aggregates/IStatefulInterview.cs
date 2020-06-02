@@ -124,8 +124,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters();
 
-        InterviewTreeSection FirstSection { get; }
-
         Guid CurrentResponsibleId { get; }
 
         Guid SupervisorId { get; }
