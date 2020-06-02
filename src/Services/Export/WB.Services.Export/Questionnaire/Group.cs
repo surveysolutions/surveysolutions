@@ -49,7 +49,7 @@ namespace WB.Services.Export.Questionnaire
 
         public IEnumerable<IQuestionnaireEntity> Children { get; set; } = new List<IQuestionnaireEntity>();
 
-        public bool HasAnyExportableQuestions => Children.Any(x => x is Question || x is Variable);
+        public bool HasAnyExportableChild => Children.Any(x => x.IsExportable);
 
         public IQuestionnaireEntity GetParent()
         {
