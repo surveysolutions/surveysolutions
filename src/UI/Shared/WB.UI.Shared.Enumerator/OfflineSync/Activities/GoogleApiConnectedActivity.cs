@@ -1,21 +1,15 @@
-﻿using System;
-using Android.App;
-using Android.Bluetooth;
-using Android.Content;
-using Android.Gms.Common;
+﻿using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.OS;
 using Android.Widget;
 using MvvmCross;
 using MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
-using GoogleApiAvailability = Android.Gms.Common.GoogleApiAvailability;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 {
@@ -27,7 +21,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
         protected GoogleApiClient GoogleApi;
         const int RequestCodeRecoverPlayServices = 1001;
         private INearbyConnection communicator;
-        private BluetoothReceiver bluetoothReceiver;
 
         protected override void OnResume()
         {
@@ -35,20 +28,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
             if (!this.CheckPlayServices()) return;
 
-            var mBluetoothAdapter = BluetoothAdapter.DefaultAdapter;
-            if (mBluetoothAdapter?.IsEnabled == true)
-            {
-                bluetoothReceiver = new BluetoothReceiver();
-                IntentFilter filter = new IntentFilter(BluetoothAdapter.ActionStateChanged);
-                RegisterReceiver(bluetoothReceiver, filter);
-                bluetoothReceiver.BluetoothDisabled += OnBluetoothDisabled;
-
-                BluetoothAdapter.DefaultAdapter.Disable();
-            }
-            else
-            {
-                this.RestoreGoogleApiConnectionIfNeeded();
-            }
+            this.RestoreGoogleApiConnectionIfNeeded();
         }
 
         protected override void OnStop()
@@ -61,24 +41,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                     this.GoogleApi.Disconnect();
                 }
             }
-            
-            if (this.bluetoothReceiver != null)
-            {
-                UnregisterReceiver(this.bluetoothReceiver);
-                bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
-                bluetoothReceiver = null;
-            }
 
             base.OnStop();
-        }
-
-        private void OnBluetoothDisabled(object sender, EventArgs e)
-        {
-            this.UnregisterReceiver(this.bluetoothReceiver);
-            this.bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
-            this.bluetoothReceiver = null;
-
-            this.RestoreGoogleApiConnectionIfNeeded();
         }
 
         /// <summary>
