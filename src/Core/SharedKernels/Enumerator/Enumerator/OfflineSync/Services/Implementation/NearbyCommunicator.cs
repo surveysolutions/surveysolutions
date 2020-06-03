@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     break;
                 case PayloadType.Stream:
                     this.logger.Verbose($"Got stream");
-                    await payload.ReadStreamAsync();
+                    payload.ReadStream();
                     break;
                 case PayloadType.File:
                     break;
@@ -222,7 +222,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                     if (isIncoming)
                     {
-                        var bytes = await payload.BytesFromStream;
+                        var bytes = payload.BytesFromStream;
                         var payloadContent = await payloadSerializer.FromPayloadAsync<PayloadContent>(bytes);
                         await HandlePayloadContent(connection, endpoint, payloadContent);
                         //logger.Verbose(
