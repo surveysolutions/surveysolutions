@@ -43,9 +43,25 @@ function NewRouter(store) {
                         component: Cover,
                     },
                     {
+                        name: 'cover',
+                        path: 'Section/11111111111111111111111111111111',
+                        component: Cover,
+                        params: { sectionId: '11111111111111111111111111111111' },
+                        beforeEnter: (to, from, next) => {
+                            to.params.sectionId = '11111111111111111111111111111111'
+                            next()
+                        },
+                    },
+                    {
                         name: 'section',
                         path: 'Section/:sectionId',
                         component: Section,
+                        beforeEnter: (to, from, next) => {
+                            if (to.params.sectionId == '11111111111111111111111111111111')
+                                next({ name: 'cover' })
+                            else
+                                next()
+                        },
                     },
                     {
                         name: 'complete',
@@ -66,7 +82,7 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
-        if(Vue.$config.splashScreen) { next(); return }
+        if (Vue.$config.splashScreen) { next(); return }
         next()
     })
 

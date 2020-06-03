@@ -3,7 +3,7 @@
         :class="coverStatusClass">
         <div class="unit-title">
             <wb-humburger :showFoldbackButtonAsHamburger="showHumburger"></wb-humburger>
-            <h3>{{ $t("WebInterviewUI.Cover")}}</h3>
+            <h3>{{ this.$store.state.webinterview.coverInfo.title || $t("WebInterviewUI.Cover")}}</h3>
         </div>
 
         <div class="wrapper-info error">
@@ -85,6 +85,7 @@
 
 <script lang="js">
 import isEmpty from 'lodash/isEmpty'
+import { GroupStatus } from './questions'
 
 export default {
     name: 'cover-readonly-view',
@@ -102,6 +103,12 @@ export default {
 
     beforeMount() {
         this.fetch()
+    },
+
+    watch: {
+        ['$route.params.sectionId']() {
+            this.fetch()
+        },
     },
 
     mounted() {
@@ -137,7 +144,22 @@ export default {
                 ? false
                 : this.$store.state.webinterview.doesBrokenPackageExist
         },
+        info() {
+            return this.$store.state.webinterview.breadcrumbs
+        },
+        hasError() {
+            return this.info.validity && this.info.validity.isValid === false
+        },
         coverStatusClass() {
+            if (this.info) {
+                return [
+                    {
+                        'complete-section'  : !this.hasBrokenPackage && this.info.status == GroupStatus.Completed && !this.hasError,
+                        'section-with-error': this.hasBrokenPackage || this.hasError,
+                    },
+                ]
+            }
+
             return [
                 {
                     'complete-section'  : !this.hasBrokenPackage,
@@ -154,6 +176,7 @@ export default {
         },
         fetch() {
             this.$store.dispatch('fetchCoverInfo')
+            this.$store.dispatch('fetchBreadcrumbs')
         },
         getGpsUrl(question) {
             return `http://maps.google.com/maps?q=${question.answer}`
