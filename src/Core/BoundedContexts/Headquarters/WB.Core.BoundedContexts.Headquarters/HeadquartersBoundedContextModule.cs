@@ -242,6 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<InterviewSummaryErrorsCountPostProcessor>();
             registry.Bind<InterviewReceivedByInterviewerCommandValidator>();
             registry.Bind<QuestionnaireValidator>();
+            registry.Bind<WebModeResponsibleAssignmentValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
