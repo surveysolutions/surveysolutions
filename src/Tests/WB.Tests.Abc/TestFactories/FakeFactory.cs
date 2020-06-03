@@ -393,14 +393,13 @@ namespace WB.Tests.Abc.TestFactories
             public Stream Stream { get; set;  }
             public PayloadType Type { get; set; }
 
-            public Task ReadStreamAsync()
+            public void ReadStream()
             {
-                var ms = Stream as MemoryStream;
-                BytesFromStream = Task.FromResult(ms.ToArray());
-                return BytesFromStream;
+                using var ms = Stream as MemoryStream;
+                BytesFromStream = ms.ToArray();
             }
 
-            public Task<byte[]> BytesFromStream { get; set; }
+            public byte[] BytesFromStream { get; set; }
         }
     }
 }
