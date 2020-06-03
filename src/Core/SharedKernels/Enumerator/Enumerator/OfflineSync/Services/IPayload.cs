@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
@@ -12,7 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
         Stream Stream { get; }
         PayloadType Type { get; }
 
-        Task ReadStreamAsync();
-        Task<byte[]> BytesFromStream { get; }
+        void ReadStream();
+        byte[] BytesFromStream { get; }
     }
 }
