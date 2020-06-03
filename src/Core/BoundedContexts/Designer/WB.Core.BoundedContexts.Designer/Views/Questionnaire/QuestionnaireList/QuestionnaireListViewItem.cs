@@ -11,6 +11,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
     {
         private ICollection<SharedPerson>? _sharedPersons;
 
+        public QuestionnaireListViewItem()
+        {
+            _sharedPersons = new List<SharedPerson>();
+        }
+
         public virtual DateTime CreationDate { get; set; }
 
         public virtual string QuestionnaireId { get; set; } = string.Empty;
@@ -42,7 +47,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public virtual ICollection<SharedPerson> SharedPersons
         {
             get => _sharedPersons ?? throw new InvalidOperationException("Trying to use shared persons collection without including it in query");
-            set => _sharedPersons = value;
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+                _sharedPersons = value;
+            }
         }
 
         public virtual string? Owner { get; set; }
