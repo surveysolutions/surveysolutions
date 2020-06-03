@@ -1947,5 +1947,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public bool IsCoverPage(Guid identityId) => innerDocument.IsCoverPage(identityId);
+        public bool IsCoverPageSupported => innerDocument.IsCoverPageSupported;
     }
 }

@@ -355,6 +355,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public EntityWithComment[] EntitiesWithComments { get; set; }
         public int CommentedQuestionsCount { get; set; }
         public string SupervisorRejectComment { get; set; }
+        public string Title { get; set; }
+        public Validity Validity { get; set; } = new Validity();
+        public GroupStatus Status { get; set; }
     }
 
     public class EntityWithComment : QuestionReference { }
