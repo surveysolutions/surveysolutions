@@ -47,10 +47,14 @@ namespace WB.Services.Export.Interview
                     query.AppendFormat(", data.{0} as data__{0} ", InterviewDatabaseConstants.RosterVector);
                 }
 
-                if (group.HasAnyExportableQuestions)
+                if (group.HasAnyExportableChild)
                 {
-                    query.Append(", ");
-                    query.Append(BuildSelectColumns("data", @group, includeStaticText: false));
+                    var columns = BuildSelectColumns("data", @group, includeStaticText: false);
+                    if (!string.IsNullOrWhiteSpace(columns))
+                    {
+                        query.Append(", ");
+                        query.Append(columns);
+                    }
                 }
             }
 

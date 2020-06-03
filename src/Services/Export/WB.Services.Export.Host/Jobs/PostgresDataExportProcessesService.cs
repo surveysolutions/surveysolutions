@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -62,8 +63,10 @@ namespace WB.Services.Export.Host.Jobs
             }
         }
         
-        public async Task<List<DataExportProcessArgs>> GetAllProcesses(bool runningOnly = true)
+        public async Task<List<DataExportProcessArgs>> GetAllProcessesAsync(bool runningOnly = true, CancellationToken token = default)
         {
+            await tenantDbContext.EnsureMigrated(token);
+
             var jobItems = runningOnly
                 ? await this.jobService.GetRunningOrQueuedJobs(tenantContext.Tenant)
                 : await this.jobService.GetAllJobsAsync(tenantContext.Tenant);
@@ -123,11 +126,10 @@ namespace WB.Services.Export.Host.Jobs
             args.ProcessId = job.Id;
             return args;
         }
-
         public async Task<List<DataExportProcessArgs>> GetProcessesAsync(long[] processIds)
         {
             var jobs = await this.jobService.GetJobsAsync(processIds);
-            
+            await this.tenantDbContext.EnsureMigrated(CancellationToken.None);
             return AsDataExportProcesses(jobs).ToList();
         }
 
