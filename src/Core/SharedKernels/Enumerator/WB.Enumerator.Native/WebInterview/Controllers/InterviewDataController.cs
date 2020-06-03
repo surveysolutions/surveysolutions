@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -473,9 +474,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var interview = this.GetCallerInterview(interviewId);
             if (interview == null) return false;
 
-            return this.GetCallerQuestionnaire(interview.QuestionnaireIdentity).GetPrefilledEntities().Any()
-                || interview.GetAllCommentedEnabledQuestions().Any()
-                || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
+            var questionnaire = this.GetCallerQuestionnaire(interview.QuestionnaireIdentity);
+            if (questionnaire.IsCoverPageSupported)
+                return false;
+            
+            return questionnaire.GetPrefilledEntities().Any()
+                   || interview.GetAllCommentedEnabledQuestions().Any()
+                   || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.sidebar.js")]
@@ -543,6 +548,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 UnansweredCount = questionsCount - answeredQuestionsCount,
                 EntitiesWithError = invalidEntities
             };
+
             return completeInfo;
         }
 
@@ -580,14 +586,27 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Select(x => this.GetIdentifyingEntity(x, interview, questionnaire))
                 .ToList();
 
-            var completeInfo = new CoverInfo
+            var status = questionnaire.IsCoverPageSupported
+                ? this.interviewEntityFactory.CalculateSimpleStatus(
+                    interview.GetGroup(new Identity(QuestionnaireDocument.CoverPageSectionId, RosterVector.Empty)), 
+                    IsReviewMode(), interview, questionnaire)
+                : GroupStatus.Completed;
+            
+            var coverInfo = new CoverInfo
             {
+                Title = questionnaire.IsCoverPageSupported 
+                    ? questionnaire.GetGroupTitle(QuestionnaireDocument.CoverPageSectionId)
+                    : null,
+                Status = status,
                 EntitiesWithComments = entitiesWithComments,
                 IdentifyingEntities = interviewEntityWithTypes,
                 CommentedQuestionsCount = commentedQuestionsCount,
                 SupervisorRejectComment = interview.SupervisorRejectComment
             };
-            return completeInfo;
+            
+            this.interviewEntityFactory.ApplyValidity(coverInfo.Validity, coverInfo.Status);
+
+            return coverInfo;
         }
     }
 }

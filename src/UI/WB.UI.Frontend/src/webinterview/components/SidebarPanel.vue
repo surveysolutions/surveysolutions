@@ -70,6 +70,10 @@ export default {
                 return this.panel.to
             }
 
+            if (this.panel.id == '11111111111111111111111111111111') {
+                return { name: 'cover', params: { sectionId: this.panel.id } }
+            }
+
             return { name: 'section', params: { sectionId: this.panel.id } }
         },
         isCollapsed() {
