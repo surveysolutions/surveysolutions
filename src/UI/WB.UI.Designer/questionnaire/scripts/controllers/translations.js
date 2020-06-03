@@ -77,6 +77,8 @@
             $scope.loadTranslations = function () {
                 if ($scope.questionnaire === null)
                     return;
+                
+                $scope.translations.splice(0, $scope.translations.length)
 
                 var defaultTranslation = {
                     translationId: null,
