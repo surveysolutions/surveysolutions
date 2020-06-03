@@ -120,7 +120,7 @@ namespace WB.Services.Export.Infrastructure
             }
         }
 
-        public async Task CheckSchemaVersionAndMigrate(CancellationToken cancellationToken)
+        private async Task CheckSchemaVersionAndMigrate(CancellationToken cancellationToken)
         {
             if (await DoesSchemaExist(cancellationToken))
             {
@@ -142,16 +142,16 @@ namespace WB.Services.Export.Infrastructure
                 }
             }
 
-            this.Database.Migrate();
+            await this.Database.MigrateAsync(cancellationToken: cancellationToken);
         }
 
-        public async Task SetContextSchema(CancellationToken cancellationToken)
+        private async Task SetContextSchema(CancellationToken cancellationToken)
         {
-            await using var tr = Database.BeginTransaction();
+            await using var tr = await Database.BeginTransactionAsync(cancellationToken);
 
             SchemaVersion.AsLong = ContextSchemaVersion;
             await SaveChangesAsync(cancellationToken);
-            tr.Commit();
+            await tr.CommitAsync(cancellationToken);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -205,7 +205,7 @@ namespace WB.Services.Export.Infrastructure
 
             foreach (var tables in tablesToDelete.Batch(30))
             {
-                await using var tr = db.BeginTransaction();
+                await using var tr = await db.BeginTransactionAsync(cancellationToken);
                 foreach (var table in tables)
                 {
                     await db.ExecuteAsync($@"drop table if exists {table}");
@@ -215,7 +215,7 @@ namespace WB.Services.Export.Infrastructure
                 await tr.CommitAsync(cancellationToken);
             }
 
-            await using (var tr = db.BeginTransaction())
+            await using (var tr = await db.BeginTransactionAsync(cancellationToken))
             {
                 foreach (var schema in schemas)
                 {
@@ -240,6 +240,15 @@ namespace WB.Services.Export.Infrastructure
                     name
                 });
             return exists;
+        }
+
+        public async Task EnsureMigrated(CancellationToken cancellationToken)
+        {
+            if (Database.IsNpgsql())
+            {
+                await CheckSchemaVersionAndMigrate(cancellationToken);
+                await SetContextSchema(cancellationToken);
+            }
         }
     }
 }
