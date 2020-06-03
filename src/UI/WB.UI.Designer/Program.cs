@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Infrastructure.AspNetCore;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Migrations.Logs;
@@ -18,43 +20,45 @@ namespace WB.UI.Designer
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
-            string? appRoot = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+            var webHost = CreateWebHostBuilder(args).Build();
+            var version = webHost.Services.GetService<IProductVersion>();
+            var applicationVersion = version.ToString();
+            var logger = webHost.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogWarning("Designer application started. Version {version}", applicationVersion);
 
-            Log.Logger = new LoggerConfiguration()
-                .ConfigureSurveySolutionsLogging(appRoot ?? throw new InvalidOperationException("App path was not found"), "designer")
-                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-                .CreateLogger();
-
-            try
-            {
-                var webHost = CreateWebHostBuilder(args).Build();
-                var version = webHost.Services.GetService<IProductVersion>();
-                var applicationVersion = version.ToString();
-
-                Log.Logger.Warning("Designer application started. Version {version}", applicationVersion);
-
-                webHost
-                    .RunMigrations(typeof(M001_Init), "plainstore")
-                    .RunMigrations(typeof(M201904221727_AddErrorsTable), "logs")
-                    .Run();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            await webHost
+                .RunMigrations(typeof(M001_Init), "plainstore")
+                .RunMigrations(typeof(M201904221727_AddErrorsTable), "logs")
+                .RunAsync();
+            
+            return 0;
         }
+
+        private static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseSerilog()
+                .UseSerilog((host, loggerConfig) =>
+                {
+                    loggerConfig
+                        .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "Headquarters");
+
+                    if (!host.HostingEnvironment.IsDevelopment())
+                    {
+                        loggerConfig.MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning);
+                    }
+                    
+                    if (host.HostingEnvironment.IsDevelopment() || InDocker)
+                    {
+                        // To debug logitems source add {SourceContext} to output template
+                        // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
+                        loggerConfig.WriteTo.Console();
+                    }
+                })
                 .ConfigureAppConfiguration((hostingContext, c) =>
                 {
                     c.AddIniFile("appsettings.ini", false, true);
@@ -63,7 +67,7 @@ namespace WB.UI.Designer
                     c.AddIniFile("appsettings.Production.ini", true);
                     c.AddCommandLine(args);
 
-                    if(hostingContext.HostingEnvironment.IsDevelopment())
+                    if (hostingContext.HostingEnvironment.IsDevelopment())
                     {
                         c.AddUserSecrets<Startup>();
                     }
