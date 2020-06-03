@@ -71,6 +71,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public Guid PublicKey => this.Questionnaire.PublicKey;
         public string VariableName => this.Questionnaire.VariableName;
 
+        public string? DefaultLanguageName => this.Questionnaire.DefaultLanguageName;
+
         public T? Find<T>(Guid publicKey) where T : class, IComposite
         {
             return this.FindEntityWithMeta(publicKey)?.Entity as T;
