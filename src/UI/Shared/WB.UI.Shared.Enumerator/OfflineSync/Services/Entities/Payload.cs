@@ -49,12 +49,9 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Entities
         public async Task ReadStreamAsync()
         {
             tsc = new TaskCompletionSource<byte[]>();
-
-            using (var ms = new MemoryStream())
-            {
-                await Stream.CopyToAsync(ms);
-                tsc.SetResult(ms.ToArray());
-            }
+            await using var ms = new MemoryStream();
+            Stream.CopyTo(ms);
+            tsc.SetResult(ms.ToArray());
         }
 
         public override string ToString()
