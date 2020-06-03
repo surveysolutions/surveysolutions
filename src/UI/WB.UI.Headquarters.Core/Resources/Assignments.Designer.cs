@@ -147,6 +147,18 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string WebModeReassignToNonInterviewer {
+            get {
+                return ResourceManager.GetString("WebModeReassignToNonInterviewer", resourceCulture);
+            }
+        }
+        
+        public static string WebModeReassignToNonInterviewer_plural {
+            get {
+                return ResourceManager.GetString("WebModeReassignToNonInterviewer_plural", resourceCulture);
+            }
+        }
+        
         public static string ShowArchived {
             get {
                 return ResourceManager.GetString("ShowArchived", resourceCulture);

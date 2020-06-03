@@ -121,7 +121,8 @@
             :title="$t('Pages.ConfirmationNeededTitle')">
             <p>{{ $t("Assignments.NumberOfAssignmentsAffected", {count: selectedRows.length} )}}</p>
             <form onsubmit="return false;">
-                <div class="form-group">
+                <div class="form-group"
+                    :class="{'has-warning': showWebModeReassignWarning}">
                     <label
                         class="control-label"
                         for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
@@ -132,6 +133,10 @@
                         :ajax-params="{ }"
                         @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
+                    <span class="help-block"
+                        v-if="showWebModeReassignWarning">
+                        {{$t('Assignments.WebModeReassignToNonInterviewer', {count: selectedRows.length})}}
+                    </span>
                 </div>
                 <div class="form-group">
                     <label class="control-label"
@@ -256,6 +261,7 @@ import * as toastr from 'toastr'
 import { isEqual, map, join, assign, findIndex, includes } from 'lodash'
 import moment from 'moment'
 import {DateFormats} from '~/shared/helpers'
+import {RoleNames} from '~/shared/constants'
 
 export default {
     data() {
@@ -287,6 +293,12 @@ export default {
             const data = this.$refs.table.table.rows({selected: true}).data()
             return data[0].webMode
         },
+        anyWebModeAssignmentSelected() {
+            if(this.selectedRows.length === 0) return false
+            const data = this.$refs.table.table.rows({selected: true}).data()
+            const webModes = map(data, (r) => r.webMode)
+            return webModes.includes(true)
+        },
         singleCloseMessage() {
             if (this.isWebModeAssignmentSelected) {
                 return this.$t('Assignments.AssignmentCloseWebMode', {
@@ -301,6 +313,11 @@ export default {
                 collected: dataRow.interviewsCount,
             })
             return result
+        },
+        showWebModeReassignWarning() {
+            if(!this.newResponsibleId) return false
+
+            return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER
         },
         quantityValidations() {
             return {
