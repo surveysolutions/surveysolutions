@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
                 await json.WritePropertyNameAsync(nameof(EventsFeedPage.Events));
                 await json.WriteStartArrayAsync();
 
-                var events = headquartersEventStore.GetRawEventsFeed(sequence, pageSize);
+                var events = headquartersEventStore.GetRawEventsFeed(sequence, pageSize, 400 * 1024 * 1024 /* 400 Mb */);
 
                 // writing events in stream "as is" without serialization/deserialization
                 // to reduce memory pressure in HQ writing JSON manually

@@ -102,7 +102,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 var sortOrder = input.Order.IsNullOrEmpty() ? $"{nameof(QuestionnaireListViewItem.LastEntryDate)}  Desc" : input.Order;
 
                 var questionnaireListViewItems = FilterQuestionnaires(this.dbContext.Questionnaires, input, isSupportFolders: isSupportFolders)
-                    
                     .OrderUsingSortExpression(sortOrder)
                     .Skip(questionnairesSkipCount)
                     .Take(questionnairesTakeCount)
@@ -122,7 +121,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                             QuestionnaireId = x.QuestionnaireId,
                             Title = x.Title,
                             FolderId = x.FolderId,
-                            Folder = isSupportFolders ? x.Folder : null
+                            Folder = isSupportFolders ? x.Folder : null,
+                            SharedPersons = x.SharedPersons
                         }).ToList();
             }
 
@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             IQueryable<QuestionnaireListViewItem> _,
             QuestionnaireListInputModel input, bool isSupportFolders)
         {
-            var result = _.Where(x => x.IsDeleted == false);
+            var result = _.Include(x => x.SharedPersons).Where(x => x.IsDeleted == false);
 
             if (isSupportFolders)
             {
