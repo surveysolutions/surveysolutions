@@ -159,9 +159,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             try
             {
-                this.connectionClient.StopDiscovery();
                 this.logger.Info($"[STOP DISCOVERY]");
-            } catch { }
+                this.connectionClient.StopDiscovery();
+            }
+            catch(Exception e)
+            {
+                this.logger.Error("[STOP DISCOVERY] Failed", e);
+            }
         }
 
         public void StopAdvertising()
@@ -170,7 +174,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             {
                 this.connectionClient.StopAdvertising();
                 this.logger.Info($"[STOP ADVERTISING]");
-            } catch { }
+            }
+            catch (Exception e)
+            {
+                this.logger.Error("[STOP ADVERTISING] Failed", e);
+            }
         }
 
         public void StopAll()
@@ -185,8 +193,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 this.locker = new NamedAsyncLocker();
                 this.logger.Info("[STOP ALL]");
             }
-            catch
+            catch(Exception e)
             {
+                this.logger.Error("[STOP ALL] Failed", e);
                 /* om om om */
             }
         }
