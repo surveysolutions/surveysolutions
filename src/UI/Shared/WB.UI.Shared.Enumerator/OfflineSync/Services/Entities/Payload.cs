@@ -1,6 +1,7 @@
 ﻿using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 
@@ -41,29 +42,32 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Entities
             return new Payload(Android.Gms.Nearby.Connection.Payload.FromBytes(bytes), endpoint);
         }
 
-        public byte[] BytesFromStream { get; private set; }
-
+        public Task<byte[]> BytesFromStream { get; private set; }
+        
         public void ReadStream()
         {
-            using var ms = new MemoryStream();
-            
-            // implementation from Stream.Copy()
-            var buffer = ArrayPool<byte>.Shared.Rent(4096);
-
-            try
+            BytesFromStream = Task.Run(() =>
             {
-                int read;
-                while ((read = Stream.Read(buffer, 0, buffer.Length)) != 0)
+                using var ms = new MemoryStream();
+
+                // implementation from Stream.Copy()
+                var buffer = ArrayPool<byte>.Shared.Rent(81920);
+
+                try
                 {
-                    ms.Write(buffer, 0, read);
+                    int read;
+                    while ((read = Stream.Read(buffer, 0, buffer.Length)) != 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
                 }
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
-            }
+                finally
+                {
+                    ArrayPool<byte>.Shared.Return(buffer);
+                }
 
-            BytesFromStream = ms.ToArray();
+                return ms.ToArray();
+            });
         }
 
         public override string ToString()
