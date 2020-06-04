@@ -36,6 +36,7 @@ export const entityDetails = {
                 isLoading: true,
             }
         },
+
         hash() {
             return getLocationHash(this.id)
         },
@@ -85,8 +86,10 @@ export const entityDetails = {
         sendAnswer(callback) {
             if (this.acceptAnswer) {
                 callback()
+                this.$store.dispatch('tryResolveFetch', this.id)
             }
         },
+
         cleanValidity() {
             this.$store.dispatch('clearAnswerValidity', { id: this.id })
         },
@@ -96,6 +99,7 @@ export const entityDetails = {
         removeAnswer() {
             this.$store.dispatch('removeAnswer', this.$me.id)
             this.$emit('answerRemoved', this.$me.id)
+
         },
 
         fetch(id) {
