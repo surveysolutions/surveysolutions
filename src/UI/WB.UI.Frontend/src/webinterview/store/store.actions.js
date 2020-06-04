@@ -100,8 +100,21 @@ export default {
         return Vue.$api.interview.answer(identity, 'answerQRBarcodeQuestion', { answer: text })
     },
 
-    removeAnswer(_, identity) {
-        return Vue.$api.interview.answer(identity, 'removeAnswer')
+    async removeAnswer({ dispatch }, identity) {
+        await Vue.$api.interview.answer(identity, 'removeAnswer')
+        dispatch('tryResolveFetch', identity)
+    },
+
+    tryResolveFetch({ getters, dispatch }, identity) {
+        setTimeout(() => {
+            if (getters.loadingProgress) {
+                dispatch({
+                    type: 'fetchEntity',
+                    id: identity,
+                    source: 'client',
+                })
+            }
+        }, 2000)
     },
 
     sendNewComment({ commit }, { identity, comment }) {
