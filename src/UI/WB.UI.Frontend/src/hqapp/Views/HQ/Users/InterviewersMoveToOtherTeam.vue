@@ -57,6 +57,11 @@
                             v-html="$t('Pages.Interviewers_MoveAllToNewTeam', { supervisor: `<b>${selectedSupervisor}</b>`})"></span>
                     </label>
                 </div>
+
+                <span class="text-warning"
+                    v-if="showWebModeReassignWarning">
+                    {{$t('Pages.Interviewers_MoveWebAssigment')}}
+                </span>
             </div>
         </Confirm>
 
@@ -108,17 +113,17 @@
 import {map, isUndefined, isEmpty, filter} from 'lodash'
 import gql from 'graphql-tag'
 
-const query = gql`query ($responsibleId: Uuid) {
+const query = gql`query ($responsibleIds: [Uuid!]) {
   assignments(
     where: {
-          responsibleId: $responsibleId,
+          responsibleId_in: $responsibleIds,
           webMode: true,
           archived: false
       },
-    take: 0
+    take: 1
     ) 
   {
-    totalCount
+    filteredCount
   }
 }`
 
@@ -129,7 +134,7 @@ export default {
             supervisor: null,
             progressInterviewers: [],
             movingDialogTitle: '',
-            displayReassignWebAssignmentWarning: false,
+            showWebModeReassignWarning: false,
         }
     },
     props: {
@@ -272,15 +277,20 @@ export default {
     },
     watch: {
         async whatToDoWithAssignments(newValue) {
+            const self = this
             if(newValue === 'ReassignToOriginalSupervisor'){
-                const response = await this.$apollo.query({
+                const interviewersArray = map(self.interviewersToMove, (i) => i.userId)
+                const response = await self.$apollo.query({
                     query,
-                    variables: variables,
+                    variables: {
+                        responsibleIds: interviewersArray,
+                    },
                     fetchPolicy: 'network-only',
                 })
-                this.displayReassignWebAssignmentWarning = response.data.assignments.totalCount > 0
-            }else{
-                this.displayReassignWebAssignmentWarning = false
+
+                self.showWebModeReassignWarning = response.data.assignments.filteredCount > 0
+            } else {
+                self.showWebModeReassignWarning = false
             }
         },
     },
