@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
         Stream Stream { get; }
         PayloadType Type { get; }
 
-        Task ReadStreamAsync();
+        void ReadStream();
         Task<byte[]> BytesFromStream { get; }
     }
 }
