@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             descriptor.Name("AssignmentsFilter");
 
             descriptor.Filter(x => x.Archived).BindFiltersExplicitly().AllowEquals();
-            descriptor.Filter(x => x.ResponsibleId).BindFiltersExplicitly().AllowEquals();
+            descriptor.Filter(x => x.ResponsibleId).BindFiltersExplicitly().AllowEquals().And().AllowIn().And().AllowNotIn().And().AllowNotEquals();
             descriptor.Filter(x => x.WebMode).BindFiltersExplicitly().AllowEquals();
         }
     }
