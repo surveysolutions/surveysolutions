@@ -106,6 +106,21 @@
 
 <script>
 import {map, isUndefined, isEmpty, filter} from 'lodash'
+import gql from 'graphql-tag'
+
+const query = gql`query ($responsibleId: Uuid) {
+  assignments(
+    where: {
+          responsibleId: $responsibleId,
+          webMode: true,
+          archived: false
+      },
+    take: 0
+    ) 
+  {
+    totalCount
+  }
+}`
 
 export default {
     data() {
@@ -114,6 +129,7 @@ export default {
             supervisor: null,
             progressInterviewers: [],
             movingDialogTitle: '',
+            displayReassignWebAssignmentWarning: false,
         }
     },
     props: {
@@ -252,6 +268,20 @@ export default {
         },
         countInterviewersToMove() {
             return this.interviewersToMove().length
+        },
+    },
+    watch: {
+        async whatToDoWithAssignments(newValue) {
+            if(newValue === 'ReassignToOriginalSupervisor'){
+                const response = await this.$apollo.query({
+                    query,
+                    variables: variables,
+                    fetchPolicy: 'network-only',
+                })
+                this.displayReassignWebAssignmentWarning = response.data.assignments.totalCount > 0
+            }else{
+                this.displayReassignWebAssignmentWarning = false
+            }
         },
     },
 }
