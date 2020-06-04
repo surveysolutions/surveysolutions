@@ -124,14 +124,13 @@
                     return;
                 }
 
-                var translationId = utilityService.guid()
+                
                 var translation = { 
-                    translationId: translationId,
-                    downloadUrl: $scope.downloadBaseUrl + '/' + $scope.questionnaire.questionnaireId + '/xlsx/' + translationId
                 };
 
                 $scope.fileSelected(translation, file, function () {
                     commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
+                        translation.downloadUrl = $scope.downloadBaseUrl + '/' + $scope.questionnaire.questionnaireId + '/xlsx/' + translation.translationId
                         translation.checkpoint = translation.checkpoint || {};
 
                         dataBind(translation.checkpoint, translation);
