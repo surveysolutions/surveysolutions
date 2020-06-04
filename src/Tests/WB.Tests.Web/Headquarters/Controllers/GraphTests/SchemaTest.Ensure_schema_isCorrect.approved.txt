@@ -178,6 +178,9 @@ input AssignmentsFilter {
   archived: Boolean
   OR: [AssignmentsFilter!]
   responsibleId: Uuid
+  responsibleId_in: [Uuid!]
+  responsibleId_not: Uuid
+  responsibleId_not_in: [Uuid!]
   webMode: Boolean
 }
 
