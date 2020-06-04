@@ -64,7 +64,7 @@ namespace WB.UI.Designer.Controllers
                               option => new QuestionnaireCategoricalOption
                               {
                                   Value = option.Value != null ? (int)option.Value : throw new InvalidOperationException("Option Value must be not null."),
-                                  ParentValue = option.ParentValue != null ? (int)option.ParentValue: throw new InvalidOperationException("Option ParentValue must be not null."),
+                                  ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : (int?) null,
                                   Title = option.Title
                               }) 
                 : new QuestionnaireCategoricalOption[0];
