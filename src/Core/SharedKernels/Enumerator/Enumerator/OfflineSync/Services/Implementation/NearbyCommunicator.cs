@@ -11,7 +11,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
-using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
@@ -186,7 +185,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     break;
                 case PayloadType.Stream:
                     this.logger.Verbose($"Got stream");
-                    await payload.ReadStreamAsync();
+                    payload.ReadStream();
                     break;
                 case PayloadType.File:
                     break;
