@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -61,7 +62,8 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
             eventStore = new PostgresEventStore(
                 eventTypeResolver,
-                sessionProvider.Object);
+                sessionProvider.Object,
+                Mock.Of<ILogger<PostgresEventStore>>());
 
             BecauseOf();
         }

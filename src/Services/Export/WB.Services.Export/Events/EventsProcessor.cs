@@ -38,7 +38,7 @@ namespace WB.Services.Export.Events
         private int pageSize;
 
         long? maximumSequenceToQuery;
-        private const double ExpectedBatchDurationInSeconds = 2;
+        private const double ExpectedBatchDurationInSeconds = 4;
 
         private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
@@ -68,7 +68,7 @@ namespace WB.Services.Export.Events
 
             dataExportProcessesService.ChangeStatusType(exportProcessId, DataExportStatus.Preparing);
 
-            var executionTrack = new Stopwatch();
+            var executionTrack = Stopwatch.StartNew();
 
             var feedRanges = new List<FeedRangeDebugDataItem>();
 
@@ -98,8 +98,6 @@ namespace WB.Services.Export.Events
 
             async Task ExecuteAndEstimate(EventsFeed feed, Func<Task> action)
             {
-                executionTrack.Restart();
-
                 // Action execution. Everything else is for estimation and progress reporting
                 await action();
 
@@ -108,7 +106,7 @@ namespace WB.Services.Export.Events
                 // ReSharper disable once PossibleInvalidOperationException - max value will always be set
                 var totalEventsToRead = maximumSequenceToQuery.Value - sequenceToStartFrom;
                 var eventsProcessed = feed.Events.Last().GlobalSequence - sequenceToStartFrom;
-                var percent = (eventsProcessed + sequenceToStartFrom).PercentDOf(totalEventsToRead);
+                var percent = (eventsProcessed + sequenceToStartFrom).PercentDOf(maximumSequenceToQuery.Value);
 
                 // in events/second
                 var thisBatchProcessingSpeed = feed.Events.Count / executionTrack.Elapsed.TotalSeconds;
@@ -132,12 +130,15 @@ namespace WB.Services.Export.Events
                 this.logger.LogInformation(
                     "Published {pageSize} events. " +
                     "GlobalSequence: {sequence:n0}/{total:n0}. " +
-                    "Batch time {duration:g}. Total time {globalDuration:g}.  ETA: {eta}",
+                    "Batch time {duration:g}. Total time {globalDuration:g}. Speed: {eventPerSeconds} e/s ETA: {eta}",
                     feed.Events.Count, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : 0,
                     feed.Total,
                     executionTrack.Elapsed,
                     globalStopwatch.Elapsed,
+                    runningAverage.Average.ToString("N2"),
                     estimatedTime);
+
+                executionTrack.Restart();
             }
         }
 
@@ -160,7 +161,7 @@ namespace WB.Services.Export.Events
                     apiTrack.Restart();
 
                     // just to make sure that we will not query too much data while skipping deleted questionnaires
-                    var amount = Math.Min((int)(readingAvg.Average * ExpectedBatchDurationInSeconds), pageSize);
+                    var amount = Math.Max(100, Math.Min((int)(readingAvg.Average * ExpectedBatchDurationInSeconds), pageSize));
 
                     var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
                     apiTrack.Stop();
