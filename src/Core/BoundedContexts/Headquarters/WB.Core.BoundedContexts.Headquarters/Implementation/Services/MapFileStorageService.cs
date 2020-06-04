@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
 
+        private const int WGS84Wkid = 4326; //https://epsg.io/4326
         private const string TempFolderName = "TempMapsData";
         private const string MapsFolderName = "MapsData";
         private readonly string path;
@@ -194,7 +195,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                     unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
                                     jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
 
-                                    item.Wkid = 4326;//extent in geographic coordinates
+                                    item.Wkid = WGS84Wkid;
 
                                     var extent = jsonObject.item.extent;
 
