@@ -342,7 +342,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentEmail>(IncosistentWebmodeAndEmail, "PL0058", messages.PL0058_IncosistentWebmodeAndEmail),
             Error<AssignmentPassword>(IncosistentWebmodeAndPassword, "PL0059", messages.PL0059_IncosistentWebmodeAndPassword),
             Error<AssignmentQuantity>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
-            Error<AssignmentWebMode>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword)
+            Error<AssignmentWebMode>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
+            Error<AssignmentResponsible>(WebModeOnlyForInterviewer, "PL0062", messages.PL0062_WebModeOnlyForInterviewer)
         };
 
         private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentWebMode webMode, PreloadingAssignmentRow assignmentRow)
@@ -350,6 +351,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                webMode.WebMode == true &&
                string.IsNullOrEmpty(assignmentRow.Password?.Value) &&
                string.IsNullOrEmpty(assignmentRow.Email?.Value);
+        
+        private bool WebModeOnlyForInterviewer(AssignmentResponsible webMode, PreloadingAssignmentRow assignmentRow)
+            => assignmentRow.WebMode?.WebMode == true && webMode.Responsible.InterviewerId == null;
 
         private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentQuantity quantity, PreloadingAssignmentRow assignmentRow)
             => quantity.Quantity == 1 &&
