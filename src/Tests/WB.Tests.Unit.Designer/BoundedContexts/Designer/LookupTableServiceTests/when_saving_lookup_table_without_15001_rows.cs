@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
             exception = Assert.Throws<ArgumentException>(() =>
                 lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent));
 
-            exception.Message.Should().Be(string.Format(ExceptionMessages.LookupTables_too_many_rows, 15000));
+            exception.Message.Should().Be(string.Format(ExceptionMessages.LookupTables_too_many_rows, 15000, 15001));
         }
 
         private static Exception exception;
