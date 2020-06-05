@@ -586,26 +586,16 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Select(x => this.GetIdentifyingEntity(x, interview, questionnaire))
                 .ToList();
 
-            var status = questionnaire.IsCoverPageSupported
-                ? this.interviewEntityFactory.CalculateSimpleStatus(
-                    interview.GetGroup(new Identity(QuestionnaireDocument.CoverPageSectionId, RosterVector.Empty)), 
-                    IsReviewMode(), interview, questionnaire)
-                : GroupStatus.Completed;
-            
             var coverInfo = new CoverInfo
             {
                 Title = questionnaire.IsCoverPageSupported 
                     ? questionnaire.GetGroupTitle(QuestionnaireDocument.CoverPageSectionId)
                     : null,
-                Status = status,
                 EntitiesWithComments = entitiesWithComments,
                 IdentifyingEntities = interviewEntityWithTypes,
                 CommentedQuestionsCount = commentedQuestionsCount,
                 SupervisorRejectComment = interview.SupervisorRejectComment
             };
-            
-            this.interviewEntityFactory.ApplyValidity(coverInfo.Validity, coverInfo.Status);
-
             return coverInfo;
         }
     }
