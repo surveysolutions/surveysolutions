@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     [TestOf(typeof(StatefulInterview))]
-    internal class StatefulInterview_PauseResumeTests
+    public class StatefulInterview_PauseResumeTests
     {
         [Test]
         public void when_pause_command_called_Should_record_pause_date()
@@ -47,6 +47,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var expectedCloseSessionDate = dateTimeOffset.UtcDateTime.AddMinutes(15);
             events.ShouldContainEvent<InterviewPaused>(x => x.UtcTime == expectedCloseSessionDate);
             events.ShouldContainEvent<InterviewResumed>(x => x.UtcTime == dateTimeOffset5SecondsAfter.UtcDateTime);
+        }
+
+        [Test]
+        public void when_resume_command_arrives_within_15_minutes_after_last_resume()
+        {
+            var interview = Create.AggregateRoot.StatefulInterview(Id.gA);
+
+            var dateTimeOffset = new DateTimeOffset(2010, 1, 20, 1, 1, 1, new TimeSpan());
+            var dateTimeOffset10MinutesAfter = dateTimeOffset.AddMinutes(10);
+            
+            // Act
+            interview.Resume(Create.Command.ResumeInterview(Id.gA, dateTimeOffset));
+            
+            using var events = new EventContext(); 
+            interview.Resume(Create.Command.ResumeInterview(Id.gA, dateTimeOffset10MinutesAfter));
+            
+            // Assert
+            var expectedCloseSessionDate = dateTimeOffset10MinutesAfter;
+            events.ShouldContainEvent<InterviewPaused>(x => x.UtcTime == expectedCloseSessionDate);
+            events.ShouldContainEvent<InterviewResumed>(x => x.UtcTime == dateTimeOffset10MinutesAfter.UtcDateTime);
         }
         
         [Test]

@@ -961,9 +961,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Resume(ResumeInterviewCommand command)
         {
-            if (this.properties.LastResumedUtc.HasValue)
+            var lastResume = this.properties.LastResumedUtc;
+            if (lastResume.HasValue)
             {
-                DateTime closePreviousNonClosedSessionDate = this.properties.LastResumedUtc.Value.AddMinutes(15);
+                DateTime closePreviousNonClosedSessionDate = 
+                    lastResume.Value.AddMinutes(15);
+
+                if (command.OriginDate.UtcDateTime < closePreviousNonClosedSessionDate)
+                {
+                    closePreviousNonClosedSessionDate = command.OriginDate.UtcDateTime;
+                }
                 
                 if (this.properties.LastAnswerDateUtc > closePreviousNonClosedSessionDate)
                 {
@@ -983,9 +990,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void OpenBySupervisor(OpenInterviewBySupervisorCommand command)
         {
-            if (this.properties.LastOpenedBySupervisor > base.clock.UtcNow().AddMinutes(15))
+            var lastOpenDate = this.properties.LastOpenedBySupervisor;
+            if (lastOpenDate.HasValue)
             {
-                DateTime closePreviousNonClosedSessionDate = this.properties.LastOpenedBySupervisor.Value.AddMinutes(15);
+                DateTime closePreviousNonClosedSessionDate = 
+                    lastOpenDate.Value.AddMinutes(15);
+
+                if (command.OriginDate.UtcDateTime < closePreviousNonClosedSessionDate)
+                {
+                    closePreviousNonClosedSessionDate = command.OriginDate.UtcDateTime;
+                }
+                
                 ApplyEvent(new InterviewClosedBySupervisor(command.UserId, closePreviousNonClosedSessionDate));
             }
             
