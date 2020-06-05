@@ -163,7 +163,7 @@
     <value>Слишком много колонок в загруженном файле. Граничное количесово колонок - {0}.</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>Превышена максимальная граница ({0}) колочества строк.</value>
+    <value>Количество строк: {1}. Превышена максимальная граница ({0}) количества строк.</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>Макрос с таким ключом уже существует</value>

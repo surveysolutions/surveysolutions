@@ -493,7 +493,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max rows count limit ({0} rows) was exceeded..
+        ///   Looks up a localized string similar to Lookup table contains {1} rows, which exceeds the limit on the number of rows in a lookup table ({0} rows)..
         /// </summary>
         public static string LookupTables_too_many_rows {
             get {
