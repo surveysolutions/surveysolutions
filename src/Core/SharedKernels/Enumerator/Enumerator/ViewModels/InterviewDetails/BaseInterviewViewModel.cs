@@ -118,7 +118,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.QuestionnaireTitle = questionnaire.Title;
 
             assignmentId = interview.GetAssignmentId();
-
             interviewKey = interview.GetInterviewKey();
             this.InterviewKey = interviewKey == null ? null : String.Format(UIResources.InterviewKey, interviewKey.ToString());
 
@@ -174,6 +173,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.UpdateGroupStatus(this.navigationState.CurrentGroup);
             }
+            else if (this.navigationState.CurrentScreenType == ScreenType.Cover)
+            {
+                coverState.UpdateFromGroupModel();
+                this.Status = this.coverState.Status;
+            }
         }
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
@@ -187,7 +191,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     break;
                 case ScreenType.Cover:
                     this.vibrationViewModel.Disable();
-                    this.coverState.Init(this.navigationState.InterviewId, null);
+                    this.answerNotifier.Init(this.InterviewId);
+                    this.coverState.Init(this.navigationState.InterviewId, eventArgs.TargetGroup);
                     this.Status = this.coverState.Status;
                     break;
                 case ScreenType.Group:
