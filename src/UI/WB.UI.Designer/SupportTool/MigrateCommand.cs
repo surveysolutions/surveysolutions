@@ -77,24 +77,23 @@ namespace WB.UI.Designer.SupportTool
                 })
                 .WaitAndRetryForeverAsync(i => TimeSpan.FromSeconds(1),
                     (e, i, time) => { logger.LogWarning("Attempt #{attempt} to run migrations", i); })
-                .ExecuteAsync(async () =>
+                .ExecuteAsync(() =>
                 {
                     Stopwatch sw = Stopwatch.StartNew();
 
-                    await host
+                    host
                         .RunMigrations(typeof(M001_Init), "plainstore")
-                        .RunMigrations(typeof(M201904221727_AddErrorsTable), "logs")
-                        .RunAsync();
+                        .RunMigrations(typeof(M201904221727_AddErrorsTable), "logs");
 
                     logger.LogInformation($"All migrations completed in {sw.Elapsed.TotalSeconds.Seconds()}");
+                    return Task.CompletedTask;
                 });
             }
             else
             {
-                await host
+                host
                     .RunMigrations(typeof(M001_Init), "plainstore")
-                    .RunMigrations(typeof(M201904221727_AddErrorsTable), "logs")
-                    .RunAsync();
+                    .RunMigrations(typeof(M201904221727_AddErrorsTable), "logs");
             }
 
             logger.LogInformation("Headquarters migrated to latest ");
