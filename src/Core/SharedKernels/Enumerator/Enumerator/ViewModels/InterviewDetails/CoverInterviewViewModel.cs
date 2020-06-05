@@ -110,9 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.QuestionnaireTitle = questionnaire.Title;
             
             var prefilledEntitiesFromQuestionnaire = questionnaire.GetPrefilledEntities();
-            IsEditMode = prefilledEntitiesFromQuestionnaire
-                .Select(id => interview.GetQuestion(new Identity(id, RosterVector.Empty))?.IsReadonly ?? true)
-                .Any(isReadOnly => !isReadOnly);
+            IsEditMode = interview.HasEditableIdentifyingQuestions;
 
             if (IsEditMode)
             {
