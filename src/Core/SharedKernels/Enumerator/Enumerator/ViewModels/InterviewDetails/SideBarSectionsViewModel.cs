@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private string interviewId;
+        private bool needAddVirtualCoverPage = false;
         private List<Identity> sectionIdentities;
 
         public SynchronizedList<ISideBarSectionItem> items = new SynchronizedList<ISideBarSectionItem>();
@@ -67,17 +68,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.sectionIdentities = questionnaire.GetAllSections()
-                .Where(sectionId => !questionnaire.IsCoverPage(sectionId))
                 .Select(sectionId => Identity.Create(sectionId, RosterVector.Empty))
                 .ToList();
 
-            this.AllVisibleSections = new ObservableRangeCollection<ISideBarItem>(new[]
-            {
-                this.modelsFactory.BuildCoverItem(this.navigationState),
-                this.modelsFactory.BuildOverviewItem(this.navigationState, this.interviewId),
-                this.modelsFactory.BuildCompleteItem(this.navigationState, this.interviewId)
-            });
+            needAddVirtualCoverPage = !questionnaire.IsCoverPageSupported;
+            var predefItems = new List<ISideBarItem>();
+            
+            if (needAddVirtualCoverPage)
+                predefItems.Add(this.modelsFactory.BuildCoverItem(this.navigationState));
+            predefItems.Add(this.modelsFactory.BuildOverviewItem(this.navigationState, this.interviewId));
+            predefItems.Add(this.modelsFactory.BuildCompleteItem(this.navigationState, this.interviewId));
 
+            this.AllVisibleSections = new ObservableRangeCollection<ISideBarItem>(predefItems);
             this.UpdateSections();
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -160,8 +162,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.AllVisibleSections.RemoveRange(removedViewModels);
 
+            var offset = needAddVirtualCoverPage ? 1 : 0;
             foreach (var addedSectionViewModel in addedSectionViewModels)
-                this.AllVisibleSections.Insert(this.items.IndexOf(addedSectionViewModel) + 1, addedSectionViewModel);
+                this.AllVisibleSections.Insert(this.items.IndexOf(addedSectionViewModel) + offset, addedSectionViewModel);
         });
 
         internal IEnumerable<Identity> GetSectionsAndExpandedSubSections(bool clearExpanded, ToggleSectionEventArgs toggledSection = null)
@@ -173,7 +176,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 (
                     !@group.IsDisabled() 
                     || @group.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(@group.Identity.Id)
-                )  && !questionnaire.IsCoverPage(group.Identity.Id);
+                );
 
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
             var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup);
