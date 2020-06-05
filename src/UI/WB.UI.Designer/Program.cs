@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Infrastructure.AspNetCore;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Migrations.Logs;
@@ -23,6 +23,12 @@ namespace WB.UI.Designer
         public static async Task<int> Main(string[] args)
         {
             var webHost = CreateWebHostBuilder(args).Build();
+
+            if (args.Length > 0 && args[0].Equals("manage", StringComparison.OrdinalIgnoreCase))
+            {
+                return await new SupportTool.SupportTool(webHost).Run(args.Skip(1).ToArray());
+            }
+
             var version = webHost.Services.GetService<IProductVersion>();
             var applicationVersion = version.ToString();
             var logger = webHost.Services.GetRequiredService<ILogger<Program>>();
