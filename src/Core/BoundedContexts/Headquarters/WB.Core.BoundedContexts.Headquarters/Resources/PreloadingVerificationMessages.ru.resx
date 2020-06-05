@@ -246,14 +246,14 @@
   </data>
     <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
     <value>Задание размером 1 в веб режиме дожно иметь пароль или электронный адрес</value>
-    <comment>Задание размером 1 в веб режиме дожно иметь пароль или электронный адрес</comment>
   </data>
     <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
     <value>Пароль не уникален. Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
-    <comment></comment>
   </data>
   <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
       <value>Пользователь не является хедквотером, супервизором или интервьюером.</value>
-      <comment>Пользователь не является хедквотером, супервизором или интервьюером.</comment>
+  </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>Все задания для web интервью должны быть назначены на интервьюера</value>
   </data>
 </root>
