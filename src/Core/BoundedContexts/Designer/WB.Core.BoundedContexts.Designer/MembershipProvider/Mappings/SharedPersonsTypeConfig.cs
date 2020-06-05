@@ -19,6 +19,10 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             builder.HasOne(x => x.Questionnaire)
                 .WithMany(x => x.SharedPersons)
                 .HasForeignKey(x => x.QuestionnaireId);
+            
+            builder.Metadata
+                .FindNavigation(nameof(SharedPerson.Questionnaire))
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }
