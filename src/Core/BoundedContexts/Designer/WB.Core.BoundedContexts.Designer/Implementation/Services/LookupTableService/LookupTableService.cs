@@ -266,7 +266,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     rows.Add(row);
                     if (rows.Count > MAX_ROWS_COUNT)
                     {
-                        throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_rows, MAX_ROWS_COUNT));
+                        throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_rows, MAX_ROWS_COUNT, rows.Count));
                     }
                 } while (csvReader.Read());
 

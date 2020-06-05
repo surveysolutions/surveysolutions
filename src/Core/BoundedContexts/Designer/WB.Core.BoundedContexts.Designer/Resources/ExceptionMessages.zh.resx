@@ -202,7 +202,7 @@
     <value>上传文件的列数过多。最多{0}列</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>已超过最大的行数（{0}行）限制</value>
+    <value>行数：{1}。已超过最大的行数（{0}行）限制</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>此宏（Macro）已存在。</value>

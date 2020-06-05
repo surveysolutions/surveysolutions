@@ -145,7 +145,7 @@
     <value>Too many columns in uploaded file. Max columns count is {0}</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>Max rows count limit ({0} rows) was exceeded.</value>
+    <value>Lookup table contains {1} rows, which exceeds the limit on the number of rows in a lookup table ({0} rows).</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>Macro with such is is already exist.</value>
