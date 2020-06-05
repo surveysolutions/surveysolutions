@@ -260,7 +260,7 @@ import {RoleNames} from '~/shared/constants'
 
 import '@/assets/css/markup-web-interview.scss'
 
-const dict = {
+const validationTranslations = {
     custom: {
         newResponsibleId: {
             required: () => Vue.$t('Assignments.ResponsibleRequired'),
@@ -268,7 +268,7 @@ const dict = {
     },
 }
 
-Validator.localize('en', dict)
+Validator.localize('en', validationTranslations)
 
 const emailOrPasswordRequired = {
     getMessage() {
