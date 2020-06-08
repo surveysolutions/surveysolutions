@@ -98,6 +98,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
 
+            bool canPromotePrototype = false;
+
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
@@ -110,7 +112,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
             else if (prototypeService.IsPrototype(aggregateId))
             {
-                promoterService.MaterializePrototypeIfRequired(aggregateId);
+                canPromotePrototype = true;
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -160,6 +162,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 aggregateRootCache.EvictAggregateRoot(aggregateId);
                 throw;
+            }
+
+            if (canPromotePrototype)
+            {
+                promoterService.MaterializePrototypeIfRequired(aggregateId);
             }
         }
 
