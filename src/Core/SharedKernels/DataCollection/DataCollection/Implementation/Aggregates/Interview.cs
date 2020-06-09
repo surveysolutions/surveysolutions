@@ -1962,6 +1962,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewApproved(userId, comment, originDate));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment, previousStatus: this.properties.Status, originDate:originDate));
+            this.ApplyEvent(new InterviewClosedBySupervisor(userId, originDate));
         }
 
         public void Reject(Guid userId, string comment, DateTimeOffset originDate)
