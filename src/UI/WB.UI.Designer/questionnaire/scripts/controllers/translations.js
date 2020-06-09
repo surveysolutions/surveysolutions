@@ -77,6 +77,8 @@
             $scope.loadTranslations = function () {
                 if ($scope.questionnaire === null)
                     return;
+                
+                $scope.translations.splice(0, $scope.translations.length)
 
                 var defaultTranslation = {
                     translationId: null,
@@ -122,10 +124,13 @@
                     return;
                 }
 
-                var translation = { translationId: utilityService.guid() };
+                
+                var translation = { 
+                };
 
                 $scope.fileSelected(translation, file, function () {
                     commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
+                        translation.downloadUrl = $scope.downloadBaseUrl + '/' + $scope.questionnaire.questionnaireId + '/xlsx/' + translation.translationId
                         translation.checkpoint = translation.checkpoint || {};
 
                         dataBind(translation.checkpoint, translation);

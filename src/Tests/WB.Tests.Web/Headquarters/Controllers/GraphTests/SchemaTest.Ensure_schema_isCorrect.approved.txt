@@ -3,6 +3,18 @@
   mutation: HeadquartersMutations
 }
 
+type Assignment {
+  archived: Boolean!
+  createdAtUtc: DateTime!
+  email: String
+  id: ID!
+  interviewsNeeded: Int
+  "Will return `null` when assignment is not received by tablet"
+  receivedByTabletAtUtc: DateTime
+  responsibleId: Uuid!
+  webMode: Boolean!
+}
+
 type CategoricalOption {
   parentValue: Int
   title: String!
@@ -16,12 +28,22 @@ type HeadquartersMutations {
 }
 
 type HeadquartersQuery {
+  assignments(skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize(apply: BEFORE_RESOLVER)
   interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
   maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
   "Gets questionnaire details"
   questionnaires("Questionnaire id" id: Uuid skip: Int take: Int "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
   questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Question] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
+}
+
+type IPagedConnectionOfAssignment {
+  "Filtered count of nodes without paging"
+  filteredCount: Int!
+  "A flattened list of the nodes."
+  nodes: [Assignment]!
+  "Total count of nodes without filtering applied"
+  totalCount: Int!
 }
 
 type IPagedConnectionOfInterview {
@@ -149,6 +171,17 @@ type User {
 type UserMap {
   "Name of the user assigned to map"
   userName: String
+}
+
+input AssignmentsFilter {
+  AND: [AssignmentsFilter!]
+  archived: Boolean
+  OR: [AssignmentsFilter!]
+  responsibleId: Uuid
+  responsibleId_in: [Uuid!]
+  responsibleId_not: Uuid
+  responsibleId_not_in: [Uuid!]
+  webMode: Boolean
 }
 
 input InterviewFilter {

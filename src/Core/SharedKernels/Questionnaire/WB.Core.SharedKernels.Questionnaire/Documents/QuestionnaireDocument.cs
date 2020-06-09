@@ -17,7 +17,7 @@ namespace Main.Core.Documents
         //is used for deserialization
         public QuestionnaireDocument(List<IComposite>? children = null)
         {
-            DefaultLanguageName = String.Empty;
+            DefaultLanguageName = null;
             VariableName = String.Empty;
             Description = String.Empty;
             this.Title = string.Empty;
@@ -151,7 +151,7 @@ namespace Main.Core.Documents
         public Dictionary<Guid, int>? EntitiesIdMap { get; set; }
 
         public bool CustomRosterTitle => false;
-        public string DefaultLanguageName { get; set; }
+        public string? DefaultLanguageName { get; set; }
 
         public void Insert(int index, IComposite c, Guid? parentId)
         {

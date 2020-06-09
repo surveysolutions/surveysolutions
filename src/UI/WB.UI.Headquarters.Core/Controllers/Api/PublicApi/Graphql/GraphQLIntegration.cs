@@ -3,7 +3,6 @@ using HotChocolate.AspNetCore;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {

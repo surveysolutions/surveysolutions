@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -97,7 +98,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             Guid? creatorId = createdBy ?? document.CreatedBy;
 
-            var sourceQuestionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireIdValue.FormatGuid());
+            var sourceQuestionnaireListViewItem =
+                this.dbContext.Questionnaires.Include(x => x.SharedPersons)
+                    .FirstOrDefault(x => x.QuestionnaireId == questionnaireIdValue.FormatGuid());
+            
+            
             var questionnaireListViewItem = sourceQuestionnaireListViewItem ?? new QuestionnaireListViewItem();
             questionnaireListViewItem.PublicId = questionnaireIdValue;
             questionnaireListViewItem.Title = questionnaireTitle ?? document.Title;

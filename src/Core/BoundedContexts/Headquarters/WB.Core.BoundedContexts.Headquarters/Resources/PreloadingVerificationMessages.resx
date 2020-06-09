@@ -250,4 +250,7 @@
   <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
     <value>Password is not unique. Password by assignment for web mode with quantity 1 should be unique</value>
   </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>All assignments for web interviews must be made to an interviewer</value>
+  </data>
 </root>
