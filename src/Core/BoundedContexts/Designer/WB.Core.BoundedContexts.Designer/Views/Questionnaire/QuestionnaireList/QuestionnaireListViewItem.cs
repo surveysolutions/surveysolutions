@@ -9,9 +9,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
     [DebuggerDisplay("{Title} | public: {IsPublic}, shared with {SharedPersons.Count} persons")]
     public class QuestionnaireListViewItem : IQuestionnaireListItem
     {
+        private ICollection<SharedPerson>? _sharedPersons;
+
         public QuestionnaireListViewItem()
         {
-            SharedPersons = new List<SharedPerson>();
+            _sharedPersons = new List<SharedPerson>();
         }
 
         public virtual DateTime CreationDate { get; set; }
@@ -23,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             get
             {
                 var id = this.QuestionnaireId.ParseGuid();
-                if(id == null)
+                if (id == null)
                     throw new InvalidOperationException("Invalid Questionnaire id.");
                 return id.Value;
             }
@@ -42,12 +44,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual bool IsPublic { get; set; }
 
-        public virtual ICollection<SharedPerson> SharedPersons { get; set; } 
+        public virtual ICollection<SharedPerson> SharedPersons
+        {
+            get => _sharedPersons ?? throw new InvalidOperationException("Trying to use shared persons collection without including it in query");
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+                _sharedPersons = value;
+            }
+        }
 
         public virtual string? Owner { get; set; }
 
         public virtual Guid? FolderId { get; set; }
 
-        public virtual QuestionnaireListViewFolder? Folder { get; set; } 
+        public virtual QuestionnaireListViewFolder? Folder { get; set; }
     }
 }

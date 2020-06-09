@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -178,7 +179,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             sessionProvider.Setup(x => x.Session)
                 .Returns(Mock.Of<ISession>(i => i.Connection == connection));
 
-            return new PostgresEventStore(eventTypeResolver, sessionProvider.Object);
+            return new PostgresEventStore(eventTypeResolver, sessionProvider.Object, Mock.Of<ILogger<PostgresEventStore>>());
         }
     }
 }

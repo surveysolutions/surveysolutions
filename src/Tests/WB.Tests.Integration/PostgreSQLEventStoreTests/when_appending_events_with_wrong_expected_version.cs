@@ -2,7 +2,9 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon.Runtime.Internal.Util;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -33,7 +35,8 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
             eventStore = new PostgresEventStore(
                 eventTypeResolver,
-                sessionProvider.Object);
+                sessionProvider.Object,
+                Mock.Of<ILogger<PostgresEventStore>>());
         }
 
         [SetUp]

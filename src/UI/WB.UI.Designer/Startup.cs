@@ -36,6 +36,7 @@ using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
 using WB.UI.Designer.Services;
+using WB.UI.Designer.Services.Restore;
 using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
@@ -151,6 +152,7 @@ namespace WB.UI.Designer
 
             services.AddDatabaseStoredExceptional(hostingEnvironment, Configuration);
 
+            services.AddTransient<IQuestionnaireRestoreService, QuestionnaireRestoreService>();
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();

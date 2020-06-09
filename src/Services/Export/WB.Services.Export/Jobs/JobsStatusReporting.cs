@@ -32,33 +32,38 @@ namespace WB.Services.Export.Jobs
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IExternalArtifactsStorage externalArtifactsStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
+        private readonly ITenantContext tenantContext;
 
         public JobsStatusReporting(IDataExportProcessesService dataExportProcessesService,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IFileSystemAccessor fileSystemAccessor,
             IExternalArtifactsStorage externalArtifactsStorage,
-            IDataExportFileAccessor exportFileAccessor            )
+            IDataExportFileAccessor exportFileAccessor,
+            ITenantContext tenantContext)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.externalArtifactsStorage = externalArtifactsStorage;
             this.exportFileAccessor = exportFileAccessor;
+            this.tenantContext = tenantContext;
         }
 
-        public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId, TenantInfo tenant)
+        private TenantInfo Tenant => this.tenantContext.Tenant;
+
+        public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId)
         {
             DataExportProcessArgs process = await this.dataExportProcessesService.GetProcessAsync(processId);
             if (process == null) return null;
 
-            if(!tenant.Id.Equals(process.ExportSettings.Tenant.Id)) throw new ArgumentException("Cannot found process #" + processId, nameof(processId));
+            if(!Tenant.Id.Equals(process.ExportSettings.Tenant.Id)) throw new ArgumentException("Cannot found process #" + processId, nameof(processId));
 
-            var dataExportProcessView = await ToDataExportProcessView(tenant, process);
+            var dataExportProcessView = await ToDataExportProcessView(process);
 
             return dataExportProcessView;
         }
 
-        public async Task<List<DataExportProcessView>> GetDataExportStatusesAsync(long[] processIds, TenantInfo tenant)
+        public async Task<List<DataExportProcessView>> GetDataExportStatusesAsync(long[] processIds)
         {
             var processes = await this.dataExportProcessesService.GetProcessesAsync(processIds);
 
@@ -66,10 +71,10 @@ namespace WB.Services.Export.Jobs
 
             foreach (var process in processes)
             {
-                if (!tenant.Id.Equals(process.ExportSettings.Tenant.Id))
+                if (!Tenant.Id.Equals(process.ExportSettings.Tenant.Id))
                     continue;
 
-                var dataExportProcessView = await ToDataExportProcessView(tenant, process);
+                var dataExportProcessView = await ToDataExportProcessView(process);
 
                 result.Add(dataExportProcessView);
             }
@@ -79,14 +84,14 @@ namespace WB.Services.Export.Jobs
 
         public async Task<IEnumerable<DataExportProcessView>> GetDataExportStatusesAsync(
             DataExportFormat? exportType, InterviewStatus? interviewStatus, string questionnaireIdentity,
-            DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset, TenantInfo tenant)
+            DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset)
         {
-            var allProcesses = await this.dataExportProcessesService.GetAllProcesses(false);
+            var allProcesses = await this.dataExportProcessesService.GetAllProcessesAsync(false);
                 
             var allViews = new List<DataExportProcessView>();
             foreach (var process in allProcesses)
             {
-                var view = await ToDataExportProcessView(tenant, process);
+                var view = await ToDataExportProcessView(process);
 
                 if (IsInFilter(view, exportType, interviewStatus, questionnaireIdentity, exportStatus, hasFile))
                     allViews.Add(view);
@@ -116,14 +121,13 @@ namespace WB.Services.Export.Jobs
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
-            TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
             InterviewStatus? status = null, 
             DateTime? fromDate = null, 
             DateTime? toDate = null)
         {
-            var allProcesses = (await this.dataExportProcessesService.GetAllProcesses())
-                .Select(ToDataExportProcessView).ToArray();
+            var allProcesses = (await this.dataExportProcessesService.GetAllProcessesAsync())
+                .Select(AsDataProcessView).ToArray();
 
             var exports = new List<DataExportView>();
             
@@ -131,7 +135,7 @@ namespace WB.Services.Export.Jobs
             {
                 var exportSettings = new ExportSettings
                 {
-                    Tenant = tenant,
+                    Tenant = Tenant,
                     QuestionnaireId = questionnaireIdentity,
                     ExportFormat = supportedDataExport.format,
                     Status = status,
@@ -200,14 +204,14 @@ namespace WB.Services.Export.Jobs
             return matchingProcess?.ProcessStatus ?? DataExportStatus.NotStarted;
         }
 
-        private async Task<DataExportProcessView> ToDataExportProcessView(TenantInfo tenant, DataExportProcessArgs process)
+        private async Task<DataExportProcessView> ToDataExportProcessView(DataExportProcessArgs process)
         {
-            var dataExportProcessView = ToDataExportProcessView(process);
+            var dataExportProcessView = AsDataProcessView(process);
             var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
 
             var exportSettings = new ExportSettings
             {
-                Tenant = tenant,
+                Tenant = Tenant,
                 QuestionnaireId = questionnaireId,
                 ExportFormat = dataExportProcessView.Format,
                 Status = dataExportProcessView.InterviewStatus,
@@ -229,7 +233,7 @@ namespace WB.Services.Export.Jobs
             return dataExportProcessView;
         }
 
-        private static DataExportProcessView ToDataExportProcessView(DataExportProcessArgs dataExportProcessDetails)
+        private static DataExportProcessView AsDataProcessView(DataExportProcessArgs dataExportProcessDetails)
         {
             var status = dataExportProcessDetails.Status ?? new DataExportProcessStatus();
             var error = status.Error;

@@ -126,7 +126,8 @@
             </div>
         </DataTables>
 
-        <ModalFrame ref="assignModal">
+        <ModalFrame ref="assignModal"
+            :title="$t('Common.Assign')">
             <form onsubmit="return false;">
                 <div class="form-group"
                     v-if="getFilteredToAssign().length > 0">
@@ -187,7 +188,8 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="deleteModal">
+        <ModalFrame ref="deleteModal"
+            :title="$t('Common.Delete')">
             <div class="action-container">
                 <p
                     v-html="$t('Interviews.DeleteConfirmMessageHQ', {count: this.getFilteredToDelete().length, status1: 'Supervisor assigned', status2: 'Interviewer assigned'})"></p>
@@ -206,7 +208,8 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="approveModal">
+        <ModalFrame ref="approveModal"
+            :title="$t('Common.Approve')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
@@ -239,6 +242,7 @@
             </div>
         </ModalFrame>
         <ModalFrame ref="rejectModal"
+            :title="$t('Common.Reject')"
             id="rejectModel">
             <form onsubmit="return false;">
                 <div class="action-container">
@@ -251,18 +255,30 @@
                 </div>
 
                 <div>
-                    <p>
-                        <label
-                            class="control-label"
-                            for="rejectResponsibleId">{{ $t('Interviews.ChooseResponsibleInterviewer') }}</label>
-                        <Typeahead
-                            control-id="rejectResponsibleId"
-                            :placeholder="$t('Common.Responsible')"
-                            :value="newResponsibleId"
-                            :ajax-params="{ }"
-                            @selected="newResponsibleSelected"
-                            :fetch-url="config.api.responsible"></Typeahead>
-                    </p>
+                    <div class="options-group">
+                        <Radio
+                            :label="$t('Interviews.RejectToOriginal')"
+                            :radioGroup="false"
+                            name="rejectToNewResponsible"
+                            :value="rejectToNewResponsible"
+                            @input="rejectToNewResponsible = false; newResponsibleId = null" />
+                        <Radio
+                            :label="$t('Interviews.RejectToNewResponsible')"
+                            :radioGroup="true"
+                            name="rejectToNewResponsible"
+                            :value="rejectToNewResponsible"
+                            @input="rejectToNewResponsible = true" />
+                        <p>
+                            <Typeahead
+                                v-if="rejectToNewResponsible == true"
+                                control-id="rejectResponsibleId"
+                                :placeholder="$t('Common.Responsible')"
+                                :value="newResponsibleId"
+                                :ajax-params="{ }"
+                                @selected="newResponsibleSelected"
+                                :fetch-url="config.api.responsible"></Typeahead>
+                        </p>
+                    </div>
                 </div>
 
                 <div>
@@ -283,7 +299,7 @@
                     class="btn btn-primary"
                     role="confirm"
                     @click="rejectInterviews"
-                    :disabled="getFilteredToReject().length==0">{{ $t("Common.Reject") }}</button>
+                    :disabled="getFilteredToReject().length==0 || (rejectToNewResponsible == true && newResponsibleId == null)">{{ $t("Common.Reject") }}</button>
                 <button
                     id="rejectCancel"
                     type="button"
@@ -292,7 +308,8 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="unapproveModal">
+        <ModalFrame ref="unapproveModal"
+            :title="$t('Common.Unapprove')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
@@ -444,6 +461,7 @@ export default {
             responsibleId: null,
             responsibleParams: {showArchived: true, showLocked: true},
             newResponsibleId: null,
+            rejectToNewResponsible: false,
             statusChangeComment: null,
             status: null,
             selectedStatus: null,
@@ -1108,6 +1126,8 @@ export default {
         rejectInterview() {
             this.statusChangeComment = null
             this.newResponsibleId = null
+            this.rejectToNewResponsible = false
+
             this.$refs.rejectModal.modal({
                 keyboard: false,
             })
