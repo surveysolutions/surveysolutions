@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
+            
             this.sectionIdentities = questionnaire.GetAllSections()
                 .Select(sectionId => Identity.Create(sectionId, RosterVector.Empty))
                 .ToList();
@@ -172,11 +172,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            bool IsSectionVisible(InterviewTreeGroup group) => 
-                (
-                    !@group.IsDisabled() 
+            bool IsSectionVisible(InterviewTreeGroup group)
+            {
+                if (questionnaire.IsCoverPage(group.Identity.Id))
+                {
+                    return !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment())
+                           || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any()
+                           || questionnaire.GetPrefilledQuestions().Any();
+                }
+                
+                return (
+                    !@group.IsDisabled()
                     || @group.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(@group.Identity.Id)
                 );
+            }
 
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
             var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup);
