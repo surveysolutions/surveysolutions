@@ -277,6 +277,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewCompleted(userId, originDate, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment, previousStatus: this.properties.Status, originDate: originDate));
+            this.ApplyEvent(new InterviewPaused(userId, originDate));
 
             var becomesValid = !(this.HasInvalidAnswers() || this.HasInvalidStaticTexts);
             if (this.properties.IsValid != becomesValid)
@@ -954,16 +955,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return childNode != null && childNode.Parents.Select(x => x.Identity).Any(x => x.Equals(parentIdentity));
         }
 
-        public void Pause(PauseInterviewCommand command)
-        {
-            ApplyEvent(new InterviewPaused(command.UserId, command.OriginDate));
-        }
-
+        /// <summary>
+        /// Timespan within which two pause/resume sessions should be merged as a single one
+        /// </summary>
+        private readonly TimeSpan pauseResumeQuiteWindow = TimeSpan.FromMinutes(1);
+        
         public void Resume(ResumeInterviewCommand command)
         {
             var lastResume = this.properties.LastResumedUtc;
             if (lastResume.HasValue)
             {
+                if (command.OriginDate.UtcDateTime - lastResume < pauseResumeQuiteWindow)
+                {
+                    return;
+                }
+                
                 DateTime closePreviousNonClosedSessionDate = 
                     lastResume.Value.AddMinutes(15);
 
@@ -983,8 +989,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate));
         }
 
+        public void Pause(PauseInterviewCommand command)
+        {
+            var lastOpen = this.properties.LastResumedUtc;
+            if (lastOpen.HasValue)
+            {
+                var afterLastResumeEvent = command.OriginDate.UtcDateTime - lastOpen;
+                if (afterLastResumeEvent < pauseResumeQuiteWindow)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+            
+            ApplyEvent(new InterviewPaused(command.UserId, command.OriginDate));
+        }
+
         public void CloseBySupervisor(CloseInterviewBySupervisorCommand command)
         {
+            var lastResume = this.properties.LastOpenedBySupervisor;
+            if (lastResume.HasValue)
+            {
+                var afterLastResumeEvent = command.OriginDate.UtcDateTime - lastResume;
+                if (afterLastResumeEvent < pauseResumeQuiteWindow)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+            
             ApplyEvent(new InterviewClosedBySupervisor(command.UserId, command.OriginDate));
         }
 
@@ -993,6 +1032,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var lastOpenDate = this.properties.LastOpenedBySupervisor;
             if (lastOpenDate.HasValue)
             {
+                if (command.OriginDate.UtcDateTime - lastOpenDate < pauseResumeQuiteWindow)
+                {
+                    return;
+                }
+                
                 DateTime closePreviousNonClosedSessionDate = 
                     lastOpenDate.Value.AddMinutes(15);
 
