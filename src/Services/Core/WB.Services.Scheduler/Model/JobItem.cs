@@ -98,14 +98,6 @@ namespace WB.Services.Scheduler.Model
         {
             switch (ev.Exception)
             {
-				//Treat HttpRequestException as any other exception and mark as faild at the end
-                //case HttpRequestException http when http.InnerException is SocketException:
-                //case SocketException _:
-                    // if HQ not available then, retry again in 30 seconds
-                    // do not increase failed times
-                    //this.ScheduleAt = DateTime.UtcNow.AddSeconds(30);
-                    //this.Status = JobStatus.Created;
-                    //return;
                 case IOException io when io.HResult == 0x70:
                     this.ErrorType = JobError.NotEnoughExternalStorageSpace.ToString();
                     this.Error = io.ToStringDemystified();
