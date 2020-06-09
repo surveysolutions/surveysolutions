@@ -30,8 +30,8 @@
 
     <!--server OS-->
     <!--AND MsiNTProductType > 1-->
-    <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
-      <![CDATA[Installed OR (VersionNT64 >= 603) AND MsiNTProductType > 1]]>
+    <Condition Message="This application only runs in Windows Server 2016 or higher.">
+      <![CDATA[Installed OR (VersionNT64 >= 1000) AND MsiNTProductType > 1]]>
     </Condition>
 
     <Property Id="NETCOREHOSTVERSION">
