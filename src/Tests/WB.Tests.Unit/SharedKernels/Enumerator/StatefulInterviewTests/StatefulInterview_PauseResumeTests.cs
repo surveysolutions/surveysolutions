@@ -14,7 +14,41 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     public class StatefulInterview_PauseResumeTests
     {
         [Test]
-        public void when_pause_command_called_Should_record_pause_date()
+        public void when_second_resume_arrives_within_30_seconds_from_last_resume_Should_not_raise_any_events()
+        {
+            var interview = Create.AggregateRoot.StatefulInterview(Id.gA);
+
+            var dateTimeOffset = new DateTimeOffset(2010, 1, 20, 1, 1, 1, new TimeSpan());
+            
+            interview.Resume(Create.Command.ResumeInterview(Id.gA, dateTimeOffset));
+            // Act
+            using var events = new EventContext(); 
+            interview.Resume(Create.Command.ResumeInterview(Id.gA, dateTimeOffset.AddSeconds(10)));
+            
+            // Assert
+            events.ShouldNotContainEvent<InterviewPaused>();
+            events.ShouldNotContainEvent<InterviewResumed>();
+        }
+
+        [Test]
+        public void when_pause_occurs_within_quite_window_Should_not_publish_event()
+        {
+            var interview = Create.AggregateRoot.StatefulInterview(Id.gA);
+
+            var dateTimeOffset = new DateTimeOffset(2010, 1, 20, 1, 1, 1, new TimeSpan());
+            
+            interview.Resume(Create.Command.ResumeInterview(Id.gA, dateTimeOffset));
+            // Act
+            using var events = new EventContext(); 
+            interview.Pause(Create.Command.PauseInterview(Id.gA, dateTimeOffset.AddSeconds(10)));
+            
+            // Assert
+            events.ShouldNotContainEvent<InterviewPaused>();
+            events.ShouldNotContainEvent<InterviewResumed>();
+        }
+
+        [Test]
+        public void when_interview_is_completed_Should_raise_interview_paused()
         {
             var interview = Create.AggregateRoot.StatefulInterview(Id.gA);
 
@@ -22,16 +56,32 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             
             // Act
             using var events = new EventContext(); 
-            interview.Pause(Create.Command.PauseInterview(Id.gA, dateTimeOffset));
+            interview.Complete(Id.gA, "", dateTimeOffset.AddSeconds(10));
             
             // Assert
-            events.ShouldContainEvent<InterviewPaused>(x => x.UtcTime == dateTimeOffset.UtcDateTime);
+            events.ShouldContainEvent<InterviewPaused>();
         }
+        
+        [Test]
+        public void when_pause_occurs_outside_of_quite_window_Should_raise_pause_event()
+        {
+            var interview = Create.AggregateRoot.StatefulInterview(Id.gA);
 
+            var dateTimeOffset = new DateTimeOffset(2010, 1, 20, 1, 1, 1, new TimeSpan());
+            
+            interview.Resume(Create.Command.ResumeInterview(Id.gA, dateTimeOffset));
+            // Act
+            using var events = new EventContext();
+            var pauseDate = dateTimeOffset.AddMinutes(1).AddMilliseconds(1);
+            interview.Pause(Create.Command.PauseInterview(Id.gA, pauseDate));
+            
+            // Assert
+            events.ShouldContainEvent<InterviewPaused>(x => x.UtcTime == pauseDate.UtcDateTime);
+        }
+        
         [Test]
         public void when_resume_command_arrives_and_interview_has_no_pause_event_and_has_no_answers_Should_record_PauseEvent_in_15_minutes_after_last_resume()
         {
-            
             var interview = Create.AggregateRoot.StatefulInterview(Id.gA);
 
             var dateTimeOffset = new DateTimeOffset(2010, 1, 20, 1, 1, 1, new TimeSpan());
@@ -49,26 +99,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             events.ShouldContainEvent<InterviewResumed>(x => x.UtcTime == dateTimeOffset5SecondsAfter.UtcDateTime);
         }
 
-        [Test]
-        public void when_resume_command_arrives_within_15_minutes_after_last_resume()
-        {
-            var interview = Create.AggregateRoot.StatefulInterview(Id.gA);
-
-            var dateTimeOffset = new DateTimeOffset(2010, 1, 20, 1, 1, 1, new TimeSpan());
-            var dateTimeOffset10MinutesAfter = dateTimeOffset.AddMinutes(10);
-            
-            // Act
-            interview.Resume(Create.Command.ResumeInterview(Id.gA, dateTimeOffset));
-            
-            using var events = new EventContext(); 
-            interview.Resume(Create.Command.ResumeInterview(Id.gA, dateTimeOffset10MinutesAfter));
-            
-            // Assert
-            var expectedCloseSessionDate = dateTimeOffset10MinutesAfter;
-            events.ShouldContainEvent<InterviewPaused>(x => x.UtcTime == expectedCloseSessionDate);
-            events.ShouldContainEvent<InterviewResumed>(x => x.UtcTime == dateTimeOffset10MinutesAfter.UtcDateTime);
-        }
-        
         [Test]
         public void when_resume_command_arrives_and_interview_has_no_pause_event_and_has_answers_Should_record_PauseEvent_with_time_of_last_answer()
         {
@@ -118,6 +148,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             // Assert
             Assert.That(events.Events.Count(), Is.EqualTo(1));
             events.ShouldContainEvent<InterviewResumed>(x => x.UtcTime == resumeDate1.UtcDateTime);
+        }
+
+        [Test]
+        public void when_pause_arrives_on_non_resumed_interview_Should_not_raise_pause_event()
+        {
+            var interview = Create.AggregateRoot.StatefulInterview(Id.gA);
+            
+            // Act
+            using var events = new EventContext(); 
+            interview.Pause(Create.Command.PauseInterview(Id.gA, new DateTimeOffset()));
+            
+            // Assert
+            Assert.That(events.Events, Is.Empty);
         }
     }
 }

@@ -337,7 +337,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 return ExportToExternalStorage();
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 return BadRequest($"Could not get access token for {state.Type} by code");
             }
