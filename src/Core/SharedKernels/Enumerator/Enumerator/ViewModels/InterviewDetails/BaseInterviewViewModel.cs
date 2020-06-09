@@ -164,7 +164,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected virtual NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
         {
-            return NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), RosterVector.Empty));
+            var sections = questionnaire.GetAllSections();
+            var firstSectionId = questionnaire.IsCoverPageSupported
+                                 && (
+                                     HasPrefilledQuestions
+                                     || HasNotEmptyNoteFromSupervior
+                                     || HasCommentsFromSupervior
+                                 )
+                ? sections.First(id => questionnaire.IsCoverPage(id))
+                : sections.First(id => !questionnaire.IsCoverPage(id));
+            return NavigationIdentity.CreateForGroup(new Identity(firstSectionId, RosterVector.Empty));
         }
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
