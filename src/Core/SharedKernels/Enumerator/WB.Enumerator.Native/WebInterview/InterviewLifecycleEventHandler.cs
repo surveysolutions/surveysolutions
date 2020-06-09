@@ -3,7 +3,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Ncqrs.Eventing;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -250,7 +249,12 @@ namespace WB.Enumerator.Native.WebInterview
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
 
         public void Handle(IPublishedEvent<TranslationSwitched> evnt)
-            => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        {
+            if (!evnt.IsPrototype())
+            {
+                this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+            }
+        }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {

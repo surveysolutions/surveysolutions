@@ -2,7 +2,7 @@
     <input
         type="text"
         autocomplete="off"
-        inputmode="numeric"
+        inputmode="decimal"
         class="ag-cell-edit-input"
         ref="inputDouble"
         :placeholder="noAnswerWatermark"

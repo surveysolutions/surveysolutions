@@ -120,6 +120,10 @@ namespace WB.Tests.Abc.TestFactories
             => new TextQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), Guid.NewGuid(), new decimal[0], originDate ?? DateTimeOffset.Now, "tttt")
                 .ToPublishedEvent(eventSourceId: interviewId);
 
+        public IPublishedEvent<TranslationSwitched> TranslationSwitched(string language = "russian", Guid? interviewId = null, string userId = null, DateTimeOffset? originDate = null, string origin = null)
+            => new TranslationSwitched(language, ToGuid(userId) ?? Guid.NewGuid(), originDate ?? DateTimeOffset.UtcNow)
+                .ToPublishedEvent(eventSourceId: interviewId, origin);
+        
         public IPublishedEvent<SingleOptionQuestionAnswered> SingleOptionQuestionAnswered(Guid? interviewId = null, Guid? questionId = null, decimal answer = 0, string userId = null, DateTimeOffset? originDate = null)
             => new SingleOptionQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), questionId ?? Guid.NewGuid(), 
                     new decimal[0], originDate ?? DateTimeOffset.Now, answer)

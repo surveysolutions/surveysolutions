@@ -190,7 +190,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Authorize(Roles = "ApiUser, Administrator")]
         [Route("")]
         //[ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public async Task<ActionResult<CreateAssignmentResult>> Create([FromBody] CreateAssignmentApiRequest createItem)
+        public ActionResult<CreateAssignmentResult> Create([FromBody] CreateAssignmentApiRequest createItem)
         {
             if (createItem == null) return StatusCode(StatusCodes.Status400BadRequest, "Bad assignment info");
             
