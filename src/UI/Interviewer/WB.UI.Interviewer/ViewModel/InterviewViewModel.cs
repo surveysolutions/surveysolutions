@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -59,11 +58,6 @@ namespace WB.UI.Interviewer.ViewModel
             this.userInteractionService = userInteractionService;
             this.logger = logger;
         }
-
-        static readonly TimeSpan PauseResumeThrottling = TimeSpan.FromSeconds(5);
-        static readonly object ThrottlingLock = new Object();
-        static PauseInterviewCommand pendingPause = null;
-        private static Thread PauseThread;
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
