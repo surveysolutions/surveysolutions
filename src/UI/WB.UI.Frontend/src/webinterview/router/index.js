@@ -46,7 +46,6 @@ function NewRouter(store) {
                         name: 'cover',
                         path: 'Section/11111111111111111111111111111111',
                         component: Cover,
-                        params: { sectionId: '11111111111111111111111111111111' },
                         beforeEnter: (to, from, next) => {
                             to.params.sectionId = '11111111111111111111111111111111'
                             next()
