@@ -15,6 +15,8 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
+using WB.Services.Export.Services.Processing;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests.ExportProcessHandlersTests
 {
@@ -76,7 +78,10 @@ namespace WB.Services.Export.Tests.ExportProcessHandlersTests
 
             var state = new ExportState(new DataExportProcessArgs()
             {
-                ExportSettings = new ExportSettings()
+                ExportSettings = new ExportSettings(
+                    exportFormat:DataExportFormat.Tabular,
+                    new QuestionnaireId(Guid.Empty.ToString()),
+                    new TenantInfo("http://test",""))
             });
 
             await handler.ExportDataAsync(state, CancellationToken.None);

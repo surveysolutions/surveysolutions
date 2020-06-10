@@ -92,17 +92,17 @@ namespace WB.Services.Export.Tests
             return new TenantInfo(baseUrl, id, name);
         }
 
-        public static QuestionnaireExportStructure QuestionnaireExportStructure(string questionnaireId = null)
+        public static QuestionnaireExportStructure QuestionnaireExportStructure(string questionnaireId = "")
         {
             return new QuestionnaireExportStructure
-            {
-                QuestionnaireId = questionnaireId
-            };
+            (
+                questionnaireId
+            );
         }
 
         public static HeaderStructureForLevel HeaderStructureForLevel()
         {
-            return new HeaderStructureForLevel { LevelScopeVector = new ValueVector<Guid>() };
+            return new HeaderStructureForLevel( new ValueVector<Guid>(), "", "" );
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, long version = 5, string variableName = null, params IQuestionnaireEntity[] children)
@@ -473,10 +473,11 @@ namespace WB.Services.Export.Tests
                 .Options;
             var dbContext = new TenantDbContext(
                 Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo
-                {
-                    Id = TenantId.None,
-                    Name = tenantName ?? "none"
-                }),
+                (
+                    "",
+                    TenantId.None,
+                    tenantName ?? "none"
+                )),
                 Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()),
                 options);
 
@@ -488,14 +489,13 @@ namespace WB.Services.Export.Tests
         {
             var options = new DbContextOptionsBuilder<TenantDbContext>().Options;
             var dbContext = new TenantDbContext(
-                Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo
-                {
-                    Id = TenantId.None,
-                    Name = tenantName ?? "none"
-                }),
+                Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo(
+                    "",
+                    TenantId.None,
+                    tenantName ?? "none"
+                )),
                 Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()
                 {
-                    
                 }),
                 options);
 
@@ -872,16 +872,18 @@ namespace WB.Services.Export.Tests
             return new DataExportProcessArgs
             {
                 ExportSettings = new ExportSettings
-                {
-                    Tenant = new TenantInfo("", "", tenant)
-                }
+                (
+                    exportFormat: DataExportFormat.Tabular,
+                    questionnaireId: new QuestionnaireId(Guid.Empty.FormatGuid() + "$" + 1),
+                    tenant : new TenantInfo("", "", tenant)
+                )
             };
         }
     }
 
     public static class EventExtensions
     {
-        public static PublishedEvent<T> ToPublishedEvent<T>(this Event @event) where T : IEvent
+        public static PublishedEvent<T> ToPublishedEvent<T>(this Event @event) where T :class, IEvent
         {
             return (PublishedEvent<T>)@event.AsPublishedEvent();
         }

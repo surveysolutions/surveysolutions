@@ -8,7 +8,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
     public class RosterTableKey
     {
         public Guid InterviewId { get; set; }
-        public RosterVector RosterVector { get; set; }
+        public RosterVector RosterVector { get; set; } = RosterVector.Empty;
 
         public override string ToString() => InterviewId + "-" + RosterVector;
 

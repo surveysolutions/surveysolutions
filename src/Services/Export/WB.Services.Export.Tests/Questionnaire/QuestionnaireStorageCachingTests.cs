@@ -33,13 +33,10 @@ namespace WB.Services.Export.Tests.Questionnaire
 
             this.tenantInfo = new TenantInfo("http://example", "hello", "some name");
             this.tenantContext = new TenantContext(Mock.Of<ITenantApi<IHeadquartersApi>>(
-                m => m.For(It.IsAny<TenantInfo>()) == this.apiMock.Object));
-
-            this.tenantContext.Tenant = tenantInfo;
+                m => m.For(It.IsAny<TenantInfo>()) == this.apiMock.Object), tenantInfo);
+            
             this.memoryCache = new MemoryCache(new MemoryCacheOptions());
-
             this.cache = new QuestionnaireStorageCache(memoryCache, tenantContext);
-
             this.storage = new QuestionnaireStorage(cache, tenantContext, new NullLogger<QuestionnaireStorage>());
         }
 

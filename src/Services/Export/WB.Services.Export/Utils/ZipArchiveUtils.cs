@@ -145,7 +145,7 @@ namespace WB.Services.Export
             }
         }
 
-        public void ZipFiles(string exportTempDirectoryPath, IEnumerable<string> files, string archiveFilePath, string password = null)
+        public void ZipFiles(string exportTempDirectoryPath, IEnumerable<string> files, string archiveFilePath, string password = "")
         {
             using (var archiveFile = File.Create(archiveFilePath))
             {

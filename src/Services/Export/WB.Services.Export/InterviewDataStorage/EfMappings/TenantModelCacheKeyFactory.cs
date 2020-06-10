@@ -9,9 +9,10 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         public object Create(DbContext context)
         {
             var dbContext = context as TenantDbContext;
+
             return new {
                 Type = context.GetType(),
-                Schema = dbContext.TenantContext.Tenant.SchemaName()
+                Schema = dbContext?.TenantContext.Tenant.SchemaName()
             };
         }
     }
