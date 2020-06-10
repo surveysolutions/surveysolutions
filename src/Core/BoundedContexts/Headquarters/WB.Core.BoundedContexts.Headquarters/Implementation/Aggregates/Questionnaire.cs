@@ -68,7 +68,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 isSupportAssignments: true,
                 isSupportExportVariables: true,
                 comment: command.Comment,
-                userId: command.CreatedBy);
+                userId: command.CreatedBy, 
+                false);
         }
 
         public void CloneQuestionnaire(CloneQuestionnaire command)
@@ -98,7 +99,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 questionnaireBrowseItem.AllowAssignments,
                 questionnaireBrowseItem.AllowExportVariables,
                 comment: command.Comment,
-                userId: command.UserId);
+                userId: command.UserId,
+                questionnaireBrowseItem.IsAudioRecordingEnabled);
         }
 
         private void CloneCategories(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion) =>
@@ -132,9 +134,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             long questionnaireContentVersion,
             long questionnaireVersion,
             bool isSupportAssignments,
-            bool isSupportExportVariables, 
+            bool isSupportExportVariables,
             string comment,
-            Guid userId)
+            Guid userId,
+            bool isAudioRecordingEnabled)
         {
             var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
             
@@ -146,7 +149,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.questionnaireBrowseItemStorage.Store(
                 new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus,
-                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment, userId),
+                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment, userId)
+                {
+                    IsAudioRecordingEnabled = isAudioRecordingEnabled
+                },
                 projectionId);
         }
 

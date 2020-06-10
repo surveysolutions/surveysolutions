@@ -465,7 +465,7 @@ export default {
                 },
                 format: exportParams.format,
                 interviewStatus: exportParams.status,
-                translation: exportParams.translation,
+                translationId: exportParams.translationId,
                 type: ExternalStorageType[this.dataDestination],
             }
 
