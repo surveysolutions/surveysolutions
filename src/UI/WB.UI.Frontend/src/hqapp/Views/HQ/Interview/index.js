@@ -57,6 +57,12 @@ export default class ReviewComponent {
                 path: 'Section/:sectionId',
                 name: 'section',
                 component: ReviewSection,
+                beforeEnter: (to, from, next) => {
+                    if (to.params.sectionId == '11111111111111111111111111111111')
+                        next({ name: 'cover' })
+                    else
+                        next()
+                },
             },
             ],
         }]
