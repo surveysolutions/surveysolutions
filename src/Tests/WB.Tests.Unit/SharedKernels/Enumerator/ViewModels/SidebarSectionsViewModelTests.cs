@@ -3,9 +3,11 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using MvvmCross.Base;
 using MvvmCross.Tests;
 using MvvmCross.Views;
@@ -323,5 +325,114 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Assert.That(viewModelsWithDisabled.Find(x=>x.Title.PlainText == "disabled group"), Is.Not.Null);
             Assert.That(viewModelsWithDisabled.FindIndex(x => x.Title.PlainText == "disabled group"), Is.EqualTo(2));
         }
+        
+        [Test]
+        public async Task when_getting_sections_for_old_questionnaire_should_add_custom_cover_section()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+
+            //arrange
+            var questionnaire = QuestionnaireDocument;
+
+            var eventRegistry = Create.Service.LiteEventRegistry();
+
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
+
+            var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
+            await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g5, Create.RosterVector(1, 3))));
+            SideBarSectionsViewModel viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
+
+            //act
+            IEnumerable<ISideBarItem> result = viewModel.AllVisibleSections.ToArray();
+
+            //assert
+            Assert.That(result.First().GetType(), Is.EqualTo(typeof(SideBarCoverSectionViewModel)));
+        }
+
+        [Test]
+        public async Task when_getting_sections_for_new_questionnaire_should_not_add_custom_cover_section()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+
+            //arrange
+            var questionnaire = Create.Entity.QuestionnaireDocument(children:
+                new IComposite[]
+                {
+                    Create.Entity.Group(QuestionnaireDocument.CoverPageSectionId, title: "custom cover", children: new IComposite[]
+                    {
+                        Create.Entity.TextQuestion(preFilled: true)
+                    }),
+                    Create.Entity.Group(Id.g2),
+                }
+            );
+
+            var eventRegistry = Create.Service.LiteEventRegistry();
+
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
+
+            var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
+            await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g2, Create.RosterVector())));
+            SideBarSectionsViewModel viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
+
+            //act
+            IEnumerable<ISideBarItem> result = viewModel.AllVisibleSections.ToArray();
+
+            //assert
+            Assert.That(result.Any(item => item.GetType() == typeof(SideBarCoverSectionViewModel)), Is.False);
+            var cover = result.OfType<SideBarSectionViewModel>().First();
+            Assert.That(cover.SectionIdentity.Id, Is.EqualTo(QuestionnaireDocument.CoverPageSectionId));
+            Assert.That(cover.Title.PlainText, Is.EqualTo("custom cover"));
+        }
+
+
+        [Test]
+        public async Task when_getting_sections_for_new_questionnaire_with_empty_cover_should_not_add_custom_cover_section_and_hide_cover()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+
+            //arrange
+            var questionnaire = Create.Entity.QuestionnaireDocument(children:
+                new IComposite[]
+                {
+                    Create.Entity.Group(QuestionnaireDocument.CoverPageSectionId, title: "custom cover"),
+                    Create.Entity.Group(Id.g2),
+                }
+            );
+
+            var eventRegistry = Create.Service.LiteEventRegistry();
+
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
+
+            var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
+            await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g2, Create.RosterVector())));
+            SideBarSectionsViewModel viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
+
+            //act
+            IEnumerable<ISideBarItem> result = viewModel.AllVisibleSections.ToArray();
+
+            //assert
+            Assert.That(result.Any(item => item.GetType() == typeof(SideBarCoverSectionViewModel)), Is.False);
+            Assert.That(result.OfType<SideBarSectionViewModel>()
+                .Any(item => item.SectionIdentity.Id == QuestionnaireDocument.CoverPageSectionId), 
+                Is.False
+            );
+            Assert.That(result.OfType<SideBarSectionViewModel>()
+                .Any(item => item.Title.PlainText == "custom cover"), 
+                Is.False
+            );
+        }
+
     }
 }
