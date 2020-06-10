@@ -9,19 +9,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class InterviewStateViewModel : GroupStateViewModel
     {
         private readonly IInterviewStateCalculationStrategy interviewStateCalculationStrategy;
-        private readonly IStatefulInterviewRepository interviewRepository;
 
         protected InterviewStateViewModel()
         {
         }
 
         public InterviewStateViewModel(IStatefulInterviewRepository interviewRepository, IInterviewStateCalculationStrategy interviewStateCalculationStrategy)
+            :base(interviewRepository, null, null)
         {
             this.interviewStateCalculationStrategy = interviewStateCalculationStrategy;
-            this.interviewRepository = interviewRepository;
         }
-
-        private string interviewId;
 
         public override void Init(string interviewId, Identity groupIdentity)
         {
