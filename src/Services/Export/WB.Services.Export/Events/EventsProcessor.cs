@@ -36,7 +36,7 @@ namespace WB.Services.Export.Events
 
         private int pageSize;
 
-        long maximumSequenceToQuery = 0;
+        long? maximumSequenceToQuery;
         private const double ExpectedBatchDurationInSeconds = 4;
 
         private async Task EnsureMigrated(CancellationToken cancellationToken)
@@ -105,7 +105,7 @@ namespace WB.Services.Export.Events
                 // ReSharper disable once PossibleInvalidOperationException - max value will always be set
                 var totalEventsToRead = maximumSequenceToQuery - sequenceToStartFrom;
                 var eventsProcessed = feed.Events.Last().GlobalSequence - sequenceToStartFrom;
-                var percent = (eventsProcessed + sequenceToStartFrom).PercentDOf(maximumSequenceToQuery);
+                var percent = (eventsProcessed + sequenceToStartFrom).PercentDOf(maximumSequenceToQuery ?? 0);
 
                 // in events/second
                 var thisBatchProcessingSpeed = feed.Events.Count / executionTrack.Elapsed.TotalSeconds;
@@ -115,7 +115,7 @@ namespace WB.Services.Export.Events
                 pageSize = (int)(size * ExpectedBatchDurationInSeconds);
 
                 // estimation by average processing speed, seconds
-                var estimatedAverage = runningAverage.Eta(totalEventsToRead - eventsProcessed);
+                var estimatedAverage = runningAverage.Eta(totalEventsToRead - eventsProcessed ?? 0);
 
                 // estimation by overall progress timer, seconds
                 var estimationByTotal = globalStopwatch.Elapsed.TotalSeconds / (percent / 100.0)
@@ -154,7 +154,7 @@ namespace WB.Services.Export.Events
 
                 while (true)
                 {
-                    if (maximumSequenceToQuery > 0
+                    if (maximumSequenceToQuery.HasValue
                         && readingSequence >= maximumSequenceToQuery) break;
 
                     apiTrack.Restart();
@@ -169,10 +169,10 @@ namespace WB.Services.Export.Events
                         ? feed.Events.Last().GlobalSequence
                         : maximumSequenceToQuery;
 
-                    maximumSequenceToQuery = feed?.Total ?? 0;
+                    maximumSequenceToQuery ??= feed?.Total;
 
-                    var readingSpeed = (feed?.Events.Count ?? 0 )/ apiTrack.Elapsed.TotalSeconds;
-                    readingAvg.Add(readingSpeed);
+                    var readingSpeed = feed?.Events.Count / apiTrack.Elapsed.TotalSeconds;
+                    readingAvg.Add(readingSpeed ?? 0);
 
                     logger.LogDebug("Read {eventsCount:n0} events from HQ. From {start:n0} to {last:n0} Took {elapsed:g}",
                         feed?.Events.Count, readingSequence, lastSequence, apiTrack.Elapsed);
