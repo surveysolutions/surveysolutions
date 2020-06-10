@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -27,6 +28,8 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IAuditLogService auditLogService;
         private readonly IAudioAuditService audioAuditService;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IJsonAllTypesSerializer serializer;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -48,7 +51,9 @@ namespace WB.UI.Interviewer.ViewModel
             IAuditLogService auditLogService,
             IAudioAuditService audioAuditService,
             IUserInteractionService userInteractionService,
-            ILogger logger)
+            ILogger logger, 
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IJsonAllTypesSerializer serializer)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
@@ -58,6 +63,8 @@ namespace WB.UI.Interviewer.ViewModel
             this.audioAuditService = audioAuditService;
             this.userInteractionService = userInteractionService;
             this.logger = logger;
+            this.interviewViewRepository = interviewViewRepository;
+            this.serializer = serializer;
         }
 
         static readonly TimeSpan PauseResumeThrottling = TimeSpan.FromSeconds(5);
@@ -195,6 +202,17 @@ namespace WB.UI.Interviewer.ViewModel
                 }
             }
 
+            var interviewView = this.interviewViewRepository.GetById(InterviewId);
+            if (interviewView != null)
+            {
+                if (this.navigationState.CurrentGroup != null)
+                {
+                    interviewView.LastVisitedSectionId = this.serializer.Serialize(this.navigationState.CurrentGroup);
+                }
+                interviewView.LastVisitedScreenType = this.navigationState.CurrentScreenType;
+                this.interviewViewRepository.Store(interviewView);
+            }
+            
             base.ViewDisappearing();
         }
 
