@@ -188,7 +188,12 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         public override InterviewInfo GetInterviewDetails(Guid interviewId)
         {
             var interviewDetails = base.GetInterviewDetails(interviewId);
-            interviewDetails.DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(interviewId);
+            if (IsReviewMode())
+            {
+                interviewDetails.DoesBrokenPackageExist =
+                    this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(interviewId);
+            }
+
             return interviewDetails;
         }
     }

@@ -57,8 +57,6 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<ICompanyLogoSynchronizer, CompanyLogoSynchronizer>();
             registry.Bind<IAttachmentsCleanupService, AttachmentsCleanupService>();
             
-            registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
-
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();
 

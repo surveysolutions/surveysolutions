@@ -27,6 +27,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -35,6 +36,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -85,6 +87,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
@@ -115,6 +118,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
@@ -137,24 +141,30 @@ namespace WB.Tests.Abc.TestFactories
             ILiteEventBus eventBus = null,
             IServiceLocator serviceLocator = null,
             IAggregateLock aggregateLock = null,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner = null,
-            IEventStore eventStore = null)
+            IEventStore eventStore = null,
+            IAggregateRootCache aggregateRootCacheCleaner = null,
+            IAggregateRootPrototypeService prototypeService = null,
+            IAggregateRootPrototypePromoterService promoterService = null)
         {
             var locatorMock = 
                 serviceLocator != null ?
-            Mock.Get(serviceLocator) : new Mock<IServiceLocator>();
+            Mock.Get(mocked: serviceLocator) : new Mock<IServiceLocator>();
 
-            locatorMock.Setup(x => x.GetInstance<IInScopeExecutor>())
-                .Returns(() => new NoScopeInScopeExecutor(locatorMock.Object));
-            locatorMock.Setup(x => x.GetInstance<ICommandExecutor>())
-                .Returns(new CommandExecutor(repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
-                    eventBus ?? Mock.Of<IEventBus>(),
-                    locatorMock.Object,
-                    plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
-                    aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>(),
-                    Mock.Of<ICommandsMonitoring>()));
+            locatorMock.Setup(expression: x => x.GetInstance<IInScopeExecutor>())
+                .Returns(valueFunction: () => new NoScopeInScopeExecutor(rootScope: locatorMock.Object));
+            locatorMock.Setup(expression: x => x.GetInstance<ICommandExecutor>())
+                .Returns(value: new CommandExecutor(
+                    eventSourcedRepository: repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                    eventBus: eventBus ?? Mock.Of<IEventBus>(),
+                    serviceLocator: locatorMock.Object,
+                    plainRepository: plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
+                    aggregateRootCache: aggregateRootCacheCleaner ?? Create.Storage.NewAggregateRootCache(),
+                    commandsMonitoring: Mock.Of<ICommandsMonitoring>(),
+                    promoterService: promoterService ?? Mock.Of<IAggregateRootPrototypePromoterService>(),
+                    prototypeService: prototypeService 
+                                      ?? Mock.Of<IAggregateRootPrototypeService>(a => a.GetPrototypeType(It.IsAny<Guid>()) == null)));
 
-            return new CommandService(locatorMock.Object, aggregateLock ?? Stub.Lock());
+            return new CommandService(serviceLocator: locatorMock.Object, aggregateLock: aggregateLock ?? Stub.Lock());
         }
 
         public AttachmentContentService AttachmentContentService(
@@ -203,12 +213,13 @@ namespace WB.Tests.Abc.TestFactories
             IEventStore eventStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepositoryWithWebCache(
                 eventStore ?? Mock.Of<IEventStore>(x => x.GetLastEventSequence(It.IsAny<Guid>()) == 0),
-                new InMemoryEventStore(Create.Storage.NewMemoryCache()),
-                new EventBusSettings(), 
+                Create.Storage.InMemoryEventStore(),
+                Create.Service.MockOfAggregatePrototypeService(), 
                 repository ?? Mock.Of<IDomainRepository>(),
                 Create.Service.ServiceLocatorService(),
                 new AggregateLock(),
-                Create.Storage.NewMemoryCache());
+                Create.Storage.NewAggregateRootCache(),
+                Options.Create(new SchedulerConfig()));
 
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
@@ -293,14 +304,21 @@ namespace WB.Tests.Abc.TestFactories
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null,
             IServiceLocator serviceLocator = null,
-            WB.Core.Infrastructure.Implementation.EventDispatcher.IDenormalizerRegistry denormalizerRegistry = null)
+            WB.Core.Infrastructure.Implementation.EventDispatcher.IDenormalizerRegistry denormalizerRegistry = null,
+            IAggregateRootPrototypeService prototypeService = null)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
                 inMemoryEventStore: Mock.Of<IInMemoryEventStore>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                denormalizerRegistry: denormalizerRegistry ?? Create.Service.DenormalizerRegistryNative());
+                denormalizerRegistry: denormalizerRegistry ?? Create.Service.DenormalizerRegistryNative(),
+                prototypeService: prototypeService ?? Create.Service.MockOfAggregatePrototypeService());
+
+        public IAggregateRootPrototypeService MockOfAggregatePrototypeService(PrototypeType? type = null)
+        {
+            return Mock.Of<IAggregateRootPrototypeService>(s => s.GetPrototypeType(It.IsAny<Guid>()) == type);
+        }
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
@@ -1062,7 +1080,8 @@ namespace WB.Tests.Abc.TestFactories
                 accessor.Store(invitation, invitation.Id);
             }
 
-            var service = new InvitationService(accessor, Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>());
+            var service = new InvitationService(accessor,
+                Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>());
             return service;
         }
 
@@ -1190,7 +1209,8 @@ namespace WB.Tests.Abc.TestFactories
             ISerializer serializer = null,
             IUserRepository userStorage = null,
             IExternalFileStorage externalFileStorage = null,
-            IAuthorizedUser authorizedUser = null)
+            IAuthorizedUser authorizedUser = null,
+            IOptions<GeospatialConfig> geospatialConfig = null)
         {
            return new MapFileStorageService(
              fileSystemAccessor ?? Create.Service.FileSystemIOAccessor(), 
@@ -1201,7 +1221,14 @@ namespace WB.Tests.Abc.TestFactories
              serializer ?? Create.Service.NewtonJsonSerializer(),
              userStorage ?? Create.Storage.UserRepository(),
              externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
-             authorizedUser ?? Mock.Of<IAuthorizedUser>()); 
+             geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
+             authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+             Mock.Of<ILogger<MapFileStorageService>>()); 
+        }
+
+        public WebModeResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)
+        {
+            return new WebModeResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
         }
     }
 

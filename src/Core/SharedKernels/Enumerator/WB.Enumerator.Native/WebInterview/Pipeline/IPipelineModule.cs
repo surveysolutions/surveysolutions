@@ -8,6 +8,5 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
     {
         Task OnConnected(Hub hub);
         Task OnDisconnected(Hub hub, Exception exception);
-        //Task OnReconnected(Hub hub);
     }
 }

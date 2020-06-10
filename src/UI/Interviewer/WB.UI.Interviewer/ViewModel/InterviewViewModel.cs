@@ -204,23 +204,25 @@ namespace WB.UI.Interviewer.ViewModel
 
             lock (ThrottlingLock)
             {
-                var delay = DateTimeOffset.Now - pendingPause.OriginDate;
-                var sameInterview = pendingPause.InterviewId == interviewId;
-                var samePendingCommand = pendingPause.CommandIdentifier == cmdid;
-
-                if (pendingPause != null 
-                    && delay > PauseResumeThrottling 
-                    && sameInterview 
-                    && samePendingCommand 
-                    && interviewRepository.Get(this.InterviewId) != null)//could be synced and deleted
+                if (pendingPause != null)
                 {
-                    try
+                    var delay = DateTimeOffset.Now - pendingPause.OriginDate;
+                    var sameInterview = pendingPause.InterviewId == interviewId;
+                    var samePendingCommand = pendingPause.CommandIdentifier == cmdid;
+
+                    if (delay > PauseResumeThrottling
+                        && sameInterview
+                        && samePendingCommand
+                        && interviewRepository.Get(this.InterviewId) != null) //could be synced and deleted
                     {
-                        commandService.Execute(pendingPause);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Info($"Was not able to save pause event for {pendingPause.InterviewId}", e);
+                        try
+                        {
+                            commandService.Execute(pendingPause);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Info($"Was not able to save pause event for {pendingPause.InterviewId}", e);
+                        }
                     }
                 }
 

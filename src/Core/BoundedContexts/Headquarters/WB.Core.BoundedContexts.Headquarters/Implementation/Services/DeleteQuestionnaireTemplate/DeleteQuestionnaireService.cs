@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
@@ -40,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
         private readonly IInvitationsDeletionService invitationsDeletionService;
-        private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
+        private readonly IAggregateRootCache aggregateRootCache;
         private readonly IAssignmentsToDeleteFactory assignmentsToDeleteFactory;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
@@ -58,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             IQuestionnaireStorage questionnaireStorage,
             DeleteQuestionnaireJobScheduler deleteQuestionnaireTask,
             IInvitationsDeletionService invitationsDeletionService,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
+            IAggregateRootCache aggregateRootCache,
             IAssignmentsToDeleteFactory assignmentsToDeleteFactory,
             IReusableCategoriesStorage reusableCategoriesStorage)
         {
@@ -73,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.questionnaireStorage = questionnaireStorage;
             this.deleteQuestionnaireTask = deleteQuestionnaireTask;
             this.invitationsDeletionService = invitationsDeletionService;
-            this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
+            this.aggregateRootCache = aggregateRootCache;
             this.assignmentsToDeleteFactory = assignmentsToDeleteFactory;
             this.reusableCategoriesStorage = reusableCategoriesStorage;
         }
@@ -162,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                         this.commandService.Execute(new DeleteAssignment(assignment.PublicKey, userId ?? assignment.ResponsibleId));
 
                         // to reduce memory pressure during deleting of thousands assignments
-                        this.aggregateRootCacheCleaner.Evict(assignment.PublicKey);
+                        this.aggregateRootCache.Evict(assignment.PublicKey);
                     }
                 }
                 catch (Exception e)
@@ -215,7 +216,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                             userId ?? interviewSummary.ResponsibleId));
 
                         // to reduce memory pressure during deleting of thousands interviews
-                        this.aggregateRootCacheCleaner.Evict(interviewSummary.InterviewId);
+                        this.aggregateRootCache.Evict(interviewSummary.InterviewId);
                     }
                 }
                 catch (Exception e)
