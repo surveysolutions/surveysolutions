@@ -6,7 +6,7 @@ namespace WB.Services.Export.Questionnaire
 {
     public abstract class Question : IValidatableQuestionnaireEntity
     {
-        private IQuestionnaireEntity parent;
+        private IQuestionnaireEntity? parent;
 
         protected Question()
         {
@@ -17,11 +17,11 @@ namespace WB.Services.Export.Questionnaire
 
         public bool Featured { get; set;  }
 
-        public string VariableName { get; set;  }
+        public string VariableName { get; set;  } = String.Empty;
 
-        public string VariableLabel { get; set;  }
+        public string VariableLabel { get; set;  } = String.Empty; 
 
-        public string QuestionText { get; set; }
+        public string QuestionText { get; set; } = String.Empty;
 
         public List<Answer> Answers { get; set; } = new List<Answer>();
 
@@ -33,7 +33,7 @@ namespace WB.Services.Export.Questionnaire
 
         public IEnumerable<IQuestionnaireEntity> Children { get; } = new List<IQuestionnaireEntity>();
 
-        public IQuestionnaireEntity GetParent()
+        public IQuestionnaireEntity? GetParent()
         {
             return parent;
         }
@@ -50,15 +50,15 @@ namespace WB.Services.Export.Questionnaire
 
         public IList<ValidationCondition> ValidationConditions { get; set; }
 
-        public string Instructions { get; set; }
+        public string Instructions { get; set; } = String.Empty;
 
-        private string columnName;
+        private string? columnName;
         public string ColumnName
         {
             get
             {
                 if (columnName != null) return columnName;
-                columnName = PostgresSystemColumns.Escape(this.VariableName?.ToLower());
+                columnName = PostgresSystemColumns.Escape(this.VariableName?.ToLower() ?? "");
                 if (string.IsNullOrEmpty(columnName))
                     throw new ArgumentException($"Column name cant be empty. Entity: {PublicKey}");
                 return columnName;

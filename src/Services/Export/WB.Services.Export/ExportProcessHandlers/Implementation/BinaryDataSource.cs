@@ -54,6 +54,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             var questionnaire = await this.questionnaireStorage
                 .GetQuestionnaireAsync(settings.QuestionnaireId, token: cancellationToken);
 
+            if(questionnaire == null)
+                throw new InvalidOperationException("questionnaire must be not null.");
+
             var batchSize = interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
 
             progress.Report(0);

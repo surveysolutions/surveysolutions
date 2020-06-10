@@ -46,6 +46,9 @@ namespace WB.Services.Export.Ddi.Implementation
             QuestionnaireId questionnaireId, string basePath)
         {
             var bigTemplateObject = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
+            if(bigTemplateObject == null)
+                throw new InvalidOperationException("Questionnaire must be not null.");
+
             QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireExportStructureStorage.CreateQuestionnaireExportStructure(bigTemplateObject);
 
             if (questionnaireExportStructure == null || bigTemplateObject == null)

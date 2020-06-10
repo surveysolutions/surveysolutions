@@ -86,10 +86,10 @@ namespace WB.Services.Export.Tests.Ddi
             metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "txt", DdiDataType.DynString, "lbl_txt", "ttt","text question", null));
 
         [NUnit.Framework.Test] public void should_add_variable_for_num_question () =>
-            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "num", DdiDataType.Numeric, "lbl", null,"numeric question", DdiVariableScale.Scale));
+            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "num", DdiDataType.Numeric, "lbl", "","numeric question", DdiVariableScale.Scale));
 
         [NUnit.Framework.Test] public void should_add_variable_for_sng_question () =>
-            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "sng", DdiDataType.Numeric, "lbl", null,"single option question", DdiVariableScale.Nominal));
+            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "sng", DdiDataType.Numeric, "lbl", "","single option question", DdiVariableScale.Nominal));
 
         [NUnit.Framework.Test] public void should_add_value_label_t1_for_question_sng () =>
             metadataWriter.Verify(x => x.AddValueLabelToVariable(Moq.It.IsAny<DdiVariable>(), 1, "t1"));
@@ -98,13 +98,13 @@ namespace WB.Services.Export.Tests.Ddi
             metadataWriter.Verify(x => x.AddValueLabelToVariable(Moq.It.IsAny<DdiVariable>(), 2, "t2"));
 
         [NUnit.Framework.Test] public void should_add_variable_for_gps_question () =>
-            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "gps", DdiDataType.Numeric, "lbl", null,"gps question", DdiVariableScale.Scale));
+            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "gps", DdiDataType.Numeric, "lbl", "","gps question", DdiVariableScale.Scale));
 
         [NUnit.Framework.Test] public void should_add_variable_r1 () =>
-            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "r1", DdiDataType.DynString, "lbl", null, null,null));
+            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "r1", DdiDataType.DynString, "lbl", "", null,null));
 
         [NUnit.Framework.Test] public void should_add_variable_r2 () =>
-            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "r1", DdiDataType.DynString, "lbl", null, null,null));
+            metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "r1", DdiDataType.DynString, "lbl", "", null,null));
 
         private static DdiMetadataFactory ddiMetadataFactory;
         private static string questionnaireId = "11111111111111111111111111111111";

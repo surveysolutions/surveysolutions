@@ -11,7 +11,7 @@ namespace WB.Services.Export.Services.Processing
     {
         string GetFileNameForDdiByQuestionnaire(QuestionnaireId questionnaire, string pathToDdiMetadata);
 
-        Task<string> GetFileNameForExportArchiveAsync(ExportSettings exportSettings, string withQuestionnaireName = null);
+        Task<string> GetFileNameForExportArchiveAsync(ExportSettings exportSettings, string withQuestionnaireName = "");
         Task<string> GetQuestionnaireDirectoryName(ExportSettings settings, CancellationToken cancellationToken);
     }
 }

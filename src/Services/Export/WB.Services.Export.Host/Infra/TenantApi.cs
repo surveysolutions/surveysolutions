@@ -43,8 +43,10 @@ namespace WB.Services.Export.Host.Infra
 
         readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
 
-        public T For(TenantInfo tenant)
+        public T For(TenantInfo? tenant)
         {
+            if (tenant == null) throw new InvalidOperationException("Tenant must be not null."); 
+
             return cache.GetOrAdd(tenant, id =>
             {
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
@@ -123,14 +125,14 @@ namespace WB.Services.Export.Host.Infra
                 }
             }
 
-            private static readonly ConcurrentDictionary<Type, FieldInfo> Cache = new ConcurrentDictionary<Type, FieldInfo>();
+            private static readonly ConcurrentDictionary<Type, FieldInfo?> Cache = new ConcurrentDictionary<Type, FieldInfo?>();
 
             private static long? GetRawSizeUsingReflection(HttpResponseMessage result)
             {
                 var field = Cache.GetOrAdd(result.Content.GetType(), type =>
                 {
                     var bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-                    return type.BaseType.GetField("_originalContent", bindFlags);
+                    return type.BaseType?.GetField("_originalContent", bindFlags);
                 });
 
                 var val = field?.GetValue(result.Content) as HttpContent;

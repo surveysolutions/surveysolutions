@@ -476,14 +476,17 @@ namespace WB.Services.Export.InterviewDataStorage
         public async Task Handle(PublishedEvent<StaticTextsDeclaredInvalid> @event, CancellationToken token = default)
         {
             var failedValidationConditions = @event.Event.FailedValidationConditions;
-            foreach (var keyValuePair in failedValidationConditions)
+            if (failedValidationConditions != null)
             {
-                await UpdateValidityValue(
-                    interviewId: @event.EventSourceId,
-                    entityId: keyValuePair.Key.Id,
-                    rosterVector: keyValuePair.Key.RosterVector,
-                    validityValue: keyValuePair.Value.Select(c => c.FailedConditionIndex).ToArray(), 
-                    token: token);
+                foreach (var keyValuePair in failedValidationConditions)
+                {
+                    await UpdateValidityValue(
+                        interviewId: @event.EventSourceId,
+                        entityId: keyValuePair.Key.Id,
+                        rosterVector: keyValuePair.Key.RosterVector,
+                        validityValue: keyValuePair.Value.Select(c => c.FailedConditionIndex).ToArray(),
+                        token: token);
+                }
             }
         }
 
@@ -517,13 +520,16 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        public async Task UpdateQuestionValue(Guid interviewId, Guid entityId, RosterVector rosterVector, object value, NpgsqlDbType valueType, CancellationToken token = default)
+        public async Task UpdateQuestionValue(Guid interviewId, Guid entityId, RosterVector rosterVector, object? value, NpgsqlDbType valueType, CancellationToken token = default)
         {
             var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
             var question = questionnaire.Find<Question>(entityId);
+            if (question == null)
+                return;
+
             var tableName = questionnaire.DatabaseStructure.GetDataTableName(entityId);
             var columnName = question.ColumnName;
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, value, valueType);
@@ -536,8 +542,8 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var variable = questionnaire.Find<Variable>(entityId);
-            
-            if (!variable.IsExportable) return;
+
+            if (variable == null || !variable.IsExportable) return;
 
             var tableName = questionnaire.DatabaseStructure.GetDataTableName(entityId);
             var columnName = variable.ColumnName;
@@ -566,22 +572,22 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
-
-            if (!entity.IsExportable) return;
+            
+            if (entity == null || !entity.IsExportable) return;
 
             var tableName = questionnaire.DatabaseStructure.GetEnablementDataTableName(entityId);
             var columnName = ResolveColumnNameForEnablement(entity);
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, isEnabled, NpgsqlDbType.Boolean);
         }
         
-        public async Task UpdateValidityValue(Guid interviewId, Guid entityId, RosterVector rosterVector, int[] validityValue, CancellationToken token = default)
+        public async Task UpdateValidityValue(Guid interviewId, Guid entityId, RosterVector rosterVector, int[]? validityValue, CancellationToken token = default)
         {
             var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
-            if (!entity.IsExportable) return;
+            if (entity == null || !entity.IsExportable) return;
 
             var tableName = questionnaire.DatabaseStructure.GetValidityDataTableName(entityId);
             var columnName = (entity as Question)?.ColumnName 
@@ -635,9 +641,9 @@ namespace WB.Services.Export.InterviewDataStorage
         }
 
         private Guid? lastInterviewId = null;
-        private QuestionnaireDocument lastQuestionnaire = null;
+        private QuestionnaireDocument? lastQuestionnaire = null;
 
-        private async ValueTask<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
+        private async ValueTask<QuestionnaireDocument?> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
         {
             if (lastInterviewId == interviewId && lastQuestionnaire != null) return lastQuestionnaire;
 
@@ -697,6 +703,6 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private string SerializeToJson(object value) => JsonConvert.SerializeObject(value);
+        private string SerializeToJson(object? value) => JsonConvert.SerializeObject(value);
     }
 }
