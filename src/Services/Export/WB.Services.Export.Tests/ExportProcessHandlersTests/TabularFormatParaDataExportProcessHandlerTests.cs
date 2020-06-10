@@ -70,11 +70,16 @@ namespace WB.Services.Export.Tests.ExportProcessHandlersTests
             csvWriter.Setup(x => x.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()))
                 .Returns(new Mock<ICsvWriterService>().Object);
             
+            var tenantApi = new Mock<ITenantApi<IHeadquartersApi>>();
+            tenantApi.Setup(x => x.For(It.IsAny<TenantInfo>()))
+                .Returns(new Mock<IHeadquartersApi>().Object);
+
             var handler = CreateTabularFormatParaDataExportProcessHandler(
                 interviewDataExportSettings: interviewDataExportSettings.Object,
                 interviewsToExportSource: interviewsToExportSource.Object,
                 fileSystemAccessor:mockOfFileSystemAccessor.Object,
-                csvWriter: csvWriter.Object);
+                csvWriter: csvWriter.Object,
+                tenantApi: tenantApi.Object);
 
             var state = new ExportState(new DataExportProcessArgs()
             {
