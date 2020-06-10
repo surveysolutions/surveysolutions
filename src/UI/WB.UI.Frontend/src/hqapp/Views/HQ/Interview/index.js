@@ -41,6 +41,19 @@ export default class ReviewComponent {
                 },
             },
             {
+                name: 'cover',
+                path: 'Section/11111111111111111111111111111111',
+                component: Cover,
+                props: {
+                    navigateToPrefilled: true,
+                    showHumburger: false,
+                },
+                beforeEnter: (to, from, next) => {
+                    to.params.sectionId = '11111111111111111111111111111111'
+                    next()
+                },
+            },
+            {
                 path: 'Section/:sectionId',
                 name: 'section',
                 component: ReviewSection,
