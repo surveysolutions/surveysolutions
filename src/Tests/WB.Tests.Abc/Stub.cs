@@ -1,6 +1,7 @@
 using System;
 using Moq;
 using MvvmCross.Base;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
 using WB.Core.Infrastructure.Implementation.Aggregates;

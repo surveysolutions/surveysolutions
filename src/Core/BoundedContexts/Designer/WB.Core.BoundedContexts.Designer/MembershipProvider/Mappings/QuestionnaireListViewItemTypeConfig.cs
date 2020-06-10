@@ -35,44 +35,22 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             builder.Property(e => e.Title).IsRequired(false).HasColumnName("title");
 
             builder.HasMany(x => x.SharedPersons)
-                
                 .WithOne(x => x.Questionnaire)
                 .HasForeignKey(x => x.QuestionnaireId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //, m =>
-            //{
-            //    m.Key(keyMap =>
-            //    {
-            //        keyMap.Column(clm =>
-            //        {
-            //            clm.Name("QuestionnaireId");
-            //        });
-            //    });
-            //    m.Table("SharedPersons");
-            //    m.Lazy(CollectionLazy.NoLazy);
-            //},
-            //r => r.Component(e =>
-            //{
-            //    e.Property(x => x.UserId);
-            //    e.Property(x => x.Email);
-            //    e.Property(x => x.IsOwner);
-            //    e.Property(x => x.ShareType);
-            //}));
+            builder.Metadata
+                .FindNavigation(nameof(QuestionnaireListViewItem.SharedPersons))
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+             // builder.UsePropertyAccessMode(PropertyAccessMode.PreferField);
+            
             builder.HasOne(d => d.Folder)
                 .WithMany()
-                //.WithMany(p => p.Questionnaires)
                 .HasForeignKey(d => d.FolderId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("questionnaire_folder_relation_fk");
-
-            //ManyToOne(x => x.Folder, m =>
-            //{
-            //    m.Column(nameof(QuestionnaireListViewItem.FolderId).ToLower());
-            //    m.Cascade(Cascade.None);
-            //    m.Update(false);
-            //    m.Insert(false);
-            //});
+            
         }
     }
 }

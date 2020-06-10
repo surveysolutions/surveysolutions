@@ -23,7 +23,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 await _next(context);
                 unitOfWork.AcceptChanges();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 unitOfWork.DiscardChanges();
                 throw;

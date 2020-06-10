@@ -595,6 +595,9 @@
   <data name="Interviewers_Header" xml:space="preserve">
     <value>Interviewers</value>
   </data>
+  <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
+      <value>You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER.</value>
+  </data>  
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>

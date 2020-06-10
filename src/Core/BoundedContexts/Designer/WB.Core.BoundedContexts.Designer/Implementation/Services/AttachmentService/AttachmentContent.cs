@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
     public class AttachmentContent
     {
         public virtual string ContentId { get; set; } = String.Empty;
-        public virtual byte[] Content { get; set; } = new byte[0];
+        public virtual byte[]? Content { get; set; }
         public virtual long Size { get; set; }
         public virtual AttachmentDetails Details { get; set; } = new AttachmentDetails();
         public virtual string ContentType { get; set; } = String.Empty;

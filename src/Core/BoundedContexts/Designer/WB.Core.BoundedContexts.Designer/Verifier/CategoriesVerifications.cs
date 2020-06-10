@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             var duplicated = 
                 from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
-                group row by Tuple.Create(row.Id, row.ParentId)
+                group row by new { row.Id, row.ParentId}
                 into g
                 where g.Count() > 1
                 select g.Key;
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             var duplicated = 
                 from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
-                group row by Tuple.Create(row.Text, row.ParentId)
+                group row by new { row.Text, row.ParentId}
                 into g
                 where g.Count() > 1
                 select g.Key;

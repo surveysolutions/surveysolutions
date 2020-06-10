@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     public class QuestionnaireInfoView
     {
         public QuestionnaireInfoView( List<CountryItem> countries,
-            string defaultLanguageName, 
+            string? defaultLanguageName, 
             string questionnaireId, string questionnaireRevision, 
             bool hideIfDisabled,
             bool isPublic,
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public List<CategoriesView> Categories { get; set; }
         
         public int? PreviewRevision { get; set; }
-        public string DefaultLanguageName { get; set; }
+        public string? DefaultLanguageName { get; set; }
 
         public bool IsCoverPageSupported { get; set; }
     }
