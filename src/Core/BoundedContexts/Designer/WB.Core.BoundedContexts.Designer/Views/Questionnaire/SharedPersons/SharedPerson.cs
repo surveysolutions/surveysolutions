@@ -6,6 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
     public class SharedPerson
     {
+        private QuestionnaireListViewItem? questionnaire;
         public int Id { get; set; }
 
         public virtual string QuestionnaireId { get; set; } = String.Empty;
@@ -14,6 +15,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
         public virtual ShareType ShareType { set; get; }
         public virtual bool IsOwner { get; set; }
 
-        public virtual QuestionnaireListViewItem Questionnaire { get; set; } = new QuestionnaireListViewItem();//bad
+        public virtual QuestionnaireListViewItem Questionnaire
+        {
+            get => questionnaire ?? throw new InvalidOperationException("Cannot return null reference");
+            set => questionnaire = value;
+        }
     }
 }
