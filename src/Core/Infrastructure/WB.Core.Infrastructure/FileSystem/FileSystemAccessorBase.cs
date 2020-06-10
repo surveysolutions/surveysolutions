@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -21,6 +22,11 @@ namespace WB.Core.Infrastructure.FileSystem
         public void WriteAllBytes(string pathToFile, byte[] content)
         {
             File.WriteAllBytes(pathToFile, content);
+        }
+        
+        public Task WriteAllBytesAsync(string pathToFile, byte[] content)
+        {
+            return File.WriteAllBytesAsync(pathToFile, content);
         }
 
         public bool IsHashValid(byte[] fileContent, byte[] hash)

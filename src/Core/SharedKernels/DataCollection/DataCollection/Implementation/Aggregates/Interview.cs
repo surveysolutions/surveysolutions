@@ -1984,7 +1984,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate:originDate));
-            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
+
+            if (interviewerId != properties.InterviewerId)
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
         }
 
         public void HqApprove(Guid userId, string comment, DateTimeOffset originDate)
@@ -2092,7 +2094,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (supervisorId != properties.SupervisorId)
                 this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, originDate));
-            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
+            if (interviewerId != properties.InterviewerId)
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
         }
 
         public void HqRejectInterviewToSupervisor(Guid userId, Guid supervisorId, string comment, DateTimeOffset originDate)
@@ -2113,7 +2116,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate: originDate));
             }
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, originDate));
+            
+            if (supervisorId != properties.SupervisorId)
+                this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, originDate));
         }
 
         public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command) 

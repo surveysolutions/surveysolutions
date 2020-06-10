@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
@@ -28,6 +30,7 @@ namespace WB.UI.Headquarters
             services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
             services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
             services.Configure<FileStorageConfig>(configuration.GetSection("FileStorage"));
+            services.Configure<GeospatialConfig>(configuration.GetSection("Geospatial"));
             
             services.Configure<MetricsConfig>(configuration.MetricsConfiguration());
 

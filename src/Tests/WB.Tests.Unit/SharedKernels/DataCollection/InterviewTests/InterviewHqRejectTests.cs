@@ -80,5 +80,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.AssertThatContainsEvent<SupervisorAssigned>();
             eventContext.AssertThatContainsEvent<InterviewStatusChanged>();
         }
+
+        [Test]
+        public void When_Interview_in_status_ApprovedBySupervisor_And_interview_rejected_by_hq_on_the_same_supervisor_as_result_supervisor_should_not_be_changed()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor));
+            SetupEventContext();
+
+            // act
+            interview.HqRejectInterviewToSupervisor(headquarterId, supervisorId, "comment", DateTimeOffset.Now);
+
+            // assert
+            eventContext.AssertThatContainsEvent<InterviewRejectedByHQ>();
+            eventContext.AssertThatContainsEvent<InterviewStatusChanged>();
+            eventContext.AssertThatDoesNotContainEvent<SupervisorAssigned>();
+        }
     }
 }

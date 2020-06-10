@@ -406,7 +406,7 @@
                                                     MarkAsDefault
                                                 </button>
 
-                                                <a href="{{translation.downloadUrl}}" class="btn btn-default"
+                                                <a ng-if="translation.downloadUrl" href="{{translation.downloadUrl}}" class="btn btn-default"
                                                    target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
 
                                                 <button ng-hide="translation.form.$dirty || translation.isOriginalTranslation" 
