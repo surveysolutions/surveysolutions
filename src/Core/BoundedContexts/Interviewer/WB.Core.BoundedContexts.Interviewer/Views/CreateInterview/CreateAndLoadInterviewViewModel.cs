@@ -46,9 +46,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             ILastCreatedInterviewStorage lastCreatedInterviewStorage, 
             IAuditLogService auditLogService, 
             IInterviewAnswerSerializer answerSerializer, 
-            IUserInteractionService userInteractionService) 
+            IUserInteractionService userInteractionService,
+            IJsonAllTypesSerializer serializer) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
-                userInteractionService, interviewsRepository)
+                userInteractionService, interviewsRepository, serializer)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.interviewerPrincipal = interviewerPrincipal;
