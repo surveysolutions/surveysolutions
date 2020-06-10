@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelTests
 {
@@ -124,7 +125,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 commandService ?? Substitute.For<ICommandService>(),
                 logger: Mock.Of<ILogger>(),
                 interactionService: Mock.Of<IUserInteractionService>(),
-                interviewsRepository: interviewsRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
+                interviewsRepository: interviewsRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                new JsonAllTypesSerializer());
 
             return loadingViewModel;
         }
