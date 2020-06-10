@@ -5,7 +5,7 @@ namespace WB.Services.Scheduler.Services
 {
     interface IJobWorker
     {
-        Task Task { get; set; }
+        Task? Task { get; set; }
 
         Task StartAsync(CancellationToken token);
     }

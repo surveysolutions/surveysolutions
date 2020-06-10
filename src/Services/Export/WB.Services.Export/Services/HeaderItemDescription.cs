@@ -8,7 +8,7 @@ namespace WB.Services.Export.Services
 {
     public class HeaderItemDescription
     {
-        public HeaderItemDescription(string label, ExportValueType valueType, VariableValueLabel[] variableValueLabels = null)
+        public HeaderItemDescription(string label, ExportValueType valueType, VariableValueLabel[]? variableValueLabels = null)
         {
             this.ValueType = valueType;
             this.Label = label;
