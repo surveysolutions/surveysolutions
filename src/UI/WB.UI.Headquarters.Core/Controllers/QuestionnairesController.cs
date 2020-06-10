@@ -86,7 +86,8 @@ namespace WB.UI.Headquarters.Controllers
                 DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
                               $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
                 Comment = browseItem.Comment,
-                Variable = browseItem.Variable
+                Variable = browseItem.Variable,
+                IsObserving = this.authorizedUser.IsObserving,
             };
 
             if (browseItem.ImportedBy.HasValue && browseItem.ImportedBy != Guid.Empty)
