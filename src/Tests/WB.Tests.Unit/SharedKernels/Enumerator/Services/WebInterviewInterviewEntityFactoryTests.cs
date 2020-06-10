@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
@@ -99,6 +101,59 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
             Assert.That(sidebar.Groups, Has.Exactly(3).Items);
             Assert.That(sidebar.Groups.Find(x=>x.Title == "disabled group"), Is.Not.Null);
             Assert.That(sidebar.Groups.FindIndex(x => x.Title == "disabled group"), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void When_new_questionnaire_with_new_cover_without_questions_then_view_model_of_that_section_should_skipped()
+        {
+            //arrange
+            var coverId = QuestionnaireDocument.CoverPageSectionId;
+            var sectionId = Id.g2;
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithHideIfDisabled(hideIfDisabled: false, children: new IComposite[]
+            {
+                Create.Entity.Group(coverId),
+                Create.Entity.Group(sectionId)
+            });
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+            
+            //act
+            var sidebar = factory.GetSidebarChildSectionsOf(null, interview, questionnaire, new[] {"null"}, false);
+
+            //assert
+            Assert.That(sidebar.Groups, Has.Exactly(1).Items);
+            Assert.That(sidebar.Groups.Find(x=>x.Id == QuestionnaireDocument.CoverPageSectionId.FormatGuid()), Is.Null);
+        }
+
+        [Test]
+        public void When_new_questionnaire_with_new_cover_with_static_text_then_section_should_be_visible()
+        {
+            //arrange
+            var coverId = QuestionnaireDocument.CoverPageSectionId;
+            var sectionId = Id.g2;
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithHideIfDisabled(hideIfDisabled: false, children: new IComposite[]
+            {
+                Create.Entity.Group(coverId, children: new IComposite[]
+                {
+                    Create.Entity.StaticText()
+                }),
+                Create.Entity.Group(sectionId)
+            });
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+            
+            //act
+            var sidebar = factory.GetSidebarChildSectionsOf(null, interview, questionnaire, new[] {"null"}, false);
+
+            //assert
+            Assert.That(sidebar.Groups, Has.Exactly(2).Items);
+            Assert.That(sidebar.Groups.Find(x=>x.Id == QuestionnaireDocument.CoverPageSectionId.FormatGuid()), Is.Not.Null);
         }
 
         private WebInterviewInterviewEntityFactory CreateWebInterviewInterviewEntityFactory() =>
