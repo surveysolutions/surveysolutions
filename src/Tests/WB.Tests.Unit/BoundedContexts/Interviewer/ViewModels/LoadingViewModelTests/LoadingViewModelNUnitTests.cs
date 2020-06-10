@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
     internal class LoadingViewModelNUnitTests : MvxTestFixture
     {
         [Test]
-        public async Task LoadingViewModel_when_interview_is_created_on_client_should_open_prefilled_questions_section()
+        public async Task LoadingViewModel_when_interview_is_created_on_client_should_open_interview_on_prefilled_questions_section()
         {
             var interview = Substitute.For<IStatefulInterview>();
             interview.HasEditableIdentifyingQuestions.Returns(true);
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestionsAsync(null);
+            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(interview.Id.FormatGuid(), null);
         }
 
         [Test]
