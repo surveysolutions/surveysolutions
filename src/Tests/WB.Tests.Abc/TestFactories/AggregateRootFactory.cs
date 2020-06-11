@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -76,14 +77,16 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance> translationsStorage = null,
-            IReusableCategoriesStorage categoriesStorage = null)
+            IReusableCategoriesStorage categoriesStorage = null,
+            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage = null)
             => new Questionnaire(
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyAccessor>(),
                 questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 translationsStorage ?? new InMemoryPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance>(),
-                categoriesStorage ?? Mock.Of<IReusableCategoriesStorage>());
+                categoriesStorage ?? Mock.Of<IReusableCategoriesStorage>(),
+                pdfStorage ?? new InMemoryPlainStorageAccessor<QuestionnairePdf>());
 
         public StatefulInterview StatefulInterview(Guid interviewId, 
             Guid? questionnaireId = null,
