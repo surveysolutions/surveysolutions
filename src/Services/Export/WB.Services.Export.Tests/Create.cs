@@ -204,7 +204,8 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IProductVersion>(),
                 Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>());
+                assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>(),
+                Mock.Of<IJsonExporter>());
         }
 
         public static CommentsExporter CommentsExporter()
@@ -715,6 +716,12 @@ namespace WB.Services.Export.Tests
             return new PdfExporter(api ?? HeadquartersApi(),
                 fileSystem ?? Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ILogger<PdfExporter>>());
+        }
+
+        public static JsonExporter JsonExporter(IFileSystemAccessor fileSystem = null)
+        {
+            return new JsonExporter(fileSystem ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ILogger<JsonExporter>>());
         }
 
         internal static IInterviewsDoFilesExporter InterviewsDoFilesExporter(IFileSystemAccessor fileSystemAccessor, QuestionnaireLabelFactory questionnaireLabelFactory = null)
