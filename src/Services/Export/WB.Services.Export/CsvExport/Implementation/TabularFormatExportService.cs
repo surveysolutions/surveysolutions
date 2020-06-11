@@ -30,6 +30,7 @@ namespace WB.Services.Export.CsvExport.Implementation
 
         private readonly IProductVersion productVersion;
         private readonly IPdfExporter pdfExporter;
+        private readonly IJsonExporter jsonExporter;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAssignmentActionsExporter assignmentActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
@@ -46,7 +47,8 @@ namespace WB.Services.Export.CsvExport.Implementation
             IProductVersion productVersion, 
             IPdfExporter pdfExporter,
             IFileSystemAccessor fileSystemAccessor,
-            IAssignmentActionsExporter assignmentActionsExporter)
+            IAssignmentActionsExporter assignmentActionsExporter,
+            IJsonExporter jsonExporter)
         {
             this.logger = logger;
             this.interviewsToExportSource = interviewsToExportSource;
@@ -60,6 +62,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.pdfExporter = pdfExporter;
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentActionsExporter = assignmentActionsExporter;
+            this.jsonExporter = jsonExporter;
         }
 
         public async Task ExportInterviewsInTabularFormatAsync(
@@ -127,6 +130,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             }
             
             await this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
+            await this.jsonExporter.ExportAsync(questionnaire, tempPath, cancellationToken);
 
             exportWatch.Stop();
 
