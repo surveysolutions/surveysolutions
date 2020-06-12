@@ -11,7 +11,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
         private static readonly Assembly Assembly = typeof(QuestionnaireDocument).Assembly;
         private static readonly ConcurrentDictionary<string, Type> ResolvedTypes = new ConcurrentDictionary<string, Type>();
 
-        public override Type BindToType(string assemblyName, string typeName)
+        public override Type BindToType(string? assemblyName, string typeName)
         {
             return ResolvedTypes.GetOrAdd(typeName, tn =>
             {
@@ -19,7 +19,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             });
         }
 
-        public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
+        public override void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
         {
             assemblyName = null;
             typeName = serializedType.Name;

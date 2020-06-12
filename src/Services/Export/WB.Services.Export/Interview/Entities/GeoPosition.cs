@@ -56,9 +56,9 @@ namespace WB.Services.Export.Interview.Entities
 
         public static string[] PropertyNames { get; } = new[] { "Latitude", "Longitude", "Accuracy", "Altitude", "Timestamp" };
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            GeoPosition geoPosition = obj as GeoPosition;
+            GeoPosition? geoPosition = obj as GeoPosition;
             return geoPosition != null && this.Equals(geoPosition);
         }
 
@@ -81,13 +81,13 @@ namespace WB.Services.Export.Interview.Entities
             }
         }
 
-        public static bool operator ==(GeoPosition x, GeoPosition y) => x?.Accuracy == y?.Accuracy &&
-                                                                        x?.Altitude == y?.Altitude &&
-                                                                        x?.Latitude == y?.Latitude &&
-                                                                        x?.Longitude == y?.Longitude &&
-                                                                        x?.Timestamp == y?.Timestamp;
+        public static bool operator ==(GeoPosition? x, GeoPosition? y) => x?.Accuracy == y?.Accuracy &&
+                                                                          x?.Altitude == y?.Altitude &&
+                                                                          x?.Latitude == y?.Latitude &&
+                                                                          x?.Longitude == y?.Longitude &&
+                                                                          x?.Timestamp == y?.Timestamp;
 
-        public static bool operator !=(GeoPosition x, GeoPosition y) => !(x == y);
+        public static bool operator !=(GeoPosition? x, GeoPosition? y) => !(x == y);
 
         public GeoPosition Clone()
         {

@@ -7,15 +7,14 @@ namespace WB.Services.Export.Events.Interview
 {
     public class StaticTextsDeclaredInvalid : InterviewPassiveEvent
     {
-        private IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditionsDictionary;
+        private IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>>? failedValidationConditionsDictionary;
 
-        public List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> FailedValidationConditions { get; protected set; }
+        public List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>? FailedValidationConditions { get; protected set; }
 
         public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> GetFailedValidationConditionsDictionary()
-            => this.failedValidationConditionsDictionary ?? (this.failedValidationConditionsDictionary
-                   = this.FailedValidationConditions != null ?
-                       this.FailedValidationConditions.ToDictionary() :
-                       new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>().ToDictionary());
+            => this.failedValidationConditionsDictionary ??= this.FailedValidationConditions != null ?
+                this.FailedValidationConditions.ToDictionary() :
+                new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>().ToDictionary();
 
         public StaticTextsDeclaredInvalid(List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> failedValidationConditions)
         {

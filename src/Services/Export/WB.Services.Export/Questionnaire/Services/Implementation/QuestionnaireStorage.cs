@@ -24,7 +24,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         private static readonly SemaphoreSlim CacheLock = new SemaphoreSlim(1);
 
-        public async Task<QuestionnaireDocument> GetQuestionnaireAsync(
+        public async Task<QuestionnaireDocument?> GetQuestionnaireAsync(
             QuestionnaireId questionnaireId,
             Guid? translation = null,
             CancellationToken token = default)
@@ -81,7 +81,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         public void InvalidateQuestionnaire(QuestionnaireId questionnaireId, Guid? translation)
         {
-            if (cache.TryGetValue(questionnaireId, translation, out var questionnaire) && !questionnaire.IsDeleted)
+            if (cache.TryGetValue(questionnaireId, translation, out var questionnaire) && !questionnaire!.IsDeleted)
             {
                 cache.Remove(questionnaireId, translation);
             }
