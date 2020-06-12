@@ -78,6 +78,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\CommandValidatorsMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\DataExport.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -111,6 +116,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\CommandValidatorsMessages.resx">
+      <LastGenOutput>CommandValidatorsMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\DataExport.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
