@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 var translationMetadata = questionnaire.Translations.FirstOrDefault(t => t.Id == translation.Value);
                 if (translationMetadata == null)
-                    throw new ArgumentException("Questionnaire doesn't contains translation: " + translation);
+                    return null;
 
                 translationData = translationService.Get(questionnaire.PublicKey, translationMetadata.Id);
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
