@@ -9,19 +9,19 @@ namespace WB.Services.Export.Events.Interview
 {
     public class AnswersDeclaredInvalid : InterviewPassiveEvent
     {
-        private IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions;
+        private IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>>? failedValidationConditions;
 
         public Identity[] Questions { get; set; }
 
-        public List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> FailedConditionsStorage { get; protected set; }
+        public List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> FailedConditionsStorage { get; protected set; } = null!;
 
         [JsonIgnore]
         public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions
         {
             get
             {
-                return this.failedValidationConditions ??
-                       (this.failedValidationConditions = this.FailedConditionsStorage.ToDictionary(x => x.Key, x => x.Value));
+                return this.failedValidationConditions ??= 
+                    this.FailedConditionsStorage.ToDictionary(x => x.Key, x => x.Value);
             }
             protected set
             {

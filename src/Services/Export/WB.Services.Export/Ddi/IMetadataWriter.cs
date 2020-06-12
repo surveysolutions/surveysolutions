@@ -8,9 +8,10 @@ namespace WB.Services.Export.Ddi
 
         DdiDataFile CreateDdiDataFile(string fileName);
 
-        DdiVariable AddDdiVariableToFile(DdiDataFile ddiDataFile, string variableName, DdiDataType type,string label, string instruction, string literal, DdiVariableScale? ddiVariableScale);
+        DdiVariable AddDdiVariableToFile(DdiDataFile ddiDataFile, string? variableName, DdiDataType type,
+            string? label, string? instruction, string? literal, DdiVariableScale? ddiVariableScale);
 
-        void AddValueLabelToVariable(DdiVariable variable, decimal valueName, string labelName);
+        void AddValueLabelToVariable(DdiVariable variable, decimal valueName, string? labelName);
 
         void SaveMetadataInFile(string fileName);
     }

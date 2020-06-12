@@ -61,7 +61,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                     command.CommandText.Append(" AND ").Append(InterviewDatabaseConstants.RosterVector)
                         .Append(" = @rosterVector" + index);
                     command.Parameters.AddWithValue("@rosterVector" + index,
-                        NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterTableKey.RosterVector.Coordinates.ToArray());
+                        NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterTableKey?.RosterVector?.Coordinates.ToArray());
                 }
 
                 command.CommandText.Append(';');

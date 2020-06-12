@@ -360,7 +360,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         {
             var questionnaireDocument = SetupQuestionnaireDocumentWithAllEntities();
 
-            ITenantContext tenantContext = Mock.Of<ITenantContext>(t => t.Tenant == Mock.Of<TenantInfo>(ti => ti.Name == "tenant_name"));
+            ITenantContext tenantContext = Mock.Of<ITenantContext>(t => t.Tenant == new TenantInfo("http://test","","tenant_name"));
             IQuestionnaireStorage questionnaireStorage = 
                 Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireAsync(It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>(), It.IsAny<CancellationToken>()) == Task.FromResult(questionnaireDocument));
             object value = questionnaireDocument.QuestionnaireId;

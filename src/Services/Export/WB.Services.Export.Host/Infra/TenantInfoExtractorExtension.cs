@@ -7,7 +7,7 @@ namespace WB.Services.Export.Host.Infra
 {
     public static class TenantInfoExtractorExtension
     {
-        public static TenantInfo GetTenantInfo(this HttpRequest request)
+        public static TenantInfo? GetTenantInfo(this HttpRequest request)
         {
             var headers = request.Headers;
             var auth = headers["Authorization"];
