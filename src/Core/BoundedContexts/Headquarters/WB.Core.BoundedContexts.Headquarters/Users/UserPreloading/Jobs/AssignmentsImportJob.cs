@@ -79,15 +79,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                                 return;
                             }
 
-                            var newAssignmentId = threadImportAssignmentsService.ImportAssignment(assignmentId,
-                                importProcessStatus.AssignedTo, questionnaire, responsibleId);
+                            try
+                            {
+                                var newAssignmentId = threadImportAssignmentsService.ImportAssignment(assignmentId,
+                                    importProcessStatus.AssignedTo, questionnaire, responsibleId);
 
-                            if (!firstImportedAssignmentId.HasValue)
-                                firstImportedAssignmentId = newAssignmentId;
-                            else
-                                lastImportedAssignmentId = newAssignmentId;
+                                if (!firstImportedAssignmentId.HasValue)
+                                    firstImportedAssignmentId = newAssignmentId;
+                                else
+                                    lastImportedAssignmentId = newAssignmentId;
 
-                            threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
+                                threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
+                            }
+                            catch (Exception e)
+                            {
+                                threadImportAssignmentsService.SetVerifiedToAssignment(assignmentId, e.Message);
+                            }
+                            
                         });
                     });
 
@@ -107,6 +115,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
             catch (Exception ex)
             {
                 this.logger.Error($"Assignments import job: FAILED. Reason: {ex.Message} ", ex);
+
+                InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
+                    serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
+                        .SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted));
             }
         }
     }
