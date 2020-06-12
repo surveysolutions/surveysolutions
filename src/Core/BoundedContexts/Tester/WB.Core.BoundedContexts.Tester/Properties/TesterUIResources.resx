@@ -150,6 +150,9 @@
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Designer web application is not accessible at this moment. Check connection setting or try again later</value>
   </data>
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Please enter correct login</value>
+  </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
