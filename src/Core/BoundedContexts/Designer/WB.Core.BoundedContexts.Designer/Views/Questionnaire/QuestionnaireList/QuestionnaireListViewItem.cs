@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual Guid? CreatedBy { get; set; }
 
-        public virtual string CreatorName { get; set; } = string.Empty;
+        public virtual string? CreatorName { get; set; } 
 
         public virtual bool IsDeleted { get; set; }
 
