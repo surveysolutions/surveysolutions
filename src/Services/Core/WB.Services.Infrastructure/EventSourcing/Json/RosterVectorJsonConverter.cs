@@ -7,34 +7,45 @@ namespace WB.Services.Infrastructure.EventSourcing.Json
 {
     public class RosterVectorJsonConverter : JsonConverter
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
-            var vector = (RosterVector)value;
-            var coordinates = (vector.Coordinates as int[]) ?? Array.Empty<int>();
-
-            if (serializer.TypeNameHandling == TypeNameHandling.All)
+            if (value == null)
             {
-                writer.WriteStartObject();
-                writer.WritePropertyName("$type");
-                writer.WriteValue(FullRosterVectorTypeName);
-                writer.WritePropertyName("$values");
-                writer.WriteStartArray();
-
-                for (int i = 0; i < coordinates.Length; i++)
-                {
-                    writer.WriteValue(coordinates[i]);
-                }
-
-                writer.WriteEndArray();
-                writer.WriteEndObject();
+                writer.WriteNull();
             }
             else
             {
-                serializer.Serialize(writer, coordinates);
+                var vector = value as RosterVector;
+
+                if (vector == null)
+                    throw new JsonSerializationException("Expected Identity object value");
+
+                var coordinates = (vector.Coordinates as int[]) ?? Array.Empty<int>();
+
+                if (serializer.TypeNameHandling == TypeNameHandling.All)
+                {
+                    writer.WriteStartObject();
+                    writer.WritePropertyName("$type");
+                    writer.WriteValue(FullRosterVectorTypeName);
+                    writer.WritePropertyName("$values");
+                    writer.WriteStartArray();
+
+                    for (int i = 0; i < coordinates.Length; i++)
+                    {
+                        writer.WriteValue(coordinates[i]);
+                    }
+
+                    writer.WriteEndArray();
+                    writer.WriteEndObject();
+                }
+                else
+                {
+                    serializer.Serialize(writer, coordinates);
+                }
             }
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             var vector = new List<int>();
 
@@ -42,7 +53,7 @@ namespace WB.Services.Infrastructure.EventSourcing.Json
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TokenType == JsonToken.PropertyName && reader.Value.ToString() == "$values")
+                    if (reader.TokenType == JsonToken.PropertyName && reader.Value?.ToString() == "$values")
                     {
                         reader.Read();
                         vector = ParseArray(reader);

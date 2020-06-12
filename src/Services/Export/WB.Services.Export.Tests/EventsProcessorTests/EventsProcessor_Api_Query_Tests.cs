@@ -68,7 +68,8 @@ namespace WB.Services.Export.Tests.EventsProcessorTests
 
             this.apiMock.Verify(s => s.GetInterviewEvents(0, It.IsAny<int>()), Times.Once);
             this.apiMock.Verify(s => s.GetInterviewEvents(3, It.IsAny<int>()), Times.Once);
-            this.apiMock.Verify(s => s.GetInterviewEvents(6, It.IsAny<int>()), Times.Never, "Should not continue query events despite availability");
+            this.apiMock.Verify(s => s.GetInterviewEvents(6, It.IsAny<int>()), Times.Never, 
+                "Should not continue query events despite availability");
         }
 
 

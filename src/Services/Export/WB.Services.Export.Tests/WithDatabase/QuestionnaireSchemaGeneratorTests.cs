@@ -28,10 +28,7 @@ namespace WB.Services.Export.Tests.WithDatabase
 
             var tenant = new TenantInfo("http://example", Guid.NewGuid().FormatGuid(), "testTenant");
 
-            var ctx = new TenantContext(null)
-            {
-                Tenant = tenant,
-            };
+            var ctx = new TenantContext(null, tenant);
 
             var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
             optionsBuilder.UseNpgsql(connectionOptions.Value.DefaultConnection,

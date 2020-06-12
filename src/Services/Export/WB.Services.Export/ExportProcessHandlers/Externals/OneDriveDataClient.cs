@@ -20,11 +20,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
     {
         private readonly ILogger<OneDriveDataClient> logger;
         private readonly ITenantContext tenantContext;
-        private IGraphServiceClient graphServiceClient;
-        private string refreshToken;
+        private IGraphServiceClient? graphServiceClient;
+        private string refreshToken = string.Empty;
         private readonly AsyncRetryPolicy retry;
 
         private static long MaxAllowedFileSizeByMicrosoftGraphApi = 4 * 1024 * 1024;
+
+        private IGraphServiceClient GraphServiceClient
+        {
+            get => graphServiceClient ?? throw new InvalidOperationException("Client is not initialized;");
+            set => graphServiceClient = value;
+        }
 
         public OneDriveDataClient(
             ILogger<OneDriveDataClient> logger,
@@ -58,7 +64,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         {
             logger.LogTrace("Creating Microsoft.Graph.Client for OneDrive file upload");
 
-            this.graphServiceClient = new GraphServiceClient(new DelegateAuthenticationProvider(requestMessage =>
+            this.GraphServiceClient = new GraphServiceClient(new DelegateAuthenticationProvider(requestMessage =>
             {
                 requestMessage
                     .Headers
@@ -93,7 +99,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
                     await this.retry.ExecuteAsync(async () =>
                     {
-                        var session = await graphServiceClient.Drive.Root.ItemWithPath(Join(folder, fileName)).CreateUploadSession().Request()
+                        var session = await GraphServiceClient.Drive.Root.ItemWithPath(Join(folder, fileName)).CreateUploadSession().Request()
                             .PostAsync(cancellationToken);
                         
                         return new ChunkedUploadProvider(session, graphServiceClient, fs, maxSizeChunk).UploadAsync();
@@ -110,14 +116,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 logger.LogTrace("Uploading {fileName} to {folder}. Small file of size {Length}", fileName, folder, contentLength);
                 
                 await this.retry.ExecuteAsync(() =>
-                    graphServiceClient.Drive.Root.ItemWithPath(Join(folder, fileName)).Content.Request()
+                    GraphServiceClient.Drive.Root.ItemWithPath(Join(folder, fileName)).Content.Request()
                         .PutAsync<DriveItem>(fileStream));
             }
         }
 
         public async Task<long?> GetFreeSpaceAsync()
         {
-            var storageInfo = await this.retry.ExecuteAsync(graphServiceClient.Drive.Request().GetAsync);
+            var storageInfo = await this.retry.ExecuteAsync(GraphServiceClient.Drive.Request().GetAsync);
             if (storageInfo?.Quota?.Total == null) return null;
 
             return storageInfo.Quota.Total - storageInfo.Quota.Used ?? 0;

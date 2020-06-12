@@ -64,6 +64,8 @@ namespace WB.Services.Export.Host
             Assembly assembly = Assembly.GetExecutingAssembly();
 
             var connectionString = GetConnectionString(configuration);
+            if(string.IsNullOrWhiteSpace(connectionString))
+                throw new InvalidOperationException("Connection string was not found.");
 
             logConfig
                 .ReadFrom.Configuration(configuration)
@@ -86,7 +88,7 @@ namespace WB.Services.Export.Host
             }
         }
 
-        private static string GetConnectionString(IConfiguration configuration)
+        private static string? GetConnectionString(IConfiguration configuration)
         {
             var webConfig = configuration["webConfigs"];
 

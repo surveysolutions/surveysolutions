@@ -78,7 +78,8 @@ namespace WB.Services.Export.CsvExport.Implementation
             var toDate = settings.ToDate;
 
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireIdentity, token: cancellationToken);
-
+            if(questionnaire == null)
+                throw new InvalidOperationException("questionnaire must be not null.");
             QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
 
             var exportInterviewsProgress = new ExportProgress();
@@ -122,7 +123,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             {
                 var assignmentIdsToExport = 
                     interviewsToExport.Where(x => x.AssignmentId.HasValue)
-                                      .Select(x => x.AssignmentId.Value)
+                                      .Select(x => x.AssignmentId!.Value)
                                       .Distinct()
                                       .ToList();
                 await this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, 
@@ -143,6 +144,9 @@ namespace WB.Services.Export.CsvExport.Implementation
         public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension, CancellationToken cancellationToken)
         {
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
+            if (questionnaire == null)
+                throw new InvalidOperationException("questionnaire must be not null.");
+
             QuestionnaireExportStructure questionnaireExportStructure = await this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
 
             var questionnaireUrl = $"https://designer.mysurvey.solutions/questionnaire/details/{questionnaire.PublicKey.ToString("N")}";
