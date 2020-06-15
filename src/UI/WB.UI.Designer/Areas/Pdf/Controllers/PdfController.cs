@@ -195,7 +195,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         
         private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, int timezoneOffsetMinutes)
         {
-            var pathToWkHtmlToPdfExecutable = this.GetPathToWKHtmlToPdfExecutableOrThrow();
+            var pathToWkHtmlToPdfExecutable = this.pdfSettings.Value.WKHtmlToPdfExecutablePath;
 
             PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation, false);
             if (questionnaire == null)
@@ -217,7 +217,9 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                         Content = questionnaireHtml,
                         PageFooterUrl = pageFooterUrl,
                         OutputPath = generationProgress.FilePath,
-                        PdfToolPath = pathToWkHtmlToPdfExecutable,
+                         
+                        PdfToolPath = pathToWkHtmlToPdfExecutable, 
+                        WkHtmlToPdfExeName = this.pdfSettings.Value.WkHtmlToPdfExeName,
                         ExecutionTimeout = this.pdfSettings.Value.PdfGenerationTimeoutInMilliseconds,
                         TempFilesPath = Path.GetTempPath(),
                         Size = PdfPageSize.A4,
@@ -242,16 +244,6 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             routeData.Values.Add("controller", "Pdf");
             routeData.Values.Add("area", "Pdf");
             return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, routeData);
-        }
-
-        private string GetPathToWKHtmlToPdfExecutableOrThrow()
-        {
-            string path = Path.GetFullPath(pdfSettings.Value.WKHtmlToPdfExecutablePath ?? "");
-
-            if (!System.IO.File.Exists(path))
-                throw new ConfigurationErrorsException(string.Format("Path to wkhtmltopdf.exe is incorrect ({0}). Please install wkhtmltopdf.exe and/or update server configuration.", path));
-
-            return path;
         }
 
         private PdfQuestionnaireModel? LoadQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
