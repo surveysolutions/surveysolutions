@@ -757,8 +757,10 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? questionnaireId = null, Attachment[] attachments = null, 
             Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(questionnaireId, Main.Core.Documents.QuestionnaireDocument.CoverPageSectionId,
-                attachments, translations, macros, children);
+            var coverId = Guid.NewGuid();
+            var document = QuestionnaireDocumentWithOneChapter(questionnaireId, coverId, attachments, translations, macros, children);
+            document.CoverPageSectionId = coverId;
+            return document;
         }
 
         public static QuestionnaireExpressionStateModelFactory QuestionnaireExecutorTemplateModelFactory(

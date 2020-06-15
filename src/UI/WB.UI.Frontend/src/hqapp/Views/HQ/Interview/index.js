@@ -8,6 +8,7 @@ const Overview = () => import(/* webpackChunkName: "review" */'./Overview')
 export default class ReviewComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
+        this.config = window.CONFIG
     }
 
     get routes() {
@@ -39,17 +40,21 @@ export default class ReviewComponent {
                     navigateToPrefilled: true,
                     showHumburger: false,
                 },
+                beforeEnter: (to, from, next) => {
+                    to.params.sectionId = this.config.coverPageId
+                    next()
+                },
             },
             {
                 name: 'cover',
-                path: 'Section/11111111111111111111111111111111',
+                path: 'Section/' + this.config.coverPageId,
                 component: Cover,
                 props: {
                     navigateToPrefilled: true,
                     showHumburger: false,
                 },
                 beforeEnter: (to, from, next) => {
-                    to.params.sectionId = '11111111111111111111111111111111'
+                    to.params.sectionId = this.config.coverPageId
                     next()
                 },
             },
@@ -58,7 +63,7 @@ export default class ReviewComponent {
                 name: 'section',
                 component: ReviewSection,
                 beforeEnter: (to, from, next) => {
-                    if (to.params.sectionId == '11111111111111111111111111111111')
+                    if (to.params.sectionId == this.config.coverPageId)
                         next({ name: 'cover' })
                     else
                         next()

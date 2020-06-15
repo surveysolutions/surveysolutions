@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCom
         {
             var group = (IGroup)questionnaire.QuestionnaireDocument.Children.First();
             group.GetParent().Should().Be(questionnaire.QuestionnaireDocument);
-            group.PublicKey.Should().Be(QuestionnaireDocument.CoverPageSectionId);
+            group.PublicKey.Should().Be(questionnaire.QuestionnaireDocument.CoverPageSectionId);
             group.Title.Should().Be(QuestionnaireEditor.CoverPageSection);
         }
 

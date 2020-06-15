@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             {
                 questionnaireInfoView.Chapters.Add(new ChapterInfoView
                 (
-                    itemId: QuestionnaireDocument.CoverPageSectionId.FormatGuid(),
+                    itemId: questionnaireDocument.CoverPageSectionId.FormatGuid(),
                     title: QuestionnaireEditor.CoverPageSection,
                     isCover: true,
                     isReadOnly: true,
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 (
                     itemId : chapter.PublicKey.FormatGuid(),
                     title : chapter.Title,
-                    isCover: chapter.PublicKey == QuestionnaireDocument.CoverPageSectionId,
+                    isCover: chapter.PublicKey == questionnaireDocument.CoverPageSectionId,
                     isReadOnly: false,
                     groupsCount : 0,
                     rostersCount : 0,

@@ -229,7 +229,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     (
                         group: new GroupDetailsView
                         { 
-                            Id = QuestionnaireDocument.CoverPageSectionId,
+                            Id = document.CoverPageSectionId,
                             Title = QuestionnaireEditor.CoverPageSection,
                             EnablementCondition = null,
                             HideIfDisabled = false,
@@ -238,7 +238,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                         },
                         breadcrumbs: new[] { new Breadcrumb()
                         {
-                            Id = QuestionnaireDocument.CoverPageSectionId.FormatGuid(),
+                            Id = document.CoverPageSectionId.FormatGuid(),
                             Title = QuestionnaireEditor.CoverPageSection
                         }}
                     );
