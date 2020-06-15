@@ -962,20 +962,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         public void Resume(ResumeInterviewCommand command)
         {
-            var lastResume = this.properties.LastResumedUtc;
+            DateTimeOffset? lastResume = this.properties.LastResumed;
             if (lastResume.HasValue)
             {
-                if (command.OriginDate.UtcDateTime - lastResume < pauseResumeQuiteWindow)
+                if (command.OriginDate - lastResume < pauseResumeQuiteWindow)
                 {
                     return;
                 }
                 
-                DateTime closePreviousNonClosedSessionDate = 
+                DateTimeOffset closePreviousNonClosedSessionDate = 
                     lastResume.Value.AddMinutes(15);
 
-                if (command.OriginDate.UtcDateTime < closePreviousNonClosedSessionDate)
+                if (command.OriginDate < closePreviousNonClosedSessionDate)
                 {
-                    closePreviousNonClosedSessionDate = command.OriginDate.UtcDateTime;
+                    closePreviousNonClosedSessionDate = command.OriginDate;
                 }
                 
                 if (this.properties.LastAnswerDateUtc > closePreviousNonClosedSessionDate)
@@ -991,10 +991,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Pause(PauseInterviewCommand command)
         {
-            var lastOpen = this.properties.LastResumedUtc;
+            DateTimeOffset? lastOpen = this.properties.LastResumed;
             if (lastOpen.HasValue)
             {
-                var afterLastResumeEvent = command.OriginDate.UtcDateTime - lastOpen;
+                TimeSpan? afterLastResumeEvent = command.OriginDate - lastOpen;
                 if (afterLastResumeEvent < pauseResumeQuiteWindow)
                 {
                     return;
@@ -1010,10 +1010,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CloseBySupervisor(CloseInterviewBySupervisorCommand command)
         {
-            var lastResume = this.properties.LastOpenedBySupervisor;
+            DateTimeOffset? lastResume = this.properties.LastOpenedBySupervisor;
             if (lastResume.HasValue)
             {
-                var afterLastResumeEvent = command.OriginDate.UtcDateTime - lastResume;
+                TimeSpan? afterLastResumeEvent = command.OriginDate - lastResume;
                 if (afterLastResumeEvent < pauseResumeQuiteWindow)
                 {
                     return;
@@ -1029,15 +1029,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void OpenBySupervisor(OpenInterviewBySupervisorCommand command)
         {
-            var lastOpenDate = this.properties.LastOpenedBySupervisor;
+            DateTimeOffset? lastOpenDate = this.properties.LastOpenedBySupervisor;
             if (lastOpenDate.HasValue)
             {
-                if (command.OriginDate.UtcDateTime - lastOpenDate < pauseResumeQuiteWindow)
+                if (command.OriginDate - lastOpenDate < pauseResumeQuiteWindow)
                 {
                     return;
                 }
                 
-                DateTime closePreviousNonClosedSessionDate = 
+                DateTimeOffset closePreviousNonClosedSessionDate = 
                     lastOpenDate.Value.AddMinutes(15);
 
                 if (command.OriginDate.UtcDateTime < closePreviousNonClosedSessionDate)
@@ -1053,25 +1053,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         private void Apply(InterviewPaused @event)
         {
-            this.properties.LastPausedUtc = @event.UtcTime;
-            this.properties.LastResumedUtc = null;
+            this.properties.LastPaused = @event.OriginDate;
+            this.properties.LastResumed = null;
         }
 
         private void Apply(InterviewResumed @event)
         {
-            this.properties.LastResumedUtc = @event.UtcTime;
-            this.properties.LastPausedUtc = null;
+            this.properties.LastResumed = @event.OriginDate;
+            this.properties.LastPaused = null;
         }
 
         private void Apply(InterviewOpenedBySupervisor @event)
         {
-            this.properties.LastOpenedBySupervisor = @event.OriginDate?.UtcDateTime;
+            this.properties.LastOpenedBySupervisor = @event.OriginDate;
             this.properties.LastClosedBySupervisor = null;
         }
 
         private void Apply(InterviewClosedBySupervisor @event)
         {
-            this.properties.LastClosedBySupervisor = @event.OriginDate?.UtcDateTime;
+            this.properties.LastClosedBySupervisor = @event.OriginDate;
             this.properties.LastOpenedBySupervisor = null;
         }
     }
