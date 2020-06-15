@@ -1,6 +1,6 @@
 import { forEach, differenceBy } from 'lodash'
 import Vue from 'vue'
-import store from 'store2'
+import browserLocalStore from '~/shared/localStorage'
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
@@ -91,8 +91,9 @@ export default {
         state.interviewCompleted = true
     },
     CURRENT_SECTION(_, { interviewId, sectionId }) {
+        const store = new browserLocalStore()
         if (sectionId)
-            store(`${interviewId}_lastSection`, sectionId)
+            store.setItem(`${interviewId}_lastSection`, sectionId)
         else
             store.remove(`${interviewId}_lastSection`)
     },
