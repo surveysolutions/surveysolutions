@@ -91,9 +91,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 
                                 threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
                             }
-                            catch (Exception e)
+                            catch (Exception ex)
                             {
-                                threadImportAssignmentsService.SetVerifiedToAssignment(assignmentId, e.Message);
+                                this.logger.Error($"Assignment import error. Reason: {ex.Message} ", ex);
+                                threadImportAssignmentsService.SetVerifiedToAssignment(assignmentId, ex.Message);
                             }
                             
                         });
