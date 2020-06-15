@@ -39,7 +39,7 @@ namespace WB.UI.Shared.Enumerator.Utils
                                 string logsPrefix = string.Empty;
                                 if (ServiceLocator.Current != null)
                                 {
-                                    var settings = ServiceLocator.Current.GetInstance<IDeviceSettings>();
+                                    var settings = ServiceLocator.Current.GetInstance<IEnumeratorSettings>();
                                     var settingsEndpoint = settings.Endpoint;
                                     logsPrefix += "HQ URL: " + settingsEndpoint + Environment.NewLine;
 

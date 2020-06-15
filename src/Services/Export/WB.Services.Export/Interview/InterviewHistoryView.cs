@@ -6,6 +6,6 @@ namespace WB.Services.Export.Interview
     public class InterviewHistoryView
     {
         public Guid InterviewId { get; set; }
-        public List<InterviewHistoricalRecordView> Records { get; set; }
+        public List<InterviewHistoricalRecordView> Records { get; set; } = new List<InterviewHistoricalRecordView>();
     }
 }

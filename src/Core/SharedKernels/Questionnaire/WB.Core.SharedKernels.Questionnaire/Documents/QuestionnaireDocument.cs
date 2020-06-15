@@ -352,15 +352,18 @@ namespace Main.Core.Documents
             return result;
         }
 
-        public IComposite GetChapterOfItemById(Guid itemId)
+        public IComposite GetChapterOfItemByIdOrThrow(Guid itemId)
         {
-            IComposite item = this.GetItemOrLogWarning(itemId);
-            IComposite? parent = item.GetParent();
+            IComposite? item = this.GetItemOrDefault(itemId);
+            
+            if(item == null)
+                throw new InvalidOperationException($"Item {itemId} was not found.");
 
-            while (!(parent is IQuestionnaireDocument) && parent != null)
+            IComposite? itemParent = item.GetParent();
+            while (!(itemParent is IQuestionnaireDocument) && itemParent != null)
             {
-                item = parent;
-                parent = parent.GetParent();
+                item = itemParent;
+                itemParent = itemParent.GetParent();
             }
 
             return item;
@@ -449,7 +452,7 @@ namespace Main.Core.Documents
 
         public void MoveItem(Guid itemId, Guid? targetGroupId, int targetIndex)
         {
-            IComposite item = this.GetItemOrLogWarning(itemId);
+            IComposite? item = this.GetItemOrDefault(itemId);
             if (item == null)
                 return;
 
@@ -466,7 +469,7 @@ namespace Main.Core.Documents
             this.LastEntryDate = DateTime.UtcNow;
         }
 
-        private IComposite GetItemOrLogWarning(Guid itemId)
+        private IComposite? GetItemOrDefault(Guid itemId)
         {
             var itemToMove = this.Find<IComposite>(item => item.PublicKey == itemId).FirstOrDefault();
 

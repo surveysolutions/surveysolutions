@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -20,7 +19,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -139,8 +137,11 @@ namespace WB.UI.Designer.Controllers
 
         [Route("questionnaire/details/{id}")]
         [Route("questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
-        public IActionResult Details(QuestionnaireRevision id, Guid? chapterId, string entityType, Guid? entityid)
+        public IActionResult Details(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
         {
+            if(id == null)
+                return this.RedirectToAction("Index");
+
             return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id.QuestionnaireId))
                 ? this.View("~/questionnaire/index.cshtml")
                 : this.LackOfPermits();

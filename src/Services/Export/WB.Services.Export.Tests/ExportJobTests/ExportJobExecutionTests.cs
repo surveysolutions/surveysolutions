@@ -10,6 +10,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests.ExportJobTests
 {
@@ -29,7 +30,7 @@ namespace WB.Services.Export.Tests.ExportJobTests
             this.handler = new Mock<IExportProcessHandler<DataExportProcessArgs>>();
             this.schemaGenerator = new Mock<IQuestionnaireSchemaGenerator>();
 
-            this.exportJob = new ExportJob(new TenantContext(null), 
+            this.exportJob = new ExportJob(new TenantContext(null, new TenantInfo("http://test","")), 
                 eventProcessor.Object, logger, handler.Object, schemaGenerator.Object);
         }
 

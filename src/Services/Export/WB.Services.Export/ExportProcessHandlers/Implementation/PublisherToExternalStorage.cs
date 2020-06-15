@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 state.ArchiveFilePath, state.StorageType);
 
             var dataClient = externalStorageDataClientFactory.GetDataClient(state.StorageType);
+
+            if (dataClient == null)
+                throw new ArgumentException("Cannot find appropriate external storage data client for type: " + state.StorageType);
+
             dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.ProcessArgs.RefreshToken,
                 state.Settings.Tenant);
             
@@ -41,10 +46,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
                 var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(state.Settings.QuestionnaireId, 
                     token: cancellationToken);
-                
-                using (var fileStream = File.OpenRead(state.ArchiveFilePath))
+
+                if (questionnaire == null)
+                    throw new InvalidOperationException("Questionnaire was not found.");
+
+                await using (var fileStream = File.OpenRead(state.ArchiveFilePath))
                 {
-                    string questionnaireName = null;
+                    string questionnaireName = "";
                     if (!string.IsNullOrEmpty(questionnaire.VariableName))
                     {
                         var split = questionnaire.QuestionnaireId.Id.Split('$');

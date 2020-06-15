@@ -91,19 +91,17 @@ namespace WB.Services.Export.Events
 
         public static bool SequenceEqual<T>(this T[] source, T[] target)
         {
-            if (source.Length == target.Length)
+            if (source.Length != target.Length) return false;
+            
+            for (var i = 0; i < source.Length; i++)
             {
-                for (var i = 0; i < source.Length; i++)
-                {
-                    if (target[i].Equals(source[i])) continue;
+                if (target[i]!.Equals(source[i])) continue;
 
-                    return false;
-                }
-
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
+
         }
 
         public static decimal[] ExtendWithOneItem(this decimal[] source, decimal coordinate)
