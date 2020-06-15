@@ -11,7 +11,7 @@
 
 import http from '~/webinterview/api/http'
 import Vue from 'vue'
-import browserLocalStore from 'store2'
+import localStorage from '~/shared/localStorage'
 
 export default {
     name: 'WebInterviwew',
@@ -53,7 +53,7 @@ export default {
         connected() {
             this.$store.dispatch('loadInterview')
             this.$store.dispatch('getLanguageInfo')
-            const lastVisitedSection = browserLocalStore(`${this.interviewId}_lastSection`)
+            const lastVisitedSection = new localStorage().getItem(`${this.interviewId}_lastSection`)
 
             if(lastVisitedSection) {
                 this.$router.push({
