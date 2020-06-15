@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
@@ -10,11 +12,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         private bool isInProgress;
         private readonly IBackupRestoreService backupRestoreService;
+        private readonly ILogger logger;
         private bool logsSent;
 
-        public SendLogsViewModel(IBackupRestoreService backupRestoreService)
+        public SendLogsViewModel(IBackupRestoreService backupRestoreService, ILogger logger)
         {
             this.backupRestoreService = backupRestoreService;
+            this.logger = logger;
         }
 
         public IMvxAsyncCommand SendLogsCommand => new MvxAsyncCommand(this.SendLogsAsync, () => !this.IsInProgress);
@@ -27,6 +31,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.IsInProgress = true;
                 await this.backupRestoreService.SendLogsAsync(cancellationToken);
                 this.LogsSent = true;
+            }
+            catch (SynchronizationException ex)
+            {
+                this.logger.Error("Error when sending logs. ", ex);
             }
             finally
             {

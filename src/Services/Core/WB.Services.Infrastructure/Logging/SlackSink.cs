@@ -52,7 +52,7 @@ namespace WB.Services.Infrastructure.Logging
                     new StringContent(JsonConvert.SerializeObject(message),
                         Encoding.UTF8, "application/json")).Wait();
 
-                void AddPropertyToField(string name, string title = null)
+                void AddPropertyToField(string name, string? title = null)
                 {
                     title = title ?? name;
                     if (logEvent.Properties.ContainsKey(name))

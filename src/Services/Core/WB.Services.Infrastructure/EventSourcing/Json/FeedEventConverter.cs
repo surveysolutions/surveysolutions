@@ -6,57 +6,72 @@ using Newtonsoft.Json.Serialization;
 
 namespace WB.Services.Infrastructure.EventSourcing.Json
 {
-    public class FeedEventConverter  : JsonConverter
+    public class FeedEventConverter : JsonConverter
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            var @event = new Event();
-            
-            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+            if (reader.TokenType == JsonToken.Null)
             {
-                if (reader.TokenType == JsonToken.PropertyName)
+                return null;
+            }
+            else
+            {
+                try
                 {
-                    var propertyName = (string) reader.Value;
 
-                    switch (propertyName)
+                    var @event = new Event();
+
+                    while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                     {
-                        case "$type":
-                            @event.EventTypeName = reader.ReadAsString();
-                            break;
-                        case nameof(Event.EventSourceId):
-                            @event.EventSourceId = Guid.Parse(reader.ReadAsString());
-                            break;
-                        case nameof(Event.GlobalSequence):
-                            reader.Read();
-                            @event.GlobalSequence = (long) reader.Value ;
-                            break;
-                        case nameof(Event.Sequence):
-                            @event.Sequence = reader.ReadAsInt32() ?? 0;
-                            break;
-                        case nameof(Event.EventTimeStamp):
-                            @event.EventTimeStamp = reader.ReadAsDateTime() ?? DateTime.MinValue;
-                            break;
-                        case nameof(Event.Payload):
-                            reader.Read();
-                            if (TypesCache.TryGetValue(@event.EventTypeName, out var eventType))
+                        if (reader.TokenType == JsonToken.PropertyName)
+                        {
+                            var propertyName = (string)reader.Value!;
+
+                            switch (propertyName)
                             {
-                                @event.Payload = (IEvent) PayloadSerializer.Deserialize(reader, eventType);
+                                case "$type":
+                                    @event.EventTypeName = reader.ReadAsString()!;
+                                    break;
+                                case nameof(Event.EventSourceId):
+                                    @event.EventSourceId = Guid.Parse(reader.ReadAsString());
+                                    break;
+                                case nameof(Event.GlobalSequence):
+                                    reader.Read();
+                                    @event.GlobalSequence = (long)reader.Value;
+                                    break;
+                                case nameof(Event.Sequence):
+                                    @event.Sequence = reader.ReadAsInt32() ?? 0;
+                                    break;
+                                case nameof(Event.EventTimeStamp):
+                                    @event.EventTimeStamp = reader.ReadAsDateTime() ?? DateTime.MinValue;
+                                    break;
+                                case nameof(Event.Payload):
+                                    reader.Read();
+                                    if (TypesCache.TryGetValue(@event.EventTypeName, out var eventType))
+                                    {
+                                        @event.Payload = (IEvent)PayloadSerializer.Deserialize(reader, eventType)!;
+                                    }
+                                    else
+                                    {
+                                        reader.Skip();
+                                    }
+                                    break;
                             }
-                            else
-                            {
-                                reader.Skip();
-                            }
-                            break;
+                        }
                     }
+
+                    return @event;
+                }
+                catch (Exception ex)
+                {
+                    throw new JsonSerializationException("Error parsing identity string.", ex);
                 }
             }
-
-            return @event;
         }
 
         public override bool CanConvert(Type objectType)
@@ -66,7 +81,7 @@ namespace WB.Services.Infrastructure.EventSourcing.Json
 
         private static readonly JsonSerializer PayloadSerializer = new JsonSerializer
         {
-            ContractResolver =  new CamelCasePropertyNamesContractResolver(),
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Converters =
             {
                 new RosterVectorJsonConverter(),
