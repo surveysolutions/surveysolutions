@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
+using Ncqrs;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -117,7 +118,8 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
                 var interviewLocator = new StatefulInterview(
                     Create.Service.SubstitutionTextFactory(),
                     Create.Service.InterviewTreeBuilder(),
-                    Mock.Of<IQuestionOptionsRepository>()
+                    Mock.Of<IQuestionOptionsRepository>(),
+                    new SystemClock()
                 );
                 interviewLocator.ServiceLocatorInstance = ServiceLocator.Current;
                 SetUp.InstanceToMockedServiceLocator<StatefulInterview>(interviewLocator);

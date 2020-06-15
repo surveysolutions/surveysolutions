@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Services;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
@@ -53,7 +54,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICaptchaProvider captchaProvider;
         private readonly IAssignmentsService assignments;
-        private readonly IPauseResumeQueue pauseResumeQueue;
         private readonly IInvitationService invitationService;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
         private readonly IInvitationMailingService invitationMailingService;
@@ -106,7 +106,6 @@ namespace WB.UI.Headquarters.Controllers
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
             IAssignmentsService assignments,
-            IPauseResumeQueue pauseResumeQueue,
             IInvitationService invitationService,
             INativeReadSideStorage<InterviewSummary> interviewSummary,
             IInvitationMailingService invitationMailingService,
@@ -125,7 +124,6 @@ namespace WB.UI.Headquarters.Controllers
             this.keyGenerator = keyGenerator;
             this.captchaProvider = captchaProvider;
             this.assignments = assignments;
-            this.pauseResumeQueue = pauseResumeQueue;
             this.invitationService = invitationService;
             this.interviewSummary = interviewSummary;
             this.invitationMailingService = invitationMailingService;
@@ -176,7 +174,6 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
-            LogResume(interview);
             return this.View("Index", GetInterviewModel(id, interview, webInterviewConfig));
         }
 
@@ -378,8 +375,10 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StartPost(string invitationId, [FromForm] string password)
         {
-            var invitation = this.invitationService.GetInvitationByToken(invitationId);
-
+            Invitation invitation = this.invitationService.GetInvitationByToken(invitationId);
+            if (invitation == null)
+                return NotFound();
+            
             var assignment = invitation.Assignment;
 
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
@@ -497,19 +496,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
-            LogResume(interview);
-
             return View("Index", GetInterviewModel(id, interview, webInterviewConfig));
-        }
-
-        private void LogResume(IStatefulInterview statefulInterview)
-        {
-            var lastCreatedInterview = TempData[LastCreatedInterviewIdKey] as string;
-            if (lastCreatedInterview != statefulInterview.Id.FormatGuid())
-            {
-                this.pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(statefulInterview.Id,
-                    statefulInterview.CurrentResponsibleId));
-            }
         }
 
         [Route("Finish/{id:Guid}")]
@@ -761,7 +748,7 @@ namespace WB.UI.Headquarters.Controllers
         private StartWebInterview GetStartModel(
             QuestionnaireIdentity questionnaireIdentity,
             WebInterviewConfig webInterviewConfig,
-            Assignment assignment)
+            Assignment? assignment)
         {
             var questionnaireBrowseItem = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
