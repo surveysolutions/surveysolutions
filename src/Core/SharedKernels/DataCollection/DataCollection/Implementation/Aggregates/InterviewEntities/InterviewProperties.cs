@@ -33,11 +33,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public int? AssignmentId { get; set; }
 
         private Guid? supervisorId;
-        private DateTime? lastPausedUtc;
-        private DateTime? lastResumedUtc;
-        private DateTime? lastOpenedBySupervisor;
-        private DateTime? lastClosedBySupervisor;
-        private DateTime? lastAnswerDateUtc;
 
         public Guid? SupervisorId
         {
@@ -50,73 +45,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool? IsAudioRecordingEnabled { get; set; }
         public bool WasCreated { get; set; }
 
-        public DateTime? LastPausedUtc
-        {
-            get => lastPausedUtc;
-            set
-            {
-                if (value != null && value.Value.Kind != DateTimeKind.Utc)
-                {
-                    throw new ArgumentException("Cannot assign non utc date in utc field");
-                }
-                
-                lastPausedUtc = value;
-            }
-        }
+        public DateTimeOffset? LastPaused { get; set; }
 
-        public DateTime? LastResumedUtc
-        {
-            get => lastResumedUtc;
-            set
-            {
-                if (value != null && value.Value.Kind != DateTimeKind.Utc)
-                {
-                    throw new ArgumentException("Cannot assign non utc date in utc field");
-                }
-                
-                lastResumedUtc = value;
-            }
-        }
+        public DateTimeOffset? LastResumed { get; set; }
 
-        public DateTime? LastOpenedBySupervisor
-        {
-            get => lastOpenedBySupervisor;
-            set
-            {
-                if (value != null && value.Value.Kind != DateTimeKind.Utc)
-                {
-                    throw new ArgumentException("Cannot assign non utc date in utc field");
-                }
-                
-                lastOpenedBySupervisor = value;
-            }
-        }
+        public DateTimeOffset? LastOpenedBySupervisor { get; set; }
 
-        public DateTime? LastClosedBySupervisor
-        {
-            get => lastClosedBySupervisor;
-            set
-            {
-                if (value != null && value.Value.Kind != DateTimeKind.Utc)
-                {
-                    throw new ArgumentException("Cannot assign non utc date in utc field");
-                }
-                
-                lastClosedBySupervisor = value;
-            }
-        }
+        public DateTimeOffset? LastClosedBySupervisor { get; set; }
 
-        public DateTime? LastAnswerDateUtc
-        {
-            get => lastAnswerDateUtc;
-            set
-            {
-                if (value != null && value.Value.Kind != DateTimeKind.Utc)
-                {
-                    throw new ArgumentException("Cannot assign non utc date in utc field");
-                }
-                lastAnswerDateUtc = value;
-            }
-        }
+        public DateTimeOffset? LastAnswerDateUtc { get; set; }
     }
 }
