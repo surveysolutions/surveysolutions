@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             
             var pageTitle = questionnaire.IsCoverPageSupported
-                ? questionnaire.GetGroupTitle(QuestionnaireDocument.CoverPageSectionId)
+                ? questionnaire.GetCoverPageTitle()
                 : UIResources.Interview_Cover_Screen_Title;
             this.InterviewState.Init(interviewId, null);
             this.Name.InitAsStatic(pageTitle);

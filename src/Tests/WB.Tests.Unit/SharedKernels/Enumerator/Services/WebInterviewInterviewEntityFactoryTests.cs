@@ -107,7 +107,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
         public void When_new_questionnaire_with_new_cover_without_questions_then_view_model_of_that_section_should_skipped()
         {
             //arrange
-            var coverId = QuestionnaireDocument.CoverPageSectionId;
+            var coverId = Id.g1;
             var sectionId = Id.g2;
 
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithHideIfDisabled(hideIfDisabled: false, children: new IComposite[]
@@ -115,6 +115,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
                 Create.Entity.Group(coverId),
                 Create.Entity.Group(sectionId)
             });
+            questionnaireDocument.CoverPageSectionId = coverId;
+            
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
@@ -125,14 +127,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 
             //assert
             Assert.That(sidebar.Groups, Has.Exactly(1).Items);
-            Assert.That(sidebar.Groups.Find(x=>x.Id == QuestionnaireDocument.CoverPageSectionId.FormatGuid()), Is.Null);
+            Assert.That(sidebar.Groups.Find(x=>x.Id == questionnaireDocument.CoverPageSectionId.FormatGuid()), Is.Null);
         }
 
         [Test]
         public void When_new_questionnaire_with_new_cover_with_static_text_then_section_should_be_visible()
         {
             //arrange
-            var coverId = QuestionnaireDocument.CoverPageSectionId;
+            var coverId = Id.g1;
             var sectionId = Id.g2;
 
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithHideIfDisabled(hideIfDisabled: false, children: new IComposite[]
@@ -143,6 +145,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
                 }),
                 Create.Entity.Group(sectionId)
             });
+            questionnaireDocument.CoverPageSectionId = coverId;
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
@@ -153,7 +156,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 
             //assert
             Assert.That(sidebar.Groups, Has.Exactly(2).Items);
-            Assert.That(sidebar.Groups.Find(x=>x.Id == QuestionnaireDocument.CoverPageSectionId.FormatGuid()), Is.Not.Null);
+            Assert.That(sidebar.Groups.Find(x=>x.Id == questionnaireDocument.CoverPageSectionId.FormatGuid()), Is.Not.Null);
         }
 
         private WebInterviewInterviewEntityFactory CreateWebInterviewInterviewEntityFactory() =>
