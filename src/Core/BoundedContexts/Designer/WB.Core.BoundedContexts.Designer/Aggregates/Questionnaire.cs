@@ -1730,7 +1730,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         break;
                 }
             });
-            this.innerDocument.Insert(targetIndex, clonedGroup, targetToPasteIn.PublicKey);
+
+            if (targetIsCoverPage)
+            {
+                foreach (var entity in elementsToCopy)
+                {
+                    this.innerDocument.Insert(targetIndex, entity, targetToPasteIn.PublicKey);
+                }
+            }
+            else
+            {
+                this.innerDocument.Insert(targetIndex, clonedGroup, targetToPasteIn.PublicKey);
+            }
         }
 
         private void CopyStaticText(Guid pasteItemId, IComposite targetToPasteIn, int targetIndex,
