@@ -214,7 +214,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             base.OnEventApplied(appliedEvent);
             if (appliedEvent.Payload is QuestionAnswered questionAnswered)
             {
-                this.properties.LastAnswerDateUtc = questionAnswered.AnswerTimeUtc;
+                this.properties.LastAnswerDate = questionAnswered.OriginDate;
             }
         }
 
@@ -978,9 +978,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     closePreviousNonClosedSessionDate = command.OriginDate;
                 }
                 
-                if (this.properties.LastAnswerDateUtc > closePreviousNonClosedSessionDate)
+                if (this.properties.LastAnswerDate > closePreviousNonClosedSessionDate)
                 {
-                    closePreviousNonClosedSessionDate = this.properties.LastAnswerDateUtc.Value;
+                    closePreviousNonClosedSessionDate = this.properties.LastAnswerDate.Value;
                 }
                 
                 ApplyEvent(new InterviewPaused(command.UserId, closePreviousNonClosedSessionDate));
@@ -1040,9 +1040,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 DateTimeOffset closePreviousNonClosedSessionDate = 
                     lastOpenDate.Value.AddMinutes(15);
 
-                if (command.OriginDate.UtcDateTime < closePreviousNonClosedSessionDate)
+                if (command.OriginDate < closePreviousNonClosedSessionDate)
                 {
-                    closePreviousNonClosedSessionDate = command.OriginDate.UtcDateTime;
+                    closePreviousNonClosedSessionDate = command.OriginDate;
                 }
                 
                 ApplyEvent(new InterviewClosedBySupervisor(command.UserId, closePreviousNonClosedSessionDate));

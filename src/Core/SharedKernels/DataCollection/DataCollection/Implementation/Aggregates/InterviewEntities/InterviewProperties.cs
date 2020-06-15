@@ -53,6 +53,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public DateTimeOffset? LastClosedBySupervisor { get; set; }
 
-        public DateTimeOffset? LastAnswerDateUtc { get; set; }
+        public DateTimeOffset? LastAnswerDate { get; set; }
     }
 }
