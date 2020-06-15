@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -67,11 +66,6 @@ namespace WB.UI.Interviewer.ViewModel
             this.serializer = serializer;
         }
 
-        static readonly TimeSpan PauseResumeThrottling = TimeSpan.FromSeconds(5);
-        static readonly object ThrottlingLock = new Object();
-        static PauseInterviewCommand pendingPause = null;
-        private static Thread PauseThread;
-
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
@@ -109,7 +103,7 @@ namespace WB.UI.Interviewer.ViewModel
                     return base.UpdateCurrentScreenViewModel(eventArgs);
             }
         }
-
+        
         public override void ViewAppeared()
         {
             if (!this.Principal.IsAuthenticated)
@@ -123,29 +117,9 @@ namespace WB.UI.Interviewer.ViewModel
                 var interviewId = Guid.Parse(InterviewId);
                 var interview = interviewRepository.Get(this.InterviewId);
                 if (interview == null) return;
-
-                if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
-                {
-                    lock (ThrottlingLock)
-                    {
-                        PauseThread?.Abort();
-                        if (pendingPause == null)
-                        {
-                            commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
-                        }
-                        else
-                        {
-                            var delay = DateTimeOffset.Now - pendingPause.OriginDate;
-                            if (delay > PauseResumeThrottling && pendingPause.InterviewId == interviewId)
-                            {
-                                commandService.Execute(pendingPause);
-                                commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
-                            }
-                        }
-
-                        pendingPause = null;
-                    }
-                }
+                
+                commandService.Execute(new ResumeInterviewCommand(interviewId,
+                    Principal.CurrentUserIdentity.UserId));
 
                 if (IsAudioRecordingEnabled == true && !isAuditStarting)
                 {
@@ -185,15 +159,8 @@ namespace WB.UI.Interviewer.ViewModel
                 {
                     var interviewId = interview.Id;
 
-                    if (!interview.IsCompleted)
-                    {
-                        pendingPause = new PauseInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId);
-                        var cmdid = pendingPause.CommandIdentifier; // to make sure it's a same command
-
-                        // discard - c# feature to ignore warning on non awaited Task
-                        PauseThread = new Thread(() => { PauseInterview(interviewId, cmdid); });
-                        PauseThread.Start();
-                    }
+                    var pause = new PauseInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId);
+                    commandService.Execute(pause);
 
                     auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
@@ -214,38 +181,6 @@ namespace WB.UI.Interviewer.ViewModel
             }
             
             base.ViewDisappearing();
-        }
-
-        private void PauseInterview(Guid interviewId, Guid cmdid)
-        {
-            Thread.Sleep(PauseResumeThrottling);
-
-            lock (ThrottlingLock)
-            {
-                if (pendingPause != null)
-                {
-                    var delay = DateTimeOffset.Now - pendingPause.OriginDate;
-                    var sameInterview = pendingPause.InterviewId == interviewId;
-                    var samePendingCommand = pendingPause.CommandIdentifier == cmdid;
-
-                    if (delay > PauseResumeThrottling
-                        && sameInterview
-                        && samePendingCommand
-                        && interviewRepository.Get(this.InterviewId) != null) //could be synced and deleted
-                    {
-                        try
-                        {
-                            commandService.Execute(pendingPause);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Info($"Was not able to save pause event for {pendingPause.InterviewId}", e);
-                        }
-                    }
-                }
-
-                pendingPause = null;
-            }
         }
     }
 }
