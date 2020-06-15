@@ -1,5 +1,6 @@
 ﻿using System;
 using Humanizer;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -65,10 +66,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return false;
         }
 
+
+
         [ActivePage(MenuItem.Docs)]
         [Route("Interview/Review/{id}")]
-        [Route("Interview/Review/{id}/Section/{url}")]
         [Route("Interview/Review/{id}/Cover")]
+        public ActionResult Cover(Guid id)
+        {
+            var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
+            if (questionnaire.IsCoverPageSupported)
+                return Redirect("Interview/Review/{id}/Section/" + questionnaire.CoverPageSectionId.FormatGuid());
+
+            return Review(id, null);
+        }        
+
+        [ActivePage(MenuItem.Docs)]
+        [Route("Interview/Review/{id}/Section/{url}")]
         public ActionResult Review(Guid id, string url)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
@@ -82,7 +96,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             ViewBag.SpecificPageCaption = interviewSummary.Key;
             ViewBag.ExcludeMarkupSpecific = true;
 
-            return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
+            return View("Review", new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {
                 Id = id.FormatGuid(),
                 Key = interviewSummary.Key,

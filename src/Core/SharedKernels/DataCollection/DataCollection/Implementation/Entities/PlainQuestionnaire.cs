@@ -1803,7 +1803,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Guid GetFirstSectionId()
         {
-            return this.GetAllSections().First();
+            return this.GetAllSections().First(s => !IsCoverPage(s));
         }
 
         public IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId)
@@ -1947,6 +1947,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public bool IsCoverPage(Guid identityId) => innerDocument.IsCoverPage(identityId);
+        public string GetCoverPageTitle() => innerDocument.GetCoverPageTitle();
         public bool IsCoverPageSupported => innerDocument.IsCoverPageSupported;
     }
 }

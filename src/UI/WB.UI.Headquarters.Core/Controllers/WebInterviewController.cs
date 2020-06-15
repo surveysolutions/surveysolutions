@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -194,7 +195,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var askForEmail = isAskForEmailAvailable ? Request.Cookies[AskForEmail] ?? "false" : "false";
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
             
             foreach (var messageKey in webInterviewConfig.CustomMessages.Keys.ToList())
             {
@@ -206,6 +207,7 @@ namespace WB.UI.Headquarters.Controllers
             return new WebInterviewIndexPageModel
             {
                 Id = interviewId,
+                CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : "",
                 AskForEmail = askForEmail,
                 CustomMessages = webInterviewConfig.CustomMessages
             };
@@ -495,6 +497,13 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var returnUrl = GenerateUrl(nameof(Cover), id);
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
+            }
+
+            var questionnaire = questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
+            if (questionnaire.IsCoverPageSupported)
+            {
+                var url = GenerateUrl(nameof(Section), id, questionnaire.CoverPageSectionId.FormatGuid());
+                return Redirect(url);
             }
 
             LogResume(interview);

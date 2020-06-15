@@ -41,13 +41,17 @@ function NewRouter(store) {
                         name: 'prefilled',
                         path: 'Cover',
                         component: Cover,
+                        beforeEnter: (to, from, next) => {
+                            to.params.sectionId = Vue.$config.CoverPageId
+                            next()
+                        },
                     },
                     {
                         name: 'cover',
-                        path: 'Section/11111111111111111111111111111111',
+                        path: 'Section/' + Vue.$config.CoverPageId,
                         component: Cover,
                         beforeEnter: (to, from, next) => {
-                            to.params.sectionId = '11111111111111111111111111111111'
+                            to.params.sectionId = Vue.$config.CoverPageId
                             next()
                         },
                     },
@@ -56,7 +60,7 @@ function NewRouter(store) {
                         path: 'Section/:sectionId',
                         component: Section,
                         beforeEnter: (to, from, next) => {
-                            if (to.params.sectionId == '11111111111111111111111111111111')
+                            if (to.params.sectionId == Vue.$config.CoverPageId)
                                 next({ name: 'cover' })
                             else
                                 next()

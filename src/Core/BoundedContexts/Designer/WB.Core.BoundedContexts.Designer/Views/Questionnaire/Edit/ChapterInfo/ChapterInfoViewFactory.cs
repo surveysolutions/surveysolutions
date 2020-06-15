@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             GroupInfoView root = new GroupInfoView
             {
-                ItemId = QuestionnaireDocument.CoverPageSectionId.FormatGuid(),
+                ItemId = document.Questionnaire.CoverPageSectionId.FormatGuid(),
                 Title = QuestionnaireEditor.CoverPageSection,
                 IsRoster = false,
                 HasCondition = false,

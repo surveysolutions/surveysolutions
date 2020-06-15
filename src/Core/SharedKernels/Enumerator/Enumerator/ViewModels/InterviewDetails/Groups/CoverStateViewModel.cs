@@ -25,12 +25,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public override void Init(string interviewId, Identity groupIdentity)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
 
             this.isCoverPageSupported = questionnaire.IsCoverPageSupported;
             this.interviewId = interviewId;
             this.group = isCoverPageSupported
-                ? new Identity(QuestionnaireDocument.CoverPageSectionId, RosterVector.Empty) 
+                ? new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty) 
                 : groupIdentity;
 
             this.QuestionsCount = 0;
