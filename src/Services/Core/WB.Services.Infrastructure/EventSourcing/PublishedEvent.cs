@@ -2,7 +2,7 @@
 
 namespace WB.Services.Infrastructure.EventSourcing
 {
-    public class PublishedEvent<T> where T : IEvent
+    public class PublishedEvent<T> where T : class, IEvent
     {
         public PublishedEvent(T @event, Guid eventSourceId, long globalSequence, long sequence, DateTime eventTimeStamp)
         {
@@ -16,7 +16,7 @@ namespace WB.Services.Infrastructure.EventSourcing
         public PublishedEvent(Event ev)
         {
             this.EventSourceId = ev.EventSourceId;
-            this.Event = (T) ev.Payload;
+            this.Event = ev.Payload as T ?? throw new InvalidOperationException("Unexpected Payload.");
             this.GlobalSequence = ev.GlobalSequence;
             this.Sequence = ev.Sequence;
             this.EventTimeStamp = ev.EventTimeStamp;

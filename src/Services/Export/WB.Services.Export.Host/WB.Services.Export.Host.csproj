@@ -9,6 +9,8 @@
     <Configurations>Debug;Release;DebugEmptyTenant</Configurations>
     <DefineConstants Condition="'$(Configuration)' == 'DebugEmptyTenant'">DEBUG;TRACE;RANDOMSCHEMA</DefineConstants>
     <RootNamespace>WB.Services.Export.Host</RootNamespace>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

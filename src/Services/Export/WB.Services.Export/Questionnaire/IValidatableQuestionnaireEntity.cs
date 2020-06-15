@@ -19,8 +19,8 @@ namespace WB.Services.Export.Questionnaire
             this.Message = message;
         }
 
-        public string Expression { get; set; } 
-        public string Message { get; set; }
+        public string Expression { get; set; } = null!;
+        public string Message { get; set; } = null!;
 
         public ValidationSeverity Severity { set; get; }
 

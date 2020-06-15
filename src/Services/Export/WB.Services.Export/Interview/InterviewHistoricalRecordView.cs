@@ -6,9 +6,9 @@ namespace WB.Services.Export.Interview
     public class InterviewHistoricalRecordView
     {
         public InterviewHistoricalAction Action { get; set; }
-        public string OriginatorName { get; set; }
-        public string OriginatorRole { get; set; }
-        public Dictionary<string, string> Parameters { get; set; }
+        public string OriginatorName { get; set; } = String.Empty;
+        public string OriginatorRole { get; set; } = String.Empty;
+        public Dictionary<string, string> Parameters { get; set; } = new Dictionary<string, string>();
         public DateTime? Timestamp { get; set; }
         public TimeSpan? Offset { get; set; }
     }

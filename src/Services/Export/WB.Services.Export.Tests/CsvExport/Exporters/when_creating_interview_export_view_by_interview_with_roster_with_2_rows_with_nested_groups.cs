@@ -73,7 +73,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             for (int i = 0; i < levelCount; i++)
             {
                 var vector = new int[1] { i };
-                var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterSizeQuestionId }, null, vector);
+                var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterSizeQuestionId },  vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
                 
                 if (!newLevel.QuestionsSearchCache.ContainsKey(questionInsideNestedGroupId))

@@ -1,11 +1,13 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace WB.Services.Export.Host
 {
     public class StartupBlocker
     {
-        private static FileStream pid;
+        private static FileStream? pid;
 
         private const string PidFileName = ".pid";
 
@@ -27,7 +29,9 @@ namespace WB.Services.Export.Host
         {
             if (File.Exists(PidFileName))
             {
-                if (!TryOpenFile(PidFileName, out var fs))
+                var fs = TryOpenFile(PidFileName);
+
+                if (fs==null)
                 {
                     // if we cannot open pid file, then someone is using it
                     return true;
@@ -67,7 +71,7 @@ namespace WB.Services.Export.Host
             return false;
         }
 
-        private bool TryGetProcess(int processId, out Process process)
+        private bool TryGetProcess(int processId, [MaybeNullWhen(returnValue: false)] out Process process)
         {
             try
             {
@@ -81,17 +85,15 @@ namespace WB.Services.Export.Host
             }
         }
 
-        private bool TryOpenFile(string file, out FileStream stream)
+        private FileStream? TryOpenFile(string file)
         {
             try
             {
-                stream = new FileStream(file, FileMode.Open);
-                return true;
+                return new FileStream(file, FileMode.Open);
             }
             catch
             {
-                stream = null;
-                return false;
+                return null;
             }
         }
     }

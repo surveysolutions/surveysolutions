@@ -6,7 +6,7 @@ namespace WB.Services.Export.Models
     public class DateExportProcessError
     {
         public DataExportError Type { get; set; }
-        public string Message { get; set; }
+        public string Message { get; set; } = String.Empty;
     }
 
     public class DataExportProcessStatus
@@ -20,19 +20,19 @@ namespace WB.Services.Export.Models
         public int ProgressInPercents { get; set; }
         public bool IsRunning { get; set; }
         public TimeSpan? TimeEstimation { get; set; }
-        public DateExportProcessError Error { get; set; }
+        public DateExportProcessError? Error { get; set; }
     }
      
     public class DataExportProcessArgs
     {
-        public ExportSettings ExportSettings { get; set; }
+        public ExportSettings ExportSettings { get; set; } = null!;
         public DataExportProcessStatus Status { get; set; } = new DataExportProcessStatus();
-        public string ArchivePassword { get; set; }
+        public string ArchivePassword { get; set; } = String.Empty;
 
         public string NaturalId => $"{this.StorageTypeString}${ExportSettings?.NaturalId ?? "noSettings"}";
 
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
+        public string AccessToken { get; set; } = String.Empty;
+        public string RefreshToken { get; set; } = String.Empty;
         public ExternalStorageType? StorageType { get; set; }
         public long ProcessId { get; set; }
 

@@ -6,8 +6,7 @@ namespace WB.Services.Export.Infrastructure
 {
     public interface ITenantContext
     {
-        TenantInfo Tenant { get; }
+        TenantInfo Tenant { get; set; }
         IHeadquartersApi Api { get; }
-        void SetTenant(TenantInfo tenant);
     }
 }

@@ -69,7 +69,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             for (int i = 0; i < levelCount; i++)
             {
                 var vector = new int[1] { i };
-                var newLevel = new InterviewLevel(new ValueVector<Guid> { propagationScopeKey }, null, vector);
+                var newLevel = new InterviewLevel(new ValueVector<Guid> { propagationScopeKey },  vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
 
                 foreach (var questionId in variableNameAndQuestionId)

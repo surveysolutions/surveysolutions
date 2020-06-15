@@ -16,12 +16,12 @@ namespace WB.Services.Export.Interview.Entities
             this.Length = length;
         }
 
-        public string FileName { get; set; }
+        public string FileName { get; set; } = String.Empty;
         public TimeSpan Length { get; set; }
 
-        public static AudioAnswer FromString(string fileName, TimeSpan? length)
+        public static AudioAnswer? FromString(string fileName, TimeSpan length)
         {
-            return fileName != null ? new AudioAnswer(fileName, length.Value) : null;
+            return fileName != null ? new AudioAnswer(fileName, length) : null;
         }
 
         public override string ToString() => $"{FileName} => {Length}";
