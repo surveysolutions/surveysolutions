@@ -14,7 +14,7 @@ namespace Main.Core.Documents
 {
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
-        public Guid CoverPageSectionId { get; set; } = new Guid();
+        public Guid CoverPageSectionId { get; set; } = Guid.NewGuid();
 
         //is used for deserialization
         public QuestionnaireDocument(List<IComposite>? children = null)
