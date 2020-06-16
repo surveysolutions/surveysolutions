@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 var rows = new List<LookupTableRow>();
 
-                if (!csvReader.Read() | !csvReader.ReadHeader() | !csvReader.Read()) // | - because we need excute all Reads
+                if (!csvReader.Read() | !csvReader.ReadHeader() | !csvReader.Read()) // | - because we need execute all Reads
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
@@ -266,7 +266,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     rows.Add(row);
                     if (rows.Count > MAX_ROWS_COUNT)
                     {
-                        throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_rows, MAX_ROWS_COUNT, rows.Count));
+                        int rowsCount = rows.Count;
+                        do
+                        {
+                            rowsCount++;
+                        } while (csvReader.Read());
+
+                        throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_rows,
+                            $"{MAX_ROWS_COUNT:n0}",
+                            $"{rowsCount - 1:n0}"));
                     }
                 } while (csvReader.Read());
 
