@@ -390,7 +390,8 @@
     <value>Секция "Обложка" должна быть первой секцией в опроснике</value>
   </data>
   <data name="CoverPageCanContainsOnlyQuestionsAndStaticTexts" xml:space="preserve">
-    <value>Секция "Обложка" может содержать только вопросы и статик тексты</value>
+    <value>Секция "Обложка" может содержать только вопросы и статические тексты</value>
+
   </data>
   <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
     <value>Вы используете старый опросник. Поэтому редактирование порядка вопросов в секции "Обложка" не доступно.</value>
