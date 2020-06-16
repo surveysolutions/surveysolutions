@@ -88,6 +88,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 audioResult.MimeType = @"audio/wav";
                 audioResult.Binary = audio;
+                audioResult.Duration = TimeSpan.FromSeconds(1);
 
                 return audioResult;
             }
