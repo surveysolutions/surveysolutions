@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
             var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
             if (questionnaire.IsCoverPageSupported)
-                return Redirect("Interview/Review/{id}/Section/" + questionnaire.CoverPageSectionId.FormatGuid());
+                return RedirectToAction("Review", new{ id, url = questionnaire.CoverPageSectionId.FormatGuid()});
 
             return Review(id, null);
         }        
