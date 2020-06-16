@@ -36,7 +36,7 @@ namespace WB.Services.Export.Storage
         private string StorageBasePath => $"{S3Settings.BasePath}/";
         private string GetKey(string key) => (StorageBasePath + key).Replace('\\', '/');
 
-        public async Task<byte[]> GetBinaryAsync(string key)
+        public async Task<byte[]?> GetBinaryAsync(string key)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace WB.Services.Export.Storage
             }
         }
 
-        public async Task<List<FileObject>> ListAsync(string prefix)
+        public async Task<List<FileObject>?> ListAsync(string prefix)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace WB.Services.Export.Storage
 
         private S3StorageSettings S3Settings => s3Settings.Value;
 
-        public string GetDirectLink(string key, TimeSpan expiration, string asFilename = null)
+        public string GetDirectLink(string key, TimeSpan expiration, string? asFilename = null)
         {
             var protocol = (client.Config.ServiceURL ?? "https://")
                 .StartsWith("https://", StringComparison.OrdinalIgnoreCase)
@@ -137,7 +137,7 @@ namespace WB.Services.Export.Storage
         }
 
         public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType,
-            ExportProgress progress = null, CancellationToken cancellationToken = default)
+            ExportProgress? progress = null, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace WB.Services.Export.Storage
             }
         }
 
-        public async Task<FileObject> GetObjectMetadataAsync(string key)
+        public async Task<FileObject?> GetObjectMetadataAsync(string key)
         {
             try
             {
@@ -209,11 +209,12 @@ namespace WB.Services.Export.Storage
             return (await GetObjectMetadataAsync(key)) != null;
         }
 
-        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType, ExportProgress progress = null, CancellationToken cancellationToken = default)
+        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType, 
+            ExportProgress? progress = null, CancellationToken cancellationToken = default)
         {
             using (var ms = new MemoryStream(data))
             {
-                return await StoreAsync(path, ms, contentType, progress);
+                return await StoreAsync(path, ms, contentType, progress, cancellationToken);
             }
         }
 

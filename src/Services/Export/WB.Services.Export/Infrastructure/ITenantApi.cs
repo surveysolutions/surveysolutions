@@ -4,6 +4,6 @@ namespace WB.Services.Export.Infrastructure
 {
     public interface ITenantApi<T>
     {
-        T For(TenantInfo tenant);
+        T For(TenantInfo? tenant);
     }
 }

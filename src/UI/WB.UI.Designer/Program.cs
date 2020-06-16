@@ -51,7 +51,7 @@ namespace WB.UI.Designer
                 .UseSerilog((host, loggerConfig) =>
                 {
                     loggerConfig
-                        .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "Headquarters");
+                        .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "designer");
 
                     if (!host.HostingEnvironment.IsDevelopment())
                     {

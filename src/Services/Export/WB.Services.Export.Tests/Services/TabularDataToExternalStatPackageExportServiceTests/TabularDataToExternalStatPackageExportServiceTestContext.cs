@@ -36,11 +36,11 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
         {
-            return new HeaderStructureForLevel()
+            return new HeaderStructureForLevel(
+                levelScopeVector ?? new ValueVector<Guid>(),
+                "Id",
+                levelName)
             {
-                LevelScopeVector = levelScopeVector ?? new ValueVector<Guid>(),
-                LevelName = levelName,
-                LevelIdColumnName = "Id",
                 IsTextListScope = referenceNames != null,
                 ReferencedNames = referenceNames,
                 HeaderItems =
@@ -63,14 +63,14 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             };
         }
 
-        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)
+        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(string questionnaireId, params HeaderStructureForLevel[] levels)
         {
             var header = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
             if (levels != null && levels.Length > 0)
             {
                 header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
             }
-            return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
+            return new QuestionnaireExportStructure( headerMap : header, questionnaireId: questionnaireId);
         }
     }
 }

@@ -83,7 +83,7 @@ namespace WB.Services.Export.Host.Infra
             Log.Logger.Debug("Using connections string: {connectionString}", connectionStringWithOutPassword);
         }
 
-        private static string GetConnectionString(XDocument config)
+        private static string? GetConnectionString(XDocument config)
         {
             var connectionStrings = config.Element("configuration")?.Element("connectionStrings");
             var connectionString = connectionStrings?.Elements("add")
@@ -93,7 +93,7 @@ namespace WB.Services.Export.Host.Infra
             return connectionString;
         }
 
-        public static string ReadConnectionStringFromWebConfig(string webConfigsPath)
+        public static string? ReadConnectionStringFromWebConfig(string webConfigsPath)
         {
             foreach (var webConfigPath in webConfigsPath.Split(';').Reverse())
             {

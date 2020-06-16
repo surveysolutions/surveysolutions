@@ -5,6 +5,6 @@ namespace WB.Services.Export.Events.Interview
 {
     public class VariablesChanged: InterviewPassiveEvent
     {
-        public ChangedVariable[] ChangedVariables { get; set; }
+        public ChangedVariable[] ChangedVariables { get; set; } = new ChangedVariable[0];
     }
 }
