@@ -42,16 +42,18 @@ function NewRouter(store) {
                         path: 'Cover',
                         component: Cover,
                         beforeEnter: (to, from, next) => {
-                            to.params.sectionId = Vue.$config.CoverPageId
+                            if (Vue.$config.coverPageId)
+                                to.params.sectionId = Vue.$config.coverPageId
                             next()
                         },
                     },
                     {
                         name: 'cover',
-                        path: 'Section/' + Vue.$config.CoverPageId,
+                        path: 'Section/' + (Vue.$config.coverPageId || 'newcover'),
                         component: Cover,
                         beforeEnter: (to, from, next) => {
-                            to.params.sectionId = Vue.$config.CoverPageId
+                            if (Vue.$config.coverPageId)
+                                to.params.sectionId = Vue.$config.coverPageId
                             next()
                         },
                     },
@@ -60,7 +62,7 @@ function NewRouter(store) {
                         path: 'Section/:sectionId',
                         component: Section,
                         beforeEnter: (to, from, next) => {
-                            if (to.params.sectionId == Vue.$config.CoverPageId)
+                            if (Vue.$config.coverPageId && to.params.sectionId == Vue.$config.coverPageId)
                                 next({ name: 'cover' })
                             else
                                 next()
