@@ -41,9 +41,9 @@ namespace WB.Services.Export.Host.Controllers
         [Route("api/v1/job/regenerate")]
         public async Task<DataExportUpdateRequestResult?> RequestUpdate(
             long processId,
-            string archivePassword,
-            string accessToken,
-            string refreshToken)
+            string? archivePassword,
+            string? accessToken,
+            string? refreshToken)
         {
             var process = await this.exportProcessesService.GetProcessAsync(processId);
             
@@ -83,9 +83,9 @@ namespace WB.Services.Export.Host.Controllers
             InterviewStatus? status,
             DateTime? from,
             DateTime? to,
-            string archivePassword,
-            string accessToken,
-            string refreshToken,
+            string? archivePassword,
+            string? accessToken,
+            string? refreshToken,
             Guid? translationId,
             ExternalStorageType? storageType)
         {

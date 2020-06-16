@@ -36,6 +36,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             if (dataClient == null)
                 throw new ArgumentException("Cannot find appropriate external storage data client for type: " + state.StorageType);
+            if (state.ProcessArgs.AccessToken == null)
+                throw new ArgumentException("Cannot publish to external storage export without accessToken", nameof(ExportState.ProcessArgs.AccessToken));
+            if (state.ProcessArgs.RefreshToken == null)
+                throw new ArgumentException("Cannot publish to external storage export without refreshToken", nameof(ExportState.ProcessArgs.RefreshToken));
 
             dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.ProcessArgs.RefreshToken,
                 state.Settings.Tenant);
