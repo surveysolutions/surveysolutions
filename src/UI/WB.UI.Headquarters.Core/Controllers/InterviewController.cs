@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -92,6 +93,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return NotFound();
 
             this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewSummary.QuestionnaireIdentity));
 
             ViewBag.SpecificPageCaption = interviewSummary.Key;
             ViewBag.ExcludeMarkupSpecific = true;
@@ -99,6 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View("Review", new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {
                 Id = id.FormatGuid(),
+                CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : String.Empty,
                 Key = interviewSummary.Key,
                 LastUpdatedAtUtc = interviewSummary.UpdateDate,
                 StatusName = interviewSummary.Status.ToLocalizeString(),
@@ -190,6 +193,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         public string Id { get; set; }
+        
+        public string CoverPageId { get; set; }
 
         public string Key { get; set; }
 

@@ -1,4 +1,5 @@
 import localStore from './store'
+import Vue from 'vue'
 
 const Review = () => import(/* webpackChunkName: "review" */'./Review')
 const Cover = () => import(/* webpackChunkName: "review" */'~/webinterview/components/Cover')
@@ -8,7 +9,7 @@ const Overview = () => import(/* webpackChunkName: "review" */'./Overview')
 export default class ReviewComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
-        this.config = window.CONFIG
+        this.config = Vue.$config.model
     }
 
     get routes() {
@@ -41,20 +42,22 @@ export default class ReviewComponent {
                     showHumburger: false,
                 },
                 beforeEnter: (to, from, next) => {
-                    to.params.sectionId = this.config.coverPageId
+                    if (this.config.coverPageId)
+                        to.params.sectionId = this.config.coverPageId
                     next()
                 },
             },
             {
                 name: 'cover',
-                path: 'Section/' + this.config.coverPageId,
+                path: 'Section/' + (this.config.coverPageId || 'newcover'),
                 component: Cover,
                 props: {
                     navigateToPrefilled: true,
                     showHumburger: false,
                 },
                 beforeEnter: (to, from, next) => {
-                    to.params.sectionId = this.config.coverPageId
+                    if (this.config.coverPageId)
+                        to.params.sectionId = this.config.coverPageId
                     next()
                 },
             },
@@ -63,7 +66,7 @@ export default class ReviewComponent {
                 name: 'section',
                 component: ReviewSection,
                 beforeEnter: (to, from, next) => {
-                    if (to.params.sectionId == this.config.coverPageId)
+                    if (this.config.coverPageId && to.params.sectionId == this.config.coverPageId)
                         next({ name: 'cover' })
                     else
                         next()
