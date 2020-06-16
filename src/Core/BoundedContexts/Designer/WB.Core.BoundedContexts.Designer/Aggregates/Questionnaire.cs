@@ -550,8 +550,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.GetGroupOrThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
-            if (this.QuestionnaireDocument.Children.Count == 1 &&
-                this.QuestionnaireDocument.Children[0].PublicKey == groupId)
+            var isSection = this.QuestionnaireDocument.Children.Any(s => s.PublicKey == groupId);
+            var isLastUserSection = (this.QuestionnaireDocument.Children.Count == 1 && !this.QuestionnaireDocument.IsCoverPageSupported)
+                                    || (this.QuestionnaireDocument.Children.Count == 2 && this.QuestionnaireDocument.IsCoverPageSupported);
+            if (isSection && isLastUserSection)
             {
                 throw new QuestionnaireException(DomainExceptionType.Undefined, ExceptionMessages.CantRemoveLastSectionInQuestionnaire);
             }
