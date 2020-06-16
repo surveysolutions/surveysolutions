@@ -30,25 +30,24 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             var tempArchivePath = this.fileSystemAccessor.CombinePath(
                 state.ExportTempFolder, this.fileSystemAccessor.GetFileName(state.ArchiveFilePath));
 
-            using (var archiveFile = fileSystemAccessor.OpenOrCreateFile(tempArchivePath, false))
+            await using (var archiveFile = fileSystemAccessor.OpenOrCreateFile(tempArchivePath, false))
             {
-                using (var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, state.ProcessArgs.ArchivePassword))
-                {
-                    await binaryDataSource.ForEachInterviewMultimediaAsync(state,
-                        binaryDataAction =>
-                        {
-                            var path = binaryDataAction.InterviewKey ?? binaryDataAction.InterviewId.FormatGuid();
-                            if (binaryDataAction.Type == BinaryDataType.AudioAudit)
-                            {
-                                path = this.fileSystemAccessor.CombinePath(path,
-                                    interviewDataExportSettings.Value.AudioAuditFolderName);
-                            }
+                using var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, state.ProcessArgs.ArchivePassword);
 
-                            path = this.fileSystemAccessor.CombinePath(path, binaryDataAction.FileName);
-                            archive.CreateEntry(path, binaryDataAction.Content, binaryDataAction.ContentLength);
-                            return Task.CompletedTask;
-                        }, cancellationToken);
-                }
+                await binaryDataSource.ForEachInterviewMultimediaAsync(state,
+                    binaryDataAction =>
+                    {
+                        var path = binaryDataAction.InterviewKey ?? binaryDataAction.InterviewId.FormatGuid();
+                        if (binaryDataAction.Type == BinaryDataType.AudioAudit)
+                        {
+                            path = this.fileSystemAccessor.CombinePath(path,
+                                interviewDataExportSettings.Value.AudioAuditFolderName);
+                        }
+
+                        path = this.fileSystemAccessor.CombinePath(path, binaryDataAction.FileName);
+                        archive.CreateEntry(path, binaryDataAction.Content, binaryDataAction.ContentLength);
+                        return Task.CompletedTask;
+                    }, cancellationToken);
             }
 
             fileSystemAccessor.DeleteFile(state.ArchiveFilePath);
