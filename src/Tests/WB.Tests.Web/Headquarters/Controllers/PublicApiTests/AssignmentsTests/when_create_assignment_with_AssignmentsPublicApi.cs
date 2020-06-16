@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
@@ -216,7 +217,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         [TestCase(QuestionType.Multimedia, "test")]
         [TestCase(QuestionType.Audio, "test")]
         [TestCase(QuestionType.Area, "test")]
-        public void when_assignment_has_not_supported_question_in_identifying_data_then_should_return_verification_errors(QuestionType questionType, string preloadingValue)
+        [TestCase(QuestionType.SingleOption, "test", true)]
+        public void when_assignment_has_not_supported_question_in_identifying_data_then_should_return_verification_errors(QuestionType questionType, string preloadingValue, bool linked = false)
         {
             var variableName = "testQuestion";
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
@@ -227,7 +229,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             
             this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, new IComposite[]
             {
-                GetQuestionByType(questionType, variableName)
+                GetQuestionByType(questionType, variableName, linked? Guid.NewGuid(): (Guid?) null)
             }));
 
             var response = this.controller.Create(new CreateAssignmentApiRequest
@@ -247,10 +249,10 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
 
             Assert.That(verificationErrors, Is.Not.Null);
             Assert.That(verificationErrors.Select(x => x.Code),
-                Is.EquivalentTo(new[] { "" }));
+                Is.EquivalentTo(new[] { "PL0063" }));
         }
 
-        private IQuestion GetQuestionByType(QuestionType questionType, string variableName)
+        private IQuestion GetQuestionByType(QuestionType questionType, string variableName, Guid? linked = null)
         {
             return questionType switch
             {
@@ -260,8 +262,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
                 QuestionType.Audio => Abc.Create.Entity.AudioQuestion(variable: variableName),
                 QuestionType.DateTime => Abc.Create.Entity.DateTimeQuestion(variable: variableName),
                 QuestionType.GpsCoordinates => Abc.Create.Entity.GpsCoordinateQuestion(variable: variableName),
-                QuestionType.MultyOption => Abc.Create.Entity.MultipleOptionsQuestion(variable: variableName),
-                QuestionType.SingleOption => Abc.Create.Entity.SingleOptionQuestion(variable: variableName),
+                QuestionType.MultyOption => Abc.Create.Entity.MultipleOptionsQuestion(variable: variableName, linkedToQuestionId: linked),
+                QuestionType.SingleOption => Abc.Create.Entity.SingleOptionQuestion(variable: variableName, linkedToQuestionId: linked),
                 QuestionType.Text => Abc.Create.Entity.TextListQuestion(variable: variableName),
                 QuestionType.Numeric => Abc.Create.Entity.NumericQuestion(variableName: variableName),
                 _ => null
