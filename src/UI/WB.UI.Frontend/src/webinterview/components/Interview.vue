@@ -11,6 +11,7 @@
 
 import http from '~/webinterview/api/http'
 import Vue from 'vue'
+import localStorage from '~/shared/localStorage'
 
 export default {
     name: 'WebInterviwew',
@@ -29,7 +30,6 @@ export default {
     beforeMount() {
         Vue.use(http, { store: this.$store })
     },
-
     beforeRouteUpdate(to, from, next) {
         return this.changeSection(to.params.sectionId, from.params.sectionId)
             .then(() => next())
@@ -51,9 +51,23 @@ export default {
         },
 
         connected() {
-            this.changeSection(this.$route.params.sectionId)
-            this.$store.dispatch('getLanguageInfo')
             this.$store.dispatch('loadInterview')
+            this.$store.dispatch('getLanguageInfo')
+            const lastVisitedSection = new localStorage().getItem(`${this.interviewId}_lastSection`)
+
+            if(lastVisitedSection) {
+                this.$router.push({
+                    name: 'section',
+                    params: {
+                        sectionId: lastVisitedSection,
+                        interviewId: this.interviewId,
+                    },
+                })
+            }
+            else {
+                this.changeSection(this.$route.params.sectionId)
+            }
+
             this.$emit('connected')
         },
     },

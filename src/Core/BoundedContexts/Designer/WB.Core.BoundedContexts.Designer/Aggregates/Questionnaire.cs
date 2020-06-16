@@ -573,8 +573,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 targetGroup = this.GetGroupOrThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
 
-                var sourceChapter = this.innerDocument.GetChapterOfItemById(groupId);
-                var targetChapter = this.innerDocument.GetChapterOfItemById(targetGroupId.Value);
+                var sourceChapter = this.innerDocument.GetChapterOfItemByIdOrThrow(groupId);
+                var targetChapter = this.innerDocument.GetChapterOfItemByIdOrThrow(targetGroupId.Value);
 
                 if (sourceChapter.PublicKey != targetChapter.PublicKey)
                 {
@@ -1622,7 +1622,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (targetToPasteIn.PublicKey != this.Id)
             {
-                var targetChapter = this.innerDocument.GetChapterOfItemById(targetToPasteIn.PublicKey);
+                var targetChapter = this.innerDocument.GetChapterOfItemByIdOrThrow(targetToPasteIn.PublicKey);
 
                 var numberOfMovedItems = entityToInsert.Children
                     .TreeToEnumerable(x => x.Children)
@@ -1796,7 +1796,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowIfChapterHasMoreThanAllowedLimit(Guid itemId)
         {
-            var chapter = this.innerDocument.GetChapterOfItemById(itemId);
+            var chapter = this.innerDocument.GetChapterOfItemByIdOrThrow(itemId);
             if (chapter.Children.TreeToEnumerable(x => x.Children).Count() >= MaxChapterItemsCount)
             {
                 throw new QuestionnaireException(string.Format(ExceptionMessages.SectionCantHaveMoreThan_Items, MaxChapterItemsCount));

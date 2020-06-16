@@ -44,7 +44,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
 
         }
 
-        [NUnit.Framework.Test] public void should_not_rise_event_InterviewStatusChanged_with_status_RejectedByHeadquarters () => eventContext.ShouldNotContainEvent<InterviewStatusChanged>(@event => @event.Status == InterviewStatus.RejectedByHeadquarters);
+        [NUnit.Framework.Test] 
+        public void should_not_rise_event_InterviewStatusChanged_with_status_RejectedByHeadquarters () => 
+            eventContext.ShouldNotContainEvent<InterviewStatusChanged>(@event => @event.Status == InterviewStatus.RejectedByHeadquarters);
 
         [NUnit.Framework.Test] public void should_throw_exception_for_each_attempt_to_rejet () => exceptionCount.Should().Be(statuses.Length); 
 

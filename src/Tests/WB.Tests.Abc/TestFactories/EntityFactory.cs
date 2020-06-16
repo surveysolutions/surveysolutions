@@ -1403,6 +1403,14 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
+        public QuestionnairePdf QuestionnairePdf()
+        {
+            return new QuestionnairePdf
+            {
+                Content = new byte[]{4,4,4}
+            };
+        }
+
         public WB.Core.SharedKernels.Enumerator.Views.TranslationInstance TranslationInstance_Enumetaror(string value = null,
             Guid? tranlationId = null,
             string questionnaireId = null,

@@ -17,7 +17,7 @@ namespace WB.Core.Infrastructure
     {
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<IClock, DateTimeBasedClock>();
+            registry.Bind<IClock, SystemClock>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
             registry.BindInPerLifetimeScope<ICommandService, CommandService>();
             registry.Bind<ICommandExecutor, CommandExecutor>();
@@ -31,7 +31,7 @@ namespace WB.Core.Infrastructure
 
         public void Load(IDependencyRegistry registry)
         {
-            registry.Bind<IClock, DateTimeBasedClock>();
+            registry.Bind<IClock, SystemClock>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
             registry.BindAsScoped<ICommandService, CommandService>();
             registry.Bind<IAggregateRootCache, AggregateRootCache>();

@@ -335,6 +335,10 @@ namespace WB.UI.Shared.Enumerator.Services
                         token: token).ConfigureAwait(false);
                 }
             }
+            catch (RestException e)
+            {
+                throw e.ToSynchronizationException();
+            }
             finally
             {
                 if (this.fileSystemAccessor.IsFileExists(backupTo))
