@@ -344,8 +344,28 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentQuantity>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
             Error<AssignmentWebMode>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
             Error<AssignmentResponsible>(WebModeOnlyForInterviewer, "PL0062", messages.PL0062_WebModeOnlyForInterviewer),
-            //Error<AssignmentResponsible>(WebModeOnlyForInterviewer, "PL0062", messages.PL0062_WebModeOnlyForInterviewer)
+            ErrorsByNotPermittedQuestions
         };
+
+        private IEnumerable<PanelImportVerificationError> ErrorsByNotPermittedQuestions(PreloadingAssignmentRow row, BaseAssignmentValue value, IQuestionnaire questionnaire)
+        {
+            if (value == null || !(value is IAssignmentAnswer answer)) yield break;
+            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
+            if (questionId == null) yield break;
+
+            var questionType = questionnaire.GetQuestionType(questionId.Value);
+
+            if (new [] {QuestionType.Area, QuestionType.Multimedia, QuestionType.Audio}.Contains(questionType) 
+                || ((questionType==QuestionType.MultyOption || questionType == QuestionType.SingleOption) && questionnaire.IsQuestionLinked(questionId.Value)))
+                yield return new PanelImportVerificationError(
+                    "PL0063",
+                    string.Format(messages.PL0063_NoPermittedQuestion, answer.VariableName),
+                    (value is AssignmentValue assignmentValue)
+                        ? new InterviewImportReference(assignmentValue.Column, row.Row, PreloadedDataVerificationReferenceType.Cell,
+                        assignmentValue.Value, row.FileName)
+                        :null
+                );
+        }
 
         private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentWebMode webMode, PreloadingAssignmentRow assignmentRow)
             => assignmentRow.Quantity?.Quantity == null &&
