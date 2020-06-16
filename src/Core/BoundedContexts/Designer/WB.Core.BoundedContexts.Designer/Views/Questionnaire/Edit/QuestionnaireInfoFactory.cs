@@ -108,65 +108,75 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }
         };
 
-        private SelectOption[] QuestionTypeOptions => new []
+        private SelectOption[] GetQuestionTypeOptions(QuestionnaireDocument document, IQuestion question)
         {
-            new SelectOption
+            var isQuestionOnCover = document.IsCoverPage(question.GetParent()!.PublicKey);
+            
+            List<SelectOption> list = new List<SelectOption>();
+            list.Add(new SelectOption
             {
                 Value = "SingleOption",
                 Text = QuestionnaireEditor.QuestionTypeSingleSelect
-            },
-            new SelectOption
-            {
-                Value = "MultyOption",
-                Text = QuestionnaireEditor.QuestionTypeMultiSelect
-            },
-            new SelectOption
+            });
+            if (!isQuestionOnCover)
+                list.Add(new SelectOption
+                {
+                    Value = "MultyOption",
+                    Text = QuestionnaireEditor.QuestionTypeMultiSelect
+                });
+            list.Add(new SelectOption
             {
                 Value = "Numeric",
                 Text = QuestionnaireEditor.QuestionTypeNumeric
-            },
-            new SelectOption
+            });
+            list.Add(new SelectOption
             {
                 Value = "DateTime",
                 Text = QuestionnaireEditor.QuestionTypeDate
-            },
-            new SelectOption
+            });
+            list.Add(new SelectOption
             {
                 Value = "Text",
                 Text = QuestionnaireEditor.QuestionTypeText
-            },
-            new SelectOption
+            });
+            list.Add(new SelectOption
             {
                 Value = "GpsCoordinates",
                 Text = QuestionnaireEditor.QuestionTypeGPS
-            }
-            ,
-            new SelectOption
-            {
-                Value = "TextList",
-                Text = QuestionnaireEditor.QuestionTypeList
-            },
-            new SelectOption
-            {
-                Value = "QRBarcode",
-                Text = QuestionnaireEditor.QuestionTypeBarcode
-            },
-            new SelectOption
-            {
-                Value = "Multimedia",
-                Text = QuestionnaireEditor.QuestionTypePicture
-            },
-            new SelectOption
-            {
-                Value = "Audio",
-                Text = QuestionnaireEditor.QuestionTypeAudio
-            },
-            new SelectOption
-            {
-                Value = "Area",
-                Text = QuestionnaireEditor.QuestionTypeGeography
-            }
-        };
+            });
+            if (!isQuestionOnCover)
+                list.Add(new SelectOption
+                {
+                    Value = "TextList",
+                    Text = QuestionnaireEditor.QuestionTypeList
+                });
+            if (!isQuestionOnCover)
+                list.Add(new SelectOption
+                {
+                    Value = "QRBarcode",
+                    Text = QuestionnaireEditor.QuestionTypeBarcode
+                });
+            if (!isQuestionOnCover)
+                list.Add(new SelectOption
+                {
+                    Value = "Multimedia",
+                    Text = QuestionnaireEditor.QuestionTypePicture
+                });
+            if (!isQuestionOnCover)
+                list.Add(new SelectOption
+                {
+                    Value = "Audio",
+                    Text = QuestionnaireEditor.QuestionTypeAudio
+                });
+            if (!isQuestionOnCover)
+                list.Add(new SelectOption
+                {
+                    Value = "Area",
+                    Text = QuestionnaireEditor.QuestionTypeGeography
+                });
+
+                return list.ToArray();
+        }
 
         private readonly string rosterType = "roster";
 
@@ -333,7 +343,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
                 result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
                 result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
-                result.QuestionTypeOptions = QuestionTypeOptions;
+                result.QuestionTypeOptions = GetQuestionTypeOptions(document, question);
                 result.AllQuestionScopeOptions = GetQuestionScopeOptions(document);
                 result.GeometryTypeOptions = GeometryTypeOptions;
 

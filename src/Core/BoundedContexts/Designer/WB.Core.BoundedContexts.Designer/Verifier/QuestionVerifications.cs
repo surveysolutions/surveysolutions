@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<IComposite>("WB0287", TableRosterDoesntContainsQuestionWithSubstitutions, VerificationMessages.WB0287_TableRosterDoesntContainsQuestionWithSubstitutions),
             ErrorsByQuestionsFromMatrixRostersThatHaveSubstitutionsToRosterQuestionsFromSelfOrDeeperRosterLevel,
             Error<IQuestion>("WB0307", IdentityQuestionsMustHaveVariableLabel, VerificationMessages.WB0307_IdentityQuestionsMustHaveVariableLabel),
+            Error<IQuestion>("WB0308", IdentifyingQuestionsMustHaveOnlyAllowQuestionTypes, VerificationMessages.WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByLinkedQuestions,
@@ -127,6 +128,36 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
 
             return false;
+        }
+
+        private bool IdentifyingQuestionsMustHaveOnlyAllowQuestionTypes(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!questionnaire.Questionnaire.IsCoverPageSupported)
+                return false;
+
+            var isIdentifying = questionnaire.Questionnaire.IsCoverPageSupported &&
+                                questionnaire.Questionnaire.IsCoverPage(question.GetParent()!.PublicKey);
+            if (!isIdentifying)
+                return false;
+
+            switch (question.QuestionType)
+            {
+                case QuestionType.Text:
+                case QuestionType.Numeric:
+                case QuestionType.DateTime:
+                case QuestionType.GpsCoordinates:
+                case QuestionType.MultyOption:
+                case QuestionType.SingleOption:
+                    return false;
+                
+                case QuestionType.Audio:
+                case QuestionType.Area:
+                case QuestionType.QRBarcode:
+                case QuestionType.TextList:
+                case QuestionType.Multimedia:
+                default:
+                    return true;
+            }
         }
 
         private bool MultiOptionQuestionYesNoQuestionCantBeLinked(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
