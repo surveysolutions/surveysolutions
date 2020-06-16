@@ -1683,6 +1683,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (targetToPasteIn.PublicKey == this.Id)
                 throw new QuestionnaireException(string.Format(ExceptionMessages.VariableCantBePaste));
+            if (IsCoverPage(targetToPasteIn.PublicKey))
+                throw new QuestionnaireException(string.Format(ExceptionMessages.VariableCantBePaste));
 
             var variable = (Variable) entityToInsertAsVariable.Clone();
             variable.PublicKey = pasteItemId;
@@ -1754,6 +1756,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var staticText = (StaticText) entityToInsertAsStaticText.Clone();
             staticText.PublicKey = pasteItemId;
+
+            if (IsCoverPage(targetToPasteIn.PublicKey))
+            {
+                staticText.ConditionExpression = String.Empty;
+            }
+            
             this.innerDocument.Insert(targetIndex, staticText, targetToPasteIn.PublicKey);
         }
 
