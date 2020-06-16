@@ -214,7 +214,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
 
         [Test]
         [TestCase(QuestionType.Multimedia, "test")]
-        [TestCase(QuestionType.QRBarcode, "test")]
+        [TestCase(QuestionType.Audio, "test")]
         [TestCase(QuestionType.Area, "test")]
         public void when_assignment_has_not_supported_question_in_identifying_data_then_should_return_verification_errors(QuestionType questionType, string preloadingValue)
         {
