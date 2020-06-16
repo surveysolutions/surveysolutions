@@ -56,6 +56,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 await File.WriteAllBytesAsync(incomingFile, audio).ConfigureAwait(false);
 
+                logger.LogInformation("Running conversion for file {source} into {dest}", incomingFile, encodedFile);
                 FFmpeg.SetExecutablesPath(this.fileStorageConfig.Value.FFmpegExecutablePath);
 
                 IMediaInfo audioInfo = await FFmpeg.GetMediaInfo(incomingFile)
@@ -72,8 +73,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     .Start()
                     .ConfigureAwait(false);
 
+                
                 audioResult.Binary = await File.ReadAllBytesAsync(encodedFile).ConfigureAwait(false);
                 audioResult.MimeType = MimeType;
+
+                logger.LogInformation("Done conversion for file {dest}. Reduced size from {srcSize} to {destSize} (bytes)", 
+                    encodedFile, audio.Length, audioResult.Binary.Length);
 
                 return audioResult;
             }
