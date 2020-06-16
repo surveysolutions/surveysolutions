@@ -79,7 +79,7 @@ namespace WB.Services.Export.Host.Infra
                     .HandleResult<HttpResponseMessage>(
                         message => message.RequestMessage.Method == HttpMethod.Get
                                    && !message.IsSuccessStatusCode && message.StatusCode != HttpStatusCode.NotFound)
-                    .WaitAndRetryAsync(6,
+                    .WaitAndRetryAsync(4,
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                         (response, timeSpan, retryCount, context) =>
                             {
