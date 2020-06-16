@@ -24,7 +24,7 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IJobService jobService;
         private readonly ITenantContext tenantContext;
-        
+
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
@@ -46,21 +46,20 @@ namespace WB.Services.Export.Host.Controllers
             string? refreshToken)
         {
             var process = await this.exportProcessesService.GetProcessAsync(processId);
-            
+
             if (process == null) return null;
 
-            var args = new DataExportProcessArgs
-            {
-                ExportSettings = new ExportSettings
+            var args = new DataExportProcessArgs(new ExportSettings
                 (
-                    tenant : tenantContext.Tenant,
-                    questionnaireId : process.ExportSettings.QuestionnaireId,
-                    exportFormat : process.ExportSettings.ExportFormat,
-                    fromDate : process.ExportSettings.FromDate,
-                    toDate : process.ExportSettings.ToDate,
-                    status : process.ExportSettings.Status,
-                    translation : process.ExportSettings.Translation
-                ),
+                    tenant: tenantContext.Tenant,
+                    questionnaireId: process.ExportSettings.QuestionnaireId,
+                    exportFormat: process.ExportSettings.ExportFormat,
+                    fromDate: process.ExportSettings.FromDate,
+                    toDate: process.ExportSettings.ToDate,
+                    status: process.ExportSettings.Status,
+                    translation: process.ExportSettings.Translation
+                ))
+            {
                 ArchivePassword = archivePassword,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
@@ -89,18 +88,17 @@ namespace WB.Services.Export.Host.Controllers
             Guid? translationId,
             ExternalStorageType? storageType)
         {
-            var args = new DataExportProcessArgs
+            var args = new DataExportProcessArgs(new ExportSettings
+            (
+                tenant: tenantContext.Tenant,
+                questionnaireId: new QuestionnaireId(questionnaireId),
+                exportFormat: format,
+                fromDate: from,
+                toDate: to,
+                translation: translationId,
+                status: status
+            ))
             {
-                ExportSettings = new ExportSettings
-                (
-                    tenant : tenantContext.Tenant,
-                    questionnaireId : new QuestionnaireId(questionnaireId),
-                    exportFormat : format,
-                    fromDate : from,
-                    toDate : to,
-                    translation : translationId,
-                    status : status
-                ),
                 ArchivePassword = archivePassword,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
@@ -142,13 +140,13 @@ namespace WB.Services.Export.Host.Controllers
         {
             var exportSettings = new ExportSettings
             (
-                questionnaireId : new QuestionnaireId(questionnaireId),
-                exportFormat : format,
-                status : status,
-                tenant : tenantContext.Tenant,
-                fromDate : fromDate,
-                toDate : toDate,
-                translation : translationId
+                questionnaireId: new QuestionnaireId(questionnaireId),
+                exportFormat: format,
+                status: status,
+                tenant: tenantContext.Tenant,
+                fromDate: fromDate,
+                toDate: toDate,
+                translation: translationId
             );
 
             var result = await this.archiveHandleService.DownloadArchiveAsync(exportSettings, archiveName);
@@ -204,7 +202,7 @@ namespace WB.Services.Export.Host.Controllers
         public async Task<ActionResult> DeleteDataExportProcess(string processId)
         {
             var job = await jobService.GetJobAsync(tenantContext.Tenant, processId);
-            
+
             if (job != null && (job.Status == JobStatus.Running || job.Status != JobStatus.Created))
             {
                 this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
@@ -242,7 +240,7 @@ namespace WB.Services.Export.Host.Controllers
         [HttpGet]
         [Route("api/v1/job/byQuery")]
         public async Task<IEnumerable<DataExportProcessView>> GetJobsByQuery(DataExportFormat? exportType,
-            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus, 
+            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus,
             bool? hasFile, int? limit, int? offset)
             => await this.jobsStatusReporting.GetDataExportStatusesAsync(exportType, interviewStatus,
                 questionnaireIdentity, exportStatus, hasFile, limit, offset);
