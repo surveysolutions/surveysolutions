@@ -70,7 +70,7 @@ export default {
                 return this.panel.to
             }
 
-            if (this.panel.id == '11111111111111111111111111111111') {
+            if (this.$config.coverPageId && this.panel.id == this.$config.coverPageId) {
                 return { name: 'cover', params: { sectionId: this.panel.id } }
             }
 
