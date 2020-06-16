@@ -119,7 +119,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 .ToArray();
 
             return TextListAnswer.FromTupleArray(textListAnswers);
-
         }
 
         public YesNoAnswer ToInterviewYesNoAnswer()
