@@ -19,18 +19,17 @@ namespace WB.Services.Export.Infrastructure
                 "Server=127.0.0.1;Port=5432;User Id=postgres;Password=Qwerty1234;Database=ExportService_Factory;");
 
             var tenantInfo = new TenantInfo
-            {
-                Id = TenantId.None,
-                Name = null
-            };
+            (
+                baseUrl:"",
+                id : TenantId.None,
+                name : ""
+            );
             var connectionSettings = Options.Create(new DbConnectionSettings
             {
                 DefaultConnection = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=Qwerty1234;Database=ExportService_Factory;"
             });
-            var tenantContext = new TenantContext(null)
-            {
-                Tenant = tenantInfo
-            };
+            var tenantContext = new TenantContext(null, tenantInfo);
+            
             return new TenantDbContext(tenantContext, connectionSettings, optionsBuilder.Options);
         }
     }

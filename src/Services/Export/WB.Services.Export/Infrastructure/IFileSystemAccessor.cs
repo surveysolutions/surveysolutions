@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WB.Services.Export.Infrastructure
 {
@@ -7,6 +8,7 @@ namespace WB.Services.Export.Infrastructure
     {
         Stream OpenOrCreateFile(string filePath, bool append);
         void WriteAllText(string contentFilePath, string toString);
+        Task WriteAllTextAsync(string contentFilePath, string toString);
         string MakeValidFileName(string questionnaireTitle);
         string Combine(params string[] parts);
         string CombinePath(params string[] parts);
@@ -19,7 +21,7 @@ namespace WB.Services.Export.Infrastructure
         void MoveFile(string fromPath, string toPath);
         string[] GetFilesInDirectory(string directoryPath);
         bool IsFileExists(string filePath);
-        byte[] ReadAllBytes(string filePath);
+        byte[]? ReadAllBytes(string filePath);
         void WriteAllBytes(string filePath, byte[] data);
         string GetTempPath(string basePath);
         DateTime GetModificationTime(string filePath);

@@ -365,9 +365,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 validationCondition: staticText.ValidationConditions.ToList()
             );
 
-            result.ValidationConditions.AddRange(staticText.ValidationConditions);
-            
-
             return result;
         }
 

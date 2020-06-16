@@ -8,6 +8,20 @@ namespace WB.Services.Export.Models
 {
     public class ExportSettings
     {
+        public ExportSettings(DataExportFormat exportFormat, 
+            QuestionnaireId questionnaireId, TenantInfo tenant,
+            InterviewStatus? status = null, DateTime? fromDate = null, 
+            DateTime? toDate = null, Guid? translation = null)
+        {
+            ExportFormat = exportFormat;
+            QuestionnaireId = questionnaireId;
+            Status = status;
+            FromDate = fromDate;
+            ToDate = toDate;
+            Tenant = tenant;
+            Translation = translation;
+        }
+
         public DataExportFormat ExportFormat { get; set; }
         public QuestionnaireId QuestionnaireId { get; set; }
         public InterviewStatus? Status { get; set; }

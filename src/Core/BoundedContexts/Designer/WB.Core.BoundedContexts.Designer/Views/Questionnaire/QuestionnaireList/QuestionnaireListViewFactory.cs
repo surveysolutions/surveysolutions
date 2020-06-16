@@ -201,7 +201,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 var filterLowerCase = input.SearchFor.Trim().ToLower();
                 result =
                     result.Where(
-                        x => x.Title.ToLower().Contains(filterLowerCase) || x.CreatorName.ToLower().Contains(filterLowerCase));
+                        x => x.Title.ToLower().Contains(filterLowerCase) || (x.CreatorName ?? "").ToLower().Contains(filterLowerCase));
             }
 
             result = result.Where(x =>
