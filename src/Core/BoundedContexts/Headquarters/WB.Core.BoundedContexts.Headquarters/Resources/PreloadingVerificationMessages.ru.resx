@@ -256,4 +256,7 @@
   <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
     <value>Все задания для web интервью должны быть назначены на интервьюера</value>
   </data>
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>Ответ на вопрос с именем {0} не может быть загружен, так как тип не поддерживается. Пожалуйста, ознакомьтесь https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type </value>
+  </data>
 </root>

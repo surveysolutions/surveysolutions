@@ -219,21 +219,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return StatusCode(StatusCodes.Status400BadRequest,
                     $"Question(s) not found: {string.Join(", ", unknownQuestions.Select(x => x.Source.Variable ?? x.Source.Identity))}");
 
-            var notPermittedQuestions = assignmentAnswers.Where(x => NotPermittedQuestionTypes.Contains(x.QuestionType))
-                .ToList();
-
-
-            if (notPermittedQuestions.Any())
-                return StatusCode(StatusCodes.Status400BadRequest,
-                    new CreateAssignmentResult
-                    {
-                        VerificationStatus = new ImportDataVerificationState { 
-                            Errors = notPermittedQuestions.Select(x => new PanelImportVerificationError(
-                                    "",
-                                    $"Answer to question with variable named {x.Variable} can't be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type/ for details of what can be preloaded in the current version.")).ToList()
-                                }
-                    });
-
             var assignmentRows = this.ToAssignmentRows(createItem, assignmentAnswers, questionnaire).ToList();
 
             var verificationErrors = VerifyAssignment(assignmentRows, questionnaire).ToList();
