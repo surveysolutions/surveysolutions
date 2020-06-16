@@ -1051,12 +1051,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
 
             //assert
-            Assert.That(errors, Is.Empty);
-
-            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
-
-            Assert.That(savedAssignments, Has.One.Items);
-            Assert.That(savedAssignments[0].Answers, Is.Empty);
+            Assert.That(errors, Has.One.Items);
         }
 
         [Test]
