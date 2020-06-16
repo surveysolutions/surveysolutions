@@ -96,5 +96,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
             Assert.That(cover.Children.Count(e => e is IStaticText), Is.EqualTo(1));
             Assert.That(cover.Children.OfType<IQuestion>().Select(q => q.Featured), Is.All.True);
         }
+
+        [Test]
+        public void when_copy_question_to_cover_page()
+        {
+            var responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var questionnaireId = Guid.Parse("DCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var questionId = Guid.Parse("FCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            var questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: questionnaireId, 
+                responsibleId: responsibleId);
+            questionnaire.QuestionnaireDocument.Add(
+                Create.Chapter(children: new List<IComposite>
+                {
+                    Create.TextQuestion(questionId),
+                }), questionnaireId);
+
+            var command = Create.Command.PasteInto(
+                questionnaireId: questionnaireId,
+                entityId: Guid.NewGuid(), 
+                sourceItemId: questionId,
+                responsibleId: responsibleId,
+                sourceQuestionnaireId: questionnaireId,
+                targetParentId: questionnaire.QuestionnaireDocument.CoverPageSectionId);
+
+            command.SourceDocument = questionnaire.QuestionnaireDocument;
+            
+            questionnaire.PasteInto(command);
+
+            var cover = questionnaire.QuestionnaireDocument.Children.First();
+            Assert.That(cover, Is.Not.Null);
+            Assert.That(cover.Children.Count, Is.EqualTo(1));
+            Assert.That(cover.Children.Count(e => e is IQuestion), Is.EqualTo(1));
+            Assert.That(cover.Children.OfType<IQuestion>().Single().Featured, Is.True);
+        }
     }
 }
