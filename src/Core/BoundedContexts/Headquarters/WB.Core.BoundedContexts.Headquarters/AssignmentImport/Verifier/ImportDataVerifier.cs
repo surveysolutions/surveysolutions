@@ -356,7 +356,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var questionType = questionnaire.GetQuestionType(questionId.Value);
 
             if (new [] {QuestionType.Area, QuestionType.Multimedia, QuestionType.Audio}.Contains(questionType) 
-                || ((questionType==QuestionType.MultyOption || questionType == QuestionType.SingleOption) && questionnaire.IsQuestionLinked(questionId.Value)))
+                || ((questionType==QuestionType.MultyOption || questionType == QuestionType.SingleOption) && (questionnaire.IsQuestionLinked(questionId.Value) || questionnaire.IsQuestionLinkedToRoster(questionId.Value))))
                 yield return new PanelImportVerificationError(
                     "PL0063",
                     string.Format(messages.PL0063_NoPermittedQuestion, answer.VariableName),
