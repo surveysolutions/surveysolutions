@@ -22,6 +22,7 @@ namespace WB.Services.Export.Services.Processing
         }
 
         public string GetExternalStoragePath(TenantInfo tenant, string name) => $"{tenant.Name}/{name}";
+
         public IZipArchive CreateExportArchive(Stream outputStream, string? password = null, CompressionLevel compressionLevel = CompressionLevel.Fastest)
         {
             return archiveUtils.CreateArchive(outputStream, password, compressionLevel);
