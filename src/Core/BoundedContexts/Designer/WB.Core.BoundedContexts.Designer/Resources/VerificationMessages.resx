@@ -752,7 +752,9 @@
   </data>
   <data name="WB0307_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
     <value>Questions in Сover section must have variable label.</value>
-
+  </data>
+  <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+    <value>Identifying questions can have only allowed types.</value>
   </data>
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
     <value>Label {1} for code {0} is a number different from the value being labeled.</value>

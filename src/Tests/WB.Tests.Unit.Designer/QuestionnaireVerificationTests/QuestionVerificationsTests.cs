@@ -560,5 +560,17 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.Question(),
                 })
                 .ExpectError("WB0307");
+
+        [TestCase(QuestionType.Audio)]
+        [TestCase(QuestionType.Area)]
+        [TestCase(QuestionType.QRBarcode)]
+        [TestCase(QuestionType.TextList)]
+        [TestCase(QuestionType.Multimedia)]
+        public void when_question_on_cover_page_allow_only_allowed_types(QuestionType questionType)
+            => QuestionnaireDocumentWithCoverPage(new[]
+                {
+                    Create.Question(questionType: questionType),
+                })
+                .ExpectError("WB0308");
     }
 }
