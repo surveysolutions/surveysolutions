@@ -1936,11 +1936,11 @@ namespace WB.Tests.Abc.TestFactories
             return exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
-        public AudioQuestion AudioQuestion(Guid qId, string variable)
+        public AudioQuestion AudioQuestion(Guid? qId = null, string variable = "audio_question")
         {
             return new AudioQuestion
             {
-                PublicKey = qId,
+                PublicKey = qId?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 QuestionScope = QuestionScope.Interviewer,
                 QuestionType = QuestionType.Audio
