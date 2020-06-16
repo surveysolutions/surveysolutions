@@ -29,6 +29,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
             this.logger = logger;
             this.fileStorageConfig = fileStorageConfig;
             audioProcessor = Task.Factory.StartNew(AudioCompressionQueueProcessor);
+            TempFilesFolder = Path.Combine(this.fileStorageConfig.Value.TempData, pathInAppDataForFfmpeg);
+            if(!Directory.Exists(TempFilesFolder))
+            {
+                Directory.CreateDirectory(TempFilesFolder);
+            }
         }
 
 
@@ -42,21 +47,16 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         private async Task<AudioFileInformation> CompressData(byte[] audio)
         {
-            var encodedFile = 
-                Path.ChangeExtension(
-                    Path.Combine(this.fileStorageConfig.Value.TempData, pathInAppDataForFfmpeg, "resultAudio"), 
-                    ".aac");
-            var incomingFile = 
-                Path.ChangeExtension(
-                    Path.Combine(this.fileStorageConfig.Value.TempData, pathInAppDataForFfmpeg, "incomingAudio"), 
-                    ".wav");
+            var encodedFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "resultAudio"), ".aac");
+            var incomingFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "incomingAudio"), ".wav");
             var audioResult = new AudioFileInformation();
 
             try
             {
-                await File.WriteAllBytesAsync(incomingFile, audio).ConfigureAwait(false);
-
                 logger.LogInformation("Running conversion for file {source} into {dest}", incomingFile, encodedFile);
+                
+                await File.WriteAllBytesAsync(incomingFile, audio).ConfigureAwait(false);
+                
                 FFmpeg.SetExecutablesPath(this.fileStorageConfig.Value.FFmpegExecutablePath);
 
                 IMediaInfo audioInfo = await FFmpeg.GetMediaInfo(incomingFile)
@@ -153,6 +153,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly Gauge audioFilesInQueue =new Gauge(@"wb_audio_queue_files_count", @"Number of audio files in queue");
         private readonly Counter audioFilesProcessed = new Counter(@"wb_audio_files_total", @"Total count of processed audio files");
         private readonly Counter audtioFilesProcessingTime = new Counter(@"wb_audio_files_processing_seconds", @"Total processing time");
+        private string TempFilesFolder;
     }
 
     public class AudioFileInformation
