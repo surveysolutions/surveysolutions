@@ -366,13 +366,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var questionnaire = Create.Entity.QuestionnaireDocument(children:
                 new IComposite[]
                 {
-                    Create.Entity.Group(QuestionnaireDocument.CoverPageSectionId, title: "custom cover", children: new IComposite[]
+                    Create.Entity.Group(Id.g1, title: "custom cover", children: new IComposite[]
                     {
                         Create.Entity.TextQuestion(preFilled: true)
                     }),
                     Create.Entity.Group(Id.g2),
                 }
             );
+            questionnaire.CoverPageSectionId = Id.g1;
 
             var eventRegistry = Create.Service.LiteEventRegistry();
 
@@ -388,7 +389,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             //assert
             Assert.That(result.Any(item => item.GetType() == typeof(SideBarCoverSectionViewModel)), Is.False);
             var cover = result.OfType<SideBarSectionViewModel>().First();
-            Assert.That(cover.SectionIdentity.Id, Is.EqualTo(QuestionnaireDocument.CoverPageSectionId));
+            Assert.That(cover.SectionIdentity.Id, Is.EqualTo(Id.g1));
             Assert.That(cover.Title.PlainText, Is.EqualTo("custom cover"));
         }
 
@@ -406,10 +407,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var questionnaire = Create.Entity.QuestionnaireDocument(children:
                 new IComposite[]
                 {
-                    Create.Entity.Group(QuestionnaireDocument.CoverPageSectionId, title: "custom cover"),
+                    Create.Entity.Group(Id.g1, title: "custom cover"),
                     Create.Entity.Group(Id.g2),
                 }
             );
+            questionnaire.CoverPageSectionId = Id.g1;
 
             var eventRegistry = Create.Service.LiteEventRegistry();
 
