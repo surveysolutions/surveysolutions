@@ -9,7 +9,7 @@ namespace WB.Services.Export.Tests.ExportJobTests
     {
         private DataExportProcessArgs args;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Deserialize()
         {
             this.args = JsonConvert.DeserializeObject<DataExportProcessArgs>(@"{
