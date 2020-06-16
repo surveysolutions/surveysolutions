@@ -25,7 +25,12 @@ namespace WB.Services.Export.Models
      
     public class DataExportProcessArgs
     {
-        public ExportSettings ExportSettings { get; set; } = null!;
+        public DataExportProcessArgs(ExportSettings exportSettings)
+        {
+            ExportSettings = exportSettings;
+        }
+
+        public ExportSettings ExportSettings { get; set; }
         public DataExportProcessStatus Status { get; set; } = new DataExportProcessStatus();
         public string? ArchivePassword { get; set; }
 

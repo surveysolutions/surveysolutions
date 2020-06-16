@@ -81,13 +81,10 @@ namespace WB.Services.Export.Tests.ExportProcessHandlersTests
                 csvWriter: csvWriter.Object,
                 tenantApi: tenantApi.Object);
 
-            var state = new ExportState(new DataExportProcessArgs()
-            {
-                ExportSettings = new ExportSettings(
-                    exportFormat:DataExportFormat.Tabular,
-                    new QuestionnaireId(Guid.Empty.ToString()),
-                    new TenantInfo("http://test",""))
-            });
+            var state = new ExportState(new DataExportProcessArgs(new ExportSettings(
+                exportFormat: DataExportFormat.Tabular,
+                new QuestionnaireId(Guid.Empty.ToString()),
+                new TenantInfo("http://test", ""))));
 
             await handler.ExportDataAsync(state, CancellationToken.None);
 
