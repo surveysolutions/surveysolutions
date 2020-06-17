@@ -200,7 +200,8 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation, false);
             if (questionnaire == null)
             {
-                throw new ArgumentException();
+                generationProgress.Fail();
+                return;
             }
             questionnaire.TimezoneOffsetMinutes = timezoneOffsetMinutes;
 
