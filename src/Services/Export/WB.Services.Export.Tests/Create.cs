@@ -876,15 +876,13 @@ namespace WB.Services.Export.Tests
 
         public DataExportProcessArgs DataExportProcessArgs(string tenant = "testTenant")
         {
-            return new DataExportProcessArgs
-            {
-                ExportSettings = new ExportSettings
+            return new DataExportProcessArgs(
+                new ExportSettings
                 (
                     exportFormat: DataExportFormat.Tabular,
                     questionnaireId: new QuestionnaireId(Guid.Empty.FormatGuid() + "$" + 1),
-                    tenant : new TenantInfo("", "", tenant)
-                )
-            };
+                    tenant: new TenantInfo("", "", tenant)
+                ));
         }
     }
 
