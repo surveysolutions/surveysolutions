@@ -110,8 +110,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                     }).ConfigureAwait(false);
                 return;
             }
-            
-            await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity: null);
+             
+            if (interview.HasEditableIdentifyingQuestions)
+            {
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
+            }
+            else
+            {
+                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity: null);
+            }
         }
 
         protected async Task<IStatefulInterview> LoadInterviewAsync(Guid interviewId)
