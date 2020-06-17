@@ -1,4 +1,4 @@
-name: .NET Core
+name: Automated tests
 
 on:
   pull_request:
