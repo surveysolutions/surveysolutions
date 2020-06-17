@@ -23,6 +23,11 @@ export default class ReviewComponent {
                     navigateToPrefilled: true,
                     showHumburger: false,
                 },
+                beforeEnter: (to, from, next) => {
+                    if (this.config.coverPageId)
+                        to.params.sectionId = this.config.coverPageId
+                    next()
+                },
             },
             {
                 path: 'Overview',
