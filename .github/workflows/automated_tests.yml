@@ -16,7 +16,7 @@ jobs:
       TEAMCITY_CACHE: ./.cache
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
-      
+    
     steps:
     - uses: actions/checkout@v2
       with: 
