@@ -52,9 +52,10 @@ namespace WB.UI.Tester.Implementation.Services
         }
 
         public override Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
-            this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
+            this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
-                InterviewId = interviewId
+                InterviewId = interviewId,
+                NavigationIdentity = NavigationIdentity.CreateForCoverScreen()
             });
 
         public override Task NavigateToFinishInstallationAsync()
