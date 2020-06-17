@@ -15,4 +15,10 @@ jobs:
         repository: surveysolutions/automatedtesting
         token: ${{secrets.PAT_AUTOMATION}}
     - name: Docker up
-      run: pwsh ./compose.ps1 -branch ${{github.ref}}
+      run: docker ps
+    # - name: Docker up
+    #   run: pwsh ./compose.ps1 -branch ${{github.head_ref}}
+    #   env: 
+    #     TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
+    #     TEAMCITY_USER: ${{secrets.TEAMCITY_USER}}
+
