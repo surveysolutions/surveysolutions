@@ -161,7 +161,8 @@ namespace WB.UI.Headquarters.Controllers
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
             }
 
-            var targetSectionIsEnabled = interview.IsEnabled(Identity.Parse(sectionId));
+            var sectionIdentity = Identity.Parse(sectionId);
+            var targetSectionIsEnabled = interview.IsEnabled(sectionIdentity);
             if (!targetSectionIsEnabled)
             {
                 return this.RedirectToFirstSection(id, interview);
@@ -173,6 +174,13 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var returnUrl = GenerateUrl(@"Section", id, sectionId);
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
+            }
+
+            var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+            if (questionnaire.IsCoverPage(sectionIdentity.Id) && !IsNeedShowCoverPage(interview, questionnaire))
+            {
+                var firstSectionUrl = GenerateUrl(nameof(Section), id, questionnaire.GetFirstSectionId().FormatGuid());
+                return Redirect(firstSectionUrl);
             }
 
             return this.View("Index", GetInterviewModel(id, interview, webInterviewConfig));
@@ -498,14 +506,28 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
-            var questionnaire = questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
-            if (questionnaire.IsCoverPageSupported)
-            {
-                var url = GenerateUrl(nameof(Section), id, questionnaire.CoverPageSectionId.FormatGuid());
-                return Redirect(url);
-            }
+            var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
 
-            return View("Index", GetInterviewModel(id, interview, webInterviewConfig));
+            if (IsNeedShowCoverPage(interview, questionnaire))
+            {
+                if (questionnaire.IsCoverPageSupported)
+                {
+                    var url = GenerateUrl(nameof(Section), id, questionnaire.CoverPageSectionId.FormatGuid());
+                    return Redirect(url);
+                }
+
+                return View("Index", GetInterviewModel(id, interview, webInterviewConfig));
+            }
+            
+            var firstSectionUrl = GenerateUrl(nameof(Section), id, questionnaire.GetFirstSectionId().FormatGuid());
+            return Redirect(firstSectionUrl);
+        }
+
+        private bool IsNeedShowCoverPage(IStatefulInterview interview, IQuestionnaire questionnaire)
+        {
+            return questionnaire.GetPrefilledEntities().Any()
+                   || !string.IsNullOrEmpty(interview.SupervisorRejectComment)
+                   || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
         }
 
         [Route("Finish/{id:Guid}")]
