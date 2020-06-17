@@ -2,12 +2,19 @@
   "profiles": {
     "WB.Services.Export.Host": {
       "commandName": "Project",
-      "launchBrowser": false,
       "commandLineArgs": "--console --ignore-pid --kestrel",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5200"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true,
+      "commandLineArgs": "--kestrel --ignore-pid",
+      "httpPort": 5200
+
     }
   }
 }
