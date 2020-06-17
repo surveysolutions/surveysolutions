@@ -146,7 +146,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 case QuestionType.Numeric:
                 case QuestionType.DateTime:
                 case QuestionType.GpsCoordinates:
-                case QuestionType.MultyOption:
                 case QuestionType.SingleOption:
                     return false;
                 
@@ -155,6 +154,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 case QuestionType.QRBarcode:
                 case QuestionType.TextList:
                 case QuestionType.Multimedia:
+                case QuestionType.MultyOption:
                 default:
                     return true;
             }

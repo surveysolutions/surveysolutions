@@ -566,6 +566,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         [TestCase(QuestionType.QRBarcode)]
         [TestCase(QuestionType.TextList)]
         [TestCase(QuestionType.Multimedia)]
+        [TestCase(QuestionType.MultyOption)]
         public void when_question_on_cover_page_allow_only_allowed_types(QuestionType questionType)
             => QuestionnaireDocumentWithCoverPage(new[]
                 {
