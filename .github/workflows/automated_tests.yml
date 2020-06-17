@@ -45,5 +45,7 @@ jobs:
 
     - name: Tests UI.Web.Interview
       run: dotnet test Regression/UI.Headquarters --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
+      env: 
+        TEAMCITY_PROJECT_NAME: "automation"
       
 
