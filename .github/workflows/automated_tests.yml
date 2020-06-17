@@ -13,10 +13,17 @@ jobs:
     - uses: actions/checkout@v2
       with: 
         repository: surveysolutions/automatedtesting
-        token: ${{secrets.PAT_AUTOMATION}}
+        token: ${{secrets.PAT_AUTOMATION}}        
     - name: Docker up
       run: pwsh ./compose.ps1 -branch ${{github.head_ref}}
       env: 
         TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
         TEAMCITY_USER: ${{secrets.TEAMCITY_USER}}
+        TEAMCITY_CACHE: ~/projects/teamcity_cache
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+    - name: Tests UI.Web.Interview
+      run: dotnet test Regression/UI.Web.Interview/UI.Web.Interview.csproj --filter TestCategory=Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High) -- NUnit.NumberOfTestWorkers=6
+      
 
