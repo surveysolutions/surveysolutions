@@ -54,8 +54,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 if (questionnaire.IsCoverPage(x.Identity.Id))
                 {
                     return questionnaire.GetPrefilledEntities().Any()
-                           || interview.GetAllCommentedEnabledQuestions().Any()
-                           || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
+                           || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment)
+                           || (isReviewMode
+                                ? interview.GetAllCommentedEnabledQuestions().Any()
+                                : interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any());
                 }
 
                 return true;

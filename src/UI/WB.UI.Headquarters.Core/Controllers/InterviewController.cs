@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -75,11 +76,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult Cover(Guid id)
         {
             var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
-            var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
-            if (questionnaire.IsCoverPageSupported)
-                return RedirectToAction("Review", new{ id, url = questionnaire.CoverPageSectionId.FormatGuid()});
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, null);
 
-            return Review(id, null);
+            if (questionnaire.GetPrefilledEntities().Any()
+                || !string.IsNullOrEmpty(interview.SupervisorRejectComment)
+                || interview.GetAllCommentedEnabledQuestions().Any())
+            {
+                if (questionnaire.IsCoverPageSupported)
+                {
+                    return RedirectToAction("Review", new{ id, url = questionnaire.CoverPageSectionId.FormatGuid()});
+                }
+
+                return Review(id, null);
+            }
+
+            return Review(id, questionnaire.GetFirstSectionId().FormatGuid());
         }        
 
         [ActivePage(MenuItem.Docs)]
