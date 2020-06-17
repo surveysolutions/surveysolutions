@@ -25,14 +25,19 @@ namespace WB.Services.Export.Models
      
     public class DataExportProcessArgs
     {
-        public ExportSettings ExportSettings { get; set; } = null!;
+        public DataExportProcessArgs(ExportSettings exportSettings)
+        {
+            ExportSettings = exportSettings;
+        }
+
+        public ExportSettings ExportSettings { get; set; }
         public DataExportProcessStatus Status { get; set; } = new DataExportProcessStatus();
-        public string ArchivePassword { get; set; } = String.Empty;
+        public string? ArchivePassword { get; set; }
 
         public string NaturalId => $"{this.StorageTypeString}${ExportSettings?.NaturalId ?? "noSettings"}";
 
-        public string AccessToken { get; set; } = String.Empty;
-        public string RefreshToken { get; set; } = String.Empty;
+        public string? AccessToken { get; set; }
+        public string? RefreshToken { get; set; }
         public ExternalStorageType? StorageType { get; set; }
         public long ProcessId { get; set; }
 

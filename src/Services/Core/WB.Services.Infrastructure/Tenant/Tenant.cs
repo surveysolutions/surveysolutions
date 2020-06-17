@@ -1,12 +1,11 @@
-﻿namespace WB.Services.Infrastructure.Tenant
+﻿using Newtonsoft.Json;
+
+namespace WB.Services.Infrastructure.Tenant
 {
     public class TenantInfo
     {
-        public TenantInfo():this("","")
-        {
-        }
-
-        public TenantInfo(string baseUrl, TenantId id, string name = "")
+        [JsonConstructor]
+        public TenantInfo(string baseUrl, TenantId id, string name)
         {
             BaseUrl = baseUrl;
             Id = id;
