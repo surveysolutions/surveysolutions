@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return Review(id, null);
             }
 
-            return Review(id, questionnaire.GetFirstSectionId().FormatGuid());
+            return RedirectToAction("Review", new{ id, url = questionnaire.GetFirstSectionId().FormatGuid()});
         }        
 
         [ActivePage(MenuItem.Docs)]
