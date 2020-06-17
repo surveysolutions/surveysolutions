@@ -33,22 +33,17 @@ jobs:
       with:
         dotnet-version: '3.1.x'
 
-    - name: Build
-      run: |
-        dotnet --version
-        dotnet build Regression/UI.Headquarters
-
     - name: Build and push images
       run: pwsh ./compose.ps1 -branch ${{ github.head_ref }} -skipApk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Start selenoid
-      uses: Xotabu4/selenoid-github-action@v1
+    # - name: Start selenoid
+    #   uses: Xotabu4/selenoid-github-action@v1
 
     - name: Tests UI.Web.Interview
       run: dotnet test Regression/UI.Headquarters --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
       env: 
         TEAMCITY_PROJECT_NAME: "automation"
-        SELENIUM_GRID_URI: "http://localhost:4444/wd/hub"
+        # SELENIUM_GRID_URI: "http://localhost:4444/wd/hub"
       
 
