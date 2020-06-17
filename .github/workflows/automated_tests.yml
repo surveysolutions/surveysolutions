@@ -9,17 +9,31 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      DOCKER_REGISTRY: docker.pkg.github.com
+      DOCKER_REPO: surveysolutions/surveysolutions
+      TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
+      TEAMCITY_USER: ${{secrets.TEAMCITY_USER}}
+      TEAMCITY_CACHE: ./.cache
+
     steps:
     - uses: actions/checkout@v2
       with: 
         repository: surveysolutions/automatedtesting
-        token: ${{secrets.PAT_AUTOMATION}}        
+        token: ${{secrets.PAT_AUTOMATION}}
+
+    - name: Cache artifacts
+      uses: actions/cache@v2
+      with:
+          path: ./.cache
+          key: ${{ runner.os }}
+
+    - name: Build and push images
+      run: pwsh ./build-and-push-images.ps1 -branch ${{ github.head_ref }}
+      
     - name: Docker up
       run: pwsh ./compose.ps1 -branch ${{github.head_ref}}
-      env: 
-        TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
-        TEAMCITY_USER: ${{secrets.TEAMCITY_USER}}
-        TEAMCITY_CACHE: ~/projects/teamcity_cache
+
     - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
