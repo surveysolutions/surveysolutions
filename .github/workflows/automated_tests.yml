@@ -5,8 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  prepare-images:
     runs-on: ubuntu-latest
 
     env:
@@ -15,7 +14,7 @@ jobs:
       TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
       TEAMCITY_USER: ${{secrets.TEAMCITY_USER}}
       TEAMCITY_CACHE: ./.cache
-
+      
     steps:
     - uses: actions/checkout@v2
       with: 
@@ -26,20 +25,20 @@ jobs:
       uses: actions/cache@v2
       with:
           path: ./.cache
-          key: ${{ runner.os }}
+          key: downloaded-artifacts-${{ runner.os }}
 
     - name: Build and push images
-      run: pwsh ./build-and-push-images.ps1 -branch ${{ github.head_ref }} -notParallel -skipApk
-      
-    - name: Docker up
-      run: docker-compose up -f ./docker/docker-compose.yml up -d
-
-    - name: Prepare HQ-Designer for test
-      run: pwsh ./docker/finish.ps1
+      run: pwsh ./compose.ps1 -branch ${{ github.head_ref }} -skipApk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
+
+    - name: Build
+      run: dotnet build Regression/UI.Web.Interview/UI.Web.Interview.csproj
+
     - name: Tests UI.Web.Interview
       run: dotnet test Regression/UI.Web.Interview/UI.Web.Interview.csproj --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
       
