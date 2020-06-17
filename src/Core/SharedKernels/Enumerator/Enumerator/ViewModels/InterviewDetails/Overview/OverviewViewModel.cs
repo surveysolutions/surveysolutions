@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private readonly IUserInteractionService userInteractionService;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly DynamicTextViewModel nameViewModel;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public OverviewViewModel(IStatefulInterviewRepository interviewRepository,
             IImageFileStorage fileStorage,
@@ -32,7 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             IAudioFileStorage audioFileStorage,
             IUserInteractionService userInteractionService,
             IDynamicTextViewModelFactory dynamicTextViewModelFactory,
-            DynamicTextViewModel nameViewModel)
+            DynamicTextViewModel nameViewModel,
+            IQuestionnaireStorage questionnaireRepository)
         {
             this.interviewRepository = interviewRepository;
             this.fileStorage = fileStorage;
@@ -42,13 +44,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.userInteractionService = userInteractionService;
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.nameViewModel = nameViewModel;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public void Configure(string interviewId, NavigationState navigationState)
         {
             this.InterviewId = interviewId;
             var interview = interviewRepository.Get(interviewId);
-            var sections = interview.GetEnabledSections().Select(x => x.Identity).ToImmutableHashSet();
+            var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var sections = interview.GetEnabledSections()
+                .Select(x => x.Identity)
+                .Where(identity => !questionnaire.IsCoverPage(identity.Id))
+                .ToImmutableHashSet();
 
             var interviewEntities = interview.GetUnderlyingInterviewerEntities();
 
