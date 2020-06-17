@@ -1,0 +1,108 @@
+name: Automated tests
+
+on:
+  pull_request:
+    branches: [ master ]
+
+env:
+  DOCKER_REGISTRY: docker.pkg.github.com
+  DOCKER_REPO: surveysolutions/surveysolutions
+  DOCKER_NETWORK: automation_network
+  TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
+  TEAMCITY_USER:  ${{secrets.TEAMCITY_USER}}
+  TEAMCITY_CACHE: $GITHUB_WORKSPACE/.tc_cache
+  TEAMCITY_PROJECT_NAME: automation
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  COMPOSE_PROJECT_NAME: github_actions
+  TC_ARTIFACTS: $GITHUB_WORKSPACE/.run_artifacts
+  
+  TEST_CATEGORIES: "Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)"
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+
+  wait-for-build:
+    runs-on: kharkov
+
+    steps:
+    # - name: Wait for build to succeed
+    #   id: waitforstatuschecks
+    #   uses: "WyriHaximus/github-action-wait-for-status@4c9e58820905eb246e88a413c39a9104cccf7e80"
+    #   with:
+    #     checkInterval: 30
+    #     ignoreActions: wait-for-build 
+    #   env:
+    #     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+    - name: Do something with a failing build
+      run: echo ok
+      #if: steps.wait-for-build.outputs.conclusion == 'failure'
+      #run: throw
+
+  prepare-images:
+    runs-on: kharkov
+
+    needs: [ wait-for-build ] 
+
+    steps:
+    - uses: actions/checkout@v2
+      with: 
+        repository: surveysolutions/automatedtesting
+        token: ${{secrets.PAT_AUTOMATION}}
+
+    - name: Cache artifacts
+      uses: actions/cache@v2
+      with:
+          path: ${{ env.TEAMCITY_CACHE }}
+          key: downloaded-artifacts-${{ runner.os }}
+
+    - name: Build and push images
+      run: pwsh ./build-and-push-images.ps1 -branch ${{ github.head_ref }} -skipApk
+
+  run-hq-tests:
+    runs-on: kharkov
+    needs: [ prepare-images ] 
+
+    env:
+      PROJECT_NAME: UI.Headquarters
+
+    steps:
+    - uses: actions/checkout@v2
+      with: 
+        repository: surveysolutions/automatedtesting
+        token: ${{secrets.PAT_AUTOMATION}}
+
+    # - uses: actions/setup-dotnet@v1
+    #   with:
+    #     dotnet-version: '3.1.x'
+
+    - name: Build ${{ env.PROJECT_NAME }}
+      run: dotnet build Regression/${{ env.PROJECT_NAME }} -v q
+
+    - name: Run env
+      run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
+
+    - name: Tests ${{ env.PROJECT_NAME }}
+      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
+      env:
+        SELENIUM_GRID_URI: http://localhost:4444/wd/hub
+        AUTOMATION_QUIET: true
+
+    - name: Collect container logs
+      uses: actions/upload-artifact@v1
+      if: ${{ always() }}
+      continue-on-error: true
+      with:
+        name: container-logs
+        path: docker/logs/${{ env.COMPOSE_PROJECT_NAME }}
+
+    - name: Collect runner logs
+      uses: actions/upload-artifact@v1
+      if: ${{ always() }}
+      continue-on-error: true
+      with:
+        name: ${{ env.PROJECT_NAME }}-logs
+        path: ${{ env.TC_ARTIFACTS }}
+
+ 

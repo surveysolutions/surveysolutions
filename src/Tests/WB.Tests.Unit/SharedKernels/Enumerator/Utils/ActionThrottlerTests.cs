@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
@@ -39,9 +40,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils
         public void should_run_in_background_without_await()
         {
             var delay = new ActionThrottler();
-            
-            delay.RunDelayed(() => Assert.Fail(), TimeSpan.FromMilliseconds(200)).ConfigureAwait(false);
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
 
+            delay.RunDelayed(() =>
+            {
+                if (tcs.Task.IsCompleted)
+                {
+                    return;
+                }
+                Assert.Fail();
+            }, TimeSpan.FromMilliseconds(200)).ConfigureAwait(false);
+            
+            tcs.SetResult(true);
+            
             Assert.Pass();
         }
 
