@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with: 
-        name: surveysolutions/automation
+        repository: surveysolutions/automation
         token: ${{secrets.PAT_AUTOMATION}}
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
