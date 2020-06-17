@@ -41,6 +41,6 @@ jobs:
       with:
         dotnet-version: '3.1.x'
     - name: Tests UI.Web.Interview
-      run: pwsh dotnet test Regression/UI.Web.Interview/UI.Web.Interview.csproj --filter TestCategory=Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High) -- NUnit.NumberOfTestWorkers=6
+      run: dotnet test Regression/UI.Web.Interview/UI.Web.Interview.csproj --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
       
 
