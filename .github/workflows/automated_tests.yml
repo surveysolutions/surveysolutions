@@ -29,7 +29,7 @@ jobs:
           key: ${{ runner.os }}
 
     - name: Build and push images
-      run: pwsh ./build-and-push-images.ps1 -branch ${{ github.head_ref }} -notParallel
+      run: pwsh ./build-and-push-images.ps1 -branch ${{ github.head_ref }} -notParallel -skipApk
       
     - name: Docker up
       run: docker-compose up -f ./docker/docker-compose.yml up -d
