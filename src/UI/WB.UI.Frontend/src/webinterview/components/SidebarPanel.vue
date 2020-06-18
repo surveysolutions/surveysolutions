@@ -70,7 +70,7 @@ export default {
                 return this.panel.to
             }
 
-            var coverPageId = this.$config.coverPageId || this.$config.model.coverPageId
+            var coverPageId = this.$config.coverPageId != undefined ? this.$config.coverPageId : this.$config.model.coverPageId
             if (coverPageId && this.panel.id == coverPageId) {
                 return { name: 'cover', params: { sectionId: this.panel.id } }
             }
