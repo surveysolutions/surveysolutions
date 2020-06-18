@@ -14,7 +14,7 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   COMPOSE_PROJECT_NAME: github_actions
-  TC_ARTIFACTS: ./.run_artifacts
+  TC_ARTIFACTS: ./.run_artifacts  
   
   TEST_CATEGORIES: "Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,7 +52,7 @@ jobs:
     - name: Cache artifacts
       uses: actions/cache@v2
       with:
-          path: ./.cache
+          path: ${{ env.TEAMCITY_CACHE }}
           key: downloaded-artifacts-${{ runner.os }}
 
     - name: Build and push images
@@ -82,7 +82,7 @@ jobs:
       run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
 
     - name: Tests ${{ env.PROJECT_NAME }}
-      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory=${{ env.TEST_CATEGORIES }} -- NUnit.NumberOfTestWorkers=6
+      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
    
     - name: Collect container logs
       uses: actions/upload-artifact@v1
