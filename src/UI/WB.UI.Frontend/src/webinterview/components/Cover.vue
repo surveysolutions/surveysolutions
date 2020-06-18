@@ -3,7 +3,9 @@
         :class="coverStatusClass">
         <div class="unit-title">
             <wb-humburger :showFoldbackButtonAsHamburger="showHumburger"></wb-humburger>
-            <h3>{{ this.$store.state.webinterview.coverInfo.title || $t("WebInterviewUI.Cover")}}</h3>
+            <h3 id="cover-title">
+                {{ this.$store.state.webinterview.breadcrumbs.title || this.$store.state.webinterview.coverInfo.title || $t("WebInterviewUI.Cover")}}
+            </h3>
         </div>
 
         <div class="wrapper-info error">
@@ -103,12 +105,6 @@ export default {
 
     beforeMount() {
         this.fetch()
-    },
-
-    watch: {
-        ['$route.params.sectionId']() {
-            this.fetch()
-        },
     },
 
     mounted() {
