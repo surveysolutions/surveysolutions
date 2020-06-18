@@ -54,7 +54,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             var sections = interview.GetEnabledSections()
                 .Select(x => x.Identity)
-                .Where(identity => !questionnaire.IsCoverPage(identity.Id))
                 .ToImmutableHashSet();
 
             var interviewEntities = interview.GetUnderlyingInterviewerEntities();
