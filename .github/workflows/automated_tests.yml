@@ -16,6 +16,8 @@ jobs:
       TEAMCITY_CACHE: ./.cache
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
+      COMPOSE_PROJECT_NAME: github_actions
+      TC_ARTIFACTS: ./.run_artifacts
     
     steps:
     - uses: actions/checkout@v2
@@ -41,9 +43,21 @@ jobs:
     #   uses: Xotabu4/selenoid-github-action@v1
 
     - name: Tests UI.Web.Interview
-      run: dotnet test Regression/UI.Headquarters --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
+      run: dotnet test Regression/UI.Headquarters --no-build -v d --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
       env: 
         TEAMCITY_PROJECT_NAME: "automation"
         # SELENIUM_GRID_URI: "http://localhost:4444/wd/hub" 
       
+    - name: Collect container logs
+      uses: actions/upload-artifact@v1
+      with:
+        name: container-logs
+        path: docker\logs\$COMPOSE_PROJECT_NAME
 
+    - name: Collect runner logs
+      uses: actions/upload-artifact@v1
+      with:
+        name: autotests-logs
+        path: $TC_ARTIFACTS
+
+    
