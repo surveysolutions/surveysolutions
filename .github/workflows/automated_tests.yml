@@ -16,6 +16,7 @@ env:
   COMPOSE_PROJECT_NAME: github_actions
   TC_ARTIFACTS: ./.run_artifacts
   TEST_CATEGORIES: "Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)"
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
 
@@ -55,8 +56,6 @@ jobs:
 
     - name: Build and push images
       run: pwsh ./build-and-push-images.ps1 -branch ${{ github.head_ref }} -skipApk
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   run-hq-tests:
     runs-on: ubuntu-latest
