@@ -43,7 +43,7 @@ jobs:
       with: 
         repository: surveysolutions/automatedtesting
         token: ${{secrets.PAT_AUTOMATION}}
-
+ 
     - name: Cache artifacts
       uses: actions/cache@v2
       with:
