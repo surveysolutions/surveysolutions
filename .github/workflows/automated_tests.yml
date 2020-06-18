@@ -87,6 +87,7 @@ jobs:
     - name: Collect container logs
       uses: actions/upload-artifact@v1
       if: ${{ always() }}
+      continue-on-error: true
       with:
         name: container-logs
         path: docker/logs/${{ env.COMPOSE_PROJECT_NAME }}
@@ -94,6 +95,7 @@ jobs:
     - name: Collect runner logs
       uses: actions/upload-artifact@v1
       if: ${{ always() }}
+      continue-on-error: true
       with:
         name: ${{ env.PROJECT_NAME }}-logs
         path: ${{ env.TC_ARTIFACTS }}
@@ -122,11 +124,12 @@ jobs:
       run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
 
     - name: Tests ${{ env.PROJECT_NAME }}
-      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory=${{ env.TEST_CATEGORIES }} -- NUnit.NumberOfTestWorkers=6
+      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
    
     - name: Collect container logs
       uses: actions/upload-artifact@v1
       if: ${{ always() }}
+      continue-on-error: true
       with:
         name: container-logs
         path: docker/logs/${{ env.COMPOSE_PROJECT_NAME }}
@@ -134,6 +137,7 @@ jobs:
     - name: Collect runner logs
       uses: actions/upload-artifact@v1
       if: ${{ always() }}
+      continue-on-error: true
       with:
         name: ${{ env.PROJECT_NAME }}-logs
         path: ${{ env.TC_ARTIFACTS }}
@@ -162,11 +166,12 @@ jobs:
       run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
 
     - name: Tests ${{ env.PROJECT_NAME }}
-      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory=${{ env.TEST_CATEGORIES }} -- NUnit.NumberOfTestWorkers=6
+      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
    
     - name: Collect container logs
       uses: actions/upload-artifact@v1
       if: ${{ always() }}
+      continue-on-error: true
       with:
         name: container-logs
         path: docker/logs/${{ env.COMPOSE_PROJECT_NAME }}
@@ -174,6 +179,7 @@ jobs:
     - name: Collect runner logs
       uses: actions/upload-artifact@v1
       if: ${{ always() }}
+      continue-on-error: true
       with:
         name: ${{ env.PROJECT_NAME }}-logs
         path: ${{ env.TC_ARTIFACTS }}
