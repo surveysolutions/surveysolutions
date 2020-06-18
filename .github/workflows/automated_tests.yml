@@ -71,13 +71,13 @@ jobs:
       env: 
         TEAMCITY_PROJECT_NAME: "automation"
     - name: Tests UI.Web.Interviewer
-        run: dotnet test Regression/UI.Web.Interviewer --no-build -v d --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
-        env: 
-          TEAMCITY_PROJECT_NAME: "automation"
+      run: dotnet test Regression/UI.Web.Interviewer --no-build -v d --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
+      env: 
+        TEAMCITY_PROJECT_NAME: "automation"
     - name: Tests UI.Web.Interview
-        run: dotnet test Regression/UI.Web.Interview --no-build -v d --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
-        env: 
-          TEAMCITY_PROJECT_NAME: "automation"
+      run: dotnet test Regression/UI.Web.Interview --no-build -v d --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
+      env: 
+        TEAMCITY_PROJECT_NAME: "automation"
 
     - name: Collect container logs
       uses: actions/upload-artifact@v1
