@@ -319,7 +319,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         GeometryType? GetQuestionGeometryType(Guid questionId);
         int GetEntityIdMapValue(Guid entityId);
         bool IsCoverPage(Guid identityId);
-        string GetCoverPageTitle();
         bool IsCoverPageSupported { get; }
         Guid CoverPageSectionId { get; }
     }
