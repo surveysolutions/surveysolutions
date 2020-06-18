@@ -32,7 +32,7 @@ jobs:
       DOCKER_REGISTRY: docker.pkg.github.com
       DOCKER_REPO: surveysolutions/surveysolutions
       TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
-      TEAMCITY_USER: github_automation
+      TEAMCITY_USER:  ${{secrets.TEAMCITY_USER}}
       TEAMCITY_CACHE: ./.cache
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
