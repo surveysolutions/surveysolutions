@@ -145,37 +145,35 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 Text = QuestionnaireEditor.QuestionTypeGPS
             });
             if (!isQuestionOnCover)
+            {
                 list.Add(new SelectOption
                 {
                     Value = "TextList",
                     Text = QuestionnaireEditor.QuestionTypeList
                 });
-            if (!isQuestionOnCover)
                 list.Add(new SelectOption
                 {
                     Value = "QRBarcode",
                     Text = QuestionnaireEditor.QuestionTypeBarcode
                 });
-            if (!isQuestionOnCover)
                 list.Add(new SelectOption
                 {
                     Value = "Multimedia",
                     Text = QuestionnaireEditor.QuestionTypePicture
                 });
-            if (!isQuestionOnCover)
                 list.Add(new SelectOption
                 {
                     Value = "Audio",
                     Text = QuestionnaireEditor.QuestionTypeAudio
                 });
-            if (!isQuestionOnCover)
                 list.Add(new SelectOption
                 {
                     Value = "Area",
                     Text = QuestionnaireEditor.QuestionTypeGeography
                 });
+            }
 
-                return list.ToArray();
+            return list.ToArray();
         }
 
         private readonly string rosterType = "roster";
