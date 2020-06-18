@@ -167,7 +167,6 @@ namespace Main.Core.Documents
             }
         }
 
-        public string GetCoverPageTitle() => ((IGroup)this.Children.First(c => c.PublicKey == CoverPageSectionId)).Title;
         public bool IsCoverPage(Guid publicKey) => publicKey == CoverPageSectionId;
 
         public void Insert(int index, IComposite c, Guid? parentId)
