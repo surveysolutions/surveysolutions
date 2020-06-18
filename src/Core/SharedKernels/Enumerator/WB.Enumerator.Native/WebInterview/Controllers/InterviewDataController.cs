@@ -589,7 +589,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var coverInfo = new CoverInfo
             {
                 Title = questionnaire.IsCoverPageSupported 
-                    ? questionnaire.GetCoverPageTitle()
+                    ? interview.GetTitleText(new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty))
                     : null,
                 EntitiesWithComments = entitiesWithComments,
                 IdentifyingEntities = interviewEntityWithTypes,
