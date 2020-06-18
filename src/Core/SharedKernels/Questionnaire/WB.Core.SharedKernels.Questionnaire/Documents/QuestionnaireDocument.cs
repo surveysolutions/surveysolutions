@@ -154,7 +154,19 @@ namespace Main.Core.Documents
 
         public bool CustomRosterTitle => false;
         public string? DefaultLanguageName { get; set; }
-        public bool IsCoverPageSupported => this.Children.Any(c => c.PublicKey == CoverPageSectionId);
+        private bool? isCoverPageSupported = null;
+        public bool IsCoverPageSupported
+        {
+            get
+            {
+                if (isCoverPageSupported.HasValue)
+                    return isCoverPageSupported.Value;
+                
+                isCoverPageSupported = this.Children.Any(c => c.PublicKey == CoverPageSectionId);
+                return isCoverPageSupported.Value;
+            }
+        }
+
         public string GetCoverPageTitle() => ((IGroup)this.Children.First(c => c.PublicKey == CoverPageSectionId)).Title;
         public bool IsCoverPage(Guid publicKey) => publicKey == CoverPageSectionId;
 
