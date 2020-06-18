@@ -23,6 +23,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -227,7 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             var valueGdalHome = this.geospatialConfig.Value.GdalHome;
                             this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
                                 fullPath, valueGdalHome);
-                            var startInfo = Command.Read(this.fileSystemAccessor.CombinePath(valueGdalHome, "gdalinfo")
+                            var startInfo = ConsoleCommand.Read(this.fileSystemAccessor.CombinePath(valueGdalHome, "gdalinfo")
                                 , $"{fullPath} -json");
                             var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
