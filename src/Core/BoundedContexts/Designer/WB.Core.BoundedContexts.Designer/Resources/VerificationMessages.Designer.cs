@@ -2141,7 +2141,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifying questions can have only allowed types..
+        ///   Looks up a localized string similar to Identifying questions can have only allowed types (Text, Numeric, DateTime, GpsCoordinates, SingleOption).
         /// </summary>
         public static string WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes {
             get {
