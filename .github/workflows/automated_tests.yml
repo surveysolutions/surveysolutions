@@ -20,6 +20,19 @@ jobs:
       TC_ARTIFACTS: ./.run_artifacts
     
     steps:
+
+    - name: Wait for build to succeed
+      uses: fountainhead/action-wait-for-check@v1.0.0
+      id: wait-for-build
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        checkName: Package (Builds)
+        ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+    - name: Do something with a failing build
+      if: steps.wait-for-build.outputs.conclusion == 'failure'
+      run: throw
+
     - uses: actions/checkout@v2
       with: 
         repository: surveysolutions/automatedtesting
