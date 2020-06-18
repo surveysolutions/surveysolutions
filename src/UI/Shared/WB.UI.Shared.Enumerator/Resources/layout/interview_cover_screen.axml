@@ -57,7 +57,6 @@
             <MvxRecyclerView
                     style="@style/PrefilledQuestions_List"
                     android:id="@+id/interviewEntitiesList"
-                    hasFixedSize="false"
                     android:scrollbars="vertical"
                     android:descendantFocusability="beforeDescendants"
                     android:focusableInTouchMode="true"
