@@ -26,7 +26,7 @@ jobs:
   prepare-images:
     runs-on: ubuntu-latest
 
-    needs: [ wait-for-build ]
+    needs: [ wait-for-build ] 
 
     env:
       DOCKER_REGISTRY: docker.pkg.github.com
