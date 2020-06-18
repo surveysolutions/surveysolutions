@@ -5,13 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Monitoring;
-using Xabe.FFmpeg;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -47,38 +47,42 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         private async Task<AudioFileInformation> CompressData(byte[] audio)
         {
-            var encodedFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "resultAudio"), ".aac");
-            var incomingFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "incomingAudio"), ".wav");
+            var destFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "resultAudio"), ".aac");
+            var sourceFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "incomingAudio"), ".wav");
             var audioResult = new AudioFileInformation();
 
             try
             {
-                logger.LogInformation("Running conversion for file {source} into {dest}", incomingFile, encodedFile);
+                logger.LogInformation("Running conversion for file {source} into {dest}", sourceFile, destFile);
                 
-                await File.WriteAllBytesAsync(incomingFile, audio).ConfigureAwait(false);
+                await File.WriteAllBytesAsync(sourceFile, audio).ConfigureAwait(false);
                 
-                FFmpeg.SetExecutablesPath(this.fileStorageConfig.Value.FFmpegExecutablePath);
+                var fullPathForSourceFile = Path.GetFullPath(sourceFile);
+                var fullPathForDestFile = Path.GetFullPath(destFile);
 
-                IMediaInfo audioInfo = await FFmpeg.GetMediaInfo(incomingFile)
-                    .ConfigureAwait(false);
-                audioResult.Duration = audioInfo.Duration;
+                this.logger.LogDebug("Starting audio audio encoder in {ffmpegHome}", 
+                    this.fileStorageConfig.Value.FFmpegExecutablePath);
 
-                IAudioStream audioStream = audioInfo.AudioStreams.First()
-                    .SetCodec(AudioCodec.aac)
-                    .SetBitrate(64 * 1024);
-
-                await FFmpeg.Conversions.New()
-                    .AddStream(audioStream)
-                    .SetOutput(encodedFile)
-                    .Start()
-                    .ConfigureAwait(false);
-
+                var pathToFfmpeg = Path.Combine(this.fileStorageConfig.Value.FFmpegExecutablePath, "ffmpeg");
                 
-                audioResult.Binary = await File.ReadAllBytesAsync(encodedFile).ConfigureAwait(false);
+                var ffmpegOutput = Infrastructure.Native.Utils.ConsoleCommand.Read(pathToFfmpeg
+                    , $"-i {fullPathForSourceFile} -y -c:a aac -b:a 64k {fullPathForDestFile}");
+                var match = Regex.Match(ffmpegOutput, @"Duration: (\d\d):(\d\d):((\d\d)(\.\d\d)?)");
+                var hours = Int32.Parse(match.Groups[1].Value);
+                var minutes = Int32.Parse(match.Groups[2].Value);
+                var seconds = Int32.Parse(match.Groups[4].Value);
+                int milliseconds = 0;
+                if (match.Groups.Count > 4)
+                {
+                    milliseconds = Int32.Parse(match.Groups[5].Value.Replace(".", ""));
+                }
+
+                audioResult.Duration = new TimeSpan(0, hours, minutes, seconds, milliseconds);
+                audioResult.Binary = await File.ReadAllBytesAsync(destFile).ConfigureAwait(false);
                 audioResult.MimeType = MimeType;
 
                 logger.LogInformation("Done conversion for file {dest}. Reduced size from {srcSize} to {destSize} (bytes)", 
-                    encodedFile, audio.Length, audioResult.Binary.Length);
+                    destFile, audio.Length, audioResult.Binary.Length);
 
                 return audioResult;
             }
@@ -94,10 +98,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
             finally
             {
-                if(File.Exists(encodedFile))
-                    File.Delete(encodedFile);
-                if(File.Exists(incomingFile))
-                    File.Delete(incomingFile);
+                if(File.Exists(destFile))
+                    File.Delete(destFile);
+                if(File.Exists(sourceFile))
+                    File.Delete(sourceFile);
             }
         }
 
