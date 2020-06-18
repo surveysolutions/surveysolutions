@@ -66,6 +66,11 @@ jobs:
       PROJECT_NAME: UI.Headquarters
 
     steps:
+    - uses: actions/checkout@v2
+      with: 
+        repository: surveysolutions/automatedtesting
+        token: ${{secrets.PAT_AUTOMATION}}
+
     - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
@@ -91,7 +96,6 @@ jobs:
         name: ${{ env.PROJECT_NAME }}-logs
         path: ${{ env.TC_ARTIFACTS }}
 
-        
   run-webinterview-tests:
     runs-on: ubuntu-latest
     needs: [ prepare-images ] 
@@ -100,9 +104,10 @@ jobs:
       PROJECT_NAME: UI.Web.Interview
 
     steps:
-    - uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '3.1.x'
+    - uses: actions/checkout@v2
+      with: 
+        repository: surveysolutions/automatedtesting
+        token: ${{secrets.PAT_AUTOMATION}}
 
     - name: Build ${{ env.PROJECT_NAME }}
       run: dotnet build Regression/${{ env.PROJECT_NAME }} -v q
@@ -128,15 +133,16 @@ jobs:
 
   run-webInterviewer-tests:
     runs-on: ubuntu-latest
-    needs: [ prepare-images ] 
+    needs: [ prepare-images ]
 
     env:
       PROJECT_NAME: UI.Web.Interview
 
     steps:
-    - uses: actions/setup-dotnet@v1
+    - uses: actions/checkout@v2
       with:
-        dotnet-version: '3.1.x'
+        repository: surveysolutions/automatedtesting
+        token: ${{secrets.PAT_AUTOMATION}}
 
     - name: Build ${{ env.PROJECT_NAME }}
       run: dotnet build Regression/${{ env.PROJECT_NAME }} -v q
