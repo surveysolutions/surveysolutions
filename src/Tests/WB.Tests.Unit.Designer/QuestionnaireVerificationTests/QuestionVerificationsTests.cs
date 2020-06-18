@@ -552,5 +552,26 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.GetError("WB0302").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
             verificationMessages.GetError("WB0302").References.Last().Id.Should().Be(sameRosterLevelQuestionId);
         }
+
+        [Test]
+        public void when_question_on_cover_page_without_variable_label()
+            => QuestionnaireDocumentWithCoverPage(new[]
+                {
+                    Create.Question(),
+                })
+                .ExpectError("WB0307");
+
+        [TestCase(QuestionType.Audio)]
+        [TestCase(QuestionType.Area)]
+        [TestCase(QuestionType.QRBarcode)]
+        [TestCase(QuestionType.TextList)]
+        [TestCase(QuestionType.Multimedia)]
+        [TestCase(QuestionType.MultyOption)]
+        public void when_question_on_cover_page_allow_only_allowed_types(QuestionType questionType)
+            => QuestionnaireDocumentWithCoverPage(new[]
+                {
+                    Create.Question(questionType: questionType),
+                })
+                .ExpectError("WB0308");
     }
 }

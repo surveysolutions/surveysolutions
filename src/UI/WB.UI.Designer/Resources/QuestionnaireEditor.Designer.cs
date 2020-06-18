@@ -925,6 +925,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Section with identifying questions. It is first section in questionnaire..
+        /// </summary>
+        public static string HelpCoverPage {
+            get {
+                return ResourceManager.GetString("HelpCoverPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allows to override template for roster button and provide custom text for %rostertitle%.
         /// </summary>
         public static string HelpCustomTitle {

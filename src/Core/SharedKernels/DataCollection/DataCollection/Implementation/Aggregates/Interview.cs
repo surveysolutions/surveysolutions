@@ -2659,11 +2659,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var targetList = sectionId != null
                 ? this.Tree.GetGroup(sectionId).Children
-                : this.Tree.GetAllNodesInEnumeratorOrder();
-
-            IEnumerable<IInterviewTreeNode> result = targetList.Except(x => (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
-                                                                 || questionnaire.IsVariable(x.Identity.Id)
-                                                     );
+                : this.Tree.GetAllNodesInEnumeratorOrder().Where(x => 
+                    !questionnaire.IsCoverPage(x.Identity.Id) && (x.Parent == null || !questionnaire.IsCoverPage(x.Parent.Identity.Id)));
+            
+            IEnumerable<IInterviewTreeNode> result = targetList.Except(x => 
+                (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
+                || questionnaire.IsVariable(x.Identity.Id)
+            );
 
             return result.Select(x => x.Identity);
         }

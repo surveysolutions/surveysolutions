@@ -592,7 +592,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool NoQuestionsExist(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return !questionnaire.Find<IQuestion>(_ => true).Any();
+            return !questionnaire.Find<IQuestion>(question => !questionnaire.Questionnaire.IsCoverPage(question.GetParent()!.PublicKey)).Any();
         }
 
         private static bool QuestionnaireTitleTooLong(MultiLanguageQuestionnaireDocument questionnaire)
