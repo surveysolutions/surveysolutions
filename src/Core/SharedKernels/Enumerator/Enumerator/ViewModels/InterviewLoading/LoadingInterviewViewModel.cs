@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                     }).ConfigureAwait(false);
                 return;
             }
-            
+             
             if (interview.HasEditableIdentifyingQuestions)
             {
                 await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
