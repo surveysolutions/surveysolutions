@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(interview.Id.FormatGuid(), null);
+            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestionsAsync(interview.Id.FormatGuid());
         }
 
         [Test]
