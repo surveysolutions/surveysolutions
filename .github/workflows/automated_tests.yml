@@ -15,6 +15,7 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   COMPOSE_PROJECT_NAME: github_actions
   TC_ARTIFACTS: ./.run_artifacts
+  
   TEST_CATEGORIES: "Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
