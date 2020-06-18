@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public bool IsEditMode { get; set; }
         
-        public IEnumerable<CoverPrefilledEntity> PrefilledReadOnlyEntities { get; set; }
+        public IReadOnlyCollection<CoverPrefilledEntity> PrefilledReadOnlyEntities { get; set; }
 
         private CompositeCollection<ICompositeEntity> prefilledEditableEntities;
         public CompositeCollection<ICompositeEntity> PrefilledEditableEntities
@@ -98,12 +98,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            if (questionnaire.IsCoverPageSupported)
+                this.Name.Init(interviewId, new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty));
+            else
+                this.Name.InitAsStatic(UIResources.Interview_Cover_Screen_Title);
             
-            var pageTitle = questionnaire.IsCoverPageSupported
-                ? questionnaire.GetCoverPageTitle()
-                : UIResources.Interview_Cover_Screen_Title;
             this.InterviewState.Init(interviewId, null);
-            this.Name.InitAsStatic(pageTitle);
 
             var firstSectionId = questionnaire.GetAllSections().First(id => !questionnaire.IsCoverPage(id));
             this.firstSectionIdentity = new Identity(firstSectionId, RosterVector.Empty);
