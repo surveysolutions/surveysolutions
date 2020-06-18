@@ -4,6 +4,19 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  DOCKER_REGISTRY: docker.pkg.github.com
+  DOCKER_REPO: surveysolutions/surveysolutions
+  TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
+  TEAMCITY_USER:  ${{secrets.TEAMCITY_USER}}
+  TEAMCITY_CACHE: ./.cache
+  TEAMCITY_PROJECT_NAME: automation
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  COMPOSE_PROJECT_NAME: github_actions
+  TC_ARTIFACTS: ./.run_artifacts
+  TEST_CATEGORIES: "Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)"
+
 jobs:
 
   wait-for-build:
@@ -28,17 +41,6 @@ jobs:
 
     needs: [ wait-for-build ] 
 
-    env:
-      DOCKER_REGISTRY: docker.pkg.github.com
-      DOCKER_REPO: surveysolutions/surveysolutions
-      TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
-      TEAMCITY_USER:  ${{secrets.TEAMCITY_USER}}
-      TEAMCITY_CACHE: ./.cache
-      DOTNET_NOLOGO: true
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-      COMPOSE_PROJECT_NAME: github_actions
-      TC_ARTIFACTS: ./.run_artifacts
-    
     steps:
     - uses: actions/checkout@v2
       with: 
@@ -51,34 +53,32 @@ jobs:
           path: ./.cache
           key: downloaded-artifacts-${{ runner.os }}
 
+    - name: Build and push images
+      run: pwsh ./build-and-push-images.ps1 -branch ${{ github.head_ref }} -skipApk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  run-hq-tests:
+    runs-on: ubuntu-latest
+    needs: [ prepare-images ] 
+
+    env:
+      PROJECT_NAME: UI.Headquarters
+
+    steps:
     - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
 
-    - name: Build Tests
-      run: |
-        dotnet build Regression/UI.Headquarters -v q
-        dotnet build Regression/UI.Web.Interview -v q
-        dotnet build Regression/UI.Web.Interviewer -v q
+    - name: Build ${{ env.PROJECT_NAME }}
+      run: dotnet build Regression/${{ env.PROJECT_NAME }} -v q
 
-    - name: Build and push images
-      run: pwsh ./compose.ps1 -branch ${{ github.head_ref }} -skipApk
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run env
+      run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
 
-    - name: Tests UI.Headquarters
-      run: dotnet test Regression/UI.Headquarters --no-build -v d --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
-      env: 
-        TEAMCITY_PROJECT_NAME: "automation"
-    - name: Tests UI.Web.Interviewer
-      run: dotnet test Regression/UI.Web.Interviewer --no-build -v d --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
-      env: 
-        TEAMCITY_PROJECT_NAME: "automation"
-    - name: Tests UI.Web.Interview
-      run: dotnet test Regression/UI.Web.Interview --no-build -v d --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
-      env: 
-        TEAMCITY_PROJECT_NAME: "automation"
-
+    - name: Tests ${{ env.PROJECT_NAME }}
+      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory=${{ env.TEST_CATEGORIES }} -- NUnit.NumberOfTestWorkers=6
+   
     - name: Collect container logs
       uses: actions/upload-artifact@v1
       with:
@@ -88,7 +88,73 @@ jobs:
     - name: Collect runner logs
       uses: actions/upload-artifact@v1
       with:
-        name: autotests-logs
+        name: ${{ env.PROJECT_NAME }}-logs
         path: ${{ env.TC_ARTIFACTS }}
 
-    
+        
+  run-webinterview-tests:
+    runs-on: ubuntu-latest
+    needs: [ prepare-images ] 
+
+    env:
+      PROJECT_NAME: UI.Web.Interview
+
+    steps:
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+
+    - name: Build ${{ env.PROJECT_NAME }}
+      run: dotnet build Regression/${{ env.PROJECT_NAME }} -v q
+
+    - name: Run env
+      run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
+
+    - name: Tests ${{ env.PROJECT_NAME }}
+      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory=${{ env.TEST_CATEGORIES }} -- NUnit.NumberOfTestWorkers=6
+   
+    - name: Collect container logs
+      uses: actions/upload-artifact@v1
+      with:
+        name: container-logs
+        path: docker/logs/${{ env.COMPOSE_PROJECT_NAME }}
+
+    - name: Collect runner logs
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ env.PROJECT_NAME }}-logs
+        path: ${{ env.TC_ARTIFACTS }}
+
+
+  run-webInterviewer-tests:
+    runs-on: ubuntu-latest
+    needs: [ prepare-images ] 
+
+    env:
+      PROJECT_NAME: UI.Web.Interview
+
+    steps:
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+
+    - name: Build ${{ env.PROJECT_NAME }}
+      run: dotnet build Regression/${{ env.PROJECT_NAME }} -v q
+
+    - name: Run env
+      run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
+
+    - name: Tests ${{ env.PROJECT_NAME }}
+      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory=${{ env.TEST_CATEGORIES }} -- NUnit.NumberOfTestWorkers=6
+   
+    - name: Collect container logs
+      uses: actions/upload-artifact@v1
+      with:
+        name: container-logs
+        path: docker/logs/${{ env.COMPOSE_PROJECT_NAME }}
+
+    - name: Collect runner logs
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ env.PROJECT_NAME }}-logs
+        path: ${{ env.TC_ARTIFACTS }}
