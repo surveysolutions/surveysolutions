@@ -11,12 +11,12 @@ jobs:
 
     steps:
     - name: Wait for build to succeed
-        id: waitforstatuschecks
-        uses: "WyriHaximus/github-action-wait-for-status@4c9e58820905eb246e88a413c39a9104cccf7e80"
-        with:
-          checkInterval: 13
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      id: waitforstatuschecks
+      uses: "WyriHaximus/github-action-wait-for-status@4c9e58820905eb246e88a413c39a9104cccf7e80"
+      with:
+        checkInterval: 13
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
     - name: Do something with a failing build
       if: steps.wait-for-build.outputs.conclusion == 'failure'
