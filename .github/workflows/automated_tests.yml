@@ -32,7 +32,7 @@ jobs:
       DOCKER_REGISTRY: docker.pkg.github.com
       DOCKER_REPO: surveysolutions/surveysolutions
       TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
-      TEAMCITY_USER: ${{secrets.TEAMCITY_USER}}
+      TEAMCITY_USER: github_automation
       TEAMCITY_CACHE: ./.cache
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -55,18 +55,16 @@ jobs:
       with:
         dotnet-version: '3.1.x'
 
+    - name: Build Tests
+      run: |
+        dotnet build Regression/UI.Headquarters -v q
+        dotnet build Regression/UI.Web.Interview -v q
+        dotnet build Regression/UI.Web.Interviewer -v q
+
     - name: Build and push images
       run: pwsh ./compose.ps1 -branch ${{ github.head_ref }} -skipApk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # - name: Start selenoid
-    #   uses: Xotabu4/selenoid-github-action@v1
-
-    - name: Build Tests
-      run: |
-        dotnet build Regression/UI.Headquarters -v -q
-        dotnet build Regression/UI.Web.Interview -v -q
-        dotnet build Regression/UI.Web.Interviewer -v -q
 
     - name: Tests UI.Web.Interview
       run: dotnet test Regression/UI.Headquarters --no-build -v d --filter TestCategory="Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)" -- NUnit.NumberOfTestWorkers=6
