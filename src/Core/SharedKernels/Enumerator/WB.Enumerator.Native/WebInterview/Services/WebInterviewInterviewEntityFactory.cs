@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -43,9 +44,24 @@ namespace WB.Enumerator.Native.WebInterview.Services
             string[] sectionIds,
             bool isReviewMode)
         {
-            bool IsSectionVisible(InterviewTreeGroup x) =>
-                (!x.IsDisabled() || x.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id))
-                && !questionnaire.IsCustomViewRoster(x.Identity.Id);
+            bool IsSectionVisible(InterviewTreeGroup x)
+            {
+                var isVisible = (!x.IsDisabled() || x.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id))
+                                 && !questionnaire.IsCustomViewRoster(x.Identity.Id);
+                if (!isVisible)
+                    return false;
+
+                if (questionnaire.IsCoverPage(x.Identity.Id))
+                {
+                    return questionnaire.GetPrefilledEntities().Any()
+                           || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment)
+                           || (isReviewMode
+                                ? interview.GetAllCommentedEnabledQuestions().Any()
+                                : interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any());
+                }
+
+                return true;
+            }
 
             Sidebar result = new Sidebar();
             HashSet<Identity> visibleSections = new HashSet<Identity>();

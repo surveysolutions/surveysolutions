@@ -32,6 +32,10 @@
                 $scope.activeGroup.itemId = $state.params.itemId;
                 $scope.activeGroup.variableName = group.variableName;
 
+                $scope.activeGroup.isCoverPage = $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $state.params.itemId, isCover: true }) != null
+                    : false;
+
                 if (!_.isNull($scope.groupForm) && !_.isUndefined($scope.groupForm)) {
                     $scope.groupForm.$setPristine();
                 }

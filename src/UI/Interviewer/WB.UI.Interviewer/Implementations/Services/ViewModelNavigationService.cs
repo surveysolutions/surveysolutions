@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
+using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
@@ -62,10 +63,11 @@ namespace WB.UI.Interviewer.Implementations.Services
         public override Task NavigateToPrefilledQuestionsAsync(string interviewId)
         {
             this.log.Trace($"Navigating to PrefilledQuestionsViewModel interviewId: {interviewId}");
-            return this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(
+            return this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
-                    InterviewId = interviewId
+                    InterviewId = interviewId,
+                    NavigationIdentity = NavigationIdentity.CreateForCoverScreen(),
                 });
         }
 

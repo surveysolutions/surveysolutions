@@ -628,8 +628,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.Tree.GetAllNodesInEnumeratorOrder();
         }
 
-        public InterviewTreeSection FirstSection => this.Tree.Sections.First();
-
         public Guid CurrentResponsibleId
         {
             get

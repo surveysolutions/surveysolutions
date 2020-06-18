@@ -69,7 +69,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getPrefilledQuestions")]
-        public override InterviewEntityWithType[] GetPrefilledQuestions(Guid interviewId) => base.GetPrefilledQuestions(interviewId);
+        public override InterviewEntityWithType[] GetInterviewEntitiesWithTypes(Guid interviewId) => base.GetInterviewEntitiesWithTypes(interviewId);
 
         [HttpGet]
         [Route("getPrefilledEntities")]
