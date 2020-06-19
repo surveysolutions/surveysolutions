@@ -10,12 +10,12 @@ env:
   DOCKER_NETWORK: automation_network
   TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
   TEAMCITY_USER:  ${{secrets.TEAMCITY_USER}}
-  TEAMCITY_CACHE: ./.cache
+  TEAMCITY_CACHE: /home/.tc_cache
   TEAMCITY_PROJECT_NAME: automation
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   COMPOSE_PROJECT_NAME: github_actions
-  TC_ARTIFACTS: ./.run_artifacts  
+  TC_ARTIFACTS: /home/.run_artifacts
   
   TEST_CATEGORIES: "Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,9 +73,9 @@ jobs:
         repository: surveysolutions/automatedtesting
         token: ${{secrets.PAT_AUTOMATION}}
 
-    - uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '3.1.x'
+    # - uses: actions/setup-dotnet@v1
+    #   with:
+    #     dotnet-version: '3.1.x'
 
     - name: Build ${{ env.PROJECT_NAME }}
       run: dotnet build Regression/${{ env.PROJECT_NAME }} -v q
@@ -84,7 +84,7 @@ jobs:
       run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
 
     - name: Selenoid
-      run: curl -s https://aerokube.com/cm/bash | bash && ./cm selenoid start -q -b "chrome" -l 1 --args "--container-network=${{ env.DOCKER_NETWORK }}"
+      run: curl -s https://aerokube.com/cm/bash | bash && ./cm selenoid start --quiet --disable-logs -b "chrome" -l 1 --args "--container-network=${{ env.DOCKER_NETWORK }}"
 
     - name: Tests ${{ env.PROJECT_NAME }}
       run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
