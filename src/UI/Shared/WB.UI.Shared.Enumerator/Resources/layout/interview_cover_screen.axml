@@ -52,7 +52,7 @@
                       local:MvxItemTemplate="@layout/interview_cover_prefilled_question_template" />
         </LinearLayout>
 
-        <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical"
+        <LinearLayout style="@style/FullWidthWrappingLayout" android:orientation="vertical"
                       local:MvxBind="Visible And(HasPrefilledEntities, IsEditMode)">
             <MvxRecyclerView
                     style="@style/PrefilledQuestions_List"
