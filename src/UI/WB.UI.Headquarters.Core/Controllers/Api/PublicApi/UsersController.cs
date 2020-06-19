@@ -231,6 +231,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("users")]
         public async Task<ActionResult<UserCreationResult>> Register([FromBody]RegisterUserModel model)
         {
+            if (!Enum.IsDefined(typeof(UserRoles), (UserRoles)model.Role))
+            {
+                ModelState.AddModelError(nameof(model.Role), "Trying to create user with unknown role");
+            }
+            
             var result = new UserCreationResult();
             var createdUserRole = model.GetDomainRole();
 
