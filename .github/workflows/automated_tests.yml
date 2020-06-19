@@ -10,12 +10,12 @@ env:
   DOCKER_NETWORK: automation_network
   TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
   TEAMCITY_USER:  ${{secrets.TEAMCITY_USER}}
-  TEAMCITY_CACHE: /home/.tc_cache
+  TEAMCITY_CACHE: $GITHUB_WORKSPACE/.tc_cache
   TEAMCITY_PROJECT_NAME: automation
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   COMPOSE_PROJECT_NAME: github_actions
-  TC_ARTIFACTS: /home/.run_artifacts
+  TC_ARTIFACTS: $GITHUB_WORKSPACE/.run_artifacts
   
   TEST_CATEGORIES: "Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
