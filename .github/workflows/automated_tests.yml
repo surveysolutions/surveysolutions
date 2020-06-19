@@ -88,7 +88,8 @@ jobs:
     - name: Tests ${{ env.PROJECT_NAME }}
       run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
       env:
-        SELENIUM_GRID_URI: http://localhost:4444/wb/hub/
+        SELENIUM_GRID_URI: http://localhost:4444/wd/hub
+        AUTOMATION_QUIET: true
 
     - name: Collect container logs
       uses: actions/upload-artifact@v1
