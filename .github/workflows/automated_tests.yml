@@ -7,6 +7,7 @@ on:
 env:
   DOCKER_REGISTRY: docker.pkg.github.com
   DOCKER_REPO: surveysolutions/surveysolutions
+  DOCKER_NETWORK: automation_network
   TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
   TEAMCITY_USER:  ${{secrets.TEAMCITY_USER}}
   TEAMCITY_CACHE: ./.cache
@@ -83,7 +84,7 @@ jobs:
       run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
 
     - name: Selenoid
-      run: curl -s https://aerokube.com/cm/bash | bash && ./cm selenoid start -b "chrome" -l 1
+      run: curl -s https://aerokube.com/cm/bash | bash && ./cm selenoid start -b "chrome" -l 1 --args "--container-network=${{ env.DOCKER_NETWORK }}"
 
     - name: Tests ${{ env.PROJECT_NAME }}
       run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
