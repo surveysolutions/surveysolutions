@@ -84,13 +84,13 @@ jobs:
       run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
 
     - name: Selenoid
-      run: curl -s https://aerokube.com/cm/bash | bash && ./cm selenoid start -b "chrome" -l 1 --args "--container-network=${{ env.DOCKER_NETWORK }}"
+      run: curl -s https://aerokube.com/cm/bash | bash && ./cm selenoid start -q -b "chrome" -l 1 --args "--container-network=${{ env.DOCKER_NETWORK }}"
 
     - name: Tests ${{ env.PROJECT_NAME }}
       run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
       env:
         SELENIUM_GRID_URI: http://localhost:4444/wd/hub
-        # AUTOMATION_QUIET: true
+        AUTOMATION_QUIET: true
 
     - name: Collect container logs
       uses: actions/upload-artifact@v1
