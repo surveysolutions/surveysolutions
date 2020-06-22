@@ -1222,6 +1222,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Map dashboard.
+        /// </summary>
+        public static string MenuItem_Title_Map_Dashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Map_Dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maps.
         /// </summary>
         public static string MenuItem_Title_Maps {
