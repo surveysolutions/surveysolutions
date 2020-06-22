@@ -9,7 +9,7 @@ const Overview = () => import(/* webpackChunkName: "review" */'./Overview')
 export default class ReviewComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
-        this.config = Vue.$config.model
+        this.config = Vue.$config.model || {}
     }
 
     get routes() {

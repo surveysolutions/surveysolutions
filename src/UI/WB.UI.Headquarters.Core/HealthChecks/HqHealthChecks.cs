@@ -9,8 +9,10 @@ namespace WB.UI.Headquarters.HealthChecks
             services.AddHostedService<AmazonS3CheckService>();
             
             services.AddHealthChecks()
+                .AddCheck<HeadquartersUrlBindingCheck>("hq_baseurl_check")
                 .AddCheck<HeadquartersStartupCheck>("under_construction_check", tags: new[] { "ready" })
-                .AddCheck<ExportServiceCheck>("export_service_check")
+                .AddCheck<ExportServiceVersionCheck>("export_service_check")
+                .AddCheck<ExportServiceConnectivityCheck>("export_service_connectivity_check")
                 .AddCheck<BrokenPackagesCheck>("broken_packages_check")
                 .AddCheck<DatabaseConnectionCheck>("database_connection_check");
         }

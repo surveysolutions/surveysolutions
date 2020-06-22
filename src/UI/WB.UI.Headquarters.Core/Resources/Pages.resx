@@ -1415,6 +1415,9 @@
   <data name="Configuration" xml:space="preserve">
     <value>Configuration</value>
   </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
   <data name="AppUpdates" xml:space="preserve">
     <value>Apk infos</value>
   </data>

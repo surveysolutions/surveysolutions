@@ -1588,4 +1588,7 @@
   <data name="AccountManage_Status2fa" xml:space="preserve">
     <value>Двухфакторная аутентификация </value>
   </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Диагностика</value>
+  </data>
 </root>
