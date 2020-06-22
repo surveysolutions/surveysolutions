@@ -3,7 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.HealthChecks
 {
@@ -24,10 +26,10 @@ namespace WB.UI.Headquarters.HealthChecks
             }
             catch(Exception e)
             {
-                return HealthCheckResult.Unhealthy("Error during DB call", e);
+                return HealthCheckResult.Unhealthy(Diagnostics.database_connection_check_Unhealty.FormatString(e), e);
             }
 
-            return HealthCheckResult.Healthy("Connection to Database completed");
+            return HealthCheckResult.Healthy(Diagnostics.database_connection_check_Healthy);
         }
     }
 }

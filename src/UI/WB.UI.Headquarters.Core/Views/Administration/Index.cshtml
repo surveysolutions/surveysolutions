@@ -1,0 +1,12 @@
+﻿@using WB.UI.Headquarters.Code
+@model object
+@{
+    ViewBag.Title = MainMenu.Administration;
+    ViewBag.SpecificPageCaption = MainMenu.Administration;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>
