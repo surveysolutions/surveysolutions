@@ -27,7 +27,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             MapSynchronizationViewModel synchronization,
             IMapService mapService,
             IPermissionsService permissions,
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService,
+            IMapInteractionService mapInteractionService)
             : base(principal, viewModelNavigationService)
         {
             this.Synchronization = synchronization;
@@ -35,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             this.mapService = mapService;
             this.permissions = permissions;
             this.userInteractionService = userInteractionService;
+            this.mapInteractionService = mapInteractionService;
 
             this.Synchronization.Init();
         }
@@ -48,6 +50,9 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         }
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
+
+        public IMvxCommand NavigateToMapDashboardCommand => 
+            new MvxAsyncCommand(async () => await mapInteractionService.OpenMapDashboardAsync());
 
         private MvxObservableCollection<MapItem> uiItems = new MvxObservableCollection<MapItem>();
         public MvxObservableCollection<MapItem> Maps
@@ -92,6 +97,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         }
 
         private bool isInProgress;
+        private IMapInteractionService mapInteractionService;
+
         public bool IsInProgress
         {
             get => this.isInProgress;
