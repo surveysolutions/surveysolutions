@@ -1359,6 +1359,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dashboard.
+        /// </summary>
+        public static string MenuItem_Title_Dashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please wait until the current operation is completed.
         /// </summary>
         public static string Messages_WaitPendingOperation {
