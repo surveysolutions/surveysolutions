@@ -214,6 +214,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var unknownQuestions = assignmentAnswers
                 .Where(x => x.QuestionIdentity == null || string.IsNullOrEmpty(x.Variable))
                 .ToArray();
+
             if (unknownQuestions.Any())
                 return StatusCode(StatusCodes.Status400BadRequest,
                     $"Question(s) not found: {string.Join(", ", unknownQuestions.Select(x => x.Source.Variable ?? x.Source.Identity))}");
@@ -259,6 +260,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 Assignment = mapper.Map<AssignmentDetails>(assignment)
             };
         }
+
+        public QuestionType[] NotPermittedQuestionTypes { get; set; } = { QuestionType.Area, QuestionType.Multimedia, QuestionType.Audio };
 
         /// <summary>
         /// Assign new responsible person for assignment
@@ -685,6 +688,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             public AssignmentIdentifyingDataItem Source { get; set; }
             public Identity QuestionIdentity { get; set; }
             public string Variable { get; set; }
+
+            public QuestionType QuestionType { get; set; }
         }
 
         private AssignmentAnswer ToAssignmentAnswer(AssignmentIdentifyingDataItem item, IQuestionnaire questionnaire)
@@ -694,9 +699,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (!string.IsNullOrEmpty(item.Identity) && Identity.TryParse(item.Identity, out Identity identity))
             {
                 answer.QuestionIdentity = identity;
-                
+
                 if (questionnaire.HasQuestion(identity.Id))
+                {
                     answer.Variable = questionnaire.GetQuestionVariableName(identity.Id);
+                    answer.QuestionType = questionnaire.GetQuestionType(identity.Id);
+                }
             }
             else if (!string.IsNullOrEmpty(item.Variable))
             {
@@ -704,7 +712,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
                 var questionId = questionnaire.GetQuestionIdByVariable(item.Variable);
                 if (questionId.HasValue)
+                {
                     answer.QuestionIdentity = Identity.Create(questionId.Value, RosterVector.Empty);
+                    answer.QuestionType = questionnaire.GetQuestionType(answer.QuestionIdentity.Id);
+                }
             }
 
             return answer;

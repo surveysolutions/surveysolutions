@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         return ToAssignmentDateTimeAnswer(answer);
                     case AnswerType.String:
                     case AnswerType.DecimalAndStringArray:
+                    default:
                         return ToAssignmentTextAnswer(answer);
                 }
             }
