@@ -478,6 +478,9 @@ for further instructions</value>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Map dashboard</value>
+  </data>
   <data name="MenuItem_Title_Language" xml:space="preserve">
     <value>Language</value>
   </data>

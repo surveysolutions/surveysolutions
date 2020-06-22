@@ -593,6 +593,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
     <value>Clear all</value>
   </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
   <data name="InterviewKey" xml:space="preserve">
     <value>Interview Key: {0}</value>
   </data>

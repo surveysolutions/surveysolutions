@@ -55,6 +55,7 @@ namespace WB.UI.Interviewer.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, EnumeratorUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_dashboard, EnumeratorUIResources.MenuItem_Title_Dashboard);
+            menu.LocalizeMenuItem(Resource.Id.menu_map_dashboard, EnumeratorUIResources.MenuItem_Title_Map_Dashboard);
 
             return base.OnCreateOptionsMenu(menu);
         }
@@ -64,6 +65,9 @@ namespace WB.UI.Interviewer.Activities
             {
                 case Resource.Id.menu_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
+                    break;
+                case Resource.Id.menu_map_dashboard:
+                    this.ViewModel.NavigateToMapDashboardCommand.Execute();
                     break;
                 case Resource.Id.menu_map_synchronization:
                     this.ViewModel.MapSynchronizationCommand.Execute();
