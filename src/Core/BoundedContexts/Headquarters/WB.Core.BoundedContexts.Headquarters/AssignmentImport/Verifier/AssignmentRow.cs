@@ -119,7 +119,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 .ToArray();
 
             return TextListAnswer.FromTupleArray(textListAnswers);
-
         }
 
         public YesNoAnswer ToInterviewYesNoAnswer()
@@ -157,7 +156,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         string VariableName { get; }
     }
 
-    public class AssignmentAnswer : AssignmentValue, IAssignmentAnswer { }
+    public class AssignmentAnswer : AssignmentValue, IAssignmentAnswer
+    {
+
+    }
 
     [DebuggerDisplay("{Code}")]
     public class AssignmentRosterInstanceCode : AssignmentAnswer

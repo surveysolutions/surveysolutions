@@ -1716,12 +1716,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
 
             //assert
-            Assert.That(errors, Is.Empty);
-
-            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
-
-            Assert.That(savedAssignments, Has.One.Items);
-            Assert.That(savedAssignments[0].Answers, Is.Empty);
+            Assert.That(errors, Has.One.Items);
         }
 
         [Test]
@@ -1763,12 +1758,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
 
             //assert
-            Assert.That(errors, Is.Empty);
-
-            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
-
-            Assert.That(savedAssignments, Has.One.Items);
-            Assert.That(savedAssignments[0].Answers, Is.Empty);
+            Assert.That(errors, Has.One.Items);
         }
 
         [Test]
