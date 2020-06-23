@@ -66,9 +66,6 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.menu_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
-                case Resource.Id.menu_map_dashboard:
-                    this.ViewModel.NavigateToMapDashboardCommand.Execute();
-                    break;
                 case Resource.Id.menu_map_synchronization:
                     this.ViewModel.MapSynchronizationCommand.Execute();
                     break;
