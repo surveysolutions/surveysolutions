@@ -246,6 +246,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
                     break;
+                case Resource.Id.menu_map_dashboard:
+                    this.ViewModel.NavigateToMapDashboardCommand.Execute();
+                    break;
                 case Resource.Id.menu_maps:
                     this.ViewModel.NavigateToMapsCommand.Execute();
                     break;

@@ -7,8 +7,6 @@
         android:icon="@drawable/dashboard_sync_icon"/>
   <item android:id="@+id/menu_dashboard" 
           local:showAsAction="never" />
-  <item android:id="@+id/menu_map_dashboard"
-        local:showAsAction="never" />
   <item android:id="@+id/menu_settings"
         local:showAsAction="never" />
   <item android:id="@+id/menu_diagnostics"
