@@ -138,10 +138,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
                 MapPoint point = 
                     (MapPoint)GeometryEngine.Project(
-                        new MapPoint(assignment.LocationLatitude.Value, 
-                            assignment.LocationLongitude.Value, 
+                        new MapPoint(
+                            assignment.LocationLongitude.Value,
+                            assignment.LocationLatitude.Value,
                             SpatialReferences.Wgs84),
-                        MapView.SpatialReference);
+                        Map.SpatialReference);
                 
                 Graphic pointGraphic = new Graphic(
                     point, 
