@@ -51,9 +51,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
 
-        public IMvxCommand NavigateToMapDashboardCommand => 
-            new MvxAsyncCommand(async () => await mapInteractionService.OpenMapDashboardAsync());
-
         private MvxObservableCollection<MapItem> uiItems = new MvxObservableCollection<MapItem>();
         public MvxObservableCollection<MapItem> Maps
         {
