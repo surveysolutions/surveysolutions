@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.MapService
 {
