@@ -425,12 +425,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                 var result = await GetGeometry(this.requestedGeometryType, this.Geometry).ConfigureAwait(false);
 
-                var position = this.MapView.LocationDisplay.Location.Position;
-                double? dist = null;
+                var position = this.MapView?.LocationDisplay?.Location?.Position;
+                double? distanceToEditor = null;
                 if (position != null)
                 {
                     var point = GeometryEngine.Project(position, this.MapView.SpatialReference);
-                    dist = GeometryEngine.Distance(result, point);
+                    distanceToEditor = GeometryEngine.Distance(result, point);
                 }
 
                 //project to geocoordinates
@@ -465,7 +465,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     Coordinates = coordinates,
                     Area = GetGeometryArea(result),
                     Length = GetGeometryLength(result),
-                    DistanceToEditor = dist,
+                    DistanceToEditor = distanceToEditor,
                     NumberOfPoints = GetGeometryPointsCount(result)
                 };
 
